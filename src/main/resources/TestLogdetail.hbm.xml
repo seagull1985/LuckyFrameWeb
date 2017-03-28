@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="TestLogdetail" table="TEST_LOGDETAIL" schema="luckyframedb">
+		<id name="logid" type="java.lang.Integer">
+			<column name="LOGID" precision="22" scale="0" />
+			<generator class="identity"/>
+		</id>
+		<property name="logtime" type="java.sql.Timestamp">
+			<column name="LOGTIME" not-null="true" default="sysdate" />
+		</property>
+		<property name="detail" type="java.lang.String">
+			<column name="DETAIL" length="1000" not-null="true" />
+		</property>
+		<property name="logGrade" type="java.lang.String">
+			<column name="LOGGRADE" length="20" />
+		</property>
+		<property name="step" type="java.lang.String">
+			<column name="STEP" length="2" />
+		</property>
+		<property name="imgname" type="java.lang.String">
+			<column name="imgname" length="30" />
+		</property>
+		<many-to-one name="testCasedetail" class="TestCasedetail"
+			fetch="select">
+			<column name="CASEID" not-null="true" />
+		</many-to-one>
+
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="ReviewInfo" table="QA_REVIEWINFO"
+		schema="luckyframedb">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" precision="22" scale="0" />
+			<generator class="identity"/>
+		</id>
+		<property name="review_id" type="java.lang.Integer">
+			<column name="review_id" length="8" not-null="true" />
+		</property>
+		<property name="bug_description" type="java.lang.String">
+			<column name="bug_description" length="500" not-null="false" />
+		</property>
+		<property name="corrective" type="java.lang.String">
+			<column name="corrective" length="500" not-null="false" />
+		</property>
+		<property name="status" type="java.lang.String">
+			<column name="status" length="20" not-null="false" />
+		</property>
+		<property name="duty_officer" type="java.lang.String">
+			<column name="duty_officer" length="100" not-null="false" />
+		</property>
+		<property name="confirm_date" type="java.lang.String">
+			<column name="confirm_date" length="20" not-null="false" />
+		</property>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="TestTaskexcute" table="TEST_TASKEXCUTE" schema="luckyframedb" lazy="false">
+		<id name="id" type="java.lang.Integer">
+			<column name="ID" />
+			<generator class="identity"/>
+		</id>
+		<property name="taskId" type="java.lang.String">
+			<column name="TASKID" length="20" not-null="true" />
+		</property>
+		<property name="casetotalCount" type="java.lang.Integer">
+			<column name="CASETOTAL_COUNT" precision="22" scale="0"  default="0"/>
+		</property>
+		<property name="casesuccCount" type="java.lang.Integer">
+			<column name="CASESUCC_COUNT" precision="22" scale="0"  default="0"/>
+		</property>
+		<property name="casefailCount" type="java.lang.Integer">
+			<column name="CASEFAIL_COUNT" precision="22" scale="0" default="0" />
+		</property>
+		<property name="caselockCount" type="java.lang.Integer">
+			<column name="CASELOCK_COUNT" precision="22" scale="0"  default="0"/>
+		</property>
+		<property name="casenoexecCount" type="java.lang.Integer">
+			<column name="CASENOEXEC_COUNT" precision="22" scale="0"  default="0"/>
+		</property>
+		<property name="createTime" type="java.sql.Timestamp"  update="false">
+			<column name="CREATETIME" default="sysdate" />
+		</property>
+		<many-to-one name="testJob" class="TestJobs" fetch="select" >
+			<column name="JOBID" not-null="true"  />
+		</many-to-one>
+		<property name="caseIsExec" type="java.lang.String">
+			<column name="CASEISEXEC" length="10" not-null="true" />
+		</property>
+		<property name="taskStatus" type="java.lang.String">
+			<column name="TASKSTATUS" length="2" />
+		</property>
+		<property name="finishtime" type="java.sql.Timestamp">
+			<column name="FINISHTIME"  />
+		</property>
+	</class>
+</hibernate-mapping>

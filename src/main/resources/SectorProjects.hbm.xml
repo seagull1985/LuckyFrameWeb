@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="SectorProjects" table="QA_SECTORPROJECTS"
+		schema="luckyframedb">
+		<id name="projectid" type="java.lang.Integer">
+			<column name="projectid" precision="22" scale="0" />
+			<generator class="identity"/>
+		</id>
+		<property name="projectname" type="java.lang.String">
+			<column name="projectname" length="20" not-null="true" />
+		</property>
+		<property name="projectmanager" type="java.lang.String">
+			<column name="projectmanager" length="20" not-null="true" />
+		</property>
+ 		<many-to-one name="secondarySector" class="SecondarySector" fetch="select" lazy="false">   <!-- 关于lazy的解释     http://blog.sina.com.cn/s/blog_4731ed500101cwsk.html -->
+			<column name="sectorid" not-null="true"  />
+		</many-to-one>
+	</class>
+</hibernate-mapping>

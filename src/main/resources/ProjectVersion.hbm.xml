@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="ProjectVersion" table="QA_PROJECTVERSION"
+		schema="luckyframedb">
+		<id name="versionid" type="java.lang.Integer">
+			<column name="versionid" precision="22" scale="0" />
+			<generator class="identity"/>
+		</id>
+		<property name="versionnumber" type="java.lang.String">
+			<column name="versionnumber" length="20" not-null="true" />
+		</property>
+		<property name="plan_launchdate" type="java.lang.String">
+			<column name="plan_launchdate" length="20" not-null="true" />
+		</property>
+		<property name="actually_launchdate" type="java.lang.String">
+			<column name="actually_launchdate" length="20" not-null="false" />
+		</property>
+		<property name="plan_devstart" type="java.lang.String">
+			<column name="plan_devstart" length="20" not-null="false" />
+		</property>
+		<property name="plan_devend" type="java.lang.String">
+			<column name="plan_devend" length="20" not-null="false" />
+		</property>
+		<property name="actually_devstart" type="java.lang.String">
+			<column name="actually_devstart" length="20" not-null="false" />
+		</property>
+		<property name="actually_devend" type="java.lang.String">
+			<column name="actually_devend" length="20" not-null="false" />
+		</property>
+		<property name="plan_teststart" type="java.lang.String">
+			<column name="plan_teststart" length="20" not-null="false" />
+		</property>
+		<property name="plan_testend" type="java.lang.String">
+			<column name="plan_testend" length="20" not-null="false" />
+		</property>
+		<property name="actually_teststart" type="java.lang.String">
+			<column name="actually_teststart" length="20" not-null="false" />
+		</property>
+		<property name="actually_testend" type="java.lang.String">
+			<column name="actually_testend" length="20" not-null="false" />
+		</property>
+		<property name="plan_demand" type="java.lang.Integer">
+			<column name="plan_demand" length="10" not-null="true" />
+		</property>
+		<property name="actually_demand" type="java.lang.Integer">
+			<column name="actually_demand" length="10" not-null="true" />
+		</property>
+		<property name="codestandard_zd" type="java.lang.Integer">
+			<column name="codestandard_zd" length="10" not-null="true" />
+		</property>
+		<property name="codestandard_yz" type="java.lang.Integer">
+			<column name="codestandard_yz" length="10" not-null="true" />
+		</property>
+		<property name="codestandard_zy" type="java.lang.Integer">
+			<column name="codestandard_zy" length="10" not-null="true" />
+		</property>
+		<property name="codeline" type="java.lang.Double">
+			<column name="codeline" length="10" not-null="true" />
+		</property>
+		<property name="testcasenum" type="java.lang.Integer">
+			<column name="testcasenum" length="10" not-null="true" />
+		</property>
+		<property name="changetestingreturn" type="java.lang.Integer">
+			<column name="changetestingreturn" length="10" not-null="true" />
+		</property>
+		<property name="dev_member" type="java.lang.String">
+			<column name="dev_member" length="50" not-null="true" />
+		</property>
+		<property name="test_member" type="java.lang.String">
+			<column name="test_member" length="50" not-null="true" />
+		</property>
+		<property name="human_cost" type="java.lang.String">
+			<column name="human_cost" length="20" not-null="false" />
+		</property>
+		<property name="human_costdev" type="java.lang.String">
+			<column name="human_costdev" length="20" not-null="false" />
+		</property>
+		<property name="human_costtest" type="java.lang.String">
+			<column name="human_costtest" length="20" not-null="false" />
+		</property>
+		<property name="per_dev" type="java.lang.String">
+			<column name="per_dev" length="20" not-null="false" />
+		</property>
+		<property name="per_test" type="java.lang.String">
+			<column name="per_test" length="20" not-null="false" />
+		</property>
+		<property name="code_DI" type="java.lang.String">
+			<column name="code_DI" length="20" not-null="true" />
+		</property>
+		<property name="qualityreview" type="java.lang.String">
+			<column name="qualityreview" length="500" not-null="false" />
+		</property>
+		<property name="imprint" type="java.lang.String">
+			<column name="imprint" length="500" not-null="true" />
+		</property>
+		<property name="remark" type="java.lang.String">
+			<column name="remark" length="500" not-null="false" />
+		</property>
+ 		<many-to-one name="sectorProjects" class="SectorProjects" fetch="select" lazy="false">   <!-- 关于lazy的解释     http://blog.sina.com.cn/s/blog_4731ed500101cwsk.html -->
+			<column name="projectid" not-null="false" />
+		</many-to-one>
+				<property name="devtime_deviation" type="java.lang.String">
+			<column name="devtime_deviation" length="20" not-null="false" />
+		</property>
+				<property name="devdelay_days" type="java.lang.String">
+			<column name="devdelay_days" length="20" not-null="false" />
+		</property>
+				<property name="testtime_deviation" type="java.lang.String">
+			<column name="testtime_deviation" length="20" not-null="false" />
+		</property>
+		<property name="testdelay_days" type="java.lang.String">
+			<column name="testdelay_days" length="20" not-null="false" />
+		</property>
+		<property name="prodelay_days" type="java.lang.String">
+			<column name="prodelay_days" length="20" not-null="false" />
+		</property>
+		<property name="protime_deviation" type="java.lang.String">
+			<column name="protime_deviation" length="20" not-null="false" />
+		</property>
+		<property name="bug_zm" type="java.lang.Integer">
+			<column name="bug_zm" length="10" not-null="true" />
+		</property>
+		<property name="bug_yz" type="java.lang.Integer">
+			<column name="bug_yz" length="10" not-null="true" />
+		</property>
+		<property name="bug_yb" type="java.lang.Integer">
+			<column name="bug_yb" length="10" not-null="true" />
+		</property>
+		<property name="bug_ts" type="java.lang.Integer">
+			<column name="bug_ts" length="10" not-null="true" />
+		</property>
+				<property name="versiontype" type="java.lang.Integer">
+			<column name="versiontype" length="8" not-null="true" />
+		</property>
+		<property name="perdemand" type="java.lang.Double">
+			<column name="perdemand" length="8" not-null="true" />
+		</property>
+		<property name="zt_versionlink" type="java.lang.String">
+			<column name="zt_versionlink" length="100" not-null="false" />
+		</property>
+	</class>
+</hibernate-mapping>

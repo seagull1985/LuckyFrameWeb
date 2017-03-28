@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="FlowInfo" table="QA_FLOWINFO"
+		schema="luckyframedb">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" precision="22" scale="0" />
+		</id>
+		<property name="phaseid" type="java.lang.Integer">
+			<column name="phaseid" length="10" not-null="true" />
+		</property>
+		<property name="phasename" type="java.lang.String">
+			<column name="phasename" length="20" not-null="true" />
+		</property>
+		<property name="phasenodeid" type="java.lang.Integer">
+			<column name="phasenodeid" length="10" not-null="true" />
+		</property>
+		<property name="phasenodename" type="java.lang.String">
+			<column name="phasenodename" length="20" not-null="true" />
+		</property>
+		<property name="checkentryid" type="java.lang.Integer">
+			<column name="checkentryid" length="10" not-null="true" />
+		</property>
+		<property name="checkentry" type="java.lang.String">
+			<column name="checkentry" length="100" not-null="true" />
+		</property>
+		<property name="remark" type="java.lang.String">
+			<column name="remark" length="100" not-null="false" />
+		</property>
+	</class>
+</hibernate-mapping>

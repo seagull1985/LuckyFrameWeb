@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="Review" table="QA_REVIEW"
+		schema="luckyframedb">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" precision="22" scale="0" />
+			<generator class="identity"/>
+		</id>
+		 <many-to-one name="sectorProjects" class="SectorProjects" fetch="select" lazy="false">   <!-- 关于lazy的解释     http://blog.sina.com.cn/s/blog_4731ed500101cwsk.html -->
+			<column name="projectid" not-null="false" />
+		</many-to-one>
+		<property name="version" type="java.lang.String">
+			<column name="version" length="20" not-null="true" />
+		</property>
+		<property name="review_type" type="java.lang.String">
+			<column name="review_type" length="20" not-null="false" />
+		</property>
+		<property name="review_date" type="java.lang.String">
+			<column name="review_date" length="20" not-null="false" />
+		</property>
+		<property name="bug_num" type="java.lang.Integer">
+			<column name="bug_num" length="8" not-null="false" />
+		</property>
+		<property name="repair_num" type="java.lang.Integer">
+			<column name="repair_num" length="8" not-null="false" />
+		</property>
+		<property name="confirm_date" type="java.lang.String">
+			<column name="confirm_date" length="20" not-null="false" />
+		</property>
+		<property name="review_object" type="java.lang.String">
+			<column name="review_object" length="100" not-null="false" />
+		</property>
+		<property name="review_result" type="java.lang.String">
+			<column name="review_result" length="50" not-null="false" />
+		</property>
+		<property name="result_Confirmor" type="java.lang.String">
+			<column name="result_Confirmor" length="50" not-null="false" />
+		</property>
+		<property name="remark" type="java.lang.String">
+			<column name="remark" length="500" not-null="false" />
+		</property>
+	</class>
+</hibernate-mapping>

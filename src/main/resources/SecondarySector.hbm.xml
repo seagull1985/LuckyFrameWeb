@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="SecondarySector" table="QA_SECONDARYSECTOR"
+		schema="luckyframedb">
+		<id name="sectorid" type="java.lang.Integer">
+			<column name="sectorid" precision="22" scale="0" />
+			<generator class="identity"/>
+		</id>
+		<property name="departmenthead" type="java.lang.String">
+			<column name="departmenthead" length="20" not-null="true" />
+		</property>
+		<property name="departmentname" type="java.lang.String">
+			<column name="departmentname" length="20" not-null="true" />
+		</property>
+	</class>
+</hibernate-mapping>

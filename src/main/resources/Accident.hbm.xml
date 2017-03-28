@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="Accident" table="QA_ACCIDENT"
+		schema="luckyframedb">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" precision="22" scale="0" />
+			<generator class="identity"/>
+		</id>
+		 <many-to-one name="sectorProjects" class="SectorProjects" fetch="select" lazy="false">   <!-- 关于lazy的解释     http://blog.sina.com.cn/s/blog_4731ed500101cwsk.html -->
+			<column name="projectid" not-null="false" />
+		</many-to-one>
+		<property name="accstatus" type="java.lang.String">
+			<column name="accstatus" length="80" not-null="true" />
+		</property>
+		<property name="eventtime" type="java.lang.String">
+			<column name="eventtime" length="30" not-null="false" />
+		</property>
+		<property name="reporter" type="java.lang.String">
+			<column name="reporter" length="20" not-null="true" />
+		</property>
+		<property name="reporttime" type="java.lang.String">
+			<column name="reporttime" length="30" not-null="true" />
+		</property>
+		<property name="accdescription" type="java.lang.String">
+			<column name="accdescription" length="500" not-null="true" />
+		</property>
+		<property name="acclevel" type="java.lang.String">
+			<column name="acclevel" length="60" not-null="true" />
+		</property>
+		<property name="causalanalysis" type="java.lang.String">
+			<column name="causalanalysis" length="500" not-null="false" />
+		</property>
+		<property name="causaltype" type="java.lang.String">
+			<column name="causaltype" length="100" not-null="false" />
+		</property>
+		<property name="consequenceanalysis" type="java.lang.String">
+			<column name="consequenceanalysis" length="300" not-null="false" />
+		</property>
+		<property name="correctiveaction" type="java.lang.String">
+			<column name="correctiveaction" length="300" not-null="false" />
+		</property>
+		<property name="resolutiontime" type="java.lang.String">
+			<column name="resolutiontime" length="30" not-null="false" />
+		</property>
+		<property name="resolutioner" type="java.lang.String">
+			<column name="resolutioner" length="20" not-null="false" />
+		</property>
+		<property name="preventiveaction" type="java.lang.String">
+			<column name="preventiveaction" length="300" not-null="false" />
+		</property>
+		<property name="preventiver" type="java.lang.String">
+			<column name="preventiver" length="20" not-null="false" />
+		</property>
+		<property name="preventiveplandate" type="java.lang.String">
+			<column name="preventiveplandate" length="30" not-null="false" />
+		</property>
+		<property name="preventiveaccdate" type="java.lang.String">
+			<column name="preventiveaccdate" length="30" not-null="false" />
+		</property>
+		<property name="trouble_duration" type="java.lang.Long">
+			<column name="trouble_duration" length="30" not-null="false" />
+		</property>
+		<property name="impact_time" type="java.lang.Long">
+			<column name="impact_time" length="30" not-null="false" />
+		</property>
+		<property name="filename" type="java.lang.String">
+			<column name="filename" length="100" not-null="false" />
+		</property>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="TestCasedetail" table="TEST_CASEDETAIL" schema="luckyframedb">
+		<id name="id" type="java.lang.Integer">
+			<column name="ID" precision="22" scale="0" />
+			<generator class="identity"/>
+		</id>
+		<many-to-one name="testTaskexcute" class="TestTaskexcute" fetch="select" lazy="false">
+			<column name="TASKID" precision="22" scale="0" not-null="true" />
+		</many-to-one>
+		<property name="caseno" type="java.lang.String">
+			<column name="CASENO" length="20" not-null="true" />
+		</property>
+		<property name="caseversion" type="java.lang.String">
+			<column name="CASEVERSION" length="20" not-null="true" />
+		</property>
+		<property name="casetime" type="java.sql.Timestamp"  update="false">
+			<column name="CASETIME" length="7" not-null="true" default="sysdate"/>
+		</property>
+		<property name="casename" type="java.lang.String">
+			<column name="CASENAME" length="20" not-null="true" />
+		</property>
+		<property name="casestatus" type="java.lang.String">
+			<column name="CASESTATUS" length="2" not-null="true" />
+		</property>
+	</class>
+</hibernate-mapping>

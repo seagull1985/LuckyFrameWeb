@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="ZtTask" table="QA_ZTTASK"	schema="luckyframedb">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" precision="22" scale="0" />
+		</id>
+		<property name="versionid" type="java.lang.Integer">
+			<column name="versionid" length="8" not-null="false" />
+		</property>
+		<property name="versionname" type="java.lang.String">
+			<column name="versionname" length="100" not-null="false" />
+		</property>
+		<property name="taskname" type="java.lang.String">
+			<column name="taskname" length="300" not-null="false" />
+		</property>
+		<property name="assignedDate" type="java.lang.String">
+			<column name="assignedDate" length="50" not-null="false" />
+		</property>
+		<property name="estimate" type="java.lang.Double">
+			<column name="estimate" length="8" not-null="false" />
+		</property>
+		<property name="consumed" type="java.lang.Double">
+			<column name="consumed" length="8" not-null="false" />
+		</property>
+		<property name="finishedby" type="java.lang.String">
+			<column name="finishedby" length="40" not-null="false" />
+		</property>
+		<property name="finishedname" type="java.lang.String">
+			<column name="finishedname" length="40" not-null="false" />
+		</property>
+		<property name="deadline" type="java.lang.String">
+			<column name="deadline" length="40" not-null="false" />
+		</property>
+		<property name="delaystatus" type="java.lang.Integer">
+			<column name="delaystatus" length="4" not-null="false" />
+		</property>
+	</class>
+</hibernate-mapping>
