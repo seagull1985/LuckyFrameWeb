@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="OperationLog" table="operation_log"	schema="luckyframedb">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" precision="22" scale="0" />
+			<generator class="identity"/>
+		</id>
+		<property name="tablename" type="java.lang.String">
+			<column name="tablename" length="30" not-null="true" />
+		</property>
+		<property name="tableid" type="java.lang.Integer">
+			<column name="tableid" length="8" not-null="true" />
+		</property>
+		<property name="operation_time" type="java.lang.String">
+			<column name="operation_time" length="30" not-null="true" />
+		</property>
+		<property name="operationer" type="java.lang.String">
+			<column name="operationer" length="20" not-null="true" />
+		</property>
+ 		<many-to-one name="sectorProjects" class="SectorProjects" fetch="select" lazy="false">   <!-- 关于lazy的解释     http://blog.sina.com.cn/s/blog_4731ed500101cwsk.html -->
+			<column name="projectid" not-null="false" />
+		</many-to-one>
+		<property name="operation_description" type="java.lang.String">
+			<column name="operation_description" length="200" not-null="true" />
+		</property>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:24:37 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="TestJobs" table="TEST_JOBS" schema="luckyframedb" lazy="false">
+		<id name="id" type="java.lang.Integer">
+			<column name="ID" />
+			<generator class="identity"/>
+		</id>
+		<property name="taskName" type="java.lang.String">
+			<column name="NAME" length="100" not-null="true" />
+		</property>
+		<property name="startDate" type="java.lang.String">
+			<column name="STARTDATE" length="100"  />
+		</property>
+		<property name="startTime" type="java.lang.String">
+			<column name="STARTTIME" length="100"  />
+		</property>
+		<property name="endDate" type="java.lang.String">
+			<column name="ENDDATE" length="100" />
+		</property>
+		<property name="endTime" type="java.lang.String">
+			<column name="ENDTIME" length="100" />
+		</property>
+		<property name="runTime" type="java.sql.Timestamp">
+			<column name="RUNTIME" />
+		</property>
+		<property name="remark" type="java.lang.String">
+			<column name="REMARK" length="100" />
+		</property>
+		<property name="planproj" type="java.lang.String">
+			<column name="PLANPROJ" length="100" />
+		</property>
+		<property name="state" type="java.lang.String">
+			<column name="STATE" length="2" not-null="true" />
+		</property>
+		<property name="taskType" type="java.lang.String">
+			<column name="TASKTYPE" length="2" not-null="true" />
+		</property>
+		<property name="startTimestr" type="java.lang.String">
+			<column name="STARTTIMESTR" length="100" />
+		</property>
+		<property name="endTimestr" type="java.lang.String">
+			<column name="ENDTIMESTR" length="100" />
+		</property>
+		<property name="createTime" type="java.sql.Timestamp" update="false">
+			<column name="CREATETIME" default="sysdate" not-null="true" />
+		</property>
+		<property name="noEndDate" type="java.lang.String">
+			<column name="NOENDDATE" length="10" />
+		</property>
+		<property name="time" type="java.lang.Integer">
+			<column name="TIME" length="2" />
+		</property>
+		<property name="timeType" type="java.lang.String">
+			<column name="TIMETYPE" length="1" />
+		</property>
+		<property name="threadCount" type="java.lang.Integer">
+			<column name="THREADCOUNT" length="2" not-null="true" />
+		</property>
+		<property name="isSendMail" type="java.lang.String">
+			<column name="ISSENDMAIL" length="1" />
+		</property>
+		<property name="emailer" type="java.lang.String">
+			<column name="EMAILER" length="100" />
+		</property>
+		<property name="isbuilding" type="java.lang.String">
+			<column name="isbuilding" length="1" />
+		</property>
+		<property name="buildname" type="java.lang.String">
+			<column name="buildname" length="100" />
+		</property>
+		<property name="isrestart" type="java.lang.String">
+			<column name="isrestart" length="1" />
+		</property>
+		<property name="restartcomm" type="java.lang.String">
+			<column name="restartcomm" length="100" />
+		</property>
+		<property name="testlinkname" type="java.lang.String">
+			<column name="testlinkname" length="200" />
+		</property>
+		<property name="extype" type="java.lang.Integer">
+			<column name="extype" length="4" not-null="true"/>
+		</property>
+		<property name="browsertype" type="java.lang.Integer">
+			<column name="browsertype" length="4"/>
+		</property>
+		<property name="timeout" type="java.lang.Integer">
+			<column name="TIMEOUT" length="8" />
+		</property>
+		<property name="clientip" type="java.lang.String">
+			<column name="clientip" length="30" />
+		</property>
+		<set name="tast">
+			<key column="jobid" update="false"/>
+			<one-to-many class="TestTaskexcute" />
+		</set> 
+	</class>
+</hibernate-mapping>

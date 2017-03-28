@@ -1,0 +1,438 @@
+ #login{
+	width:287px;
+	height:340px;;
+	margin: 0 auto;
+	font-size:12px;
+	margin-top: 40px;
+	
+}
+.clear{ clear:both; width:100%; height:0; overflow:hidden;}
+*+html #login{
+	width:287px;
+	height:330px;;
+	margin: 0 auto;
+	font-size:12px;
+	margin-top: 40px;
+	
+}
+#login .login_type_div{
+	width:100%;
+	height:48px;
+}
+#login .login_type_div span{
+	float:right;
+	width:46px;
+	height:48px;
+}
+
+#login .login_type_div .iphone_tip{
+	background:url("login/login_type_tip.png") -49px -49px no-repeat;
+	
+	
+	
+}
+#login .login_type_div .pc_tip{
+	background:url("login/login_type_tip.png") -2px -1px no-repeat;
+	display:none;
+}
+
+#login #loginTab{
+    float: left;
+	width:287px;
+	height:340px;
+	background:url(login/login_banner.png) no-repeat;
+	clear:both;
+}
+
+#login #mobile{
+	margin-top:10px;
+}
+#login #goHomeTab{
+    float: left;
+	padding-top:10px;
+	background:url(login/goHome_banner.png) no-repeat;
+	clear:both;
+}
+
+*+html #login #goHomeTab{
+    float: left;
+	padding-top:10px;
+	background:url(login/goHome_banner.png) no-repeat;
+	clear:both;
+}
+
+
+.loginDiv_left{
+	float:left;
+	font-size: 20px;
+	font-family: '微软雅黑';
+	color:#fff;
+	margin-left: 28px;
+}
+.loginDiv_right{
+	float:right;
+	margin-right: 20px;
+}
+
+
+
+
+
+
+#login .right .login_right_ul{
+	width:287px;
+	height:146px;
+	margin:0;
+	padding:0;
+	padding-left:33px;
+}
+
+
+#login .right li{
+	clear:both;
+	height:40px;
+	color:#666666;
+	list-style-type: none;
+}
+
+/* #login .right input{
+	height:22px;
+	width:155px;
+	line-height:24px;
+	border:1px solid rgb(170,170,170);
+	line-height:26px;
+	margin-top:3px;
+	font-size:12px;
+} */
+
+
+#_ocx_password{
+	height:26px;
+	width:170px;
+	margin:0px;
+	margin-top: 11px;
+}
+
+*+html #_ocx_password{
+	height:26px;
+	width:170px;
+	margin:0px;
+	margin-top:16px;
+}
+
+.loginForm{
+	margin-top:20px;
+	height: 120px;
+}
+
+*+html .loginForm{
+	margin-top:20px;
+	height: 120px;
+}
+
+#login .login_bottom{
+	text-align: center;
+	padding-top: 3px;
+}
+
+#login .login_bottom p{
+	font-size:12px;
+	
+}
+
+#login  .login_bottom .login_bottom_login_p{
+	font-family: "微软雅黑";
+	color:rgb(203,203,203);
+}
+
+#login  .login_bottom .login_bottom_login_p_second{
+	margin-top: 6px;
+	font-family: "微软雅黑";
+	
+}
+
+#login  .login_bottom .login_bottom_login_p_second a{
+	color:#fff;
+	
+}
+
+*+html #login  .login_bottom .login_bottom_login_p{
+	font-family: "微软雅黑";
+	color:rgb(203,203,203);
+	margin-top: 0px;
+}
+
+
+
+
+
+
+
+.login_submit_img {
+	width:220px;
+	margin:0 auto;
+	margin-top:20px;
+	cursor: pointer;
+}
+
+#login .right .labelstyle {
+    display: inline-block;
+    float: left;
+    height: 22px;
+    line-height: 30px;
+    width: 50px;
+    color:rgb(75,75,75);
+    font-size:14px;
+    font-family: "微软雅黑";
+    margin-left:13px;
+}
+
+#login .right a:active {
+    color: rgb(0,160,255);
+    cursor: pointer;
+    text-decoration: none;
+    font-family: "微软雅黑";
+}
+
+#login .right a:link {
+    color:#fff;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: "微软雅黑";
+}
+
+#login .right a{
+    color:rgb(0,160,255);
+    cursor: pointer;
+    text-decoration: none;
+    font-family: "微软雅黑";
+}
+
+*+html .right #imgcode{
+	margin-top:-11px;
+	padding-top:-10px;
+	vertical-align: top;
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/** lable **/
+	.ui-form-label {
+		display: inline-block;
+    	float: left;
+    	height: 22px;
+    	line-height: 30px;
+    	width: 50px;
+    	color:rgb(75,75,75);
+    	font-size:14px;
+    	font-family: "微软雅黑";
+    	margin-left:-2px;
+	} 
+	/** input **/
+	.ui-input { 
+		height:25px;
+		width:170px;
+		border: 0px;
+		line-height:26px;
+		font-size:13px;
+		font-family: "微软雅黑";
+	}
+		
+	 
+/**  link **/
+	.fm-link {  
+		display: block; 
+		margin-bottom:5px;
+		font: 12px/1.5 tahoma,arial,宋体;
+	} 
+	.fm-link  a {
+		color:#666666;
+		text-align:center;
+	} 
+	.fm-link  img {
+		
+	} 
+/**  btn **/
+.ui-button-text { 
+	background:url("../images/btn.png") no-repeat scroll 0 0 transparent;
+	font: 12px/1.5 tahoma,arial,宋体;
+	font-size: 24px; 
+	font-weight:bolder;
+	line-height: 35px;
+	border: 0 none;
+	cursor: pointer;
+	display: block;
+	height: 35px;
+	outline: 0 none;
+	overflow: hidden;
+	text-indent: -9999px;
+	width: 200px;
+}  
+.ocx_style{
+	font-size: 13px;
+	height: 28px; 
+	width: 198px;  
+	margin-bottom:10px; 
+} 
+.ocx_style_init{
+	
+	color: #aeaeae;
+	width:175px;
+	height: 28px; 
+	line-height: 28px; 
+	text-indent: 6px; 
+	margin-left: 20px;
+	margin: 0;  
+	
+}
+/*针对GoogleChrome、Safari3*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+ .ocx_style {width:192px;height: 20px; } 
+ } 
+@-moz-document url-prefix() { 
+.ocx_style {width:200px} 
+ } 
+
+.contact01{
+padding:0px; 
+margin-right: 0px;
+margin-left: 0px;
+}
+.loginForm{
+margin: 0px;
+padding:0px;
+padding-bottom: 5px;
+}
+.showDetail {
+border: 1px dashed #DE9797;
+color: #C40404;
+background: #FDF3F3 url(../images/wrong.gif) no-repeat 5px 3px; 
+padding: 3px 4px;
+text-indent: 20px;
+margin-bottom: 10px;
+margin-left:0px;
+width: 190px; 
+display: none;
+}
+.otherDiv { 
+padding-top:5px;
+}
+#register{
+color: #585757;
+display: block;
+font-size: 14px;
+font-weight: bold;
+height: 33px;
+line-height: 33px;
+margin-bottom: 10px;
+text-align: center;
+width: 198px;
+background: url("../images/reg.png") no-repeat scroll 0 0 transparent;
+}
+
+
+
+#checkcode{
+	height: 30px;
+	width:93px;
+	margin-top: 18px;
+	margin-left: -18px;
+	border:0px;
+}
+
+#valicode{
+	height: 22px;
+	width:93px;
+	margin-top: 3.5px;
+	margin-left: -15px;
+	border:0px;
+}
+
+*+html  #valicode{
+	height: 26px;
+	width:93px;
+	margin-top: 17px;
+	margin-left: -15px;
+}
+
+
+.usercodeline{
+	color:rgb(50, 174, 229); 
+	font-size: 16px;  
+	font-weight: 1000; 
+	margin-left: 30px; 
+	margin-top: 32px;
+}
+
+*+html .usercodeline{
+	color:rgb(50, 174, 229); 
+	font-size: 16px;  
+	font-weight: 1000; 
+	margin-left: 30px; 
+	margin-top: 44px;
+}
+
+#login #imgcode{
+	width: 75px; 
+	height: 38px; 
+	vertical-align: middle; 
+	cursor: pointer;
+	margin-top:-5px;
+}
+
+*+html  #login #imgcode{
+	margin-top:-10px;
+}
+
+#resetSms{
+	background: none repeat scroll 0 0 #fafafa;
+	border: 1px solid #c8c8c8;
+    color: #a9a8a8;
+    cursor: pointer;
+    float: right;
+    height: 38px;
+    margin-right: 68px;
+    margin-top: 14px;
+    text-align: center;
+    width: 72px;
+    border-radius: 3px;
+}
+
+#acquireSms{
+	background: none repeat scroll 0 0 #fafafa;
+	border: 1px solid #c8c8c8;
+    color: #a9a8a8;
+    cursor: pointer;
+    float: right;
+    height: 38px;
+    margin-right: 68px;
+    margin-top: -36px;
+    text-align: center;
+    width: 72px;
+    border-radius: 3px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
