@@ -372,7 +372,7 @@ insert into QA_SECONDARYSECTOR (sectorid, departmenthead, departmentname)
 values (99, '系统管理员', '总部');
 /*插入默认项目*/
 insert into QA_SECTORPROJECTS (projectid, projectname, projectmanager, sectorid, projecttype)
-values (99, '全部项目/未知项目', '系统管理员', 1, 0);
+values (99, '全部项目/未知项目', '系统管理员', 99, 0);
 /*插入默认管理员*/
 insert into USERINFO (id, usercode, password, username, role, sectorid)
 values (1, 'admin', 'uJ45aIeS9N80kaSFDjvk%2FA%3D%3D', '系统管理员', '1', 99);
