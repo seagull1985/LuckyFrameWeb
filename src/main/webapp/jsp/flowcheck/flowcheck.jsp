@@ -8,7 +8,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script language="JavaScript" type="text/javascript"
 	src="/js/My97DatePicker/WdatePicker.js"></script>	
-
 <title>项目流程检查信息</title>
 <link href="/css/style.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
@@ -22,7 +21,6 @@
 .STYLE6 {color: #FF0000; font-size: 12px; }
 -->
 </style>
-
 
 	</head>
 
@@ -46,7 +44,8 @@
 		 <header class="page-header">
 				<h1 class="page-title" style="text-align:center;">项目流程检查信息</h1>
 			</header>
-					
+	
+<div id="bg" class="bg" style="display:none;"></div>					
 	 <sf:form method="post" modelAttribute="flowcheck">
 		<input name="page" id="page" type="hidden"  />					
 		<div align="right"></div>
@@ -110,7 +109,7 @@
 			  <tr>
 			  <td height="25" align="center"><a href="/flowCheck/projectchecklist.do?projectid=${t[0] }&checkid=${t[1] }&versionnum=${t[6] }" style="cursor: pointer;"><u>${t[8] }</u></a></td>
 				  
-				  <td height="25" align="center">${t[6] }&nbsp;</td>				  
+				  <td height="25" align="center"><a href="#" onclick="openDiv('${t[6] }','${t[0] }')"  style="text-decoration: none;color:blue;">${t[6] }&nbsp;</a></td>				  
 				  <td height="25" align="center">第${t[1] }次&nbsp;</td>
 				  <%-- <td height="25" align="center">${t.checkdate }&nbsp;</td> --%>
 				  <td height="25" align="center">${t[2] }&nbsp;</td>			  
@@ -182,13 +181,22 @@
 		document.getElementById("flowcheck").submit();
 		return true;
 	}
-	function showDiv_backup(){
-		document.getElementById('passDiv').style.display='block';
-		document.getElementById('bg').style.display='block';
-	}
-	function closepassDiv(){
-		document.getElementById('passDiv').style.display='none';
-		document.getElementById('bg').style.display='none';
+	function openDiv(verold,proid){
+		var version=prompt("请输入修改的版本号",verold);
+		if (version!=null && version!=""){
+			var url = '/flowCheck/updateversion.do?versionold='+verold+'&versionnew='+version+'&projectid='+proid;
+		    $.getJSON(url,null,function call(result){
+		        var tt="";
+		        $.each(result, function(k, v) {
+		            tt += v;
+		        })
+		    	 if(tt=="成功"){
+		    		 alert("更新成功！");
+		    	 }else{
+		    		 alert("更新异常,请查看！");
+		    	 }
+		      });
+		}
 	}
 	function showDiv(){
 		var status = document.getElementById("loginstatus").value;
@@ -198,11 +206,11 @@
 				window.location.href=url;
 			}else{
 				return false; 
-			} 
+			}
 		}else{
 			var url = '/flowCheck/add.do';
 			window.location.href=url;
-		}	
+		}
 	}
 	</script>
 </body>

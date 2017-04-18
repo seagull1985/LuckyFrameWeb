@@ -787,6 +787,37 @@ public class FlowCheckController {
 	}
 	
 	/**
+	 * 修改版本号
+	 * @param tj
+	 * @param br
+	 * @param model
+	 * @param req
+	 * @param rsp
+	 * @return
+	 * @throws Exception
+	 * @Description:
+	 */
+	@RequestMapping(value = "/updateversion.do")
+	public void updateversion(HttpServletRequest req, HttpServletResponse rsp) throws Exception{
+		String result="成功";
+		try{
+		String versionold = req.getParameter("versionold");
+		String versionnew = req.getParameter("versionnew");
+		int projectid = Integer.valueOf(req.getParameter("projectid"));
+		flowcheckservice.updateversion(projectid, versionold, versionnew);
+		}catch(Exception e){
+			e.printStackTrace();
+			result="失败";
+		}finally{
+			// 取集合
+		    rsp.setContentType("text/xml;charset=utf-8");
+		    JSONObject jsobjcet = new JSONObject();
+		    jsobjcet.put("result", result); 
+			rsp.getWriter().write(jsobjcet.toString());
+		}
+	}
+	
+	/**
 	 * 三级联动查询
 	 * @param tj
 	 * @param br

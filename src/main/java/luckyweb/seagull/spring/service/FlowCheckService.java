@@ -40,7 +40,7 @@ public interface FlowCheckService {
 	public List findByPageTable( final Object value,final int offset, final int pageSize);
 	
 	public List reportList( final Object value,final int offset, final int pageSize);
-	
+	public void updateversion(int proid,String verold,String vernew) throws Exception;
 	public int findRowsReport(FlowCheck flowcheck) ;
 	public int findRows(FlowCheck flowcheck) ;
 //	public List<TestJobs> getListForPage( final int offset,final int lengh);

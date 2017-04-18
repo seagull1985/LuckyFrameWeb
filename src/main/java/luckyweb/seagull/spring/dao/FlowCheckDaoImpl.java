@@ -170,9 +170,21 @@ public class FlowCheckDaoImpl extends HibernateDaoSupport implements FlowCheckDa
 
 
 	@Override
-	public void modifyInfo(FlowCheck flowcheck) throws Exception {
+	public void modifyVersion(String sql) throws Exception {
 		// TODO Auto-generated method stub
+		Session session=this.getSession(true);
+		try {
+		session.beginTransaction();
+		Query query =session .createQuery(sql);
+		query.executeUpdate();
 		
+		session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally
+		{
+			session.close();		
+		}		
 	}
 
 
