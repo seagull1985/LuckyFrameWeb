@@ -197,6 +197,12 @@ public class FlowCheckServiceImpl implements FlowCheckService{
 	}
 
 	@Override
+	public void updateversion(int proid,String verold,String vernew) throws Exception {
+		// TODO Auto-generated method stub
+		this.flowcheckdao.modifyVersion("update FlowCheck set versionnum='"+vernew+"' where projectid="+proid+" and versionnum='"+verold+"'");
+	}
+	
+	@Override
 	public List listcheckinfo(int projectid,int checkid) throws Exception {
 		// TODO Auto-generated method stub
 		return this.flowcheckdao.listcheckinfo("select id,phasename,phasenodename,checkentry from QA_FLOWINFO where id not in(select checkentry from QA_FLOWCHECK  "

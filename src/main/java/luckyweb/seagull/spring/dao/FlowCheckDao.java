@@ -15,7 +15,7 @@ public interface FlowCheckDao {
 
 	public void modifyState(FlowCheck flowcheck) throws Exception;
 
-	public void modifyInfo(FlowCheck flowcheck) throws Exception;
+	public void modifyVersion(String sql) throws Exception;
 
 	public void delete(int id) throws Exception;
 
