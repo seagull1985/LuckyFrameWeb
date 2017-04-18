@@ -181,7 +181,17 @@
 		document.getElementById("flowcheck").submit();
 		return true;
 	}
+	
 	function openDiv(verold,proid){
+		var status = document.getElementById("loginstatus").value;
+		if(status=="false"){
+			if(window.confirm("你未登录哦，要先去登录吗？")){
+				var url = '/progressus/signin.jsp';
+				window.location.href=url;
+			}else{
+				return false; 
+			}
+		}else{
 		var version=prompt("请输入修改的版本号",verold);
 		if (version!=null && version!=""){
 			var url = '/flowCheck/updateversion.do?versionold='+verold+'&versionnew='+version+'&projectid='+proid;
@@ -190,14 +200,12 @@
 		        $.each(result, function(k, v) {
 		            tt += v;
 		        })
-		    	 if(tt=="成功"){
-		    		 alert("更新成功！");
-		    	 }else{
-		    		 alert("更新异常,请查看！");
-		    	 }
+                alert(tt);
 		      });
 		}
+		}
 	}
+	
 	function showDiv(){
 		var status = document.getElementById("loginstatus").value;
 		if(status=="false"){
