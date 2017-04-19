@@ -145,7 +145,7 @@ public class ReviewController {
 		if(!UserLoginController.permissionboolean(req, "rev_2")){
 			model.addAttribute("review", new Review());
 			model.addAttribute("url", "/review/list.do");
-			model.addAttribute("message", "当前用户无权限删除评审信息，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限删除评审信息，请联系管理员！");
 			return "success";
 		}
 		
@@ -198,7 +198,7 @@ public class ReviewController {
 			if(!UserLoginController.permissionboolean(req, "rev_3")){
 				model.addAttribute("review", new Review());
 				model.addAttribute("url",  "/review/list.do");
-				model.addAttribute("message", "当前用户无权限修改评审信息，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限修改评审信息，请联系管理员！");
 				return "success";
 			}
 			

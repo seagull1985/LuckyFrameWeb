@@ -111,7 +111,7 @@ public class TestJobsController
 			if(!UserLoginController.permissionboolean(req, "tast_1")){
 				model.addAttribute("taskjob", new TestJobs());
 				model.addAttribute("url",  "/testJobs/list.do");
-				model.addAttribute("message", "当前用户无权限添加计划任务，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限添加计划任务，请联系管理员！");
 				return "success";
 			}
 			
@@ -394,7 +394,7 @@ public class TestJobsController
 		if(!UserLoginController.permissionboolean(req, "tast_3")){
 			model.addAttribute("taskjob", new TestJobs());
 			model.addAttribute("url",  "/testJobs/list.do");
-			model.addAttribute("message", "当前用户无权限修改计划任务，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限修改计划任务，请联系管理员！");
 			return "success";
 		}
 		
@@ -624,7 +624,7 @@ public class TestJobsController
 		if(!UserLoginController.permissionboolean(req, "tast_2")){
 			model.addAttribute("taskjob", new TestJobs());
 			model.addAttribute("url",  "/testJobs/list.do");
-			model.addAttribute("message", "当前用户无权限删除计划任务，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限删除计划任务，请联系管理员！");
 			return "success";
 		}
 		int id = Integer.valueOf(req.getParameter("id"));
@@ -847,7 +847,7 @@ public class TestJobsController
 		if(!UserLoginController.permissionboolean(req, "tast_upload")){
 			model.addAttribute("taskjob", new TestJobs());
 			model.addAttribute("url",  "/testJobs/list.do");
-			model.addAttribute("message", "当前用户无权限上传测试项目，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限上传测试项目，请联系管理员！");
 			return "error";
 		}
 		String clientip = req.getParameter("clientip");

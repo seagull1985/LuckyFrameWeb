@@ -140,7 +140,7 @@ public class ReviewInfoController {
 			if(!UserLoginController.permissionboolean(req, "revinfo_1")){
 				model.addAttribute("reviewinfo", new ReviewInfo());
 				model.addAttribute("url", "/review/list.do");
-				model.addAttribute("message", "当前用户无权限添加评审信息，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限添加评审信息，请联系管理员！");
 				return "success";
 			}
 			
@@ -260,7 +260,7 @@ public class ReviewInfoController {
 		if(!UserLoginController.permissionboolean(req, "revinfo_2")){
 			model.addAttribute("reviewinfo", new ReviewInfo());
 			model.addAttribute("url", "/review/list.do");
-			model.addAttribute("message", "当前用户无权限删除评审信息，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限删除评审信息，请联系管理员！");
 			return "success";
 		}
 		
@@ -322,7 +322,7 @@ public class ReviewInfoController {
 			if(!UserLoginController.permissionboolean(req, "revinfo_3")){
 				model.addAttribute("reviewinfo", new ReviewInfo());
 				model.addAttribute("url",  "/reviewinfo/list.do?reviewid="+reinfo.getReview_id());
-				model.addAttribute("message", "当前用户无权限修改评审信息，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限修改评审信息，请联系管理员！");
 				return "success";
 			}
 			

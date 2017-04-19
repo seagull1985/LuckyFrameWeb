@@ -174,7 +174,7 @@ public class AccidentController {
 			if(!UserLoginController.permissionboolean(req, "acc_1")){
 				model.addAttribute("accident", new Accident());
 				model.addAttribute("url", "/accident/list.do");
-				model.addAttribute("message", "当前用户无权限添加生产事故信息，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限添加生产事故信息，请联系管理员！");
 				return "success";
 			}
 			
@@ -304,7 +304,7 @@ public class AccidentController {
 		if(!UserLoginController.permissionboolean(req, "acc_3")){
 			model.addAttribute("accident", new Accident());
 			model.addAttribute("url", "/accident/list.do");
-			model.addAttribute("message", "当前用户无权限修改生产事故信息，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限修改生产事故信息，请联系管理员！");
 			return "success";
 		}
 		
@@ -407,7 +407,7 @@ public class AccidentController {
 		if(!UserLoginController.permissionboolean(req, "acc_2")){
 			model.addAttribute("accident", new Accident());
 			model.addAttribute("url", "/accident/list.do");
-			model.addAttribute("message", "当前用户无权限删除生产事故信息，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限删除生产事故信息，请联系管理员！");
 			return "success";
 		}
 		

@@ -190,7 +190,7 @@ public class FlowCheckController {
 				if(!UserLoginController.permissionboolean(req, "fc_1")){
 					model.addAttribute("flowcheck", new FlowCheck());
 					model.addAttribute("url", "/flowCheck/projectchecklist.do?projectid="+projectid+"&checkid="+checkid+"&version="+versionnum);
-					model.addAttribute("message", "当前用户无权限添加项目检查信息，请联系软件质量管理室！");
+					model.addAttribute("message", "当前用户无权限添加项目检查信息，请联系管理员！");
 					return "success";
 				}
 				String result = addinfodetail(flowcheck, br, projectid, checkid, req, rsp, model);
@@ -477,7 +477,7 @@ public class FlowCheckController {
 			if(!UserLoginController.permissionboolean(req, "fc_1")){
 				model.addAttribute("flowcheck", new FlowCheck());
 				model.addAttribute("url", "list.do");
-				model.addAttribute("message", "当前用户无权限添加项目检查信息，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限添加项目检查信息，请联系管理员！");
 				return "success";
 			}
 			
@@ -603,7 +603,7 @@ public class FlowCheckController {
 			if(!UserLoginController.permissionboolean(req, "fc_3")){
 				model.addAttribute("flowcheck", new FlowCheck());
 				model.addAttribute("url", "/flowCheck/projectchecklist.do?projectid="+fc.getSectorProjects().getProjectid()+"&checkid="+fc.getCheckid()+"&version="+fc.getVersionnum());
-				model.addAttribute("message", "当前用户无权限修改项目检查信息，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限修改项目检查信息，请联系管理员！");
 				return "success";
 			}
 			
@@ -752,7 +752,7 @@ public class FlowCheckController {
 			if(!UserLoginController.permissionboolean(req, "fc_2")){
 				model.addAttribute("flowcheck", new FlowCheck());
 				model.addAttribute("url", "/flowCheck/projectchecklist.do?projectid="+fc.getSectorProjects().getProjectid()+"&checkid="+fc.getCheckid()+"&version="+fc.getVersionnum());
-				model.addAttribute("message", "当前用户无权限删除项目检查信息，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限删除项目检查信息，请联系管理员！");
 				return "success";
 			}
 

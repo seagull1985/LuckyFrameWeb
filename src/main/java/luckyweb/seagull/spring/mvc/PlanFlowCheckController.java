@@ -156,7 +156,7 @@ public class PlanFlowCheckController {
 			if(!UserLoginController.permissionboolean(req, "pfc_1")){
 				model.addAttribute("planflowcheck", new PlanFlowCheck());
 				model.addAttribute("url", "list.do");
-				model.addAttribute("message", "当前用户无权限添加项目检查计划，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限添加项目检查计划，请联系管理员！");
 				return "success";
 			}
 			
@@ -284,7 +284,7 @@ public class PlanFlowCheckController {
 			if(!UserLoginController.permissionboolean(req, "pfc_3")){
 				model.addAttribute("planflowcheck", new PlanFlowCheck());
 				model.addAttribute("url", "list.do");
-				model.addAttribute("message", "当前用户无权修改项目检查计划，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权修改项目检查计划，请联系管理员！");
 				return "success";
 			}
 			
@@ -395,7 +395,7 @@ public class PlanFlowCheckController {
 			if(!UserLoginController.permissionboolean(req, "pfc_2")){
 				model.addAttribute("flowcheck", new FlowCheck());
 				model.addAttribute("url", "list.do");
-				model.addAttribute("message", "当前用户无权限删除项目检查计划，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限删除项目检查计划，请联系管理员！");
 				return "success";
 			}
 
@@ -441,7 +441,7 @@ public class PlanFlowCheckController {
 		if(!UserLoginController.permissionboolean(req, "fc_tocheck")){
 			model.addAttribute("flowcheck", new FlowCheck());
 			model.addAttribute("url", "list.do");
-			model.addAttribute("message", "当前用户无权限把计划转成检查结果，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限把计划转成检查结果，请联系管理员！");
 			return "success";
 		}
 		

@@ -72,7 +72,7 @@ public class UserInfoController {
 		if(!UserLoginController.permissionboolean(req, "ui_4")){
 			model.addAttribute("userinfo", new UserInfo());
 			model.addAttribute("url", "/index.jsp");
-			model.addAttribute("message", "您无权限使用用户管理功能，请联系软件质量管理室！");
+			model.addAttribute("message", "您无权限使用用户管理功能，请联系管理员！");
 			return "success";
 		}
 
@@ -159,7 +159,7 @@ public class UserInfoController {
 			if(!UserLoginController.permissionboolean(req, "ui_1")){
 				model.addAttribute("userinfo", new UserInfo());
 				model.addAttribute("url", "/userInfo/list.do");
-				model.addAttribute("message", "当前用户无权限添加用户，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限添加用户，请联系管理员！");
 				return "success";
 			}
 
@@ -266,7 +266,7 @@ public class UserInfoController {
 		if(!UserLoginController.permissionboolean(req, "ui_2")){
 			model.addAttribute("userinfo", new UserInfo());
 			model.addAttribute("url", "/userInfo/list.do");
-			model.addAttribute("message", "当前用户无权限删除用户，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限删除用户，请联系管理员！");
 			return "success";
 		}
 		
@@ -311,7 +311,7 @@ public class UserInfoController {
 		if(!UserLoginController.permissionboolean(req, "ui_3")){
 			model.addAttribute("userinfo", new UserInfo());
 			model.addAttribute("url", "/userInfo/list.do");
-			model.addAttribute("message", "当前用户无权限修改用户信息，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限修改用户信息，请联系管理员！");
 			return "success";
 		}
 		Endecrypt endecrypt = new Endecrypt();
@@ -504,7 +504,7 @@ public class UserInfoController {
 			if(!UserLoginController.permissionboolean(req, "role_3")){
 				model.addAttribute("userinfo", new UserInfo());
 				model.addAttribute("url", "/userInfo/list.do");
-				model.addAttribute("message", "当前用户无权限查看角色权限信息，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限查看角色权限信息，请联系管理员！");
 				return "success";
 			}
 			
@@ -587,7 +587,7 @@ public class UserInfoController {
 			if(!UserLoginController.permissionboolean(req, "role_1")){
 				model.addAttribute("userinfo", new UserInfo());
 				model.addAttribute("url", "/userInfo/list.do");
-				model.addAttribute("message", "当前用户无权限添加角色权限信息，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限添加角色权限信息，请联系管理员！");
 				return "success";
 			}
 			
@@ -657,7 +657,7 @@ public class UserInfoController {
 		if(!UserLoginController.permissionboolean(req, "role_2")){
 			model.addAttribute("userinfo", new UserInfo());
 			model.addAttribute("url", "/userInfo/list.do");
-			model.addAttribute("message", "当前用户无权限删除角色，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限删除角色，请联系管理员！");
 			return "success";
 		}
 		

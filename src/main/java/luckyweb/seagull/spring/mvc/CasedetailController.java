@@ -272,7 +272,7 @@ public class CasedetailController
 		if(!UserLoginController.permissionboolean(req, "case_ex")){
 			model.addAttribute("testCasedetail", new TestCasedetail());
 			model.addAttribute("url",  "/caseDetail/list.do");
-			model.addAttribute("message", "当前用户无权限执行批量用例，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限执行批量用例，请联系管理员！");
 			return "success";
 		}
 
