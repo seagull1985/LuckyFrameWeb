@@ -109,24 +109,24 @@
 				varStatus="i">
 				<tr>
 					<td height="25" align="center">${i.index+1}&nbsp;</td>
-									<td height="25" align="center" style="text-align:center;"><a href="#"
+					<td height="25" align="center" style="text-align:center;"><a href="#"
 						onclick="showDiv(${t.id},1)" style="cursor: pointer;"><img src="../pic/run.png"
-						width="20" height="20" border="0" title="立即运行" />
-					</a><a href="/testJobs/show.do?id=${t.id}"><img src="../pic/detail.png"
-						width="20" height="20" border="0" title="详情" /></a>
+						width="20" height="20" border="0" title="立即运行" />	</a>&nbsp;
+						<a href="/testJobs/show.do?id=${t.id}"><img src="../pic/detail.png"
+						width="20" height="20" border="0" title="详情" /></a>&nbsp;
 						<c:if test="${t.showRun==true }">
 							<c:if test="${t.state==0 }">
 								<a href="#" onclick="showDiv(${t.id},2)" style="cursor: pointer;"><img src="../pic/run.png"
-						width="20" height="20" border="0" title="启动" /></a>	        </c:if>
+						width="20" height="20" border="0" title="启动" /></a>&nbsp;	        </c:if>
 							<c:if test="${t.state==1 }">
 								<a href="#" onclick="showDiv(${t.id},3)" style="cursor: pointer;"><img src="../pic/close.png"
-						width="20" height="20" border="0" title="关闭" /></a>	      </c:if>
+						width="20" height="20" border="0" title="关闭" /></a>&nbsp;	      </c:if>
 						</c:if> <c:if test="${t.showRun==false }">
 	   		  已失效
 	     </c:if> <a href="#" onclick="showDiv(${t.id},4)" style="cursor: pointer;"><img src="../pic/update.png"
 						width="20" height="20" border="0" title="修改" />
-					</a><a href="#" onclick="showDiv(${t.id},5)"><img src="../pic/delete.png"
-						width="20" height="20" border="0" title="删除" /></a></td>
+					</a>&nbsp;<a href="#" onclick="showDiv(${t.id},5)"><img src="../pic/delete.png"
+						width="20" height="20" border="0" title="删除" /></a>&nbsp;</td>
 					<td height="25" align="center"><a onclick="goTaskList(${t.id})"	style="cursor: pointer;">${t.taskName }</a></td>
 					<%-- 			        <td height="25" align="center"><a href="/tastExecute/list.do?${t.id}">${t.name }</a></td> --%>
 					<td height="25" align="center">【<b>${t.planproj }</b>】${t.testlinkname }&nbsp;</td>
