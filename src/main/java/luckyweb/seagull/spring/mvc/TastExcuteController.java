@@ -240,7 +240,7 @@ public class TastExcuteController
 		if(!UserLoginController.permissionboolean(req, "tastex_2")){
 			model.addAttribute("testTastexcute", new TestTaskexcute());
 			model.addAttribute("url",  "/tastExecute/list.do");
-			model.addAttribute("message", "当前用户无权限删除已执行的任务，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限删除已执行的任务，请联系管理员！");
 			return "success";
 		}
 		int id = Integer.valueOf(req.getParameter("id"));
@@ -300,7 +300,7 @@ public class TastExcuteController
 		if (!UserLoginController.permissionboolean(req, "tastex_2")) {
 			model.addAttribute("testTastexcute", new TestTaskexcute());
 			model.addAttribute("url", "/tastExecute/list.do");
-			model.addAttribute("message", "当前用户无权限删除已执行的任务，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限删除已执行的任务，请联系管理员！");
 			return "success";
 		}
 		String[] reqid = req.getParameterValues("deletebox");

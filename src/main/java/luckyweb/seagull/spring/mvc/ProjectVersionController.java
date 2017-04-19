@@ -172,7 +172,7 @@ public class ProjectVersionController {
 			if(!UserLoginController.permissionboolean(req, "pv_1")){
 				model.addAttribute("projectversion", new ProjectVersion());
 				model.addAttribute("url", "/projectVersion/list.do");
-				model.addAttribute("message", "当前用户无权限添加版本信息，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限添加版本信息，请联系管理员！");
 				return "success";
 			}
 
@@ -394,7 +394,7 @@ public class ProjectVersionController {
 		if(!UserLoginController.permissionboolean(req, "pv_3")){
 			model.addAttribute("projectversion", new ProjectVersion());
 			model.addAttribute("url", "/projectVersion/list.do");
-			model.addAttribute("message", "当前用户无权限操作修改版本信息，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限操作修改版本信息，请联系管理员！");
 			return "success";
 		}
 			
@@ -622,7 +622,7 @@ public class ProjectVersionController {
 			if(!UserLoginController.permissionboolean(req, "pvp_1")){
 				model.addAttribute("projectversion", new ProjectVersion());
 				model.addAttribute("url", "/projectVersion/list.do");
-				model.addAttribute("message", "当前用户无权限添加版本计划信息，请联系软件质量管理室！");
+				model.addAttribute("message", "当前用户无权限添加版本计划信息，请联系管理员！");
 				return "success";
 			}
 
@@ -822,7 +822,7 @@ public class ProjectVersionController {
 		if(!UserLoginController.permissionboolean(req, "pv_2")){
 			model.addAttribute("projectversion", new ProjectVersion());
 			model.addAttribute("url", "/projectVersion/list.do");
-			model.addAttribute("message", "当前用户无权限删除版本信息，请联系软件质量管理室！");
+			model.addAttribute("message", "当前用户无权限删除版本信息，请联系管理员！");
 			return "success";
 		}
 		int versionid = Integer.valueOf(req.getParameter("versionid"));
