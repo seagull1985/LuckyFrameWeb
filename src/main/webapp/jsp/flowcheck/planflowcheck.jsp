@@ -102,9 +102,10 @@ _top:       expression(eval(document.compatMode &&
 			将计划转成检查结果？
   	</div>
   	是否生成新的检查   <select name="checkid" id="checkid" >
-    </select><br> 
-	<input class="btnold STYLE1" id="qd" name="qd" value="好的" onclick="tocheck();" style="margin: 5px 0 0 0;"/>&nbsp;&nbsp;&nbsp;
-	<input class="btnold STYLE1" name="qx" value="放弃" onclick="closeDiv();"/>
+    </select><br>
+    <input class="btnold" id="qd" name="qd" value="好的" onclick="tocheck();" style="margin: 5px 0 0 0;width:30%;text-align:center"/>&nbsp;
+	<input class="btnold" name="qx" value="放弃" onclick="closeDiv();" style="width:30%;text-align:center"/>
+
 </div>
 	 <div id="bg" class="bg" style="display:none;"></div>
 	 <table width="100%" align="center">
