@@ -367,7 +367,7 @@ public class TastExcuteController
 		TestCasedetail caseDetail = new TestCasedetail();
 		caseDetail.setTaskId(Integer.valueOf(taskid));
 		
-		if(task.getCasetotalCount()!=0){
+		if(null!=task&&task.getCasetotalCount()!=0){
 			int excount = casedetailService.findRows(caseDetail);
 			//int excount = task.getCasesuccCount()+task.getCasenoexecCount()+task.getCaselockCount()+task.getCasefailCount();
 			int a = (int)((Double.valueOf(excount)/Double.valueOf(task.getCasetotalCount()))*100);
