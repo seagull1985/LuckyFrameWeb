@@ -94,10 +94,10 @@
 					<tr id="uiclientipdis" style="display: none">
 						<td height="30" align="left">UI自动化浏览器类型</td>
 						<td height="30" colspan="3">
-						<sf:radiobutton	path="browsertype" id="browsertype" value="0" />IE浏览器&nbsp;&nbsp;&nbsp;&nbsp;
-						<sf:radiobutton path="browsertype" id="browsertype" value="1" /> 火狐浏览器&nbsp;&nbsp;&nbsp;&nbsp;
-						<sf:radiobutton	path="browsertype" id="browsertype" value="2" /> 谷歌浏览器&nbsp;&nbsp;&nbsp;&nbsp;
-						<sf:radiobutton	path="browsertype" id="browsertype" value="3" /> Edge浏览器</td>
+						<sf:radiobutton	path="browsertype" id="browsertype0" value="0" />IE浏览器&nbsp;&nbsp;&nbsp;&nbsp;
+						<sf:radiobutton path="browsertype" id="browsertype1" value="1" /> 火狐浏览器&nbsp;&nbsp;&nbsp;&nbsp;
+						<sf:radiobutton	path="browsertype" id="browsertype2" value="2" /> 谷歌浏览器&nbsp;&nbsp;&nbsp;&nbsp;
+						<sf:radiobutton	path="browsertype" id="browsertype3" value="3" /> Edge浏览器</td>
 					</tr>
 					<tr>
 						<td height="30" align="left">客户端IP</td>
@@ -315,7 +315,7 @@
 		if(isSend=='1'){
 			document.getElementById('uiclientipdis').style.display='block';
 			document.getElementById('uiclientipdis').style.display = 'table-row'
-				document.getElementById('browsertype').checked = true
+			document.getElementById('browsertype${browsertype}').checked = true
 		}else{
 			document.getElementById('uiclientipdis').style.display='none';
 			document.getElementById('uiclientip').value="";
