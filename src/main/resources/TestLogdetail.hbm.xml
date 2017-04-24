@@ -12,7 +12,7 @@
 			<column name="LOGTIME" not-null="true" default="sysdate" />
 		</property>
 		<property name="detail" type="java.lang.String">
-			<column name="DETAIL" length="2000" not-null="true" />
+			<column name="DETAIL" length="5000" not-null="true" />
 		</property>
 		<property name="logGrade" type="java.lang.String">
 			<column name="LOGGRADE" length="20" />
