@@ -6,7 +6,7 @@ function gouserInfo(){
 	var status = document.getElementById("loginstatus").value;
 	if(status=="false"){
 		if(window.confirm("你未登录哦，要先去首页登录吗？")){
-			var url = '/progressus/signin.html';
+			var url = '/progressus/signin.jsp';
 			window.location.href=url;
 		}else{
 			return false; 
