@@ -24,10 +24,10 @@
   <!-- 指定连接池里最小连接数 -->
   <property name="hibernate.c3p0.min_size">5</property>
   <!-- 指定连接池里连接的超时时长 -->
-  <property name="hibernate.c3p0.timeout">60</property>
+  <property name="hibernate.c3p0.timeout">0</property>
   <!-- 指定连接池里最大缓存多少个Statement对象 -->
   <property name="hibernate.c3p0.max_statements">20</property>
-  <property name="hibernate.c3p0.idle_test_period">60</property>
+  <property name="hibernate.c3p0.idle_test_period">0</property>
   <property name="hibernate.c3p0.acquire_increment">2</property>
   <property name="hibernate.c3p0.validate">true</property>
   <property name="hibernate.c3p0.preferredTestQuery ">select 1 </property>
