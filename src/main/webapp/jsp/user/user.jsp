@@ -59,7 +59,9 @@
 			<a href="#" onclick="showDiv(0,5)" style="text-decoration: none;"> 
 			<span class="btnold STYLE1" style="width:70px;background:#FFA54F;border:#FFA54F;"> 添加角色</span></a>&nbsp;&nbsp;
 			<a href="#" onclick="showDiv(0,4)" style="text-decoration: none;"> 
-			<span class="btnold STYLE1" style="width:70px;background:#FFA54F;border:#FFA54F;"> 权限管理</span></a>				
+			<span class="btnold STYLE1" style="width:70px;background:#FFA54F;border:#FFA54F;"> 权限管理</span></a>&nbsp;&nbsp;
+			<a href="#" onclick="showDiv(0,6)" style="text-decoration: none;"> 
+			<span class="btnold STYLE1" style="width:70px;background:#FFA54F;border:#FFA54F;"> 项目管理</span></a>				
 				</td>
 		</tr>
 		  </table> 
@@ -177,6 +179,9 @@
 			window.location.href=url;
 	    }else if(opr=="5"){
 			var url = '/userInfo/roleadd.do';
+			window.location.href=url;
+	    }else if(opr=="6"){
+			var url = '/sectorProjects/list.do';
 			window.location.href=url;
 	    }else{ 
 	       alert("操作码有误，是否有非法操作，请联系软件质量室！"); 

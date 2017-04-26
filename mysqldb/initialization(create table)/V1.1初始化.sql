@@ -356,6 +356,12 @@ insert into USER_AUTHORITY (id, module, auth_type, alias)
 values (46, '用户管理-权限角色', '增加', 'role_1');
 insert into USER_AUTHORITY (id, module, auth_type, alias)
 values (47, '用户管理-权限角色', '删除', 'role_2');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (48, '项目管理', '增加', 'pro_1');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (49, '项目管理', '删除', 'pro_2');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (50, '项目管理', '修改', 'pro_3');
 
 /*插入角色默认定义*/
 insert into USER_ROLE (id, role, permission)

@@ -17,5 +17,6 @@ public interface OperationLogDao {
 	public List findByPage(final String hql, final Object value, final int offset, final int pageSize);
 	
 	public int findRows(OperationLog oplog, String hql); 
+	public void delete(String hql) throws Exception;
 
 }

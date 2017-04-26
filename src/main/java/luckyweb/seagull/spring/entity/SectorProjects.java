@@ -12,8 +12,15 @@ public class SectorProjects implements java.io.Serializable{
 	private String projectname;
 	private String projectmanager;
 	private int sectorid;
+	private int projecttype;
 	private SecondarySector secondarySector;
 	
+	public int getProjecttype() {
+		return projecttype;
+	}
+	public void setProjecttype(int projecttype) {
+		this.projecttype = projecttype;
+	}
 	public int getProjectid() {
 		return projectid;
 	}

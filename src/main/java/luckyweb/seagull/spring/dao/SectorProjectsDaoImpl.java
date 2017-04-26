@@ -12,7 +12,9 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
+import luckyweb.seagull.spring.entity.ProjectVersion;
 import luckyweb.seagull.spring.entity.SectorProjects;
+import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.util.StrLib;
 
 @Repository("sectorprojectsDao")
@@ -26,9 +28,9 @@ public class SectorProjectsDaoImpl extends HibernateDaoSupport implements Sector
 
 
 	@Override
-	public void delete(int id) throws Exception {
+	public void delete(SectorProjects sectorprojects) throws Exception {
 		// TODO Auto-generated method stub
-		
+	    this.getHibernateTemplate().delete(sectorprojects);
 	}
 
 	private void whereParameter(SectorProjects sectorprojects, Query query) {
@@ -88,8 +90,8 @@ public class SectorProjectsDaoImpl extends HibernateDaoSupport implements Sector
 
 	@Override
 	public int add(SectorProjects sectorprojects) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		this.getHibernateTemplate().save(sectorprojects);
+		return sectorprojects.getProjectid();
 	}
 
 
@@ -97,7 +99,7 @@ public class SectorProjectsDaoImpl extends HibernateDaoSupport implements Sector
 	@Override
 	public void modify(SectorProjects sectorprojects) throws Exception {
 		// TODO Auto-generated method stub
-		
+		this.getHibernateTemplate().update(sectorprojects);
 	}
 
 
@@ -169,20 +171,25 @@ public class SectorProjectsDaoImpl extends HibernateDaoSupport implements Sector
 		return null;
 	}
 
-
-
 	@Override
-	public SectorProjects get(int id) throws Exception {
+	public SectorProjects load(int projectid) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return (SectorProjects) this.getHibernateTemplate().get(SectorProjects.class, projectid);
 	}
-
-
-
+	
 	@Override
-	public List<SectorProjects> findJobsList() {
-		// TODO Auto-generated method stub
-		return null;
+	public int projectrow(String hql) {
+//		List<TestTastexcute> list=new ArrayList<TestTastexcute>();
+		Session session = this.getSession(true);
+		int count=0;
+		try {
+			count = session.createSQLQuery(hql).list().size();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		return count;
+		// return this.getHibernateTemplate().find("select id,name,planproj from TestJobs  order by id asc ");
 	}
-
 }
