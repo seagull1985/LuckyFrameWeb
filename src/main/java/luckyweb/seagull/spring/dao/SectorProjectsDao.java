@@ -17,7 +17,7 @@ public interface SectorProjectsDao {
 
 	public void modifyInfo(SectorProjects sectorprojects) throws Exception;
 
-	public void delete(int id) throws Exception;
+	public void delete(SectorProjects sectorprojects) throws Exception;
 
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public List<SectorProjects> list(SectorProjects sectorprojects) throws Exception;
@@ -29,8 +29,6 @@ public interface SectorProjectsDao {
 
 	public List<SectorProjects> load(String name, String cmdType, String planPath)
 			throws Exception;
-
-	public SectorProjects get(int id) throws Exception;
 	
 	public int getid(String projectname) throws Exception;
 
@@ -41,7 +39,6 @@ public interface SectorProjectsDao {
 	public List findByPage(final String hql, final Object value,final int offset, final int pageSize);
 
 	public int findRows(SectorProjects sectorprojects,String hql);
-	
-	public List<SectorProjects> findJobsList();
-
+	public SectorProjects load(int projectid) throws Exception;
+	public int projectrow(String hql);
 }

@@ -16,4 +16,5 @@ public interface OperationLogService {
 	public OperationLog load(int id)throws Exception;
 	public List findByPage( final Object value,final int offset, final int pageSize);
 	public int findRows(OperationLog oplog);
+	public void delete(int id) throws Exception;
 }

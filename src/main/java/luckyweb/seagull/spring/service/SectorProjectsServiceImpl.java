@@ -27,13 +27,13 @@ public class SectorProjectsServiceImpl implements SectorProjectsService{
 	@Override
 	public int add(SectorProjects sectorprojects) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.sectorprojectsdao.add(sectorprojects);
 	}
 
 	@Override
 	public void modify(SectorProjects sectorprojects) throws Exception {
 		// TODO Auto-generated method stub
-		
+		this.sectorprojectsdao.modify(sectorprojects);
 	}
 
 	@Override
@@ -43,9 +43,9 @@ public class SectorProjectsServiceImpl implements SectorProjectsService{
 	}
 
 	@Override
-	public void delete(int id) throws Exception {
+	public void delete(SectorProjects sectorprojects) throws Exception {
 		// TODO Auto-generated method stub
-		
+		this.sectorprojectsdao.delete(sectorprojects);
 	}
 
 	@Override
@@ -71,6 +71,12 @@ public class SectorProjectsServiceImpl implements SectorProjectsService{
 	public Object load(int projectid) throws Exception {
 		// TODO Auto-generated method stub
 		return this.sectorprojectsdao.findproject(projectid);
+	}
+	
+	@Override
+	public SectorProjects loadob(int projectid) throws Exception {
+		// TODO Auto-generated method stub
+		return this.sectorprojectsdao.load(projectid);
 	}
 	
 	@Override
@@ -129,4 +135,14 @@ public class SectorProjectsServiceImpl implements SectorProjectsService{
 		return null;
 	}
 
+	@Override
+	public int projectrow(int id) {
+		int row=0;
+		row=sectorprojectsdao.projectrow("SELECT projectid from qa_accident where projectid="+id);
+		row=sectorprojectsdao.projectrow("SELECT projectid from qa_flowcheck where projectid="+id)+row;
+		row=sectorprojectsdao.projectrow("SELECT projectid from qa_planflowcheck where projectid="+id)+row;
+		row=sectorprojectsdao.projectrow("SELECT projectid from qa_projectversion where projectid="+id)+row;
+		row=sectorprojectsdao.projectrow("SELECT projectid from qa_review where projectid="+id)+row;
+		return row;
+	}
 }

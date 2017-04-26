@@ -96,5 +96,20 @@ public class OperationLogDaoImpl extends HibernateDaoSupport implements Operatio
 		return s;
 	}
 	
+	@Override
+	public void delete(String hql) throws Exception {
+		Session session=this.getSession(true);
+		try {
+		session.beginTransaction();
+		Query query =session .createQuery(hql);
+		query.executeUpdate();
+		
+		session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+	}
 	
 }

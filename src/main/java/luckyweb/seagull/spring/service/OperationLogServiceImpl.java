@@ -92,4 +92,9 @@ public class OperationLogServiceImpl implements OperationLogService{
 		return this.operationlogdao.add(op_log);
 	}
 	
+	@Override
+	public void delete(int id) throws Exception {
+		String hql="delete from OperationLog where projectid="+id;
+		this.operationlogdao.delete(hql);
+	}
 }

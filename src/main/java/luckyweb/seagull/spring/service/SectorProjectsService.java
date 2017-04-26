@@ -12,7 +12,7 @@ public interface SectorProjectsService {
 	public int add(SectorProjects sectorprojects)throws Exception;
 	public void modify(SectorProjects sectorprojects)throws Exception;
 	public void modifyState(SectorProjects sectorprojects)throws Exception;
-	public void delete(int id)throws Exception;
+	public void delete(SectorProjects sectorprojects)throws Exception;
 	
 	@Transactional(propagation=Propagation.NOT_SUPPORTED)
 	public List<SectorProjects> list(SectorProjects sectorprojects)throws Exception;
@@ -38,4 +38,6 @@ public interface SectorProjectsService {
 //	public List<TestJobs> getListForPage( final int offset,final int lengh);
 
 	public List<SectorProjects> findProjectsList();
+	public SectorProjects loadob(int projectid) throws Exception;
+	public int projectrow(int id);
 }
