@@ -92,7 +92,7 @@
       <sf:option value="0">未执行</sf:option>
        <sf:option value="1">执行中</sf:option>
        <sf:option value="2">执行成功</sf:option>
-       <sf:option value="3">调起失败</sf:option>
+       <sf:option value="3">调起失败|超时</sf:option>
     </sf:select>
     &nbsp;</td>
     <td width="24%" height="30" align="center">

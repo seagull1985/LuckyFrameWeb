@@ -1,6 +1,7 @@
 package luckyweb.seagull.quartz;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.rmi.Naming;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -57,7 +58,7 @@ public class QuartzJob implements Job {
 		}
 	}
 
-	public String toRunTask(String projname,int jobId,String jobname,String clientip) {
+	public String toRunTask(String projname,int jobId,String jobname,String clientip){
 		Session s = null;
 		Transaction tx = null;
 		//System.out.println(tastId);
@@ -69,15 +70,16 @@ public class QuartzJob implements Job {
 		projname = projname.replaceAll(" ","\" \""); //防止计划名称或是项目名称带了空格符号,在run.exec中会执行出错
 		String result="启动失败！";
 		try{
-    		//调用远程对象，注意RMI路径与接口必须与服务器配置一致
-    		RunService service=(RunService)Naming.lookup("rmi://"+clientip+":6633/RunService");
+			 //调用远程对象，注意RMI路径与接口必须与服务器配置一致
+			RunService service=(RunService)Naming.lookup("rmi://"+clientip+":6633/RunService"); 
+
     		RunTaskEntity tasken = new RunTaskEntity();
     		tasken.setProjectname(projname);
     		tasken.setTaskid(String.valueOf(task.getId()));
     		result=service.runtask(tasken);
     		System.out.println(result);
     		return result;
-		} catch (Exception e) {
+		}catch (Exception e) {
 			execFail(s, tx,task.getId(),jobId,tastName);
 			e.printStackTrace();
 			return result;
