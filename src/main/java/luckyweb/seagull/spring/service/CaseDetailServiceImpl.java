@@ -40,11 +40,6 @@ public class CaseDetailServiceImpl implements CaseDetailService {
 		this.casedetailDao = casedetailDao;
 	}
 
-	@Override
-	public TestCasedetail get(int id) {
-		return this.casedetailDao.get(id);
-	}
-
 	private static String  orderBy=" order by id asc ";
 	
 	@Override
