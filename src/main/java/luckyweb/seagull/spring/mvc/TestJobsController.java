@@ -867,6 +867,11 @@ public class TestJobsController
 	public String upload(@RequestParam(value = "file", required = false) MultipartFile file, Model model,
 	        HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		if(null==file.getOriginalFilename()||file.getOriginalFilename().length()<4){
+			String message = "请选择一个文件后，再进行上传操作！";
+			model.addAttribute("message", message);
+			return "/jsp/task/file_upload";
+		}
 		String fileName = file.getOriginalFilename().substring(file.getOriginalFilename().length() - 4,
 		        file.getOriginalFilename().length());
 		String clientip = request.getParameter("clientip");

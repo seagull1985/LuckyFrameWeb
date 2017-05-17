@@ -226,7 +226,7 @@ public class CasedetailController
 		rsp.setContentType("text/html;charset=utf-8");	
 		PrintWriter pw;
 
-		TestCasedetail caseDetail = this.casedetailService.get(id);
+		TestCasedetail caseDetail = this.casedetailService.load(id);
 		String url = "/caseDetail/list.do?tastId=" + caseDetail.getTestTaskexcute().getId();
 
 		try
@@ -287,7 +287,7 @@ public class CasedetailController
 			String ckAll = req.getParameter("ckAll");
 			String caseId = req.getParameter("caseId");
 
-			TestCasedetail caseDetail = casedetailService.get(Integer.valueOf(caseId));
+			TestCasedetail caseDetail = casedetailService.load(Integer.valueOf(caseId));
 			TestTaskexcute task = caseDetail.getTestTaskexcute();
 			
 			if(task.getCasesuccCount()==task.getCasetotalCount()){

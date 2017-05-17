@@ -13,6 +13,7 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
+import luckyweb.seagull.spring.entity.Accident;
 import luckyweb.seagull.spring.entity.TestCasedetail;
 import luckyweb.seagull.util.StrLib;
 
@@ -45,14 +46,7 @@ public class TestCasedetailDaoImpl extends HibernateDaoSupport implements TestCa
 
 	@Override
 	public TestCasedetail load(int id) {
-		return (TestCasedetail) this.getSession().load(TestCasedetail.class, id);
-	}
-
-
-	@Override
-	public TestCasedetail get(int id) {
-		return (TestCasedetail) this.getSession().get(TestCasedetail.class, id);
-		
+		return (TestCasedetail) this.getHibernateTemplate().get(TestCasedetail.class, id);
 	}
 	
 

@@ -41,7 +41,7 @@ public class ZtTaskServiceImpl implements ZtTaskService{
 
 	@Override
 	public void delete(int versionid) throws Exception {
-		String sql="delete QA_ZTTASK where versionid="+versionid;
+		String sql="delete from QA_ZTTASK where versionid="+versionid;
 		this.zttaskdao.delete(sql);
 	}
 	

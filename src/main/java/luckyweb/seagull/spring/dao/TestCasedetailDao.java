@@ -17,8 +17,6 @@ public interface TestCasedetailDao {
 	
 	public TestCasedetail load(int id);
 
-	public TestCasedetail get(int id);
-
 
 	public List findByPage(final String hql, final Object value,final int offset, final int pageSize);
 

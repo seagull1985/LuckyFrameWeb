@@ -16,8 +16,6 @@ public interface CaseDetailService {
 	
 	public TestCasedetail load(int id);
 
-	public TestCasedetail get(int id);
-
 	public List findByPage( final Object value,final int offset, final int pageSize);
 	
 	public int findRows(TestCasedetail jobs ) ;
