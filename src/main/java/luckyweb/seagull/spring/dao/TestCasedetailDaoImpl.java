@@ -103,13 +103,13 @@ public class TestCasedetailDaoImpl extends HibernateDaoSupport implements TestCa
 			query.setParameter("taskId", caseDetail.getTaskId());
 		}
 		if (!StrLib.isEmpty(caseDetail.getCaseno())) {
-			query.setParameter("caseno", caseDetail.getCaseno().trim());
+			query.setParameter("caseno", "%"+caseDetail.getCaseno().trim()+"%");
 		}
 		if (!StrLib.isEmpty(caseDetail.getCasestatus())) {
 			query.setParameter("casestatus", caseDetail.getCasestatus().trim());
 		}
 		if (!StrLib.isEmpty(caseDetail.getCasename())) {
-			query.setParameter("casename", caseDetail.getCasename().trim());
+			query.setParameter("casename", "%"+caseDetail.getCasename().trim()+"%");
 		}
 	}
 
