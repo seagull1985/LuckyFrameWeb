@@ -100,14 +100,14 @@ public class CasedetailController
 		String startDate = req.getParameter("startDate");
 		String endDate = req.getParameter("endDate");
 		String projName = req.getParameter("projName");
-		String tastId = req.getParameter("tastId");
-		List tasts = new ArrayList<>();
-		if (!StrLib.isEmpty(tastId)){
-			if (!StrLib.isEmpty(tastId) && !tastId.equals("0"))
+		String taskId = req.getParameter("taskId");
+		List tasks = new ArrayList<>();
+		if (!StrLib.isEmpty(taskId)){
+			if (!StrLib.isEmpty(taskId) && !taskId.equals("0"))
 			{
-				caseDetail.getTestTaskexcute().setId(Integer.valueOf(tastId));
-				caseDetail.setTaskId(Integer.valueOf(tastId));
-				TestTaskexcute task = tastExcuteService.get(Integer.valueOf(tastId));
+				caseDetail.getTestTaskexcute().setId(Integer.valueOf(taskId));
+				caseDetail.setTaskId(Integer.valueOf(taskId));
+				TestTaskexcute task = tastExcuteService.get(Integer.valueOf(taskId));
 				if (task == null){
 					caseDetail.setStartDate(startDate);
 					caseDetail.setEndDate(endDate);
@@ -135,16 +135,16 @@ public class CasedetailController
 				caseDetail.setEndDate(endDate);
 			}
 		}
-		//tasts = tastExcuteService.findTastListByParam(caseDetail.getStartDate(), projName, null);
-		tasts = tastExcuteService.findTastList(caseDetail.getStartDate(), projName, caseDetail.getEndDate());
+		//tasks = tastExcuteService.findTastListByParam(caseDetail.getStartDate(), projName, null);
+		tasks = tastExcuteService.findTastList(caseDetail.getStartDate(), projName, caseDetail.getEndDate());
 
-		if (tasts.size() == 0)
+		if (tasks.size() == 0)
 		{
-			model.addAttribute("tasts", null);
+			model.addAttribute("tasks", null);
 		}else{
-			model.addAttribute("tasts", tasts);
+			model.addAttribute("tasks", tasks);
 		}
-		model.addAttribute("size", tasts.size());
+		model.addAttribute("size", tasks.size());
 
 		caseDetail.setProjName(projName);
 		model.addAttribute("projName", projName);
@@ -156,7 +156,7 @@ public class CasedetailController
 		try
 		{
 
-			model.addAttribute("tastId", tastId);
+			model.addAttribute("taskId", taskId);
 			String page2 = req.getParameter("page");
 			if (StrLib.isEmpty(page2))
 			{
@@ -227,7 +227,7 @@ public class CasedetailController
 		PrintWriter pw;
 
 		TestCasedetail caseDetail = this.casedetailService.load(id);
-		String url = "/caseDetail/list.do?tastId=" + caseDetail.getTestTaskexcute().getId();
+		String url = "/caseDetail/list.do?taskId=" + caseDetail.getTestTaskexcute().getId();
 
 		try
 		{
@@ -278,7 +278,7 @@ public class CasedetailController
 
 		String taskId = req.getParameter("taskId");
 
-		String url = "/caseDetail/list.do?flag=2&tastId=" + taskId;
+		String url = "/caseDetail/list.do?flag=2&taskId=" + taskId;
 
 		PrintWriter pw;
 		try
@@ -375,9 +375,9 @@ public class CasedetailController
 	public String getTastNameList(String startDate, String projName)
 	{
 		// 任务列表
-		//List tasts = tastExcuteService.findTastListByParam(startDate, projName, null);
-		List<Object[]> tasts = tastExcuteService.findTastList(startDate, projName, null);
-		JSONArray array = JSONArray.fromObject(tasts);
+		//List tasks = tastExcuteService.findTastListByParam(startDate, projName, null);
+		List<Object[]> tasks = tastExcuteService.findTastList(startDate, projName, null);
+		JSONArray array = JSONArray.fromObject(tasks);
 		return array.toString();
 	}
 
