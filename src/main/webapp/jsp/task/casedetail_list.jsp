@@ -59,15 +59,15 @@
                 </c:if>
             <c:if test="${size>0 }">
             <%--   <sf:option value="0">全部</sf:option> --%>
-                 <c:forEach var="task" items="${tasts }"  begin="0" step="1" varStatus="i" >
+                 <c:forEach var="task" items="${tasks }"  begin="0" step="1" varStatus="i" >
                   <sf:option value="${task[0]}">${task[1]}</sf:option>
                 </c:forEach>
             </c:if>
       </sf:select> </span>     </td>
       <%--<td height="40" align="left"><strong>任务名称</strong></td>
-        <td height="40"><sf:select path="tastId">
+        <td height="40"><sf:select path="taskId">
             <sf:option value="0">全部</sf:option>
-            <c:forEach var="tast" items="${tasts }"  begin="0" step="1" varStatus="i" >
+            <c:forEach var="tast" items="${tasks }"  begin="0" step="1" varStatus="i" >
               <sf:option value="${tast[0]}">${tast[1]}</sf:option>
             </c:forEach>
           </sf:select>        </td>--%>
@@ -176,10 +176,10 @@
           <div  id="pagelist" align="center" >
              <c:if test="${allRows!=0 }"> 
                <ul>	 
-                  <li> <a href="#" onclick="return setPage('${tastId}',1)">首页 </a></li>
-                  <li>  <a href="#" onclick="return frontPageCheck('${tastId}',${page-1});">上一页</a></li>
-                  <li>  <a href="#" onclick="return backPageCheck('${tastId}',${page+1});">下一页</a></li>
-                <li>  <a href="#" onclick="return setPage('${tastId}',${allPage})">末页</a></li>
+                  <li> <a href="#" onclick="return setPage('${taskId}',1)">首页 </a></li>
+                  <li>  <a href="#" onclick="return frontPageCheck('${taskId}',${page-1});">上一页</a></li>
+                  <li>  <a href="#" onclick="return backPageCheck('${taskId}',${page+1});">下一页</a></li>
+                <li>  <a href="#" onclick="return setPage('${taskId}',${allPage})">末页</a></li>
                  <li> 第${page}页 </li>
                   <li>共${allRows}条</li>
                 <li>共${allPage}页</li>
