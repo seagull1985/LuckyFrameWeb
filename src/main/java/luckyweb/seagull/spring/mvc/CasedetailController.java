@@ -101,7 +101,12 @@ public class CasedetailController
 		String endDate = req.getParameter("endDate");
 		String projName = req.getParameter("projName");
 		String taskId = req.getParameter("taskId");
+		String status = req.getParameter("status");
+		
 		List tasks = new ArrayList<>();
+		if (!StrLib.isEmpty(status)){
+			caseDetail.setCasestatus(status);
+		}
 		if (!StrLib.isEmpty(taskId)){
 			if (!StrLib.isEmpty(taskId) && !taskId.equals("0"))
 			{

@@ -124,7 +124,7 @@
 	   <c:forEach var="t" items="${list }"   begin="0" step="1" varStatus="i"> 
 	    <tr>
 	      <td style="text-align:center"><input type="checkbox" name="deletebox" value="${t.id}" /></td>
-	      <td height="25" align="center"><a  href="#" onclick="list(${t.id},'${t.testJob.planproj}','${t.createTime}')">${t.taskId }</a>&nbsp;</td>
+	      <td height="25" align="center"><a  href="#" onclick="list(${t.id})">${t.taskId }</a>&nbsp;</td>
 	      <td height="25" align="center">${t.testJob.planproj }&nbsp;</td>
 	      <td height="25" align="center"><fmt:formatDate value="${t.createTime }" pattern="yyyy-MM-dd HH:mm:ss" /></td>
 	      <td height="25" align="center" id="finishtime${t.id}"><fmt:formatDate value="${t.finishtime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
@@ -134,11 +134,11 @@
 	      <c:if test="${t.taskStatus!=1&&t.taskStatus!=0 }">
 	      <td height="25" align="center" width="8%" style="text-align:center">${t.taskStatus_str}</td>
 	      </c:if>
-	      <td width="5%" height="25" style="text-align:center" id="casetotal${t.id}">${t.casetotalCount}</td>
-          <td width="4%" height="25" style="text-align:center;color:#00bf5f" id="casesucc${t.id}">${t.casesuccCount}</td>
-          <td width="4%" height="25" style="text-align:center;color:#ff0000" id="casefail${t.id}">${t.casefailCount}</td>
-          <td width="4%" style="text-align:center;color:#FF7F00" id="caselock${t.id}">${t.caselockCount}</td>
-          <td width="4%" height="25" style="text-align:center;color:#FFD39B" id="casenoex${t.id}">${t.casenoexecCount}</td>
+	      <td width="5%" height="25" style="text-align:center" id="casetotal${t.id}"><a  href="#" onclick="list(${t.id})">${t.casetotalCount}</a></td>
+          <td width="4%" height="25" style="text-align:center;color:#00bf5f" id="casesucc${t.id}"><a  style="color:#00bf5f" href="#" onclick="gocasedetail(${t.id},0)">${t.casesuccCount}</a></td>
+          <td width="4%" height="25" style="text-align:center;color:#ff0000" id="casefail${t.id}"><a  style="color:#ff0000" href="#" onclick="gocasedetail(${t.id},1)">${t.casefailCount}</a></td>
+          <td width="4%" style="text-align:center;color:#FF7F00" id="caselock${t.id}"><a  style="color:#FF7F00" href="#" onclick="gocasedetail(${t.id},2)">${t.caselockCount}</a></td>
+          <td width="4%" height="25" style="text-align:center;color:#FFD39B" id="casenoex${t.id}"><a  style="color:#FFD39B" href="#" onclick="gocasedetail(${t.id},4)">${t.casenoexecCount}</a></td>
           <td align="center" style="text-align:center"><a href="#" onclick="showDiv('${t.id}','${t.taskId }')"><img src="../pic/delete.png"
 						width="20" height="20" border="0" title="删除" /></a></td>
 	    </tr>
@@ -186,10 +186,15 @@
 	</div>
 	
 <script type="text/javascript">
-	function list(taskid,projName,time){
+	function list(taskid){
 		document.getElementById("testTastexcute").action="/caseDetail/list.do";
 		document.getElementById("taskId").value=taskid;
 		document.getElementById("testTastexcute").submit();
+	}
+	
+	function gocasedetail(taskid,status){
+		var url = '/caseDetail/list.do?taskId='+taskid+'&status='+status;
+		window.location.href=url;
 	}
 
 function frontPageCheck(jobid,page)
