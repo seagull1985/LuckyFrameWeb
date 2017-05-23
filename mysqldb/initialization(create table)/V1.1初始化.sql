@@ -228,7 +228,7 @@ create table TEST_LOGDETAIL
 (
   logid    int(10) not null AUTO_INCREMENT,
   logtime  datetime not null COMMENT '日志时间',
-  detail   VARCHAR(2000) not null COMMENT '日志',   /*V1.1  扩展日志明细字段到2000*/
+  detail   VARCHAR(5000) not null COMMENT '日志',   /*V1.1  扩展日志明细字段到2000*/
   loggrade VARCHAR(20) COMMENT '日志级别',
   caseid   int(10) not null COMMENT '用例编号',
   taskid   int(10),
