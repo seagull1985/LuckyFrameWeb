@@ -103,8 +103,9 @@ public class CasedetailController
 		String taskId = req.getParameter("taskId");
 		String status = req.getParameter("status");
 		
+		@SuppressWarnings("rawtypes")
 		List tasks = new ArrayList<>();
-		if (!StrLib.isEmpty(status)){
+		if (!StrLib.isEmpty(status)&&StrLib.isEmpty(caseDetail.getCasestatus())){
 			caseDetail.setCasestatus(status);
 		}
 		if (!StrLib.isEmpty(taskId)){
