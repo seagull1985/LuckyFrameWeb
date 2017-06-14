@@ -99,25 +99,23 @@ _top:       expression(eval(document.compatMode &&
       </tr>
        <tr>
       <td width="20%" height="5" style="text-align:center;"><b>一级事故</b></td>
-      <td width="80%">交易或支付类实时系统<font color="#FF0000">大面积中断时间超过30分钟以上（含30分钟）</font>，或者造成交易笔数<font color="#FF0000">影响交易笔数达5万笔（含5万笔）</font>，
-          <font color="#FF0000">或造成经济损失达100万元(含100万元)</font>，以及因为系统故障造成极坏社会影响的。</td>
+      <td width="80%">系统<font color="#FF0000">大面积中断时间超过30分钟以上（含30分钟）</font>，因为系统故障造成极坏社会影响的。</td>
       </tr>
          <tr>
       <td width="20%" height="5" style="text-align:center;"><b>二级事故</b></td>
-      <td width="80%">交易或支付类实时系统<font color="#FF0000">大面积中断时间在10-30分钟以内（含10 分钟）</font>，或者造成交易笔数<font color="#FF0000">影响交易笔数1-5万笔（含1万笔）</font>，
-                                                                                           或造成<font color="#FF0000">经济损失达10-100万元（含10万元）</font>。</td>
+      <td width="80%">系统<font color="#FF0000">大面积中断时间在10-30分钟以内（含10 分钟）</font>。</td>
       </tr>
       <tr>
       <td width="20%" height="5" style="text-align:center;"><b>三级事故</b></td>
-      <td width="80%">交易或支付类实时系统<font color="#FF0000">大面积中断时间在10分钟以内</font>，造成交易笔数<font color="#FF0000">影响交易笔数少于1万笔，造成经济损失低于10万元</font>。</td>
+      <td width="80%">系统<font color="#FF0000">大面积中断时间在10分钟以内</font>。</td>
       </tr>
        <tr>
       <td width="20%" height="5" style="text-align:center;"><b>四级事故</b></td>
-      <td width="80%">交易或支付类实时系统<font color="#FF0000">未造成大面积中断，但影响部分的实时交易类型失败，外部门户系统功能受阻或造成内部运营系统宕机事故</font>。</td>
+      <td width="80%">系统<font color="#FF0000">未造成大面积中断，小概率宕机事故</font>。</td>
       </tr>
       <tr>
       <td width="20%" height="5" style="text-align:center;"><b>五级及以下事故</b></td>
-      <td width="80%">交易或支付类实时系统<font color="#FF0000">不涉及，外部门户系统一般问题级别以下或内部运营系统功能受阻级别以下</font>。</td>
+      <td width="80%">系统不涉及中断，<font color="#FF0000">系统一般问题级别以下</font>。</td>
       </tr>
 
 		</table>
@@ -135,30 +133,30 @@ _top:       expression(eval(document.compatMode &&
  	<table width="70%"  align="center" class="rect"  frame="box" cellPadding=5 border=1 style="background-color:rgba(240,255,240,0.5);table-layout:fixed;">
   
     <tr>
-      <td width="20%" height="40"><b>项目名称：</b></td>
+      <td width="20%" height="40"><b>所属项目：</b></td>
       <td width="20%" height="40">${accident.sectorProjects.projectname}</td>
 	  <td height="30" ><b>事故等级：</b></td>
 	  <td height="30" >${accident.acclevel}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	  <a href="#" onclick="openDiv()"  style="text-decoration: none;color:#FF8000;">查看事故级别定义</a></td>
       </tr>      
     <tr>
-      <td width="20%" height="40"><b>事故状态：</b></td>
-      <td height="40">${accident.accstatus}</td>
+      <td width="20%" height="40"><b>目前状态：</b></td>
+      <td height="40" >${accident.accstatus}</td>
 	  <td height="30" ><b>事故报告人：</b></td>
 	  <td height="30" >${accident.reporter}</td>
 	</tr>
     <tr>
       <td width="20%" height="40"><b>事故发生时间：</b></td>
-      <td height="40">${accident.eventtime}</td>
-      <td width="20%" height="40"><b>事故报告时间：</b></td>
-      <td height="40">${accident.reporttime}</td>
+      <td height="40" colspan="3" >${accident.eventtime}</td>
+<%--       <td width="20%" height="40"><b>事故报告时间：</b></td>
+      <td height="40">${accident.reporttime}</td> --%>
     </tr>
-    <tr>
+<%--     <tr>
       <td width="20%" height="40"><b>事故持续时间：</b></td>
       <td height="40">${accident.strtrouble_duration}</td>
       <td width="20%" height="40"><b>事故影响时间：</b></td>
       <td height="40">${accident.strimpact_time}</td>
-    </tr>
+    </tr> --%>
     <tr>
       <td width="20%" height="40"><b>事故描述：</b></td>
       <td height="40" valign="top" colspan="3" style="white-space:pre;overflow:hidden;word-break:break-all;word-wrap:break-word;">${accident.accdescription}</td>
@@ -168,25 +166,25 @@ _top:       expression(eval(document.compatMode &&
       <td height="40" colspan="3">${accident.causaltype}</td>
     </tr>
     <tr>
-      <td width="20%" height="40"><b>事故原因分析：</b></td>
+      <td width="20%" height="40"><b>异常情况描述：</b></td>
       <td height="40" valign="top" colspan="3" style="white-space:pre;overflow:hidden;word-break:break-all;word-wrap:break-word;">${accident.causalanalysis}</td>
     </tr>  
     <tr>
-      <td width="20%" height="40"><b>事故后果分析：</b></td>
+      <td width="20%" height="40"><b>受影响范围：</b></td>
       <td height="40" valign="top" colspan="3" style="white-space:pre;overflow:hidden;word-break:break-all;word-wrap:break-word;">${accident.consequenceanalysis}</td>
     </tr> 
     <tr>
-      <td width="20%" height="40"><b>纠正措施：</b></td>
+      <td width="20%" height="40"><b>纠正处理过程：</b></td>
       <td height="40" valign="top" colspan="3" style="white-space:pre;overflow:hidden;word-break:break-all;word-wrap:break-word;">${accident.correctiveaction}</td>
     </tr> 
        
     <tr>
-      <td width="20%" height="40"><b>解决人员：</b></td>
-      <td height="40">${accident.resolutioner}</td>
+<%--       <td width="20%" height="40"><b>解决人员：</b></td>
+      <td height="40">${accident.resolutioner}</td> --%>
       <td width="20%" height="40"><b>解决时间：</b></td>
-      <td height="40">${accident.resolutiontime}</td>
+      <td height="40" colspan="3" >${accident.resolutiontime}</td>
     </tr>
-    <tr>
+   <%--  <tr>
       <td width="20%" height="40"><b>预防措施实施人：</b></td>
       <td height="40" colspan="3">${accident.preventiver}</td>
     </tr>
@@ -195,7 +193,7 @@ _top:       expression(eval(document.compatMode &&
       <td height="40">${accident.preventiveplandate}</td>
       <td width="20%" height="40" style="white-space:nowrap;overflow:hidden;word-break:break-all;"><b>预防措施实际完成时间：</b></td>
       <td height="40">${accident.preventiveaccdate}</td>
-    </tr>
+    </tr> --%>
         <tr>
       <td width="20%" height="40"><b>预防措施：</b></td>
       <td height="40" valign="top" colspan="3" style="white-space:pre;overflow:hidden;word-break:break-all;word-wrap:break-word;">${accident.preventiveaction}</td>

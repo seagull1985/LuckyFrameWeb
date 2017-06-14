@@ -65,11 +65,16 @@
 			</header>  
 			
 	<sf:form modelAttribute="accident" method="post" onsubmit="return validTime(this)" >
-
+        <input type="hidden" id="reporttime" name="reporttime" value="NULL"/>
+        <input type="hidden" id="resolutioner" name="resolutioner" value="NULL"/>
+        <input type="hidden" id="preventiver" name="preventiver" value="NULL"/>
+        <input type="hidden" id="impact_time" name="impact_time" value="0"/>
+        <input type="hidden" id="preventiveplandate" name="preventiveplandate" value="NULL"/>
+        <input type="hidden" id="preventiveaccdate" name="preventiveaccdate" value="NULL"/>
 		<table width="70%"  align="center" class="rect"  frame="box" cellPadding=5 border=1 style="background-color:rgba(240,255,240,0.5);">
   
 <tr>
-			<td height="30" align="left">项目名称</td>
+			<td height="30" align="left">所属项目</td>
 			  <td height="30" >
               <sf:select path="projectid" id="projectid" class="easyui-combobox"  required="true" validType="selectValueRequired['#projectid']"  missingMessage="项目名必选" invalidMessage="项目名必选"  >            
                    <sf:option value="0">请选择</sf:option>
@@ -89,7 +94,7 @@
 						</td>
 			</tr>
 		  <tr>
-				<td height="30" align="left">事故状态</td>
+				<td height="30" align="left">目前状态</td>
 			  <td height="30" > 
 			  	<sf:select path="accstatus" id="accstatus" class="easyui-combobox"  required="true" validType="selectValueRequired['#accstatus']"  missingMessage="事故状态" invalidMessage="事故状态"  >            
                    <sf:option value="已发生-初始状态">已发生-初始状态</sf:option>
@@ -98,33 +103,20 @@
                    <sf:option value="跟踪处理完成">跟踪处理完成</sf:option>
                     </sf:select> 
 						</td>
-				<td height="30" align="left">事故出现时间</td>
+						  	<td height="30" align="left">事故报告人</td>
+			  <td height="30" colspan="1"><sf:input path="reporter" id="reporter"  
+						cssClass="easyui-validatebox" required="true"  data-options="validType:'minLength[0,20]'"  missingMessage="事故报告人不能为空" invalidMessage="事故报告人非法输入"  /> <sf:errors path="reporter"
+						cssClass="error_msg" /> <sf:errors path="reporter" cssClass="error_msg" /></td>
+
+		  </tr>
+		  <tr>
+				<td height="30" align="left">事故发生时间</td>
 			  <td height="30" colspan="1"><sf:input path="eventtime" id="eventtime"  cssClass="easyui-validatebox" required="true"  missingMessage="事故出现时间不能为空"
 			  	onclick="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'});"
 						readonly="true" style="width:130px" value="${eventtime}" /> <sf:errors path="eventtime"
 					cssClass="error_msg" /></td>
-		  </tr>
-		  <tr>
-		  	<td height="30" align="left">事故报告人</td>
-			  <td height="30" colspan="1"><sf:input path="reporter" id="reporter"  
-						cssClass="easyui-validatebox" required="true"  data-options="validType:'minLength[0,20]'"  missingMessage="事故报告人不能为空" invalidMessage="事故报告人非法输入"  /> <sf:errors path="reporter"
-						cssClass="error_msg" /> <sf:errors path="reporter" cssClass="error_msg" /></td>
-			<td height="30" align="left">事故报告时间</td>
-			  <td height="30" colspan="1"><sf:input path="reporttime" id="reporttime"  cssClass="easyui-validatebox" required="true"  missingMessage="事故报告时间不能为空"
-			  	onclick="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'});"
-						readonly="true" style="width:130px" value="${reporttime}" /> <sf:errors path="reporttime" cssClass="error_msg" /></td>
-			</tr>
-			<tr>
-				<td height="30" align="left">事故描述</td>
-			  <td height="30" colspan="3"><sf:textarea cols="100" rows="5" path="accdescription"
-						id="accdescription"
-						cssClass="easyui-validatebox" required="true"  data-options="validType:'minLength[0,248]'"  missingMessage="事故描述不能为空" invalidMessage="事故描述非法输入" />&nbsp;
-						<sf:errors path="accdescription" cssClass="error_msg" />
-						</td>
-			</tr>
-		   <tr>
-		  	<td height="30" align="left">原因类型</td>
-			  <td height="30" colspan="3"> 
+			<td height="30" align="left">事故原因类型</td>
+			  <td height="30" colspan="1"> 
 			  	<sf:select path="causaltype" id="causaltype" class="easyui-combobox"  required="true" validType="selectValueRequired['#causaltype']">   
 			  	<sf:option value="暂未选择">请选择</sf:option>         
                    <sf:option value="测试漏测">测试漏测</sf:option>
@@ -144,40 +136,57 @@
                    <sf:option value="其它异常">其它异常</sf:option>
                     </sf:select> 
 						</td>
-			  </tr>
+			</tr>
 			<tr>
-				<td height="30" align="left">原因分析</td>
+				<td height="30" align="left">异常情况描述</td>
+			  <td height="30" colspan="3"><sf:textarea cols="100" rows="5" path="accdescription"
+						id="accdescription"
+						cssClass="easyui-validatebox" required="true"  data-options="validType:'minLength[0,248]'"  missingMessage="事故描述不能为空" invalidMessage="事故描述非法输入" />&nbsp;
+						<sf:errors path="accdescription" cssClass="error_msg" />
+						</td>
+			</tr>
+<%-- 			<tr>
+						<td height="30" align="left">事故报告时间</td>
+						<td height="30" colspan="3"><sf:input path="reporttime"
+								id="reporttime" cssClass="easyui-validatebox"
+								missingMessage="事故报告时间不能为空"
+								onclick="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'});"
+								readonly="true" style="width:130px" value="${reporttime}" /> <sf:errors
+								path="reporttime" cssClass="error_msg" /></td>
+			</tr> --%>
+			<tr>
+				<td height="30" align="left">受影响范围</td>
+			  <td height="30" colspan="3"><sf:textarea cols="100" rows="5" path="consequenceanalysis"  id="consequenceanalysis"
+						cssClass="easyui-validatebox"  data-options="validType:'minLength[0,148]'"  invalidMessage="受影响范围内容非法"  
+						 />&nbsp;<sf:errors path="consequenceanalysis"
+						cssClass="error_msg" /></td>
+			</tr>
+			<tr>
+				<td height="30" align="left">事故原因分析</td>
 			  <td height="30" colspan="3"><sf:textarea cols="100" rows="5" path="causalanalysis"
 						id="causalanalysis"  cssClass="easyui-validatebox"  data-options="validType:'minLength[0,248]'" invalidMessage="原因分析内容非法"  
 						 />&nbsp;<sf:errors path="causalanalysis" cssClass="error_msg" /></td>
 						 
 			</tr>
 			<tr>
-				<td height="30" align="left">后果分析</td>
-			  <td height="30" colspan="3"><sf:textarea cols="100" rows="5" path="consequenceanalysis"  id="consequenceanalysis"
-						cssClass="easyui-validatebox"  data-options="validType:'minLength[0,148]'"  invalidMessage="后果分析内容非法"  
-						 />&nbsp;<sf:errors path="consequenceanalysis"
-						cssClass="error_msg" /></td>
-			</tr>
-			<tr>
-				<td height="30" align="left">纠正措施</td>
+				<td height="30" align="left">纠正处理过程<br/>(需点名责任人)</td>
 			  <td height="30" colspan="3"><sf:textarea cols="100" rows="5" path="correctiveaction"  id="correctiveaction"
 				cssClass="easyui-validatebox"  data-options="validType:'minLength[0,148]'"  invalidMessage="纠正措施内容非法"  
 						 />&nbsp;<sf:errors path="correctiveaction"
 						cssClass="error_msg" /></td>
 			</tr>
 			<tr>
-		  	<td height="30" align="left">解决人员</td>
+<%-- 		  	<td height="30" align="left">解决人员</td>
 			  <td height="30" colspan="1"><sf:input path="resolutioner"  id="resolutioner" 
 						data-options="validType:'minLength[0,50]'"  missingMessage="解决人员" invalidMessage="解决人员"  />&nbsp;<sf:errors path="resolutioner"
-						cssClass="error_msg" /> </td>
-			<td height="30" align="left">解决时间</td>
-			  <td height="30" colspan="1"><sf:input path="resolutiontime" id="resolutiontime" 
+						cssClass="error_msg" /> </td> --%>
+			<td height="30" align="left">纠正处理完成时间</td>
+			  <td height="30" colspan="3"><sf:input path="resolutiontime" id="resolutiontime" 
 			  	onclick="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'});"
 						readonly="true" style="width:130px" value="${resolutiontime}" /> </td>
 			  </tr>
 
-		   <tr>
+<%-- 		   <tr>
 		   	<td height="30" align="left">预防措施责任人</td>
 			  <td height="30" ><sf:input path="preventiver" id="preventiver" 
 						data-options="validType:'minLength[0,20]'"  missingMessage="预防措施责任人" invalidMessage="预防措施责任人"  />&nbsp;<sf:errors path="preventiver"
@@ -198,10 +207,10 @@
 			  <td height="30" colspan="1"><sf:input path="preventiveaccdate" id="preventiveaccdate" 
 			  	onclick="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'});"
 						readonly="true" style="width:130px" value="${preventiveaccdate}" /> </td>
-		       </tr>
+		       </tr> --%>
 		      	  
 			<tr>
-				<td height="30" align="left">预防措施</td>
+				<td height="30" align="left">整改措施方案：<br/>(需点名责任人)</td>
 			  <td height="30" colspan="4"><sf:textarea cols="100" rows="5" path="preventiveaction"	id="preventiveaction"						
 				cssClass="easyui-validatebox"  data-options="validType:'minLength[0,148]'"   invalidMessage="预防措施内容非法"  />&nbsp;<sf:errors path="preventiveaction"
 						cssClass="error_msg" /></td>
