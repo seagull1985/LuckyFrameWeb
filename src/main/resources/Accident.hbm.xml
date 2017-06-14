@@ -22,7 +22,7 @@
 			<column name="reporter" length="20" not-null="true" />
 		</property>
 		<property name="reporttime" type="java.lang.String">
-			<column name="reporttime" length="30" not-null="true" />
+			<column name="reporttime" length="30" not-null="false" />
 		</property>
 		<property name="accdescription" type="java.lang.String">
 			<column name="accdescription" length="500" not-null="true" />
