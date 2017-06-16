@@ -105,7 +105,7 @@ public class CasedetailController
 		
 		@SuppressWarnings("rawtypes")
 		List tasks = new ArrayList<>();
-		if (!StrLib.isEmpty(status)&&StrLib.isEmpty(caseDetail.getCasestatus())){
+		if (!StrLib.isEmpty(status)&&null==caseDetail.getCasestatus()){
 			caseDetail.setCasestatus(status);
 		}
 		if (!StrLib.isEmpty(taskId)){
