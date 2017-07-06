@@ -1,15 +1,14 @@
-/*
- * author	zhyan
- * date		2004-8-3
- * desc		�ַ����		
- */
 package luckyweb.seagull.util;
 
 
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class StrLib {
@@ -24,11 +23,7 @@ public class StrLib {
 		return (str == null ? "" : str);
 	}
 
-	/**
-	 * ��һ���ı���html�﷨��ʽת��
-	 * @param str �ı�
-	 * @return html��ʽ�ı�
-	 */
+
 	public static String formatHtml(String str) {
 		if (str == null) return "";
 		str = str.replaceAll("<","&lt;");
@@ -39,29 +34,17 @@ public class StrLib {
 		return str;
 	}
 
-	/**
-	 * ���ִ���ĵ���Ÿ�дΪ2����l�ĵ���ţ�����sql����һ����
-	 * @param str ���ܰ���ŵ�sql���
-	 * @return ��ת�������Ϊ2����l�ĵ���ŵ����
-	 */
+
 	public static String formatSql(String str) {
 		return str.replaceAll("'","''");
 	}
 	
-	/**
-	 * �ж�һ���ִ��Ƿ�Ϊ�գ�null����""��
-	 * @param str Ҫ�жϵ��ִ�
-	 * @return Ϊ�գ�null����""���򷵻�true�����򷵻�false
-	 */
+
 	public static boolean isEmpty(String str) {
 		return (str == null || str.length() == 0);
 	}
 	
-	/**
-	 * ת���ַ����ΪGBK
-	 * @param str Ҫת�����ַ�
-	 * @return ��GBK�������ַ�
-	 */
+
 	public static String toChinese(String str) {
 		if (str == null) return null;
 		try {
@@ -71,21 +54,12 @@ public class StrLib {
 		}
 	}
 
-	/**
-	 * ɾ��һ���ִ�ͷβ�Ŀո�
-	 * @param str �ִ�
-	 * @return ����ִ�Ϊnull������""�����򷵻�ȥ����ͷβ�ո���ִ�
-	 */
+
 	public static String trim(String str) {
 		return (str == null ? "" : str.trim());
 	}
 	
-	/**
-	 * �ַ������Ԫ��֮����ָ���ķָ��ָ�ϲ�Ϊһ���ַ���
-	 * @param arr �ַ�����
-	 * @param separator �ָ��
-	 * @return �ϲ�����ַ�
-	 */
+
 	public static String arrayToString(String[] arr,String separator) {
 		int i,length;
 		String str = null;
@@ -221,4 +195,75 @@ public class StrLib {
 		}
 
 	}
+	
+	 /**
+	  * 功能描述:通过传入一个列表对象,调用指定方法将列表中的数据生成一个JSON规格指定字符串
+	  * @param list列表对象
+	  * @return java.lang.String
+	  */
+	 public static String listToJson(List<?> list) {
+	  StringBuilder json = new StringBuilder();
+	  json.append("[");
+	  if (list != null && list.size() > 0) {
+	   for (Object obj : list) {
+	    json.append(objectToJson(obj));
+	    json.append(",");
+	   }
+	   json.setCharAt(json.length() - 1, ']');
+	  } else {
+	   json.append("]");
+	  }
+	  return json.toString();
+	 }
+
+	 /**
+	  * @param object 任意对象
+	  * @return java.lang.String
+	  */
+	 public static String objectToJson(Object object) {
+	  StringBuilder json = new StringBuilder();
+	  if (object == null) {
+	   json.append("\"\"");
+	  } else if (object instanceof String || object instanceof Integer) {
+	   json.append("\"").append(object.toString()).append("\"");
+	  } else {
+	   json.append(beanToJson(object));
+	  }
+	  return json.toString();
+	 }
+	
+	 /**
+	  * 功能描述:传入任意一个 javabean 对象生成一个指定规格的字符串
+	  * @param bean bean对象
+	  * @return String
+	  */
+	 private static String beanToJson(Object bean) {
+	  StringBuilder json = new StringBuilder();
+	  json.append("{");
+	  PropertyDescriptor[] props = null;
+	  try {
+	   props = Introspector.getBeanInfo(bean.getClass(), Object.class)
+	     .getPropertyDescriptors();
+	  } catch (IntrospectionException e) {
+	  }
+	  if (props != null) {
+	   for (int i = 0; i < props.length; i++) {
+	    try {
+	     String name = objectToJson(props[i].getName());
+	     String value = objectToJson(props[i].getReadMethod()
+	       .invoke(bean));
+	     json.append(name);
+	     json.append(":");
+	     json.append(value);
+	     json.append(",");
+	    } catch (Exception e) {
+	    }
+	   }
+	   json.setCharAt(json.length() - 1, '}');
+	  } else {
+	   json.append("}");
+	  }
+	  return json.toString();
+	 }
+	 
 }

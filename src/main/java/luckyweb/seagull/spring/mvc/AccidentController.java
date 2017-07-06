@@ -201,13 +201,6 @@ public class AccidentController {
 					return retVal;
 				}
 				
-				if(accident.getReporttime().equals("")){
-					message = "请选择事故报告时间!";
-					model.addAttribute("message", message);
-					model.addAttribute("projects", QueueListener.qa_projlist);
-					return retVal;
-				}
-				
 				if(accident.getReporter().equals("")){
 					message = "请填写事故报告人!";
 					model.addAttribute("message", message);
@@ -222,14 +215,8 @@ public class AccidentController {
 						model.addAttribute("projects", QueueListener.qa_projlist);
 						return retVal;
 					}
-					if(accident.getResolutiontime().equals("")||accident.getResolutioner().equals("")){
-						message = "跟踪处理完成状态，请填写解决时间以及解决人员!";
-						model.addAttribute("message", message);
-						model.addAttribute("projects", QueueListener.qa_projlist);
-						return retVal;
-					}
-					if(accident.getImpact_time()==0){
-						message = "跟踪处理完成状态，请填写故障影响时间!";
+					if(accident.getResolutiontime().equals("")){
+						message = "跟踪处理完成状态，请填写解决时间!";
 						model.addAttribute("message", message);
 						model.addAttribute("projects", QueueListener.qa_projlist);
 						return retVal;
@@ -239,24 +226,7 @@ public class AccidentController {
 				
 				if(!accident.getEventtime().equals("")&&!accident.getResolutiontime().equals("")){
 					accident.setTrouble_duration(interval(accident.getEventtime(),accident.getResolutiontime()));
-				}
-				accident.setImpact_time(accident.getImpact_time());
-				accident.setAccstatus(accident.getAccstatus());
-				accident.setEventtime(accident.getEventtime());
-				accident.setReporter(accident.getReporter());
-				accident.setReporttime(accident.getReporttime());
-				accident.setAccdescription(accident.getAccdescription());
-				accident.setAcclevel(accident.getAcclevel());
-				accident.setCausalanalysis(accident.getCausalanalysis());
-				accident.setCausaltype(accident.getCausaltype());
-				accident.setConsequenceanalysis(accident.getConsequenceanalysis());
-				accident.setCorrectiveaction(accident.getCorrectiveaction());
-				accident.setResolutiontime(accident.getResolutiontime());
-				accident.setResolutioner(accident.getResolutioner());
-				accident.setPreventiveaction(accident.getPreventiveaction());
-				accident.setPreventiver(accident.getPreventiver());
-				accident.setPreventiveplandate(accident.getPreventiveplandate());
-				accident.setPreventiveaccdate(accident.getPreventiveaccdate());				
+				}		
 				
 				SectorProjects p = new SectorProjects();
 				p.setProjectid(accident.getProjectid());
@@ -330,13 +300,8 @@ public class AccidentController {
 					model.addAttribute("message", message);
 					return retVal;
 				}
-				if(accident.getResolutiontime().equals("")||accident.getResolutioner().equals("")){
-					message = "跟踪处理完成状态，请填写解决时间以及解决人员!";
-					model.addAttribute("message", message);
-					return retVal;
-				}
-				if(accident.getImpact_time()==null){
-					message = "跟踪处理完成状态，请填写故障影响时间!";
+				if(accident.getResolutiontime().equals("")){
+					message = "跟踪处理完成状态，请填写解决时间!";
 					model.addAttribute("message", message);
 					return retVal;
 				}
@@ -344,24 +309,7 @@ public class AccidentController {
 			
 			if(!accident.getEventtime().equals("")&&!accident.getResolutiontime().equals("")){
 				accident.setTrouble_duration(interval(accident.getEventtime(),accident.getResolutiontime()));
-			}
-			accident.setImpact_time(accident.getImpact_time());
-			accident.setAccstatus(accident.getAccstatus());
-			accident.setEventtime(accident.getEventtime());
-			accident.setReporter(accident.getReporter());
-			accident.setReporttime(accident.getReporttime());
-			accident.setAccdescription(accident.getAccdescription());
-			accident.setAcclevel(accident.getAcclevel());
-			accident.setCausalanalysis(accident.getCausalanalysis());
-			accident.setCausaltype(accident.getCausaltype());
-			accident.setConsequenceanalysis(accident.getConsequenceanalysis());
-			accident.setCorrectiveaction(accident.getCorrectiveaction());
-			accident.setResolutiontime(accident.getResolutiontime());
-			accident.setResolutioner(accident.getResolutioner());
-			accident.setPreventiveaction(accident.getPreventiveaction());
-			accident.setPreventiver(accident.getPreventiver());
-			accident.setPreventiveplandate(accident.getPreventiveplandate());
-			accident.setPreventiveaccdate(accident.getPreventiveaccdate());				
+			}		
 			
 			SectorProjects p = new SectorProjects();
 			p.setProjectid(accident.getProjectid());

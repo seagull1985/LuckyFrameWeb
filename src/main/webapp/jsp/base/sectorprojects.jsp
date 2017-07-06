@@ -58,17 +58,19 @@
                 <tr bgcolor="#B9DCFF">
 				<th width="5%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">项目编号</th>
 				<th width="35%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">项目名称</th>
+				<th width="10%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">项目标识</th>
 				<th width="10%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">项目经理</th>
 				<th width="10%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">项目类型</th>
 				<th width="10%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">所属部门</th>
 				<th width="10%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">部门经理</th>
-				<th width="20%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">操作</th>
+				<th width="10%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">操作</th>
 		  </tr>
 		  <c:forEach var="t" items="${splist}" begin="0" step="1"
 				varStatus="i">
 			  <tr>
 				  <td height="25" style="text-align:center">${t.projectid }&nbsp;</td>
 				  <td height="25" >${t.projectname }&nbsp;</td>
+				  <td height="25" >${t.projectsign }&nbsp;</td>
 				  <td height="25" >${t.projectmanager }&nbsp;</td>
 				  <c:if test="${t.projecttype==0 }">
 				  <td height="25" >质量管理项目&nbsp;</td>
