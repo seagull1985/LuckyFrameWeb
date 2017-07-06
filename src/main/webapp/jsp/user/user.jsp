@@ -68,10 +68,11 @@
 		
 	   <table width="100%" align="center" class="bordered" style="table-layout: fixed">
           <tr bgcolor="#B9DCFF">                
-				<th width="15%" height="40" nowrap="nowrap"  >姓名</th>
-				<th width="20%" height="40" nowrap="nowrap"  >用户名</th>
+				<th width="10%" height="40" nowrap="nowrap"  >姓名</th>
+				<th width="15%" height="40" nowrap="nowrap"  >用户名</th>
 				<th width="45%" height="40" nowrap="nowrap"  >角色</th>
 				<th width="15%" height="40" nowrap="nowrap"  >所属部门</th>
+				<th width="10%" height="40" nowrap="nowrap"  >默认项目</th>
 				<th width="5%" height="40" nowrap="nowrap"  >操作</th>
 		  </tr>
 		  <c:forEach var="t" items="${splist}" begin="0" step="1" varStatus="i">
@@ -80,6 +81,7 @@
 					<td height="25" align="center">${t.usercode }</td>
 					<td height="25" align="center">${t.role }</td>
 					<td height="25" align="center">${t.secondarySector.departmentname }</td>
+					<td height="25" align="center">${t.projectname }</td>
 					<%-- <td height="25" align="center">${t.remark }</td> --%>
 					<td height="25" align="center" style="word-break: break-all">
 						<a href="#" onclick="showDiv('${t.id}','2')"
@@ -120,7 +122,7 @@
 		if(${page > 1})
 		{
 			document.getElementById("page").value=page;
-			document.getElementById("review").submit();
+			document.getElementById("userinfo").submit();
 			return true;
 		}
 		return false;
@@ -132,7 +134,7 @@
 		if(${page < allPage})
 		{
 			document.getElementById("page").value=page;
-			document.getElementById("review").submit();
+			document.getElementById("userinfo").submit();
 			//$("#projectversion").submit();
 			return true;
 		}			
@@ -146,7 +148,7 @@
 		}else{
 			document.getElementById("page").value=page;
 		}
-		document.getElementById("review").submit();
+		document.getElementById("userinfo").submit();
 		return true;
 	}
 	

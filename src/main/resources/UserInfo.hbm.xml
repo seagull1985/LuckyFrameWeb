@@ -23,5 +23,8 @@
 		<many-to-one name="secondarySector" class="SecondarySector" fetch="select" lazy="false">   <!-- 关于lazy的解释     http://blog.sina.com.cn/s/blog_4731ed500101cwsk.html -->
 			<column name="sectorid" not-null="true"  />
 		</many-to-one>
+	    <property name="projectid" type="java.lang.Integer">
+			<column name="projectid" length="4" not-null="false" />
+		</property>
 	</class>
 </hibernate-mapping>

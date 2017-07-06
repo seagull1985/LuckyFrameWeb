@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.SecondarySector;
+import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.UserAuthority;
 import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.entity.UserRole;
@@ -108,9 +110,16 @@ public class UserInfoController {
 			model.addAttribute("allPage", allPage);
 			List<UserRole> roleMap = userroleservice.listall();
 			List<UserInfo> sssMap = userinfoservice.findByPage(userinfo, offset, pageSize);
+			List<SectorProjects> prolist = QueueListener.qa_projlist;
 			for(int i=0;i<sssMap.size();i++){
 				String role="";
 				String temp[]=sssMap.get(i).getRole().split(";",-1);
+				for(SectorProjects projectlist:prolist){
+					if(sssMap.get(i).getProjectid()==projectlist.getProjectid()){
+						sssMap.get(i).setProjectname(projectlist.getProjectname());
+					}
+				}
+				
 				for(int k=0;k<temp.length;k++){
 					if(null==temp[k]||"".equals(temp[k])){
 						continue;
@@ -176,6 +185,7 @@ public class UserInfoController {
 					message = "真实姓名不能为空！";
 					model.addAttribute("userrole", userroleservice.listall());
 				    model.addAttribute("secondarysector", secondarysectorService.listall());
+				    model.addAttribute("projects", QueueListener.qa_projlist);
 					model.addAttribute("message", message);
 					return retVal;
 				}
@@ -183,13 +193,15 @@ public class UserInfoController {
 					message = "用户名不能为空！";
 					model.addAttribute("userrole", userroleservice.listall());
 				    model.addAttribute("secondarysector", secondarysectorService.listall());
+				    model.addAttribute("projects", QueueListener.qa_projlist);
 					model.addAttribute("message", message);
 					return retVal;
 				}
-				if(StrLib.isEmpty(userinfo.getSecondarySector().getDepartmentname())||"0".equals(userinfo.getSecondarySector().getDepartmentname())){
+				if(userinfo.getSectorid()==0){
 					message = "请至少选择一个所属部门！";
 					model.addAttribute("userrole", userroleservice.listall());
 				    model.addAttribute("secondarysector", secondarysectorService.listall());
+				    model.addAttribute("projects", QueueListener.qa_projlist);
 					model.addAttribute("message", message);
 					return retVal;
 				}
@@ -197,6 +209,7 @@ public class UserInfoController {
 					message = "密码不能为空！";
 					model.addAttribute("userrole", userroleservice.listall());
 				    model.addAttribute("secondarysector", secondarysectorService.listall());
+				    model.addAttribute("projects", QueueListener.qa_projlist);
 					model.addAttribute("message", message);
 					return retVal;
 				}
@@ -206,6 +219,7 @@ public class UserInfoController {
 					message = "两次输入的密码不一致，请确认！";
 					model.addAttribute("userrole", userroleservice.listall());
 				    model.addAttribute("secondarysector", secondarysectorService.listall());
+				    model.addAttribute("projects", QueueListener.qa_projlist);
 					model.addAttribute("message", message);
 					return retVal;
 				}
@@ -214,6 +228,7 @@ public class UserInfoController {
 					message = "用户名已经存在，请重新输入！";
 					model.addAttribute("userrole", userroleservice.listall());
 				    model.addAttribute("secondarysector", secondarysectorService.listall());
+				    model.addAttribute("projects", QueueListener.qa_projlist);
 					model.addAttribute("message", message);
 					return retVal;
 				}
@@ -223,7 +238,7 @@ public class UserInfoController {
 				userinfo.setPassword(cryptpwd);
 				userinfo.setRole(userinfo.getRole().replaceAll(",", ";"));
 				
-				SecondarySector ss = secondarysectorService.load(Integer.valueOf(userinfo.getSecondarySector().getDepartmentname()));
+				SecondarySector ss = secondarysectorService.load(userinfo.getSectorid());
 				userinfo.setSectorid(ss.getSectorid());
 				userinfo.setSecondarySector(ss);
 				
@@ -239,6 +254,8 @@ public class UserInfoController {
 			}
 			    model.addAttribute("userrole", userroleservice.listall());
 			    model.addAttribute("secondarysector", secondarysectorService.listall());
+			    model.addAttribute("projects", QueueListener.qa_projlist);
+			    userinfo.setProjectid(99);
 				model.addAttribute("userinfo", userinfo);
 				return retVal;
 
@@ -328,6 +345,7 @@ public class UserInfoController {
 				message = "真实姓名不能为空！";
 				model.addAttribute("userrole", userroleservice.listall());
 			    model.addAttribute("secondarysector", secondarysectorService.listall());
+			    model.addAttribute("projects", QueueListener.qa_projlist);
 				model.addAttribute("message", message);
 				return retVal;
 			}
@@ -335,13 +353,15 @@ public class UserInfoController {
 				message = "用户名不能为空！";
 				model.addAttribute("userrole", userroleservice.listall());
 			    model.addAttribute("secondarysector", secondarysectorService.listall());
+			    model.addAttribute("projects", QueueListener.qa_projlist);
 				model.addAttribute("message", message);
 				return retVal;
 			}
-			if(StrLib.isEmpty(userinfo.getSecondarySector().getDepartmentname())||"0".equals(userinfo.getSecondarySector().getDepartmentname())){
+			if(userinfo.getSectorid()==0){
 				message = "请至少选择一个所属部门！";
 				model.addAttribute("userrole", userroleservice.listall());
 			    model.addAttribute("secondarysector", secondarysectorService.listall());
+			    model.addAttribute("projects", QueueListener.qa_projlist);
 				model.addAttribute("message", message);
 				return retVal;
 			}
@@ -349,6 +369,7 @@ public class UserInfoController {
 				message = "密码不能为空！";
 				model.addAttribute("userrole", userroleservice.listall());
 			    model.addAttribute("secondarysector", secondarysectorService.listall());
+			    model.addAttribute("projects", QueueListener.qa_projlist);
 				model.addAttribute("message", message);
 				return retVal;
 			}
@@ -357,6 +378,7 @@ public class UserInfoController {
 				message = "两次输入的密码不一致，请确认！";
 				model.addAttribute("userrole", userroleservice.listall());
 			    model.addAttribute("secondarysector", secondarysectorService.listall());
+			    model.addAttribute("projects", QueueListener.qa_projlist);
 				model.addAttribute("message", message);
 				return retVal;
 			}
@@ -365,7 +387,7 @@ public class UserInfoController {
 			userinfo.setPassword(cryptpwd);
 			userinfo.setRole(userinfo.getRole().replaceAll(",", ";"));
 			
-			SecondarySector ss = secondarysectorService.load(Integer.valueOf(userinfo.getSecondarySector().getDepartmentname()));
+			SecondarySector ss = secondarysectorService.load(userinfo.getSectorid());
 			userinfo.setSectorid(ss.getSectorid());
 			userinfo.setSecondarySector(ss);
 			
@@ -387,6 +409,8 @@ public class UserInfoController {
 		
 	    model.addAttribute("userrole", userroleservice.listall());
 	    model.addAttribute("secondarysector", secondarysectorService.listall());
+	    model.addAttribute("projects", QueueListener.qa_projlist);
+	    
 		model.addAttribute("userinfo", userinfo);
 		return "/jsp/user/user_update";
 
@@ -465,12 +489,63 @@ public class UserInfoController {
 			req.getSession().setAttribute("usercode", null);
 			req.getSession().setAttribute("username", null);
 			req.getSession().setAttribute("permission", null);
-			model.addAttribute("url", "/progressus/signin.html");
+			model.addAttribute("url", "/progressus/signin.jsp");
 			return "success";
 
 		}	
 
 		model.addAttribute("userinfo", userinfo);
+		return retVal;
+
+	}
+	catch (Exception e){
+		model.addAttribute("message", e.getMessage());
+		model.addAttribute("url", "/");
+		return "error";
+	 }
+	}
+	
+	/**
+	 * 
+	 * 用户修改默认项目
+	 * @param id
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateproject.do")
+	public String updateproject(@Valid @ModelAttribute("userinfo") UserInfo userinfo, BindingResult br,
+	        Model model, HttpServletRequest req) throws Exception{
+		
+		req.setCharacterEncoding("utf-8");
+		String usercode="";
+		if(req.getSession().getAttribute("usercode")!=null&&req.getSession().getAttribute("username")!=null){
+			usercode = req.getSession().getAttribute("usercode").toString();
+		}else{
+			model.addAttribute("message", "获取用户信息失败！");
+			model.addAttribute("url", "../index.jsp");
+			return "error";
+		}
+		
+		try{
+		String retVal = "/jsp/user/user_proupdate";
+		UserInfo ui = userinfoservice.getUseinfo(usercode);
+		if (req.getMethod().equals("POST"))
+		{
+			if (br.hasErrors())
+			{
+				return retVal;
+			}
+			ui.setProjectid(userinfo.getProjectid());
+			userinfoservice.modify(ui);
+			
+			model.addAttribute("message", "修改默认项目成功！");
+			model.addAttribute("url", "/progressus/signin.jsp");
+			return "success";
+
+		}	
+		model.addAttribute("projects", QueueListener.qa_projlist);
+		model.addAttribute("userinfo", ui);
 		return retVal;
 
 	}

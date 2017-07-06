@@ -98,11 +98,21 @@
 								<div class="top-margin">
 								<label>所属部门 <span class="text-danger">*</span></label>
 								<sf:select type="text" class="form-control"
-									path="secondarySector.departmentname"
-									id="secondarySector.departmentname">
+									path="sectorid"
+									id="sectorid">
 									<sf:option value="0">请选择</sf:option>
 									<c:forEach var="p" items="${secondarysector}">
 										<sf:option value="${p.sectorid}">${p.departmentname}</sf:option>
+									</c:forEach>
+								</sf:select>
+							</div>
+							<div class="top-margin">
+								<label>默认项目</label>
+								<sf:select type="text" class="form-control"
+									path="projectid"
+									id="projectid">
+									<c:forEach var="p" items="${projects}">
+										<sf:option value="${p.projectid}">${p.projectname}</sf:option>
 									</c:forEach>
 								</sf:select>
 							</div>

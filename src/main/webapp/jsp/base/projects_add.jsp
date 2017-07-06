@@ -67,6 +67,10 @@
 									<sf:input type="text" class="form-control" path="projectname" id="projectname"/>
 								</div>
 								<div class="top-margin">
+									<label>项目标识(英文简称)<span class="text-danger">*</span></label>
+									<sf:input type="text" class="form-control" path="projectsign" id="projectsign"/>
+								</div>
+								<div class="top-margin">
 									<label>项目经理 <span class="text-danger">*</span></label>
 									<sf:input type="text" class="form-control" path="projectmanager" id="projectmanager"/>
 								</div>
@@ -83,8 +87,8 @@
 							</div>
 							<div class="top-margin">
 									<label>项目类型 <span class="text-danger">*</span></label><br/>								
-									<sf:radiobutton path="projecttype" id="projecttype" value="0" /> 质量管理项目&nbsp;&nbsp;&nbsp;&nbsp; 
-				                    <sf:radiobutton	path="projecttype" id="projecttype" value="1" /> 自动化管理项目(testlink)
+									<sf:radiobutton path="projecttype" id="projecttype" value="0" /> 质量&自动化管理项目&nbsp;&nbsp;&nbsp;&nbsp; 
+				                    <sf:radiobutton	path="projecttype" id="projecttype" value="1" /> 第三方自动化用例管理项目(testlink)
 								</div>
 
 </br>

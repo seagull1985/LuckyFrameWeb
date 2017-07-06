@@ -8,7 +8,7 @@
 <!-- 指定连接数据库所用的驱动 -->
   <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
   <!-- 指定连接数据库的url，hibernate连接的数据库名 -->
-  <property name="connection.url">jdbc:mysql://localhost:3306/luckyframedb?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</property>
+  <property name="connection.url">jdbc:mysql://10.213.32.241:3306/luckyframedb?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</property>
   <property name="connection.useUnicode">true</property>
   <property name="connection.characterEncoding">utf-8</property>
   <!-- 指定连接数据库的用户名 -->
@@ -18,21 +18,19 @@
   <!-- C3P0连接池设定-->
   <property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
   <!-- 连接池大小 -->
-  <property name="connection.pool_size">20</property>
+  <property name="connection.pool_size">50</property>
   <!-- 指定连接池里最大连接数 -->
-  <property name="hibernate.c3p0.max_size">20</property>
+  <property name="hibernate.c3p0.max_size">50</property>
   <!-- 指定连接池里最小连接数 -->
-  <property name="hibernate.c3p0.min_size">5</property>
+  <property name="hibernate.c3p0.min_size">10</property>
   <!-- 指定连接池里连接的超时时长 -->
-  <property name="hibernate.c3p0.timeout">0</property>
+  <property name="hibernate.c3p0.timeout">1800</property>
   <!-- 指定连接池里最大缓存多少个Statement对象 -->
   <property name="hibernate.c3p0.max_statements">20</property>
-  <property name="hibernate.c3p0.idle_test_period">0</property>
+  <property name="hibernate.c3p0.idle_test_period">60</property>
   <property name="hibernate.c3p0.acquire_increment">2</property>
   <property name="hibernate.c3p0.validate">true</property>
-  <property name="hibernate.c3p0.preferredTestQuery ">select 1 </property>
-  <property name="hibernate.c3p0.idleConnectionTestPeriod">180</property>            
-  <property name="hibernate.c3p0.maxIdleTime">3600</property>         
+  <property name="hibernate.c3p0.preferredTestQuery ">SELECT 1 </property>               
   <property name="hibernate.c3p0.testConnectionOnCheckout">true</property>
   <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
   <property name="connection.autocommit">true</property>
@@ -63,5 +61,9 @@
         <mapping resource="ReviewInfo.hbm.xml" />
         <mapping resource="UserAuthority.hbm.xml" />
         <mapping resource="UserRole.hbm.xml" />
+        <mapping resource="ProjectCase.hbm.xml" />
+        <mapping resource="ProjectCasesteps.hbm.xml" />
+<!--         <mapping resource="ProjectPlan.hbm.xml" />
+        <mapping resource="ProjectPlanCase.hbm.xml" /> -->
 	</session-factory>
 </hibernate-configuration>

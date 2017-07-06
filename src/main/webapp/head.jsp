@@ -1,22 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
-	<script src="/js/easyui/jquery.min.js"></script>
-	<script src="/progressus/assets/js/bootstrap.min.js"></script>
-	<script src="/progressus/assets/js/headroom.min.js"></script>
-	<script src="/progressus/assets/js/jQuery.headroom.min.js"></script>
-	<script src="/progressus/assets/js/template.js"></script>
-	<script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
-    <script type="text/javascript" src="/js/easyui/jquery.easyui.min.js"></script>
     <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
 	<link rel="stylesheet" href="/progressus/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/progressus/assets/css/bootstrapValidator.css">
+	<link rel="stylesheet" href="/progressus/assets/css/bootstrap-editable.css">
 	<link rel="stylesheet" href="/progressus/assets/css/font-awesome.min.css">
 	<!-- Custom styles for our template -->
 	<link rel="stylesheet" href="/progressus/assets/css/bootstrap-theme.css" media="screen" >
+	<link rel="stylesheet" href="/progressus/assets/css/bootstrap-table.css" media="screen" >
 	<link rel="stylesheet" href="/progressus/assets/css/main.css">
-		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	
+	<script type="text/javascript" src="/progressus/assets/js/jquery-1.10.2.min.js"></script>
+	<script src="/progressus/assets/js/bootstrap.min.js"></script>
+	<script src="/progressus/assets/js/bootstrapValidator/bootstrapValidator.js"></script>
+	<script src="/progressus/assets/js/bootstraptable/bootstrap-table.js"></script>
+	<script src="/progressus/assets/js/bootstraptable/extensions/editable/bootstrap-table-editable.js"></script>
+		<script src="/progressus/assets/js/bootstrap-editable.js"></script>
+	<script src="/progressus/assets/js/bootstraptable/locale/bootstrap-table-zh-CN.js"></script>
+	<script src="/progressus/assets/js/headroom.min.js"></script>
+	<script src="/progressus/assets/js/jQuery.headroom.min.js"></script>
+	<script src="/progressus/assets/js/template.js"></script>
+    <script type="text/javascript" src="/js/easyui/jquery.easyui.min.js"></script>
+<!-- 		HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
 	<script src="/progressus/assets/js/html5shiv.js"></script>
 	<script src="/progressus/assets/js/respond.min.js"></script>
 	<![endif]-->
+
 
 	<div class="navbar navbar-inverse navbar-fixed-top headroom" style="background-color:rgba(51,204,255,0.5);font-size:20px;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;">
 		<div class="container">
@@ -33,6 +42,7 @@
 						<ul class="dropdown-menu" style="background-color:rgba(51,204,255,0.6);">
 							<li><a href="/testJobs/list.do">调度配置</a></li>
 							<li><a href="/tastExecute/list.do">任务查询</a></li>
+							<li><a href="/projectCase/load.do">用例管理</a></li>
 							<li><a href="/autoTestChar/chart.do">任务概况图表</a></li>
 						</ul>
 					</li>

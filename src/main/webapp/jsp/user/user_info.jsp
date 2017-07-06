@@ -82,7 +82,9 @@
 							<div class="row top-margin">
 									<div class="col-lg-4 text-center" style="width:900px">
 										<a href="../userInfo/updatepw.do" 
-										style="text-decoration: none;"> <span class="btn btn-action" > 修改密码</span></a>	
+										style="text-decoration: none;"> <span class="btn btn-action" > 修改密码</span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+										<a href="../userInfo/updateproject.do" 
+										style="text-decoration: none;"> <span class="btn btn-action" > 切换默认项目</span></a>		
 									</div>
 								</div>
 								
