@@ -40,9 +40,10 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">UTP<b class="caret"></b></a>
 						<ul class="dropdown-menu" style="background-color:rgba(51,204,255,0.6);">
+							<li><a href="/projectPlan/load.do">测试计划</a></li>
+							<li><a href="/projectCase/load.do">用例管理</a></li>
 							<li><a href="/testJobs/list.do">调度配置</a></li>
 							<li><a href="/tastExecute/list.do">任务查询</a></li>
-							<li><a href="/projectCase/load.do">用例管理</a></li>
 							<li><a href="/autoTestChar/chart.do">任务概况图表</a></li>
 						</ul>
 					</li>

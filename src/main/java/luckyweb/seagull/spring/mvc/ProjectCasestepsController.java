@@ -54,7 +54,7 @@ public class ProjectCasestepsController {
 	private UserInfoService userinfoservice;
 
 	/**
-	 * 添加用例
+	 * 添加步骤
 	 * 
 	 * @param tj
 	 * @param br
@@ -71,14 +71,13 @@ public class ProjectCasestepsController {
 		try {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
-			PrintWriter pw = rsp.getWriter();
-			/*
-			 * if(!UserLoginController.permissionboolean(req, "case_1")){
-			 * model.addAttribute("casesteps", new ProjectCasesteps());
-			 * model.addAttribute("url", "/projectCase/list.do");
-			 * model.addAttribute("message", "当前用户无权限添加用例，请联系管理员！"); return
-			 * "success"; }
-			 */
+
+			if (!UserLoginController.permissionboolean(req, "case_step")) {
+				model.addAttribute("casesteps", new ProjectCasesteps());
+				model.addAttribute("url", "/projectCase/load.do");
+				model.addAttribute("message", "当前用户无权限管理用例步骤，请联系管理员！");
+				return "success";
+			}
 
 			String caseid = req.getParameter("caseid");
 			ProjectCase prcase = null;
@@ -87,7 +86,7 @@ public class ProjectCasestepsController {
 			}
 			String retVal = "/jsp/plancase/step_add";
 			List<ProjectCasesteps> steps = casestepsservice.getSteps(Integer.valueOf(caseid));
-			if(steps.size()==0){
+			if (steps.size() == 0) {
 				ProjectCasesteps step = new ProjectCasesteps();
 				step.setPath("");
 				step.setOperation("");
@@ -101,7 +100,7 @@ public class ProjectCasestepsController {
 				step.setRemark("");
 				steps.add(step);
 			}
-			
+
 			model.addAttribute("casesign", prcase.getSign());
 			model.addAttribute("caseid", caseid);
 			model.addAttribute("projectid", prcase.getProjectid());
@@ -128,52 +127,59 @@ public class ProjectCasestepsController {
 
 	@RequestMapping(value = "/editsteps.do")
 	private void editsteps(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/html;charset=utf-8");
+		request.setCharacterEncoding("utf-8");
 		PrintWriter pw = response.getWriter();
 		StringBuilder sb = new StringBuilder();
-		try (BufferedReader reader = request.getReader();) {
-			char[] buff = new char[1024];
-			int len;
-			while ((len = reader.read(buff)) != -1) {
-				sb.append(buff, 0, len);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		String jsonstr = sb.toString().substring(1, sb.toString().length() - 1);
-		jsonstr = jsonstr.replace("\\\"", "\"");
-		jsonstr = jsonstr.replace("undefined", "0");
-		System.out.println(jsonstr);
-		JSONArray jsonarr = JSONArray.fromObject(jsonstr);
-		List<?> list = JSONArray.toList(jsonarr, new ProjectCasesteps(), new JsonConfig());// 参数1为要转换的JSONArray数据，参数2为要转换的目标数据，即List盛装的数据
-		String usercode="";
-		if (null != request.getSession().getAttribute("usercode")
-				&& null != request.getSession().getAttribute("username")) {
-			usercode = request.getSession().getAttribute("usercode").toString();
-		}
-		Date currentTime = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String time = formatter.format(currentTime);
-
-		
-		for (int i = 0; i < list.size(); i++) {
-			ProjectCasesteps step = (ProjectCasesteps) list.get(i);
-			if(i == 0){
-				casestepsservice.delforcaseid(step.getCaseid());
-			}
-			step.setOperationer(usercode);
-			step.setTime(time);
-			
-			int stepsid = casestepsservice.add(step);
-			/*operationlogservice.add(req, "PROJECT_CASESTEPS", stepsid, step.getProjectid(), "添加用例"+prcase.getSign()+"步骤"+step.getStepnum()+"成功！");*/
-
-		}
-
-		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
-		json.put("status", "success");
-		json.put("data", "dddSSSSSSS");
+		if (!UserLoginController.permissionboolean(request, "case_step")) {
+			json.put("status", "fail");
+			json.put("ms", "编辑失败,权限不足,请联系管理员!");
+		} else {
+			try (BufferedReader reader = request.getReader();) {
+				char[] buff = new char[1024];
+				int len;
+				while ((len = reader.read(buff)) != -1) {
+					sb.append(buff, 0, len);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			String jsonstr = sb.toString().substring(1, sb.toString().length() - 1);
+			jsonstr = jsonstr.replace("\\\"", "\"");
+			jsonstr = jsonstr.replace("undefined", "0");
+			System.out.println(jsonstr);
+			JSONArray jsonarr = JSONArray.fromObject(jsonstr);
+			List<?> list = JSONArray.toList(jsonarr, new ProjectCasesteps(), new JsonConfig());// 参数1为要转换的JSONArray数据，参数2为要转换的目标数据，即List盛装的数据
+			String usercode = "";
+			if (null != request.getSession().getAttribute("usercode")
+					&& null != request.getSession().getAttribute("username")) {
+				usercode = request.getSession().getAttribute("usercode").toString();
+			}
+			Date currentTime = new Date();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String time = formatter.format(currentTime);
+			ProjectCase projectcase = new ProjectCase();
+			for (int i = 0; i < list.size(); i++) {
+				ProjectCasesteps step = (ProjectCasesteps) list.get(i);
+				if (i == 0) {
+					casestepsservice.delforcaseid(step.getCaseid());
+					projectcase=projectcaseservice.load(step.getCaseid());
+				}
+				step.setOperationer(usercode);
+				step.setTime(time);
+				casestepsservice.add(step);
+				
+				projectcase.setOperationer(usercode);
+				projectcase.setTime(time);
+				projectcaseservice.modify(projectcase);
+			}
+			json.put("status", "success");
+			json.put("ms", "编辑步骤成功!");
+		}
 		pw.print(json.toString());
 	}
+
 	/**
 	 * 
 	 * 
@@ -206,26 +212,33 @@ public class ProjectCasestepsController {
 	}
 
 	@RequestMapping(value = "/update.do")
-	public void updatecase(HttpServletRequest req, HttpServletResponse rsp, ProjectCasesteps casesteps) {
+	public void updatestep(HttpServletRequest req, HttpServletResponse rsp, ProjectCasesteps casesteps) {
 		// 更新实体
 		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
-			if (null != req.getSession().getAttribute("usercode")
-					&& null != req.getSession().getAttribute("username")) {
-				String usercode = req.getSession().getAttribute("usercode").toString();
-				casesteps.setOperationer(usercode);
-			}
-			Date currentTime = new Date();
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String time = formatter.format(currentTime);
-			casesteps.setTime(time);
-
-			casestepsservice.modify(casesteps);
-			String RecordJson = StrLib.objectToJson(casesteps);
-			// 需要返回的数据有总记录数和行数据
+			StringBuilder sb = new StringBuilder();
 			JSONObject json = new JSONObject();
-			json.put("status", "success");
-			json.put("data", RecordJson);
+			if (!UserLoginController.permissionboolean(req, "case_step")) {
+				json.put("status", "fail");
+				json.put("ms", "编辑失败,权限不足,请联系管理员!");
+			} else {
+				if (null != req.getSession().getAttribute("usercode")
+						&& null != req.getSession().getAttribute("username")) {
+					String usercode = req.getSession().getAttribute("usercode").toString();
+					casesteps.setOperationer(usercode);
+				}
+				Date currentTime = new Date();
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String time = formatter.format(currentTime);
+				casesteps.setTime(time);
+
+				casestepsservice.modify(casesteps);
+
+				json.put("status", "success");
+				json.put("ms", "编辑步骤成功!");
+			}
 			pw.print(json.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -234,10 +247,6 @@ public class ProjectCasestepsController {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String aaa = "\"[{\"setpnum\":1,\"path\":\"aaa\",\"operation\":\"ss\",\"parameters\":\"ss\",\"action\":\"ss\",\"expectedresult\":\"sfda\",\"steptype\":0,\"remark\":\"ddd\"},{\"setpnum\":2,\"path\":\"ffff\",\"operation\":\"fdsa\",\"parameters\":\"csa\",\"action\":\"\",\"expectedresult\":\"\",\"steptype\":1,\"remark\":\"csa\"},{\"setpnum\":3,\"path\":\"fdsa\",\"operation\":\"fss\",\"parameters\":\"akuy\",\"action\":\"a\",\"expectedresult\":\"\",\"steptype\":0,\"remark\":\"fdsa\"},{\"setpnum\":4,\"path\":\"fdsa\",\"operation\":\"dss\",\"parameters\":\"cdxddd\",\"action\":\"sa\",\"expectedresult\":\"\",\"steptype\":0,\"remark\":\"czxc\"}]\"";
-		String jsonstr = aaa.substring(1, aaa.length() - 1);
-		System.out.println(jsonstr);
-		/* JSONObject jsonObject = JSONObject.fromObject(aaa); */
 
 	}
 

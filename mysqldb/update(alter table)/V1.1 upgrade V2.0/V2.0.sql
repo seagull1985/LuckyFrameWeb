@@ -55,3 +55,18 @@ create table PROJECT_PLANCASE
 alter table userinfo add projectid int(4) default '0';
 /*项目管理表增加项目标识字段*/
 alter table QA_SECTORPROJECTS add projectsign VARCHAR(20) not null;
+/*增加权限标识*/
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (51, '用例管理', '增加', 'case_1');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (52, '用例管理', '删除', 'case_2');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (53, '用例管理', '修改', 'case_3');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (54, '步骤管理', '增删改查', 'case_step');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (55, '测试计划管理', '增加', 'proplan_1');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (56, '测试计划管理', '删除', 'proplan_2');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (57, '测试计划管理', '修改', 'proplan_3');

@@ -15,6 +15,14 @@ public class ProjectPlan implements java.io.Serializable{
     private String remark;
     private String time;
     private String operationer;
+    private String projectname;
+    
+	public String getProjectname() {
+		return projectname;
+	}
+	public void setProjectname(String projectname) {
+		this.projectname = projectname;
+	}
 	public int getId() {
 		return id;
 	}

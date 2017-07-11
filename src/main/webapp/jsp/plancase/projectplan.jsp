@@ -7,7 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<title>用例管理</title>
+<title>测试计划</title>
 </head>
 
 <body>
@@ -21,14 +21,14 @@
 	<div class="container" style="width: auto; font-size: 14px;">
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
-			<li class="active">用例管理</li>
+			<li class="active">测试计划</li>
 		</ol>
 
 		<div class="row">
 			<!-- Article main content -->
 			<article class="col-sm-9 maincontent" style="width:100%;">
 			<header class="page-header">
-			<h1 class="page-title" style="text-align: center;">用例管理</h1>
+			<h1 class="page-title" style="text-align: center;">测试计划管理</h1>
 			</header>
 
 			<div class="panel-body" style="padding-bottom: 0px;">
@@ -51,16 +51,16 @@
 
 				<div id="toolbar" class="btn-group">
 					<button id="btn_add" type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增用例
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增计划
 					</button>
 					<button id="btn_delete" type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除用例
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除计划
 					</button>
 					<button id="btn_edit" type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑步骤
+						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>计划用例
 					</button>
 				</div>
-				<table id="tb_projectcase"></table>
+				<table id="tb_projectplan"></table>
 
 				<!-- 模态框示例（Modal） -->
 				<form method="post" action="" class="form-horizontal" role="form"
@@ -88,27 +88,10 @@
 										</div>
 
 										<div class="form-group">
-											<label for="name" class="col-sm-3 control-label">用例名称</label>
+											<label for="lastname" class="col-sm-3 control-label">计划名称</label>
 											<div class="col-sm-9">
 												<input type="text" class="form-control" name="name"
 													id="name" placeholder="用例名称">
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="casetype" class="col-sm-3 control-label">用例类型</label>
-											<div class="col-sm-9">
-												<input type="radio" class="form-control"
-													style="width: 25px; height: 25px; float: left; cursor: pointer;"
-													name="casetype" id="casetype" value="0" checked="checked" />
-												<label
-													style="float: left; margin-top: 8px; cursor: pointer;"
-													for="casetype">
-													&nbsp;&nbsp;接口自动化&nbsp;&nbsp;&nbsp;&nbsp; </label> <input
-													type="radio" class="form-control"
-													style="width: 25px; height: 25px; float: left; cursor: pointer;"
-													name="casetype" id="casetype" value="1" /> <label
-													style="float: left; margin-top: 8px; cursor: pointer;"
-													for="casetype">&nbsp;&nbsp;UI自动化</label>
 											</div>
 										</div>
 
@@ -135,8 +118,7 @@
 						<!-- /.modal -->
 					</div>
 				</form>
-
-
+				
 			</div>
 			</article>
 		</div>
@@ -144,11 +126,11 @@
 
 	<script type="text/javascript">
 		$(function() {
-			$("#projectid option[value='99']").remove();
+ 			$("#projectid option[value='99']").remove();
 			$('#search_project').val('${projectid }');
 			if(${projectid }!=99){
 				$('#projectid').val('${projectid }');
-			}
+			} 
 			//1.初始化Table
 			var oTable = new TableInit();
 			oTable.Init();
@@ -158,8 +140,8 @@
 			var oTableInit = new Object();
 			//初始化Table
 			oTableInit.Init = function() {
-				$('#tb_projectcase').bootstrapTable({
-					url : '/projectCase/list.do', //请求后台的URL（*）
+				$('#tb_projectplan').bootstrapTable({
+					url : '/projectPlan/list.do', //请求后台的URL（*）
 					method : 'get', //请求方式（*）
 					toolbar : '#toolbar', //工具按钮用哪个容器
 					striped : true, //是否显示行间隔色
@@ -182,14 +164,15 @@
 					uniqueId : "ID", //每一行的唯一标识，一般为主键列
 					showToggle : false, //是否显示详细视图和列表视图的切换按钮
 					cardView : false, //是否显示详细视图
-					detailView : true, //是否显示父子表
+					detailView : false, //是否显示父子表
 					columns : [ {
-						checkbox : true
+						checkbox : true,
+						width : '3%',
 					}, {
 						field : 'id',
 						title : 'id',
 						visible : false
-					}, {
+					},  {
 						field : 'projectid',
 						title : 'projectid',
 						visible : false
@@ -198,41 +181,26 @@
 						title : '项目名称',
 						width : '10%',
 					}, {
-						field : 'sign',
-						title : '用例编号',
-						width : '10%',
-					}, {
 						field : 'name',
-						title : '用例名称',
+						title : '计划名称',
 						width : '30%',
 						editable : {
 							type : 'text',
-							title : '用例名称',
-							emptytext : "无用例名称",
+							title : '计划名称',
+							emptytext : "无计划名称",
 							validate : function(value) {
 								if (!$.trim(value))
-									return '用例名称不能为空';
-								if (value.length > 200)
-									return '用例名称不能超过200个字符';
+									return '计划名称不能为空';
+								if (value.length > 50)
+									return '计划名称不能超过50个字符';
 								if (value.length < 2)
-									return '用例名称不能适于2个字符';
+									return '计划名称不能适于2个字符';
 							}
 						}
 					}, {
-						field : 'casetype',
-						title : '用例类型',
+						field : 'casecount',
+						title : '用例总数',
 						width : '10%',
-						editable : {
-							type : 'select',
-							title : '用例类型',
-							source : [ {
-								value : "0",
-								text : "接口自动化"
-							}, {
-								value : "1",
-								text : "Web自动化"
-							} ]
-						}
 					}, {
 						field : 'time',
 						title : '更新时间',
@@ -256,7 +224,7 @@
 						}
 					} ],
 					onEditableSave : function(field, row, oldValue, $el) {
-						var status = document.getElementById("loginstatus").value;
+				    	var status = document.getElementById("loginstatus").value;
 						if(status=="false"){
 							if(window.confirm("你未登录哦，要先去登录吗？")){
 								var url = '/progressus/signin.jsp';
@@ -267,32 +235,28 @@
 							} 	
 						}
 						
-						$('#tb_projectcase').bootstrapTable("resetView");
+						$('#tb_projectplan').bootstrapTable("resetView");
 						$.ajax({
 							type : "post",
-							url : "/projectCase/update.do",
+							url : "/projectPlan/update.do",
 							data : row,
 							dataType : 'JSON',
 							success : function(data, status) {
 								if (data.status == "success") {
 									alert(data.ms);
 								}else{
-									$('#tb_projectcase').bootstrapTable('refresh');
-									alert(data.ms);									
+									$('#tb_projectplan').bootstrapTable('refresh');
+									alert(data.ms);
 								}
 							},
-							error : function(data, status) {
-								alert("编辑失败!");
+							error : function() {
+								alert('编辑失败');
 							},
 							complete : function() {
 
 							}
 
 						});
-					},
-					//注册加载子表的事件。注意下这里的三个参数！
-					onExpandRow : function(index, row, $detail) {
-						oTableInit.InitSubTable(index, row, $detail);
 					}
 				});
 			};
@@ -307,200 +271,9 @@
 				return temp;
 			};
 
-			//初始化子表格(无线循环)
-			oTableInit.InitSubTable = function(index, row, $detail) {
-				var parentid = row.id;
-				var cur_table = $detail.html('<table></table>').find('table');
-				$(cur_table).bootstrapTable({
-					url : '/projectCasesteps/list.do',
-					method : 'get',
-					queryParams : {
-						strParentID : parentid
-					},
-					ajaxOptions : {
-						strParentID : parentid
-					},
-					clickToSelect : true,
-					detailView : false,//父子表
-					uniqueId : "ID",
-					pageSize : 10,
-					pageList : [ 10, 25 ],
-					columns : [ {
-						checkbox : true,
-						visible : false
-					}, {
-						field : 'stepnum',
-						title : '步骤编号'
-					}, {
-						field : 'path',
-						title : '包路径|定位路径',
-						editable : {
-							type : 'text',
-							title : '包路径|定位路径',
-							validate : function(value) {
-								if (!$.trim(value))
-									return '包路径|定位路径不能为空';
-								if (value.length > 100)
-									return '包路径|定位路径不能超过100个字符';
-								if (value.length < 2)
-									return '包路径|定位路径不能适于2个字符';
-							}
-						}
-					}, {
-						field : 'operation',
-						title : '方法名|操作',
-						editable : {
-							type : 'text',
-							title : '包路径|定位路径',
-							validate : function(value) {
-								if (!$.trim(value))
-									return '包路径|定位路径不能为空';
-								if (value.length > 100)
-									return '包路径|定位路径不能超过100个字符';
-								if (value.length < 2)
-									return '包路径|定位路径不能适于2个字符';
-							}
-						}
-					}, {
-						field : 'parameters',
-						title : '参数',
-						editable : {
-							type : 'text',
-							title : '包路径|定位路径',
-							validate : function(value) {
-								if (!$.trim(value))
-									return '包路径|定位路径不能为空';
-								if (value.length > 500)
-									return '包路径|定位路径不能超过500个字符';
-								if (value.length < 2)
-									return '包路径|定位路径不能适于2个字符';
-							}
-						}
-					}, {
-						field : 'action',
-						title : '步骤动作',
-						editable : {
-							type : 'text',
-							title : '包路径|定位路径',
-							validate : function(value) {
-								if (!$.trim(value))
-									return '包路径|定位路径不能为空';
-								if (value.length > 50)
-									return '包路径|定位路径不能超过50个字符';
-								if (value.length < 2)
-									return '包路径|定位路径不能适于2个字符';
-							}
-						}
-					}, {
-						field : 'expectedresult',
-						title : '预期结果',
-						editable : {
-							type : 'text',
-							title : '包路径|定位路径',
-							validate : function(value) {
-								if (!$.trim(value))
-									return '包路径|定位路径不能为空';
-								if (value.length > 200)
-									return '包路径|定位路径不能超过200个字符';
-								if (value.length < 2)
-									return '包路径|定位路径不能适于2个字符';
-							}
-						}
-					}, {
-						field : 'steptype',
-						title : '步骤类型',
-						editable : {
-							type : 'select',
-							title : '步骤类型',
-							source : [ {
-								value : "0",
-								text : "接口自动化"
-							}, {
-								value : "1",
-								text : "Web自动化"
-							} ]
-						}
-					}, {
-						field : 'time',
-						title : '更新时间'
-					}, {
-						field : 'operationer',
-						title : '更新人员'
-					}, {
-						field : 'remark',
-						title : '备注',
-						editable : {
-							type : 'text',
-							title : '包路径|定位路径',
-							validate : function(value) {
-								if (!$.trim(value))
-									return '包路径|定位路径不能为空';
-								if (value.length > 200)
-									return '包路径|定位路径不能超过200个字符';
-								if (value.length < 2)
-									return '包路径|定位路径不能适于2个字符';
-							}
-						}
-					}, {
-						field : 'id',
-						title : 'id',
-						visible : false
-					}, {
-						field : 'projectid',
-						title : '项目ID',
-						visible : false
-					}, {
-						field : 'caseid',
-						title : '用例ID',
-						visible : false
-					}, ],
-					//无线循环取子表，直到子表里面没有记录
-					onExpandRow : function(index, row, $Subdetail) {
-						oInit.InitSubTable(index, row, $Subdetail);
-					},
-
-					onEditableSave : function(field, row, oldValue, $el) {
-						var status = document.getElementById("loginstatus").value;
-						if(status=="false"){
-							if(window.confirm("你未登录哦，要先去登录吗？")){
-								var url = '/progressus/signin.jsp';
-								window.location.href=url;
-								return true; 
-							}else{
-								return false; 
-							} 	
-						}
-						
-						$('#cur_table').bootstrapTable("resetView");
-						$.ajax({
-							type : "post",
-							url : "/projectCasesteps/update.do",
-							data : row,
-							dataType : 'JSON',
-							success : function(data, status) {
-								if (data.status == "success") {
-									alert(data.ms);
-								}else{
-									$('#cur_table').bootstrapTable('refresh');
-									alert(data.ms);									
-								}
-							},
-							error : function() {
-								alert('编辑失败');
-							},
-							complete : function() {
-
-							}
-
-						});
-					},
-				});
-
-			};
-
 			return oTableInit;
 		};
- 
+
 		$(document).ready(
 				function() {
 					$('#form_data').bootstrapValidator({
@@ -513,25 +286,25 @@
 						},
 						fields : {
 							name : {
-								message : '用例名称无效！',
+								message : '计划名称无效！',
 								validators : {
 									notEmpty : {
-										message : '用例名称不能为空'
+										message : '计划名称不能为空'
 									},
 									stringLength : {
 										min : 2,
-										max : 200,
-										message : '用例名称长度必须在2~200个字符区间'
+										max : 50,
+										message : '用例名称长度必须在2~50个字符区间'
 									}
 								}
 							},
 							remark : {
-								message : '用例备注无效！',
+								message : '计划备注无效！',
 								validators : {
 									stringLength : {
 										min : 0,
 										max : 200,
-										message : '用例备注长度必须小于200个字符'
+										message : '计划备注长度必须小于200个字符'
 									}
 								}
 							}
@@ -543,17 +316,17 @@
 								e.preventDefault();
 								var $form = $(e.target), validator = $form
 										.data('bootstrapValidator');
-								$form.find('.alert').html('用例创建成功！');
+								$form.find('.alert').html('计划创建成功！');
 							});
 				});
-
+		
 		var searchproject = function() {
 			//1.初始化Table
 			var oTable = new TableInit();
-			$('#tb_projectcase').bootstrapTable('destroy');
+			$('#tb_projectplan').bootstrapTable('destroy');
 			oTable.Init();
 		};
-
+	    
 	    // 提交表单
 	    function check_form()
 	    {
@@ -562,10 +335,10 @@
 	        // 异步提交数据到action页面
 	        $.ajax(
 	                {
-	                    url: "caseadd.do",
+	                    url: "planadd.do",
 	                    data:form_data,
 	                    type: "post",
-	                    dataType : 'JSON',
+	                    dataType : "json",
 	                    beforeSend:function()
 	                    {
 	                        $("#tip").html("<span style='color:blue'>正在处理...</span>");
@@ -575,7 +348,7 @@
 	                    {
 	                        if(data.status == "success")
 	                        {
-	                            $("#tip").html("<span style='color:blueviolet'>恭喜，添加用例成功！</span>");
+	                            $("#tip").html("<span style='color:blueviolet'>恭喜，添加计划成功！</span>");
 	                            // document.location.href='system_notice.php'
 	                            alert(data.ms);
 	                            location.reload();
@@ -597,7 +370,7 @@
 
 	        return false;
 	    }
-	    
+
 	    btn_add.onclick=function(){
 	    	var status = document.getElementById("loginstatus").value;
 			if(status=="false"){
@@ -616,7 +389,7 @@
 	        // 关闭时清空edit状态为add
 	        location.reload();
 	    })
-	    });	    
+	    });
 	    
 	    btn_delete.onclick=function(){
 	    	var status = document.getElementById("loginstatus").value;
@@ -629,8 +402,9 @@
 					return false; 
 				} 	
 			}
+			
 	        var selectIndex = $('input[name="btSelectItem"]:checked ').val();
-	        deleteItem($('#tb_projectcase'), selectIndex, true);
+	        deleteItem($('#tb_projectplan'), selectIndex, true);
 	    }
 	    
 	    function deleteItem($table, selectIndex, reLoad){
@@ -638,7 +412,7 @@
                       return row.id;
                        }); 
 	        if(ids.length != 0 ){
-	        	if(confirm("真的要删除用例吗?")){
+	        	if(confirm("真的要删除计划吗?")){
 		                $.ajax({
 		                   type: "POST",
 		                   cache:false,
@@ -646,7 +420,7 @@
 		                   dataType : "json",
 		                   url:  "delete.do",
 		                   contentType: "application/json", //必须有
-		                   data: JSON.stringify({"caseids":ids}),
+		                   data: JSON.stringify({"planids":ids}),
 		                   success: function(data, status){
 		                           if (data.status == "success"){
 		                               $table.bootstrapTable('hideRow', {index:selectIndex});
@@ -679,18 +453,18 @@
 					return false; 
 				} 	
 			}
-            var ids = $.map($('#tb_projectcase').bootstrapTable('getSelections'), function (row) {
+			
+            var ids = $.map($('#tb_projectplan').bootstrapTable('getSelections'), function (row) {
                 return row.id;
                  });
             if(ids.length == 1 ){
-    			var url = '/projectCasesteps/stepadd.do?caseid='+ids;
+    			var url = '/projectPlanCase/casesload.do?planid='+ids;
     			window.location.href=url;
             }else{
-            	alert('要进行用例编辑只能选择一条用例哦！');
+            	alert('您有且只能选择一条计划哦！');
             }
 
 	    }
-
 	</script>
 </body>
 </html>
