@@ -17,7 +17,22 @@ public class ProjectCase implements java.io.Serializable{
     private int casetype;
     private String time;
     private String operationer;
+    private int priority;
+    private int checktype;
     
+    
+	public int getChecktype() {
+		return checktype;
+	}
+	public void setChecktype(int checktype) {
+		this.checktype = checktype;
+	}
+	public int getPriority() {
+		return priority;
+	}
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
 	public String getProjectname() {
 		return projectname;
 	}

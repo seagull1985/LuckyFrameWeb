@@ -419,6 +419,20 @@ insert into USER_AUTHORITY (id, module, auth_type, alias)
 values (49, '项目管理', '删除', 'pro_2');
 insert into USER_AUTHORITY (id, module, auth_type, alias)
 values (50, '项目管理', '修改', 'pro_3');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (51, '用例管理', '增加', 'case_1');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (52, '用例管理', '删除', 'case_2');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (53, '用例管理', '修改', 'case_3');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (54, '步骤管理', '增删改查', 'case_step');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (55, '测试计划管理', '增加', 'proplan_1');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (56, '测试计划管理', '删除', 'proplan_2');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (57, '测试计划管理', '修改', 'proplan_3');
 
 /*插入角色默认定义*/
 insert into USER_ROLE (id, role, permission)

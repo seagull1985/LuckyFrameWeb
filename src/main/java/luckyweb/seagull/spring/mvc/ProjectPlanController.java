@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectCase;
+import luckyweb.seagull.spring.entity.ProjectPlan;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectCaseService;
-import luckyweb.seagull.spring.service.ProjectCasestepsService;
+import luckyweb.seagull.spring.service.ProjectPlanCaseService;
+import luckyweb.seagull.spring.service.ProjectPlanService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
@@ -31,14 +33,14 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
-@RequestMapping("/projectCase")
-public class ProjectCaseController {
+@RequestMapping("/projectPlan")
+public class ProjectPlanController {
 
-	@Resource(name = "projectCaseService")
-	private ProjectCaseService projectcaseservice;
+	@Resource(name = "projectPlanCaseService")
+	private ProjectPlanCaseService projectplancaseservice;
 
-	@Resource(name = "projectCasestepsService")
-	private ProjectCasestepsService casestepsservice;
+	@Resource(name = "projectPlanService")
+	private ProjectPlanService projectplanservice;
 
 	@Resource(name = "sectorprojectsService")
 	private SectorProjectsService sectorprojectsService;
@@ -75,10 +77,10 @@ public class ProjectCaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/projectCase/load.do");
+			model.addAttribute("url", "/projectPlan/load.do");
 			return "error";
 		}
-		return "/jsp/plancase/projectcase";
+		return "/jsp/plancase/projectplan";
 	}
 
 	@RequestMapping(value = "/list.do")
@@ -88,7 +90,7 @@ public class ProjectCaseController {
 		PrintWriter pw = response.getWriter();
 		String search = request.getParameter("search");
 		String projectid = request.getParameter("projectid");
-		ProjectCase projectcase = new ProjectCase();
+		ProjectPlan projectplan = new ProjectPlan();
 		if (null == offset && null == limit) {
 			offset = 0;
 		}
@@ -97,32 +99,31 @@ public class ProjectCaseController {
 		}
 		// 得到客户端传递的查询参数
 		if (!StrLib.isEmpty(search)) {
-			projectcase.setSign(search);
-			projectcase.setName(search);
-			projectcase.setOperationer(search);
-			projectcase.setRemark(search);
+			projectplan.setName(search);
+			projectplan.setOperationer(search);
+			projectplan.setRemark(search);
 		}
 		// 得到客户端传递的查询参数
 		if (!StrLib.isEmpty(projectid) && !"99".equals(projectid)) {
-			projectcase.setProjectid(Integer.valueOf(projectid));
+			projectplan.setProjectid(Integer.valueOf(projectid));
 		}
 
-		List<ProjectCase> projectcases = projectcaseservice.findByPage(projectcase, offset, limit);
+		List<ProjectPlan> projectplans = projectplanservice.findByPage(projectplan, offset, limit);
 		List<SectorProjects> prolist = QueueListener.qa_projlist;
-		for (int i = 0; i < projectcases.size(); i++) {
-			ProjectCase pcase = projectcases.get(i);
+		for (int i = 0; i < projectplans.size(); i++) {
+			ProjectPlan pp = projectplans.get(i);
 			for (SectorProjects projectlist : prolist) {
-				if (pcase.getProjectid() == projectlist.getProjectid()) {
-					pcase.setProjectname(projectlist.getProjectname());
-					projectcases.set(i, pcase);
+				if (pp.getProjectid() == projectlist.getProjectid()) {
+					pp.setProjectname(projectlist.getProjectname());
+					projectplans.set(i, pp);
 				}
 			}
 
 		}
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(projectcases);
+		String RecordJson = StrLib.listToJson(projectplans);
 		// 得到总记录数
-		int total = projectcaseservice.findRows(projectcase);
+		int total = projectplanservice.findRows(projectplan);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
@@ -131,33 +132,33 @@ public class ProjectCaseController {
 	}
 
 	@RequestMapping(value = "/update.do")
-	public void updatecase(HttpServletRequest req, HttpServletResponse rsp, ProjectCase projectcase) {
+	public void updateplan(HttpServletRequest req, HttpServletResponse rsp, ProjectPlan projectplan) {
 		// 更新实体
-		JSONObject json = new JSONObject();
 		try {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
-
-			if (!UserLoginController.permissionboolean(req, "case_3")) {
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "proplan_3")) {
 				json.put("status", "fail");
-				json.put("ms", "编辑失败,权限不足,请联系管理员!");
+				json.put("ms", "编辑计划失败,权限不足,请联系管理员!");
 			} else {
 				if (null != req.getSession().getAttribute("usercode")
 						&& null != req.getSession().getAttribute("username")) {
 					String usercode = req.getSession().getAttribute("usercode").toString();
-					projectcase.setOperationer(usercode);
+					projectplan.setOperationer(usercode);
 				}
 				Date currentTime = new Date();
 				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String time = formatter.format(currentTime);
-				projectcase.setTime(time);
+				projectplan.setTime(time);
 
-				projectcaseservice.modify(projectcase);
-				operationlogservice.add(req, "PROJECT_CASE", projectcase.getId(), projectcase.getProjectid(),
-						"编辑用例成功！用例编号：" + projectcase.getSign());
+				projectplanservice.modify(projectplan);
+
+				operationlogservice.add(req, "PROJECT_PLAN", projectplan.getId(), projectplan.getProjectid(),
+						"修改测试计划成功!");
 				json.put("status", "success");
-				json.put("ms", "编辑成功!");
+				json.put("ms", "编辑计划成功!");
 			}
 			pw.print(json.toString());
 		} catch (Exception e) {
@@ -167,7 +168,7 @@ public class ProjectCaseController {
 	}
 
 	/**
-	 * 添加用例
+	 * 添加计划
 	 * 
 	 * @param tj
 	 * @param br
@@ -178,42 +179,39 @@ public class ProjectCaseController {
 	 * @throws Exception
 	 * @Description:
 	 */
-	@RequestMapping(value = "/caseadd.do")
-	public void add(ProjectCase projectcase, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+	@RequestMapping(value = "/planadd.do")
+	public void add(ProjectPlan projectplan, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
 		try {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "case_1")) {
+			if (!UserLoginController.permissionboolean(req, "proplan_1")) {
 				json.put("status", "fail");
-				json.put("ms", "添加失败,权限不足,请联系管理员!");
+				json.put("ms", "增加测试计划失败,权限不足,请联系管理员!");
 			} else {
 				if (null != req.getSession().getAttribute("usercode")
 						&& null != req.getSession().getAttribute("username")) {
 					String usercode = req.getSession().getAttribute("usercode").toString();
-					projectcase.setOperationer(usercode);
+					projectplan.setOperationer(usercode);
 				}
+
 				String regEx_space = "\t|\r|\n";// 定义空格回车换行符
 				Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
-				Matcher m_space = p_space.matcher(projectcase.getRemark());
-				projectcase.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
+				Matcher m_space = p_space.matcher(projectplan.getRemark());
+				projectplan.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
 
 				Date currentTime = new Date();
 				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String time = formatter.format(currentTime);
-				projectcase.setTime(time);
+				projectplan.setTime(time);
 
-				SectorProjects sp = sectorprojectsService.loadob(projectcase.getProjectid());
-				projectcase.setSign(sp.getProjectsign() + "-0000");
-				int caseid = projectcaseservice.add(projectcase);
-				projectcase.setSign(sp.getProjectsign() + "-" + caseid);
-				projectcaseservice.modify(projectcase);
-				operationlogservice.add(req, "PROJECT_CASE", caseid, projectcase.getProjectid(),
-						"添加用例成功！用例编号：" + projectcase.getSign());
+				int planid = projectplanservice.add(projectplan);
+
+				operationlogservice.add(req, "PROJECT_PLAN", planid, projectplan.getProjectid(), "添加测试计划成功!");
 
 				json.put("status", "success");
-				json.put("ms", "添加用例成功！");
+				json.put("ms", "添加测试计划成功!");
 			}
 			pw.print(json.toString());
 
@@ -224,7 +222,7 @@ public class ProjectCaseController {
 	}
 
 	/**
-	 * 删除用例
+	 * 删除计划
 	 * 
 	 * @param tj
 	 * @param br
@@ -242,9 +240,9 @@ public class ProjectCaseController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "case_2")) {
+			if (!UserLoginController.permissionboolean(req, "proplan_2")) {
 				json.put("status", "fail");
-				json.put("ms", "删除失败,权限不足,请联系管理员!");
+				json.put("ms", "删除计划失败,权限不足,请联系管理员!");
 			} else {
 				StringBuilder sb = new StringBuilder();
 				try (BufferedReader reader = req.getReader();) {
@@ -257,18 +255,17 @@ public class ProjectCaseController {
 					e.printStackTrace();
 				}
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("caseids"));
+				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("planids"));
 
 				for (int i = 0; i < jsonarr.size(); i++) {
 					int id = Integer.valueOf(jsonarr.get(i).toString());
-					ProjectCase pc=projectcaseservice.load(id);
-					casestepsservice.delforcaseid(id);
-					projectcaseservice.delete(id);
-					operationlogservice.add(req, "PROJECT_CASE", pc.getId(), pc.getProjectid(),
-							"删除用例成功！");
+					ProjectPlan projectplan = projectplanservice.load(id);
+					projectplancaseservice.delforplanid(id);
+					projectplanservice.delete(projectplan);
+					operationlogservice.add(req, "PROJECT_PLAN", id, projectplan.getProjectid(), "删除测试计划成功!");
 				}
 				json.put("status", "success");
-				json.put("ms", "删除成功!");
+				json.put("ms", "删除计划成功!");
 			}
 			pw.print(json.toString());
 

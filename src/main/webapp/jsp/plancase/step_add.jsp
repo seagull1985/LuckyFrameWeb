@@ -300,12 +300,12 @@
 				contentType : "application/json", //必须有
 				data : JSON.stringify(json),
 				success : function(data, status) {
- 				if (status == "success") {
-						alert("编辑步骤成功！");
+ 				if (data.status == "success") {
+						alert(data.ms);
 		    			var url = '/projectCase/load.do';
 		    			window.location.href=url;
-					} else {
-						alert('操作失败' + data);
+					}else{
+						alert(data.ms);
 					}
 				},
 				error : function() {

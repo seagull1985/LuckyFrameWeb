@@ -48,7 +48,7 @@ public class ProjectCasestepsServiceImpl implements ProjectCasestepsService{
 	@Override
 	public List<ProjectCasesteps> getSteps(int caseid) throws Exception {
 		// TODO Auto-generated method stub
-		return this.casestepsDao.steps(" from ProjectCasesteps where caseid="+caseid+"order by stepnum");
+		return this.casestepsDao.steps(" from ProjectCasesteps where caseid="+caseid+" order by stepnum");
 	}
 	
 	@Override

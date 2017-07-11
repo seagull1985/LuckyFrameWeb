@@ -12,10 +12,12 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import luckyweb.seagull.spring.entity.ProjectCase;
+import luckyweb.seagull.spring.entity.ProjectCasesteps;
+import luckyweb.seagull.spring.entity.ProjectPlanCase;
 
-@Repository("projectCaseDao")
-public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCaseDao{
+
+@Repository("projectPlanCaseDao")
+public class ProjectPlanCaseDaoImpl extends HibernateDaoSupport implements ProjectPlanCaseDao{
 	
 	@Resource(name = "sessionFactory")
 	public void setSuperSessionFactory(SessionFactory sessionFactory) {
@@ -25,31 +27,33 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 
 
 	@Override
-	public void delete(int id) throws Exception {
+	public void delete(ProjectPlanCase projectplancase) throws Exception {
 		try{
-			ProjectCase projectcase = this.load(id);
-		    this.getHibernateTemplate().delete(projectcase);
+		    this.getHibernateTemplate().delete(projectplancase);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		
 	}
 
-	private void whereParameter(ProjectCase projectcase, Query query) {
-		if (projectcase.getProjectid()!=0&&projectcase.getProjectid()!=99) {
-			query.setParameter("projectid", projectcase.getProjectid());
+	@Override
+	public void delete(String hql, int id) throws Exception {
+		Session session=this.getSession(true);
+		session.beginTransaction();
+		Query query =session .createQuery(hql);
+		query.setInteger("planId", id);
+		query.executeUpdate();
+		
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	private void whereParameter(ProjectPlanCase projectplancase, Query query) {
+		if (projectplancase.getCaseid()!=0) {
+			query.setParameter("caseid", projectplancase.getCaseid());
 		}
-		if (null!=projectcase.getSign()&&!"".equals(projectcase.getSign())) {
-			query.setParameter("sign", "%"+projectcase.getSign()+"%");
-		}
-		if (null!=projectcase.getName()&&!"".equals(projectcase.getName())) {
-			query.setParameter("name", "%"+projectcase.getName()+"%");
-		}
-		if (null!=projectcase.getOperationer()&&!"".equals(projectcase.getOperationer())) {
-			query.setParameter("operationer", "%"+projectcase.getOperationer()+"%");
-		}
-		if (null!=projectcase.getRemark()&&!"".equals(projectcase.getRemark())) {
-			query.setParameter("remark", "%"+projectcase.getRemark()+"%");
+		if (projectplancase.getPlanid()!=0) {
+			query.setParameter("planid", projectplancase.getPlanid());
 		}
 	}
 	
@@ -65,7 +69,7 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 					throws HibernateException {
 				// 执行hibernate 分页查询
 				Query query= session.createQuery(hql);
-				whereParameter((ProjectCase)value, query);
+				whereParameter((ProjectPlanCase)value, query);
 				List result =query
 						.setFirstResult(offset).setMaxResults(pageSize).list();
 				session.close();
@@ -77,12 +81,15 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 	}
 
 	@Override
-	public int findRows(ProjectCase projectcase, String hql) {
+	public int findRows(ProjectPlanCase projectplancase, String hql) {
 		int s=0;
 		Session session=this.getSession(true);
 		try {
 			Query query=session.createQuery(hql);
-			whereParameter(projectcase, query);
+			whereParameter(projectplancase, query);
+			if(0==query.list().size()){
+				return 0;
+			}
 			s= Integer.valueOf(
 					query
 					.list().get(0)
@@ -98,23 +105,23 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 
 
 	@Override
-	public int add(ProjectCase projectcase) throws Exception {
-		this.getHibernateTemplate().save(projectcase);
-		return projectcase.getId();
+	public int add(ProjectPlanCase projectplancase) throws Exception {
+		this.getHibernateTemplate().save(projectplancase);
+		return projectplancase.getId();
 	}
 
 
 
 	@Override
-	public void modify(ProjectCase projectcase) throws Exception {
-		this.getHibernateTemplate().update(projectcase);
+	public void modify(ProjectPlanCase projectplancase) throws Exception {
+		this.getHibernateTemplate().update(projectplancase);
 		
 	}
 
 
 
 	@Override
-	public void modifyState(ProjectCase projectcase) throws Exception {
+	public void modifyState(ProjectPlanCase projectplancase) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
@@ -122,7 +129,7 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 
 
 	@Override
-	public void modifyInfo(ProjectCase projectcase) throws Exception {
+	public void modifyInfo(ProjectPlanCase projectplancase) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
@@ -130,7 +137,7 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 
 
 	@Override
-	public List<ProjectCase> list(ProjectCase projectcase)
+	public List<ProjectPlanCase> list(ProjectPlanCase projectplancase)
 			throws Exception {
 		// TODO Auto-generated method stub
 		return null;
@@ -140,21 +147,23 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ProjectCase> list(String hql) throws Exception {
+	public List<ProjectPlanCase> list(String hql) throws Exception {
 		 return this.getHibernateTemplate().find(hql);
 	}
 
 
 
 	@Override
-	public ProjectCase load(int id) throws Exception {		
-		return (ProjectCase) this.getHibernateTemplate().get(ProjectCase.class, id);
+	public ProjectPlanCase load(int id) throws Exception {
+		
+		return (ProjectPlanCase) this.getHibernateTemplate().get(ProjectPlanCase.class, id);
+		//return (ProjectCase) this.getSession().load(ProjectCase.class, id);
 	}
 
 
 
 	@Override
-	public List<ProjectCase> load(String name, String cmdType,
+	public List<ProjectPlanCase> load(String name, String cmdType,
 			String planPath) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
@@ -163,7 +172,7 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 
 
 	@Override
-	public ProjectCase get(int id) throws Exception {
+	public ProjectPlanCase get(int id) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -171,7 +180,7 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 
 
 	@Override
-	public List<ProjectCase> findJobsList() {
+	public List<ProjectPlanCase> findJobsList() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -180,12 +189,12 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public List getList(String sql) throws Exception {
+	public List<ProjectPlanCase> getList(String sql) throws Exception {
 		// TODO Auto-generated method stub
-		List count=null;
+		List<ProjectPlanCase> count=null;
 		Session session=this.getSession(true);
 		try {
-			count = session.createSQLQuery(sql).list();
+			count = session.createQuery(sql).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -193,6 +202,4 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 		}	
 		return count;
 	}
-
-
 }
