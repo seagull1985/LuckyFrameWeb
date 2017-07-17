@@ -212,6 +212,9 @@ create table TEST_JOBS
   browsertype  int(4) COMMENT 'UI自动化浏览器类型',
   timeout      int(8) default 60 not null COMMENT '任务超时中断时间(分钟)',
   clientip     VARCHAR(30) default '127.0.0.1' not null COMMENT '版本ID',
+  projecttype  int(4) default "0" COMMENT '项目类型 0 testlink 1 系统内项目',
+  projectid    int(8) COMMENT '系统内项目ID',
+  planid       int(8) COMMENT '系统内项目关联测试计划ID',
   primary key (id)
 )default character set utf8;
 create table TEST_CASEDETAIL

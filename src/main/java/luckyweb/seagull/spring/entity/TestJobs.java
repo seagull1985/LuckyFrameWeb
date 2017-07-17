@@ -44,7 +44,34 @@ public class TestJobs implements java.io.Serializable {
 	private Integer browsertype;  //0:ie  1:火狐  2:谷歌   3：Edge
 	private Integer timeout;  //任务超时时间 单位：分钟
 	private String clientip; //客户端IP
+	private Integer projecttype;  //项目类型 0testlink 1系统内项目
+	private Integer projectid;  //系统内项目ID
+	private Integer planid;  //系统内项目关联计划ID
 	
+	public Integer getProjecttype() {
+		return projecttype;
+	}
+
+	public void setProjecttype(Integer projecttype) {
+		this.projecttype = projecttype;
+	}
+
+	public Integer getProjectid() {
+		return projectid;
+	}
+
+	public void setProjectid(Integer projectid) {
+		this.projectid = projectid;
+	}
+
+	public Integer getPlanid() {
+		return planid;
+	}
+
+	public void setPlanid(Integer planid) {
+		this.planid = planid;
+	}
+
 	public String getClientip() {
 		return clientip;
 	}

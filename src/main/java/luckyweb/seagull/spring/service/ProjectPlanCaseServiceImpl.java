@@ -85,6 +85,7 @@ public class ProjectPlanCaseServiceImpl implements ProjectPlanCaseService{
 		return projectplancaseDao.findRows(projectplancase, hql);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<ProjectPlanCase> getcases(int planid) throws Exception {
 		// TODO Auto-generated method stub

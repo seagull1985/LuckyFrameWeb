@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class ProjectPlanCaseController {
 				model.addAttribute("message", "当前用户无权限管理计划用例，请联系管理员！");
 				return "success";
 			}
-			
+
 			String planid = req.getParameter("planid");
 			ProjectPlan propaln = projectplanservice.load(Integer.valueOf(planid));
 			model.addAttribute("projectid", propaln.getProjectid());
@@ -199,7 +200,7 @@ public class ProjectPlanCaseController {
 				for (int k = 0; k < plancases.size(); k++) { // 删除原有列表中多的用例
 					projectplancaseservice.delete(plancases.get(k));
 				}
-				
+
 				if (null != req.getSession().getAttribute("usercode")
 						&& null != req.getSession().getAttribute("username")) {
 					String usercode = req.getSession().getAttribute("usercode").toString();
@@ -212,7 +213,7 @@ public class ProjectPlanCaseController {
 				int count = projectplancaseservice.getcases(Integer.valueOf(planid)).size();
 				pc.setCasecount(count);
 				projectplanservice.modify(pc);
-				
+
 				operationlogservice.add(req, "PROJECT_PLAN", Integer.valueOf(planid), pc.getProjectid(), "保存计划用例成功!");
 				json.put("status", "success");
 				json.put("ms", "保存计划用例成功!");
@@ -262,4 +263,64 @@ public class ProjectPlanCaseController {
 		}
 	}
 
+	@RequestMapping(value = "/cgetcasebyplanid.do")
+	public void cgetCaseByPlanid(HttpServletRequest req, HttpServletResponse rsp) {
+		// 更新实体
+		try {
+			rsp.setContentType("text/html;charset=GBK");
+			req.setCharacterEncoding("GBK");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			String planid = req.getParameter("planid");
+			
+			List<ProjectPlanCase> plancases = projectplancaseservice.getcases(Integer.valueOf(planid));
+			List<ProjectCase> projectcases=new ArrayList<ProjectCase>();
+
+			for(int i=0;i<plancases.size();i++){
+				ProjectCase projectcase=projectcaseservice.load(plancases.get(i).getCaseid());
+				projectcases.add(i, projectcase);
+			}
+
+			// 转换成json字符串
+			String RecordJson = StrLib.listToJson(projectcases);
+
+			// 需要返回的数据有总记录数和行数据
+			json.put("cases", RecordJson);
+			pw.print(json.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@RequestMapping(value = "/cgetcasebyplanname.do")
+	public void cgetCaseByPlanname(HttpServletRequest req, HttpServletResponse rsp) {
+		// 更新实体
+		try {
+			rsp.setContentType("text/html;charset=GBK");
+			req.setCharacterEncoding("GBK");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			String name = req.getParameter("name");
+			ProjectPlan pp=projectplanservice.getcases(name);
+			List<ProjectPlanCase> plancases = projectplancaseservice.getcases(pp.getId());
+			List<ProjectCase> projectcases=new ArrayList<ProjectCase>();
+
+			for(int i=0;i<plancases.size();i++){
+				ProjectCase projectcase=projectcaseservice.load(plancases.get(i).getCaseid());
+				projectcases.add(i, projectcase);
+			}
+
+			// 转换成json字符串
+			String RecordJson = StrLib.listToJson(projectcases);
+
+			// 需要返回的数据有总记录数和行数据
+			json.put("cases", RecordJson);
+			pw.print(json.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }

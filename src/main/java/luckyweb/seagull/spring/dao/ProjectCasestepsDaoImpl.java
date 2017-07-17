@@ -178,17 +178,20 @@ public class ProjectCasestepsDaoImpl extends HibernateDaoSupport implements Proj
 		return null;
 	}
 
-
-
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<ProjectCasesteps> steps(String sql) throws Exception {
 		// TODO Auto-generated method stub
+		List<ProjectCasesteps> list=null;
 		Session session=this.getSession(true);
-		List<ProjectCasesteps> list = session.createQuery(sql).list();
-		session.close();
+		try {
+			list = session.createQuery(sql).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}	
 		return list;
 	}
-
 
 }

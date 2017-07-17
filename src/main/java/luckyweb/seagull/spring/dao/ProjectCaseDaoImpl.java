@@ -180,18 +180,18 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public List getList(String sql) throws Exception {
+	public List<ProjectCase> getList(String sql) throws Exception {
 		// TODO Auto-generated method stub
-		List count=null;
+		List<ProjectCase> list=null;
 		Session session=this.getSession(true);
 		try {
-			count = session.createSQLQuery(sql).list();
+			list = session.createQuery(sql).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
 			session.close();
 		}	
-		return count;
+		return list;
 	}
 
 

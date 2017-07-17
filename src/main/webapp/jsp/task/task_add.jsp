@@ -96,24 +96,44 @@
 						path="clientip" cssClass="error_msg" /></td>
 			</tr>
 			<tr>
+				<td height="30" align="left">项目类型</td>
+				<td height="30" colspan="3">
+				<sf:radiobutton path="projecttype" id="projecttype" value="0" onclick="isShow6('0')" /> TestLink项目&nbsp;&nbsp;&nbsp;&nbsp; 
+				<sf:radiobutton	path="projecttype" id="projecttype" value="1" onclick="isShow6('1')" /> 系统项目</td>
+			</tr>
+			<tr id="testlinkpro">
 				<td height="30" align="left">项目名（testlink中）</td>
 				<td height="30" colspan="3"><sf:select path="planproj"
-						id="planproj" class="easyui-combobox" 
-						validType="selectValueRequired['#planproj']"
-						missingMessage="项目名必选" invalidMessage="项目名必选">
-						<sf:option value="">请选择</sf:option>
+						id="planproj" class="easyui-combobox" >
+						<sf:option value="0">请选择</sf:option>
 						<c:forEach var="p" items="${projects}">
 							<sf:option value="${p[1]}">${p[1]}</sf:option>
 						</c:forEach>
 					</sf:select></td>
 			</tr>
-			<tr>
+			<tr id="testlinkplan">
 				<td height="30" align="left" valign="top">计划名（testlink中）</td>
 				<td height="30" colspan="3"><sf:textarea cols="50" rows="5"
 						path="testlinkname" id="testlinkname" /></td>
 			</tr>
+			<tr id="pro"  style="display: none">
+				<td height="30" align="left">项目名</td>
+				<td height="30" colspan="3"><sf:select path="projectid"
+						id="projectid" onChange="getPlan()" onFocus="getPlan()" >
+						<sf:option value="0">请选择</sf:option>
+						<c:forEach var="p" items="${sysprojects}">
+							<sf:option value="${p.projectid}">${p.projectname}</sf:option>
+						</c:forEach>
+					</sf:select></td>
+			</tr>
+			<tr id="plan"  style="display: none">
+				<td height="30" align="left">测试计划</td>
+				<td height="30" colspan="3"><sf:select path="planid" id="planid" width="20%">
+   	               <sf:option value="0">请选择测试计划...</sf:option>
+                       </sf:select></td>
+			</tr>
 			<tr>
-				<td height="30" align="left" valign="top">计划描述</td>
+				<td height="30" align="left" valign="top">调度任务描述</td>
 				<td height="30" colspan="3"><sf:textarea cols="50" rows="5"
 						path="remark" id="remark" /></td>
 			</tr>
@@ -403,7 +423,25 @@
 		    document.getElementById('browsertype').checked = true
 		}else{
 			document.getElementById('uiclientipdis').style.display='none';
-			document.getElementById('uiclientip').value="";
+		}
+		type=isSend;
+	}
+	
+	function  isShow6(isSend){
+		if(isSend=='1'){
+			jQuery("#projectid option[value='99']").remove();
+			document.getElementById('testlinkpro').style.display='none';
+			document.getElementById('testlinkplan').style.display='none';
+			document.getElementById('pro').style.display='block';
+			document.getElementById('pro').style.display = 'table-row';
+			document.getElementById('plan').style.display='block';
+			document.getElementById('plan').style.display = 'table-row';
+		}else{
+			document.getElementById('pro').style.display='none';
+			document.getElementById('testlinkpro').style.display='block';
+			document.getElementById('testlinkplan').style.display='block';
+			document.getElementById('testlinkpro').style.display = 'table-row';
+		    document.getElementById('testlinkplan').style.display='table-row';
 		}
 		type=isSend;
 	}
@@ -448,6 +486,36 @@
 		}
 		
 	}
+
+    //按上级ID取子列表
+	 function getPlan(){
+//	    clearSel(); //清空节点	    
+	    if(jQuery("#projectid").val() == "") return;
+	    var projectid = jQuery("#projectid").val();
+	     var url ="/projectPlan/getplanlist.do?projectid="+projectid;
+	     jQuery.getJSON(url,null,function call(result){
+	    	 clearSel();
+	    	 setPlan(result); 
+	      });
+    
+	    }
+    
+	  //设置子列表
+	 function setPlan(result){	    
+  	   var options = "";
+	   jQuery.each(result.data, function(i, node){
+		  options +=  "<option value='"+node.id+"'>"+node.name+"</option>";
+	      }); 
+	      jQuery("#planid").html(options);
+	    }
+	  
+	 // 清空下拉列表
+     function clearSel(){  
+	  while(jQuery("#planid").length>1){
+		  $("#planid option[index='1']").remove();
+	//	 document.getElementById("checkentry").options.remove("1"); 
+	    }
+	   }
 	</script>
 </body>
 </html>

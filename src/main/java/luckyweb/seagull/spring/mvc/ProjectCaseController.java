@@ -278,6 +278,24 @@ public class ProjectCaseController {
 
 	}
 
+	@RequestMapping(value = "/cgetcasebysign.do")
+	public void cgetcasebysign(HttpServletRequest req, HttpServletResponse rsp) {
+		// 更新实体
+		try {
+			rsp.setContentType("text/html;charset=GBK");
+			req.setCharacterEncoding("GBK");
+			PrintWriter pw = rsp.getWriter();
+			String sign = req.getParameter("sign");
+			
+			ProjectCase pc=projectcaseservice.getCaseBySign(sign);
+			String jsonStr=JSONObject.fromObject(pc).toString();
+			pw.print(jsonStr);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) throws Exception {
 
 	}

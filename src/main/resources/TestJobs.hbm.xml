@@ -92,6 +92,15 @@
 		<property name="clientip" type="java.lang.String">
 			<column name="clientip" length="30" />
 		</property>
+	    <property name="projecttype" type="java.lang.Integer">
+			<column name="projecttype" length="8" />
+		</property>
+		<property name="projectid" type="java.lang.Integer">
+			<column name="projectid" length="8" />
+		</property>
+		<property name="planid" type="java.lang.Integer">
+			<column name="planid" length="8" />
+		</property>
 		<set name="tast">
 			<key column="jobid" update="false"/>
 			<one-to-many class="TestTaskexcute" />

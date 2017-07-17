@@ -82,5 +82,11 @@ public class ProjectCaseServiceImpl implements ProjectCaseService{
 		String hql="select count(*) from ProjectCase "+where(projectcase);
 		return projectcaseDao.findRows(projectcase, hql);
 	}
+	
+	@Override
+	public ProjectCase getCaseBySign(String sign) throws Exception {
+		// TODO Auto-generated method stub
+		return this.projectcaseDao.getList(" from ProjectCase where sign='"+sign+"' order by id").get(0);
+	}
 
 }

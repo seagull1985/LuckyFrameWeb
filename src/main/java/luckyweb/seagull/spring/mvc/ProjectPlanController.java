@@ -275,6 +275,35 @@ public class ProjectPlanController {
 
 	}
 
+	/**
+	 * 联动查询测试计划
+	 * @param tj
+	 * @param br
+	 * @param model
+	 * @param req
+	 * @param rsp
+	 * @return
+	 * @throws Exception
+	 * @Description:
+	 */
+	@RequestMapping(value = "/getplanlist.do")
+	public void getplanlist(HttpServletRequest req, HttpServletResponse rsp) throws Exception{	    
+		int	projectid = Integer.valueOf(req.getParameter("projectid"));
+
+		ProjectPlan projectplan=new ProjectPlan();
+		projectplan.setProjectid(projectid);
+		List<ProjectPlan> listplan = projectplanservice.findByPage(projectplan, 0, 1000);
+		
+		// 取集合
+	    rsp.setContentType("text/xml;charset=utf-8");
+
+		JSONArray jsonArray = JSONArray.fromObject(listplan);
+		JSONObject jsobjcet = new JSONObject();
+		jsobjcet.put("data", jsonArray); 
+		
+		rsp.getWriter().write(jsobjcet.toString());
+	}
+	
 	public static void main(String[] args) throws Exception {
 
 	}

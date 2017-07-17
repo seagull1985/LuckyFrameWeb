@@ -27,7 +27,7 @@ public interface ProjectCaseDao {
 	public List<ProjectCase> list(String hql) throws Exception;
 	
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public List getList(String sql) throws Exception;
+	public List<ProjectCase> getList(String sql) throws Exception;
 
 	public ProjectCase load(int id) throws Exception;
 
