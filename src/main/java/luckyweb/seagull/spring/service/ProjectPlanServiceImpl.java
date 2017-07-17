@@ -81,4 +81,12 @@ public class ProjectPlanServiceImpl implements ProjectPlanService{
 		return projectplanDao.findRows(projectplan, hql);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public ProjectPlan getcases(String name) throws Exception {
+		// TODO Auto-generated method stub
+		List<ProjectPlan> pps=projectplanDao.getList(" from ProjectPlan where name='"+name+"' order by id");
+		return pps.get(0);
+	}
+	
 }

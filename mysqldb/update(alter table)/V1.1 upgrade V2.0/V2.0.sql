@@ -55,6 +55,10 @@ create table PROJECT_PLANCASE
 alter table userinfo add projectid int(4) default '0';
 /*项目管理表增加项目标识字段*/
 alter table QA_SECTORPROJECTS add projectsign VARCHAR(20) not null;
+/*调度任务配置增加三个支持内部项目字段*/
+alter table TEST_JOBS add projecttype int(8) default '0' COMMENT '项目类型 0 testlink 1 系统内项目';
+alter table TEST_JOBS add projectid int(8) COMMENT '系统内项目ID';
+alter table TEST_JOBS add planid int(8) COMMENT '系统内项目关联测试计划ID';
 /*增加权限标识*/
 insert into USER_AUTHORITY (id, module, auth_type, alias)
 values (51, '用例管理', '增加', 'case_1');

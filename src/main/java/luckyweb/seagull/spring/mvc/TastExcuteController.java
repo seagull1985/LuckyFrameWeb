@@ -1,5 +1,6 @@
 package luckyweb.seagull.spring.mvc;
 
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -393,6 +394,25 @@ public class TastExcuteController
 		jsobjcet.put("data", jsonArray); 
 		
 		rsp.getWriter().write(jsobjcet.toString());
+	}
+	
+	@RequestMapping(value = "/cgettaskbyid.do")
+	public void cgetCaseByPlan(HttpServletRequest req, HttpServletResponse rsp) {
+		// 更新实体
+		try {
+			rsp.setContentType("text/html;charset=GBK");
+			req.setCharacterEncoding("GBK");
+			PrintWriter pw = rsp.getWriter();
+			String taskid = req.getParameter("taskid");
+			
+			TestTaskexcute task = tastExcuteService.load(Integer.valueOf(taskid));
+			task.getTestJob().setTast(null);
+			String jsonStr=JSONObject.fromObject(task).toString();
+			pw.print(jsonStr);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

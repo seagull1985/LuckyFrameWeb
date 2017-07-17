@@ -31,10 +31,13 @@ import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.quartz.QuartzJob;
 import luckyweb.seagull.quartz.QuartzManager;
 import luckyweb.seagull.quartz.QuratzJobDataMgr;
+import luckyweb.seagull.spring.entity.ProjectPlan;
+import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.spring.service.CaseDetailService;
 import luckyweb.seagull.spring.service.LogDetailService;
 import luckyweb.seagull.spring.service.OperationLogService;
+import luckyweb.seagull.spring.service.ProjectPlanService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.TestJobsService;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
@@ -63,6 +66,9 @@ public class TestJobsController
 	
 	@Resource(name = "casedetailService")
 	private CaseDetailService	casedetailService;
+	
+	@Resource(name = "projectPlanService")
+	private ProjectPlanService projectplanservice;
 	
 	@Resource(name = "logdetailService")
 	private LogDetailService	logdetailService;
@@ -115,6 +121,7 @@ public class TestJobsController
 				return "success";
 			}
 			
+			List<SectorProjects> qaprolist=QueueListener.qa_projlist;
 			String retVal = "/jsp/task/task_add";
 			if (req.getMethod().equals("POST"))
 			{
@@ -242,6 +249,17 @@ public class TestJobsController
 					tj.setRestartcomm("");
 				}
 				
+				if(tj.getProjecttype()==1){
+					String projectname="0";
+					for(int i=0;i<qaprolist.size();i++){
+						if(qaprolist.get(i).getProjectid()==tj.getProjectid()){
+							projectname=qaprolist.get(i).getProjectname();
+						}
+					}
+					ProjectPlan pp=projectplanservice.load(tj.getPlanid());
+					tj.setPlanproj(projectname);
+					tj.setTestlinkname(pp.getName());
+				}
 				int id = testJobsService.add(tj);
 				if (id != 0)
 				{
@@ -270,8 +288,10 @@ public class TestJobsController
 			tj.setIsrestart("0");
 			tj.setThreadCount(1);
 			tj.setTimeout(60);
+			tj.setProjecttype(0);
 			model.addAttribute("taskjob", tj);
-			model.addAttribute("projects", QueueListener.projlist);//
+			model.addAttribute("projects", QueueListener.projlist);
+			model.addAttribute("sysprojects", qaprolist);
 			return retVal;
 
 		}
@@ -389,8 +409,10 @@ public class TestJobsController
 	{
 		req.setCharacterEncoding("utf-8");
 		int id = Integer.valueOf(req.getParameter("id"));
-		model.addAttribute("projects", QueueListener.projlist);
+		List<SectorProjects> qaprolist=QueueListener.qa_projlist;
 		
+		model.addAttribute("projects", QueueListener.projlist);
+		model.addAttribute("sysprojects", qaprolist);
 		if(!UserLoginController.permissionboolean(req, "tast_3")){
 			model.addAttribute("taskjob", new TestJobs());
 			model.addAttribute("url",  "/testJobs/list.do");
@@ -559,6 +581,18 @@ public class TestJobsController
 				String startTimestr = tj.getStartTimestr();
 				tj.setStartTimestr(startTimestr);
 
+				if(tj.getProjecttype()==1){
+					String projectname="0";
+					for(int i=0;i<qaprolist.size();i++){
+						if(qaprolist.get(i).getProjectid()==tj.getProjectid()){
+							projectname=qaprolist.get(i).getProjectname();
+						}
+					}
+					ProjectPlan pp=projectplanservice.load(tj.getPlanid());
+					tj.setPlanproj(projectname);
+					tj.setTestlinkname(pp.getName());
+				}
+				
 				// 写入数据库
 				testJobsService.modify(tj);
 				// 更新内存，替换原来的调度
@@ -601,12 +635,20 @@ public class TestJobsController
 				return "error";
 			}
 		}
-		model.addAttribute("taskjob", jobload);
+
 		model.addAttribute("isSendMail", jobload.getIsSendMail());
 		model.addAttribute("isrestart", jobload.getIsrestart());
 		model.addAttribute("isbuilding", jobload.getIsbuilding());
 		model.addAttribute("extype", jobload.getExtype());
 		model.addAttribute("browsertype", jobload.getBrowsertype());
+		model.addAttribute("projecttype", jobload.getProjecttype());
+		if(jobload.getProjecttype()==1){
+			ProjectPlan projectplan=new ProjectPlan();
+			projectplan.setProjectid(jobload.getProjectid());
+			List<ProjectPlan> listplan = projectplanservice.findByPage(projectplan, 0, 1000);
+			model.addAttribute("planlist", listplan);
+		}
+		model.addAttribute("taskjob", jobload);
 		return "/jsp/task/task_update";
 	}
 
@@ -940,6 +982,5 @@ public class TestJobsController
 		model.addAttribute("message", result);
 		return "success";
 	}
-
 	
 }

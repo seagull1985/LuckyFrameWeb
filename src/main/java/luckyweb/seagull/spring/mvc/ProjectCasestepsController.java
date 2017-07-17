@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
-import luckyweb.seagull.spring.entity.SectorProjects;
-import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectCaseService;
 import luckyweb.seagull.spring.service.ProjectCasestepsService;
@@ -246,6 +244,30 @@ public class ProjectCasestepsController {
 		}
 	}
 
+	@RequestMapping(value = "/cgetStepsByCase.do")
+	public void cgetStepsByCase(HttpServletRequest req, HttpServletResponse rsp) {
+		// 更新实体
+		try {
+			rsp.setContentType("text/html;charset=GBK");
+			req.setCharacterEncoding("GBK");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			String caseid = req.getParameter("caseid");
+			
+			List<ProjectCasesteps> steps = casestepsservice.getSteps(Integer.valueOf(caseid));
+
+			// 转换成json字符串
+			String RecordJson = StrLib.listToJson(steps);
+
+			// 需要返回的数据有总记录数和行数据
+			json.put("steps", RecordJson);
+			pw.print(json.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) throws Exception {
 
 	}

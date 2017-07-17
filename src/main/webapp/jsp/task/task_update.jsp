@@ -108,26 +108,49 @@
 								missingMessage="客户端IP不能为空" invalidMessage="客户端IP不能为空" />&nbsp;<sf:errors
 								path="clientip" cssClass="error_msg" /></td>
 					</tr>
-
-					<tr>
+			<tr>
+				<td height="30" align="left">项目类型</td>
+				<td height="30" colspan="3">
+				<sf:radiobutton path="projecttype" id="projecttype" value="0" onclick="isShow6('0')" /> TestLink项目&nbsp;&nbsp;&nbsp;&nbsp; 
+				<sf:radiobutton	path="projecttype" id="projecttype" value="1" onclick="isShow6('1')" /> 系统项目</td>
+			</tr>																										 
+					<tr id="testlinkpro">					   
 						<td width="140" height="32">项目名（testlink中）</td>
 						<td height="32" colspan="3"><sf:select path="planproj"
-								id="planproj" class="easyui-combobox"
-								validType="selectValueRequired['#planproj']"
-								missingMessage="项目名必选" invalidMessage="项目名必选">
-								<sf:option value="">请选择</sf:option>
+								id="planproj" class="easyui-combobox">
+								<sf:option value="0">请选择</sf:option>
 								<c:forEach var="p" items="${projects}">
 									<sf:option value="${p[1]}">${p[1]}</sf:option>
 								</c:forEach>
 							</sf:select></td>
 					</tr>
-					<tr>
+					<tr id="testlinkplan">
 						<td height="30" align="left" valign="top">计划名（testlink中）</td>
 						<td height="30" colspan="3"><sf:textarea cols="50" rows="5"
 								path="testlinkname" id="testlinkname" /></td>
 					</tr>
+				<tr id="pro"  style="display: none">
+				<td height="30" align="left">项目名</td>
+				<td height="30" colspan="3"><sf:select path="projectid"
+						id="projectid" onChange="getPlan()" onFocus="getPlan()" >
+						<sf:option value="0">请选择</sf:option>
+						<c:forEach var="p" items="${sysprojects}">
+							<sf:option value="${p.projectid}">${p.projectname}</sf:option>
+						</c:forEach>
+					</sf:select></td>
+			</tr>
+			<tr id="plan"  style="display: none">
+				<td height="30" align="left">测试计划</td>
+				<td height="30" colspan="3">
+				<sf:select path="planid" id="planid" width="20%">
+   	               <c:forEach var="p" items="${planlist}">
+							<sf:option value="${p.id}">${p.name}</sf:option>
+						</c:forEach>
+                       </sf:select></td>
+			</tr>							
+
 					<tr>
-						<td width="140" height="32" align="left" valign="top">计划描述</td>
+						<td width="140" height="32" align="left" valign="top">调度任务描述</td>
 						<td height="32" colspan="3"><sf:textarea cols="50" rows="5"
 								path="remark" id="remark" /></td>
 					</tr>
@@ -225,8 +248,8 @@
 							*&quot;，每10秒中执行调试一次)，对使用者要求比较，要会写Cron表达式） 注意hour只支持00-23点</td>
 					</tr>
 					<tr>
-						<td width="174" height="32" colspan="4" align="center"><input
-							type="submit" name="updBtn" id="updBtn" value="修 改"
+						<td width="174" height="32" colspan="4" align="center">
+						<input type="submit" name="updBtn" id="updBtn" value="修 改"
 							class="button gray" />&nbsp;&nbsp;&nbsp;&nbsp; <a
 							href="/testJobs/list.do"><span class="btnold STYLE1"
 								style="width: 70px; margin-bottom: 10px;">返 回</span></a></td>
@@ -280,7 +303,13 @@
 	
 	<script type="text/javascript">
 
+					   
+					   
+   
+  
+ 
 	var type="O";
+ 
 	function  isShow2(isSend){
 		if(isSend=='1'){
 			document.getElementById('tr_send').style.display='block';
@@ -315,14 +344,37 @@
 		if(isSend=='1'){
 			document.getElementById('uiclientipdis').style.display='block';
 			document.getElementById('uiclientipdis').style.display = 'table-row'
-			document.getElementById('browsertype${browsertype}').checked = true
+			if("${browsertype}"==""){
+				document.getElementById('browsertype0').checked = true
+			}else{
+				document.getElementById('browsertype${browsertype}').checked = true
+			}
+			
 		}else{
 			document.getElementById('uiclientipdis').style.display='none';
-			document.getElementById('uiclientip').value="";
 		}
 		type=isSend;
 	}
 	
+	function  isShow6(isSend){
+		if(isSend=='1'){
+			jQuery("#projectid option[value='99']").remove();
+			document.getElementById('testlinkpro').style.display='none';
+			document.getElementById('testlinkplan').style.display='none';
+			document.getElementById('pro').style.display='block';
+			document.getElementById('pro').style.display = 'table-row';
+			document.getElementById('plan').style.display='block';
+			document.getElementById('plan').style.display = 'table-row';
+		}else{
+			document.getElementById('pro').style.display='none';
+			document.getElementById('testlinkpro').style.display='block';
+			document.getElementById('testlinkplan').style.display='block';
+			document.getElementById('testlinkpro').style.display = 'table-row';
+		    document.getElementById('testlinkplan').style.display='table-row';
+		}
+		type=isSend;
+	}					   
+				  
 		function valid(f){
 			return true;
 		}
@@ -334,6 +386,9 @@
 	}
 	
 		$(function(){
+			if("${projecttype}"==1){
+				isShow6('1');
+			}
 			
 			$.extend($.fn.validatebox.defaults.rules, {    
 			   	 minLength: {    
@@ -391,8 +446,60 @@
 			return true;
 		}
 	
-	
-		
+
+		    //按上级ID取子列表
+			 function getPlan(){
+//			    clearSel(); //清空节点	    
+			    if(jQuery("#projectid").val() == "") return;
+			    var projectid = jQuery("#projectid").val();
+			     var url ="/projectPlan/getplanlist.do?projectid="+projectid;
+			     jQuery.getJSON(url,null,function call(result){
+			    	 clearSel();
+			    	 setPlan(result); 
+			      });
+		    
+			    }
+		    
+			  //设置子列表
+			 function setPlan(result){	    
+		  	   var options = "";
+			   jQuery.each(result.data, function(i, node){
+					   options +=  "<option value='"+node.id+"'>"+node.name+"</option>";
+			      }); 
+			      jQuery("#planid").html(options);
+			    }
+			  
+			 // 清空下拉列表
+		     function clearSel(){  
+			  while(jQuery("#planid").length>1){
+				  $("#planid option[index='1']").remove();
+			//	 document.getElementById("checkentry").options.remove("1"); 
+			    }
+			   }
+		 	
+		     $(function(){
+		    		$.extend($.fn.validatebox.defaults.rules, {    
+		    		   	 minLength: {    
+		    		        validator: function(value, param){    
+		    		            return value.length > param[0] && value.length<= param[1];    
+		    		        } 
+		    		    },
+		    			 minTime: {    
+		    		        validator: function(value, param){    
+		    		            return value.length > param[0] && value.length<= param[1];    
+		    		        } 
+		    		    },
+		    			selectValueRequired: {  
+		    				validator: function(value,param){  
+		    				//console.info($(param[0]).find("option:contains('"+value+"')").val()); 
+		    				return $(param[0]).find("option:contains('"+value+"')").val() != '';  
+		    			},  
+		    			message: '项目名必选'  
+		    		} 
+		    			 
+		    		}); 
+				});						   
+					   
 	function init(){
 		if('${message}'!=''){
 			alert('${message}');

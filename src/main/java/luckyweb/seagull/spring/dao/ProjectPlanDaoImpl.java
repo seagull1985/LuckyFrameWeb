@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import luckyweb.seagull.spring.entity.ProjectPlan;
 
-
 @Repository("projectPlanDao")
 public class ProjectPlanDaoImpl extends HibernateDaoSupport implements ProjectPlanDao{
 	
@@ -179,12 +178,12 @@ public class ProjectPlanDaoImpl extends HibernateDaoSupport implements ProjectPl
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public List getList(String sql) throws Exception {
+	public List<ProjectPlan> getList(String sql) throws Exception {
 		// TODO Auto-generated method stub
-		List count=null;
+		List<ProjectPlan> count=null;
 		Session session=this.getSession(true);
 		try {
-			count = session.createSQLQuery(sql).list();
+			count = session.createQuery(sql).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
