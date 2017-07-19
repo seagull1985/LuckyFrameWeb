@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectCase;
+import luckyweb.seagull.spring.entity.ProjectModule;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectCaseService;
 import luckyweb.seagull.spring.service.ProjectCasestepsService;
+import luckyweb.seagull.spring.service.ProjectModuleService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
@@ -40,6 +42,9 @@ public class ProjectCaseController {
 	@Resource(name = "projectCasestepsService")
 	private ProjectCasestepsService casestepsservice;
 
+	@Resource(name = "projectModuleService")
+	private ProjectModuleService moduleservice;
+	
 	@Resource(name = "sectorprojectsService")
 	private SectorProjectsService sectorprojectsService;
 
@@ -88,6 +93,7 @@ public class ProjectCaseController {
 		PrintWriter pw = response.getWriter();
 		String search = request.getParameter("search");
 		String projectid = request.getParameter("projectid");
+		String moduleid = request.getParameter("moduleid");
 		ProjectCase projectcase = new ProjectCase();
 		if (null == offset && null == limit) {
 			offset = 0;
@@ -106,17 +112,30 @@ public class ProjectCaseController {
 		if (!StrLib.isEmpty(projectid) && !"99".equals(projectid)) {
 			projectcase.setProjectid(Integer.valueOf(projectid));
 		}
-
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(moduleid)) {
+			projectcase.setModuleid(Integer.valueOf(moduleid));
+		}
 		List<ProjectCase> projectcases = projectcaseservice.findByPage(projectcase, offset, limit);
 		List<SectorProjects> prolist = QueueListener.qa_projlist;
+		List<ProjectModule> modulelist=moduleservice.getModuleList();
 		for (int i = 0; i < projectcases.size(); i++) {
 			ProjectCase pcase = projectcases.get(i);
+			//更新项目名
 			for (SectorProjects projectlist : prolist) {
 				if (pcase.getProjectid() == projectlist.getProjectid()) {
 					pcase.setProjectname(projectlist.getProjectname());
 					projectcases.set(i, pcase);
 				}
 			}
+			//更新模块名
+			for (ProjectModule module : modulelist) {
+				if (pcase.getModuleid() == module.getId()) {
+					pcase.setModulename(module.getModulename());
+					projectcases.set(i, pcase);
+				}
+			}
+			
 
 		}
 		// 转换成json字符串
@@ -205,10 +224,11 @@ public class ProjectCaseController {
 				projectcase.setTime(time);
 
 				SectorProjects sp = sectorprojectsService.loadob(projectcase.getProjectid());
-				projectcase.setSign(sp.getProjectsign() + "-0000");
+				String maxindex =projectcaseservice.getCaseMaxIndex(projectcase.getProjectid());
+				int index=Integer.valueOf(maxindex)+1;
+				projectcase.setSign(sp.getProjectsign() + "-" +index);
+				projectcase.setProjectindex(index);
 				int caseid = projectcaseservice.add(projectcase);
-				projectcase.setSign(sp.getProjectsign() + "-" + caseid);
-				projectcaseservice.modify(projectcase);
 				operationlogservice.add(req, "PROJECT_CASE", caseid, projectcase.getProjectid(),
 						"添加用例成功！用例编号：" + projectcase.getSign());
 
@@ -294,6 +314,74 @@ public class ProjectCaseController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 添加用例集
+	 * 
+	 * @param tj
+	 * @param br
+	 * @param model
+	 * @param req
+	 * @param rsp
+	 * @return
+	 * @throws Exception
+	 * @Description:
+	 */
+	@RequestMapping(value = "/moduleadd.do")
+	public void addModule(ProjectModule projectmodule, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "case_1")) {
+				json.put("status", "fail");
+				json.put("ms", "添加失败,权限不足,请联系管理员!");
+			} else {
+				projectmodule.setProjectid(projectmodule.getMprojectid());
+				int id = moduleservice.add(projectmodule);
+				operationlogservice.add(req, "PROJECT_CASE", id, projectmodule.getProjectid(),
+						"添加用例集成功！");
+
+				json.put("status", "success");
+				json.put("ms", "添加用例集成功！");
+			}
+			pw.print(json.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	/**
+	 * 联动查询测试集
+	 * @param tj
+	 * @param br
+	 * @param model
+	 * @param req
+	 * @param rsp
+	 * @return
+	 * @throws Exception
+	 * @Description:
+	 */
+	@RequestMapping(value = "/getmodulelist.do")
+	public void getplanlist(HttpServletRequest req, HttpServletResponse rsp) throws Exception{	    
+		int	projectid = Integer.valueOf(req.getParameter("projectid"));
+
+		ProjectModule projectmodule = new ProjectModule();
+		projectmodule.setProjectid(projectid);
+		List<ProjectModule> modules = moduleservice.getModuleListByProjectid(projectid);
+		
+		// 取集合
+	    rsp.setContentType("text/xml;charset=utf-8");
+
+		JSONArray jsonArray = JSONArray.fromObject(modules);
+		JSONObject jsobjcet = new JSONObject();
+		jsobjcet.put("data", jsonArray); 
+		
+		rsp.getWriter().write(jsobjcet.toString());
 	}
 	
 	public static void main(String[] args) throws Exception {

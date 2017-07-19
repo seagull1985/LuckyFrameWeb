@@ -16,4 +16,5 @@ public interface ProjectCaseService {
 	public List findByPage( final Object value,final int offset, final int pageSize);
 	public int findRows(ProjectCase projectcase) ;
 	public ProjectCase getCaseBySign(String sign) throws Exception;
+	public String getCaseMaxIndex(int projectid) throws Exception;
 }

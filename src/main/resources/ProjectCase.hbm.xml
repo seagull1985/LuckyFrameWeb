@@ -21,6 +21,12 @@
 		<property name="projectid" type="java.lang.Integer">
 			<column name="projectid" length="8" not-null="true" />
 		</property>
+		<property name="moduleid" type="java.lang.Integer">
+			<column name="moduleid" length="8" not-null="true" />
+		</property>
+		<property name="projectindex" type="java.lang.Integer">
+			<column name="projectindex" length="8" not-null="true" />
+		</property>
 		<property name="casetype" type="java.lang.Integer">
 			<column name="casetype" length="2" not-null="true" />
 		</property>

@@ -18,9 +18,9 @@
 		<property name="projectsign" type="java.lang.String">
 			<column name="projectsign" length="20" not-null="true" />
 		</property>
- 		<many-to-one name="secondarySector" class="SecondarySector" fetch="select" lazy="false">   <!-- 关于lazy的解释     http://blog.sina.com.cn/s/blog_4731ed500101cwsk.html -->
-			<column name="sectorid" not-null="true"  />
-		</many-to-one>
+		<property name="sectorid" type="java.lang.Integer">
+			<column name="sectorid" length="4" not-null="true" />
+		</property>
 		<property name="projecttype" type="java.lang.Integer">
 			<column name="projecttype" length="4" not-null="true" />
 		</property>

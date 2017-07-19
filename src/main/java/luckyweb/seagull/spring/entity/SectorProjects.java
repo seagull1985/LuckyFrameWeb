@@ -14,8 +14,21 @@ public class SectorProjects implements java.io.Serializable{
 	private int sectorid;
 	private int projecttype;
 	private String projectsign;
-	private SecondarySector secondarySector;
+	private String departmenthead;
+	private String departmentname;
 	
+	public String getDepartmenthead() {
+		return departmenthead;
+	}
+	public void setDepartmenthead(String departmenthead) {
+		this.departmenthead = departmenthead;
+	}
+	public String getDepartmentname() {
+		return departmentname;
+	}
+	public void setDepartmentname(String departmentname) {
+		this.departmentname = departmentname;
+	}
 	public String getProjectsign() {
 		return projectsign;
 	}
@@ -52,15 +65,5 @@ public class SectorProjects implements java.io.Serializable{
 	public void setSectorid(int sectorid) {
 		this.sectorid = sectorid;
 	}
-	public SecondarySector getSecondarySector() {
-		return secondarySector;
-	}
-	public void setSecondarySector(SecondarySector secondarySector) {
-		this.secondarySector = secondarySector;
-	}
-
-	
-
-
 
 }

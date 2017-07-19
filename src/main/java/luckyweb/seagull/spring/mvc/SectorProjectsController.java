@@ -1,44 +1,38 @@
 package luckyweb.seagull.spring.mvc;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
+
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import luckyweb.seagull.spring.entity.Accident;
-import luckyweb.seagull.spring.entity.ProjectVersion;
+import luckyweb.seagull.spring.entity.ProjectCase;
+import luckyweb.seagull.spring.entity.ProjectPlan;
 import luckyweb.seagull.spring.entity.SecondarySector;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.TestCasedetail;
 import luckyweb.seagull.spring.entity.TestJobs;
-import luckyweb.seagull.spring.entity.UserInfo;
-import luckyweb.seagull.spring.service.AccidentService;
 import luckyweb.seagull.spring.service.OperationLogService;
-import luckyweb.seagull.spring.service.ProjectsVersionService;
+import luckyweb.seagull.spring.service.ProjectCaseService;
+import luckyweb.seagull.spring.service.ProjectPlanService;
 import luckyweb.seagull.spring.service.SecondarySectorService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.TestJobsService;
-import luckyweb.seagull.util.Endecrypt;
 import luckyweb.seagull.util.StrLib;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/sectorProjects")
 public class SectorProjectsController {
-	
-	private int allPage;
-	private int pageSize = 20;
-	private int allRows;
-	private int page = 1;
-	private int offset;
 	
 	@Resource(name = "sectorprojectsService")
 	private SectorProjectsService sectorprojectsservice;
@@ -46,16 +40,14 @@ public class SectorProjectsController {
 	@Resource(name = "secondarysectorService")
 	private SecondarySectorService secondarysectorservice;
 
-	public SectorProjectsService getsectorprojectsService() {
-		return sectorprojectsservice;
-	}
-
-	public void setSectorProjectsService(SectorProjectsService sectorprojectsservice) {
-		this.sectorprojectsservice = sectorprojectsservice;
-	}
-
+	@Resource(name = "projectCaseService")
+	private ProjectCaseService projectcaseservice;
+	
 	@Resource(name = "testJobsService")
 	private TestJobsService	 testJobsService;
+	
+	@Resource(name = "projectPlanService")
+	private ProjectPlanService projectplanservice;
 	
 	@Resource(name = "operationlogService")
 	private OperationLogService operationlogservice;
@@ -66,7 +58,6 @@ public class SectorProjectsController {
 		return "/jsp/base/sectorprojects";
 	}
 	
-	
 	/**
 	 * 
 	 * 
@@ -75,60 +66,92 @@ public class SectorProjectsController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/list.do")
-	public String list(HttpServletRequest req, SectorProjects sectorprojects, Model model)
-			throws Exception {
-		model.addAttribute("sectorprojects", sectorprojects);
-		try {
-			String p = req.getParameter("page");
-			if (StrLib.isEmpty(p) || Integer.valueOf(p) == 0) {
-				page = 1;
-			}
-
-			String page2 = req.getParameter("page");
-			if (StrLib.isEmpty(page2)) {
-				page = 1;
-			} else {
-				try {
-					page = Integer.parseInt(page2);
-				} catch (Exception e) {
-					page = 1;
-				}
-			}
-			allRows = sectorprojectsservice.findRows(sectorprojects);
-			offset = (page - 1) * pageSize;
-			if (allRows % pageSize == 0) {
-				allPage = allRows / pageSize;
-			} else {
-				allPage = allRows / pageSize + 1;
-			}
-
-			model.addAttribute("allRows", allRows);
-			model.addAttribute("page", page);
-			model.addAttribute("offset", offset);
-			model.addAttribute("pageSize", pageSize);
-			model.addAttribute("allPage", allPage);
-
-			// 调度列表
-			List<SecondarySector> secondarySector = secondarysectorservice.findSecotorList();
-			model.addAttribute("secondarySector", secondarySector);
-			
-			List<SectorProjects> sssMap = sectorprojectsservice.findByPage(sectorprojects, offset,
-					pageSize);
-			model.addAttribute("splist", sssMap);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/sectorProjects/list.do");
-			return "error";
-		}
+	@RequestMapping(value = "/load.do")
+	public String load(HttpServletRequest req, Model model) throws Exception {
+		List<SecondarySector> sectors=secondarysectorservice.findSecotorList();
+		model.addAttribute("sectors", sectors);
 		return "/jsp/base/sectorprojects";
 	}
 	
+	@RequestMapping(value = "/list.do")
+	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		response.setContentType("text/html;charset=utf-8");
+		request.setCharacterEncoding("utf-8");
+		PrintWriter pw = response.getWriter();
+		String search = request.getParameter("search");
+		SectorProjects sectorprojects=new SectorProjects();
+		if (null == offset && null == limit) {
+			offset = 0;
+		}
+		if (null == limit || limit == 0) {
+			limit = 10;
+		}
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(search)) {
+		    String strutf8 = new String(search.getBytes("ISO-8859-1"),"UTF-8");
+			sectorprojects.setProjectname(strutf8);
+			sectorprojects.setProjectmanager(strutf8);
+			sectorprojects.setProjectsign(strutf8);
+		}
+
+		List<SectorProjects> projects = sectorprojectsservice.findByPage(sectorprojects, offset, limit);
+		List<SecondarySector> sectors = secondarysectorservice.findSecotorList();
+		for(int i=0;i<projects.size();i++){			
+			if(projects.get(i).getProjectid()==99){
+				projects.remove(i);
+				i--;
+				continue;
+			}
+			for(SecondarySector sector:sectors){
+				if(projects.get(i).getSectorid()==sector.getSectorid()){
+					projects.get(i).setDepartmentname(sector.getDepartmentname());
+					projects.get(i).setDepartmenthead(sector.getDepartmenthead());
+				}
+			}
+		}
+		
+		// 转换成json字符串
+		String RecordJson = StrLib.listToJson(projects);
+		// 得到总记录数
+		int total = sectorprojectsservice.findRows(sectorprojects);
+		// 需要返回的数据有总记录数和行数据
+		JSONObject json = new JSONObject();
+		json.put("total", total-1);
+		json.put("rows", RecordJson);
+		pw.print(json.toString());
+	}
+	
+	@RequestMapping(value = "/update.do")
+	public void updateproject(HttpServletRequest req, HttpServletResponse rsp, SectorProjects sectorprojects) {
+		// 更新实体
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "pro_3")) {
+				json.put("status", "fail");
+				json.put("ms", "当前用户无权限修改项目信息，请联系管理员！");
+			} else {
+				
+				sectorprojectsservice.modify(sectorprojects);
+
+				operationlogservice.add(req, "SectorProjects", sectorprojects.getProjectid(), 
+						sectorprojects.getProjectid(),"项目信息修改成功！项目名"+sectorprojects.getProjectname());
+				json.put("status", "success");
+				json.put("ms", "编辑项目成功!");
+			}
+			pw.print(json.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	/**
-	 * 项目添加
+	 * 添加项目
+	 * 
 	 * @param tj
 	 * @param br
 	 * @param model
@@ -138,219 +161,132 @@ public class SectorProjectsController {
 	 * @throws Exception
 	 * @Description:
 	 */
-	@RequestMapping(value = "/add.do")
-	public String add(@Valid @ModelAttribute("sectorprojects") SectorProjects sectorprojects, BindingResult br, Model model,
-	        HttpServletRequest req, HttpServletResponse rsp) throws Exception
-	{
-		try
-		{
+	@RequestMapping(value = "/projectadd.do")
+	public void add(SectorProjects sectorprojects, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		try {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
-			
-			if(!UserLoginController.permissionboolean(req, "pro_1")){
-				model.addAttribute("sectorprojects", new SectorProjects());
-				model.addAttribute("url", "/sectorProjects/list.do");
-				model.addAttribute("message", "当前用户无权限添加项目，请联系管理员！");
-				return "success";
-			}
-
-			String retVal = "/jsp/base/projects_add";
-			if (req.getMethod().equals("POST"))
-			{
-				if (br.hasErrors())
-				{
-					return retVal;
-				}
-				String message = "";
-				
-				if(StrLib.isEmpty(sectorprojects.getProjectname())){
-					message = "项目名称不能为空！";
-				    model.addAttribute("secondarysector", secondarysectorservice.listall());
-					model.addAttribute("message", message);
-					return retVal;
-				}
-				if(StrLib.isEmpty(sectorprojects.getProjectmanager())){
-					message = "项目经理不能为空！";
-				    model.addAttribute("secondarysector", secondarysectorservice.listall());
-					model.addAttribute("message", message);
-					return retVal;
-				}
-				if(sectorprojects.getSecondarySector().getSectorid()==0){
-					message = "请至少选择一个所属部门！";
-				    model.addAttribute("secondarysector", secondarysectorservice.listall());
-					model.addAttribute("message", message);
-					return retVal;
-				}
-				SecondarySector ss = secondarysectorservice.load(sectorprojects.getSecondarySector().getSectorid());
-				sectorprojects.setSecondarySector(ss);
-				
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "pro_1")) {
+				json.put("status", "fail");
+				json.put("ms", "增加项目失败,权限不足,请联系管理员!");
+			} else {
 				int proid = sectorprojectsservice.add(sectorprojects);
-				
 				operationlogservice.add(req, "SectorProjects", proid, 
 						proid,"项目添加成功！项目名："+sectorprojects.getProjectname());
 				
-				model.addAttribute("message", "添加项目成功");
-				model.addAttribute("url", "/sectorProjects/list.do");
-				return "success";
-
+				json.put("status", "success");
+				json.put("ms", "添加项目成功!");
 			}
-			    model.addAttribute("secondarysector", secondarysectorservice.listall());
-				return retVal;
+			pw.print(json.toString());
 
-		}
-		catch (Exception e)
-		{
-			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/sectorProjects/list.do");
-			return "error";
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
-	}
-
-	/**
-	 * 删除项目
-	 * 
-	 * @param id
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/delete.do", method = RequestMethod.GET)
-	public String delete(Model model,HttpServletRequest req) throws Exception
-	{
-		if(!UserLoginController.permissionboolean(req, "pro_2")){
-			model.addAttribute("sectorprojects", new SectorProjects());
-			model.addAttribute("url", "/sectorProjects/list.do");
-			model.addAttribute("message", "当前用户无权限删除项目，请联系管理员！");
-			return "success";
-		}
-		
-		int projectid = Integer.valueOf(req.getParameter("projectid"));
-		SectorProjects sectorprojects = sectorprojectsservice.loadob(projectid);
-		sectorprojects.setSectorid(sectorprojects.getSecondarySector().getSectorid());
-
-		if(null!=sectorprojects&&sectorprojects.getProjecttype()==0){
-			int rows = sectorprojectsservice.projectrow(projectid);
-			if(rows>=1){
-				String message = "此项目关联了质量管理模块信息，不能删除！";
-				model.addAttribute("sectorprojects", new SectorProjects());
-				model.addAttribute("message", message);
-				model.addAttribute("url", "/sectorProjects/list.do");
-				return "success";
-			}
-		}
-		
-		if(null!=sectorprojects&&sectorprojects.getProjecttype()==1){
-			TestJobs testjobs = new TestJobs();
-			testjobs.setPlanproj(sectorprojects.getProjectname());
-			int rows = testJobsService.findRows(testjobs);
-			if(rows>=1){
-				String message = "此项目有关联自动化调度任务，不能删除！";
-				model.addAttribute("sectorprojects", new SectorProjects());
-				model.addAttribute("message", message);
-				model.addAttribute("url", "/sectorProjects/list.do");
-				return "success";
-			}
-		}
-		
-		try
-		{		
-			operationlogservice.delete(projectid);
-			sectorprojectsservice.delete(sectorprojects);
-		}
-		catch (Exception e)
-		{
-			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/sectorProjects/list.do");
-			return "error";
-		}
-		
-		operationlogservice.add(req, "SectorProjects", projectid, 
-				99,"项目信息删除成功！项目名："+sectorprojects.getProjectname());
-
-		String message = "删除项目成功！";
-		model.addAttribute("sectorprojects", new SectorProjects());
-		model.addAttribute("message", message);
-		model.addAttribute("url", "/sectorProjects/list.do");
-		return "success";
 	}
 	
 	/**
+	 * 删除项目
 	 * 
-	 * 根据id更新项目信息
-	 * @param id
+	 * @param tj
+	 * @param br
 	 * @param model
+	 * @param req
+	 * @param rsp
 	 * @return
 	 * @throws Exception
+	 * @Description:
 	 */
-	@RequestMapping(value = "/update.do")
-	public String update(@Valid @ModelAttribute("sectorprojects") SectorProjects sectorprojects, BindingResult br,
-	        Model model, HttpServletRequest req) throws Exception
-	{
-		req.setCharacterEncoding("utf-8");
-		int projectid = Integer.valueOf(req.getParameter("projectid"));
-		
-		if(!UserLoginController.permissionboolean(req, "pro_3")){
-			model.addAttribute("sectorprojects", new SectorProjects());
-			model.addAttribute("url", "/sectorProjects/list.do");
-			model.addAttribute("message", "当前用户无权限修改项目信息，请联系管理员！");
-			return "success";
+	@RequestMapping(value = "/delete.do")
+	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "pro_2")) {
+				json.put("status", "fail");
+				json.put("ms", "删除项目失败,权限不足,请联系管理员!");
+			} else {
+				StringBuilder sb = new StringBuilder();
+				try (BufferedReader reader = req.getReader();) {
+					char[] buff = new char[1024];
+					int len;
+					while ((len = reader.read(buff)) != -1) {
+						sb.append(buff, 0, len);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
+				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("proids"));
+
+				String status="fail";
+				String ms="删除项目失败!";
+				for (int i = 0; i < jsonarr.size(); i++) {
+					int id = Integer.valueOf(jsonarr.get(i).toString());
+					SectorProjects sectorproject = sectorprojectsservice.loadob(id);
+					
+					if(null!=sectorproject&&sectorproject.getProjecttype()==0){
+						int rows = sectorprojectsservice.projectrow(id);
+						if(rows>=1){
+							status="fail";
+							ms=sectorproject.getProjectname()+"有关联质量模块的记录，不能删除!";
+							break;
+						}
+					}
+					
+					if(null!=sectorproject&&sectorproject.getProjecttype()==1){
+						TestJobs testjobs = new TestJobs();
+						testjobs.setPlanproj(sectorproject.getProjectname());
+						int rows = testJobsService.findRows(testjobs);
+						if(rows>=1){
+							status="fail";
+							ms=sectorproject.getProjectname()+"有关联自动化调度任务的记录，不能删除!";
+							break;
+						}
+					}
+					
+					if(null!=sectorproject&&sectorproject.getProjecttype()==0){
+						ProjectPlan plan = new ProjectPlan();
+						plan.setProjectid(id);
+						int rows = projectplanservice.findRows(plan);
+						if(rows>=1){
+							status="fail";
+							ms=sectorproject.getProjectname()+"有关联测试计划的记录，不能删除!";
+							break;
+						}
+					}
+					
+					if(null!=sectorproject&&sectorproject.getProjecttype()==0){
+						ProjectCase cases = new ProjectCase();
+						cases.setProjectid(id);
+						int rows = projectcaseservice.findRows(cases);
+						if(rows>=1){
+							status="fail";
+							ms=sectorproject.getProjectname()+"有关联测试用例的记录，不能删除!";
+							break;
+						}
+					}
+					
+					operationlogservice.delete(id);
+					sectorprojectsservice.delete(sectorproject);
+					operationlogservice.add(req, "SectorProjects", id, 
+							99,"项目信息删除成功！项目名："+sectorproject.getProjectname());
+					status="success";
+					ms="删除项目成功!";
+				}
+				json.put("status", status);
+				json.put("ms", ms);
+			}
+			pw.print(json.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		try{
-		String retVal = "/jsp/base/projects_add";
-		if (req.getMethod().equals("POST"))
-		{
-			if (br.hasErrors())
-			{
-				return retVal;
-			}
-			String message = "";
-			if(StrLib.isEmpty(sectorprojects.getProjectname())){
-				message = "项目名称不能为空！";
-			    model.addAttribute("secondarysector", secondarysectorservice.listall());
-				model.addAttribute("message", message);
-				return retVal;
-			}
-			if(StrLib.isEmpty(sectorprojects.getProjectmanager())){
-				message = "项目经理不能为空！";
-			    model.addAttribute("secondarysector", secondarysectorservice.listall());
-				model.addAttribute("message", message);
-				return retVal;
-			}
-			if(sectorprojects.getSecondarySector().getSectorid()==0){
-				message = "请至少选择一个所属部门！";
-			    model.addAttribute("secondarysector", secondarysectorservice.listall());
-				model.addAttribute("message", message);
-				return retVal;
-			}
-			
-			SecondarySector ss = secondarysectorservice.load(sectorprojects.getSecondarySector().getSectorid());
-			sectorprojects.setSecondarySector(ss);
-			
-			sectorprojectsservice.modify(sectorprojects);
-			
-			operationlogservice.add(req, "SectorProjects", sectorprojects.getProjectid(), 
-					sectorprojects.getProjectid(),"项目信息修改成功！项目名"+sectorprojects.getProjectname());
 
-			
-			model.addAttribute("message", "修改项目信息成功");
-			model.addAttribute("url", "/sectorProjects/list.do");
-			return "success";
-
-		}	
-		SectorProjects sss = sectorprojectsservice.loadob(projectid);
-		sss.setSectorid(sss.getSecondarySector().getSectorid());
-		
-	    model.addAttribute("secondarysector", secondarysectorservice.listall());
-		model.addAttribute("sectorprojects", sss);
-		return "/jsp/base/projects_update";
-
-	}
-	catch (Exception e){
-		model.addAttribute("message", e.getMessage());
-		model.addAttribute("url", "/sectorProjects/list.do");
-		return "error";
-	 }
 	}
 	
 	public static void main(String[] args) {

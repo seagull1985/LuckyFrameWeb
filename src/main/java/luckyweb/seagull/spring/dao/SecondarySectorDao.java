@@ -38,5 +38,5 @@ public interface SecondarySectorDao {
 
 	public int findRows(SecondarySector sector,String hql);
 	
-	public List<SecondarySector> findSectorList();
+	public List<SecondarySector> findSectorList()  throws Exception ;
 }

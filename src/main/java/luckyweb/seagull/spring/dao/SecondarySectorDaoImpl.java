@@ -13,7 +13,6 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import luckyweb.seagull.spring.entity.SecondarySector;
-import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.util.StrLib;
 
 @Repository("secondarysectorDao")
@@ -135,10 +134,20 @@ public class SecondarySectorDaoImpl extends HibernateDaoSupport implements Secon
 		return s;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public List<SecondarySector> findSectorList() {
+	public List<SecondarySector> findSectorList() throws Exception {
 		// TODO Auto-generated method stub
-		return this.getHibernateTemplate().find("select sectorid,departmenthead,departmentname from SecondarySector order by sectorid");
+		List<SecondarySector> list=null;
+		Session session=this.getSession(true);
+		try {
+			list = session.createQuery(" from SecondarySector order by sectorid").list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}	
+		return list;
 	}
-
+	
 }

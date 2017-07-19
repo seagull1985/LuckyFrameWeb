@@ -183,7 +183,7 @@
 			var url = '/userInfo/roleadd.do';
 			window.location.href=url;
 	    }else if(opr=="6"){
-			var url = '/sectorProjects/list.do';
+			var url = '/sectorProjects/load.do';
 			window.location.href=url;
 	    }else{ 
 	       alert("操作码有误，是否有非法操作，请联系软件质量室！"); 
