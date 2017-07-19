@@ -45,4 +45,5 @@ public interface ProjectCaseDao {
 	public int findRows(ProjectCase projectcase,String hql);
 	
 	public List<ProjectCase> findJobsList();
+	public String getCaseMaxIndex(String sql) throws Exception ;
 }

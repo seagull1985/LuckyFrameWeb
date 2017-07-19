@@ -17,10 +17,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import luckyweb.seagull.spring.entity.ProjectCase;
+import luckyweb.seagull.spring.entity.ProjectModule;
 import luckyweb.seagull.spring.entity.ProjectPlan;
 import luckyweb.seagull.spring.entity.ProjectPlanCase;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectCaseService;
+import luckyweb.seagull.spring.service.ProjectModuleService;
 import luckyweb.seagull.spring.service.ProjectPlanCaseService;
 import luckyweb.seagull.spring.service.ProjectPlanService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
@@ -39,6 +41,9 @@ public class ProjectPlanCaseController {
 	@Resource(name = "projectPlanService")
 	private ProjectPlanService projectplanservice;
 
+	@Resource(name = "projectModuleService")
+	private ProjectModuleService moduleservice;
+	
 	@Resource(name = "projectCaseService")
 	private ProjectCaseService projectcaseservice;
 
@@ -72,7 +77,9 @@ public class ProjectPlanCaseController {
 
 			String planid = req.getParameter("planid");
 			ProjectPlan propaln = projectplanservice.load(Integer.valueOf(planid));
+			List<ProjectModule> modules = moduleservice.getModuleListByProjectid(propaln.getProjectid());
 			model.addAttribute("projectid", propaln.getProjectid());
+			model.addAttribute("modules", modules);
 			model.addAttribute("planid", planid);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,6 +98,7 @@ public class ProjectPlanCaseController {
 		String search = request.getParameter("search");
 		String projectid = request.getParameter("projectid");
 		String planidstr = request.getParameter("planid");
+		String moduleid = request.getParameter("moduleid");
 		ProjectCase projectcase = new ProjectCase();
 		if (null == offset && null == limit) {
 			offset = 0;
@@ -113,6 +121,10 @@ public class ProjectPlanCaseController {
 		int planid = 0;
 		if (!StrLib.isEmpty(planidstr)) {
 			planid = Integer.valueOf(planidstr);
+		}
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(moduleid)) {
+			projectcase.setModuleid(Integer.valueOf(moduleid));
 		}
 
 		List<ProjectCase> projectcases = projectcaseservice.findByPage(projectcase, offset, limit);

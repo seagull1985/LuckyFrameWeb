@@ -12,6 +12,9 @@ public class ProjectCase implements java.io.Serializable{
     private String sign;
     private String name;
 	private int projectid;
+	private int moduleid;
+	private String modulename;
+	private int projectindex;
 	private String projectname;
     private String remark;
     private int casetype;
@@ -21,6 +24,24 @@ public class ProjectCase implements java.io.Serializable{
     private int checktype;
     
     
+	public String getModulename() {
+		return modulename;
+	}
+	public void setModulename(String modulename) {
+		this.modulename = modulename;
+	}
+	public int getModuleid() {
+		return moduleid;
+	}
+	public void setModuleid(int moduleid) {
+		this.moduleid = moduleid;
+	}
+	public int getProjectindex() {
+		return projectindex;
+	}
+	public void setProjectindex(int projectindex) {
+		this.projectindex = projectindex;
+	}
 	public int getChecktype() {
 		return checktype;
 	}

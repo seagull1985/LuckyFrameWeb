@@ -4,6 +4,8 @@ create table PROJECT_CASE
   sign                  VARCHAR(20) not null COMMENT '用例标识',
   name                  VARCHAR(200) not null COMMENT '用例名称',
   projectid             int(8) not null COMMENT '关联项目ID',
+  moduleid              int(8) not null COMMENT '关联项目模块ID',
+  projectindex          int(8) not null COMMENT '项目用例编号',
   time                  VARCHAR(30) COMMENT '最后更新时间',
   operationer           VARCHAR(20) COMMENT '最后更新人员',
   casetype              int(2) not null COMMENT '0 接口 1 UI',
@@ -51,6 +53,16 @@ create table PROJECT_PLANCASE
   index (caseid),
   index (planid) 
 )default character set utf8;
+
+create table PROJECT_MODULE
+(
+  id                    int(9) not null AUTO_INCREMENT,
+  projectid             int(8) not null COMMENT '项目ID',
+  modulename            VARCHAR(30) COMMENT '模块名字',
+  hierarchical          int(4) COMMENT '层级关系',
+  primary key (ID)
+)default character set utf8;
+
 /*用户增加默认选择字段*/
 alter table userinfo add projectid int(4) default '0';
 /*项目管理表增加项目标识字段*/

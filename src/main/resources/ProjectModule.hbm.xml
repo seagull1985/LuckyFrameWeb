@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="ProjectModule" table="PROJECT_MODULE"
+		schema="luckyframedb">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" precision="22" scale="0" />
+			<generator class="identity"/>
+		</id>
+		<property name="projectid" type="java.lang.Integer">
+			<column name="projectid" length="8" not-null="true" />
+		</property>
+		<property name="modulename" type="java.lang.String">
+			<column name="modulename" length="30" not-null="false" />
+		</property>
+		<property name="hierarchical" type="java.lang.Integer">
+			<column name="hierarchical" length="4" not-null="false" />
+		</property>
+	</class>
+</hibernate-mapping>

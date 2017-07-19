@@ -49,6 +49,8 @@ public class ProjectCaseServiceImpl implements ProjectCaseService{
 		String where = " where ";
 		if (projectcase.getProjectid()!=0&&projectcase.getProjectid()!=99) {
 			where += " projectid =:projectid  and ";
+		}if (projectcase.getModuleid()!=0) {
+			where += " moduleid =:moduleid  and ";
 		}if (null!=projectcase.getSign()&&!"".equals(projectcase.getSign())) {
 			where += " sign like :sign  or ";
 		}if (null!=projectcase.getName()&&!"".equals(projectcase.getName())) {
@@ -89,4 +91,9 @@ public class ProjectCaseServiceImpl implements ProjectCaseService{
 		return this.projectcaseDao.getList(" from ProjectCase where sign='"+sign+"' order by id").get(0);
 	}
 
+	@Override
+	public String getCaseMaxIndex(int projectid) throws Exception {
+		// TODO Auto-generated method stub
+		return this.projectcaseDao.getCaseMaxIndex("select IFNULL(MAX(projectindex),0) from project_case where projectid="+projectid);
+	}
 }

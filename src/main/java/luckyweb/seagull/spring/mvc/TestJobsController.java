@@ -671,12 +671,12 @@ public class TestJobsController
 		}
 		int id = Integer.valueOf(req.getParameter("id"));
 		TestJobs tj = testJobsService.get(id);
-		List<Object[]> idlist = tastExcuteService.getidlist(id);
+		List idlist = tastExcuteService.getidlist(id);
 		try
 		{
 			int tastid = 0;
 			for(int i=0;i<idlist.size();i++){
-				tastid = Integer.valueOf(idlist.get(i)[0].toString());
+				tastid = Integer.valueOf(idlist.get(i).toString());
 				this.logdetailService.delete(tastid);
 				this.casedetailService.delete(tastid);
 				this.tastExcuteService.delete(tastid);

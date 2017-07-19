@@ -35,13 +35,15 @@ public class SectorProjectsDaoImpl extends HibernateDaoSupport implements Sector
 
 	private void whereParameter(SectorProjects sectorprojects, Query query) {
 
-		if (!StrLib.isEmpty(sectorprojects.getProjectmanager())) {
-			query.setParameter("departmenthead", sectorprojects.getProjectmanager().trim());
-		}
 		if (!StrLib.isEmpty(sectorprojects.getProjectname())) {
-			query.setParameter("departmentname",sectorprojects.getProjectname().trim());
+			query.setParameter("projectname", "%"+sectorprojects.getProjectname().trim()+"%");
 		}
-
+		if (!StrLib.isEmpty(sectorprojects.getProjectmanager())) {
+			query.setParameter("projectmanager","%"+sectorprojects.getProjectmanager().trim()+"%");
+		}
+		if (!StrLib.isEmpty(sectorprojects.getProjectsign())) {
+			query.setParameter("projectsign","%"+sectorprojects.getProjectsign().trim()+"%");
+		}
 	}
 	
 	@Override

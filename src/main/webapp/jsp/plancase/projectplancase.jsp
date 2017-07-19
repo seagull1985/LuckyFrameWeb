@@ -33,7 +33,24 @@
 			</header>
 
 			<div class="panel-body" style="padding-bottom: 0px;">
-
+				<div class="panel panel-default">
+					<div class="panel-heading">查询条件</div>
+					<div class="panel-body">
+						<div class="form-group" style="margin-top: 15px">
+							<label class="control-label col-sm-1" style="width:6%" for="txt_search_module">用例集:</label>
+							<div class="col-sm-3">
+								<select class="form-control" id="search_module"
+									onchange="searchmodule()">
+									<c:forEach var="p" items="${modules }">
+									    <option value="0">全部</option>
+										<option value="${p.id}">${p.modulename}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				
 				<div id="toolbar" class="btn-group">
 					<button id="btn_edit" type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>&nbsp;保存选项
@@ -69,15 +86,15 @@
 					queryParams : oTableInit.queryParams,//传递参数（*）
 					sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）
 					pageNumber : 1, //初始化加载第一页，默认第一页
-					pageSize : 10, //每页的记录行数（*）
-					pageList : [ 10, 25, 50, 100 ], //可供选择的每页的行数（*）
+					pageSize : 25, //每页的记录行数（*）
+					pageList : [ 25, 50, 100, 200], //可供选择的每页的行数（*）
 					search : true, //是否显示表格搜索，此搜索会进服务端
 					strictSearch : true,
 					showColumns : false, //是否显示所有的列
 					showRefresh : true, //是否显示刷新按钮
 					minimumCountColumns : 2, //最少允许的列数
 					clickToSelect : true, //是否启用点击选中行
-					height : 500, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+					height : 500, //行高，如果没有设置height属性，表格自动根据记录条数决定表格高度
 					uniqueId : "ID", //每一行的唯一标识，一般为主键列
 					showToggle : false, //是否显示详细视图和列表视图的切换按钮
 					cardView : false, //是否显示详细视图
@@ -192,7 +209,7 @@
 					limit : params.limit, //页面大小
 					offset : params.offset, //页码偏移量
 					search : params.search, //搜索参数
-					projectid : $('#search_project').val(), //项目ID
+					moduleid : $('#search_module').val(), //模块ID
 				};
 				return temp;
 			};
@@ -200,7 +217,7 @@
 			return oTableInit;
 		};
 		
-		var searchproject = function() {
+		var searchmodule = function() {
 			//1.初始化Table
 			var oTable = new TableInit();
 			$('#tb_projectplancase').bootstrapTable('destroy');

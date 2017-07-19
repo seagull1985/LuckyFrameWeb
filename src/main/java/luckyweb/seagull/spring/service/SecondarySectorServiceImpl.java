@@ -113,7 +113,7 @@ public class SecondarySectorServiceImpl implements SecondarySectorService{
 	}
 
 	@Override
-	public List<SecondarySector> findSecotorList() {
+	public List<SecondarySector> findSecotorList()  throws Exception {
 		// TODO Auto-generated method stub
 		return secondarysectordao.findSectorList();
 	}

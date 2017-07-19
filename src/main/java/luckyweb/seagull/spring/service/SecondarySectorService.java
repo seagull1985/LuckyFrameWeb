@@ -34,5 +34,5 @@ public interface SecondarySectorService {
 	public int findRows(SecondarySector Sector) ;
 //	public List<TestJobs> getListForPage( final int offset,final int lengh);
 
-	public List<SecondarySector> findSecotorList();
+	public List<SecondarySector> findSecotorList()  throws Exception ;
 }

@@ -72,7 +72,7 @@
 								<div class="modal-header">
 									<button type="button" class="close" data-dismiss="modal"
 										aria-hidden="true">&times;</button>
-									<h4 class="modal-title" id="myModalLabel">用户信息</h4>
+									<h4 class="modal-title" id="myModalLabel">计划信息</h4>
 								</div>
 								<div class="modal-body">
 									<form class="form-horizontal" role="form">
@@ -88,7 +88,7 @@
 										</div>
 
 										<div class="form-group">
-											<label for="lastname" class="col-sm-3 control-label">计划名称</label>
+											<label for="name" class="col-sm-3 control-label">计划名称</label>
 											<div class="col-sm-9">
 												<input type="text" class="form-control" name="name"
 													id="name" placeholder="用例名称">
@@ -294,7 +294,7 @@
 									stringLength : {
 										min : 2,
 										max : 50,
-										message : '用例名称长度必须在2~50个字符区间'
+										message : '计划名称长度必须在2~50个字符区间'
 									}
 								}
 							},
@@ -361,6 +361,7 @@
 	                    error:function()
 	                    {
 	                        alert('请求出错');
+	                        location.reload();
 	                    },
 	                    complete:function()
 	                    {

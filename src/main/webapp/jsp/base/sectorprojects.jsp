@@ -6,175 +6,482 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script language="JavaScript" type="text/javascript"
-	src="/js/My97DatePicker/WdatePicker.js"></script>	
-	
-<title>项目管理</title>
-<link href="/css/style.css" rel="stylesheet" type="text/css" />
-<style type="text/css">
-<!--
-.STYLE1 {
-	color: #ffffff
-}
-.STYLE6 {color: #FF0000; font-size: 12px; }
--->
-</style>
-	
-	</head>
 
-<body>	
-	<div>  
-        <%@ include file="/head.jsp" %>
-    </div> 
+<title>项目管理</title>
+</head>
+
+<body>
+	<div>
+		<%@ include file="/head.jsp"%>
+	</div>
+
 	<header id="head" class="secondary"></header>
 
 	<!-- container -->
-	<div class="container" style="width:auto;font-size:14px">
+	<div class="container" style="width: auto; font-size: 14px;">
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active"><a href="/userInfo/list.do">用户管理</a></li>
 			<li class="active">项目管理</li>
 		</ol>
 
-		<div class="row">	
+		<div class="row">
 			<!-- Article main content -->
-		<article class="col-sm-9 maincontent" style="width:100%;">
-		 <header class="page-header">
-				<h1 class="page-title" style="text-align:center;">项目管理</h1>
+			<article class="col-sm-9 maincontent" style="width:100%;">
+			<header class="page-header">
+			<h1 class="page-title" style="text-align:center;">项目管理</h1>
 			</header>
-			
- <sf:form method="post" modelAttribute="sectorprojects">
- <input name="page" id="page" type="hidden"  />	
- 		<table width="100%" align="center" class="rect" height=40 cellPadding=1 border=1 bordercolor="#CCCCCC">
-		  <tr>
-		  <td width="25%" align="center" valign="middle">
-            <a href="#" onclick="showDiv(0,1)" style="text-decoration: none;"> 
-			<span class="btnold STYLE1" style="width:70px;background:#FFA54F;border:#FFA54F;"> 添加项目</span></a>			
-		  </td>
-		</tr>
-		  </table>
-		  
-	   <table width="100%" align="center" class="bordered">
-                <tr bgcolor="#B9DCFF">
-				<th width="5%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">项目编号</th>
-				<th width="35%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">项目名称</th>
-				<th width="10%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">项目标识</th>
-				<th width="10%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">项目经理</th>
-				<th width="10%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">项目类型</th>
-				<th width="10%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">所属部门</th>
-				<th width="10%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">部门经理</th>
-				<th width="10%" height="40" nowrap="nowrap" bgcolor="#B9DCFF">操作</th>
-		  </tr>
-		  <c:forEach var="t" items="${splist}" begin="0" step="1"
-				varStatus="i">
-			  <tr>
-				  <td height="25" style="text-align:center">${t.projectid }&nbsp;</td>
-				  <td height="25" >${t.projectname }&nbsp;</td>
-				  <td height="25" >${t.projectsign }&nbsp;</td>
-				  <td height="25" >${t.projectmanager }&nbsp;</td>
-				  <c:if test="${t.projecttype==0 }">
-				  <td height="25" >质量管理项目&nbsp;</td>
-				  </c:if>
-				  <c:if test="${t.projecttype==1 }">
-				  <td height="25" >自动化管理项目(testlink)&nbsp;</td>
-				  </c:if>
-				  <td height="25" >${t.secondarySector.departmentname }&nbsp;</td>
-				  <td height="25" >${t.secondarySector.departmenthead }&nbsp;</td>
-				  <td height="25" style="word-break: break-all">
-						<a href="#" onclick="showDiv('${t.projectid}','2')"
-						style="cursor: pointer;"><u>修改</u></a>&nbsp; <a href="#"
-						onclick="showDiv('${t.projectid}','3')" style="cursor: pointer;"><u>删除</u></a>&nbsp;
-					</td>
-			  </tr>
-		  </c:forEach>
-		</table>
-<center>
-			<div id="pagelist" align="center">
-				<c:if test="${allRows!=0 }">
-					<ul>
-						<li><a href="#" onclick="return setPage(1)">首页 </a></li>
-						<li><a href="#" onclick="return frontPageCheck(${page-1});">上一页</a></li>
-						<li><a href="#" onclick="return backPageCheck(${page+1});">下一页</a></li>
-						<li><a href="#" onclick="return setPage(${allPage})">末页</a></li>
-						<li>第${page}页</li>
-						<li>共${allRows}条</li>
-						<li>共${allPage}页</li>
-					</ul>
-				</c:if>
-				<c:if test="${allRows==0 }">
-					<font color="#FF0000">没有记录!</font>				</c:if>
-			</div></center>
-				</sf:form>
-     <p>&nbsp;</p>
-	</article>
+
+			<div class="panel-body" style="padding-bottom: 0px;">
+
+				<div id="toolbar" class="btn-group">
+					<button id="btn_add" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增项目
+					</button>
+					<button id="btn_delete" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除项目
+					</button>
+				</div>
+				<table id="tb_sectorproject"></table>
+
+				<!-- 模态框示例（Modal） -->
+				<form method="post" action="" class="form-horizontal" role="form"
+					id="form_data" onsubmit="return check_form()" style="margin: 20px;">
+					<div class="modal fade" id="addModal" tabindex="-1" role="dialog"
+						aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal"
+										aria-hidden="true">&times;</button>
+									<h4 class="modal-title" id="myModalLabel">项目信息</h4>
+								</div>
+								<div class="modal-body">
+									<form class="form-horizontal" role="form">
+										<div class="form-group">
+											<label for="sectorid" class="col-sm-3 control-label">所属部门</label>
+											<div class="col-sm-9">
+												<select class="form-control" name="sectorid" id="sectorid">
+													<c:forEach var="p" items="${sectors }">
+														<option value="${p.sectorid}">${p.departmentname}</option>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+										
+										<div class="form-group">
+											<label for="projectname" class="col-sm-3 control-label">项目名称</label>
+											<div class="col-sm-9">
+												<input type="text" class="form-control" name="projectname"
+													id="projectname" placeholder="项目名称">
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="projectsign" class="col-sm-3 control-label">项目标识</label>
+											<div class="col-sm-9">
+												<input type="text" class="form-control" name="projectsign"
+													id="projectsign" placeholder="项目标识">
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="projectmanager" class="col-sm-3 control-label">项目经理</label>
+											<div class="col-sm-9">
+												<input type="text" class="form-control" name="projectmanager"
+													id="projectmanager" placeholder="项目经理">
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="projectmanager" class="col-sm-3 control-label">项目类型</label>
+											<div class="col-sm-9">
+												<input type="radio" class="form-control"
+													style="width: 25px; height: 25px; float: left; cursor: pointer;"
+													name="projecttype" id="projecttype" value="0" checked="checked" />
+												<label
+													style="float: left; margin-top: 8px; cursor: pointer;"
+													for="projecttype">
+													&nbsp;&nbsp;系统项目&nbsp;&nbsp;&nbsp;&nbsp; </label> <input
+													type="radio" class="form-control"
+													style="width: 25px; height: 25px; float: left; cursor: pointer;"
+													name="projecttype" id="projecttype" value="1" /> <label
+													style="float: left; margin-top: 8px; cursor: pointer;"
+													for="projecttype">&nbsp;&nbsp;TestLink项目</label>
+											</div>
+										</div>
+
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default"
+										data-dismiss="modal">关闭</button>
+									<button type="submit" class="btn btn-primary">提交</button>
+									&nbsp;&nbsp;&nbsp;&nbsp;<span id="tip"> </span>
+								</div>
+							</div>
+							<!-- /.modal-content -->
+						</div>
+						<!-- /.modal -->
+					</div>
+				</form>
+				
+			</div>
+			</article>
+		</div>
 	</div>
-	</div>
-	
+
 	<script type="text/javascript">
-	function frontPageCheck(page)
-	{
-		if(${page > 1})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("sectorprojects").submit();
-			return true;
-		}
-		return false;
-	}
-	
-	function backPageCheck(page)
-	{
-		if(${page < allPage})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("sectorprojects").submit();
-			return true;
-		}			
-		return false;
-	}
-	
-	
-	function setPage(page)
-	{
-		if(page==1){
-			document.getElementById("page").value=1;
-		}else{
-			document.getElementById("page").value=page;
-		}
-			document.getElementById("sectorprojects").submit();
-		return true;
-	}
-	
-	function showDiv(proid,opr){
-		var status = document.getElementById("loginstatus").value;
-		if(status=="false"){
-			if(window.confirm("你未登录哦，要先去首页登录吗？")){
-				var url = '/progressus/signin.jsp';
-				window.location.href=url;
-			}else{
-				return false; 
-			} 	
-		}else{
-		if(opr=="1"){
-			var url = '/sectorProjects/add.do';
-			window.location.href=url;
-	    }else if(opr=="2"){
-			var url = '/sectorProjects/update.do?projectid='+proid;
-			window.location.href=url;
-	    }else if(opr=="3"){
-	    	if(window.confirm("将会把项目关联的操作日志一起删除，确定要删除吗？")){ 
-				var url = '/sectorProjects/delete.do?projectid='+proid;
-				window.location.href=url;
-	    		return true; 
-	    		}else{ 
-	    		return false; 
-	    		}
-	    }else{ 
-	       alert("操作码有误，是否有非法操作，请联系软件质量室！"); 
-	       return false;
-	      }
-		}
-	}
+		$(function() {
+			//1.初始化Table
+			var oTable = new TableInit();
+			oTable.Init();
+		});
+
+		var TableInit = function() {
+			var oTableInit = new Object();
+			//初始化Table
+			oTableInit.Init = function() {
+				$('#tb_sectorproject').bootstrapTable({
+					url : '/sectorProjects/list.do', //请求后台的URL（*）
+					method : 'get', //请求方式（*）
+					toolbar : '#toolbar', //工具按钮用哪个容器
+					striped : true, //是否显示行间隔色
+					cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+					pagination : true, //是否显示分页（*）
+					sortable : false, //是否启用排序
+					sortOrder : "asc", //排序方式
+					queryParams : oTableInit.queryParams,//传递参数（*）
+					sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）
+					pageNumber : 1, //初始化加载第一页，默认第一页
+					pageSize : 10, //每页的记录行数（*）
+					pageList : [ 10, 25, 50, 100 ], //可供选择的每页的行数（*）
+					search : true, //是否显示表格搜索，此搜索会进服务端
+					strictSearch : true,
+					showColumns : false, //是否显示所有的列
+					showRefresh : true, //是否显示刷新按钮
+					minimumCountColumns : 2, //最少允许的列数
+					clickToSelect : true, //是否启用点击选中行
+					height : 500, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+					uniqueId : "projectid", //每一行的唯一标识，一般为主键列
+					showToggle : false, //是否显示详细视图和列表视图的切换按钮
+					cardView : false, //是否显示详细视图
+					detailView : false, //是否显示父子表
+					columns : [ {
+						checkbox : true,
+						width : '3%',
+					}, {
+						field : 'projectid',
+						title : 'projectid',
+						visible : false
+					}, {
+						field : 'sectorid',
+						title : 'sectorid',
+						visible : false
+					}, {
+						field : 'secondarySector',
+						title : 'secondarySector',
+						visible : false
+					}, {
+						field : 'projectname',
+						title : '项目名称',
+						width : '10%',
+						editable : {
+							type : 'text',
+							title : '项目名称',
+							emptytext : "无项目名称",
+							validate : function(value) {
+								if (!$.trim(value))
+									return '项目名称不能为空';
+								if (value.length > 20)
+									return '项目名称不能超过20个字符';
+								if (value.length < 2)
+									return '项目名称不能适于2个字符';
+							}
+						}
+					}, {
+						field : 'projectsign',
+						title : '项目标识',
+						width : '10%',
+						editable : {
+							type : 'text',
+							title : '项目标识',
+							emptytext : "无项目标识",
+							validate : function(value) {
+								if (!$.trim(value))
+									return '项目标识不能为空';
+								if (value.length > 20)
+									return '项目标识不能超过20个字符';
+								if (value.length < 2)
+									return '项目标识不能适于2个字符';
+							}
+						}
+					}, {
+						field : 'projectmanager',
+						title : '项目经理',
+						width : '10%',
+						editable : {
+							type : 'text',
+							title : '项目经理',
+							emptytext : "无项目经理",
+							validate : function(value) {
+								if (!$.trim(value))
+									return '项目经理不能为空';
+								if (value.length > 20)
+									return '项目经理不能超过20个字符';
+								if (value.length < 2)
+									return '项目经理不能适于2个字符';
+							}
+						}
+					}, {
+						field : 'projecttype',
+						title : '项目类型',
+						width : '10%',
+						editable : {
+							type : 'select',
+							title : '项目类型',
+							source : [ {
+								value : "0",
+								text : "系统项目"
+							}, {
+								value : "1",
+								text : "testlink项目"
+							} ]
+						}
+					}, {
+						field : 'departmenthead',
+						title : '二级部门经理',
+						width : '10%',
+					},{
+						field : 'departmentname',
+						title : '二级部门',
+						width : '10%',
+					}],
+					onEditableSave : function(field, row, oldValue, $el) {
+				    	var status = document.getElementById("loginstatus").value;
+						if(status=="false"){
+							if(window.confirm("你未登录哦，要先去登录吗？")){
+								var url = '/progressus/signin.jsp';
+								window.location.href=url;
+								return true; 
+							}else{
+								return false; 
+							} 	
+						}
+						
+						$('#tb_sectorproject').bootstrapTable("resetView");
+						$.ajax({
+							type : "post",
+							url : "/sectorProjects/update.do",
+							data : row,
+							dataType : 'JSON',
+							success : function(data, status) {
+								if (data.status == "success") {
+									alert(data.ms);
+								}else{
+									$('#tb_sectorproject').bootstrapTable('refresh');
+									alert(data.ms);
+								}
+							},
+							error : function() {
+								alert('编辑失败');
+							},
+							complete : function() {
+
+							}
+
+						});
+					}
+				});
+			};
+			//得到查询的参数
+			oTableInit.queryParams = function(params) {
+				var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+					limit : params.limit, //页面大小
+					offset : params.offset, //页码偏移量
+					search : params.search, //搜索参数
+				};
+				return temp;
+			};
+
+			return oTableInit;
+		};
+
+		$(document).ready(
+				function() {
+					$('#form_data').bootstrapValidator({
+						message : '当前填写信息无效！',
+						//live: 'submitted',
+						feedbackIcons : {
+							valid : 'glyphicon glyphicon-ok',
+							invalid : 'glyphicon glyphicon-remove',
+							validating : 'glyphicon glyphicon-refresh'
+						},
+						fields : {
+							projectname : {
+								message : '项目名称无效！',
+								validators : {
+									notEmpty : {
+										message : '项目名称不能为空'
+									},
+									stringLength : {
+										min : 2,
+										max : 20,
+										message : '项目名称长度必须在2~20个字符区间'
+									}
+								}
+							},
+							projectsign : {
+								message : '项目标识无效！',
+								validators : {
+									notEmpty : {
+										message : '项目标识不能为空'
+									},
+									stringLength : {
+										min : 2,
+										max : 20,
+										message : '项目标识长度必须在2~20个字符区间'
+									}
+								}
+							},
+							projectmanager : {
+								message : '项目经理无效！',
+								validators : {
+									notEmpty : {
+										message : '项目经理不能为空'
+									},
+									stringLength : {
+										min : 2,
+										max : 20,
+										message : '项目经理长度必须在2~20个字符区间'
+									}
+								}
+							}
+						}
+					}).on(
+							'success.form.bv',
+							function(e) {
+								// Prevent submit form
+								e.preventDefault();
+								var $form = $(e.target), validator = $form
+										.data('bootstrapValidator');
+								$form.find('.alert').html('计划创建成功！');
+							});
+				});
+	    
+	    // 提交表单
+	    function check_form()
+	    {
+	        var form_data = $('#form_data').serialize();
+	        $.param(form_data); 
+	        // 异步提交数据到action页面
+	        $.ajax(
+	                {
+	                    url: "projectadd.do",
+	                    data:form_data,
+	                    type: "post",
+	                    dataType : "json",
+	                    beforeSend:function()
+	                    {
+	                        $("#tip").html("<span style='color:blue'>正在处理...</span>");
+	                        return true;
+	                    },
+	                    success:function(data, status)
+	                    {
+	                        if(data.status == "success")
+	                        {
+	                            $("#tip").html("<span style='color:blueviolet'>恭喜，添加项目成功！</span>");
+	                            // document.location.href='system_notice.php'
+	                            alert(data.ms);
+	                            location.reload();
+	                        }else{
+	                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
+	                            alert(data.ms);
+	                            location.reload();
+	                        }
+	                    },
+	                    error:function()
+	                    {
+	                        alert('请求出错');
+	                        location.reload();
+	                    },
+	                    complete:function()
+	                    {
+	                        $('#addModal').hide();
+	                    }
+	                });
+
+	        return false;
+	    }
+
+	    btn_add.onclick=function(){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
+			}
+	    	$("#addModal").modal('show');
+	    }
+	    
+	    $(function () { $('#addModal').on('hide.bs.modal', function () {
+	        // 关闭时清空edit状态为add
+	        location.reload();
+	    })
+	    });
+	    
+	    btn_delete.onclick=function(){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
+			}
+			
+	        var selectIndex = $('input[name="btSelectItem"]:checked ').val();
+	        deleteItem($('#tb_sectorproject'), selectIndex, true);
+	    }
+	    
+	    function deleteItem($table, selectIndex, reLoad){
+            var ids = $.map($table.bootstrapTable('getSelections'), function (row) {
+                      return row.projectid;
+                       }); 
+	        if(ids.length != 0 ){
+	        	if(confirm("真的要删除项目吗?")){
+		                $.ajax({
+		                   type: "POST",
+		                   cache:false,
+		                   async : true,
+		                   dataType : "json",
+		                   url:  "delete.do",
+		                   contentType: "application/json", //必须有
+		                   data: JSON.stringify({"proids":ids}),
+		                   success: function(data, status){
+		                           if (data.status == "success"){
+		                               $table.bootstrapTable('hideRow', {index:selectIndex});
+		                               alert(data.ms);
+		                              if(reLoad){
+		                                  $table.bootstrapTable('refresh');
+		                              }
+		                           }else{
+		                        	   alert(data.ms);
+		                           }
+		                   },error:function()
+		                    {
+		                        alert('删除出错');
+		                    }
+		                });
+	            }    
+	        }else{
+	            alert('请选取要删除的数据行！');
+	        }
+	    }
+	   
 	</script>
 </body>
 </html>

@@ -97,14 +97,12 @@ public class SectorProjectsServiceImpl implements SectorProjectsService{
 			where += " sectorid=:sectorid  and ";
 		}*/
 		if (!StrLib.isEmpty(sp.getProjectmanager())) {
-			where += " projectname=:projectname  and ";
-		}
-		else if (!StrLib.isEmpty(sp.getProjectname())) {
-			where += " projectmanager=:projectmanager  and ";
-		}
-		
-		
-		if (where.length() == 7) {
+			where += " projectname like :projectname  or ";
+		}if (!StrLib.isEmpty(sp.getProjectname())) {
+			where += " projectmanager like :projectmanager  or ";
+		}if (!StrLib.isEmpty(sp.getProjectname())) {
+			where += " projectsign like :projectsign  or ";
+		}if (where.length() == 7) {
 			where = "";
 		} 
 		else{
