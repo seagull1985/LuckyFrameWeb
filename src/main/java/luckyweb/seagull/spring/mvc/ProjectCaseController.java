@@ -528,15 +528,19 @@ public class ProjectCaseController {
 		PrintWriter pw = rsp.getWriter();
 		try {
 			ProjectCase projectcase = new ProjectCase();
+			int moduleid=0;
 
 			String name = req.getParameter("name");
 			String projectid = req.getParameter("projectid");
-			String moduleid = req.getParameter("moduleid");
+			String modulename = req.getParameter("modulename");
 			String casetype = req.getParameter("casetype");
 			String remark = req.getParameter("remark");
+			
+			moduleid=moduleservice.getModuleIdByName(modulename);
+			
 			projectcase.setName(name);
 			projectcase.setProjectid(Integer.valueOf(projectid));
-			projectcase.setModuleid(Integer.valueOf(moduleid));
+			projectcase.setModuleid(moduleid);
 			projectcase.setCasetype(Integer.valueOf(casetype));
 			projectcase.setRemark(remark);
 

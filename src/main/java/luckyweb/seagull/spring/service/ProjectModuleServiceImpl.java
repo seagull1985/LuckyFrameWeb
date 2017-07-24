@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import luckyweb.seagull.spring.dao.ProjectModuleDao;
 import luckyweb.seagull.spring.entity.ProjectModule;
+import luckyweb.seagull.util.StrLib;
 
 @Service("projectModuleService")
 public class ProjectModuleServiceImpl implements ProjectModuleService{
@@ -131,4 +132,15 @@ public class ProjectModuleServiceImpl implements ProjectModuleService{
 		return result;
 	}
 	
+	@Override
+	public int getModuleIdByName(String modulename) throws Exception {
+		// TODO Auto-generated method stub
+		String id= this.projectmoduleDao.getModuleIdByName("select IFNULL(MAX(id),0) from project_module where modulename='"+modulename+"'");
+		if(!StrLib.isEmpty(id)){
+			return Integer.valueOf(id);
+		}else{
+			return 0;
+		}
+
+	}
 }

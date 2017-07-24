@@ -41,5 +41,5 @@ public interface ProjectModuleDao {
 	public int findRows(ProjectModule projectmodule,String hql);
 	
 	public List<ProjectModule> findJobsList();
-	public String getCaseMaxIndex(String sql) throws Exception ;
+	public String getModuleIdByName(String sql) throws Exception ;
 }

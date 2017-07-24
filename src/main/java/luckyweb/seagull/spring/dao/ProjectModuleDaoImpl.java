@@ -183,7 +183,7 @@ public class ProjectModuleDaoImpl extends HibernateDaoSupport implements Project
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public String getCaseMaxIndex(String sql) throws Exception {
+	public String getModuleIdByName(String sql) throws Exception {
 		// TODO Auto-generated method stub
 		List list=null;
 		Session session=this.getSession(true);
