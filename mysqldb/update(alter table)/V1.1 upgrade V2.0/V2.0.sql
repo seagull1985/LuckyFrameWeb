@@ -59,7 +59,7 @@ create table PROJECT_MODULE
   id                    int(9) not null AUTO_INCREMENT,
   projectid             int(8) not null COMMENT '项目ID',
   modulename            VARCHAR(30) COMMENT '模块名字',
-  hierarchical          int(4) COMMENT '层级关系',
+  pid          int(4) COMMENT '层级关系',
   primary key (ID)
 )default character set utf8;
 

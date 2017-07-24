@@ -29,8 +29,8 @@ public class ProjectModuleServiceImpl implements ProjectModuleService{
 	}
 	
 	@Override
-	public void delete(int id) throws Exception {
-		this.projectmoduleDao.delete(id);		
+	public void delete(ProjectModule projectmodule) throws Exception {
+		this.projectmoduleDao.delete(projectmodule);		
 	}
 	
 	@Override
@@ -89,7 +89,20 @@ public class ProjectModuleServiceImpl implements ProjectModuleService{
 	}
 
 	@Override
-	public List<ProjectModule> getModuleListByProjectid(int projectid){
+	public List<ProjectModule> getModuleListByProjectid(int projectid,int id){
+		// TODO Auto-generated method stub
+		List<ProjectModule> list= null;
+		try {
+			list=this.projectmoduleDao.getList(" from ProjectModule where projectid="+projectid+" and pid="+id+" order by id");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	@Override
+	public List<ProjectModule> getModuleAllListByProjectid(int projectid){
 		// TODO Auto-generated method stub
 		List<ProjectModule> list= null;
 		try {
@@ -99,6 +112,23 @@ public class ProjectModuleServiceImpl implements ProjectModuleService{
 			e.printStackTrace();
 		}
 		return list;
+	}
+	
+	@Override
+	public boolean getModuleIsParent(int id){
+		// TODO Auto-generated method stub
+		boolean result=false;
+		try {
+			List<ProjectModule> list= null;
+			list=this.projectmoduleDao.getList(" from ProjectModule where pid="+id+" order by id");
+			if(null!=list&&list.size()>0){
+				result=true;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 }

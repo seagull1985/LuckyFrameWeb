@@ -50,11 +50,11 @@ public class ProjectPlanServiceImpl implements ProjectPlanService{
 		if (projectplan.getProjectid()!=0&&projectplan.getProjectid()!=99) {
 			where += " projectid =:projectid  and ";
 		}if (null!=projectplan.getName()&&!"".equals(projectplan.getName())) {
-			where += " name like :name  or ";
+			where += " (name like :name  or ";
 		}if (null!=projectplan.getOperationer()&&!"".equals(projectplan.getOperationer())) {
 			where += " operationer like :operationer  or ";
 		}if (null!=projectplan.getRemark()&&!"".equals(projectplan.getRemark())) {
-			where += " remark like :remark  or ";
+			where += " remark like :remark)  or ";
 		}
 		if (where.length() == 7) {
 			where = "";

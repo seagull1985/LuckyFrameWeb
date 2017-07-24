@@ -19,7 +19,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
 import luckyweb.seagull.spring.service.OperationLogService;
@@ -265,6 +264,50 @@ public class ProjectCasestepsController {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(value = "/cpoststep.do")
+	public void cpoststep(HttpServletRequest req, HttpServletResponse rsp) throws IOException {
+		// 更新实体
+		rsp.setContentType("text/html;charset=GBK");
+		req.setCharacterEncoding("GBK");
+		PrintWriter pw = rsp.getWriter();
+		try {
+			ProjectCasesteps steps=new ProjectCasesteps();
+			
+			String path = req.getParameter("path");
+			String operation = req.getParameter("operation");
+			String parameters = req.getParameter("parameters");
+			String action = req.getParameter("action");
+			String caseid = req.getParameter("caseid");
+			String stepnum = req.getParameter("stepnum");
+			String expectedresult = req.getParameter("expectedresult");
+			String projectid = req.getParameter("projectid");
+			String steptype = req.getParameter("steptype");
+			steps.setPath(path);
+			steps.setOperation(operation);
+			steps.setParameters(parameters);
+			steps.setAction(action);
+			steps.setCaseid(Integer.valueOf(caseid));
+			steps.setStepnum(Integer.valueOf(stepnum));
+			steps.setExpectedresult(expectedresult);
+			steps.setProjectid(Integer.valueOf(projectid));
+			steps.setSteptype(Integer.valueOf(steptype));
+			
+			Date currentTime = new Date();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String time = formatter.format(currentTime);
+			steps.setTime(time);
+			steps.setOperationer("http-post");
+
+			int stepid = casestepsservice.add(steps);
+
+			pw.print(stepid);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			pw.print("fail");
 		}
 	}
 	

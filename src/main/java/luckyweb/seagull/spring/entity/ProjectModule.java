@@ -12,7 +12,7 @@ public class ProjectModule implements java.io.Serializable{
 	private int projectid;
 	private int mprojectid;
 	private String modulename;
-	private int hierarchical;
+	private int pid;
 	
 	public int getMprojectid() {
 		return mprojectid;
@@ -38,11 +38,11 @@ public class ProjectModule implements java.io.Serializable{
 	public void setModulename(String modulename) {
 		this.modulename = modulename;
 	}
-	public int getHierarchical() {
-		return hierarchical;
+	public int getPid() {
+		return pid;
 	}
-	public void setHierarchical(int hierarchical) {
-		this.hierarchical = hierarchical;
+	public void setPid(int pid) {
+		this.pid = pid;
 	}
     
 }

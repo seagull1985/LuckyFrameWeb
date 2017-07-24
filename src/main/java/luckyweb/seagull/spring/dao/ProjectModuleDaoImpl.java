@@ -25,9 +25,8 @@ public class ProjectModuleDaoImpl extends HibernateDaoSupport implements Project
 
 
 	@Override
-	public void delete(int id) throws Exception {
+	public void delete(ProjectModule projectmodule) throws Exception {
 		try{
-			ProjectModule projectmodule = this.load(id);
 		    this.getHibernateTemplate().delete(projectmodule);
 		}catch(Exception e){
 			e.printStackTrace();

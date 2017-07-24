@@ -77,9 +77,7 @@ public class ProjectPlanCaseController {
 
 			String planid = req.getParameter("planid");
 			ProjectPlan propaln = projectplanservice.load(Integer.valueOf(planid));
-			List<ProjectModule> modules = moduleservice.getModuleListByProjectid(propaln.getProjectid());
 			model.addAttribute("projectid", propaln.getProjectid());
-			model.addAttribute("modules", modules);
 			model.addAttribute("planid", planid);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -129,14 +127,20 @@ public class ProjectPlanCaseController {
 
 		List<ProjectCase> projectcases = projectcaseservice.findByPage(projectcase, offset, limit);
 		List<ProjectPlanCase> plancases = projectplancaseservice.getcases(planid);
-
+		List<ProjectModule> modulelist = moduleservice.getModuleList();
 		for (int i = 0; i < projectcases.size(); i++) {
+			ProjectCase pc = projectcases.get(i);
 			for (int j = 0; j < plancases.size(); j++) {
-				ProjectCase pc = projectcases.get(i);
 				ProjectPlanCase ppc = plancases.get(j);
 				if (pc.getId() == ppc.getCaseid()) {
 					projectcases.get(i).setChecktype(1);
 					projectcases.get(i).setPriority(plancases.get(j).getPriority());
+				}
+			}
+			// 更新模块名
+			for (ProjectModule module : modulelist) {
+				if (pc.getModuleid() == module.getId()) {
+					projectcases.get(i).setModulename(module.getModulename());
 				}
 			}
 		}
