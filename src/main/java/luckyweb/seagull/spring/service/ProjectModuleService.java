@@ -19,4 +19,5 @@ public interface ProjectModuleService {
 	public List<ProjectModule> getModuleListByProjectid(int projectid,int id);
 	public boolean getModuleIsParent(int id);
 	public List<ProjectModule> getModuleAllListByProjectid(int projectid);
+	public int getModuleIdByName(String modulename) throws Exception;
 }
