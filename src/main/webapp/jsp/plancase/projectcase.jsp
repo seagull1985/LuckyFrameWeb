@@ -36,10 +36,11 @@
 					<div class="panel-heading">查询条件</div>
 					<div class="panel-body">
 						<div class="form-group" style="margin-top: 15px">
-							<label class="control-label col-sm-1" style="width:6%" for="txt_search_project">项目名称:</label>
+							<label class="control-label col-sm-1" style="width: 6%"
+								for="txt_search_project">项目名称:</label>
 							<div class="col-sm-3">
 								<select class="form-control" id="search_project"
-									onchange="searchproject()" onFocus="searchproject()">
+									onchange="searchproject()">
 									<c:forEach var="p" items="${projects }">
 										<option value="${p.projectid}">${p.projectname}</option>
 									</c:forEach>
@@ -48,11 +49,18 @@
 						</div>
 
 						<div class="form-group" style="margin-top: 15px">
-							<label class="control-label col-sm-1" style="width:6%" for="txt_search_module">用例集:</label>
+							<label class="control-label col-sm-1" style="width: 6%"
+								for="txt_search_module">用例集:</label>
 							<div class="col-sm-3">
-								<select class="form-control" id="search_module" onchange="searchmodule()" >
-                                      <option value="0">全部</option>
-								</select>
+								<input type="text" class="form-control" id="module_tree"
+									placeholder="点击选择或编辑用例集" onclick="showMenu()" />
+								 <input	type="hidden" id="search_module" value="0" />
+								<div id="menuContent2" class="menuContent"
+									style="display: none; position: absolute; width: 95%; border: 1px solid rgb(170, 170, 170); z-index: 10; background-color: rgba(51, 204, 255, 0.8);">
+									<ul id="treeDemo" class="ztree"
+										style="margin-top: 0; width: 160px; height: auto;"></ul>
+								</div>
+
 							</div>
 						</div>
 
@@ -68,9 +76,6 @@
 					</button>
 					<button id="btn_edit" type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;编辑步骤
-					</button>
-					<button id="btn_addmodule" type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp;增加用例集
 					</button>
 				</div>
 				<table id="tb_projectcase"></table>
@@ -93,7 +98,7 @@
 											<label for="projectid" class="col-sm-3 control-label">项目名称</label>
 											<div class="col-sm-9">
 												<select class="form-control" name="projectid" id="projectid"
-													onchange="getModule(1)" onFocus="getModule(1)">
+													onchange="clearModule()">
 													<c:forEach var="p" items="${projects }">
 														<option value="${p.projectid}">${p.projectname}</option>
 													</c:forEach>
@@ -102,12 +107,17 @@
 										</div>
 
 										<div class="form-group">
-											<label for="moduleid" class="col-sm-3 control-label">用例集</label>
-											<div class="col-sm-9">
-												<select class="form-control" name="moduleid" id="moduleid">
-													<option value="0">全部</option>
-												</select>
+										<label for="moduleid" class="col-sm-3 control-label">测试集</label>
+										<div class="col-sm-9">
+											<input type="text" class="form-control" id="modulename" name="modulename"
+												placeholder="点击选择用例集" onclick="showMenuAddCase()" /> 
+											<input class="form-control" type="hidden" name="moduleid" id="moduleid"/>
+											<div id="menuContent" class="menuContent"
+												style="display: none; position: absolute; width: 90%; border: 1px solid rgb(170, 170, 170); z-index: 10; background-color: rgba(51, 204, 255, 0.8);">
+												<ul id="treeDemo1" class="ztree"
+													style="margin-top: 0; width: 80px; height: auto;"></ul>
 											</div>
+										</div>
 										</div>
 
 										<div class="form-group">
@@ -158,72 +168,20 @@
 						<!-- /.modal -->
 					</div>
 				</form>
-
-
-				<!-- 增加测试用例集 -->
-				<form method="post" action="" class="form-horizontal" role="form"
-					id="Module_data" onsubmit="return check_moduleform()"
-					style="margin: 20px;">
-					<div class="modal fade" id="addModule" tabindex="-1" role="dialog"
-						aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal"
-										aria-hidden="true">&times;</button>
-									<h4 class="modal-title" id="myModalLabel">用例集信息</h4>
-								</div>
-								<div class="modal-body">
-									<form class="form-horizontal" role="form">
-										<div class="form-group">
-											<label for="projectid" class="col-sm-3 control-label">项目名称</label>
-											<div class="col-sm-9">
-												<select class="form-control" name="mprojectid"
-													id="mprojectid">
-													<c:forEach var="p" items="${projects }">
-														<option value="${p.projectid}">${p.projectname}</option>
-													</c:forEach>
-												</select>
-											</div>
-										</div>
-
-										<div class="form-group">
-											<label for="modulename" class="col-sm-3 control-label">用例集名称</label>
-											<div class="col-sm-9">
-												<input type="text" class="form-control" name="modulename"
-													id="modulename" placeholder="用例集名称">
-											</div>
-										</div>
-
-									</form>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default"
-										data-dismiss="modal">关闭</button>
-									<button type="submit" class="btn btn-primary">提交</button>
-									&nbsp;&nbsp;&nbsp;&nbsp;<span id="tip"> </span>
-								</div>
-							</div>
-							<!-- /.modal-content -->
-						</div>
-						<!-- /.modal -->
-					</div>
-				</form>
-
+				
 			</div>
 			</article>
 		</div>
 	</div>
 
 	<script type="text/javascript">
+		//alert(genJsonConfig());
 		$(function() {
 			$("#projectid option[value='99']").remove();
-			$("#mprojectid option[value='99']").remove();
 			$('#search_project').val('${projectid }');
 			if(${projectid }!=99){
 				$('#projectid').val('${projectid }');
-				$('#mprojectid').val('${projectid }');
-				getModule(0);
+				$.fn.zTree.init($("#treeDemo"), genJsonConfig());
 			}
 			//1.初始化Table
 			var oTable = new TableInit();
@@ -631,17 +589,10 @@
 								$form.find('.alert').html('用例创建成功！');
 							});
 				});
-
+		
 		var searchproject = function() {
-			getModule(0);
-			//1.初始化Table
-			var oTable = new TableInit();
-			$('#tb_projectcase').bootstrapTable('destroy');
-			oTable.Init();
-		};
-
-		var searchmodule = function() {
-			//1.初始化Table
+			//1.初始化Table						
+			$.fn.zTree.init($("#treeDemo"), genJsonConfig());
 			var oTable = new TableInit();
 			$('#tb_projectcase').bootstrapTable('destroy');
 			oTable.Init();
@@ -651,7 +602,8 @@
 	    function check_form()
 	    {
 	        var form_data = $('#form_data').serialize();
-	        $.param(form_data); 
+	        $.param(form_data);
+	        console.log(form_data);
 	        // 异步提交数据到action页面
 	        $.ajax(
 	                {
@@ -690,53 +642,7 @@
 	                });
 
 	        return false;
-	    }
-	    
-	    // 提交表单
-	    function check_moduleform()
-	    {
-	        var form_data = $('#Module_data').serialize();
-	        $.param(form_data); 
-	        // 异步提交数据到action页面
-	        $.ajax(
-	                {
-	                    url: "moduleadd.do",
-	                    data:form_data,
-	                    type: "post",
-	                    dataType : 'JSON',
-	                    beforeSend:function()
-	                    {
-	                        $("#tip").html("<span style='color:blue'>正在处理...</span>");
-	                        return true;
-	                    },
-	                    success:function(data, status)
-	                    {
-	                        if(data.status == "success")
-	                        {
-	                            $("#tip").html("<span style='color:blueviolet'>恭喜，添加用例集成功！</span>");
-	                            // document.location.href='system_notice.php'
-	                            alert(data.ms);
-	                            location.reload();
-	                        }else{
-	                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
-	                            alert(data.ms);
-	                            location.reload();
-	                        }
-	                    },
-	                    error:function()
-	                    {
-	                        alert('请求出错');
-	                        location.reload();
-	                    },
-	                    complete:function()
-	                    {
-	                        $('#addModule').hide();
-	                    }
-	                });
-
-	        return false;
-	    }
-	    
+	    }    
 	    
 	    btn_add.onclick=function(){
 	    	var status = document.getElementById("loginstatus").value;
@@ -750,35 +656,14 @@
 				} 	
 			}
 			
-			getModule(1);
 	    	$("#addModal").modal('show');
-	    }
-	    
-	    btn_addmodule.onclick=function(){
-	    	var status = document.getElementById("loginstatus").value;
-			if(status=="false"){
-				if(window.confirm("你未登录哦，要先去登录吗？")){
-					var url = '/progressus/signin.jsp';
-					window.location.href=url;
-					return true; 
-				}else{
-					return false; 
-				} 	
-			}
-	    	$("#addModule").modal('show');
 	    }
 	    
 	    $(function () { $('#addModal').on('hide.bs.modal', function () {
 	        // 关闭时清空edit状态为add
 	        location.reload();
 	    })
-	    });	    
-	    
-	    $(function () { $('#addModule').on('hide.bs.modal', function () {
-	        // 关闭时清空edit状态为add
-	        location.reload();
-	    })
-	    });	
+	    });
 	    
 	    btn_delete.onclick=function(){
 	    	var status = document.getElementById("loginstatus").value;
@@ -852,57 +737,256 @@
             }
 
 	    }
+	//=========================================================================================		
+		function genJsonConfig(){
+			var setting = {
+					async: {
+						enable: true,
+						url:"/projectCase/getmodulelist.do",
+						autoParam:["id", "name=n", "level=lv"],
+						otherParam:{"projectid":$('#search_project').val()},
+						dataFilter: filter
+					},
+					view: {expandSpeed:"",
+						addHoverDom: addHoverDom,
+						removeHoverDom: removeHoverDom,
+						selectedMulti: false
+					},
+					edit: {
+						enable: true
+					},
+					data: {
+						simpleData: {
+							enable: true
+						}
+					},
+					callback: {
+						beforeRemove: beforeRemove,
+						beforeRename: beforeRename,
+						beforeClick: beforeClick
+					}
+				}; 
+			
+			return setting;
+		}
 
-	    //按上级ID取子列表
-		 function getModule(type){
-//		    clearSel(); //清空节点
-            var projectid;
-            if(type==0){
-            	if(jQuery("#search_project").val() == ""||jQuery("#search_project").val() == "99") return;
-            	var projectid = jQuery("#search_project").val();
-            }else if(type==1){
-    		    if(jQuery("#projectid").val() == ""||jQuery("#projectid").val() == "99") return;
-    		    var projectid = jQuery("#projectid").val();
-            }else{
-            	return;
-            }
-		     var url ="/projectCase/getmodulelist.do?projectid="+projectid;
-		     jQuery.getJSON(url,null,function call(result){
-		    	 clearSel(type);
-		    	 setPlan(result,type); 
-		      });
-	    
+		function filter(treeId, parentNode, childNodes) {
+			if (!childNodes) return null;
+			for (var i=0, l=childNodes.length; i<l; i++) {
+				childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
+			}
+			return childNodes;
+		}
+		
+		function beforeClick(treeId, treeNode) {
+			$("#module_tree").val(treeNode.name);
+			$("#search_module").val(treeNode.id);
+			var oTable = new TableInit();
+			$('#tb_projectcase').bootstrapTable('destroy');
+			oTable.Init();
+			hideMenu();
+		}
+		
+		function beforeRemove(treeId, treeNode) {
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
+			}
+			
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+			zTree.selectNode(treeNode);
+			if(null==treeNode.pId){
+				$.fn.zTree.init($("#treeDemo"), genJsonConfig());
+				 alert('项目名称不能删除!');
+				 return false;
+			}
+			
+			if(confirm("确认删除 测试集 -- " + treeNode.name + " 吗？")){
+				var dataSend = JSON.stringify({"id":treeNode.id});
+                $.ajax({
+	                   type: "POST",
+	                   cache:false,
+	                   async : true,
+	                   dataType : "json",
+	                   url:  "moduledel.do",
+	                   data: dataSend,
+	                   success: function(data, status){
+	                           if (data.status == "success"){
+	                               alert(data.ms);
+	                           }else{
+	                        	   $.fn.zTree.init($("#treeDemo"), genJsonConfig());
+	                        	   alert(data.ms);
+	                           }
+	                   },error:function()
+	                    {
+	                	    $.fn.zTree.init($("#treeDemo"), genJsonConfig());
+	                        alert('删除出错');
+	                    }
+	                });
+			}
+		}
+		
+		function beforeRename(treeId, treeNode, newName) {
+			if (newName.length == 0) {
+				setTimeout(function() {
+					var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+					zTree.cancelEditName();
+					alert("节点名称不能为空.");
+				}, 0);
+				return false;
+			}else{
+		    	var status = document.getElementById("loginstatus").value;
+				if(status=="false"){
+					if(window.confirm("你未登录哦，要先去登录吗？")){
+						var url = '/progressus/signin.jsp';
+						window.location.href=url;
+						return true; 
+					}else{
+						return false; 
+					} 	
+				}
+				
+				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+				zTree.selectNode(treeNode);
+				if(null==treeNode.pId){
+					$.fn.zTree.init($("#treeDemo"), genJsonConfig());
+					 alert('项目名称不能编辑!');
+					 return false;
+				}
+				
+				var dataSend = JSON.stringify({"pid":treeNode.pId,"name":newName,"projectid":$('#search_project').val()});
+                $.ajax({
+	                   type: "POST",
+	                   cache:false,
+	                   async : true,
+	                   dataType : "json",
+	                   url:  "moduleadd.do",
+	                   data: dataSend,
+	                   success: function(data, status){
+	                           if (data.status == "success"){
+	                               alert(data.ms);
+	                           }else{
+	                        	   $.fn.zTree.init($("#treeDemo"), genJsonConfig());
+	                        	   alert(data.ms);
+	                           }
+	                   },error:function()
+	                    {
+	                	   $.fn.zTree.init($("#treeDemo"), genJsonConfig());
+	                        alert('保存出错');
+	                    }
+	                });
+			}
+			return true;
+		}
+
+		var newCount = 1;
+		function addHoverDom(treeId, treeNode) {
+			var sObj = $("#" + treeNode.tId + "_span");
+			if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+			var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+				+ "' title='add node' onfocus='this.blur();'></span>";
+			sObj.after(addStr);
+			var btn = $("#addBtn_"+treeNode.tId);
+			if (btn) btn.bind("click", function(){
+				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+				zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, name:"new node" + (newCount++)});
+				return false;
+			});
+		};
+		function removeHoverDom(treeId, treeNode) {
+			$("#addBtn_"+treeNode.tId).unbind().remove();
+		};
+		
+
+		//显示菜单
+		function showMenu() {
+		    $("#menuContent2").css({ left: "15px", top: "34px" }).slideDown("fast");
+
+		    $("body").bind("mousedown", onBodyDown);
+		}
+		//隐藏菜单
+		function hideMenu() {
+		    $("#menuContent2").fadeOut("fast");
+		    $("body").unbind("mousedown", onBodyDown);
+		}
+		
+		function onBodyDown(event) {
+		    if (!(event.target.id == "menuBtn" || event.target.id == "menuContent2" || event.target.id == "module_tree" || $(event.target).parents("#menuContent2").length > 0)) {
+		        hideMenu();
 		    }
-	    
-		  //设置子列表
-		 function setPlan(result,type){	    
-	  	   var options = "";
-	  	   options +=  "<option value='0'>全部</option>";
-		   jQuery.each(result.data, function(i, node){
-			  options +=  "<option value='"+node.id+"'>"+node.modulename+"</option>";
-		      }); 
-			  if(type==0){
-		  	      console.log(options);
-				  jQuery("#search_module").html(options);
-			  }else{
-				  jQuery("#moduleid").html(options);
-			  }		      
+		}
+		
+		//========================新增用例 module树=================================================================		
+		function genJsonConfigAddCase(){
+			var setting = {
+					async: {
+						enable: true,
+						url:"/projectCase/getmodulelist.do",
+						autoParam:["id", "name=n", "level=lv"],
+						otherParam:{"projectid":$('#projectid').val()},
+						dataFilter: filterAddCase
+					},
+					view: {expandSpeed:"",
+						selectedMulti: false
+					},
+					edit: {
+						enable: false
+					},
+					data: {
+						simpleData: {
+							enable: true
+						}
+					},
+					callback: {
+						beforeClick: beforeClickAddCase
+					}
+				}; 
+			
+			return setting;
+		}
+
+		function filterAddCase(treeId, parentNode, childNodes) {
+			if (!childNodes) return null;
+			for (var i=0, l=childNodes.length; i<l; i++) {
+				childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
+			}
+			return childNodes;
+		}
+		
+		function beforeClickAddCase(treeId, treeNode) {
+			$("#modulename").val(treeNode.name);
+			$("#moduleid").val(treeNode.id);
+			hideMenuAddCase();
+		}		
+
+		//显示菜单
+		function showMenuAddCase() {
+		    $("#menuContent").css({ left: "15px", top: "34px" }).slideDown("fast");
+		    $("body").bind("mousedown", onBodyDown);
+		    $.fn.zTree.init($("#treeDemo1"), genJsonConfigAddCase());
+		}
+		//隐藏菜单
+		function hideMenuAddCase() {
+		    $("#menuContent").fadeOut("fast");
+		    $("body").unbind("mousedown", onBodyDown);
+		}
+		
+		function onBodyDownAddCase(event) {
+		    if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || event.target.id == "modulename" || $(event.target).parents("#menuContent").length > 0)) {
+		        hideMenu();
 		    }
-		  
-		 // 清空下拉列表
-	     function clearSel(type){  
-	    	if(type==0){
-		  while(jQuery("#search_module").length>1){
-			  $("#search_module option[index='1']").remove();
-		//	 document.getElementById("checkentry").options.remove("1"); 
-		    }
-	    	}else{
-	  		  while(jQuery("#moduleid").length>1){
-				  $("#moduleid option[index='1']").remove();
-			//	 document.getElementById("checkentry").options.remove("1"); 
-			    }
-	    	}
-		   }
+		}
+		
+		function clearModule(){
+			$("#modulename").val("");
+			$("#moduleid").val("");
+		}
 	</script>
 </body>
 </html>

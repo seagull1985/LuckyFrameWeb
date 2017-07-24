@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectModule;
+import luckyweb.seagull.spring.entity.ProjectModuleJson;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.service.OperationLogService;
@@ -44,7 +45,7 @@ public class ProjectCaseController {
 
 	@Resource(name = "projectModuleService")
 	private ProjectModuleService moduleservice;
-	
+
 	@Resource(name = "sectorprojectsService")
 	private SectorProjectsService sectorprojectsService;
 
@@ -118,24 +119,21 @@ public class ProjectCaseController {
 		}
 		List<ProjectCase> projectcases = projectcaseservice.findByPage(projectcase, offset, limit);
 		List<SectorProjects> prolist = QueueListener.qa_projlist;
-		List<ProjectModule> modulelist=moduleservice.getModuleList();
+		List<ProjectModule> modulelist = moduleservice.getModuleList();
 		for (int i = 0; i < projectcases.size(); i++) {
 			ProjectCase pcase = projectcases.get(i);
-			//更新项目名
+			// 更新项目名
 			for (SectorProjects projectlist : prolist) {
 				if (pcase.getProjectid() == projectlist.getProjectid()) {
-					pcase.setProjectname(projectlist.getProjectname());
-					projectcases.set(i, pcase);
+					projectcases.get(i).setProjectname(projectlist.getProjectname());
 				}
 			}
-			//更新模块名
+			// 更新模块名
 			for (ProjectModule module : modulelist) {
 				if (pcase.getModuleid() == module.getId()) {
-					pcase.setModulename(module.getModulename());
-					projectcases.set(i, pcase);
+					projectcases.get(i).setModulename(module.getModulename());
 				}
 			}
-			
 
 		}
 		// 转换成json字符串
@@ -224,9 +222,9 @@ public class ProjectCaseController {
 				projectcase.setTime(time);
 
 				SectorProjects sp = sectorprojectsService.loadob(projectcase.getProjectid());
-				String maxindex =projectcaseservice.getCaseMaxIndex(projectcase.getProjectid());
-				int index=Integer.valueOf(maxindex)+1;
-				projectcase.setSign(sp.getProjectsign() + "-" +index);
+				String maxindex = projectcaseservice.getCaseMaxIndex(projectcase.getProjectid());
+				int index = Integer.valueOf(maxindex) + 1;
+				projectcase.setSign(sp.getProjectsign() + "-" + index);
 				projectcase.setProjectindex(index);
 				int caseid = projectcaseservice.add(projectcase);
 				operationlogservice.add(req, "PROJECT_CASE", caseid, projectcase.getProjectid(),
@@ -281,11 +279,10 @@ public class ProjectCaseController {
 
 				for (int i = 0; i < jsonarr.size(); i++) {
 					int id = Integer.valueOf(jsonarr.get(i).toString());
-					ProjectCase pc=projectcaseservice.load(id);
+					ProjectCase pc = projectcaseservice.load(id);
 					casestepsservice.delforcaseid(id);
 					projectcaseservice.delete(id);
-					operationlogservice.add(req, "PROJECT_CASE", pc.getId(), pc.getProjectid(),
-							"删除用例成功！");
+					operationlogservice.add(req, "PROJECT_CASE", pc.getId(), pc.getProjectid(), "删除用例成功！");
 				}
 				json.put("status", "success");
 				json.put("ms", "删除成功!");
@@ -306,16 +303,16 @@ public class ProjectCaseController {
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
 			String sign = req.getParameter("sign");
-			
-			ProjectCase pc=projectcaseservice.getCaseBySign(sign);
-			String jsonStr=JSONObject.fromObject(pc).toString();
+
+			ProjectCase pc = projectcaseservice.getCaseBySign(sign);
+			String jsonStr = JSONObject.fromObject(pc).toString();
 			pw.print(jsonStr);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 添加用例集
 	 * 
@@ -329,23 +326,43 @@ public class ProjectCaseController {
 	 * @Description:
 	 */
 	@RequestMapping(value = "/moduleadd.do")
-	public void addModule(ProjectModule projectmodule, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+	public void addModule(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
 		try {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
+			ProjectModule projectmodule = new ProjectModule();
 			if (!UserLoginController.permissionboolean(req, "case_1")) {
 				json.put("status", "fail");
 				json.put("ms", "添加失败,权限不足,请联系管理员!");
 			} else {
-				projectmodule.setProjectid(projectmodule.getMprojectid());
+				StringBuilder sb = new StringBuilder();
+				try (BufferedReader reader = req.getReader();) {
+					char[] buff = new char[1024];
+					int len;
+					while ((len = reader.read(buff)) != -1) {
+						sb.append(buff, 0, len);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
+
+				int projectid = Integer.valueOf(jsonObject.getString("projectid"));
+				int pid = Integer.valueOf(jsonObject.getString("pid"));
+
+				String name = jsonObject.getString("name");
+				projectmodule.setProjectid(projectid);
+				projectmodule.setPid(pid);
+				;
+				projectmodule.setModulename(name);
 				int id = moduleservice.add(projectmodule);
-				operationlogservice.add(req, "PROJECT_CASE", id, projectmodule.getProjectid(),
-						"添加用例集成功！");
+				operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(), "保存用例集成功！");
 
 				json.put("status", "success");
-				json.put("ms", "添加用例集成功！");
+				json.put("ms", "保存用例集成功！");
+
 			}
 			pw.print(json.toString());
 
@@ -354,9 +371,72 @@ public class ProjectCaseController {
 		}
 
 	}
-	
+
 	/**
-	 * 联动查询测试集
+	 * 删除用例集
+	 * 
+	 * @param tj
+	 * @param br
+	 * @param model
+	 * @param req
+	 * @param rsp
+	 * @return
+	 * @throws Exception
+	 * @Description:
+	 */
+	@RequestMapping(value = "/moduledel.do")
+	public void delModule(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "case_2")) {
+				json.put("status", "fail");
+				json.put("ms", "删除失败,权限不足,请联系管理员!");
+			} else {
+				StringBuilder sb = new StringBuilder();
+				try (BufferedReader reader = req.getReader();) {
+					char[] buff = new char[1024];
+					int len;
+					while ((len = reader.read(buff)) != -1) {
+						sb.append(buff, 0, len);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
+
+				int id = Integer.valueOf(jsonObject.getString("id"));
+				ProjectModule projectmodule = moduleservice.load(id);
+
+				ProjectCase projectcase = new ProjectCase();
+				projectcase.setModuleid(id);
+				int casecount = projectcaseservice.findRows(projectcase);
+
+				if (casecount == 0) {
+					moduleservice.delete(projectmodule);
+					operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(), "删除用例集成功！");
+
+					json.put("status", "success");
+					json.put("ms", "删除用例集成功！");
+				} else {
+					json.put("status", "fail");
+					json.put("ms", "此用例集中包括了" + casecount + "条用例，不能删除!");
+				}
+
+			}
+			pw.print(json.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * 查询测试集
+	 * 
 	 * @param tj
 	 * @param br
 	 * @param model
@@ -367,23 +447,120 @@ public class ProjectCaseController {
 	 * @Description:
 	 */
 	@RequestMapping(value = "/getmodulelist.do")
-	public void getplanlist(HttpServletRequest req, HttpServletResponse rsp) throws Exception{	    
-		int	projectid = Integer.valueOf(req.getParameter("projectid"));
+	public void getmodulelist(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		rsp.setContentType("text/html;charset=utf-8");
+		req.setCharacterEncoding("utf-8");
+		int id = 0;
+		int projectid = Integer.valueOf(req.getParameter("projectid"));
+		String idstr = req.getParameter("id");
+		JSONObject json = new JSONObject();
+		JSONArray jsonarr = new JSONArray();
+		if (!StrLib.isEmpty(idstr)) {
+			id = Integer.valueOf(idstr);
 
-		ProjectModule projectmodule = new ProjectModule();
-		projectmodule.setProjectid(projectid);
-		List<ProjectModule> modules = moduleservice.getModuleListByProjectid(projectid);
-		
-		// 取集合
-	    rsp.setContentType("text/xml;charset=utf-8");
+			List<ProjectModule> modules = moduleservice.getModuleListByProjectid(projectid, id);
+			for (ProjectModule projectmodule : modules) {
+				ProjectModuleJson modulejson = new ProjectModuleJson();
+				modulejson.setId(projectmodule.getId());
+				modulejson.setName(projectmodule.getModulename());
+				boolean isParent = moduleservice.getModuleIsParent(projectmodule.getId());
+				modulejson.setisParent(isParent);
+				jsonarr.add(json.fromObject(modulejson));
+			}
+		} else {
+			List<SectorProjects> prolist = QueueListener.qa_projlist;
+			for (SectorProjects sp : prolist) {
+				if (sp.getProjectid() == projectid) {
+					ProjectModuleJson modulejson = new ProjectModuleJson();
+					modulejson.setId(0);
+					modulejson.setName(sp.getProjectname());
+					List<ProjectModule> modules = moduleservice.getModuleListByProjectid(projectid, 0);
+					if (modules.size() > 0) {
+						modulejson.setisParent(true);
+					} else {
+						modulejson.setisParent(false);
+					}
 
-		JSONArray jsonArray = JSONArray.fromObject(modules);
-		JSONObject jsobjcet = new JSONObject();
-		jsobjcet.put("data", jsonArray); 
-		
-		rsp.getWriter().write(jsobjcet.toString());
+					jsonarr.add(json.fromObject(modulejson));
+				}
+			}
+		}
+
+		String jsonstr = jsonarr.toString().replace("parent", "isParent");
+		rsp.getWriter().write(jsonstr);
 	}
-	
+
+	/**
+	 * 查询项目中的所有测试集
+	 * 
+	 * @param tj
+	 * @param br
+	 * @param model
+	 * @param req
+	 * @param rsp
+	 * @return
+	 * @throws Exception
+	 * @Description:
+	 */
+	@RequestMapping(value = "/getmodulealllist.do")
+	public void getmodulealllist(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		rsp.setContentType("text/html;charset=utf-8");
+		req.setCharacterEncoding("utf-8");
+		int projectid = Integer.valueOf(req.getParameter("projectid"));
+		JSONArray jsonarr = new JSONArray();
+		List<ProjectModule> modules = moduleservice.getModuleAllListByProjectid(projectid);
+		for (ProjectModule projectmodule : modules) {
+			JSONObject json = new JSONObject();
+			json.put("moduleid", projectmodule.getId());
+			json.put("name", projectmodule.getModulename());
+			jsonarr.add(json);
+		}
+
+		String jsonstr = jsonarr.toString();
+		rsp.getWriter().write(jsonstr);
+	}
+
+	@RequestMapping(value = "/cpostcase.do")
+	public void cpostcase(HttpServletRequest req, HttpServletResponse rsp) throws IOException {
+		// 更新实体
+		rsp.setContentType("text/html;charset=GBK");
+		req.setCharacterEncoding("GBK");
+		PrintWriter pw = rsp.getWriter();
+		try {
+			ProjectCase projectcase = new ProjectCase();
+
+			String name = req.getParameter("name");
+			String projectid = req.getParameter("projectid");
+			String moduleid = req.getParameter("moduleid");
+			String casetype = req.getParameter("casetype");
+			String remark = req.getParameter("remark");
+			projectcase.setName(name);
+			projectcase.setProjectid(Integer.valueOf(projectid));
+			projectcase.setModuleid(Integer.valueOf(moduleid));
+			projectcase.setCasetype(Integer.valueOf(casetype));
+			projectcase.setRemark(remark);
+
+			Date currentTime = new Date();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String time = formatter.format(currentTime);
+			projectcase.setTime(time);
+			projectcase.setOperationer("http-post");
+
+			SectorProjects sp = sectorprojectsService.loadob(projectcase.getProjectid());
+			String maxindex = projectcaseservice.getCaseMaxIndex(projectcase.getProjectid());
+			int index = Integer.valueOf(maxindex) + 1;
+			projectcase.setSign(sp.getProjectsign() + "-" + index);
+			projectcase.setProjectindex(index);
+			int caseid = projectcaseservice.add(projectcase);
+
+			pw.print(caseid);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			pw.print("fail");
+		}
+	}
+
 	public static void main(String[] args) throws Exception {
 
 	}

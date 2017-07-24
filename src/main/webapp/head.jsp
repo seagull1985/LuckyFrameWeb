@@ -7,6 +7,7 @@
 	<!-- Custom styles for our template -->
 	<link rel="stylesheet" href="/progressus/assets/css/bootstrap-theme.css" media="screen" >
 	<link rel="stylesheet" href="/progressus/assets/css/bootstrap-table.css" media="screen" >
+	<link rel="stylesheet" href="/progressus/assets/css/metroStyle.css" media="screen" >
 	<link rel="stylesheet" href="/progressus/assets/css/main.css">
 	
 	<script type="text/javascript" src="/progressus/assets/js/jquery-1.10.2.min.js"></script>
@@ -17,6 +18,7 @@
 		<script src="/progressus/assets/js/bootstrap-editable.js"></script>
 	<script src="/progressus/assets/js/bootstraptable/locale/bootstrap-table-zh-CN.js"></script>
 	<script src="/progressus/assets/js/headroom.min.js"></script>
+	<script src="/progressus/assets/js/jquery.ztree.all.js"></script>
 	<script src="/progressus/assets/js/jQuery.headroom.min.js"></script>
 	<script src="/progressus/assets/js/template.js"></script>
     <script type="text/javascript" src="/js/easyui/jquery.easyui.min.js"></script>

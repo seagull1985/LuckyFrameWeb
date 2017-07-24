@@ -9,12 +9,14 @@ import luckyweb.seagull.spring.entity.ProjectModule;
 @Transactional
 public interface ProjectModuleService {
 	public int add(ProjectModule projectmodule)throws Exception;
-	public void delete(int id)throws Exception;
+	public void delete(ProjectModule projectmodule)throws Exception;
 	public void modify(ProjectModule projectmodule)throws Exception;
 	public ProjectModule load(int id)throws Exception;
 	
 	public List findByPage( final Object value,final int offset, final int pageSize);
 	public int findRows(ProjectModule projectmodule) ;
 	public List<ProjectModule> getModuleList();
-	public List<ProjectModule> getModuleListByProjectid(int projectid);
+	public List<ProjectModule> getModuleListByProjectid(int projectid,int id);
+	public boolean getModuleIsParent(int id);
+	public List<ProjectModule> getModuleAllListByProjectid(int projectid);
 }

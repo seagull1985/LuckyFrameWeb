@@ -18,7 +18,7 @@ public interface ProjectModuleDao {
 
 	public void modifyInfo(ProjectModule projectmodule) throws Exception;
 
-	public void delete(int id) throws Exception;
+	public void delete(ProjectModule projectmodule) throws Exception;
 
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public List<ProjectModule> list(ProjectModule projectmodule) throws Exception;

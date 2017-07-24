@@ -52,13 +52,13 @@ public class ProjectCaseServiceImpl implements ProjectCaseService{
 		}if (projectcase.getModuleid()!=0) {
 			where += " moduleid =:moduleid  and ";
 		}if (null!=projectcase.getSign()&&!"".equals(projectcase.getSign())) {
-			where += " sign like :sign  or ";
+			where += " (sign like :sign  or ";
 		}if (null!=projectcase.getName()&&!"".equals(projectcase.getName())) {
 			where += " name like :name  or ";
 		}if (null!=projectcase.getOperationer()&&!"".equals(projectcase.getOperationer())) {
 			where += " operationer like :operationer  or ";
 		}if (null!=projectcase.getRemark()&&!"".equals(projectcase.getRemark())) {
-			where += " remark like :remark  or ";
+			where += " remark like :remark)  or ";
 		}
 		if (where.length() == 7) {
 			where = "";

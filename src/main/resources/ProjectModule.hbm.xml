@@ -15,8 +15,8 @@
 		<property name="modulename" type="java.lang.String">
 			<column name="modulename" length="30" not-null="false" />
 		</property>
-		<property name="hierarchical" type="java.lang.Integer">
-			<column name="hierarchical" length="4" not-null="false" />
+		<property name="pid" type="java.lang.Integer">
+			<column name="pid" length="4" not-null="false" />
 		</property>
 	</class>
 </hibernate-mapping>

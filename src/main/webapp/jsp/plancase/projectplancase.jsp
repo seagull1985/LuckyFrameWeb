@@ -37,15 +37,18 @@
 					<div class="panel-heading">查询条件</div>
 					<div class="panel-body">
 						<div class="form-group" style="margin-top: 15px">
-							<label class="control-label col-sm-1" style="width:6%" for="txt_search_module">用例集:</label>
+							<label class="control-label col-sm-1" style="width: 6%"
+								for="txt_search_module">用例集:</label>
 							<div class="col-sm-3">
-								<select class="form-control" id="search_module"
-									onchange="searchmodule()">
-									<c:forEach var="p" items="${modules }">
-									    <option value="0">全部</option>
-										<option value="${p.id}">${p.modulename}</option>
-									</c:forEach>
-								</select>
+								<input type="text" class="form-control" id="module_tree"
+									placeholder="点击选择用例集" onclick="showMenu()" />
+								<input type="hidden" id="search_module" value="0"/>
+								<div id="menuContent2" class="menuContent"
+									style="display: none; position: absolute; width: 95%; border: 1px solid rgb(170, 170, 170); z-index: 10;background-color:rgba(51,204,255,0.8);">
+									<ul id="treeDemo" class="ztree"
+										style="margin-top: 0; width: 160px; height: auto;"></ul>
+								</div>
+
 							</div>
 						</div>
 					</div>
@@ -65,6 +68,7 @@
 
 	<script type="text/javascript">
 		$(function() {
+			$.fn.zTree.init($("#treeDemo"), genJsonConfig());
 			//1.初始化Table
 			var oTable = new TableInit();
 			oTable.Init();
@@ -138,7 +142,11 @@
 					}, {
 						field : 'name',
 						title : '用例名称',
-						width : '60%'
+						width : '50%'
+					}, {
+						field : 'modulename',
+						title : '所属模块',
+						width : '10%',
 					}, {
 						field : 'casetype',
 						title : '用例类型',
@@ -216,13 +224,6 @@
 
 			return oTableInit;
 		};
-		
-		var searchmodule = function() {
-			//1.初始化Table
-			var oTable = new TableInit();
-			$('#tb_projectplancase').bootstrapTable('destroy');
-			oTable.Init();
-		};
 	    
 		btn_edit.onclick=function(){
 	    	var status = document.getElementById("loginstatus").value;
@@ -273,6 +274,70 @@
 	            alert('请选取要添加的用例！');
 	        }
 	    }
+	    
+		//=========================================================================================		
+		function genJsonConfig(){
+			var setting = {
+					async: {
+						enable: true,
+						url:"/projectCase/getmodulelist.do",
+						autoParam:["id", "name=n", "level=lv"],
+						otherParam:{"projectid":${projectid}},
+						dataFilter: filter
+					},
+					view: {expandSpeed:"",
+						selectedMulti: false
+					},
+					edit: {
+						enable: false
+					},
+					data: {
+						simpleData: {
+							enable: true
+						}
+					},
+					callback: {
+						beforeClick: beforeClick
+					}
+				}; 
+			
+			return setting;
+		}
+
+		function filter(treeId, parentNode, childNodes) {
+			if (!childNodes) return null;
+			for (var i=0, l=childNodes.length; i<l; i++) {
+				childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
+			}
+			return childNodes;
+		}
+		
+		function beforeClick(treeId, treeNode) {
+			$("#module_tree").val(treeNode.name);
+			$("#search_module").val(treeNode.id);
+			var oTable = new TableInit();
+			$('#tb_projectplancase').bootstrapTable('destroy');
+			oTable.Init();
+			hideMenu();
+		}		
+
+		//显示菜单
+		function showMenu() {
+		    $("#menuContent2").css({ left: "15px", top: "34px" }).slideDown("fast");
+
+		    $("body").bind("mousedown", onBodyDown);
+		}
+		//隐藏菜单
+		function hideMenu() {
+		    $("#menuContent2").fadeOut("fast");
+		    $("body").unbind("mousedown", onBodyDown);
+		}
+		
+		function onBodyDown(event) {
+		    if (!(event.target.id == "menuBtn" || event.target.id == "menuContent2" || event.target.id == "module_tree" || $(event.target).parents("#menuContent2").length > 0)) {
+		        hideMenu();
+		    }
+		}
 	</script>
 </body>
 </html>
