@@ -65,5 +65,6 @@
         <mapping resource="ProjectCasesteps.hbm.xml" />
         <mapping resource="ProjectPlan.hbm.xml" />
         <mapping resource="ProjectPlanCase.hbm.xml" />
+        <mapping resource="ProjectModule.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>
