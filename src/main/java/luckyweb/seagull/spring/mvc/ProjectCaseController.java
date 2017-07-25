@@ -540,7 +540,7 @@ public class ProjectCaseController {
 			ProjectCase projectcase = new ProjectCase();
 			int moduleid=0;
 
-			String name = req.getParameter("name");
+			String name = req.getParameter("name").replace("BBFFHH", "%");
 			String projectid = req.getParameter("projectid");
 			String modulename = req.getParameter("modulename");
 			String casetype = req.getParameter("casetype");
