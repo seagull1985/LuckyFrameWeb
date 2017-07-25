@@ -380,9 +380,8 @@
 						editable : {
 							type : 'text',
 							title : '包路径|定位路径',
+							emptytext : "【包路径|定位路径】为空",
 							validate : function(value) {
-								if (!$.trim(value))
-									return '包路径|定位路径不能为空';
 								if (value.length > 100)
 									return '包路径|定位路径不能超过100个字符';
 								if (value.length < 2)
@@ -394,14 +393,13 @@
 						title : '方法名|操作',
 						editable : {
 							type : 'text',
-							title : '包路径|定位路径',
+							title : '方法名|操作',
+							emptytext : "【方法名|操作】为空",
 							validate : function(value) {
-								if (!$.trim(value))
-									return '包路径|定位路径不能为空';
 								if (value.length > 100)
-									return '包路径|定位路径不能超过100个字符';
+									return '方法名|操作不能超过100个字符';
 								if (value.length < 2)
-									return '包路径|定位路径不能适于2个字符';
+									return '方法名|操作不能适于2个字符';
 							}
 						}
 					}, {
@@ -409,14 +407,13 @@
 						title : '参数',
 						editable : {
 							type : 'text',
-							title : '包路径|定位路径',
+							title : '参数',
+							emptytext : "【参数】为空",
 							validate : function(value) {
-								if (!$.trim(value))
-									return '包路径|定位路径不能为空';
 								if (value.length > 500)
-									return '包路径|定位路径不能超过500个字符';
+									return '参数不能超过500个字符';
 								if (value.length < 2)
-									return '包路径|定位路径不能适于2个字符';
+									return '参数不能适于2个字符';
 							}
 						}
 					}, {
@@ -424,14 +421,13 @@
 						title : '步骤动作',
 						editable : {
 							type : 'text',
-							title : '包路径|定位路径',
+							title : '步骤动作',
+							emptytext : "【步骤动作】为空",
 							validate : function(value) {
-								if (!$.trim(value))
-									return '包路径|定位路径不能为空';
 								if (value.length > 50)
-									return '包路径|定位路径不能超过50个字符';
+									return '步骤动作不能超过50个字符';
 								if (value.length < 2)
-									return '包路径|定位路径不能适于2个字符';
+									return '步骤动作不能适于2个字符';
 							}
 						}
 					}, {
@@ -439,14 +435,13 @@
 						title : '预期结果',
 						editable : {
 							type : 'text',
-							title : '包路径|定位路径',
+							title : '预期结果',
+							emptytext : "【预期结果】为空",
 							validate : function(value) {
-								if (!$.trim(value))
-									return '包路径|定位路径不能为空';
 								if (value.length > 200)
-									return '包路径|定位路径不能超过200个字符';
+									return '预期结果不能超过200个字符';
 								if (value.length < 2)
-									return '包路径|定位路径不能适于2个字符';
+									return '预期结果不能适于2个字符';
 							}
 						}
 					}, {
@@ -474,14 +469,13 @@
 						title : '备注',
 						editable : {
 							type : 'text',
-							title : '包路径|定位路径',
+							title : '备注',
+							emptytext : "【备注】为空",
 							validate : function(value) {
-								if (!$.trim(value))
-									return '包路径|定位路径不能为空';
 								if (value.length > 200)
-									return '包路径|定位路径不能超过200个字符';
+									return '备注不能超过200个字符';
 								if (value.length < 2)
-									return '包路径|定位路径不能适于2个字符';
+									return '备注不能适于2个字符';
 							}
 						}
 					}, {
@@ -697,6 +691,7 @@
 		                   success: function(data, status){
 		                           if (data.status == "success"){
 		                               $table.bootstrapTable('hideRow', {index:selectIndex});
+		                            
 		                               alert(data.ms);
 		                              if(reLoad){
 		                                  $table.bootstrapTable('refresh');
@@ -829,6 +824,8 @@
 	                        alert('删除出错');
 	                    }
 	                });
+			}else{
+				$.fn.zTree.init($("#treeDemo"), genJsonConfig());
 			}
 		}
 		
@@ -859,8 +856,7 @@
 					 alert('项目名称不能编辑!');
 					 return false;
 				}
-				
-				var dataSend = JSON.stringify({"pid":treeNode.pId,"name":newName,"projectid":$('#search_project').val()});
+				var dataSend = JSON.stringify({"id":treeNode.id,"oldName":treeNode.name,"pid":treeNode.pId,"name":newName,"projectid":$('#search_project').val()});
                 $.ajax({
 	                   type: "POST",
 	                   cache:false,
@@ -870,6 +866,8 @@
 	                   data: dataSend,
 	                   success: function(data, status){
 	                           if (data.status == "success"){
+	                        	   $.fn.zTree.destroy("treeDemo");
+	                        	   $.fn.zTree.init($("#treeDemo"), genJsonConfig());
 	                               alert(data.ms);
 	                           }else{
 	                        	   $.fn.zTree.init($("#treeDemo"), genJsonConfig());
