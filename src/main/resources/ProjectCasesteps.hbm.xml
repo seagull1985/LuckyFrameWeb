@@ -28,7 +28,7 @@
 			<column name="stepnum" length="2" not-null="true" />
 		</property>
 		<property name="expectedresult" type="java.lang.String">
-			<column name="expectedresult" length="200" not-null="true" />
+			<column name="expectedresult" length="500" not-null="false" />
 		</property>
 		<property name="projectid" type="java.lang.Integer">
 			<column name="projectid" length="8" not-null="true" />
