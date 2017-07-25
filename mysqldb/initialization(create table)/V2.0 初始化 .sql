@@ -309,7 +309,7 @@ create table PROJECT_CASESTEPS
   action                VARCHAR(50) COMMENT '步骤动作',
   caseid                int(8) not null COMMENT '用例ID',
   stepnum               int(2) not null COMMENT '步骤编号',
-  expectedresult        VARCHAR(200) COMMENT '预期结果',
+  expectedresult        VARCHAR(500) COMMENT '预期结果',
   projectid             int(8) not null COMMENT '项目ID',
   steptype              int(2) not null COMMENT '0 接口 1 UI',
   time                  VARCHAR(30)  COMMENT '最后更新时间',
