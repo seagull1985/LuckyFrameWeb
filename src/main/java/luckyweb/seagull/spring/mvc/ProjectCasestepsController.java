@@ -278,11 +278,11 @@ public class ProjectCasestepsController {
 			
 			String path = req.getParameter("path");
 			String operation = req.getParameter("operation");
-			String parameters = req.getParameter("parameters");
+			String parameters = req.getParameter("parameters").replace("BBFFHH", "%");
 			String action = req.getParameter("action");
 			String caseid = req.getParameter("caseid");
 			String stepnum = req.getParameter("stepnum");
-			String expectedresult = req.getParameter("expectedresult");
+			String expectedresult = req.getParameter("expectedresult").replace("BBFFHH", "%");
 			String projectid = req.getParameter("projectid");
 			String steptype = req.getParameter("steptype");
 			steps.setPath(path);
