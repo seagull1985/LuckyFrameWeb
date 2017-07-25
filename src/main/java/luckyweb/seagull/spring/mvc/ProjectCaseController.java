@@ -348,20 +348,30 @@ public class ProjectCaseController {
 					e.printStackTrace();
 				}
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
+				String ms="保存用例集成功!";
 
 				int projectid = Integer.valueOf(jsonObject.getString("projectid"));
 				int pid = Integer.valueOf(jsonObject.getString("pid"));
-
+				String oldName = jsonObject.getString("oldName");
 				String name = jsonObject.getString("name");
-				projectmodule.setProjectid(projectid);
-				projectmodule.setPid(pid);
-				;
-				projectmodule.setModulename(name);
-				int id = moduleservice.add(projectmodule);
-				operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(), "保存用例集成功！");
+				int id = Integer.valueOf(jsonObject.getString("id"));
+
+				ProjectModule pm=moduleservice.load(id);
+				if(null!=pm&&pm.getProjectid()==projectid&&pm.getPid()==pid&&pm.getModulename().equals(oldName)){
+					pm.setModulename(name);
+					moduleservice.modify(pm);
+					operationlogservice.add(req, "PROJECT_MODULE", id, pm.getProjectid(), "保存用例集成功！");
+				}else{					
+					projectmodule.setProjectid(projectid);
+					projectmodule.setPid(pid);
+					projectmodule.setModulename(name);
+					id = moduleservice.add(projectmodule);
+					operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(), "新增用例集成功！");
+					ms="新增用例集成功!";
+				}
 
 				json.put("status", "success");
-				json.put("ms", "保存用例集成功！");
+				json.put("ms", ms);
 
 			}
 			pw.print(json.toString());
