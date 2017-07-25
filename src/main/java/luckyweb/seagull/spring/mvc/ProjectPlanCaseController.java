@@ -55,6 +55,8 @@ public class ProjectPlanCaseController {
 
 	@Resource(name = "userinfoService")
 	private UserInfoService userinfoservice;
+	
+	private List<ProjectCase> viewToSaveCase;
 
 	/**
 	 * 
@@ -144,6 +146,7 @@ public class ProjectPlanCaseController {
 				}
 			}
 		}
+		viewToSaveCase = projectcases;
 		// 转换成json字符串
 		String RecordJson = StrLib.listToJson(projectcases);
 		// 得到总记录数
@@ -194,27 +197,34 @@ public class ProjectPlanCaseController {
 				}
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
 				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("caseids"));
+				List<ProjectCase> caselist=viewToSaveCase;
 				for (int i = 0; i < jsonarr.size(); i++) { // 添加列表中多的用例
-					int tag = 0; // 标识在原列表里面是否存在
 					int caseid = Integer.valueOf(jsonarr.get(i).toString());
-					for (int j = 0; j < plancases.size(); j++) {
-						if (plancases.get(j).getCaseid() == caseid) {
-							tag = 1;
-							plancases.remove(j);
-							break;
-						}
-					}
-					if (tag == 0) {
-						projectplancase.setCaseid(caseid);
-						projectplancase.setPlanid(Integer.valueOf(planid));
-						projectplancase.setPriority(0);
+					int tag = 0; // 标识在原列表里面是否存在
+					for (ProjectCase  viewcase:caselist) {
+						if (viewcase.getId() == caseid) {
+							if(viewcase.getChecktype()==1){
+								caselist.remove(viewcase);
+								break;
+							}else{
+								projectplancase.setCaseid(caseid);
+								projectplancase.setPlanid(Integer.valueOf(planid));
+								projectplancase.setPriority(0);
 
-						projectplancaseservice.add(projectplancase);
+								projectplancaseservice.add(projectplancase);
+								caselist.remove(viewcase);
+								break;
+							}
+						}
 					}
 				}
 
-				for (int k = 0; k < plancases.size(); k++) { // 删除原有列表中多的用例
-					projectplancaseservice.delete(plancases.get(k));
+				for (int k = 0; k < caselist.size(); k++) { // 删除原有列表中多的用例
+					for(ProjectPlanCase ppc:plancases){
+						if(ppc.getCaseid()==caselist.get(k).getId()){
+							projectplancaseservice.delete(ppc);
+						}
+					}
 				}
 
 				if (null != req.getSession().getAttribute("usercode")
