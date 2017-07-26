@@ -13,7 +13,7 @@
 			<column name="projectid" length="8" not-null="true" />
 		</property>
 		<property name="modulename" type="java.lang.String">
-			<column name="modulename" length="30" not-null="false" />
+			<column name="modulename" length="50" not-null="false" />
 		</property>
 		<property name="pid" type="java.lang.Integer">
 			<column name="pid" length="4" not-null="false" />
