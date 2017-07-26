@@ -276,13 +276,22 @@ public class ProjectCasestepsController {
 		try {
 			ProjectCasesteps steps=new ProjectCasesteps();
 			
-			String path = req.getParameter("path").replace("DHDHDH", "=");
+			String path = req.getParameter("path");
+			if(null!=path){
+				path=path.replace("DHDHDH", "=");
+			}
 			String operation = req.getParameter("operation");
-			String parameters = req.getParameter("parameters").replace("BBFFHH", "%");
+			String parameters = req.getParameter("parameters");
+			if(null!=parameters){
+				parameters=parameters.replace("BBFFHH", "%");
+			}
 			String action = req.getParameter("action");
 			String caseid = req.getParameter("caseid");
 			String stepnum = req.getParameter("stepnum");
-			String expectedresult = req.getParameter("expectedresult").replace("BBFFHH", "%");
+			String expectedresult = req.getParameter("expectedresult");
+			if(null!=expectedresult){
+				expectedresult=expectedresult.replace("BBFFHH", "%");
+			}
 			String projectid = req.getParameter("projectid");
 			String steptype = req.getParameter("steptype");
 			steps.setPath(path);
