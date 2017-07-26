@@ -276,7 +276,7 @@ public class ProjectCasestepsController {
 		try {
 			ProjectCasesteps steps=new ProjectCasesteps();
 			
-			String path = req.getParameter("path");
+			String path = req.getParameter("path").replace("DHDHDH", "=");
 			String operation = req.getParameter("operation");
 			String parameters = req.getParameter("parameters").replace("BBFFHH", "%");
 			String action = req.getParameter("action");
