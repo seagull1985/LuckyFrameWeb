@@ -225,7 +225,7 @@ public class StrLib {
 	  if (object == null) {
 	   json.append("\"\"");
 	  } else if (object instanceof String || object instanceof Integer) {
-	   json.append("\"").append(object.toString()).append("\"");
+	   json.append("\"").append(object.toString().replace("\"", "&quot;")).append("\"");
 	  } else {
 	   json.append(beanToJson(object));
 	  }
