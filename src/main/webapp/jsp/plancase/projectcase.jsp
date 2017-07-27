@@ -53,8 +53,8 @@
 								for="txt_search_module">用例集:</label>
 							<div class="col-sm-3">
 								<input type="text" class="form-control" id="module_tree"
-									placeholder="点击选择或编辑用例集" onclick="showMenu()" />
-								 <input	type="hidden" id="search_module" value="0" />
+									placeholder="点击选择或编辑用例集" onclick="showMenu()" /> <input
+									type="hidden" id="search_module" value="0" />
 								<div id="menuContent2" class="menuContent"
 									style="display: none; position: absolute; width: 95%; border: 1px solid rgb(170, 170, 170); z-index: 10; background-color: rgba(51, 204, 255, 0.8);">
 									<ul id="treeDemo" class="ztree"
@@ -73,6 +73,9 @@
 					</button>
 					<button id="btn_delete" type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;删除用例
+					</button>
+					<button id="btn_copy" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-share" aria-hidden="true"></span>&nbsp;复制用例
 					</button>
 					<button id="btn_edit" type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;编辑步骤
@@ -107,17 +110,18 @@
 										</div>
 
 										<div class="form-group">
-										<label for="moduleid" class="col-sm-3 control-label">测试集</label>
-										<div class="col-sm-9">
-											<input type="text" class="form-control" id="modulename" name="modulename"
-												placeholder="点击选择用例集" onclick="showMenuAddCase()" /> 
-											<input class="form-control" type="hidden" name="moduleid" id="moduleid"/>
-											<div id="menuContent" class="menuContent"
-												style="display: none; position: absolute; width: 90%; border: 1px solid rgb(170, 170, 170); z-index: 10; background-color: rgba(51, 204, 255, 0.8);">
-												<ul id="treeDemo1" class="ztree"
-													style="margin-top: 0; width: 80px; height: auto;"></ul>
+											<label for="moduleid" class="col-sm-3 control-label">测试集</label>
+											<div class="col-sm-9">
+												<input type="text" class="form-control" id="modulename"
+													name="modulename" placeholder="点击选择用例集"
+													onclick="showMenuAddCase()" /> <input class="form-control"
+													type="hidden" name="moduleid" id="moduleid" />
+												<div id="menuContent" class="menuContent"
+													style="display: none; position: absolute; width: 90%; border: 1px solid rgb(170, 170, 170); z-index: 10; background-color: rgba(51, 204, 255, 0.8);">
+													<ul id="treeDemo1" class="ztree"
+														style="margin-top: 0; width: 80px; height: auto;"></ul>
+												</div>
 											</div>
-										</div>
 										</div>
 
 										<div class="form-group">
@@ -168,7 +172,7 @@
 						<!-- /.modal -->
 					</div>
 				</form>
-				
+
 			</div>
 			</article>
 		</div>
@@ -710,6 +714,49 @@
 	        }
 	    }
 	    
+	    btn_copy.onclick=function(){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
+			}
+			
+            var ids = $.map($('#tb_projectcase').bootstrapTable('getSelections'), function (row) {
+                return row.id;
+                 });
+            if(ids.length == 1 ){
+	        	if(confirm("确定要复制此条用例吗?")){
+	                $.ajax({
+	                   type: "POST",
+	                   cache:false,
+	                   async : true,
+	                   dataType : "json",
+	                   url:  "copycase.do?caseid="+ids,
+	                   data: {},
+	                   success: function(data, status){
+	                           if (data.status == "success"){
+	                        	   $('#tb_projectcase').bootstrapTable('refresh');
+	                               alert(data.ms);
+	                           }else{
+	                        	   alert(data.ms);
+	                           }
+	                   },error:function()
+	                    {
+	                        alert('复制出错');
+	                    }
+	                });
+            }
+            }else{
+            	alert('要复制用例有且只能选择一条用例哦！');
+            }
+
+	    }
+	    
 	    btn_edit.onclick=function(){
 	    	var status = document.getElementById("loginstatus").value;
 			if(status=="false"){
@@ -728,7 +775,7 @@
     			var url = '/projectCasesteps/stepadd.do?caseid='+ids;
     			window.location.href=url;
             }else{
-            	alert('要进行用例编辑只能选择一条用例哦！');
+            	alert('要进行步骤编辑只能选择一条用例哦！');
             }
 
 	    }
