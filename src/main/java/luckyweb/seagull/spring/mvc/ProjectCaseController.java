@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectCase;
+import luckyweb.seagull.spring.entity.ProjectCasesteps;
 import luckyweb.seagull.spring.entity.ProjectModule;
 import luckyweb.seagull.spring.entity.ProjectModuleJson;
 import luckyweb.seagull.spring.entity.SectorProjects;
@@ -241,6 +242,71 @@ public class ProjectCaseController {
 
 	}
 
+	/**
+	 * 复制用例
+	 * 
+	 * @param tj
+	 * @param br
+	 * @param model
+	 * @param req
+	 * @param rsp
+	 * @return
+	 * @throws Exception
+	 * @Description:
+	 */
+	@RequestMapping(value = "/copycase.do")
+	public void copyCase(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			int id = Integer.valueOf(req.getParameter("caseid"));
+			if (!UserLoginController.permissionboolean(req, "case_1")) {
+				json.put("status", "fail");
+				json.put("ms", "复制失败,权限不足,请联系管理员!");
+			} else {
+				ProjectCase projectcase=projectcaseservice.load(id);
+				projectcase.setName("COPY "+projectcase.getName());
+				if (null != req.getSession().getAttribute("usercode")
+						&& null != req.getSession().getAttribute("username")) {
+					String usercode = req.getSession().getAttribute("usercode").toString();
+					projectcase.setOperationer(usercode);
+				}
+
+				Date currentTime = new Date();
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String time = formatter.format(currentTime);
+				projectcase.setTime(time);
+
+				SectorProjects sp = sectorprojectsService.loadob(projectcase.getProjectid());
+				String maxindex = projectcaseservice.getCaseMaxIndex(projectcase.getProjectid());
+				int index = Integer.valueOf(maxindex) + 1;
+				projectcase.setSign(sp.getProjectsign() + "-" + index);
+				projectcase.setProjectindex(index);
+				int caseid = projectcaseservice.add(projectcase);
+				operationlogservice.add(req, "PROJECT_CASE", caseid, projectcase.getProjectid(),
+						"复制用例成功！用例编号：" + projectcase.getSign());
+
+				List<ProjectCasesteps> steps=casestepsservice.getSteps(id);
+				for(ProjectCasesteps step:steps){
+					step.setCaseid(caseid);
+					int stepid=casestepsservice.add(step);
+				    operationlogservice.add(req, "PROJECT_CASESTEPS", stepid, projectcase.getProjectid(),
+							"复制用例步骤成功！");
+				}
+				
+				json.put("status", "success");
+				json.put("ms", "复制用例【"+projectcase.getName()+"】成功！");
+			}
+			pw.print(json.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
 	/**
 	 * 删除用例
 	 * 
