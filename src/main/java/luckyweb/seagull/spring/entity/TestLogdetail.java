@@ -24,6 +24,9 @@ public class TestLogdetail implements java.io.Serializable {
 	private String detailShort;
 	private String step;
 	private String imgname;
+	private String logGrade;	
+	private int taskid;
+	private int caseid;
 	
 	public String getImgname() {
 		return imgname;
@@ -47,28 +50,22 @@ public class TestLogdetail implements java.io.Serializable {
 
 	public void setDetailShort(String detailShort) {
 		this.detailShort = detailShort;
-	}
-
-	private String logGrade;
+	}	
 	
-	private int tastId;
-	private int caseId;
-	
-	
-	public int getTastId() {
-		return tastId;
+	public int getTaskid() {
+		return taskid;
 	}
 
-	public void setTastId(int tastId) {
-		this.tastId = tastId;
+	public void setTaskid(int taskid) {
+		this.taskid = taskid;
 	}
 
-	public int getCaseId() {
-		return caseId;
+	public int getCaseid() {
+		return caseid;
 	}
 
-	public void setCaseId(int caseId) {
-		this.caseId = caseId;
+	public void setCaseid(int caseid) {
+		this.caseid = caseid;
 	}
 
 	public String getLogGrade() {
