@@ -39,7 +39,7 @@ public class TestLogdetailDaoImpl extends HibernateDaoSupport implements
 	}
 
 	@Override
-	public TestLogdetail get(int id) {
+	public TestLogdetail load(int id) {
 		return (TestLogdetail) this.getHibernateTemplate().get(TestLogdetail.class, id);
 
 	}

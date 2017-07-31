@@ -14,7 +14,7 @@ public interface TestLogdetailDao {
 	@Transactional(propagation=Propagation.NOT_SUPPORTED)
 	public List<TestLogdetail> list(TestLogdetail logDetail);
 
-	public TestLogdetail get(int id);
+	public TestLogdetail load(int id);
 
 	public void delete(String hql,int id) throws Exception;
 

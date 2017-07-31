@@ -26,8 +26,8 @@ public class LogDetailServiceImpl implements LogDetailService {
 	}
 	
 	@Override
-	public TestLogdetail get(int id) {
-		return this.logdetailDao.get(id);
+	public TestLogdetail load(int id) {
+		return this.logdetailDao.load(id);
 	}
 
 	@Override

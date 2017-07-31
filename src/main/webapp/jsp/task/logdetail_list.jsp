@@ -53,7 +53,7 @@ background:#CCCCCC;
 				  <td height="20"><fmt:formatDate value="${t.logtime }" pattern="yyyy-MM-dd HH:mm:ss" /></td>
 				  <td height="20" align="center">${t.logGrade}&nbsp;
 				   <c:if test="${t.imgname!=\"\" }">
-				    <a href="javascript:window.open('/logDetail/showImage.do?filename=${t.imgname}.png')">错误截图</a>
+				    <a href="javascript:window.open('/logDetail/showImage.do?filename=${t.imgname}.png&logid=${t.logid}')">错误截图</a>
 				   </c:if> 
 				 </td>
 			  </tr>

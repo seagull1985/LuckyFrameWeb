@@ -14,7 +14,7 @@ public interface LogDetailService {
 	@Transactional(propagation=Propagation.NOT_SUPPORTED)
 	public List<TestLogdetail> list(TestLogdetail log);
 
-	public TestLogdetail get(int id);
+	public TestLogdetail load(int id);
 	/*public List findByPage( TestLogdetail tast, final int offset,final int pageSize);
 
 	public List findByPage( final Object[] values,final int offset, final int pageSize);

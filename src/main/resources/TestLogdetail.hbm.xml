@@ -23,6 +23,12 @@
 		<property name="imgname" type="java.lang.String">
 			<column name="imgname" length="30" />
 		</property>
+		<property name="taskid" type="java.lang.Integer">
+			<column name="taskid" length="10" />
+		</property>
+		<property name="caseid" type="java.lang.Integer">
+			<column name="caseid" length="10" />
+		</property>
 		<many-to-one name="testCasedetail" class="TestCasedetail"
 			fetch="select">
 			<column name="CASEID" not-null="true" />
