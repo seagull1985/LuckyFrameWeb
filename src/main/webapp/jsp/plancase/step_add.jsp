@@ -237,8 +237,8 @@
 								validators : {
 									stringLength : {
 										min : 0,
-										max : 200,
-										message : '【预期结果】长度必须小于200个字符'
+										max : 2000,
+										message : '【预期结果】长度必须小于2000个字符'
 									}
 								}
 							},

@@ -442,8 +442,8 @@
 							title : '预期结果',
 							emptytext : "【预期结果】为空",
 							validate : function(value) {
-								if (value.length > 200)
-									return '预期结果不能超过200个字符';
+								if (value.length > 2000)
+									return '预期结果不能超过2000个字符';
 								if (value.length < 2)
 									return '预期结果不能适于2个字符';
 							}
