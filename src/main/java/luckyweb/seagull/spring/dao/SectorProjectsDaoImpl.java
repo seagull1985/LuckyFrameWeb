@@ -1,5 +1,6 @@
 package luckyweb.seagull.spring.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -192,6 +193,22 @@ public class SectorProjectsDaoImpl extends HibernateDaoSupport implements Sector
 			session.close();
 		}
 		return count;
+		// return this.getHibernateTemplate().find("select id,name,planproj from TestJobs  order by id asc ");
+	}
+	
+	@Override
+	public List<SectorProjects> getAllProject() {
+//		List<TestTastexcute> list=new ArrayList<TestTastexcute>();
+		Session session = this.getSession(true);
+		List<SectorProjects> list = new ArrayList<>();
+		try {
+			list = session.createQuery("from SectorProjects order by projectid asc").list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		return list;
 		// return this.getHibernateTemplate().find("select id,name,planproj from TestJobs  order by id asc ");
 	}
 }

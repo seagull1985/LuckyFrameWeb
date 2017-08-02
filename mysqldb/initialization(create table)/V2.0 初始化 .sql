@@ -163,7 +163,7 @@ create table QA_SECTORPROJECTS
   projectmanager VARCHAR(100) not null,
   sectorid       int(10) not null,
   projecttype    int(4) default 0 not null,
-  projectsign    VARCHAR(20) not null,
+  projectsign    VARCHAR(20) default 'sign' not null,
   primary key (projectid)
 )default character set utf8;
 create table QA_ZTTASK

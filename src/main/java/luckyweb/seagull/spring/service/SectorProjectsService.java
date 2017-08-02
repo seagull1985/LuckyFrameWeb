@@ -40,4 +40,5 @@ public interface SectorProjectsService {
 	public List<SectorProjects> findProjectsList();
 	public SectorProjects loadob(int projectid) throws Exception;
 	public int projectrow(int id);
+	public List<SectorProjects> getAllProject();
 }

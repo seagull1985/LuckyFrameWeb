@@ -121,7 +121,7 @@ public class TestTastExcuteServiceImpl implements TestTastExcuteService {
 			}
 		}
 		if(!StrLib.isEmpty(param2)){
-			sql+=" and  jobid in (select id from TEST_JOBS t where t.planproj = '"+param2+"')";
+			sql+=" and  jobid in (select id from TEST_JOBS t where t.projectid = '"+param2+"')";
 		}
 		sql+=" order by id desc";
 		return tastExcuteDao.findTastList(sql);

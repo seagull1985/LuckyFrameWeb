@@ -143,4 +143,9 @@ public class SectorProjectsServiceImpl implements SectorProjectsService{
 		row=sectorprojectsdao.projectrow("SELECT projectid from qa_review where projectid="+id)+row;
 		return row;
 	}
+	
+	@Override
+	public List<SectorProjects> getAllProject(){
+		return sectorprojectsdao.getAllProject();
+	}
 }

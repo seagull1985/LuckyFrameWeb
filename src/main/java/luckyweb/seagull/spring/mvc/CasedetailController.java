@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.quartz.QuartzJob;
+import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.TestCasedetail;
 import luckyweb.seagull.spring.entity.TestTaskexcute;
 import luckyweb.seagull.spring.service.CaseDetailService;
@@ -108,12 +109,13 @@ public class CasedetailController
 		if (!StrLib.isEmpty(status)&&null==caseDetail.getCasestatus()){
 			caseDetail.setCasestatus(status);
 		}
+		TestTaskexcute task=null;
 		if (!StrLib.isEmpty(taskId)){
 			if (!StrLib.isEmpty(taskId) && !taskId.equals("0"))
 			{
 				caseDetail.getTestTaskexcute().setId(Integer.valueOf(taskId));
 				caseDetail.setTaskId(Integer.valueOf(taskId));
-				TestTaskexcute task = tastExcuteService.get(Integer.valueOf(taskId));
+				task = tastExcuteService.get(Integer.valueOf(taskId));
 				if (task == null){
 					caseDetail.setStartDate(startDate);
 					caseDetail.setEndDate(endDate);
@@ -142,7 +144,7 @@ public class CasedetailController
 			}
 		}
 		//tasks = tastExcuteService.findTastListByParam(caseDetail.getStartDate(), projName, null);
-		tasks = tastExcuteService.findTastList(caseDetail.getStartDate(), projName, caseDetail.getEndDate());
+		tasks = tastExcuteService.findTastList(caseDetail.getStartDate(), task.getTestJob().getProjectid().toString(), caseDetail.getEndDate());
 
 		if (tasks.size() == 0)
 		{
@@ -206,7 +208,14 @@ public class CasedetailController
 			}
 			model.addAttribute("testCasedetail", caseDetail);
 			// 项目
-			model.addAttribute("projects", QueueListener.projlist);
+			List<SectorProjects> prolist=sectorprojectsService.getAllProject();
+			prolist.remove(sectorprojectsService.loadob(99));
+			for(int i=0;i<prolist.size();i++){
+				if(prolist.get(i).getProjecttype()==1){
+					prolist.get(i).setProjectname(prolist.get(i).getProjectname()+"(TestLink项目)");
+				}
+			}
+			model.addAttribute("projects", prolist);
 		}catch (Exception e){
 			model.addAttribute("message", e.getMessage());
 			model.addAttribute("url", "/caseDetail/list.do");
@@ -365,9 +374,9 @@ public class CasedetailController
 		{
 			pw = rsp.getWriter();
 			String startDate = req.getParameter("startDate");
-			String projName = req.getParameter("projName");
+			String projid = req.getParameter("projid");
 			//projName=new String(projName.getBytes("ISO-8859-1"),"UTF-8");
-			String json = getTastNameList(startDate, projName);
+			String json = getTastNameList(startDate, projid);
 			pw.write(json);
 		}
 		catch (IOException e)
@@ -378,11 +387,11 @@ public class CasedetailController
 		return null;
 	}
 
-	public String getTastNameList(String startDate, String projName)
+	public String getTastNameList(String startDate, String projid)
 	{
 		// 任务列表
 		//List tasks = tastExcuteService.findTastListByParam(startDate, projName, null);
-		List<Object[]> tasks = tastExcuteService.findTastList(startDate, projName, null);
+		List<Object[]> tasks = tastExcuteService.findTastList(startDate, projid, null);
 		JSONArray array = JSONArray.fromObject(tasks);
 		return array.toString();
 	}
