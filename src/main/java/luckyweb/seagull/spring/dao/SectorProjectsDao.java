@@ -41,4 +41,5 @@ public interface SectorProjectsDao {
 	public int findRows(SectorProjects sectorprojects,String hql);
 	public SectorProjects load(int projectid) throws Exception;
 	public int projectrow(String hql);
+	public List<SectorProjects> getAllProject();
 }

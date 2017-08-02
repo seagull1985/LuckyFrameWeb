@@ -45,7 +45,7 @@
       &nbsp;&nbsp;<sf:select path="projName" id="projName" onchange="getTastList()">
           <%-- <sf:option value="">全部</sf:option> --%>
           <c:forEach var="proj" items="${projects }"  begin="0" step="1" varStatus="i" >
-            <sf:option value="${proj[1]}">${proj[1]}</sf:option>
+            <sf:option value="${proj.projectid}">${proj.projectname}</sf:option>
           </c:forEach>
         </sf:select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                    执行时间
@@ -64,15 +64,6 @@
                 </c:forEach>
             </c:if>
       </sf:select> </span>     </td>
-      <%--<td height="40" align="left"><strong>任务名称</strong></td>
-        <td height="40"><sf:select path="taskId">
-            <sf:option value="0">全部</sf:option>
-            <c:forEach var="tast" items="${tasks }"  begin="0" step="1" varStatus="i" >
-              <sf:option value="${tast[0]}">${tast[1]}</sf:option>
-            </c:forEach>
-          </sf:select>        </td>--%>
-      <%--   <td width="12%" align="left"><strong>用例名称</strong></td>
-        <td width="23%"><input type="text" name="casename" id="casename" /></td>--%>
     </tr>
   <tr>
     <td width="80%" height="20" align="left" style="font-size:15px;font-weight:600">用例编号
@@ -249,14 +240,14 @@
 function getTastList(){
 	var startDate=document.getElementById("startDate").value;
 	var projNameType=document.getElementById('projName');
-	var projName=projNameType.options[projNameType.selectedIndex].value;
+	var projid=projNameType.options[projNameType.selectedIndex].value;
 	var tastName=document.getElementById('taskId');
 	$.ajax({
 		type : "post",
 		dataType:"json",
 		contentType:"application/x-www-form-urlencoded:charset=UTF-8",
         async:true,
-		url:encodeURI("/caseDetail/getTastNameList.do?startDate="+startDate+"&projName="+projName),
+		url:encodeURI("/caseDetail/getTastNameList.do?startDate="+startDate+"&projid="+projid),
 		success:function(json){
 			for(var i=tastName.options.length;i>=0;i--)
 			{

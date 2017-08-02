@@ -66,7 +66,7 @@ create table PROJECT_MODULE
 /*用户增加默认选择字段*/
 alter table userinfo add projectid int(4) default '0';
 /*项目管理表增加项目标识字段*/
-alter table QA_SECTORPROJECTS add projectsign VARCHAR(20) not null;
+alter table QA_SECTORPROJECTS add projectsign VARCHAR(20) default 'sign' not null;
 /*调度任务配置增加三个支持内部项目字段*/
 alter table TEST_JOBS add projecttype int(8) default '0' COMMENT '项目类型 0 testlink 1 系统内项目';
 alter table TEST_JOBS add projectid int(8) COMMENT '系统内项目ID';

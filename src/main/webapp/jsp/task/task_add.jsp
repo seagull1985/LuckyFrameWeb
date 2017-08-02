@@ -98,8 +98,8 @@
 			<tr>
 				<td height="30" align="left">项目类型</td>
 				<td height="30" colspan="3">
-				<sf:radiobutton path="projecttype" id="projecttype" value="0" onclick="isShow6('0')" /> TestLink项目&nbsp;&nbsp;&nbsp;&nbsp; 
-				<sf:radiobutton	path="projecttype" id="projecttype" value="1" onclick="isShow6('1')" /> 系统项目</td>
+				<sf:radiobutton path="projecttype" id="projecttype" value="1" onclick="isShow6('1')" /> TestLink项目&nbsp;&nbsp;&nbsp;&nbsp; 
+				<sf:radiobutton	path="projecttype" id="projecttype" value="0" onclick="isShow6('0')" /> 系统项目</td>
 			</tr>
 			<tr id="testlinkpro">
 				<td height="30" align="left">项目名（testlink中）</td>
@@ -428,7 +428,7 @@
 	}
 	
 	function  isShow6(isSend){
-		if(isSend=='1'){
+		if(isSend=='0'){
 			jQuery("#projectid option[value='99']").remove();
 			document.getElementById('testlinkpro').style.display='none';
 			document.getElementById('testlinkplan').style.display='none';

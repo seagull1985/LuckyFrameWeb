@@ -111,8 +111,8 @@
 			<tr>
 				<td height="30" align="left">项目类型</td>
 				<td height="30" colspan="3">
-				<sf:radiobutton path="projecttype" id="projecttype" value="0" onclick="isShow6('0')" /> TestLink项目&nbsp;&nbsp;&nbsp;&nbsp; 
-				<sf:radiobutton	path="projecttype" id="projecttype" value="1" onclick="isShow6('1')" /> 系统项目</td>
+				<sf:radiobutton path="projecttype" id="projecttype" value="1" onclick="isShow6('1')" /> TestLink项目&nbsp;&nbsp;&nbsp;&nbsp; 
+				<sf:radiobutton	path="projecttype" id="projecttype" value="0" onclick="isShow6('0')" /> 系统项目</td>
 			</tr>																										 
 					<tr id="testlinkpro">					   
 						<td width="140" height="32">项目名（testlink中）</td>
@@ -132,7 +132,7 @@
 				<tr id="pro"  style="display: none">
 				<td height="30" align="left">项目名</td>
 				<td height="30" colspan="3"><sf:select path="projectid"
-						id="projectid" onChange="getPlan()" onFocus="getPlan()" >
+						id="projectid" onChange="getPlan()">
 						<sf:option value="0">请选择</sf:option>
 						<c:forEach var="p" items="${sysprojects}">
 							<sf:option value="${p.projectid}">${p.projectname}</sf:option>
@@ -357,7 +357,7 @@
 	}
 	
 	function  isShow6(isSend){
-		if(isSend=='1'){
+		if(isSend=='0'){
 			jQuery("#projectid option[value='99']").remove();
 			document.getElementById('testlinkpro').style.display='none';
 			document.getElementById('testlinkplan').style.display='none';
@@ -386,8 +386,8 @@
 	}
 	
 		$(function(){
-			if("${projecttype}"==1){
-				isShow6('1');
+			if("${projecttype}"==0){
+				isShow6('0');
 			}
 			
 			$.extend($.fn.validatebox.defaults.rules, {    

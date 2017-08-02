@@ -122,6 +122,7 @@ public class TestJobsController
 			}
 			
 			List<SectorProjects> qaprolist=QueueListener.qa_projlist;
+			List<SectorProjects> prolist=QueueListener.projlist;
 			String retVal = "/jsp/task/task_add";
 			if (req.getMethod().equals("POST"))
 			{
@@ -249,7 +250,7 @@ public class TestJobsController
 					tj.setRestartcomm("");
 				}
 				
-				if(tj.getProjecttype()==1){
+				if(tj.getProjecttype()==0){
 					String projectname="0";
 					for(int i=0;i<qaprolist.size();i++){
 						if(qaprolist.get(i).getProjectid()==tj.getProjectid()){
@@ -259,6 +260,12 @@ public class TestJobsController
 					ProjectPlan pp=projectplanservice.load(tj.getPlanid());
 					tj.setPlanproj(projectname);
 					tj.setTestlinkname(pp.getName());
+				}else{
+					for(int i=0;i<prolist.size();i++){
+						if(prolist.get(i).getProjectname().equals(tj.getTestlinkname())){
+							tj.setProjectid(qaprolist.get(i).getProjectid());
+						}
+					}
 				}
 				int id = testJobsService.add(tj);
 				if (id != 0)
@@ -288,7 +295,7 @@ public class TestJobsController
 			tj.setIsrestart("0");
 			tj.setThreadCount(1);
 			tj.setTimeout(60);
-			tj.setProjecttype(0);
+			tj.setProjecttype(1);
 			model.addAttribute("taskjob", tj);
 			model.addAttribute("projects", QueueListener.projlist);
 			model.addAttribute("sysprojects", qaprolist);
@@ -410,6 +417,7 @@ public class TestJobsController
 		req.setCharacterEncoding("utf-8");
 		int id = Integer.valueOf(req.getParameter("id"));
 		List<SectorProjects> qaprolist=QueueListener.qa_projlist;
+		List<SectorProjects> prolist=QueueListener.projlist;
 		
 		model.addAttribute("projects", QueueListener.projlist);
 		model.addAttribute("sysprojects", qaprolist);
@@ -581,7 +589,7 @@ public class TestJobsController
 				String startTimestr = tj.getStartTimestr();
 				tj.setStartTimestr(startTimestr);
 
-				if(tj.getProjecttype()==1){
+				if(tj.getProjecttype()==0){
 					String projectname="0";
 					for(int i=0;i<qaprolist.size();i++){
 						if(qaprolist.get(i).getProjectid()==tj.getProjectid()){
@@ -591,6 +599,12 @@ public class TestJobsController
 					ProjectPlan pp=projectplanservice.load(tj.getPlanid());
 					tj.setPlanproj(projectname);
 					tj.setTestlinkname(pp.getName());
+				}else{
+					for(int i=0;i<prolist.size();i++){
+						if(prolist.get(i).getProjectname().equals(tj.getTestlinkname())){
+							tj.setProjectid(qaprolist.get(i).getProjectid());
+						}
+					}
 				}
 				
 				// 写入数据库
@@ -642,7 +656,7 @@ public class TestJobsController
 		model.addAttribute("extype", jobload.getExtype());
 		model.addAttribute("browsertype", jobload.getBrowsertype());
 		model.addAttribute("projecttype", jobload.getProjecttype());
-		if(jobload.getProjecttype()==1){
+		if(jobload.getProjecttype()==0){
 			ProjectPlan projectplan=new ProjectPlan();
 			projectplan.setProjectid(jobload.getProjectid());
 			List<ProjectPlan> listplan = projectplanservice.findByPage(projectplan, 0, 1000);
