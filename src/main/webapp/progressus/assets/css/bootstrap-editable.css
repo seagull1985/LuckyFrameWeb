@@ -17,7 +17,7 @@
   See: https://github.com/vitalets/x-editable/issues/393
 */
 .editableform .form-control {
-    width: auto;
+    width: 400px;
 }
 
 .editable-buttons {

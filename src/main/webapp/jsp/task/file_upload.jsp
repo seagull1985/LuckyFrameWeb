@@ -77,14 +77,11 @@
       <td width="55%" height="53" valign="bottom"><span class="STYLE6">温馨提示：</span></td>
     </tr>
     <tr>
-      <td valign="middle"><p class="STYLE6">1、若各自项目中的自动化用例代码有更新，将项目重新打包后上传至（10.211.19.55）服务器D:\web_task\TestFrame\lib目录。</p>
+      <td valign="middle"><p class="STYLE6">1、若各自项目中的自动化驱动桩代码有更新，将项目重新打包后上传至对应的客户端IP即可，此JAR包将会自动保存至客户端的LIB目录下</p>
           <p class="STYLE6">2、重新运行即是最新的代码。</p>
       <p class="STYLE6">3、打包项目的名称最好与项目名一致。</p>
-      <p class="STYLE6">４、如更新的项目中有新加入的jar包。【请把新加入的jar包】</p>
-      <p class="STYLE6">以下以TestSettle项目为例，打包上传至服务器中的TestFrame项目中。</p>
-      <p class="STYLE6">a、目前（2015-06-03为止）项目中的已经打好的包 有以下（以下项目打包文件名以此文件名为准）：</p>
-      <p class="STYLE6"><img src="../pic/test_upload/lib.png" width="373" height="119" /></p>
-      <p class="STYLE6">b、打包流程如下：根据箭头的流程来打包：</p>
+      <p class="STYLE6">4、如果出现方法或是类找不到，那么有可能是您的LIB目录中存在方法或是类冲突的情况，可以使用findJAR.cmd进行排除</p>
+      <p class="STYLE6">5、打包流程如下：根据箭头的流程来打包：</p>
       <p class="STYLE6"><img src="../pic/test_upload/1.png" width="728" height="466" /></p>
        <p class="STYLE6"><img src="../pic/test_upload/2.png" width="531" height="552" /></p>
         <p class="STYLE6"><img src="../pic/test_upload/3.png" width="563" height="694" /></p>
@@ -92,15 +89,11 @@
           <p class="STYLE6"><img src="../pic/test_upload/5.png" width="563" height="694" /></p>
            <p class="STYLE6"><img src="../pic/test_upload/6.png" width="563" height="694" /></p>
             <p class="STYLE6"><img src="../pic/test_upload/7.png" width="563" height="694" /></p>
-             <p class="STYLE6"><img src="../pic/test_upload/8.png" width="900" height="500" /></p>
-              <p class="STYLE6">&nbsp;</p>
-               <p class="STYLE6"><img src="../pic/test_upload/10.png" width="900" height="646" /></p>
-      
+             <p class="STYLE6"><img src="../pic/test_upload/8.png" width="900" height="500" /></p>     
       
       </td>
     </tr>
   </table>
-  <img src="../pic/test_upload/11.png" width="874" height="355" />
   <p>&nbsp;</p>
 </form>
 	</article>
