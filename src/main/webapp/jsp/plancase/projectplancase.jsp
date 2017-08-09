@@ -245,7 +245,6 @@
             var ids = $.map($table.bootstrapTable('getSelections'), function (row) {
                       return row.id;
                        }); 
-	        if(ids.length != 0 ){
 	        	if(confirm("确认保存您选择的用例到计划中吗?")){
 		                $.ajax({
 		                   type: "POST",
@@ -270,9 +269,6 @@
 		                    }
 		                });
 	            }    
-	        }else{
-	            alert('请选取要添加的用例！');
-	        }
 	    }
 	    
 		//=========================================================================================		
