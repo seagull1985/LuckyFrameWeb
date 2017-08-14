@@ -10,6 +10,7 @@ import java.rmi.Naming;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -34,6 +35,7 @@ import luckyweb.seagull.quartz.QuratzJobDataMgr;
 import luckyweb.seagull.spring.entity.ProjectPlan;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.TestJobs;
+import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.service.CaseDetailService;
 import luckyweb.seagull.spring.service.LogDetailService;
 import luckyweb.seagull.spring.service.OperationLogService;
@@ -41,9 +43,12 @@ import luckyweb.seagull.spring.service.ProjectPlanService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.TestJobsService;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
+import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.DateUtil;
 import luckyweb.seagull.util.StrLib;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import rmi.service.RunService;
 
 @Controller
@@ -51,11 +56,6 @@ import rmi.service.RunService;
 public class TestJobsController
 {
 	private static final Logger	log	     = Logger.getLogger(TestJobsController.class);
-	private int	 allPage;
-	private int	 pageSize = 20;
-	private int	 allRows;
-	private int	 page = 1;
-	private int	 offset;
 	
 	
 	@Resource(name = "testJobsService")
@@ -72,28 +72,98 @@ public class TestJobsController
 	
 	@Resource(name = "logdetailService")
 	private LogDetailService	logdetailService;
-
-	public TestJobsService getTestJobsService()
-	{
-		return testJobsService;
-	}
-
-	@Resource(name = "testJobsService")
-	public void setTestJobsService(TestJobsService testJobsService)
-	{
-		this.testJobsService = testJobsService;
-	}
-
 	
 	@Resource(name = "operationlogService")
 	private OperationLogService operationlogservice;
 
-	public OperationLogService getOperationlogService() {
-		return operationlogservice;
-	}
+	@Resource(name = "userinfoService")
+	private UserInfoService userinfoservice;
 	
 	@Resource(name = "sectorprojectsService")
 	private SectorProjectsService sectorprojectsService;
+	
+	/**
+	 * 
+	 * 
+	 * @param tj
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/load.do")
+	public String load(HttpServletRequest req, Model model) throws Exception {
+
+		try {
+			int projectid = 99;
+			if (null != req.getSession().getAttribute("usercode")
+					&& null != req.getSession().getAttribute("username")) {
+				String usercode = req.getSession().getAttribute("usercode").toString();
+				UserInfo userinfo = userinfoservice.getUseinfo(usercode);
+				projectid = userinfo.getProjectid();
+			}
+
+			List<SectorProjects> prolist=sectorprojectsService.getAllProject();
+			for(int i=0;i<prolist.size();i++){
+				if(prolist.get(i).getProjecttype()==1){
+					prolist.get(i).setProjectname(prolist.get(i).getProjectname()+"(TestLink项目)");
+				}
+			}
+			SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd"); 
+			Date dt = new Date();
+			String date=formatter.format(dt);
+		    
+			List iplist = testJobsService.getipList();
+			model.addAttribute("iplist", iplist);
+			
+			model.addAttribute("projects", prolist);
+			model.addAttribute("projectid", projectid);
+			model.addAttribute("date", date);
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("message", e.getMessage());
+			model.addAttribute("url", "/testJobs/load.do");
+			return "error";
+		}
+		return "/jsp/task/job_list";
+	}
+
+	@SuppressWarnings({ "unused", "unchecked" })
+	@RequestMapping(value = "/list.do")
+	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		response.setCharacterEncoding("utf-8");
+		PrintWriter pw = response.getWriter();
+		String search = request.getParameter("search");
+		String projectid = request.getParameter("projectid");
+		TestJobs tj= new TestJobs();
+		if (null == offset && null == limit) {
+			offset = 0;
+		}
+		if (null == limit || limit == 0) {
+			limit = 10;
+		}
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(search)) {
+			tj.setTaskName(search);
+            tj.setPlanproj(search);
+		}
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(projectid)) {
+			tj.setProjectid(Integer.valueOf(projectid));
+		}
+
+		List<TestJobs> jobs = testJobsService.findByPage(tj, offset, limit);
+		// 转换成json字符串
+		String RecordJson = StrLib.listToJson(jobs);
+		// 得到总记录数
+		int total = testJobsService.findRows(tj);
+		// 需要返回的数据有总记录数和行数据
+		JSONObject json = new JSONObject();
+		json.put("total", total);
+		json.put("rows", RecordJson);
+		pw.print(json.toString());
+	}
+	
 	/**
 	 * 新增Job
 	 * @param tj
@@ -116,7 +186,7 @@ public class TestJobsController
 			
 			if(!UserLoginController.permissionboolean(req, "tast_1")){
 				model.addAttribute("taskjob", new TestJobs());
-				model.addAttribute("url",  "/testJobs/list.do");
+				model.addAttribute("url",  "/testJobs/load.do");
 				model.addAttribute("message", "当前用户无权限添加计划任务，请联系管理员！");
 				return "success";
 			}
@@ -278,13 +348,13 @@ public class TestJobsController
 							sectorprojectsService.getid(tj.getPlanproj()),"自动化用例计划任务添加成功！计划名称："+tj.getTaskName());
 		
 					model.addAttribute("message", "添加成功");
-					model.addAttribute("url", "/testJobs/list.do");
+					model.addAttribute("url", "/testJobs/load.do");
 					return retVal;
 				}
 				else
 				{
 					model.addAttribute("message", "添加失败");
-					model.addAttribute("url", "/testJobs/list.do");
+					model.addAttribute("url", "/testJobs/load.do");
 					return retVal;
 				}
 
@@ -297,7 +367,7 @@ public class TestJobsController
 			tj.setTimeout(60);
 			tj.setProjecttype(1);
 			model.addAttribute("taskjob", tj);
-			model.addAttribute("projects", QueueListener.projlist);
+			model.addAttribute("projects", prolist);
 			model.addAttribute("sysprojects", qaprolist);
 			return retVal;
 
@@ -305,81 +375,10 @@ public class TestJobsController
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/testJobs/list.do");
+			model.addAttribute("url", "/testJobs/load.do");
 			return "error";
 		}
 
-	}
-
-	/**
-	 * 
-	 * Job查询
-	 * @param tj
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/list.do")
-	public String list(HttpServletRequest req, TestJobs tj, Model model) throws Exception
-	{
-		
-		model.addAttribute("taskjob", tj);
-		try
-		{
-			String p = req.getParameter("page");
-			if (StrLib.isEmpty(p) || Integer.valueOf(p) == 0)
-			{
-				page = 1;
-			}
-
-			String page2 = req.getParameter("page");
-			if (StrLib.isEmpty(page2))
-			{
-				page = 1;
-			}
-			else
-			{
-				try
-				{
-					page = Integer.parseInt(page2);
-				}
-				catch (Exception e)
-				{
-					page = 1;
-				}
-			}
-			allRows = testJobsService.findRows(tj);
-			offset = (page - 1) * pageSize;
-			if (allRows % pageSize == 0)
-			{
-				allPage = allRows / pageSize;
-			}
-			else
-			{
-				allPage = allRows / pageSize + 1;
-			}
-
-			model.addAttribute("allRows", allRows);
-			model.addAttribute("page", page);
-			model.addAttribute("offset", offset);
-			model.addAttribute("pageSize", pageSize);
-			model.addAttribute("allPage", allPage);
-
-			List<TestJobs> tjjobsMap = testJobsService.findByPage(tj, offset, pageSize);
-			List iplist = testJobsService.getipList();
-			model.addAttribute("tjlist", tjjobsMap);
-			model.addAttribute("iplist", iplist);
-		}
-		catch (Exception e)
-		{
-			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/testJobs/list.do");
-			return "error";
-		}
-
-		model.addAttribute("startDate", DateLib.today("yyyy-MM-dd"));
-		return "/jsp/task/task_list";
-		
 	}
 
 	/**
@@ -419,11 +418,11 @@ public class TestJobsController
 		List<SectorProjects> qaprolist=QueueListener.qa_projlist;
 		List<SectorProjects> prolist=QueueListener.projlist;
 		
-		model.addAttribute("projects", QueueListener.projlist);
+		model.addAttribute("projects", prolist);
 		model.addAttribute("sysprojects", qaprolist);
 		if(!UserLoginController.permissionboolean(req, "tast_3")){
 			model.addAttribute("taskjob", new TestJobs());
-			model.addAttribute("url",  "/testJobs/list.do");
+			model.addAttribute("url",  "/testJobs/load.do");
 			model.addAttribute("message", "当前用户无权限修改计划任务，请联系管理员！");
 			return "success";
 		}
@@ -639,13 +638,13 @@ public class TestJobsController
 					return "/jsp/task/task_update";
 				}
 				model.addAttribute("message", "修改成功,请返回查询！");
-				model.addAttribute("url", "/testJobs/list.do");
+				model.addAttribute("url", "/testJobs/load.do");
 				return "/jsp/task/task_update";
 			}
 			catch (Exception e)
 			{
 				model.addAttribute("message", e.getMessage());
-				model.addAttribute("url", "/testJobs/list.do");
+				model.addAttribute("url", "/testJobs/load.do");
 				return "error";
 			}
 		}
@@ -667,54 +666,63 @@ public class TestJobsController
 	}
 
 	/**
-	 * 删除Job
+	 * 删除调度
 	 * 
-	 * @param id
+	 * @param tj
+	 * @param br
 	 * @param model
+	 * @param req
+	 * @param rsp
 	 * @return
 	 * @throws Exception
+	 * @Description:
 	 */
-	@RequestMapping(value = "/delete.do", method = RequestMethod.POST)
-	public String delete(Model model,HttpServletRequest req) throws Exception
-	{
-		if(!UserLoginController.permissionboolean(req, "tast_2")){
-			model.addAttribute("taskjob", new TestJobs());
-			model.addAttribute("url",  "/testJobs/list.do");
-			model.addAttribute("message", "当前用户无权限删除计划任务，请联系管理员！");
-			return "success";
-		}
-		int id = Integer.valueOf(req.getParameter("id"));
-		TestJobs tj = testJobsService.get(id);
-		List idlist = tastExcuteService.getidlist(id);
-		try
-		{
-			int tastid = 0;
-			for(int i=0;i<idlist.size();i++){
-				tastid = Integer.valueOf(idlist.get(i).toString());
-				this.logdetailService.delete(tastid);
-				this.casedetailService.delete(tastid);
-				this.tastExcuteService.delete(tastid);
+	@RequestMapping(value = "/delete.do")
+	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "tast_2")) {
+				json.put("status", "fail");
+				json.put("ms", "删除调度失败,权限不足,请联系管理员!");
+			} else {
+				int id = Integer.valueOf(req.getParameter("jobid"));
+				TestJobs tj = testJobsService.get(id);
+				List idlist = tastExcuteService.getidlist(id);
+				try
+				{
+					int tastid = 0;
+					for(int i=0;i<idlist.size();i++){
+						tastid = Integer.valueOf(idlist.get(i).toString());
+						this.logdetailService.delete(tastid);
+						this.casedetailService.delete(tastid);
+						this.tastExcuteService.delete(tastid);
+					}
+					testJobsService.delete(id);
+					QuartzManager.removeJob(id + "");
+					
+					operationlogservice.add(req, "TESTJOBS", id, 
+							sectorprojectsService.getid(tj.getPlanproj()),"自动化用例计划任务删除成功！计划名称："+tj.getTaskName());
+					
+					json.put("status", "success");
+					json.put("ms", "删除调度任务成功!");
+				}
+				catch (Exception e)
+				{
+					json.put("status", "fail");
+					json.put("ms", "删除调度过程中失败!");
+				}
 			}
-			testJobsService.delete(id);
-			QuartzManager.removeJob(id + "");
-		}
-		catch (Exception e)
-		{
-			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/testJobs/list.do");
-			return "error";
-		}
-		
-		operationlogservice.add(req, "TESTJOBS", id, 
-				sectorprojectsService.getid(tj.getPlanproj()),"自动化用例计划任务删除成功！计划名称："+tj.getTaskName());
-		
-		String message = "删除成功！";
-		model.addAttribute("taskjob", new TestJobs());
-		model.addAttribute("message", message);
-		model.addAttribute("url", "/testJobs/list.do");
-		return "success";
-	}
+			pw.print(json.toString());
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
 	/**
 	 *启动
 	 * 
@@ -902,7 +910,7 @@ public class TestJobsController
 	{
 		if(!UserLoginController.permissionboolean(req, "tast_upload")){
 			model.addAttribute("taskjob", new TestJobs());
-			model.addAttribute("url",  "/testJobs/list.do");
+			model.addAttribute("url",  "/testJobs/load.do");
 			model.addAttribute("message", "当前用户无权限上传测试项目，请联系管理员！");
 			return "error";
 		}
@@ -958,7 +966,7 @@ public class TestJobsController
 		{
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/testJobs/list.do");
+			model.addAttribute("url", "/testJobs/load.do");
 			return "error";
 		}
 
@@ -992,7 +1000,7 @@ public class TestJobsController
 			result = "服务端IOException！";
 		}
 		
-		model.addAttribute("url", "/testJobs/list.do");
+		model.addAttribute("url", "/testJobs/load.do");
 		model.addAttribute("message", result);
 		return "success";
 	}

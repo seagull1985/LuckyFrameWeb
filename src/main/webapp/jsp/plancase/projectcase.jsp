@@ -257,7 +257,7 @@
 								if (value.length > 200)
 									return '用例名称不能超过200个字符';
 								if (value.length < 2)
-									return '用例名称不能适于2个字符';
+									return '用例名称不能小于2个字符';
 							}
 						}
 					}, {
@@ -389,7 +389,7 @@
 								if (value.length > 100)
 									return '包路径|定位路径不能超过100个字符';
 								if (value.length < 2)
-									return '包路径|定位路径不能适于2个字符';
+									return '包路径|定位路径不能小于2个字符';
 							}
 						}
 					}, {
@@ -403,7 +403,7 @@
 								if (value.length > 100)
 									return '方法名|操作不能超过100个字符';
 								if (value.length < 2)
-									return '方法名|操作不能适于2个字符';
+									return '方法名|操作不能小于2个字符';
 							}
 						}
 					}, {
@@ -417,7 +417,7 @@
 								if (value.length > 500)
 									return '参数不能超过500个字符';
 								if (value.length < 2)
-									return '参数不能适于2个字符';
+									return '参数不能小于2个字符';
 							}
 						}
 					}, {
@@ -431,7 +431,7 @@
 								if (value.length > 50)
 									return '步骤动作不能超过50个字符';
 								if (value.length < 2)
-									return '步骤动作不能适于2个字符';
+									return '步骤动作不能小于2个字符';
 							}
 						}
 					}, {
@@ -445,7 +445,7 @@
 								if (value.length > 2000)
 									return '预期结果不能超过2000个字符';
 								if (value.length < 2)
-									return '预期结果不能适于2个字符';
+									return '预期结果不能小于2个字符';
 							}
 						}
 					}, {
@@ -479,7 +479,7 @@
 								if (value.length > 200)
 									return '备注不能超过200个字符';
 								if (value.length < 2)
-									return '备注不能适于2个字符';
+									return '备注不能小于2个字符';
 							}
 						}
 					}, {

@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="/progressus/assets/css/bootstrap-theme.css" media="screen" >
 	<link rel="stylesheet" href="/progressus/assets/css/bootstrap-table.css" media="screen" >
 	<link rel="stylesheet" href="/progressus/assets/css/metroStyle.css" media="screen" >
+	<link rel="stylesheet" href="/progressus/assets/css/bootstrap-datetimepicker.min.css" media="screen" >
 	<link rel="stylesheet" href="/progressus/assets/css/main.css">
 	
 	<script type="text/javascript" src="/progressus/assets/js/jquery-1.10.2.min.js"></script>
@@ -19,6 +20,8 @@
 	<script src="/progressus/assets/js/bootstraptable/locale/bootstrap-table-zh-CN.js"></script>
 	<script src="/progressus/assets/js/headroom.min.js"></script>
 	<script src="/progressus/assets/js/jquery.ztree.all.js"></script>
+	<script src="/progressus/assets/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="/progressus/assets/js/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script src="/progressus/assets/js/jQuery.headroom.min.js"></script>
 	<script src="/progressus/assets/js/template.js"></script>
     <script type="text/javascript" src="/js/easyui/jquery.easyui.min.js"></script>
@@ -44,7 +47,7 @@
 						<ul class="dropdown-menu" style="background-color:rgba(51,204,255,0.6);">
 							<li><a href="/projectPlan/load.do">测试计划</a></li>
 							<li><a href="/projectCase/load.do">用例管理</a></li>
-							<li><a href="/testJobs/list.do">调度配置</a></li>
+							<li><a href="/testJobs/load.do">调度配置</a></li>
 							<li><a href="/tastExecute/list.do">任务查询</a></li>
 							<li><a href="/autoTestChar/chart.do">任务概况图表</a></li>
 						</ul>

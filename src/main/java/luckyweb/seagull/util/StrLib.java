@@ -5,6 +5,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -223,11 +224,20 @@ public class StrLib {
 	 public static String objectToJson(Object object) {
 	  StringBuilder json = new StringBuilder();
 	  if (object == null) {
-	   json.append("\"\"");
-	  } else if (object instanceof String || object instanceof Integer) {
-	   json.append("\"").append(object.toString().replace("\"", "&quot;")).append("\"");
+	      json.append("\"\"");
+	  } else if (object instanceof Timestamp) {
+		  SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//定义格式，不显示毫秒
+		  String str = df.format(object);
+	      json.append("\"").append(str.replace("\"", "&quot;")).append("\"");
+	  } else if (boolean.class.isAssignableFrom(object.getClass())) {
+		  Boolean B = new Boolean((boolean)object);
+	      json.append("\"").append(B.toString().replace("\"", "&quot;")).append("\"");
+	  } else if (object instanceof String || object instanceof Integer || object instanceof Boolean) {
+		  String str=object.toString().replace("\"", "&quot;");
+		  str=str.replace("\r\n","<br/>");
+	      json.append("\"").append(str).append("\"");
 	  } else {
-	   json.append(beanToJson(object));
+	      json.append(beanToJson(object));
 	  }
 	  return json.toString();
 	 }

@@ -47,6 +47,11 @@ public class TestJobs implements java.io.Serializable {
 	private Integer projecttype;  //项目类型 0testlink 1系统内项目
 	private Integer projectid;  //系统内项目ID
 	private Integer planid;  //系统内项目关联计划ID
+	private String taskType;
+	private String startTimestr;
+	private String endTimestr;
+	private Timestamp createTime;
+	private String noEndDate;
 	
 	public Integer getProjecttype() {
 		return projecttype;
@@ -192,24 +197,8 @@ public class TestJobs implements java.io.Serializable {
 		this.state_str = state_str;
 	}
 
-	private String taskType;
-	private String startTimestr;
-	private String endTimestr;
-	private Timestamp createTime;
-	private String noEndDate;
-	
-	public Set<TestTaskexcute> getTast() {
-		return tast;
-	}
-
-	public void setTast(Set<TestTaskexcute> tast) {
-		this.tast = tast;
-	}
-	private Set<TestTaskexcute> tast;
-
 	private boolean showRun = true;
 	
-
 	public TestJobs() {
 	}
 

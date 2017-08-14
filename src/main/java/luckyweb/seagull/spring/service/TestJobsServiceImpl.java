@@ -119,7 +119,7 @@ public class TestJobsServiceImpl implements TestJobsService
 		return true;
 	}
 
-	private static String	orderBy	= " order by name asc ";
+	private static String	orderBy	= " order by id desc ";
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -181,17 +181,14 @@ public class TestJobsServiceImpl implements TestJobsService
 	private String where(TestJobs jb)
 	{
 		String where = " where ";
-		if (!StrLib.isEmpty(jb.getTaskName()))
-		{
-			where += " name=:name  and ";
+		if (jb.getProjectid()!=0&&jb.getProjectid()!=99){
+			where += " projectid=:projectid  and ";
 		}
-		else if (!StrLib.isEmpty(jb.getTaskType()))
-		{
-			where += " taskType=:taskType  and ";
+		if (!StrLib.isEmpty(jb.getTaskName())){
+			where += " (name like :name  or ";
 		}
-		else if (!StrLib.isEmpty(jb.getPlanproj()))
-		{
-			where += " planproj=:planproj  and ";
+		if (!StrLib.isEmpty(jb.getPlanproj())){
+			where += " planproj like :planproj)  or ";
 		}
 
 		if (where.length() == 7)

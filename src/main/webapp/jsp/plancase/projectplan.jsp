@@ -194,7 +194,7 @@
 								if (value.length > 50)
 									return '计划名称不能超过50个字符';
 								if (value.length < 2)
-									return '计划名称不能适于2个字符';
+									return '计划名称不能小于2个字符';
 							}
 						}
 					}, {

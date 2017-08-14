@@ -101,9 +101,5 @@
 		<property name="planid" type="java.lang.Integer">
 			<column name="planid" length="8" />
 		</property>
-		<set name="tast">
-			<key column="jobid" update="false"/>
-			<one-to-many class="TestTaskexcute" />
-		</set> 
 	</class>
 </hibernate-mapping>
