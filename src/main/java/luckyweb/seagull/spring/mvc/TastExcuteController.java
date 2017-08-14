@@ -406,7 +406,6 @@ public class TastExcuteController
 			String taskid = req.getParameter("taskid");
 			
 			TestTaskexcute task = tastExcuteService.load(Integer.valueOf(taskid));
-			task.getTestJob().setTast(null);
 			String jsonStr=JSONObject.fromObject(task).toString();
 			pw.print(jsonStr);
 		} catch (Exception e) {

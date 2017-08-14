@@ -49,7 +49,7 @@
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">UTP</li>
-			<li class="active"><a href="/testJobs/list.do">调度任务</a></li>
+			<li class="active"><a href="/testJobs/load.do">调度任务</a></li>
 			<li class="active">添加调度任务</li>
 		</ol>
 
@@ -107,7 +107,7 @@
 						id="planproj" class="easyui-combobox" >
 						<sf:option value="0">请选择</sf:option>
 						<c:forEach var="p" items="${projects}">
-							<sf:option value="${p[1]}">${p[1]}</sf:option>
+							<sf:option value="${p.projectid}">${p.projectname}</sf:option>
 						</c:forEach>
 					</sf:select></td>
 			</tr>
@@ -266,7 +266,7 @@
 				<td height="30">&nbsp;</td>
 				<td width="194" height="30"><input name="addBtn" type="submit"
 					class="button gray" id="addBtn" value="添 加" /></td>
-				<td colspan="2"><a href="/testJobs/list.do"><span
+				<td colspan="2"><a href="/testJobs/load.do"><span
 						class="btnold STYLE1" style="width: 70px; margin-bottom: 10px;">返
 							回</span></a></td>
 
@@ -328,7 +328,7 @@
 		}
 		
 		function goBack(){
-		document.getElementById("taskjob").action="/testJobs/list.do";
+		document.getElementById("taskjob").action="/testJobs/load.do";
 		document.getElementById("taskjob").submit();
 		return true;
 	}

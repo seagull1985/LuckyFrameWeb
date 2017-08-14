@@ -28,7 +28,7 @@
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">UTP</li>
-			<li class="active"><a href="/testJobs/list.do">调度任务</a></li>
+			<li class="active"><a href="/testJobs/load.do">调度任务</a></li>
 			<li class="active">调度任务详情</li>
 		</ol>
 
@@ -148,7 +148,7 @@
     <tr>
       <td width="20%" height="40">&nbsp;</td>
       <td height="40" align="center"><a
-						href="/testJobs/list.do" ><span class="btnold STYLE1"  style="width:70px; margin-bottom:10px;">返 回</span></a></td>
+						href="/testJobs/load.do" ><span class="btnold STYLE1"  style="width:70px; margin-bottom:10px;">返 回</span></a></td>
     </tr>
   </table>
  

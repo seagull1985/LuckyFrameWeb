@@ -104,7 +104,7 @@ public class ProjectPlanController {
 			projectplan.setRemark(search);
 		}
 		// 得到客户端传递的查询参数
-		if (!StrLib.isEmpty(projectid) && !"99".equals(projectid)) {
+		if (!StrLib.isEmpty(projectid)) {
 			projectplan.setProjectid(Integer.valueOf(projectid));
 		}
 

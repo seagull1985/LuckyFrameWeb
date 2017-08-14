@@ -40,7 +40,7 @@
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">UTP</li>
-			<li class="active"><a href="../testJobs/list.do">调度配置</a></li>
+			<li class="active"><a href="../testJobs/load.do">调度配置</a></li>
 			<li class="active">上传测试驱动桩</li>
 		</ol>
 

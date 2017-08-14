@@ -43,7 +43,7 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 		
 		if (isRun == false) {
 			try {
-				Query queryproj = session.createQuery("select  projectid, projectname from SectorProjects where projecttype=1 order by projectid asc");
+				Query queryproj = session.createQuery("from SectorProjects where projecttype=1 order by projectid asc");
 				QueueListener.projlist = queryproj.list();//获取所有项目
 				
 				Query query = session.createQuery("from TestJobs where (tasktype ='D') or  (tasktype ='O' and runtime>sysdate()) ");
@@ -187,15 +187,14 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 	
 	private void whereParameter(TestJobs jb, Query query) {
 		if (!StrLib.isEmpty(jb.getTaskName())) {
-			query.setParameter("name", jb.getTaskName().trim());
-		}
-		if (!StrLib.isEmpty(jb.getTaskType())) {
-			query.setParameter("taskType", jb.getTaskType().trim());
+			query.setParameter("name", "%"+jb.getTaskName().trim()+"%");
 		}
 		if (!StrLib.isEmpty(jb.getPlanproj())) {
-			query.setParameter("planproj", jb.getPlanproj().trim());
+			query.setParameter("planproj", "%"+jb.getPlanproj().trim()+"%");
 		}
-
+		if (jb.getProjectid()!=0&&jb.getProjectid()!=99) {
+			query.setParameter("projectid", jb.getProjectid());
+		}
 	}
 
 	@Override
