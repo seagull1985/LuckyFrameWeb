@@ -90,7 +90,7 @@
 										<label for="dtp_input" class="col-md-3 control-label">选择日志日期：</label>
 										<div class="input-group date form_date col-md-5">
 											<input id="dtp_input" class="form-control" type="text" value="${date }" readonly> 
-					<span class="input-group-addon" ><span class="glyphicon glyphicon-calendar"></span></span>
+					                        <span class="input-group-addon" ><span class="glyphicon glyphicon-calendar"></span></span>
 										</div>
 									</div>
 
@@ -152,6 +152,7 @@
 
 	<script type="text/javascript">
 		$(function() {
+			$('#search_project').val('${projectid }');
 			//1.初始化Table
 			var oTable = new TableInit();
 			oTable.Init();
@@ -190,10 +191,6 @@
 									detailView : false, //是否显示父子表
 									columns : [
 											{
-												checkbox : true,
-												width : '3%',
-											},
-											{
 												field : 'projectid',
 												title : 'projectid',
 												visible : false
@@ -201,10 +198,10 @@
 											{
 												field : 'taskName',
 												title : '调度名称',
-												width : '17%',
+												width : '18%',
 												formatter : function(value,
 														row, index) {
-													return '<a href="/tastExecute/list.do?jobid='
+													return '<a href="/tastExecute/load.do?jobid='
 															+ row.id
 															+ '">'
 															+ value + '</a> ';
@@ -218,7 +215,7 @@
 											{
 												field : 'taskName',
 												title : '计划名称',
-												width : '15%',
+												width : '17%',
 											},
 											{
 												field : 'taskType',
@@ -301,47 +298,6 @@
 													return e + d + f + g + h;
 												}
 											} ],
-
-									onEditableSave : function(field, row,
-											oldValue, $el) {
-										var status = document
-												.getElementById("loginstatus").value;
-										if (status == "false") {
-											if (window.confirm("你未登录哦，要先去登录吗？")) {
-												var url = '/progressus/signin.jsp';
-												window.location.href = url;
-												return true;
-											} else {
-												return false;
-											}
-										}
-
-										$('#tb_testjob').bootstrapTable(
-												"resetView");
-										$.ajax({
-											type : "post",
-											url : "/testJobs/update.do",
-											data : row,
-											dataType : 'JSON',
-											success : function(data, status) {
-												if (data.status == "success") {
-													alert(data.ms);
-												} else {
-													$('#tb_testjob')
-															.bootstrapTable(
-																	'refresh');
-													alert(data.ms);
-												}
-											},
-											error : function() {
-												alert('编辑失败');
-											},
-											complete : function() {
-
-											}
-
-										});
-									}
 								});
 			};
 			//得到查询的参数
@@ -400,6 +356,8 @@
 			$(".form_date").datetimepicker({
 				format: 'yyyy-mm-dd',
 		        language:  'zh-CN',
+		        startDate : new Date(new Date()-365*24*60*60*1000),
+		        endDate : new Date(),
 		        weekStart: 1,
 		        todayBtn:  1,
 				autoclose: 1,

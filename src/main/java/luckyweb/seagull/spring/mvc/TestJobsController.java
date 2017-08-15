@@ -111,7 +111,7 @@ public class TestJobsController
 			SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd"); 
 			Date dt = new Date();
 			String date=formatter.format(dt);
-		    
+			
 			List iplist = testJobsService.getipList();
 			model.addAttribute("iplist", iplist);
 			

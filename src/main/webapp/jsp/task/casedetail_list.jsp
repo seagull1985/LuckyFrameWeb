@@ -232,7 +232,7 @@
 	}
 	function goBack(){
 		document.getElementById("taskId").value="";		
-		document.getElementById("testCasedetail").action="/tastExecute/list.do";
+		document.getElementById("testCasedetail").action="/tastExecute/load.do";
 		document.getElementById("testCasedetail").submit();
 		return true;
 	}

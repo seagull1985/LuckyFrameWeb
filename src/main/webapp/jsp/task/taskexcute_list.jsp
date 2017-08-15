@@ -1,301 +1,393 @@
-<%@ page contentType="text/html; charset=utf-8" language="java" import="java.sql.*" errorPage="" %>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ page contentType="text/html; charset=utf-8" language="java"
+	import="java.sql.*" errorPage=""%>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-
-<link rel="stylesheet" type="text/css" href="/js/easyui/themes/default/easyui.css" />
-<link rel="stylesheet" type="text/css" href="/js/easyui/themes/default/progressbar.css" />
-<link rel="stylesheet" type="text/css" href="/js/easyui/themes/icon.css" />
-<!-- <link rel="stylesheet" type="text/css" href="../js/easyui/demo/demo.css"> -->
-<script language="JavaScript" type="text/javascript"	src="/js/My97DatePicker/WdatePicker.js"></script>
-
-<title>任务查询</title>
-<link href="/css/style.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript">
- 	window.onload = function init(){
- 		var idlist = eval('${idlist}');
-	  	 for(var i=0;i<"${idlistsize}";i++){
-	 	 	var url ="/tastExecute/progressdata.do?id="+idlist[i];
-	 		$.ajax({
-	 			type:"GET",
-	 			url:url,
-	 			cache:false,
-	 			dataType:"json",
-	 			success:function (result){
-	 		    	if(result.data[1]!=null&&result.data[1]<=100&&result.data[1]>0){		
-	 		    		$('#'+result.data[0]).progressbar('setValue', result.data[1]);
-	 		    		document.getElementById("casetotal"+result.data[0]).innerText = result.data[7];
-	 		    		if(result.data[1]==100){
-	 		    			document.getElementById("finishtime"+result.data[0]).innerText = result.data[2];
-	 		    			document.getElementById("casesucc"+result.data[0]).innerText = result.data[3];
-	 		    			document.getElementById("casefail"+result.data[0]).innerText = result.data[4];
-	 		    			document.getElementById("caselock"+result.data[0]).innerText = result.data[5];
-	 		    			document.getElementById("casenoex"+result.data[0]).innerText = result.data[6];
-	 		    		}
-	 					return true;
-	 		    	}
-	 			}
-	 			});
-	 	 	}
-  	setTimeout(arguments.callee, 3000);
-	} 
-</script>	
+<title>任务执行列表</title>
 </head>
 
-<body >
-	<div>  
-        <%@ include file="/head.jsp" %>
-    </div> 
-	<header id="head" class="secondary"></header>    
-	<div class="container" style="width:auto;">
+<body>
+	<div>
+		<%@ include file="/head.jsp"%>
+	</div>
+
+	<header id="head" class="secondary"></header>
+
+	<!-- container -->
+	<div class="container" style="width: auto; font-size: 14px;">
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">UTP</li>
 			<li class="active">任务查询</li>
 		</ol>
 
-		<div class="row">	
+		<div class="row">
 			<!-- Article main content -->
-		<article class="col-sm-9 maincontent" style="width:100%;">
-		 <header class="page-header">
-				<h1 class="page-title" style="text-align:center;">任务查询</h1>
+			<article class="col-sm-9 maincontent" style="width:100%;">
+			<header class="page-header">
+			<h1 class="page-title" style="text-align: center;">任务执行列表</h1>
 			</header>
 
-<sf:form  method="post"  modelAttribute="testTastexcute">
-<input name="projName" id="projName" type="hidden"  />
-<input name="createTime1" id="createTime1" type="hidden" value=""  />
-<input name="flag" id="flag" type="hidden" value="1"  />
-<table width="90%"  align="center" class="rect"  cellPadding=1 border=1 bordercolor="#CCCCCC">
-  <tr>
-    <td width="11%" height="20" style="font-size:15px;font-weight:600">执行时间</td>
-    <td width="33%" height="20" valign="middle" style="font-size:15px;font-weight:600">&nbsp;&nbsp;<sf:input path="startDate" 	class="Wdate" style="height:95%" onclick="WdatePicker({isShowClear:false})"  />&nbsp;至&nbsp;<sf:input path="endDate" 	class="Wdate" style="height:95%" onclick="WdatePicker({isShowClear:false,readOnly:true})"  /></td>
-    <td width="10%" height="20" style="font-size:15px;font-weight:600">调度名称</td>
-    <td height="30" colspan="2" style="font-size:15px;font-weight:600">&nbsp;
-    	<sf:select path="jobid">
-   	   <sf:option value="0">全部</sf:option>
-     <c:forEach var="job" items="${jobs }"  begin="0" step="1" varStatus="i" >
-	  <sf:option value="${job[0]}">【${job[2]}】—${job[1]}</sf:option>
-	  </c:forEach>
-    </sf:select>    </td>
-    </tr>
-  <tr>
-    <td height="30" style="font-size:15px;font-weight:600">任务编号</td>
-    <td height="30" style="font-size:15px;font-weight:600">&nbsp;&nbsp;<sf:input path="taskId" /></td>
-    <td style="font-size:15px;font-weight:600">运行状态</td>
-    <td style="font-size:15px;font-weight:600">&nbsp;&nbsp;<sf:select path="taskStatus">
-     <sf:option value="">全部</sf:option>
-      <sf:option value="0">未执行</sf:option>
-       <sf:option value="1">执行中</sf:option>
-       <sf:option value="2">执行成功</sf:option>
-       <sf:option value="3">调起失败|超时</sf:option>
-    </sf:select>
-    &nbsp;</td>
-    <td width="24%" height="30" align="center">
-    <input	name="button" type="submit" class="button gray" id="button" value="查询" />&nbsp;&nbsp;
-    <a	href="#" onclick="showDiv('888888','batch')" style="text-decoration: none;"> <span
-						class="btnold STYLE1" style="width: 70px;">批量删除</span></a>&nbsp;&nbsp;
-    </td>
-    </tr>
-</table>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="error_msg" >${message}</span>
-<input name="page" id="page" type="hidden"  />
-<%--<sf:input path="jobid" />--%>
-  <table width="92%" align="center" class="bordered">
-    <tr bgcolor="#B9DCFF">
-      <th width="4%" height="45" align="center" bgcolor="#B9DCFF">全部<br><input type="checkbox" onclick="selk(this)"/></th>
-      <th height="45" align="center">任务名称</th>
-      <th height="45" align="center">所属项目</th>
-      <th height="45" align="center">执行时间</th>
-      <th height="45" align="center">结束时间</th>
-      <th height="45" align="center">运行状态</th>
-       <th width="4%" height="25" align="center" nowrap="nowrap">总用例</th>
-          <th width="4%" height="25" align="center"nowrap="nowrap"> 成功 </th>
-          <th width="4%" height="25" align="center"nowrap="nowrap"> 失败 </th>
-          <th width="4%" height="25" align="center"nowrap="nowrap"> 锁定 </th>
-          <th width="4%" height="25" align="center"nowrap="nowrap">未执行</th>
-      <th height="45" align="center">操作</th>
-     
-    </tr>
-	   <c:forEach var="t" items="${list }"   begin="0" step="1" varStatus="i"> 
-	    <tr>
-	      <td style="text-align:center"><input type="checkbox" name="deletebox" value="${t.id}" /></td>
-	      <td height="25" align="center"><a  href="#" onclick="list(${t.id})">${t.taskId }</a>&nbsp;</td>
-	      <td height="25" align="center">${t.testJob.planproj }&nbsp;</td>
-	      <td height="25" align="center"><fmt:formatDate value="${t.createTime }" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-	      <td height="25" align="center" id="finishtime${t.id}"><fmt:formatDate value="${t.finishtime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-	      <c:if test="${t.taskStatus==1||t.taskStatus==0 }">
-	      <td height="25" align="center" width="8%" style="text-align:center;"><div id="${t.id}" class="easyui-progressbar" style="width:100%;height:100%;text-align:center">${t.taskStatus_str}</div></td>
-	      </c:if>
-	      <c:if test="${t.taskStatus!=1&&t.taskStatus!=0 }">
-	      <td height="25" align="center" width="8%" style="text-align:center">${t.taskStatus_str}</td>
-	      </c:if>
-	      <td width="5%" height="25" style="text-align:center" id="casetotal${t.id}"><a  href="#" onclick="list(${t.id})">${t.casetotalCount}</a></td>
-          <td width="4%" height="25" style="text-align:center;color:#00bf5f" id="casesucc${t.id}"><a  style="color:#00bf5f" href="#" onclick="gocasedetail(${t.id},0)">${t.casesuccCount}</a></td>
-          <td width="4%" height="25" style="text-align:center;color:#ff0000" id="casefail${t.id}"><a  style="color:#ff0000" href="#" onclick="gocasedetail(${t.id},1)">${t.casefailCount}</a></td>
-          <td width="4%" style="text-align:center;color:#FF7F00" id="caselock${t.id}"><a  style="color:#FF7F00" href="#" onclick="gocasedetail(${t.id},2)">${t.caselockCount}</a></td>
-          <td width="4%" height="25" style="text-align:center;color:#FFD39B" id="casenoex${t.id}"><a  style="color:#FFD39B" href="#" onclick="gocasedetail(${t.id},4)">${t.casenoexecCount}</a></td>
-          <td align="center" style="text-align:center"><a href="#" onclick="showDiv('${t.id}','${t.taskId }')"><img src="../pic/delete.png"
-						width="20" height="20" border="0" title="删除" /></a></td>
-	    </tr>
-    </c:forEach>
-  </table>
+			<div class="panel-body" style="padding-bottom: 0px;">
+				<div class="panel panel-default">
+					<div class="panel-heading">查询条件</div>
+					<div class="panel-body">
+						<div class="form-group" style="margin-top: 15px">
+							
+							<div class="col-md-12">
+							<label class="control-label" for="txt_search_job" style="float: left;">调度名称:</label>
+							<div class="select-group  col-md-3">
+								<select class="form-control" id="search_job"
+									onchange="searchjob()">
+									<option value="0">全部调度</option>
+									<c:forEach var="job" items="${jobs }">
+										<option value="${job[0]}">【${job[2]}】—${job[1]}</option>
+									</c:forEach>
+								</select>
+								</div>
+								
+						     <label class="control-label" for="txt_search_job" style="float: left;">日期段:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <div class="input-group date form_date col-md-3" id="datepicker" style="float: left;">  
+                                  <input type="text" class="form-control" name="start" id="qBeginTime" readonly/>
+                                  <span class="input-group-addon" ><span class="glyphicon glyphicon-calendar"></span></span>
+                                  <span class="input-group-addon">至</span>  
+                                  <input type="text" class="form-control" name="end" id="qEndTime" readonly/>
+                                  <span class="input-group-addon" ><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                                
+                            <label class="control-label" for="txt_search_job" style="float: left;">&nbsp;&nbsp;&nbsp;&nbsp;任务状态:</label>
+							<div class="select-group col-md-2" style="float: left;">
+								<select class="form-control" id="search_status"	onchange="searchstatus()">
+                                  <option value="">全部</option>
+                                  <option value="0">未执行</option>
+                                  <option value="1">执行中</option>
+                                  <option value="2">执行成功</option>
+                                  <option value="3">调起失败|超时</option>
+								</select>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+				</div>
 
-      
-<center>
- 		 <div  id="pagelist" align="center" >
-    	 <c:if test="${allRows!=0 }">  
-			<ul>	 
-            		
-              <li> <a href="#" onclick="return setPage(${jobid },1)">首页 </a></li>
-              <li>  <a href="#" onclick="return frontPageCheck(${jobid },${page-1});">上一页</a></li>
-              <li>  <a href="#" onclick="return backPageCheck(${jobid },${page+1});">下一页</a></li>
-              <li>  <a href="#" onclick="return setPage(${jobid },${allPage})">末页</a></li>
-          	  <li> 第${page}页 </li>
-              <li>共${allRows}条</li>
-            <li>共${allPage}页</li>
-          </ul>
-     	 </c:if>
-          <c:if test="${allRows==0 }"> 
-          	<font color="#FF0000">没有记录!</font>
-          </c:if> 
+				<div id="toolbar" class="btn-group">
+					<button id="btn_del" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除任务
+					</button>
+				</div>
+				<table id="tb_testexcute"></table>
 
-  </div>
- 	</center>
-        
-</sf:form>
-
-<%--
-<center>
-				总共有${allPage}页, 当前是第${page}页 <a href="/tastExecute/list.do/${jobid }/1"><font
-					 color="blue">首页</font> </a> &nbsp;<a onclick="goPage(${jobid},${page-1})"
-					href="/tastExecute/list.do/${jobid }/${page-1}"
-					onclick="return frontPageCheck();"><font  color="red">上一页</font>
-				</a>&nbsp; <a href="/tastExecute/list.do/${jobid }/${page+1}"
-					onclick="return backPageCheck();"><font  color="red">下一页</font>
-				</a>&nbsp; <a href="/tastExecute/list.do/${jobid }/${allPage}"><font 
-					color="blue">末页</font> </a>
-	</center>--%>
-<p>&nbsp;</p>
-	</article>
+			</div>
+			</article>
+		</div>
 	</div>
-	</div>
-	
-<script type="text/javascript">
-	function list(taskid){
-		document.getElementById("testTastexcute").action="/caseDetail/list.do";
-		document.getElementById("taskId").value=taskid;
-		document.getElementById("testTastexcute").submit();
-	}
-	
-	function gocasedetail(taskid,status){
-		var url = '/caseDetail/list.do?taskId='+taskid+'&status='+status;
-		window.location.href=url;
-	}
 
-function frontPageCheck(jobid,page)
-	{
-		if(${page > 1})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("testTastexcute").submit();
-			return true;
-		}
-		return false;
-	}
-	
-	function backPageCheck(jobid,page)
-	{
-		if(${page < allPage})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("testTastexcute").submit();
-			return true;
-		}			
-		return false;
-	}
-	
-	
-		function setPage(jobid,page)
-	{
-		if(page==1){
-			document.getElementById("page").value=1;
-		}else{
-			document.getElementById("page").value=page;
-		}
-			document.getElementById("testTastexcute").submit();
-		return true;
-	}
-	
-	
-	function delbatch(){
-		var _id = document.getElementsByName("deletebox");
-		var id;
-		for(var i=0;i<_id.length;i++){
-			if(_id[i].checked){
-				id = _id[i];
+	<script type="text/javascript">
+		$(function() {
+			$('#search_job').val('${jobid }');
+			
+			//1.初始化Table
+			var oTable = new TableInit();
+			oTable.Init();
+			
+			$('#qBeginTime').datetimepicker({
+				format: 'yyyy-mm-dd',
+		        language:  'zh-CN',
+			    todayBtn : "linked",  
+			    autoclose : true,  
+			    todayHighlight : true,
+			    forceParse: 0,
+			    weekStart: 1,
+			    minView: "month",//设置只显示到月份
+			    startView: 2,
+			    endDate : new Date(),
+			}).on('changeDate',function(e){  
+			    var startTime = e.date;  
+			    $('#qEndTime').datetimepicker('setStartDate',startTime);
+				//1.初始化Table
+				var oTable = new TableInit();
+				$('#tb_testexcute').bootstrapTable('destroy');
+				oTable.Init();
+			});  
+			//结束时间：  
+			$('#qEndTime').datetimepicker({
+				format: 'yyyy-mm-dd',
+		        language:  'zh-CN',
+			    todayBtn : "linked",  
+			    autoclose : true,  
+			    todayHighlight : true,
+			    forceParse: 0,
+			    minView: "month",//设置只显示到月份
+			    weekStart: 1,
+			    endDate : new Date()
+			}).on('changeDate',function(e){  
+			    var endTime = e.date;  
+			    $('#qBeginTime').datetimepicker('setEndDate',endTime);
+				//1.初始化Table
+				var oTable = new TableInit();
+				$('#tb_testexcute').bootstrapTable('destroy');
+				oTable.Init();
+			});
+			
+			$('#qBeginTime').datetimepicker('setDate',new Date(new Date()-7*24*60*60*1000));
+			$('#qEndTime').datetimepicker('setDate',new Date(new Date()-1000));
+		});
+
+		var TableInit = function() {
+			var oTableInit = new Object();
+			//初始化Table
+			oTableInit.Init = function() {
+				$('#tb_testexcute')
+						.bootstrapTable(
+								{
+									url : '/tastExecute/list.do', //请求后台的URL（*）
+									method : 'get', //请求方式（*）
+									toolbar : '#toolbar', //工具按钮用哪个容器
+									striped : true, //是否显示行间隔色
+									cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+									pagination : true, //是否显示分页（*）
+									sortable : false, //是否启用排序
+									sortOrder : "asc", //排序方式
+									queryParams : oTableInit.queryParams,//传递参数（*）
+									sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）
+									pageNumber : 1, //初始化加载第一页，默认第一页
+									pageSize : 10, //每页的记录行数（*）
+									pageList : [ 10, 25, 50, 100 ], //可供选择的每页的行数（*）
+									search : true, //是否显示表格搜索，此搜索会进服务端
+									strictSearch : true,
+									showColumns : false, //是否显示所有的列
+									showRefresh : true, //是否显示刷新按钮
+									minimumCountColumns : 2, //最少允许的列数
+									clickToSelect : true, //是否启用点击选中行
+									height : 500, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+									uniqueId : "ID", //每一行的唯一标识，一般为主键列
+									showToggle : false, //是否显示详细视图和列表视图的切换按钮
+									cardView : false, //是否显示详细视图
+									detailView : false, //是否显示父子表
+									columns : [
+											{
+												checkbox : true,
+												width : '3%',
+											},
+											{
+												field : 'id',
+												title : 'id',
+												visible : false
+											},
+											{
+												field : 'taskId',
+												title : '任务名称',
+												width : '25%',
+												formatter : function(value,
+														row, index) {
+													return '<a href="/caseDetail/list.do?taskId='
+															+ row.id
+															+ '">'
+															+ value + '</a> ';
+												}
+											},
+											{
+												field : 'testJob.planproj',
+												title : '项目名称',
+												width : '13%',
+											},
+											{
+												field : 'createTime',
+												title : '开始时间',
+												width : '10%',
+											},
+											{
+												field : 'finishtime',
+												title : '结束时间',
+												width : '10%',
+												formatter : function(value,
+														row, index) {
+													return '<font id="finishtime' + row.id + '">'+value+'</font>';
+												}
+											},
+											{
+												field : 'taskStatus',
+												title : '运行状态',
+												width : '15%',
+												align : 'center',
+												formatter : function(value,
+														row, index) {
+													if(value==1||value==0){
+												 	 	var hdiv = '<div class="progress progress-striped active" style="margin-bottom:0px">'+
+														'<div id="progress'+row.id+'" class="progress-bar progress-bar-success" aria-valuemax="100"'+ 
+														'aria-valuemin="0" aria-valuenow="0" style="width:0%;text-align:center">0%</div></div>';
+														refreshProgress(row.id);
+													    return hdiv;					
+													}else{
+														return row.taskStatus_str;
+													}
+													
+												}
+											},
+											{
+												field : 'casetotalCount',
+												title : '总用例数',
+												width : '5%',
+												formatter : function(value,
+														row, index) {
+													return '<a href="/caseDetail/list.do?taskId='
+															+ row.id
+															+ '" id="casetotal'+row.id+'">'
+															+ value + '</a> ';
+												}
+											},
+											{
+												field : 'casesuccCount',
+												title : '成功',
+												width : '5%',
+												formatter : function(value,
+														row, index) {
+													return '<a href="/caseDetail/list.do?taskId='+ row.id+ '&status=0" id="casesucc'+row.id+'">'	+ value + '</a> ';
+												}
+											},
+											{
+												field : 'casefailCount',
+												title : '失败',
+												width : '5%',
+												formatter : function(value,
+														row, index) {
+													return '<a href="/caseDetail/list.do?taskId='+ row.id+ '&status=1" id="casefail'+row.id+'">'	+ value + '</a> ';
+												}
+											},
+											{
+												field : 'caselockCount',
+												title : '锁定',
+												width : '5%',
+												formatter : function(value,
+														row, index) {
+													return '<a href="/caseDetail/list.do?taskId='+ row.id+ '&status=2" id="caselock'+row.id+'">'	+ value + '</a> ';
+												}
+											},
+											{
+												field : 'casenoexecCount',
+												title : '未执行',
+												width : '5%',
+												formatter : function(value,
+														row, index) {
+													return '<a href="/caseDetail/list.do?taskId='+ row.id+ '&status=4" id="casenoexec'+row.id+'">'	+ value + '</a> ';
+												}
+											} ],
+								});
+			};
+			//得到查询的参数
+			oTableInit.queryParams = function(params) {
+				var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+					limit : params.limit, //页面大小
+					offset : params.offset, //页码偏移量
+					search : params.search, //搜索参数
+					jobid : $('#search_job').val(), //项目ID
+					startDate: $('#qBeginTime').val(), //查询日期段
+					endDate: $('#qEndTime').val(), //查询日期段
+					status: $('#search_status').val(), //查询日期段
+				};
+				return temp;
+			};
+
+			return oTableInit;
+		};
+
+		var searchjob = function() {
+			//1.初始化Table
+			var oTable = new TableInit();
+			$('#tb_testexcute').bootstrapTable('destroy');
+			oTable.Init();
+		};
+		
+		var searchstatus = function() {
+			//1.初始化Table
+			var oTable = new TableInit();
+			$('#tb_testexcute').bootstrapTable('destroy');
+			oTable.Init();
+		};
+		
+	 	function refreshProgress(id){
+		 	 	var url ="/tastExecute/progressdata.do?id="+id;
+ 		 		$.ajax({
+		 			type:"GET",
+		 			url:url,
+		 			cache:false,
+		 			dataType:"json",
+		 			success:function (result){
+		 		    	if(result.data[1]!=null&&result.data[1]<=100&&result.data[1]>0){
+		 		    		document.getElementById("casetotal"+id).innerText = result.data[7];
+		 		    		$('#progress'+id).css('width', result.data[1]+'%');
+		 		    		document.getElementById("progress"+id).innerText  = result.data[1]+'%';
+		 		    		$('#progress'+id).attr("aria-valuenow",result.data[1]);
+		 		    	}
+		 		    	if(result.data[1]==100){
+		 		    		document.getElementById("finishtime"+id).innerText = result.data[2];
+		 		    		document.getElementById("casesucc"+id).innerText = result.data[3];
+		 		    		document.getElementById("casefail"+id).innerText = result.data[4];
+		 		    		document.getElementById("caselock"+id).innerText = result.data[5];
+		 		    		document.getElementById("casenoexec"+id).innerText = result.data[6];
+		 		    		clearTimeout(t);
+	 		    		}
+		 			}
+		 			});
+		 		    var t=setTimeout("refreshProgress("+id+")", 3000);
+		} 
+	 	
+	    btn_del.onclick=function(){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
 			}
-		}
-		if(confirm('批量删除会将选中的任务用例和日志全部删除！耗时较长，请耐心等待！\r\n确定要删除吗？')==true){
-			document.getElementById("testTastexcute").action="/tastExecute/deletebatch.do";
-			document.getElementById("testTastexcute").submit();
-			return true;
-		}
-	}
-	
-	
-	function del(id,name){
-		if(confirm('即将删除任务下的所有用例和日志！请谨慎操作！\r\n确定要删除 '+name+' 吗？')==true){
-			document.getElementById("testTastexcute").action="/tastExecute/delete.do?id="+id;
-			document.getElementById("testTastexcute").submit();
-			return true;
-		}
-	}
-	
-	function showPic1(id){
-			document.getElementById("testTastexcute").action="/tastExecute/"+id+"/showPic1.do";
-			document.getElementById("testTastexcute").submit();
-	}
-	
-	function selk(sel) 
-	{
-		var _id = document.getElementsByName("deletebox");
-		if (sel.checked) {
-		 for (var i = 0; i < _id.length; i ++) 
-		 {
-			if (_id[i].type == "checkbox") _id[i].checked = true;
-		 }
-		 
-		}else
-		{
-		  for (var i = 0; i < _id.length; i ++) 
-		 {
-			if (_id[i].type == "checkbox") _id[i].checked = false;
-		 }
-		}
-		return;
-	}
-	
-	function showDiv(id,name){
-		var status = document.getElementById("loginstatus").value;
-		if(status=="false"){
-			if(window.confirm("你未登录哦，要先去登录吗？")){
-				var url = '/progressus/signin.jsp';
-				window.location.href=url;
-			}else{
-				return false; 
-			} 	
-		}else if(id=="888888"&&name=="batch"){
-			delbatch();
-		}else{
-			del(id,name);
-		}		
-	}
-	
-</script>
+			
+	        var selectIndex = $('input[name="btSelectItem"]:checked ').val();
+	        deleteItem($('#tb_testexcute'), selectIndex, true);
+	    }
+	    
+	    function deleteItem($table, selectIndex, reLoad){
+            var ids = $.map($table.bootstrapTable('getSelections'), function (row) {
+                      return row.id;
+                       }); 
+	        if(ids.length != 0 ){
+	        	if(confirm("真的要删除选择的任务吗?")){
+		                $.ajax({
+		                   type: "POST",
+		                   cache:false,
+		                   async : true,
+		                   dataType : "json",
+		                   url:  "delete.do",
+		                   contentType: "application/json", //必须有
+		                   data: JSON.stringify({"taskids":ids}),
+		                   success: function(data, status){
+		                           if (data.status == "success"){
+		                               $table.bootstrapTable('hideRow', {index:selectIndex});
+		                               alert(data.ms);
+		                              if(reLoad){
+		                                  $table.bootstrapTable('refresh');
+		                              }
+		                           }else{
+		                        	   alert(data.ms);
+		                           }
+		                   },error:function()
+		                    {
+		                        alert('删除出错');
+		                    }
+		                });
+	            }    
+	        }else{
+	            alert('请选取要删除的任务！');
+	        }
+	    }
+	</script>
 </body>
 </html>
