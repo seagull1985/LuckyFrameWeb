@@ -48,7 +48,7 @@
 							<li><a href="/projectPlan/load.do">测试计划</a></li>
 							<li><a href="/projectCase/load.do">用例管理</a></li>
 							<li><a href="/testJobs/load.do">调度配置</a></li>
-							<li><a href="/tastExecute/list.do">任务查询</a></li>
+							<li><a href="/tastExecute/load.do">任务查询</a></li>
 							<li><a href="/autoTestChar/chart.do">任务概况图表</a></li>
 						</ul>
 					</li>
