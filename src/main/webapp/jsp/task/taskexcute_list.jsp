@@ -331,7 +331,10 @@
 		 		    		document.getElementById("casefail"+id).innerText = result.data[4];
 		 		    		document.getElementById("caselock"+id).innerText = result.data[5];
 		 		    		document.getElementById("casenoexec"+id).innerText = result.data[6];
-		 		    		clearTimeout(t);
+		 		    		
+		 		    		if(result.data[2]!=null){
+		 		    			clearTimeout(t);
+		 		    		}	 		    		
 	 		    		}
 		 			}
 		 			});
