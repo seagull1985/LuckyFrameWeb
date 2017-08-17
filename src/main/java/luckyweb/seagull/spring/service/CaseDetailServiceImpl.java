@@ -84,14 +84,15 @@ public class CaseDetailServiceImpl implements CaseDetailService {
 		}
 		if (caseDetail.getTaskId()!=0) {
 			where += " taskId=:taskId  and ";
-		}
-		 if (!StrLib.isEmpty(caseDetail.getCaseno())) {
-			where += " caseno like :caseno  and ";
-		} if (!StrLib.isEmpty(caseDetail.getCasestatus())) {
+		} 
+		if (!StrLib.isEmpty(caseDetail.getCasestatus())) {
 			where += " casestatus=:casestatus  and ";
 		}
-		 if (!StrLib.isEmpty(caseDetail.getCasename())) {
-			where += " casename like :casename  and ";
+		if (!StrLib.isEmpty(caseDetail.getCaseno())) {
+			where += " (caseno like :caseno  or ";
+		}
+		if (!StrLib.isEmpty(caseDetail.getCasename())) {
+			where += " casename like :casename)  or ";
 		}
 
 		if (where.length() == 7) {

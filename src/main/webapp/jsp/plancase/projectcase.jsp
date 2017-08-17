@@ -370,8 +370,6 @@
 					clickToSelect : true,
 					detailView : false,//父子表
 					uniqueId : "ID",
-					pageSize : 10,
-					pageList : [ 10, 25 ],
 					columns : [ {
 						checkbox : true,
 						visible : false
