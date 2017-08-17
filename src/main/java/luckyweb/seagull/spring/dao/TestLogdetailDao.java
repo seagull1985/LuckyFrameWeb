@@ -18,12 +18,8 @@ public interface TestLogdetailDao {
 
 	public void delete(String hql,int id) throws Exception;
 
-/*	public List findByPage(final TestLogdetail tast,final String hql, final int offset,final int pageSize);
-
-	public List findByPage(final String hql, final Object[] values,final int offset, final int pageSize);
-
 	public List findByPage(final String hql, final Object value,final int offset, final int pageSize);
 
-	public int findRows(String hql,TestLogdetail tast);*/
+	public int findRows(String hql,TestLogdetail logs);
 
 }

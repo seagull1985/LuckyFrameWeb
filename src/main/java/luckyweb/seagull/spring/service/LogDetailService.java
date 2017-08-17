@@ -15,13 +15,8 @@ public interface LogDetailService {
 	public List<TestLogdetail> list(TestLogdetail log);
 
 	public TestLogdetail load(int id);
-	/*public List findByPage( TestLogdetail tast, final int offset,final int pageSize);
-
-	public List findByPage( final Object[] values,final int offset, final int pageSize);
-
-	public List findByPage( final Object value,final int offset, final int pageSize);
-	
-	public int findRows(TestLogdetail jobs ) ;*/
+	public List<TestLogdetail> findByPage(Object value, int offset, int pageSize);
+	public int findRows(TestLogdetail logs) ;
 	public void delete(int id) throws Exception;
 
 }

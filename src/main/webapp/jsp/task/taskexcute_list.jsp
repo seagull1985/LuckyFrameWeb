@@ -92,10 +92,6 @@
 		$(function() {
 			$('#search_job').val('${jobid }');
 			
-			//1.初始化Table
-			var oTable = new TableInit();
-			oTable.Init();
-			
 			$('#qBeginTime').datetimepicker({
 				format: 'yyyy-mm-dd',
 		        language:  'zh-CN',
@@ -137,6 +133,10 @@
 			
 			$('#qBeginTime').datetimepicker('setDate',new Date(new Date()-7*24*60*60*1000));
 			$('#qEndTime').datetimepicker('setDate',new Date(new Date()-1000));
+			
+			//1.初始化Table
+			var oTable = new TableInit();
+			oTable.Init();
 		});
 
 		var TableInit = function() {
@@ -186,7 +186,7 @@
 												width : '25%',
 												formatter : function(value,
 														row, index) {
-													return '<a href="/caseDetail/list.do?taskId='
+													return '<a href="/caseDetail/load.do?taskId='
 															+ row.id
 															+ '">'
 															+ value + '</a> ';
@@ -219,7 +219,7 @@
 												formatter : function(value,
 														row, index) {
 													if(value==1||value==0){
-												 	 	var hdiv = '<div class="progress progress-striped active" style="margin-bottom:0px">'+
+												 	 	var hdiv = '<div class="progress progress-striped active progress-bar-warning" style="margin-bottom:0px">'+
 														'<div id="progress'+row.id+'" class="progress-bar progress-bar-success" aria-valuemax="100"'+ 
 														'aria-valuemin="0" aria-valuenow="0" style="width:0%;text-align:center">0%</div></div>';
 														refreshProgress(row.id);
@@ -236,7 +236,7 @@
 												width : '5%',
 												formatter : function(value,
 														row, index) {
-													return '<a href="/caseDetail/list.do?taskId='
+													return '<a href="/caseDetail/load.do?taskId='
 															+ row.id
 															+ '" id="casetotal'+row.id+'">'
 															+ value + '</a> ';
@@ -248,7 +248,7 @@
 												width : '5%',
 												formatter : function(value,
 														row, index) {
-													return '<a href="/caseDetail/list.do?taskId='+ row.id+ '&status=0" id="casesucc'+row.id+'">'	+ value + '</a> ';
+													return '<a href="/caseDetail/load.do?taskId='+ row.id+ '&status=0" id="casesucc'+row.id+'">'	+ value + '</a> ';
 												}
 											},
 											{
@@ -257,7 +257,7 @@
 												width : '5%',
 												formatter : function(value,
 														row, index) {
-													return '<a href="/caseDetail/list.do?taskId='+ row.id+ '&status=1" id="casefail'+row.id+'">'	+ value + '</a> ';
+													return '<a href="/caseDetail/load.do?taskId='+ row.id+ '&status=1" id="casefail'+row.id+'">'	+ value + '</a> ';
 												}
 											},
 											{
@@ -266,7 +266,7 @@
 												width : '5%',
 												formatter : function(value,
 														row, index) {
-													return '<a href="/caseDetail/list.do?taskId='+ row.id+ '&status=2" id="caselock'+row.id+'">'	+ value + '</a> ';
+													return '<a href="/caseDetail/load.do?taskId='+ row.id+ '&status=2" id="caselock'+row.id+'">'	+ value + '</a> ';
 												}
 											},
 											{
@@ -275,7 +275,7 @@
 												width : '5%',
 												formatter : function(value,
 														row, index) {
-													return '<a href="/caseDetail/list.do?taskId='+ row.id+ '&status=4" id="casenoexec'+row.id+'">'	+ value + '</a> ';
+													return '<a href="/caseDetail/load.do?taskId='+ row.id+ '&status=4" id="casenoexec'+row.id+'">'	+ value + '</a> ';
 												}
 											} ],
 								});
@@ -289,7 +289,7 @@
 					jobid : $('#search_job').val(), //项目ID
 					startDate: $('#qBeginTime').val(), //查询日期段
 					endDate: $('#qEndTime').val(), //查询日期段
-					status: $('#search_status').val(), //查询日期段
+					status: $('#search_status').val(), //查询状态
 				};
 				return temp;
 			};

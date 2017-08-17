@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,13 +15,9 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import luckyweb.seagull.spring.entity.ProjectPlan;
-import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.TestCasedetail;
 import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.spring.entity.TestTaskexcute;
-import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.service.CaseDetailService;
 import luckyweb.seagull.spring.service.LogDetailService;
 import luckyweb.seagull.spring.service.OperationLogService;
@@ -39,17 +34,6 @@ import net.sf.json.JSONObject;
 @RequestMapping("/tastExecute")
 public class TastExcuteController {
 	private static final Logger log = Logger.getLogger(TastExcuteController.class);
-
-	/** 总共有多少页 */
-	private int allPage;
-	/** 页面大小 */
-	private int pageSize = 20;
-	/** 记录总数 */
-	private int allRows;
-	/** 当前页面数， 默认为1 */
-	private int page = 1;
-	/** 第一条记录的索引 */
-	private int offset = 0;
 
 	@Resource(name = "tastExcuteService")
 	private TestTastExcuteService tastExcuteService;
@@ -93,7 +77,7 @@ public class TastExcuteController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/testJobs/load.do");
+			model.addAttribute("url", "/tastExecute/load.do");
 			return "error";
 		}
 		return "/jsp/task/taskexcute_list";
@@ -127,7 +111,7 @@ public class TastExcuteController {
 		}
 
 		if (StrLib.isEmpty(startDate)) {
-			task.setStartDate(DateLib.befor_Nd_format("yyyy-MM-dd", 6));
+			task.setStartDate(DateLib.befor_Nd_format("yyyy-MM-dd", 7));
 		} else {
 			task.setStartDate(startDate);
 		}
@@ -137,7 +121,7 @@ public class TastExcuteController {
 			task.setEndDate(endDate);
 		}
 		if (!StrLib.isEmpty(status)) {
-			task.setTaskStatus(status);;
+			task.setTaskStatus(status);
 		}
 		List<TestTaskexcute> tasklist = tastExcuteService.findByPage(task, offset, limit);
 		// 转换成json字符串
@@ -219,7 +203,7 @@ public class TastExcuteController {
 						break;
 					}
 
-					operationlogservice.add(req, "TESTJOBS", id,
+					operationlogservice.add(req, "TEST_TASKEXCUTE", id,
 							sectorprojectsService.getid(tast.getTestJob().getPlanproj()),
 							"自动化用例已执行任务记录删除成功！任务名称：" + tast.getTaskId());					
 				}

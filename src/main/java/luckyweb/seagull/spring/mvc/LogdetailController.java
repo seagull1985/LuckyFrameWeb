@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.rmi.Naming;
 import java.util.List;
 
@@ -15,8 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import luckyweb.seagull.spring.entity.TestLogdetail;
@@ -24,6 +23,7 @@ import luckyweb.seagull.spring.entity.TestTaskexcute;
 import luckyweb.seagull.spring.service.LogDetailService;
 import luckyweb.seagull.spring.service.TestJobsService;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
+import luckyweb.seagull.util.StrLib;
 import rmi.service.RunService;
 
 @Controller
@@ -39,26 +39,29 @@ public class LogdetailController
 
 	@Resource(name = "testJobsService")
 	private TestJobsService	      testJobsService;
-
-	public LogDetailService getLogdetailService()
-	{
-		return logdetailService;
-	}
-
-	public void setLogdetailService(LogDetailService logdetailService)
-	{
-		this.logdetailService = logdetailService;
-	}
-
-	@RequestMapping(value = "/list/{caseId}.do")
-	public String list(@PathVariable int caseId, TestLogdetail logDetail, Model model)
-	{
-		logDetail.getTestCasedetail().setId(caseId);
-		List<TestLogdetail> list = this.logdetailService.list(logDetail);
-		model.addAttribute("list", list);
-		model.addAttribute("allRows", list.size());
-		model.addAttribute("caseId", caseId);
-		return "/jsp/task/logdetail_list";
+	
+	@SuppressWarnings({ "unused", "unchecked" })
+	@RequestMapping(value = "/list.do")
+	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		response.setCharacterEncoding("utf-8");
+		PrintWriter pw = response.getWriter();
+		String caseId = request.getParameter("caseId");
+		TestLogdetail logDetail = new TestLogdetail();
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(caseId)) {
+			logDetail.setCaseid(Integer.valueOf(caseId));
+		}
+		
+		List<TestLogdetail> loglist = logdetailService.list(logDetail);
+		for(int i=0;i<loglist.size();i++){
+			TestLogdetail log = loglist.get(i);
+			log.setTestCasedetail(null);
+			loglist.set(i, log);
+		}
+		// 转换成json字符串
+		String RecordJson = StrLib.listToJson(loglist);
+		pw.print(RecordJson);
 	}
 	
 	@RequestMapping(value = "/showImage.do")

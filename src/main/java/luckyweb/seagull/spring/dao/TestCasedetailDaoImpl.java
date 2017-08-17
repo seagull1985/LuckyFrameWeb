@@ -13,7 +13,6 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import luckyweb.seagull.spring.entity.Accident;
 import luckyweb.seagull.spring.entity.TestCasedetail;
 import luckyweb.seagull.util.StrLib;
 
@@ -102,11 +101,11 @@ public class TestCasedetailDaoImpl extends HibernateDaoSupport implements TestCa
 		}if (caseDetail.getTaskId()!=0) {
 			query.setParameter("taskId", caseDetail.getTaskId());
 		}
-		if (!StrLib.isEmpty(caseDetail.getCaseno())) {
-			query.setParameter("caseno", "%"+caseDetail.getCaseno().trim()+"%");
-		}
 		if (!StrLib.isEmpty(caseDetail.getCasestatus())) {
 			query.setParameter("casestatus", caseDetail.getCasestatus().trim());
+		}
+		if (!StrLib.isEmpty(caseDetail.getCaseno())) {
+			query.setParameter("caseno", "%"+caseDetail.getCaseno().trim()+"%");
 		}
 		if (!StrLib.isEmpty(caseDetail.getCasename())) {
 			query.setParameter("casename", "%"+caseDetail.getCasename().trim()+"%");

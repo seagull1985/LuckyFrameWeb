@@ -108,7 +108,6 @@
 					formatter: function (value, row, index) {
 					    if (row.checktype == 1)
 					        return {
-					            disabled : false,//设置是否可用
 					            checked : true//设置选中
 					        };
 					}

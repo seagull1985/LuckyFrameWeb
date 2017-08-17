@@ -10,7 +10,6 @@ import java.rmi.Naming;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -47,7 +46,6 @@ import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.DateUtil;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import rmi.service.RunService;
 
@@ -108,16 +106,13 @@ public class TestJobsController
 					prolist.get(i).setProjectname(prolist.get(i).getProjectname()+"(TestLink项目)");
 				}
 			}
-			SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd"); 
-			Date dt = new Date();
-			String date=formatter.format(dt);
 			
 			List iplist = testJobsService.getipList();
 			model.addAttribute("iplist", iplist);
 			
 			model.addAttribute("projects", prolist);
 			model.addAttribute("projectid", projectid);
-			model.addAttribute("date", date);
+			model.addAttribute("date", DateLib.today("yyyy-MM-dd"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());

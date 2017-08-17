@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import luckyweb.seagull.spring.dao.TestLogdetailDao;
-import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.spring.entity.TestLogdetail;
 
 @Service("logdetailService")
@@ -41,28 +40,23 @@ public class LogDetailServiceImpl implements LogDetailService {
 		
 		return list;
 	}
-	/*public static final String hql=" from TestLogdetail where caseid=? ";
-
-	@Override
-	public List findByPage(TestLogdetail  logdetail,int offset, int pageSize) {
-		return logdetailDao.findByPage(logdetail, hql, offset, pageSize);
-	}
-
-	@Override
-	public List findByPage( Object[] values, int offset, int pageSize) {
-		return logdetailDao.findByPage(hql, values, offset, pageSize);
-	}
-
-	@Override
-	public List findByPage(Object value, int offset, int pageSize) {
-		return logdetailDao.findByPage(hql, value, offset, pageSize);
-	}*/
-
 	
-	/*public int findRows(TestLogdetail logdetail ) {
-		String hql="select count(*) from TestLogdetail where caseid=? ";
-		return logdetailDao.findRows(hql, logdetail);
-	}*/
+	private static String	orderBy	= " order by id ";
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TestLogdetail> findByPage(Object value, int offset, int pageSize)
+	{
+		String hql = " from TestLogdetail " + where((TestLogdetail) value) + orderBy;
+		List<TestLogdetail> list = logdetailDao.findByPage(hql, value, offset, pageSize);
+		return list;
+	}
+
+	public int findRows(TestLogdetail logs)
+	{
+		String hql = "select count(*) from TestLogdetail " + where(logs);
+		return logdetailDao.findRows(hql, logs);
+	}
 	
 
 	@Override
@@ -71,4 +65,24 @@ public class LogDetailServiceImpl implements LogDetailService {
 		this.logdetailDao.delete(hql,id);
 	}
 
+	private String where(TestLogdetail logs)
+	{
+		String where = " where ";
+		if (logs.getCaseid()!=0){
+			where += " caseid=:caseid  and ";
+		}
+		if (logs.getTaskid()!=0){
+			where += " taskid=:taskid  and ";
+		}
+		if (where.length() == 7)
+		{
+			where = "";
+		}
+		else
+		{
+			where = where.substring(0, where.length() - 5);
+		}
+
+		return where;
+	}
 }

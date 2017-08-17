@@ -2,448 +2,468 @@
 	import="java.sql.*" errorPage=""%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script language="JavaScript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 
-<title>用例日志明细</title>
-<link href="/css/style.css" rel="stylesheet" type="text/css" />
-
+<title>用例执行列表</title>
 </head>
 
-<body onload="init()">
-	<div>  
-        <%@ include file="/head.jsp" %>
-    </div> 
+<body>
+	<div>
+		<%@ include file="/head.jsp"%>
+	</div>
+
 	<header id="head" class="secondary"></header>
 
 	<!-- container -->
-	<div class="container" style="width:auto;">
+	<div class="container" style="width: auto; font-size: 14px;">
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">UTP</li>
-			<li class="active">用例&日志</li>
+			<li class="active">任务查询</li>
 		</ol>
 
-		<div class="row">	
+		<div class="row">
 			<!-- Article main content -->
-		<article class="col-sm-9 maincontent" style="width:100%;">
-		 <header class="page-header">
-				<h1 class="page-title" style="text-align:center;">用例&日志</h1>
+			<article class="col-sm-9 maincontent" style="width:100%;">
+			<header class="page-header">
+			<h1 class="page-title" style="text-align: center;">用例日志查询</h1>
 			</header>
-		
-<sf:form method="post" modelAttribute="testCasedetail">
 
-<input name="flag" id="flag" type="hidden" value="2"  />
- <table width="90%"  align="center" class="rect"  height="100px" cellPadding="1px" border="1px" bordercolor="#CCCCCC">
-  <tr>
-      <td width="10%" height="20" colspan="4" style="font-size:15px;font-weight:600;">
-          项目名称
-      &nbsp;&nbsp;<sf:select path="projName" id="projName" onchange="getTastList()">
-          <%-- <sf:option value="">全部</sf:option> --%>
-          <c:forEach var="proj" items="${projects }"  begin="0" step="1" varStatus="i" >
-            <sf:option value="${proj.projectid}">${proj.projectname}</sf:option>
-          </c:forEach>
-        </sf:select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   执行时间
-        <%-- <sf:input path="startDate" 	class="Wdate" onblur="aa()"  onclick="WdatePicker({isShowClear:false,readOnly:true});"  /> --%>
-        &nbsp;&nbsp;<sf:input path="startDate" 	class="Wdate" onclick="WdatePicker({isShowClear:false,readOnly:true})"  />&nbsp;至&nbsp;<sf:input path="endDate" class="Wdate" onclick="WdatePicker({isShowClear:false,readOnly:true})"  />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-         <span id="span_id">任务名称&nbsp;&nbsp;
-         <sf:select path="taskId" id="taskId" style=" width:400px;">
-         <c:if test="${size==0 }">
-           <sf:option value="99999999">没有任务</sf:option>
-                </c:if>
-            <c:if test="${size>0 }">
-            <%--   <sf:option value="0">全部</sf:option> --%>
-                 <c:forEach var="task" items="${tasks }"  begin="0" step="1" varStatus="i" >
-                  <sf:option value="${task[0]}">${task[1]}</sf:option>
-                </c:forEach>
-            </c:if>
-      </sf:select> </span>     </td>
-    </tr>
-  <tr>
-    <td width="80%" height="20" align="left" style="font-size:15px;font-weight:600">用例编号
-    &nbsp;&nbsp;<input type="text" name="caseno" id="caseno" value="${caseno}" />
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用例状态
-       &nbsp;&nbsp;<sf:select path="casestatus" style=" width:200px;">
-        <sf:option value="">全部</sf:option>
-        <sf:option value="0">成功</sf:option>
-        <sf:option value="1">失败</sf:option>
-        <sf:option value="2">锁定</sf:option>
-        <sf:option value="4">未执行</sf:option>
-    </sf:select></td>
-    <td width="20%" height="20" colspan="2" align="center">
-    <input	name="button" type="submit" class="button gray" id="button" value="查询" />
-&nbsp;&nbsp;
-  <button  class="button gray" onclick="goBack()" >返回</button></td>
-    </tr>
-  </table>
-  <input name="page" id="page" type="hidden"  />
-<p>
-</p>
+			<div class="panel-body" style="padding-bottom: 0px;">
+				<div class="panel panel-default">
+					<div class="panel-heading">查询条件</div>
+					<div class="panel-body">
+						<div class="form-group" style="margin-top: 15px">
+							
+							<div class="col-md-12">
+							<label class="control-label" for="txt_search_case" style="float: left;">用例查询条件:</label>
+							<div class="select-group  col-md-2">
+								<select class="form-control" id="search_pro"
+									onchange="searchproject()">
+									<c:forEach var="p" items="${projects }">
+										<option value="${p.projectid}">${p.projectname}</option>
+									</c:forEach>
+								</select>
+								</div>
+								
+                                <div class="input-group date form_date col-md-3" id="datepicker" style="float: left;">  
+                                  <input type="text" class="form-control" name="start" id="qBeginTime" readonly/>
+                                  <span class="input-group-addon" ><span class="glyphicon glyphicon-calendar"></span></span>
+                                  <span class="input-group-addon">至</span>  
+                                  <input type="text" class="form-control" name="end" id="qEndTime" readonly/>
+                                  <span class="input-group-addon" ><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                            
+							<div class="select-group col-md-3" style="float: left;">
+								<select class="form-control" id="search_task"  onchange="searchtask()">
+									<c:forEach var="t" items="${tasks }">
+										<option value="${t[0]}">${t[1]}</option>
+									</c:forEach>
+								</select>
+								</div>
+							
+							
+							<div class="select-group col-md-1" style="float: left;">
+								<select class="form-control" id="search_status"	onchange="searchstatus()">
+                                   <option value="">全部</option>
+                                   <option value="0">成功</option>
+                                   <option value="1">失败</option>
+                                   <option value="2">锁定</option>
+                                   <option value="4">未执行</option>
+								</select>
+								</div>
+							</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
 
-	<table width="90%" align="center" class="bordered"><c:forEach var="t" items="${list}" begin="0" step="1" varStatus="i"></c:forEach>
-  </table>
- 
-<center>
-        <table width="90%" align="center" class="bordered">
-          <tr>
-            <th width="2%" align="center" bgcolor="#B9DCFF">选择</th>
-            <th width="3%" height="40" align="center" bgcolor="#B9DCFF">序号</th>
-           
-            <th width="6%" align="center" bgcolor="#B9DCFF" nowrap="nowrap">用例编号</th>
-            <th width="46%" height="40" align="center" bgcolor="#B9DCFF">用例名称</th>
-            <th width="6%" height="40" align="center" bgcolor="#B9DCFF">用例版本</th>
-            <th width="12%" height="40" align="center" bgcolor="#B9DCFF">用例执行时间</th>
-            <th width="6%" height="40" align="center" bgcolor="#B9DCFF">用例状态</th>
-            <th width="10%" align="center" bgcolor="#B9DCFF">操作</th>
-          </tr>
-          <c:forEach var="t" items="${list}" begin="0" step="1" varStatus="i">
-            <tr>
-              <td width="2%" nowrap="nowrap" align="center"><c:if test="${t.casestatus!=0 }">
-                  <input type="checkbox" value="${t.caseno }%${t.caseversion}" onclick="" name="cases"/>
-                </c:if>
-                &nbsp;</td>
-              <td width="3%" height="25" align="center"> ${i.index+1}&nbsp;</td>
-              
-              <td width="6%" align="center">${t.caseno }&nbsp;</td>
-              <td width="46%" height="25">${t.casename }&nbsp;</td>
-              <td width="6%" height="25" align="center">${t.caseversion }&nbsp;</td>
-              <td width="12%" height="25"><fmt:formatDate value="${t.casetime }" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-              <c:choose>
-              <c:when test="${t.casestatus==0}">
-              <td width="6%" height="25" style="text-align:center;color:#00bf5f">${t.casestatus_str}</td>
-               </c:when>
-               <c:when test="${t.casestatus==1}">
-              <td width="6%" height="25" style="text-align:center;color:#ff0000">${t.casestatus_str}</td>
-               </c:when>
-               <c:otherwise>
-              <td width="6%" height="25" style="text-align:center;color:#FF7F00">${t.casestatus_str}</td>
-               </c:otherwise>
-              </c:choose>
-              <td width="10%" align="center">&nbsp;<span  onclick="showChild(this,'${t.id }')" style="cursor:pointer; color:blue;"><img src="../pic/detail.png"
-						width="20" height="20" border="0" title="详情" /></span>&nbsp;
-                  <c:if test="${t.casestatus!=0}"> <span onclick="showDiv('${t.id }','${t.testTaskexcute.testJob.taskName}','${t.testTaskexcute.createTime}',1)"  style="cursor:pointer; color:blue;" ><img src="../pic/run.png"
-						width="20" height="20" border="0" title="执行" /></span> </c:if>              </td>
-            </tr>
-            <c:if test="${i.index+1==1}">
-              <input name="caseId"  type="hidden" value="${t.id }"/>
-            </c:if>
-            <tr id="tr${t.id }" style="display:none">
-              <td >&nbsp;</td>
-              <td >&nbsp;</td>
-              <td colspan="6" align="right" width="100%"><iframe id="fm${t.id }" frameborder="0" width="98%"
-					height="300" src="" scrolling="auto"></iframe></td>
-            </tr>
-          </c:forEach>
-        </table>
-        
-  </center>
-		 <c:if test="${allRows!=0 }"> 
-          <div style="width:90%; margin-left:60px;">
-          <fieldset style="text-align:left; font-size:13px; "> 
-          <legend style="font-size:13px; color:#666666">操作</legend>
-            <input name="isSetAll"  type="hidden" value="false"/>
-            <font color="green">全选本页用例</font><font color="green">
-              <input type="radio" name="chf" value="0" onclick="selk(this)" />
-            </font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="red">所有非成功状态的用例
-          <input type="radio" name="ckAll" onclick="setIsCheck()" value="ALLFAIL"  checked="checked"/>
-          </font> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <input name="button2" type="submit" class="button gray" onclick="showDiv(0,0,0,'2')"  id="button2" value="批量执行" />
-          
-          <br/>
-          <font color="#FF6600">备注：<br/>
-          勾选【全选本页用例】，以此为准，其他勾选选项无效；<br/>
-          勾选【所有非成功状态的用例】，以此为准，其他勾选选项无效。
-          </font>
-          </fieldset>
-      </div>
-            </c:if> 
-   <center>
-          <div  id="pagelist" align="center" >
-             <c:if test="${allRows!=0 }"> 
-               <ul>	 
-                  <li> <a href="#" onclick="return setPage('${taskId}',1)">首页 </a></li>
-                  <li>  <a href="#" onclick="return frontPageCheck('${taskId}',${page-1});">上一页</a></li>
-                  <li>  <a href="#" onclick="return backPageCheck('${taskId}',${page+1});">下一页</a></li>
-                <li>  <a href="#" onclick="return setPage('${taskId}',${allPage})">末页</a></li>
-                 <li> 第${page}页 </li>
-                  <li>共${allRows}条</li>
-                <li>共${allPage}页</li>
-               </ul>
-          </c:if> 
-                    <c:if test="${allRows==0 }"> 
-                <font color="#FF0000">没有记录!</font>
-              </c:if> 
-        </div>
+				<div id="toolbar" class="btn-group">
+					<button id="btn_run" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-play" aria-hidden="true"></span>执行所选用例
+					</button>
+					<button id="btn_allrun" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-forward" aria-hidden="true"></span>执行全部非成功用例
+					</button>
+				</div>
+				<table id="tb_testcase"></table>
 
-  </center>
-</sf:form>
-	<p>&nbsp;</p>
-	</article>
+			</div>
+			</article>
+		</div>
 	</div>
-</div>
 
-<script type="text/javascript">
-
-	function del(id){
-		if(confirm('确定要删除此条记录吗？')==true){
-			document.getElementById("taskjob").action="testJobs/"+id+"/delete.do";
-			document.getElementById("taskjob").submit();
-		}
-	}
-	function frontPageCheck(taskId,page)
-	{
-		if(${page > 1})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("testCasedetail").submit();
-			return true;
-		}
-		return false;
-	}
-	
-	function backPageCheck(taskId,page)
-	{
-		if(${page < allPage})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("testCasedetail").submit();
-			return true;
-		}			
-		return false;
-	}
-	
-	
-	function setPage(taskId,page)
-	{
-		if(page==1){
-			document.getElementById("page").value=1;
-		}else{
-			document.getElementById("page").value=page;
-		}
-		//alert(document.getElementById("page").value);
-			document.getElementById("testCasedetail").submit();
-		return true;
-	}
-	function goBack(){
-		document.getElementById("taskId").value="";		
-		document.getElementById("testCasedetail").action="/tastExecute/load.do";
-		document.getElementById("testCasedetail").submit();
-		return true;
-	}
-
-function getTastList(){
-	var startDate=document.getElementById("startDate").value;
-	var projNameType=document.getElementById('projName');
-	var projid=projNameType.options[projNameType.selectedIndex].value;
-	var tastName=document.getElementById('taskId');
-	$.ajax({
-		type : "post",
-		dataType:"json",
-		contentType:"application/x-www-form-urlencoded:charset=UTF-8",
-        async:true,
-		url:encodeURI("/caseDetail/getTastNameList.do?startDate="+startDate+"&projid="+projid),
-		success:function(json){
-			for(var i=tastName.options.length;i>=0;i--)
-			{
-				tastName.options.remove(i);   
-			}
-			if(json!=""){
-				for(var i=0;i<json.length;i++)
-				{			
-                        var option = new Option(json[i][1],json[i][0]);    
-						tastName.options.add(option); 
-				}  
-			}else{
-					var option = new Option("没有任务","99999999");    
-					tastName.options.add(option); 
-			}
-		},
-		error:function(){
-			alert("请稍后再试!");
-		}
-		
-	});
-}
-
-
-function execCase(id,projName,createTime){
-	$.ajax({
-		type : "post",
-		dataType:"text",
-		contentType:"application/x-www-form-urlencoded:charset=UTF-8",
-        async:true,
-		url:encodeURI("/caseDetail/"+id+"/execCase.do"),
-		data:"projName="+projName+"&createTime="+createTime,
-		success:function(json){
-			alert(json);
-		},
-		error:function(){
-			alert("系统异常，请稍后再试!");
-		}
-
-	});
-
-}
-
-
-function execCaseBatch(){
-	$.ajax({
-		type : "post",
-		dataType:"json",
-		contentType:"application/x-www-form-urlencoded:charset=UTF-8",
-        async:true,
-		url:encodeURI("/caseDetail/"+id+"/execCase.do"),
-		success:function(json){
-			alert(json);
-		},
-		error:function(){
-			alert("系统异常，请稍后再试!");
-		}
-
-	});
-
-}
-
-function showChild(img,c_id) {
-		var tr = document.getElementById("tr" + c_id);
-		var fm = document.getElementById("fm" + c_id);
-		
-		if (tr.style.display == "") {
-			tr.style.display = "none";
+	<script type="text/javascript">
+		$(function() {
+			$('#search_pro').val('${projectid }');
 			
-		} else {
-			tr.style.display = "";
-			fm.src = "/logDetail/list/"+c_id+".do";
-		}
-	}
+			$('#qBeginTime').datetimepicker({
+				format: 'yyyy-mm-dd',
+		        language:  'zh-CN',
+			    todayBtn : "linked",  
+			    autoclose : true,  
+			    todayHighlight : true,
+			    forceParse: 0,
+			    weekStart: 1,
+			    minView: "month",//设置只显示到月份
+			    startView: 2,
+			    endDate : new Date(),
+			}).on('changeDate',function(e){  
+			    var startTime = e.date;  
+			    $('#qEndTime').datetimepicker('setStartDate',startTime);
+			    searchproject();
+			});  
+			//结束时间：  
+			$('#qEndTime').datetimepicker({
+				format: 'yyyy-mm-dd',
+		        language:  'zh-CN',
+			    todayBtn : "linked",  
+			    autoclose : true,  
+			    todayHighlight : true,
+			    forceParse: 0,
+			    minView: "month",//设置只显示到月份
+			    weekStart: 1,
+			    endDate : new Date()
+			}).on('changeDate',function(e){  
+			    var endTime = e.date;  
+			    $('#qBeginTime').datetimepicker('setEndDate',endTime);
+			    searchproject();
+			});
 	
-var count=0;
-function aa(){
-	count++;
-	if(count==2){
-		changeProjName();
-		count=0;
-	}
-}
+			$('#qBeginTime').datetimepicker('setDate',new Date(Date.parse('${date }'.replace(/-/g,   "/"))));
+			$('#qEndTime').datetimepicker('setDate',new Date(Date.parse('${date }'.replace(/-/g,   "/"))));
+			
+			//1.初始化Table
+			var oTable = new TableInit();
+			oTable.Init();
+		});
 
-function changeProjName(){
-	var projNameType=document.getElementById('projName');
-	var startDate=document.getElementById('startDate');
-	projNameType.fireEvent("onchange"); 
-}
+		var TableInit = function() {
+			var oTableInit = new Object();
+			//初始化Table
+			oTableInit.Init = function() {
+				$('#tb_testcase').bootstrapTable({
+									url : '/caseDetail/list.do', //请求后台的URL（*）
+									method : 'get', //请求方式（*）
+									toolbar : '#toolbar', //工具按钮用哪个容器
+									striped : true, //是否显示行间隔色
+									cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+									pagination : true, //是否显示分页（*）
+									sortable : false, //是否启用排序
+									sortOrder : "asc", //排序方式
+									queryParams : oTableInit.queryParams,//传递参数（*）
+									sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）
+									pageNumber : 1, //初始化加载第一页，默认第一页
+									pageSize : 10, //每页的记录行数（*）
+									pageList : [ 10, 25, 50, 100 ], //可供选择的每页的行数（*）
+									search : true, //是否显示表格搜索，此搜索会进服务端
+									strictSearch : true,
+									showColumns : false, //是否显示所有的列
+									showRefresh : true, //是否显示刷新按钮
+									minimumCountColumns : 2, //最少允许的列数
+									clickToSelect : true, //是否启用点击选中行
+									height : 500, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+									uniqueId : "ID", //每一行的唯一标识，一般为主键列
+									showToggle : false, //是否显示详细视图和列表视图的切换按钮
+									cardView : false, //是否显示详细视图
+									detailView : true, //是否显示父子表
+									columns : [
+											{
+												checkbox : true,
+												width : '5%',
+												formatter : function(value,
+														row, index) {
+													if(row.casestatus==0){
+										                return {  
+										                    disabled : "disabled",//设置是否可用
+										                }; 
+													}
+ 
+												}
+											},
+											{
+												field : 'id',
+												title : 'id',
+												visible : false
+											},
+											{
+												field : 'caseno',
+												title : '用例编号',
+												width : '10%',
+											},
+											{
+												field : 'casename',
+												title : '用例名称',
+												width : '65%',
+											},
+											{
+												field : 'casetime',
+												title : '执行时间',
+												width : '10%',
+											},
+											{
+												field : 'casestatus_str',
+												title : '用例状态',
+												width : '10%',
+												formatter : function(value,
+														row, index) {
+													if(row.casestatus==0){
+														return '<font style="color:#00bf5f">'+value+'</font>';
+													}else if(row.casestatus==1){
+														return '<font style="color:#ff0000">'+value+'</font>';
+													}else{
+														return '<font style="color:#FF7F00">'+value+'</font>';
+													}
+												}
+											}],
+											//注册加载子表的事件。注意下这里的三个参数！
+											onExpandRow : function(index, row, $detail) {
+												oTableInit.InitSubTable(index, row, $detail);
+											}
+								});
+			};
+			//得到查询的参数
+			oTableInit.queryParams = function(params) {
+				var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+					limit : params.limit, //页面大小
+					offset : params.offset, //页码偏移量
+					search : params.search, //搜索参数
+					projectid : $('#search_pro').val(), //项目ID
+					startDate: $('#qBeginTime').val(), //查询日期段
+					endDate: $('#qEndTime').val(), //查询日期段
+					status: $('#search_status').val(), //查询状态
+					taskId: $('#search_task').val(), //查询状态
+				};
+				return temp;
+			};
+			
+			//初始化子表格(无线循环)
+			oTableInit.InitSubTable = function(index, row, $detail) {
+				var caseid = row.id;
+				console.log(caseid);
+				var cur_table = $detail.html('<table></table>').find('table');
+				$(cur_table).bootstrapTable({
+					url : '/logDetail/list.do',
+					method : 'get',
+					queryParams : {
+						caseId : caseid,
+					},
+					ajaxOptions : {
+						caseId : caseid,
+					},
+					clickToSelect : false,
+					detailView : false,//父子表
+					uniqueId : "logid",
+					columns : [{
+						field : 'logid',
+						title : '序号',
+						width : '3%',
+						formatter : function(value, row, index) {  
+							return '<p align="center">'+(index+1)+'</p>';  
+				         } 
+					},  
+					{
+						field : 'step',
+						title : '步骤编号',
+						width : '4%',
+						formatter : function(value,
+								row, index) {
+							if(value!="ending"){
+								return "步骤_"+value;
+							}else{
+								return '<font style="color:#00bf5f">'+value+'</font>';
+							}
+							
+						}
+					}, {
+						field : 'detail',
+						title : '日志打印',
+						width : '75%',
+					}, {
+						field : 'logtime',
+						title : '打印时间',
+						width : '10%',
+					}, {
+						field : 'logGrade',
+						title : '日志级别',
+						width : '8%',
+						formatter : function(value,
+								row, index) {
+							if(row.imgname==""){
+								if(value!="info"){
+									return '<font style="color:#ff0000">'+value+'</font>';
+								}else{
+									return '<font style="color:#00bf5f">'+value+'</font>';
+								}
+								
+							}else{
+								return '<font style="color:#ff0000">'+value+'</font>&nbsp;&nbsp;&nbsp;&nbsp;'+
+								'<a href="javascript:window.open(\'/logDetail/showImage.do?filename='+ row.imgname+ '.png&logid='+row.logid+'\')">错误截图</a> ';
+							}
+						}
+					}, ],
+					//无线循环取子表，直到子表里面没有记录
+					onExpandRow : function(index, row, $Subdetail) {
+						oInit.InitSubTable(index, row, $Subdetail);
+					},
 
-function showDiv(id,projName,createTime,opr){
-	var status = document.getElementById("loginstatus").value;
-	if(status=="false"){
-		if(window.confirm("你未登录哦，要先去登录吗？")){
-			var url = '/progressus/signin.jsp';
-			window.location.href=url;
-		}else{
-			return false; 
-		} 	
-	}else{
-		if(opr=="1"){
-			var url ="/userlogin/permissionboolean.do?permissioncode=case_ex";
-		    jQuery.getJSON(url,null,function call(result){
-		    	if(result.data[0]==null){
-		    		alert("你好，当前用户无权限进行此操作，请联系软件质量室！");
-					return false;
-		    	}else if(result.data[0]=="true"){
-		    		execCase(id,projName,createTime);
-					return true;
-				 }else{
-					alert("你好，当前用户无权限进行此操作，请联系软件质量室！");
-					return false;
-				   }
-		       });			
-		}else if(opr=="2"){
-			pass();
-		}
-	}		
-}
+				});
 
-function init(){
-	if('${message}'!=''){
-		if('${message}'=='添加成功'){
-			alert("添加成功,请返回查询！");
-		}else{
-			alert('${message}');
-		}
-	}
-	
-}
-</script>
+			};
 
-<script type="text/javascript">
-	function setIsCheck(){
-		var f = document.getElementById("testCasedetail");
+			return oTableInit;
+		};
+
+		var searchproject = function() {
+			var startDate= $('#qBeginTime').val();
+			var endDate= $('#qEndTime').val();
+			var projid=$('#search_pro').val();
+			var taskName=document.getElementById('search_task');
+			var aaa=null;
+			$.ajax({
+				type : "post",
+				dataType:"json",
+				contentType:"application/x-www-form-urlencoded:charset=UTF-8",
+				async:false, //关闭异步，使用同步机制
+				url:encodeURI("/caseDetail/getTastNameList.do?startDate="+startDate+"&projid="+projid+"&endDate="+endDate),
+				success:function(json){
+					for(var i=taskName.options.length;i>=0;i--)
+					{
+						taskName.options.remove(i);   
+					}
+					
+					if(json!=""){
+						for(var i=0;i<json.length;i++)
+						{		
+		                        var option = new Option(json[i][1],json[i][0]);    
+								taskName.options.add(option); 
+						} 
+					}else{
+							var option = new Option("没有任务","99999999");    
+							taskName.options.add(option); 
+					}
+
+				},
+				error:function(){
+					alert("请稍后再试!");
+				}
+				
+			});
+
+			//1.初始化Table
+			var oTable = new TableInit();
+			$('#tb_testcase').bootstrapTable('destroy');
+			oTable.Init();			
+		};
 		
-		if(f.ckAll.checked){
-			f.isSetAll.value="true";
-			f.chf.checked=false; 
-			var _id = document.getElementsByName("cases");
-			for (var i = 0; i < _id.length; i ++) 
-			 {
-				if (_id[i].type == "checkbox") _id[i].checked = false;
-			 }
-		}else{
-			f.isSetAll.value="false";
-		}
-	}
-	
-	   
-		function selk(sel) 
-		{
-			var _id = document.getElementsByName("cases");
-			var f = document.getElementById("testCasedetail");
-			f.ckAll.checked=false;
-			f.isSetAll.value="false";
-			if (sel.checked) {
-			 for (var i = 0; i < _id.length; i ++) 
-			 {
-				if (_id[i].type == "checkbox") _id[i].checked = true;
-			 }
-			 
-			}else
-			{
-			  for (var i = 0; i < _id.length; i ++) 
-			 {
-				if (_id[i].type == "checkbox") _id[i].checked = false;
-			 }
+		var searchstatus = function() {
+			//1.初始化Table
+			var oTable = new TableInit();
+			$('#tb_testcase').bootstrapTable('destroy');
+			oTable.Init();
+		};
+		
+		var searchtask = function() {
+			//1.初始化Table
+			var oTable = new TableInit();
+			$('#tb_testcase').bootstrapTable('destroy');
+			oTable.Init();
+		};
+		
+		btn_run.onclick=function(){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
 			}
-			return;
-		}   
-	
-		function pass() {
-	 	   var form = document.getElementById("testCasedetail");
-		
-	 	  if( form.ckAll.checked){
-				if (confirm("将【所有非成功状态的用例】重新执行，您确定吗？")) {
-					 form.flag.value="1";
-					 form.action="/caseDetail/execCaseBatch.do";
-					 form.button2.disabled=true;
-					 form.submit();
-				 return true;
-				}
-				 return false;
-	 	  }else{
-		 	 
-				if (confirm("将选择的【非成功状态的用例】重新执行，您确定吗？")) {
-					 form.action="/caseDetail/execCaseBatch.do";
-					 form.button2.disabled=true;
-					 form.submit();
-					 return true;
-				}
-				 return false;
-		 	  }
-		}
-
-</script>
+			
+	        var selectIndex = $('input[name="btSelectItem"]:checked ').val();
+	        selecteItem($('#tb_testcase'), selectIndex, true);
+	    }
+	    
+	    function selecteItem($table, selectIndex, reLoad){
+            var ids = $.map($table.bootstrapTable('getSelections'), function (row) {
+                      return row.id;
+                       }); 
+            console.log(ids);
+	        if(ids.length != 0 ){
+	        	if(confirm("真的要执行所选用例吗?")){
+		                $.ajax({
+		                   type: "POST",
+		                   cache:false,
+		                   async : true,
+		                   dataType : "json",
+		                   url:  "runCase.do",
+		                   contentType: "application/json", //必须有
+		                   data: JSON.stringify({"caseids":ids}),
+		                   success: function(data, status){
+		                           if (data.status == "success"){
+		                               $table.bootstrapTable('hideRow', {index:selectIndex});
+		                               alert(data.ms);
+		                              if(reLoad){
+		                                  $table.bootstrapTable('refresh');
+		                              }
+		                           }else{
+		                        	   alert(data.ms);
+		                           }
+		                   },error:function()
+		                    {
+		                        alert('执行用例出错啦！');
+		                    }
+		                });
+	            }    
+	        }else{
+	            alert('请选取要执行的用例！');
+	        }
+	    }
+	    
+	    btn_allrun.onclick=function(){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
+			}
+			
+        	if(confirm("真的要执行全部非成功用例吗?")){
+                $.ajax({
+                   type: "POST",
+                   cache:false,
+                   async : true,
+                   dataType : "json",
+                   url:  "runCase.do",
+                   contentType: "application/json", //必须有
+                   data: JSON.stringify({"caseids":["ALLFAIL", $('#search_task').val()]}),
+                   success: function(data, status){
+                           if (data.status == "success"){
+                               $table.bootstrapTable('hideRow', {index:selectIndex});
+                               alert(data.ms);
+                              if(reLoad){
+                                  $table.bootstrapTable('refresh');
+                              }
+                           }else{
+                        	   alert(data.ms);
+                           }
+                   },error:function()
+                    {
+                        alert('执行用例出错啦！');
+                    }
+                });
+        }  
+	    }
+	</script>
 </body>
 </html>
