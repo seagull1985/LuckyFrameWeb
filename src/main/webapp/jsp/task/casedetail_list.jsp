@@ -283,6 +283,17 @@
 						field : 'detail',
 						title : '日志打印',
 						width : '75%',
+						cellStyle : function (value, row, index, field) {
+							if(row.logGrade!="info"){
+								  return {
+									    css: {"color": "#ff0000"}
+									  };
+							 }else{
+								  return {
+									    css: {"color": "#00bf5f"}
+									  };
+							 }
+							}
 					}, {
 						field : 'logtime',
 						title : '打印时间',

@@ -1,197 +1,279 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"%>
+<%@ page contentType="text/html; charset=utf-8" language="java"
+	import="java.sql.*" errorPage=""%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script language="JavaScript" type="text/javascript"
-	src="/js/My97DatePicker/WdatePicker.js"></script>	
 
-<title>用户管理</title>
-<link href="/css/style.css" rel="stylesheet" type="text/css" />
-<style type="text/css">
-<!--
-.STYLE1 {
-	color: #ffffff
-}
-.STYLE2 {
-	color: #FF0000
-}
-.STYLE6 {color: #FF0000; font-size: 12px; }
--->
-</style>
-
-	</head>
+<title>系统管理</title>
+</head>
 
 <body>
-	<div>  
-        <%@ include file="/head.jsp" %>
-    </div> 
+	<div>
+		<%@ include file="/head.jsp"%>
+	</div>
+
 	<header id="head" class="secondary"></header>
 
 	<!-- container -->
-	<div class="container" style="width:auto;font-size:14px">
+	<div class="container" style="width: auto; font-size: 14px;">
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">用户管理</li>
 		</ol>
 
-		<div class="row">	
+		<div class="row">
 			<!-- Article main content -->
-		<article class="col-sm-9 maincontent" style="width:100%;">
-		 <header class="page-header">
-				<h1 class="page-title" style="text-align:center;">用户管理</h1>
+			<article class="col-sm-9 maincontent" style="width:100%;">
+			<header class="page-header">
+			<h1 class="page-title" style="text-align: center;">用户管理</h1>
 			</header>
-	 
-	 <sf:form method="post" modelAttribute="userinfo">
-		<input name="page" id="page" type="hidden"  />					
-		<div align="right"></div>
-		
-		<table width="100%" align="center" class="rect" height=40 cellPadding=1 border=1 bordercolor="#CCCCCC">
-		  <tr>
-		  <td width="25%" align="left" valign="middle">
-		   <font size="2" color="black">用户名:&nbsp;</font>
-			<sf:input path="usercode" id="usercode" style="width:150px;"/>			
-			<input name="button" style="width:100px;height:28px" type="submit" class="button gray" id="button" align="right" value="查&nbsp;&nbsp;询" />	
-			&nbsp;&nbsp;<a href="#" onclick="showDiv(0,1)" style="text-decoration: none;"> 
-			<span class="btnold STYLE1" style="width:70px;background:#FFA54F;border:#FFA54F;"> 添加用户</span></a>&nbsp;&nbsp;
-			<a href="#" onclick="showDiv(0,5)" style="text-decoration: none;"> 
-			<span class="btnold STYLE1" style="width:70px;background:#FFA54F;border:#FFA54F;"> 添加角色</span></a>&nbsp;&nbsp;
-			<a href="#" onclick="showDiv(0,4)" style="text-decoration: none;"> 
-			<span class="btnold STYLE1" style="width:70px;background:#FFA54F;border:#FFA54F;"> 权限管理</span></a>&nbsp;&nbsp;
-			<a href="#" onclick="showDiv(0,6)" style="text-decoration: none;"> 
-			<span class="btnold STYLE1" style="width:70px;background:#FFA54F;border:#FFA54F;"> 项目管理</span></a>				
-				</td>
-		</tr>
-		  </table> 
-		
-	   <table width="100%" align="center" class="bordered" style="table-layout: fixed">
-          <tr bgcolor="#B9DCFF">                
-				<th width="10%" height="40" nowrap="nowrap"  >姓名</th>
-				<th width="15%" height="40" nowrap="nowrap"  >用户名</th>
-				<th width="45%" height="40" nowrap="nowrap"  >角色</th>
-				<th width="15%" height="40" nowrap="nowrap"  >所属部门</th>
-				<th width="10%" height="40" nowrap="nowrap"  >默认项目</th>
-				<th width="5%" height="40" nowrap="nowrap"  >操作</th>
-		  </tr>
-		  <c:forEach var="t" items="${splist}" begin="0" step="1" varStatus="i">
-				<tr>
-					<td height="25" align="center">${t.username }</td>
-					<td height="25" align="center">${t.usercode }</td>
-					<td height="25" align="center">${t.role }</td>
-					<td height="25" align="center">${t.secondarySector.departmentname }</td>
-					<td height="25" align="center">${t.projectname }</td>
-					<%-- <td height="25" align="center">${t.remark }</td> --%>
-					<td height="25" align="center" style="word-break: break-all">
-						<a href="#" onclick="showDiv('${t.id}','2')"
-						style="cursor: pointer;"><u>修改</u></a>&nbsp; <a href="#"
-						onclick="showDiv('${t.id}','3')" style="cursor: pointer;"><u>删除</u></a>&nbsp;
-					</td>
-				</tr>
-			</c:forEach>
-		</table>
-<center>
-			<div id="pagelist" align="center">
-				<c:if test="${allRows!=0 }">
-					<ul>
-						<li><a href="#" onclick="return setPage(1)">首页 </a></li>
-						<li><a href="#" onclick="return frontPageCheck(${page-1});">上一页</a></li>
-						<li><a href="#" onclick="return backPageCheck(${page+1});">下一页</a></li>
-						<li><a href="#" onclick="return setPage(${allPage})">末页</a></li>
-						<li>第${page}页</li>
-						<li>共${allRows}条</li>
-						<li>共${allPage}页</li>
-					</ul>
-				</c:if>
-				<c:if test="${allRows==0 }">
-					<font color="#FF0000">没有记录!</font>				</c:if>
+
+			<div class="panel-body" style="padding-bottom: 0px;">
+
+				<div id="toolbar" class="btn-group">
+					<button id="btn_adduser" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;添加用户
+					</button>
+					<button id="btn_addrole" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>&nbsp;添加角色
+					</button>
+					<button id="btn_authority" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;权限管理
+					</button>
+					<button id="btn_project" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp;项目管理
+					</button>
+				</div>
+				<table id="tb_user"></table>
+
 			</div>
-			<br/><br/>
-			</center>
-						
-		</sf:form>
-		<p>&nbsp;</p>
-	</article>
+			</article>
+		</div>
 	</div>
-	</div>
-	
+
 	<script type="text/javascript">
-	function frontPageCheck(page)
-	{
-		if(${page > 1})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("userinfo").submit();
-			return true;
-		}
-		return false;
-	}
-	
-	function backPageCheck(page)
-	{
-		
-		if(${page < allPage})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("userinfo").submit();
-			//$("#projectversion").submit();
-			return true;
-		}			
-		return false;
-	}
-	
-	
-	function setPage(page){
-		if(page==1){
-			document.getElementById("page").value=1;
-		}else{
-			document.getElementById("page").value=page;
-		}
-		document.getElementById("userinfo").submit();
-		return true;
-	}
-	
-	function showDiv(userid,opr){
-		var status = document.getElementById("loginstatus").value;
-		if(status=="false"){
-			if(window.confirm("你未登录哦，要先去首页登录吗？")){
-				var url = '/progressus/signin.jsp';
-				window.location.href=url;
-			}else{
-				return false; 
-			} 	
-		}else{
-		if(opr=="1"){
+		$(function() {
+			//1.初始化Table
+			var oTable = new TableInit();
+			oTable.Init();
+		});
+
+		var TableInit = function() {
+			var oTableInit = new Object();
+			//初始化Table
+			oTableInit.Init = function() {
+				$('#tb_user')
+						.bootstrapTable(
+								{
+									url : '/userInfo/list.do', //请求后台的URL（*）
+									method : 'get', //请求方式（*）
+									toolbar : '#toolbar', //工具按钮用哪个容器
+									striped : true, //是否显示行间隔色
+									cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+									pagination : true, //是否显示分页（*）
+									sortable : false, //是否启用排序
+									sortOrder : "asc", //排序方式
+									queryParams : oTableInit.queryParams,//传递参数（*）
+									sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）
+									pageNumber : 1, //初始化加载第一页，默认第一页
+									pageSize : 10, //每页的记录行数（*）
+									pageList : [ 10, 25, 50, 100 ], //可供选择的每页的行数（*）
+									search : true, //是否显示表格搜索，此搜索会进服务端
+									strictSearch : true,
+									showColumns : false, //是否显示所有的列
+									showRefresh : true, //是否显示刷新按钮
+									minimumCountColumns : 2, //最少允许的列数
+									clickToSelect : true, //是否启用点击选中行
+									height : 500, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+									uniqueId : "ID", //每一行的唯一标识，一般为主键列
+									showToggle : false, //是否显示详细视图和列表视图的切换按钮
+									cardView : false, //是否显示详细视图
+									detailView : false, //是否显示父子表
+									columns : [
+											{
+												field : 'username',
+												title : '姓名',
+												width : '10%',
+											},
+											{
+												field : 'usercode',
+												title : '用户名',
+												width : '10%',
+											},
+											{
+												field : 'role',
+												title : '角色',
+												width : '50%',
+											},
+											{
+												field : 'secondarySector.departmentname',
+												title : '所属部门',
+												width : '10%',
+											},
+											{
+												field : 'projectname',
+												title : '默认项目',
+												width : '10%',
+											},
+											{
+												field : 'id',
+												title : '操作',
+												width : '10%',
+												align : 'center',
+												formatter : function(value,
+														row, index) {
+													var e = '<a href="#" mce_href="#" onclick="edit(\''
+															+ index
+															+ '\',\''
+															+ row.id
+															+ '\')">编辑</a> ';
+													var d = '<a href="#" mce_href="#" onclick="del(\''
+															+ index
+															+ '\',\''
+															+ row.id
+															+ '\')">删除</a> ';
+													return e +'&nbsp;&nbsp;&nbsp;&nbsp;'+ d;
+												}
+											} ],
+								});
+			};
+			//得到查询的参数
+			oTableInit.queryParams = function(params) {
+				var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+					limit : params.limit, //页面大小
+					offset : params.offset, //页码偏移量
+					search : params.search, //搜索参数
+				};
+				return temp;
+			};
+
+			return oTableInit;
+		};
+
+		btn_adduser.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
 			var url = '/userInfo/add.do';
-			window.location.href=url;
-	    }else if(opr=="2"){
-			var url = '/userInfo/update.do?id='+userid;
-			window.location.href=url;
-	    }else if(opr=="3"){
-	    	if(window.confirm("你确认要删除吗？")){ 
-				var url = '/userInfo/delete.do?id='+userid;
-				window.location.href=url;
-	    		return true; 
-	    		}else{ 
-	    		return false; 
-	    		}
-	    }else if(opr=="4"){
-			var url = '/userInfo/role.do';
-			window.location.href=url;
-	    }else if(opr=="5"){
-			var url = '/userInfo/roleadd.do';
-			window.location.href=url;
-	    }else if(opr=="6"){
-			var url = '/sectorProjects/load.do';
-			window.location.href=url;
-	    }else{ 
-	       alert("操作码有误，是否有非法操作，请联系软件质量室！"); 
-	       return false;
-	      }
+			window.location.href = url;
 		}
-	}
-	
+
+		btn_addrole.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			var url = '/userInfo/roleadd.do';
+			window.location.href = url;
+		}
+		
+		btn_authority.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			var url = '/userInfo/role.do';
+			window.location.href = url;
+		}
+		
+		btn_project.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			var url = '/sectorProjects/load.do';
+			window.location.href = url;
+		}
+		
+		function del(selectIndex, id) {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			if (confirm("真的要删除此用户吗?")) {
+				$.ajax({
+					type : "POST",
+					cache : false,
+					async : true,
+					dataType : "json",
+					url : "delete.do",
+					data : {
+						"userid" : id
+					},
+					success : function(data, status) {
+						if (data.status == "success") {
+							$('#tb_user').bootstrapTable('hideRow', {
+								index : selectIndex
+							});
+							alert(data.ms);
+							if (reLoad) {
+								$('#tb_user').bootstrapTable('refresh');
+							}
+						} else {
+							alert(data.ms);
+						}
+					},
+					error : function() {
+						alert('删除出错');
+					}
+				});
+			}
+		}
+
+		function edit(selectIndex, id) {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			var url = '/userInfo/update.do?id=' + id;
+			window.location.href = url;
+		}
 	</script>
 </body>
 </html>

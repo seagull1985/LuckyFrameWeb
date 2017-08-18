@@ -21,7 +21,7 @@
 	<div class="container" style="width: auto; font-size: 14px;">
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
-			<li class="active"><a href="/userInfo/list.do">用户管理</a></li>
+			<li class="active"><a href="/userInfo/load.do">用户管理</a></li>
 			<li class="active">项目管理</li>
 		</ol>
 

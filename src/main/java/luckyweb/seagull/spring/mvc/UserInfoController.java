@@ -1,5 +1,6 @@
 package luckyweb.seagull.spring.mvc;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import luckyweb.seagull.comm.QueueListener;
+import luckyweb.seagull.quartz.QuartzManager;
 import luckyweb.seagull.spring.entity.SecondarySector;
 import luckyweb.seagull.spring.entity.SectorProjects;
+import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.spring.entity.UserAuthority;
 import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.entity.UserRole;
@@ -65,84 +68,64 @@ public class UserInfoController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/list.do")
-	public String list(HttpServletRequest req, UserInfo userinfo, Model model)
-			throws Exception {
-		model.addAttribute("userinfo", userinfo);
-		
-		if(!UserLoginController.permissionboolean(req, "ui_4")){
-			model.addAttribute("userinfo", new UserInfo());
-			model.addAttribute("url", "/index.jsp");
-			model.addAttribute("message", "您无权限使用用户管理功能，请联系管理员！");
-			return "success";
-		}
-
-		try {
-			String p = req.getParameter("page");
-
-			if (StrLib.isEmpty(p) || Integer.valueOf(p) == 0) {
-				page = 1;
-			}
-
-			String page2 = req.getParameter("page");
-			if (StrLib.isEmpty(page2)) {
-				page = 1;
-			} else {
-				try {
-					page = Integer.parseInt(page2);
-				} catch (Exception e) {
-					page = 1;
-				}
-			}
-			allRows = userinfoservice.findRows(userinfo);
-			offset = (page - 1) * pageSize;
-			if (allRows % pageSize == 0) {
-				allPage = allRows / pageSize;
-			} else {
-				allPage = allRows / pageSize + 1;
-			}
-
-			model.addAttribute("allRows", allRows);
-			model.addAttribute("page", page);
-			model.addAttribute("offset", offset);
-			model.addAttribute("pageSize", pageSize);
-			model.addAttribute("allPage", allPage);
-			List<UserRole> roleMap = userroleservice.listall();
-			List<UserInfo> sssMap = userinfoservice.findByPage(userinfo, offset, pageSize);
-			List<SectorProjects> prolist = QueueListener.qa_projlist;
-			for(int i=0;i<sssMap.size();i++){
-				String role="";
-				String temp[]=sssMap.get(i).getRole().split(";",-1);
-				for(SectorProjects projectlist:prolist){
-					if(sssMap.get(i).getProjectid()==projectlist.getProjectid()){
-						sssMap.get(i).setProjectname(projectlist.getProjectname());
-					}
-				}
-				
-				for(int k=0;k<temp.length;k++){
-					if(null==temp[k]||"".equals(temp[k])){
-						continue;
-					}
-					for(int j=0;j<roleMap.size();j++){
-						if(Integer.valueOf(temp[k])==roleMap.get(j).getId()){
-							role = role+roleMap.get(j).getRole()+";";
-							break;
-						}
-					}					
-				}
-				sssMap.get(i).setRole(role);
-			}
-
-			model.addAttribute("splist", sssMap);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/review/list.do");
-			return "error";
-		}
+	@RequestMapping(value = "/load.do")
+	public String load(HttpServletRequest req, Model model) throws Exception {
 		return "/jsp/user/user";
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	@RequestMapping(value = "/list.do")
+	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		response.setCharacterEncoding("utf-8");
+		PrintWriter pw = response.getWriter();
+		String search = request.getParameter("search");
+		UserInfo userinfo= new UserInfo();
+		if (null == offset && null == limit) {
+			offset = 0;
+		}
+		if (null == limit || limit == 0) {
+			limit = 10;
+		}
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(search)) {
+			userinfo.setUsercode(search);
+			userinfo.setUsername(search);
+		}
+		List<UserRole> roleMap = userroleservice.listall();
+		List<SectorProjects> prolist = QueueListener.qa_projlist;
+		List<UserInfo> users = userinfoservice.findByPage(userinfo, offset, limit);
+		for(int i=0;i<users.size();i++){
+			String role="";
+			String temp[]=users.get(i).getRole().split(";",-1);
+			for(SectorProjects projectlist:prolist){
+				if(users.get(i).getProjectid()==projectlist.getProjectid()){
+					users.get(i).setProjectname(projectlist.getProjectname());
+				}
+			}
+			
+			for(int k=0;k<temp.length;k++){
+				if(null==temp[k]||"".equals(temp[k])){
+					continue;
+				}
+				for(int j=0;j<roleMap.size();j++){
+					if(Integer.valueOf(temp[k])==roleMap.get(j).getId()){
+						role = role+roleMap.get(j).getRole()+";";
+						break;
+					}
+				}					
+			}
+			users.get(i).setRole(role);
+		}
+		// 转换成json字符串
+		String RecordJson = StrLib.listToJson(users);
+		// 得到总记录数
+		int total = userinfoservice.findRows(userinfo);
+		// 需要返回的数据有总记录数和行数据
+		JSONObject json = new JSONObject();
+		json.put("total", total);
+		json.put("rows", RecordJson);
+		pw.print(json.toString());
 	}
 
 	/**
@@ -167,7 +150,7 @@ public class UserInfoController {
 			
 			if(!UserLoginController.permissionboolean(req, "ui_1")){
 				model.addAttribute("userinfo", new UserInfo());
-				model.addAttribute("url", "/userInfo/list.do");
+				model.addAttribute("url", "/userInfo/load.do");
 				model.addAttribute("message", "当前用户无权限添加用户，请联系管理员！");
 				return "success";
 			}
@@ -248,7 +231,7 @@ public class UserInfoController {
 						99,"用户添加成功！用户名："+userinfo.getUsercode());
 				
 				model.addAttribute("message", "创建用户成功");
-				model.addAttribute("url", "/userInfo/list.do");
+				model.addAttribute("url", "/userInfo/load.do");
 				return "success";
 
 			}
@@ -263,51 +246,59 @@ public class UserInfoController {
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/userInfo/list.do");
+			model.addAttribute("url", "/userInfo/load.do");
 			return "error";
 		}
 
 	}
 
 	/**
-	 * 删除用户
+	 * 删除调度
 	 * 
-	 * @param id
+	 * @param tj
+	 * @param br
 	 * @param model
+	 * @param req
+	 * @param rsp
 	 * @return
 	 * @throws Exception
+	 * @Description:
 	 */
-	@RequestMapping(value = "/delete.do", method = RequestMethod.GET)
-	public String delete(Model model,HttpServletRequest req) throws Exception
-	{
-		if(!UserLoginController.permissionboolean(req, "ui_2")){
-			model.addAttribute("userinfo", new UserInfo());
-			model.addAttribute("url", "/userInfo/list.do");
-			model.addAttribute("message", "当前用户无权限删除用户，请联系管理员！");
-			return "success";
-		}
-		
-		int id = Integer.valueOf(req.getParameter("id"));
-		UserInfo userinfo = userinfoservice.load(id);
-		try
-		{		
-			userinfoservice.delete(id);
-		}
-		catch (Exception e)
-		{
-			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/userInfo/list.do");
-			return "error";
-		}
-		
-		operationlogservice.add(req, "USERINFO", id, 
-				99,"用户信息删除成功！用户名："+userinfo.getUsercode());
+	@RequestMapping(value = "/delete.do")
+	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "ui_2")) {
+				json.put("status", "fail");
+				json.put("ms", "删除用户失败,权限不足,请联系管理员!");
+			} else {
+				int id = Integer.valueOf(req.getParameter("userid"));
+				UserInfo userinfo = userinfoservice.load(id);
+				try
+				{
+					userinfoservice.delete(id);
+					
+					operationlogservice.add(req, "USERINFO", id, 
+							99,"用户信息删除成功！用户名："+userinfo.getUsercode());
+					
+					json.put("status", "success");
+					json.put("ms", "删除用户成功!");
+				}
+				catch (Exception e)
+				{
+					json.put("status", "fail");
+					json.put("ms", "删除用户过程中失败!");
+				}
+			}
+			pw.print(json.toString());
 
-		String message = "删除用户成功！";
-		model.addAttribute("userinfo", new UserInfo());
-		model.addAttribute("message", message);
-		model.addAttribute("url", "/userInfo/list.do");
-		return "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 	
 	/**
@@ -327,7 +318,7 @@ public class UserInfoController {
 		
 		if(!UserLoginController.permissionboolean(req, "ui_3")){
 			model.addAttribute("userinfo", new UserInfo());
-			model.addAttribute("url", "/userInfo/list.do");
+			model.addAttribute("url", "/userInfo/load.do");
 			model.addAttribute("message", "当前用户无权限修改用户信息，请联系管理员！");
 			return "success";
 		}
@@ -398,7 +389,7 @@ public class UserInfoController {
 
 			
 			model.addAttribute("message", "修改用户信息成功");
-			model.addAttribute("url", "/userInfo/list.do");
+			model.addAttribute("url", "/userInfo/load.do");
 			return "success";
 
 		}	
@@ -417,7 +408,7 @@ public class UserInfoController {
 	}
 	catch (Exception e){
 		model.addAttribute("message", e.getMessage());
-		model.addAttribute("url", "/userInfo/list.do");
+		model.addAttribute("url", "/userInfo/load.do");
 		return "error";
 	 }
 	}
@@ -578,7 +569,7 @@ public class UserInfoController {
 
 			if(!UserLoginController.permissionboolean(req, "role_3")){
 				model.addAttribute("userinfo", new UserInfo());
-				model.addAttribute("url", "/userInfo/list.do");
+				model.addAttribute("url", "/userInfo/load.do");
 				model.addAttribute("message", "当前用户无权限查看角色权限信息，请联系管理员！");
 				return "success";
 			}
@@ -633,7 +624,7 @@ public class UserInfoController {
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/userInfo/list.do");
+			model.addAttribute("url", "/userInfo/load.do");
 			return "error";
 		}
 
@@ -661,7 +652,7 @@ public class UserInfoController {
 
 			if(!UserLoginController.permissionboolean(req, "role_1")){
 				model.addAttribute("userinfo", new UserInfo());
-				model.addAttribute("url", "/userInfo/list.do");
+				model.addAttribute("url", "/userInfo/load.do");
 				model.addAttribute("message", "当前用户无权限添加角色权限信息，请联系管理员！");
 				return "success";
 			}
@@ -712,7 +703,7 @@ public class UserInfoController {
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/userInfo/list.do");
+			model.addAttribute("url", "/userInfo/load.do");
 			return "error";
 		}
 
@@ -731,7 +722,7 @@ public class UserInfoController {
 	{
 		if(!UserLoginController.permissionboolean(req, "role_2")){
 			model.addAttribute("userinfo", new UserInfo());
-			model.addAttribute("url", "/userInfo/list.do");
+			model.addAttribute("url", "/userInfo/load.do");
 			model.addAttribute("message", "当前用户无权限删除角色，请联系管理员！");
 			return "success";
 		}
@@ -745,7 +736,7 @@ public class UserInfoController {
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/userInfo/list.do");
+			model.addAttribute("url", "/userInfo/load.do");
 			return "error";
 		}
 		

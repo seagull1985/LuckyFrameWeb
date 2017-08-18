@@ -53,7 +53,10 @@ public class UserInfoServiceImpl implements UserInfoService{
 	private String where(UserInfo userinfo) {
 		String where = " where ";
 		if (null!=userinfo.getUsercode()&&!"".equals(userinfo.getUsercode())) {
-			where += " usercode like :usercode  and ";
+			where += " usercode like :usercode  or ";
+		}
+		if (null!=userinfo.getUsername()&&!"".equals(userinfo.getUsername())) {
+			where += " username like :username  or ";
 		}
 		if (where.length() == 7) {
 			where = "";
