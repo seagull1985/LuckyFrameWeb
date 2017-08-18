@@ -411,16 +411,16 @@
 							$('#tb_testjob').bootstrapTable('hideRow', {
 								index : selectIndex
 							});
-							alert(data.ms);
+							toastr.success(data.ms);
 							if (reLoad) {
 								$('#tb_testjob').bootstrapTable('refresh');
 							}
 						} else {
-							alert(data.ms);
+							toastr.info(data.ms);
 						}
 					},
 					error : function() {
-						alert('删除出错');
+						toastr.error('删除出错');
 					}
 				});
 			}
@@ -428,8 +428,8 @@
 
 		function edit(selectIndex, id) {
 			var status = document.getElementById("loginstatus").value;
-			if (status == "false") {
-				if (window.confirm("你未登录哦，要先去登录吗？")) {
+			if (status == "false") { 
+ 				if (window.confirm("你未登录哦，要先去登录吗？")) {
 					var url = '/progressus/signin.jsp';
 					window.location.href = url;
 					return true;
@@ -451,7 +451,7 @@
 			var url = "/userlogin/permissionboolean.do?permissioncode=" + code;
 			jQuery.getJSON(url, null, function call(result) {
 				if (result.data[0] == null) {
-					alert("你好，当前用户无权限进行此操作，请联系软件质量室！");
+					toastr.warning('你好，当前用户无权限进行此操作，请联系软件质量室！'); 
 					return false;
 				} else if (result.data[0] == "true") {
 					if (code == "tast_run") {
@@ -461,10 +461,10 @@
 							async : true,
 							url : encodeURI("/testJobs/run.do?id=" + id),
 							success : function(json) {
-								alert(json);
+								toastr.success(json);
 							},
 							error : function() {
-								alert("系统异常，请稍后再试!");
+								toastr.error('系统异常，请稍后再试!');
 							}
 
 						});
@@ -475,10 +475,10 @@
 							async : true,
 							url : encodeURI("/testJobs/remove.do?id=" + id),
 							success : function(json) {
-								alert(json);
+								toastr.success(json);
 							},
 							error : function() {
-								alert("系统异常，请稍后再试!");
+								toastr.error('系统异常，请稍后再试!');
 							}
 
 						});
@@ -489,17 +489,17 @@
 							async : true,
 							url : encodeURI("/testJobs/startNow.do?id=" + id),
 							success : function(json) {
-								alert(json);
+								toastr.success(json);
 							},
 							error : function() {
-								alert("系统异常，请稍后再试!");
+								toastr.error('系统异常，请稍后再试!');
 							}
 
 						});
 					}
 					return true;
 				} else {
-					alert("你好，当前用户无权限进行此操作，请联系软件质量室！");
+					toastr.warning('你好，当前用户无权限进行此操作，请联系软件质量室！'); 
 					return false;
 				}
 			});

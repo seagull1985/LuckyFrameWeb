@@ -6,7 +6,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
 <title>任务执行列表</title>
 </head>
 
@@ -82,6 +81,12 @@
 					</button>
 				</div>
 				<table id="tb_testexcute"></table>
+				
+			<div id="delModal" class="modal fade" data-keyboard="false"
+                data-backdrop="static" data-role="dialog"
+                      aria-labelledby="myModalLabel" aria-hidden="true">
+            <div id="loading" class="loading">删除中,请稍候...</div>
+        </div>
 
 			</div>
 			</article>
@@ -363,6 +368,7 @@
                        }); 
 	        if(ids.length != 0 ){
 	        	if(confirm("真的要删除选择的任务吗?")){
+	        		$('#delModal').modal('show');
 		                $.ajax({
 		                   type: "POST",
 		                   cache:false,
@@ -373,22 +379,25 @@
 		                   data: JSON.stringify({"taskids":ids}),
 		                   success: function(data, status){
 		                           if (data.status == "success"){
+		                               toastr.success(data.ms);
+		                        	   $('#delModal').modal('hide');
 		                               $table.bootstrapTable('hideRow', {index:selectIndex});
-		                               alert(data.ms);
 		                              if(reLoad){
 		                                  $table.bootstrapTable('refresh');
 		                              }
 		                           }else{
-		                        	   alert(data.ms);
+		                        	   $('#delModal').modal('hide');
+		                        	   toastr.info(data.ms);
 		                           }
 		                   },error:function()
 		                    {
-		                        alert('删除出错');
+		                	   $('#myModal').modal('hide');
+		                	   toastr.error('删除出错!');
 		                    }
 		                });
 	            }    
 	        }else{
-	            alert('请选取要删除的任务！');
+	        	toastr.warning('请选取要删除的任务！'); 
 	        }
 	    }
 	</script>

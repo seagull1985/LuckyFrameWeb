@@ -10,13 +10,15 @@
 	<link rel="stylesheet" href="/progressus/assets/css/metroStyle.css" media="screen" >
 	<link rel="stylesheet" href="/progressus/assets/css/bootstrap-datetimepicker.min.css" media="screen" >
 	<link rel="stylesheet" href="/progressus/assets/css/main.css">
+	<link rel="stylesheet" href="/progressus/assets/css/bootstrap-modal-loading.css">
+	<link rel="stylesheet" href="/progressus/assets/css/toastr.css">
 	
 	<script type="text/javascript" src="/progressus/assets/js/jquery-1.10.2.min.js"></script>
 	<script src="/progressus/assets/js/bootstrap.min.js"></script>
 	<script src="/progressus/assets/js/bootstrapValidator/bootstrapValidator.js"></script>
 	<script src="/progressus/assets/js/bootstraptable/bootstrap-table.js"></script>
 	<script src="/progressus/assets/js/bootstraptable/extensions/editable/bootstrap-table-editable.js"></script>
-		<script src="/progressus/assets/js/bootstrap-editable.js"></script>
+	<script src="/progressus/assets/js/bootstrap-editable.js"></script>
 	<script src="/progressus/assets/js/bootstraptable/locale/bootstrap-table-zh-CN.js"></script>
 	<script src="/progressus/assets/js/headroom.min.js"></script>
 	<script src="/progressus/assets/js/jquery.ztree.all.js"></script>
@@ -24,13 +26,16 @@
 	<script src="/progressus/assets/js/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script src="/progressus/assets/js/jQuery.headroom.min.js"></script>
 	<script src="/progressus/assets/js/template.js"></script>
+	<script src="/progressus/assets/js/toastr.min.js"></script>
     <script type="text/javascript" src="/js/easyui/jquery.easyui.min.js"></script>
 <!-- 		HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
 	<script src="/progressus/assets/js/html5shiv.js"></script>
 	<script src="/progressus/assets/js/respond.min.js"></script>
 	<![endif]-->
-
+<script type="text/javascript">  
+    toastr.options.positionClass = 'toast-bottom-center';  
+ </script> 
 
 	<div class="navbar navbar-inverse navbar-fixed-top headroom" style="background-color:rgba(51,204,255,0.5);font-size:20px;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;">
 		<div class="container">
@@ -148,6 +153,8 @@ function logout(){
 	  			return false;
 	  		   }
 	      });
+    	 var url = '/index.jsp';
+		 window.location.href = url;
 	}
 }	
 

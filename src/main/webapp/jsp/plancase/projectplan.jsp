@@ -243,14 +243,14 @@
 							dataType : 'JSON',
 							success : function(data, status) {
 								if (data.status == "success") {
-									alert(data.ms);
+									toastr.success(data.ms);
 								}else{
 									$('#tb_projectplan').bootstrapTable('refresh');
-									alert(data.ms);
+									toastr.info(data.ms);
 								}
 							},
 							error : function() {
-								alert('编辑失败');
+								toastr.error('编辑失败!');
 							},
 							complete : function() {
 
@@ -350,18 +350,17 @@
 	                        {
 	                            $("#tip").html("<span style='color:blueviolet'>恭喜，添加计划成功！</span>");
 	                            // document.location.href='system_notice.php'
-	                            alert(data.ms);
+	                             toastr.success(data.ms);
 	                            location.reload();
 	                        }else{
 	                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
-	                            alert(data.ms);
+	                            toastr.info(data.ms);
 	                            location.reload();
 	                        }
 	                    },
 	                    error:function()
 	                    {
-	                        alert('请求出错');
-	                        location.reload();
+	                        toastr.error('请求出错!');
 	                    },
 	                    complete:function()
 	                    {
@@ -425,21 +424,21 @@
 		                   success: function(data, status){
 		                           if (data.status == "success"){
 		                               $table.bootstrapTable('hideRow', {index:selectIndex});
-		                               alert(data.ms);
+		                               toastr.success(data.ms);
 		                              if(reLoad){
 		                                  $table.bootstrapTable('refresh');
 		                              }
 		                           }else{
-		                        	   alert(data.ms);
+		                        	   toastr.info(data.ms);
 		                           }
 		                   },error:function()
 		                    {
-		                        alert('删除出错');
+		                	   toastr.error('删除出错!');
 		                    }
 		                });
 	            }    
 	        }else{
-	            alert('请选取要删除的测试计划！');
+	            toastr.warning('请选取要删除的测试计划！');
 	        }
 	    }
 	    
@@ -462,7 +461,7 @@
     			var url = '/projectPlanCase/casesload.do?planid='+ids;
     			window.location.href=url;
             }else{
-            	alert('您有且只能选择一条计划哦！');
+            	toastr.warning('您有且只能选择一条计划哦！'); 
             }
 
 	    }

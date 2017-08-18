@@ -22,7 +22,7 @@
 <script type="text/javascript">
 	function init(){
 		if('${message}'!=''){
-			alert('${message}');
+			toastr.info('${message}');
 		}
 	}
 	

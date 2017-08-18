@@ -244,16 +244,16 @@
 							$('#tb_user').bootstrapTable('hideRow', {
 								index : selectIndex
 							});
-							alert(data.ms);
+							toastr.success(data.ms);
 							if (reLoad) {
 								$('#tb_user').bootstrapTable('refresh');
 							}
 						} else {
-							alert(data.ms);
+							toastr.info(data.ms);
 						}
 					},
 					error : function() {
-						alert('删除出错');
+						toastr.error('删除出错!');
 					}
 				});
 			}

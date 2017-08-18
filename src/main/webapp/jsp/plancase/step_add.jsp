@@ -168,9 +168,9 @@
 
 			if ('${message}' != '') {
 				if ('${message}' == '添加成功') {
-					alert("添加成功,请返回查询！");
+					toastr.success('添加成功,请返回查询！');
 				} else {
-					alert('${message}');
+					toastr.info('${message}');
 				}
 			}
 		}
@@ -301,15 +301,15 @@
 				data : JSON.stringify(json),
 				success : function(data, status) {
  				if (data.status == "success") {
-						alert(data.ms);
+ 					toastr.success(data.ms);
 		    			var url = '/projectCase/load.do';
 		    			window.location.href=url;
 					}else{
-						alert(data.ms);
+						toastr.info(data.ms);
 					}
 				},
 				error : function() {
- 					alert(data);
+					toastr.error(data);
 				}
 			});
 
