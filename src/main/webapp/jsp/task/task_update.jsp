@@ -438,10 +438,12 @@
 			**/
 			var threadCount=document.getElementById('threadCount').value;
 			if(threadCount.isInt()==false){
-				alert("线程必须为数字");return  false;
+				toastr.warning('线程必须为数字'); 
+				return  false;
 			}
 			if(threadCount<1  || threadCount>20){
-				alert("线程数在1-20之间");return  false;
+				toastr.warning('线程数在1-20之间');
+				return  false;
 			}
 			return true;
 		}
@@ -502,7 +504,7 @@
 					   
 	function init(){
 		if('${message}'!=''){
-			alert('${message}');
+			toastr.info('${message}');
 		}
 	}
 </script>

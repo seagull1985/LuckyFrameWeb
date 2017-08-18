@@ -130,10 +130,10 @@
     <script type="text/javascript">	
 	function init(){
 		if('${message}'!=''){
-			if('${message}'=='添加成功'){
-				alert("添加成功,请返回查询！");
-			}else{
-				alert('${message}');
+			if ('${message}' == '添加成功') {
+				toastr.success('添加成功,请返回查询！');
+			} else {
+				toastr.warning('${message}'); 
 			}
 		}
 		

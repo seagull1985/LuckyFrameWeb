@@ -221,7 +221,7 @@
 	function  validTime(f){
 		var projectid=document.getElementById('projectid').value;
 		if(projectid.isInt()==0){
-			alert("项目名必选");
+			toastr.warning('项目名必选！'); 
 			return  false;
 		}
 		return true;
@@ -230,10 +230,10 @@
 	
 	function init(){
 		if('${message}'!=''){
-			if('${message}'=='添加成功'){
-				alert("添加成功,请返回查询！");
-			}else{
-				alert('${message}');
+			if ('${message}' == '添加成功') {
+				toastr.success('添加成功,请返回查询！');
+			} else {
+				toastr.warning('${message}'); 
 			}
 		}
 		

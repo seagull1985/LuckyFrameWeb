@@ -184,7 +184,7 @@
 							contentType: "application/x-www-form-urlencoded; charset=utf-8", 
 							success : function(data, status) {
 								if (data.status == "success") {
-	                                    alert(data.ms);
+									toastr.success(data.ms);
 	                                    
 	                                    var i=0;
 	                                    var allTableData = $("#tb_projectplancase").bootstrapTable('getData');
@@ -196,11 +196,11 @@
 	                                    $('#tb_projectplancase').bootstrapTable('check',i);
 								}else{
 									$('#tb_projectplancase').bootstrapTable('refresh');
-									alert(data.ms);
+									toastr.info(data.ms);
 								}
 							},
 							error : function() {
-								alert('编辑失败');
+								toastr.error('编辑失败!');
 							},
 							complete : function() {
 
@@ -256,15 +256,15 @@
 		                   success: function(data, status){
 		                           if (data.status == "success"){
 		                              if(reLoad){
-		                            	  alert('保存计划中的用例成功');
+		                            	  toastr.success('保存计划中的用例成功!');
 		                                  $table.bootstrapTable('refresh');
 		                              }
 		                           }else{
-		                        	   alert('保存计划中的用例出错');
+		                        	   toastr.error('保存计划中的用例出错!');
 		                           }
 		                   },error:function()
 		                    {
-		                        alert('保存计划中的用例出错');
+		                	   toastr.error('保存计划中的用例出错!');
 		                    }
 		                });
 	            }    

@@ -274,14 +274,14 @@
 							dataType : 'JSON',
 							success : function(data, status) {
 								if (data.status == "success") {
-									alert(data.ms);
+									toastr.success(data.ms);
 								}else{
 									$('#tb_sectorproject').bootstrapTable('refresh');
-									alert(data.ms);
+									toastr.info(data.ms);
 								}
 							},
 							error : function() {
-								alert('编辑失败');
+								toastr.error('编辑失败!');
 							},
 							complete : function() {
 
@@ -389,17 +389,17 @@
 	                        {
 	                            $("#tip").html("<span style='color:blueviolet'>恭喜，添加项目成功！</span>");
 	                            // document.location.href='system_notice.php'
-	                            alert(data.ms);
+	                            toastr.success(data.ms);
 	                            location.reload();
 	                        }else{
 	                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
-	                            alert(data.ms);
+	                            toastr.warning(data.ms); 
 	                            location.reload();
 	                        }
 	                    },
 	                    error:function()
 	                    {
-	                        alert('请求出错');
+	                    	toastr.error('请求出错!');
 	                        location.reload();
 	                    },
 	                    complete:function()
@@ -464,21 +464,21 @@
 		                   success: function(data, status){
 		                           if (data.status == "success"){
 		                               $table.bootstrapTable('hideRow', {index:selectIndex});
-		                               alert(data.ms);
+		                               toastr.success(data.ms);
 		                              if(reLoad){
 		                                  $table.bootstrapTable('refresh');
 		                              }
 		                           }else{
-		                        	   alert(data.ms);
+		                        	   toastr.warning(data.ms); 
 		                           }
 		                   },error:function()
 		                    {
-		                        alert('删除出错');
+		                	   toastr.error('删除出错!');
 		                    }
 		                });
 	            }    
 	        }else{
-	            alert('请选取要删除的数据行！');
+	            toastr.warning('请选取要删除的数据行！'); 
 	        }
 	    }
 	   

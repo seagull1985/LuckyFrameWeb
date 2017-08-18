@@ -360,7 +360,7 @@
 
 				},
 				error:function(){
-					alert("请稍后再试!");
+					toastr.error('请稍后再试!');
 				}
 				
 			});
@@ -419,21 +419,21 @@
 		                   success: function(data, status){
 		                           if (data.status == "success"){
 		                               $table.bootstrapTable('hideRow', {index:selectIndex});
-		                               alert(data.ms);
+		                               toastr.success(data.ms);
 		                              if(reLoad){
 		                                  $table.bootstrapTable('refresh');
 		                              }
 		                           }else{
-		                        	   alert(data.ms);
+		                        	   toastr.info(data.ms);
 		                           }
 		                   },error:function()
 		                    {
-		                        alert('执行用例出错啦！');
+		                        toastr.error('执行用例出错啦！');
 		                    }
 		                });
 	            }    
 	        }else{
-	            alert('请选取要执行的用例！');
+	            toastr.warning('请选取要执行的用例！'); 
 	        }
 	    }
 	    
@@ -461,16 +461,16 @@
                    success: function(data, status){
                            if (data.status == "success"){
                                $table.bootstrapTable('hideRow', {index:selectIndex});
-                               alert(data.ms);
+                               toastr.success(data.ms);
                               if(reLoad){
                                   $table.bootstrapTable('refresh');
                               }
                            }else{
-                        	   alert(data.ms);
+                        	   toastr.info(data.ms);
                            }
                    },error:function()
                     {
-                        alert('执行用例出错啦！');
+                        toastr.error('执行用例出错啦！');
                     }
                 });
         }  

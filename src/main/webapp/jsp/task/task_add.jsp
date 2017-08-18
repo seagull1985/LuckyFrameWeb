@@ -466,10 +466,12 @@
 		**/
 		var threadCount=document.getElementById('threadCount').value;
 		if(threadCount.isInt()==false){
-			alert("线程必须为数字");return  false;
+			toastr.warning('线程必须为数字'); 
+			return  false;
 		}
 		if(threadCount<1  || threadCount>20){
-			alert("线程数在1-20之间");return  false;
+			toastr.warning('线程数在1-20之间'); 
+			return  false;
 		}
 		return true;
 	}
@@ -479,9 +481,9 @@
 	function init(){
 		if('${message}'!=''){
 			if('${message}'=='添加成功'){
-				alert("添加成功,请返回查询！");
+				toastr.success('添加成功,请返回查询！');
 			}else{
-				alert('${message}');
+				toastr.warning('${message}');
 			}
 		}
 		

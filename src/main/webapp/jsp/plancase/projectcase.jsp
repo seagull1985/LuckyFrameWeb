@@ -321,14 +321,14 @@
 							dataType : 'JSON',
 							success : function(data, status) {
 								if (data.status == "success") {
-									alert(data.ms);
+									 toastr.success(data.ms);
 								}else{
 									$('#tb_projectcase').bootstrapTable('refresh');
-									alert(data.ms);									
+									toastr.info(data.ms);								
 								}
 							},
 							error : function(data, status) {
-								alert("编辑失败!");
+								toastr.error('编辑失败!');
 							},
 							complete : function() {
 
@@ -518,14 +518,14 @@
 							dataType : 'JSON',
 							success : function(data, status) {
 								if (data.status == "success") {
-									alert(data.ms);
+									toastr.success(data.ms);
 								}else{
 									$('#cur_table').bootstrapTable('refresh');
-									alert(data.ms);									
+									toastr.info(data.ms);									
 								}
 							},
 							error : function() {
-								alert('编辑失败');
+								 toastr.error('编辑失败!');
 							},
 							complete : function() {
 
@@ -578,11 +578,12 @@
 					}).on(
 							'success.form.bv',
 							function(e) {
-								// Prevent submit form
+ 								// Prevent submit form
 								e.preventDefault();
 								var $form = $(e.target), validator = $form
 										.data('bootstrapValidator');
 								$form.find('.alert').html('用例创建成功！');
+								
 							});
 				});
 		
@@ -618,26 +619,24 @@
 	                        {
 	                            $("#tip").html("<span style='color:blueviolet'>恭喜，添加用例成功！</span>");
 	                            // document.location.href='system_notice.php'
-	                            alert(data.ms);
+	                            toastr.success(data.ms);
 	                            location.reload();
 	                        }else{
 	                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
-	                            alert(data.ms);
 	                            location.reload();
+	                            toastr.info(data.ms);
 	                        }
 	                    },
 	                    error:function()
 	                    {
-	                        alert('请求出错');
 	                        location.reload();
+	                    	toastr.error('添加用例出错!');
 	                    },
 	                    complete:function()
 	                    {
 	                        $('#addModal').hide();
 	                    }
 	                });
-
-	        return false;
 	    }    
 	    
 	    btn_add.onclick=function(){
@@ -693,22 +692,21 @@
 		                   success: function(data, status){
 		                           if (data.status == "success"){
 		                               $table.bootstrapTable('hideRow', {index:selectIndex});
-		                            
-		                               alert(data.ms);
+		                               toastr.success(data.ms);
 		                              if(reLoad){
 		                                  $table.bootstrapTable('refresh');
 		                              }
 		                           }else{
-		                        	   alert(data.ms);
+		                        	   toastr.info(data.ms);
 		                           }
 		                   },error:function()
 		                    {
-		                        alert('删除出错');
+		                	   toastr.error('删除出错!');
 		                    }
 		                });
 	            }    
 	        }else{
-	            alert('请选取要删除的数据行！');
+	        	toastr.warning('请选取要删除的任务！'); 
 	        }
 	    }
 	    
@@ -739,18 +737,18 @@
 	                   success: function(data, status){
 	                           if (data.status == "success"){
 	                        	   $('#tb_projectcase').bootstrapTable('refresh');
-	                               alert(data.ms);
+	                        	   toastr.success(data.ms);
 	                           }else{
-	                        	   alert(data.ms);
+	                        	   toastr.info(data.ms);
 	                           }
 	                   },error:function()
 	                    {
-	                        alert('复制出错');
+	                	   toastr.error('复制出错!');
 	                    }
 	                });
             }
             }else{
-            	alert('要复制用例有且只能选择一条用例哦！');
+            	toastr.warning('要复制用例有且只能选择一条用例哦！'); 
             }
 
 	    }
@@ -773,7 +771,7 @@
     			var url = '/projectCasesteps/stepadd.do?caseid='+ids;
     			window.location.href=url;
             }else{
-            	alert('要进行步骤编辑只能选择一条用例哦！');
+            	toastr.warning('要进行步骤编辑有且选择一条用例哦！'); 
             }
 
 	    }
@@ -843,7 +841,7 @@
 			zTree.selectNode(treeNode);
 			if(null==treeNode.pId){
 				$.fn.zTree.init($("#treeDemo"), genJsonConfig());
-				 alert('项目名称不能删除!');
+				 toastr.warning('项目名称不能删除!'); 
 				 return false;
 			}
 			
@@ -858,15 +856,15 @@
 	                   data: dataSend,
 	                   success: function(data, status){
 	                           if (data.status == "success"){
-	                               alert(data.ms);
+	                        	   toastr.success(data.ms);
 	                           }else{
 	                        	   $.fn.zTree.init($("#treeDemo"), genJsonConfig());
-	                        	   alert(data.ms);
+	                        	   toastr.info(data.ms);
 	                           }
 	                   },error:function()
 	                    {
 	                	    $.fn.zTree.init($("#treeDemo"), genJsonConfig());
-	                        alert('删除出错');
+	                	    toastr.error('删除出错!');
 	                    }
 	                });
 			}else{
@@ -879,7 +877,7 @@
 				setTimeout(function() {
 					var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 					zTree.cancelEditName();
-					alert("节点名称不能为空.");
+					toastr.warning('节点名称不能为空！');
 				}, 0);
 				return false;
 			}else{
@@ -898,7 +896,7 @@
 				zTree.selectNode(treeNode);
 				if(null==treeNode.pId){
 					$.fn.zTree.init($("#treeDemo"), genJsonConfig());
-					 alert('项目名称不能编辑!');
+					 toastr.warning('项目名称不能编辑！');
 					 return false;
 				}
 				var dataSend = JSON.stringify({"id":treeNode.id,"oldName":treeNode.name,"pid":treeNode.pId,"name":newName,"projectid":$('#search_project').val()});
@@ -913,15 +911,15 @@
 	                           if (data.status == "success"){
 	                        	   $.fn.zTree.destroy("treeDemo");
 	                        	   $.fn.zTree.init($("#treeDemo"), genJsonConfig());
-	                               alert(data.ms);
+	                        	   toastr.success(data.ms);
 	                           }else{
 	                        	   $.fn.zTree.init($("#treeDemo"), genJsonConfig());
-	                        	   alert(data.ms);
+	                        	   toastr.info(data.ms);
 	                           }
 	                   },error:function()
 	                    {
 	                	   $.fn.zTree.init($("#treeDemo"), genJsonConfig());
-	                        alert('保存出错');
+	                        toastr.error('保存出错!');
 	                    }
 	                });
 			}
