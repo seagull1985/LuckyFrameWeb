@@ -12,7 +12,7 @@ function gouserInfo(){
 			return false; 
 		} 	
 	}else{
-		var url = '/userInfo/list.do';
+		var url = '/userInfo/load.do';
 		window.location.href=url;
 	}
 }

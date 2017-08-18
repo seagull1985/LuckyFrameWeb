@@ -73,6 +73,9 @@ public class UserInfoDaoImpl extends HibernateDaoSupport implements UserInfoDao{
 		if (null!=userinfo.getUsercode()&&!"".equals(userinfo.getUsercode())) {
 			query.setParameter("usercode", "%"+userinfo.getUsercode()+"%");
 		}
+		if (null!=userinfo.getUsername()&&!"".equals(userinfo.getUsername())) {
+			query.setParameter("username", "%"+userinfo.getUsername()+"%");
+		}
 	}
 	
 	@Override
