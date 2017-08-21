@@ -16,11 +16,6 @@
     </div> 
     
 	<header id="head" class="secondary"></header>
-	
-<sf:form method="post" modelAttribute="testCasedetail">
-<sf:input path="casestatus" type="hidden"  />
-<sf:input path="taskId" type="hidden"  />
-</sf:form>
     
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
     <div id="main" style="height:600px; background-color:#F2F2F2;"></div>
@@ -32,7 +27,7 @@
     <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
     <script type="text/javascript">
 	//debugger;
-	var tastid = ${tastid};
+	var taskid = ${taskid};
 	var jobname = ${jobname};
 	var casetotal = ${casetotal};
 	var casesuc = ${casesuc};
@@ -624,21 +619,17 @@
                 //设置图型点击链接
                 var ecConfig = require('echarts/config');	 
                 function eConsole(param) {
-                		//window.location.href='../caseDetail/list.do?tastId='+tastid[param.seriesIndex]+'&status='+param.dataIndex;
-            		document.getElementById("testCasedetail").action="/caseDetail/list.do";
-            		document.getElementById("taskId").value=tastid[param.seriesIndex];
-            		var casestatus;
+            		var status;
             		if(param.dataIndex==3){
-						casestatus = 0;
+            			status = 0;
 					}else if(param.dataIndex==0){
-						casestatus = 1;
+						status = 1;
 					}else if(param.dataIndex==1){
-						casestatus = 2;
+						status = 2;
 					}else if(param.dataIndex==2){
-						casestatus = 4;
+						status = 4;
 					}
-            		document.getElementById("casestatus").value=casestatus;
-            		document.getElementById("testCasedetail").submit();
+            		window.location.href='/caseDetail/load.do?taskId='+taskid[param.seriesIndex]+'&status='+status;
                 	}
                 myChart.on(ecConfig.EVENT.CLICK, eConsole);	
                 

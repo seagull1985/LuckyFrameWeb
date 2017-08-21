@@ -193,7 +193,7 @@
 								if (value.length > 20)
 									return '项目名称不能超过20个字符';
 								if (value.length < 2)
-									return '项目名称不能适于2个字符';
+									return '项目名称不能小于2个字符';
 							}
 						}
 					}, {
@@ -210,7 +210,7 @@
 								if (value.length > 20)
 									return '项目标识不能超过20个字符';
 								if (value.length < 2)
-									return '项目标识不能适于2个字符';
+									return '项目标识不能小于2个字符';
 							}
 						}
 					}, {
@@ -227,7 +227,7 @@
 								if (value.length > 20)
 									return '项目经理不能超过20个字符';
 								if (value.length < 2)
-									return '项目经理不能适于2个字符';
+									return '项目经理不能小于2个字符';
 							}
 						}
 					}, {
@@ -362,7 +362,7 @@
 								e.preventDefault();
 								var $form = $(e.target), validator = $form
 										.data('bootstrapValidator');
-								$form.find('.alert').html('计划创建成功！');
+								$form.find('.alert').html('项目创建成功！');
 							});
 				});
 	    

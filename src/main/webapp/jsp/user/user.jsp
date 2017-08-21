@@ -44,7 +44,10 @@
 						<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;权限管理
 					</button>
 					<button id="btn_project" type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp;项目管理
+						<span class="glyphicon glyphicon-list" aria-hidden="true"></span>&nbsp;项目管理
+					</button>
+					<button id="btn_dpmt" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp;部门管理
 					</button>
 				</div>
 				<table id="tb_user"></table>
@@ -214,6 +217,22 @@
 			}
 
 			var url = '/sectorProjects/load.do';
+			window.location.href = url;
+		}
+		
+		btn_dpmt.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			var url = '/secondarySector/load.do';
 			window.location.href = url;
 		}
 		

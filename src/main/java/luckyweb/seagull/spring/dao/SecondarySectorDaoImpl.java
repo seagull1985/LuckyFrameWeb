@@ -26,13 +26,14 @@ public class SecondarySectorDaoImpl extends HibernateDaoSupport implements Secon
 	@Override
 	public int add(SecondarySector sector) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		this.getHibernateTemplate().save(sector);
+		return sector.getSectorid();
 	}
 
 	@Override
 	public void modify(SecondarySector sector) throws Exception {
 		// TODO Auto-generated method stub
-		
+		this.getHibernateTemplate().update(sector);
 	}
 
 	@Override
@@ -48,9 +49,9 @@ public class SecondarySectorDaoImpl extends HibernateDaoSupport implements Secon
 	}
 
 	@Override
-	public void delete(int id) throws Exception {
+	public void delete(SecondarySector sector) throws Exception {
 		// TODO Auto-generated method stub
-		
+		this.getHibernateTemplate().delete(sector);
 	}
 
 	@Override
@@ -84,10 +85,10 @@ public class SecondarySectorDaoImpl extends HibernateDaoSupport implements Secon
 	private void whereParameter(SecondarySector ss, Query query) {
 
 		if (!StrLib.isEmpty(ss.getDepartmenthead())) {
-			query.setParameter("departmenthead", ss.getDepartmenthead().trim());
+			query.setParameter("departmenthead", "%"+ss.getDepartmenthead().trim()+"%");
 		}
 		if (!StrLib.isEmpty(ss.getDepartmentname())) {
-			query.setParameter("departmentname",ss.getDepartmentname().trim());
+			query.setParameter("departmentname","%"+ss.getDepartmentname().trim()+"%");
 		}
 
 	}
