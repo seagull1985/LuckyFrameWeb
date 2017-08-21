@@ -12,7 +12,7 @@ public interface SecondarySectorService {
 	public int add(SecondarySector Sector)throws Exception;
 	public void modify(SecondarySector Sector)throws Exception;
 	public void modifyState(SecondarySector Sector)throws Exception;
-	public void delete(int id)throws Exception;
+	public void delete(SecondarySector Sector)throws Exception;
 	
 	@Transactional(propagation=Propagation.NOT_SUPPORTED)
 	public List<SecondarySector> list(SecondarySector Sector)throws Exception;

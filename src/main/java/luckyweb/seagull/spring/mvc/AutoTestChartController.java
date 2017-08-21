@@ -39,33 +39,33 @@ public class AutoTestChartController {
 	@RequestMapping(value = "/chart.do")
 	public String chart(HttpServletRequest req,Model model) {
 		try {
-			List<Object[]> tastinfo = tastExcuteService.listtastinfo();
+			List<Object[]> taskinfo = tastExcuteService.listtastinfo();
 			
-			String jobname[] = new String[tastinfo.size()];
-			String casetotal[] = new String[tastinfo.size()];
-			String casesuc[] = new String[tastinfo.size()];
-			String casefail[] = new String[tastinfo.size()];
-			String caselock[] = new String[tastinfo.size()];
-			String casenoex[] = new String[tastinfo.size()];
-			String createtime[] = new String[tastinfo.size()];
-			String tastid[] = new String[tastinfo.size()];
+			String jobname[] = new String[taskinfo.size()];
+			String casetotal[] = new String[taskinfo.size()];
+			String casesuc[] = new String[taskinfo.size()];
+			String casefail[] = new String[taskinfo.size()];
+			String caselock[] = new String[taskinfo.size()];
+			String casenoex[] = new String[taskinfo.size()];
+			String createtime[] = new String[taskinfo.size()];
+			String taskid[] = new String[taskinfo.size()];
 			int j=0;
-			for(int i=0;i<tastinfo.size();i++){
-				if(Integer.valueOf(tastinfo.get(i)[2].toString())==0){
+			for(int i=0;i<taskinfo.size();i++){
+				if(Integer.valueOf(taskinfo.get(i)[2].toString())==0){
 					continue;
 				}
-				tastid[j] = tastinfo.get(i)[0].toString();
-				jobname[j] = tastinfo.get(i)[1].toString();
-				casetotal[j] = tastinfo.get(i)[2].toString();
-				casesuc[j] = tastinfo.get(i)[3].toString();
-				casefail[j] = tastinfo.get(i)[4].toString();
-				caselock[j] = tastinfo.get(i)[5].toString();
-				casenoex[j] = tastinfo.get(i)[6].toString();
-				createtime[j] = tastinfo.get(i)[7].toString();
+				taskid[j] = taskinfo.get(i)[0].toString();
+				jobname[j] = taskinfo.get(i)[1].toString();
+				casetotal[j] = taskinfo.get(i)[2].toString();
+				casesuc[j] = taskinfo.get(i)[3].toString();
+				casefail[j] = taskinfo.get(i)[4].toString();
+				caselock[j] = taskinfo.get(i)[5].toString();
+				casenoex[j] = taskinfo.get(i)[6].toString();
+				createtime[j] = taskinfo.get(i)[7].toString();
 				j++;
 			}
 			
-			JSONArray  jsontastid=JSONArray.fromObject(tastid);
+			JSONArray  jsontaskid=JSONArray.fromObject(taskid);
 			JSONArray  jsonjobname=JSONArray.fromObject(jobname);
 			JSONArray  jsoncasetotal=JSONArray.fromObject(casetotal);
 			JSONArray  jsoncasesuc=JSONArray.fromObject(casesuc);
@@ -74,7 +74,7 @@ public class AutoTestChartController {
 			JSONArray  jsoncasenoex=JSONArray.fromObject(casenoex);
 			JSONArray  jsoncreatetime=JSONArray.fromObject(createtime);
 
-			req.setAttribute("tastid", jsontastid);
+			req.setAttribute("taskid", jsontaskid);
 			req.setAttribute("jobname", jsonjobname);
 			req.setAttribute("casetotal", jsoncasetotal);
 			req.setAttribute("casesuc", jsoncasesuc);
@@ -92,4 +92,17 @@ public class AutoTestChartController {
 		return "/jsp/echart/echarts_pie5";
 	}
 	
+	/**
+	 * 
+	 * Job查询
+	 * @param tj
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "unchecked" })
+	@RequestMapping(value = "/testchart.do")
+	public String testchart(HttpServletRequest req,Model model) {
+		return "/jsp/echart/echarts_pie6";
+	}
 }

@@ -145,6 +145,13 @@ public class SectorProjectsServiceImpl implements SectorProjectsService{
 	}
 	
 	@Override
+	public int projectrowfordmtp(int sectorid) {
+		int row=0;
+		row=sectorprojectsdao.projectrow("SELECT projectid from QA_SECTORPROJECTS where sectorid="+sectorid);
+		return row;
+	}
+	
+	@Override
 	public List<SectorProjects> getAllProject(){
 		return sectorprojectsdao.getAllProject();
 	}

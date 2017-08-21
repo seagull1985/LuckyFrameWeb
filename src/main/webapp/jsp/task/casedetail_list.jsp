@@ -100,6 +100,7 @@
 	<script type="text/javascript">
 		$(function() {
 			$('#search_pro').val('${projectid }');
+			$('#search_status').val('${status }');
 			
 			$('#qBeginTime').datetimepicker({
 				format: 'yyyy-mm-dd',

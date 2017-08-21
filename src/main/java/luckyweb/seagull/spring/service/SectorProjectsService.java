@@ -41,4 +41,5 @@ public interface SectorProjectsService {
 	public SectorProjects loadob(int projectid) throws Exception;
 	public int projectrow(int id);
 	public List<SectorProjects> getAllProject();
+	public int projectrowfordmtp(int sectorid);
 }

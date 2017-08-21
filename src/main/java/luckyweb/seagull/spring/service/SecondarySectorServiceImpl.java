@@ -28,12 +28,12 @@ public class SecondarySectorServiceImpl implements SecondarySectorService{
 	@Override
 	public int add(SecondarySector Sector) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.secondarysectordao.add(Sector);
 	}
 
 	@Override
 	public void modify(SecondarySector Sector) throws Exception {
-		// TODO Auto-generated method stub
+		this.secondarysectordao.modify(Sector);
 		
 	}
 
@@ -44,9 +44,9 @@ public class SecondarySectorServiceImpl implements SecondarySectorService{
 	}
 
 	@Override
-	public void delete(int id) throws Exception {
+	public void delete(SecondarySector Sector) throws Exception {
 		// TODO Auto-generated method stub
-		
+		this.secondarysectordao.delete(Sector);
 	}
 
 	@Override
@@ -80,10 +80,10 @@ public class SecondarySectorServiceImpl implements SecondarySectorService{
 			where += " sectorid=:sectorid  and ";
 		}*/
 		if (!StrLib.isEmpty(ss.getDepartmenthead())) {
-			where += " departmenthead=:departmenthead  and ";
+			where += " departmenthead like :departmenthead  or ";
 		}
 		else if (!StrLib.isEmpty(ss.getDepartmentname())) {
-			where += " departmentname=:departmentname  and ";
+			where += " departmentname like :departmentname  or ";
 		}
 		
 		

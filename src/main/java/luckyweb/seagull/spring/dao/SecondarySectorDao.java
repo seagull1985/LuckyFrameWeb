@@ -17,7 +17,7 @@ public interface SecondarySectorDao {
 
 	public void modifyInfo(SecondarySector sector) throws Exception;
 
-	public void delete(int id) throws Exception;
+	public void delete(SecondarySector sector) throws Exception;
 
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public List<SecondarySector> list(SecondarySector sector) throws Exception;
