@@ -30,7 +30,7 @@
 
 </head>
 
-<body onload="init()">
+<body>
 	<div>
 		<%@ include file="/head.jsp"%>
 	</div>
@@ -154,26 +154,18 @@
 	</div>
 
 	<script type="text/javascript">
-		function init() {
-			if ('${steps}'.size == 0) {
-				document.getElementById("steptbody").rows[0].cells[0].innerHTML = 1;
-				document.getElementById("steptbody").rows[0].cells[0].value = 1;
-			} else {
-				var oTable = document.getElementById("steptbody");
-				for (var i = 0; i < oTable.rows.length; i++) {
-					oTable.rows[i].cells[0].innerHTML = (i + 1);
-					oTable.rows[i].cells[0].value = (i + 1);
-				}
-			}
-
-			if ('${message}' != '') {
-				if ('${message}' == '添加成功') {
-					toastr.success('添加成功,请返回查询！');
-				} else {
-					toastr.info('${message}');
-				}
+	$(function() {
+		if ('${steps}'.size == 0) {
+			document.getElementById("steptbody").rows[0].cells[0].innerHTML = 1;
+			document.getElementById("steptbody").rows[0].cells[0].value = 1;
+		} else {
+			var oTable = document.getElementById("steptbody");
+			for (var i = 0; i < oTable.rows.length; i++) {
+				oTable.rows[i].cells[0].innerHTML = (i + 1);
+				oTable.rows[i].cells[0].value = (i + 1);
 			}
 		}
+	});
 
 		$(document).ready(
 				function() {
@@ -263,6 +255,10 @@
 								$form.find('.alert').html('步骤创建成功！');
 							});
 				});
+		
+		String.prototype.replaceAll = function(s1,s2) { 
+		    return this.replace(new RegExp(s1,"gm"),s2); 
+		}
 
 		// 提交表单
 		function check_form() {
@@ -272,19 +268,19 @@
 				var index = i + 1
 				json = json + "{\"stepnum\":" + oTable.rows[i].cells[0].value
 						+ ",";
-				json = json + "\"path\":\"" + $("#path" + index).val() + "\",";
-				json = json + "\"operation\":\"" + $("#operation" + index).val()
+				json = json + "\"path\":\"" + $("#path" + index).val().replaceAll("\"", "&quot;") + "\",";
+				json = json + "\"operation\":\"" + $("#operation" + index).val().replaceAll("\"", "&quot;")
 						+ "\",";
 				json = json + "\"parameters\":\""
-						+ $("#parameters" + index).val() + "\",";
-				json = json + "\"action\":\"" + $("#action" + index).val() + "\",";
+						+ $("#parameters" + index).val().replaceAll("\"", "&quot;") + "\",";
+				json = json + "\"action\":\"" + $("#action" + index).val().replaceAll("\"", "&quot;") + "\",";
 				json = json + "\"expectedresult\":\""
-						+ $("#expectedresult" + index).val() + "\",";
+						+ $("#expectedresult" + index).val().replaceAll("\"", "&quot;") + "\",";
 				json = json + "\"steptype\":" + $("#steptype" + index).val()+ ",";
 				json = json + "\"id\":" + $("#id" + index).val()+ ",";
 				json = json + "\"caseid\":\""+ '${caseid}' + "\",";
 				json = json + "\"projectid\":\""+ '${projectid}' + "\",";
-				json = json + "\"remark\":\"" + $("#remark" + index).val() + "\"}";
+				json = json + "\"remark\":\"" + $("#remark" + index).val().replaceAll("\"", "&quot;") + "\"}";
 				if (i != oTable.rows.length - 1) {
 					json = json + ",";
 				}
@@ -302,8 +298,6 @@
 				success : function(data, status) {
  				if (data.status == "success") {
  					toastr.success(data.ms);
-		    			var url = '/projectCase/load.do';
-		    			window.location.href=url;
 					}else{
 						toastr.info(data.ms);
 					}
@@ -325,7 +319,6 @@
 			var oTable = document.getElementById("steptbody");
 			clonedNode.setAttribute("id", "steprow-" + (oTable.rows.length + 1)); // 修改一下id 值，避免id 重复
 			var o = clonedNode.childNodes;
-			console.log(o);
 /* 			o[5].childNodes[0].setAttribute("id", "2222"); */
 			parentTR.parentNode.appendChild(clonedNode); // 在父节点插入克隆的节点 
 

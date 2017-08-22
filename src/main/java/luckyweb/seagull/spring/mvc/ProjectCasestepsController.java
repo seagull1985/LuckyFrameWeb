@@ -165,6 +165,12 @@ public class ProjectCasestepsController {
 				}
 				step.setOperationer(usercode);
 				step.setTime(time);
+				step.setOperation(step.getOperation().replaceAll("&quot;", "\""));
+				step.setPath(step.getPath().replaceAll("&quot;", "\""));
+				step.setParameters(step.getParameters().replaceAll("&quot;", "\""));
+				step.setAction(step.getAction().replaceAll("&quot;", "\""));
+				step.setExpectedresult(step.getExpectedresult().replaceAll("&quot;", "\""));
+				step.setRemark(step.getRemark().replaceAll("&quot;", "\""));
 				casestepsservice.add(step);
 				
 				projectcase.setOperationer(usercode);
