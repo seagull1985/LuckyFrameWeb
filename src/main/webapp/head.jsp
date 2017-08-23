@@ -87,7 +87,6 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">关于<b class="caret"></b></a>
 						<ul class="dropdown-menu" style="background-color:rgba(51,204,255,0.6);">
-						    <li><a href="/operationLog/list.do">平台日志</a></li>
 							<li><a href="/progressus/contact.jsp">联系我们</a></li>
 						</ul>
 					</li>
