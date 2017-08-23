@@ -350,12 +350,10 @@
 	                        {
 	                            $("#tip").html("<span style='color:blueviolet'>恭喜，添加计划成功！</span>");
 	                            // document.location.href='system_notice.php'
-	                             toastr.success(data.ms);
-	                            location.reload();
+	                            toastr.success(data.ms);
 	                        }else{
 	                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
 	                            toastr.info(data.ms);
-	                            location.reload();
 	                        }
 	                    },
 	                    error:function()
@@ -364,7 +362,7 @@
 	                    },
 	                    complete:function()
 	                    {
-	                        $('#addModal').hide();
+	               /*          $('#addModal').hide(); */
 	                    }
 	                });
 

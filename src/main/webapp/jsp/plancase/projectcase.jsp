@@ -600,7 +600,7 @@
 	    {
 	        var form_data = $('#form_data').serialize();
 	        $.param(form_data);
-	        console.log(form_data);
+
 	        // 异步提交数据到action页面
 	        $.ajax(
 	                {
@@ -620,10 +620,8 @@
 	                            $("#tip").html("<span style='color:blueviolet'>恭喜，添加用例成功！</span>");
 	                            // document.location.href='system_notice.php'
 	                            toastr.success(data.ms);
-	                            location.reload();
 	                        }else{
 	                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
-	                            location.reload();
 	                            toastr.info(data.ms);
 	                        }
 	                    },
@@ -634,7 +632,7 @@
 	                    },
 	                    complete:function()
 	                    {
-	                        $('#addModal').hide();
+	                       /*  $('#addModal').hide(); */
 	                    }
 	                });
 	    }    

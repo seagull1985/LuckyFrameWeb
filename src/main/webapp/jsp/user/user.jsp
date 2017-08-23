@@ -49,6 +49,9 @@
 					<button id="btn_dpmt" type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp;部门管理
 					</button>
+					<button id="btn_olog" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;操作日志
+					</button>
 				</div>
 				<table id="tb_user"></table>
 
@@ -233,6 +236,22 @@
 			}
 
 			var url = '/secondarySector/load.do';
+			window.location.href = url;
+		}
+		
+		btn_olog.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			var url = '/operationLog/load.do';
 			window.location.href = url;
 		}
 		

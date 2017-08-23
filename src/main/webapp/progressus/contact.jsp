@@ -45,9 +45,9 @@
 			<aside class="col-sm-3 sidebar sidebar-right">
 
 				<div class="widget">
-					<h4><a href="javascript:window.open('http://www.luckyframe.cn')">LuckyFrame官网</a></h4>
+					<h4>LuckyFrame官网</h4>
 					<address>
-						http://www.luckyframe.cn
+						<a href="javascript:window.open('http://www.luckyframe.cn')">http://www.luckyframe.cn</a>
 					</address>
 					<h4>LuckyFrame官方交流群</h4>
 					<address>

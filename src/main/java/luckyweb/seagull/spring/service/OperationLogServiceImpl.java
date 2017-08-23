@@ -45,10 +45,10 @@ public class OperationLogServiceImpl implements OperationLogService{
 			where += " projectid=:projectid  and ";
 		}
 		if (oplog.getOperationer()!=null&&!oplog.getOperationer().equals("")) {
-			where += " operationer like :operationer  and ";
+			where += " (operationer like :operationer  or ";
 		}
 		if (oplog.getOperation_description()!=null&&!oplog.getOperation_description().equals("")) {
-			where += " operation_description like :operation_description  and ";
+			where += " operation_description like :operation_description)  or ";
 		}
 		if (where.length() == 7) {
 			where = "";
