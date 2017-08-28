@@ -227,10 +227,13 @@ public class ProjectCasestepsController {
 				json.put("status", "fail");
 				json.put("ms", "编辑失败,权限不足,请联系管理员!");
 			} else {
+				ProjectCase projectcase = new ProjectCase();
 				if (null != req.getSession().getAttribute("usercode")
 						&& null != req.getSession().getAttribute("username")) {
 					String usercode = req.getSession().getAttribute("usercode").toString();
 					casesteps.setOperationer(usercode);
+					projectcase=projectcaseservice.load(casesteps.getCaseid());
+					projectcase.setOperationer(usercode);
 				}
 				Date currentTime = new Date();
 				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -238,6 +241,9 @@ public class ProjectCasestepsController {
 				casesteps.setTime(time);
 
 				casestepsservice.modify(casesteps);
+				
+				projectcase.setTime(time);
+				projectcaseservice.modify(projectcase);
 
 				json.put("status", "success");
 				json.put("ms", "编辑步骤成功!");

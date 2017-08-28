@@ -101,6 +101,7 @@
 		$(function() {
 			$('#search_pro').val('${projectid }');
 			$('#search_status').val('${status }');
+			$('#search_task').val('${taskid }');
 			
 			$('#qBeginTime').datetimepicker({
 				format: 'yyyy-mm-dd',
@@ -245,7 +246,6 @@
 			//初始化子表格(无线循环)
 			oTableInit.InitSubTable = function(index, row, $detail) {
 				var caseid = row.id;
-				console.log(caseid);
 				var cur_table = $detail.html('<table></table>').find('table');
 				$(cur_table).bootstrapTable({
 					url : '/logDetail/list.do',
@@ -307,11 +307,15 @@
 								row, index) {
 							if(row.imgname==""){
 								if(value!="info"){
-									return '<font style="color:#ff0000">'+value+'</font>';
+									if(row.detail.indexOf('测试结果：')>0){
+										return '<font style="color:#ff0000">'+value+'</font>&nbsp;&nbsp;&nbsp;&nbsp;'+
+										'<a href="#" onclick="updateStep('+row.logid+')">同步结果</a> ';
+									}else{
+									    return '<font style="color:#ff0000">'+value+'</font>';
+									}
 								}else{
 									return '<font style="color:#00bf5f">'+value+'</font>';
-								}
-								
+								}								
 							}else{
 								return '<font style="color:#ff0000">'+value+'</font>&nbsp;&nbsp;&nbsp;&nbsp;'+
 								'<a href="javascript:window.open(\'/logDetail/showImage.do?filename='+ row.imgname+ '.png&logid='+row.logid+'\')">错误截图</a> ';
@@ -419,7 +423,6 @@
 		                   data: JSON.stringify({"caseids":ids}),
 		                   success: function(data, status){
 		                           if (data.status == "success"){
-		                               $table.bootstrapTable('hideRow', {index:selectIndex});
 		                               toastr.success(data.ms);
 		                              if(reLoad){
 		                                  $table.bootstrapTable('refresh');
@@ -461,7 +464,6 @@
                    data: JSON.stringify({"caseids":["ALLFAIL", $('#search_task').val()]}),
                    success: function(data, status){
                            if (data.status == "success"){
-                               $table.bootstrapTable('hideRow', {index:selectIndex});
                                toastr.success(data.ms);
                               if(reLoad){
                                   $table.bootstrapTable('refresh');
@@ -472,6 +474,44 @@
                    },error:function()
                     {
                         toastr.error('执行用例出错啦！');
+                    }
+                });
+        }  
+	    }
+	    
+	    function updateStep(logid){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
+			}
+			
+        	if(confirm("你确定要把此步骤【测试结果】更新到【用例步骤中的预期结果】吗?")){
+                $.ajax({
+                   type: "POST",
+                   cache:false,
+                   async : true,
+                   dataType : "json",
+                   url:  "/logDetail/updateStepResult.do",
+                   contentType: "application/json", //必须有
+                   data: JSON.stringify({"logid":logid}),
+                   success: function(data, status){
+                           if (data.status == "success"){
+                               toastr.success(data.ms);
+                              if(reLoad){
+                                  $table.bootstrapTable('refresh');
+                              }
+                           }else{
+                        	   toastr.info(data.ms);
+                           }
+                   },error:function()
+                    {
+                        toastr.error('更新用例预期结果出错啦！');
                     }
                 });
         }  
