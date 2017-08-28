@@ -332,6 +332,49 @@ public class ProjectCasestepsController {
 		}
 	}
 	
+	@RequestMapping(value = "/cUpdateStepExpectedResults.do")
+	public void cUpdateStepExpectedResults(HttpServletRequest req, HttpServletResponse rsp) {
+		try {
+			rsp.setContentType("text/html;charset=GBK");
+			req.setCharacterEncoding("GBK");
+			PrintWriter pw = rsp.getWriter();
+			String caseno = req.getParameter("caseno");
+			String stepnum = req.getParameter("stepnum");
+			String expectedresults = req.getParameter("expectedresults");
+			expectedresults=expectedresults.replace("BBFFHH", "%");
+			expectedresults=expectedresults.replace("DHDHDH", "=");
+			expectedresults=expectedresults.replace("ANDAND", "&");
+			
+			String result="更新用例【"+caseno+"】第【"+stepnum+"】步失败，预期结果【"+expectedresults+"】";
+			ProjectCase pc=projectcaseservice.getCaseBySign(caseno);
+			List<ProjectCasesteps> steps= casestepsservice.getSteps(pc.getId());
+			
+			for(ProjectCasesteps step:steps){
+				if(stepnum.equals(String.valueOf(step.getStepnum()))){				
+					Date currentTime = new Date();
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String time = formatter.format(currentTime);
+					
+					step.setTime(time);
+					step.setOperationer("http-post");
+					step.setExpectedresult(expectedresults);
+					
+					pc.setTime(time);
+					pc.setOperationer("http-post");
+					
+					casestepsservice.modify(step);
+					projectcaseservice.modify(pc);
+					result = "更新用例【"+caseno+"】第【"+stepnum+"】步成功，预期结果【"+expectedresults+"】";
+					break;
+				}
+			}
+			pw.print(result);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) throws Exception {
 
 	}
