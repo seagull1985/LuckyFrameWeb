@@ -78,6 +78,7 @@ public class CasedetailController
 				dateStr = sdf.format(task.getCreateTime());
 				tasks = tastExcuteService.findTastList(dateStr, task.getTestJob().getProjectid().toString(), dateStr);
 				model.addAttribute("projectid", task.getTestJob().getProjectid());
+				model.addAttribute("taskid", taskId);
 			}
 
 			model.addAttribute("status", status);
@@ -148,145 +149,6 @@ public class CasedetailController
 	}
 
 	/**
-	 * 单条用例重新执行
-	 * 
-	 * @param id
-	 * @param req
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/{id}/execCase.do")
-	public String execCase(@PathVariable int id, HttpServletRequest req, HttpServletResponse rsp, Model model)
-	        throws Exception
-	{
-		req.setCharacterEncoding("utf-8");
-		rsp.setContentType("text/html;charset=utf-8");	
-		PrintWriter pw;
-
-		TestCasedetail caseDetail = this.casedetailService.load(id);
-		String url = "/caseDetail/list.do?taskId=" + caseDetail.getTestTaskexcute().getId();
-
-		try
-		{
-			pw = rsp.getWriter();
-
-			TestTaskexcute task = caseDetail.getTestTaskexcute();
-
-			QuartzJob qj = new QuartzJob();
-			String message = qj.toRunCase(task.getTestJob().getPlanproj(),task.getId(), caseDetail.getCaseno(), caseDetail.getCaseversion(),task.getTestJob().getClientip());		
-			
-			operationlogservice.add(req, "TEST_CASEDETAIL", id, 
-					sectorprojectsService.getid(task.getTestJob().getPlanproj()),"自动化用例单条开始执行！任务名称："+task.getTaskId()+
-					" 用例编号："+caseDetail.getCaseno()+" 结果："+message);
-			
-			pw.write(message);
-
-		}
-		catch (Exception e)
-		{
-			model.addAttribute("message", "当前项目在服务器不存在！");
-			model.addAttribute("url", url);
-			return "error";
-		}
-
-		return null;
-	}
-
-	/**
-	 * 批量执行非成功用例
-	 * 
-	 * @param req
-	 * @param model
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 */
-	@RequestMapping(value = "/execCaseBatch.do")
-	public String execCaseBatch(HttpServletRequest req, HttpServletResponse rsp, Model model) throws Exception
-	{
-		req.setCharacterEncoding("utf-8");
-		rsp.setContentType("text/html;charset=utf-8");
-		
-		if(!UserLoginController.permissionboolean(req, "case_ex")){
-			model.addAttribute("testCasedetail", new TestCasedetail());
-			model.addAttribute("url",  "/caseDetail/list.do");
-			model.addAttribute("message", "当前用户无权限执行批量用例，请联系管理员！");
-			return "success";
-		}
-
-		String taskId = req.getParameter("taskId");
-
-		String url = "/caseDetail/list.do?flag=2&taskId=" + taskId;
-
-		PrintWriter pw;
-		try
-		{
-			String[] cases = req.getParameterValues("cases");
-			String ckAll = req.getParameter("ckAll");
-			String caseId = req.getParameter("caseId");
-
-			TestCasedetail caseDetail = casedetailService.load(Integer.valueOf(caseId));
-			TestTaskexcute task = caseDetail.getTestTaskexcute();
-			
-			if(task.getCasesuccCount()==task.getCasetotalCount()){
-				model.addAttribute("message", "未在当前任务下找到非成功状态的用例，请确认！");
-				model.addAttribute("url", url);
-				return "error";
-			}
-
-			StringBuffer caseInfo = new StringBuffer();
-
-			if (!StrLib.isEmpty(ckAll))
-			{
-				caseInfo.append(ckAll);
-			}
-			else
-			{
-				if ((cases==null&&ckAll==null)||cases.length == 0)
-				{
-					model.addAttribute("message", "请至少选择一个用例或是勾选所有非成功用例！");
-					model.addAttribute("url", url);
-					return "error";
-				}
-
-				String c;
-				for (int i = 0; i < cases.length; i++)
-				{
-					c = cases[i];
-					if (i == cases.length - 1)
-					{
-						caseInfo.append(c);
-					}
-					else
-					{
-						caseInfo.append(c).append("#");
-					}
-				}
-			}
-
-			String projName1 = task.getTestJob().getPlanproj();
-
-			// 批量执行用例
-			QuartzJob qj = new QuartzJob();
-			String message = qj.toRunCaseBatch(projName1, task.getId(), caseInfo.toString(),task.getTestJob().getClientip());		
-
-			operationlogservice.add(req, "TESTJOBS", 0, 
-					sectorprojectsService.getid(projName1),"自动化用例批量(非成功)开始执行!"+" 结果："+message);
-			
-			model.addAttribute("message", message);
-			model.addAttribute("url", url);
-		}
-		catch (Exception e)
-		{
-			model.addAttribute("message", e);
-			model.addAttribute("url", url);
-			return "error";
-		}
-
-		return "success";
-	}
-
-	/**
 	 * 根据caseId执行用例
 	 * 
 	 * @param tj
@@ -299,7 +161,7 @@ public class CasedetailController
 	 * @Description:
 	 */
 	@RequestMapping(value = "/runCase.do")
-	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+	public void runCase(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
 		try {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
