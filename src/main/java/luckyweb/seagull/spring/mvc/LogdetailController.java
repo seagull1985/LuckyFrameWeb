@@ -211,6 +211,7 @@ public class LogdetailController
     						projectcaseservice.modify(pc);
     						status="success";
     						ms="更新用例【"+pc.getSign()+"】第【"+step.getStepnum()+"】步预期结果成功！";
+    						break;
     					}
     				}
                 }
