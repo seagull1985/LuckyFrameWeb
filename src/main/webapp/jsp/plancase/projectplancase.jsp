@@ -29,7 +29,7 @@
 			<!-- Article main content -->
 			<article class="col-sm-9 maincontent" style="width:100%;">
 			<header class="page-header">
-			<h1 class="page-title" style="text-align: center;">添加用例到计划</h1>
+			<h1 class="page-title" style="text-align: center;">添加用例到计划【${planname}】</h1>
 			</header>
 
 			<div class="panel-body" style="padding-bottom: 0px;">

@@ -8,7 +8,7 @@
 <!-- 指定连接数据库所用的驱动 -->
   <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
   <!-- 指定连接数据库的url，hibernate连接的数据库名 -->
-  <property name="connection.url">jdbc:mysql://localhost:3306/luckyframedb?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</property>
+  <property name="connection.url">jdbc:mysql://XX.XX.XX.XX:3306/luckyframedb?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</property>
   <property name="connection.useUnicode">true</property>
   <property name="connection.characterEncoding">utf-8</property>
   <!-- 指定连接数据库的用户名 -->
@@ -27,10 +27,10 @@
   <property name="hibernate.c3p0.timeout">1800</property>
   <!-- 指定连接池里最大缓存多少个Statement对象 -->
   <property name="hibernate.c3p0.max_statements">20</property>
-  <property name="hibernate.c3p0.idle_test_period">60</property>
-  <property name="hibernate.c3p0.acquire_increment">2</property>
+  <property name="hibernate.c3p0.idle_test_period">30</property>
+  <property name="hibernate.c3p0.acquire_increment">10</property>
   <property name="hibernate.c3p0.validate">true</property>
-  <property name="hibernate.c3p0.preferredTestQuery ">SELECT 1 </property>               
+  <property name="hibernate.c3p0.preferredTestQuery ">SELECT 1 </property>
   <property name="hibernate.c3p0.testConnectionOnCheckout">true</property>
   <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
   <property name="connection.autocommit">true</property>
@@ -66,5 +66,7 @@
         <mapping resource="ProjectPlan.hbm.xml" />
         <mapping resource="ProjectPlanCase.hbm.xml" />
         <mapping resource="ProjectModule.hbm.xml" />
+        <mapping resource="ProjectProtocolTemplate.hbm.xml" />
+        <mapping resource="ProjectTemplateParams.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>

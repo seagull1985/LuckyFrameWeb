@@ -116,6 +116,7 @@ public class ProjectPlanController {
 				if (pp.getProjectid() == projectlist.getProjectid()) {
 					pp.setProjectname(projectlist.getProjectname());
 					projectplans.set(i, pp);
+					break;
 				}
 			}
 
