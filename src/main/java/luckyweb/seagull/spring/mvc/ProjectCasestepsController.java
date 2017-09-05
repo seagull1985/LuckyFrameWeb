@@ -210,7 +210,6 @@ public class ProjectCasestepsController {
 		}
 		// 转换成json字符串
 		String RecordJson = StrLib.listToJson(casesteps);
-
 		pw.print(RecordJson);
 	}
 

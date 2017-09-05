@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
-    <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+   <!--  <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700"> -->
 	<link rel="stylesheet" href="/progressus/assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/progressus/assets/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="/progressus/assets/css/bootstrap-editable.css">
@@ -52,6 +52,7 @@
 						<ul class="dropdown-menu" style="background-color:rgba(51,204,255,0.6);">
 							<li><a href="/projectPlan/load.do">测试计划</a></li>
 							<li><a href="/projectCase/load.do">用例管理</a></li>
+							<li><a href="/projectprotocolTemplate/load.do">协议模板</a></li>
 							<li><a href="/testJobs/load.do">调度配置</a></li>
 							<li><a href="/tastExecute/load.do">任务查询</a></li>
 							<li><a href="/autoTestChar/chart.do">任务概况图表</a></li>

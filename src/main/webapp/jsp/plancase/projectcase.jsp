@@ -163,7 +163,7 @@
 								<div class="modal-footer">
 									<button type="button" class="btn btn-default"
 										data-dismiss="modal">关闭</button>
-									<button type="submit" class="btn btn-primary">提交</button>
+									<button type="submit" class="btn btn-primary" disabled="disabled">提交</button>
 									&nbsp;&nbsp;&nbsp;&nbsp;<span id="tip"> </span>
 								</div>
 							</div>
@@ -458,6 +458,12 @@
 							}, {
 								value : "1",
 								text : "Web自动化"
+							}, {
+								value : "2",
+								text : "HTTP"
+							}, {
+								value : "3",
+								text : "SOCKET"
 							} ]
 						}
 					}, {
@@ -598,6 +604,11 @@
 	    // 提交表单
 	    function check_form()
 	    {
+	    	$('#form_data').data('bootstrapValidator').validate();  
+	    	  if(!$('#form_data').data('bootstrapValidator').isValid()){  
+	    		 return ;  
+	    	  } 
+	    	  
 	        var form_data = $('#form_data').serialize();
 	        $.param(form_data);
 

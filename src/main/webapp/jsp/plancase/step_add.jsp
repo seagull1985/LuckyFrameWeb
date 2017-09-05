@@ -8,26 +8,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>编辑用例步骤</title>
 
-<style type="text/css">
-<!--
-.STYLE1 {
-	font-size: 12px;
-	color: #ffffff;
-}
-
--->
-.error_msg {
-	font-size: 12px;
-	color: #f00;
-}
-
-.tip {
-	font-size: 12px;
-	color: blue;
-}
-</style>
-
-
 </head>
 
 <body>
@@ -51,8 +31,7 @@
 			<h1 class="page-title" style="text-align: center;">编辑步骤</h1>
 			</header>
 
-			<div class="col-md-10 col-md-offset1 col-sm-8 col-sm-offset-2"
-				style="margin-left: 8%">
+			<div class="col-md-12 col-sm-12">
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<h3 class="thin text-center">用例【${casesign}】编辑步骤</h3>
@@ -87,32 +66,38 @@
 												<td width="18%"><sf:input type="text"
 														class="form-control" path="path" id="path${i.count}"
 														value="${t.path }" /></td>
-												<td width="13%"><sf:input type="text"
+												<td width="13%"><div class="input-group"><sf:input type="text"
 														class="form-control" path="operation"
-														id="operation${i.count}" value="${t.operation }" /></td>
-												<td width="15%"><sf:input type="text"
+														id="operation${i.count}" value="${t.operation }" />
+														<div class="input-group-btn">
+                                                         <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                                           </ul>
+                                                        </div>
+                                                        </div>
+														</td>
+												<td width="17%"><sf:input type="text"
 														class="form-control" path="parameters"
 														id="parameters${i.count}" value="${t.parameters }" /></td>
-												<td width="10%"><sf:input type="text"
+												<td width="10%"><div class="input-group"><sf:input type="text"
 														class="form-control" path="action" id="action${i.count}"
-														value="${t.action }" /></td>
+														value="${t.action }" />
+														<div class="input-group-btn">
+                                                         <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                                           </ul>
+                                                        </div>
+                                                        </div>
+														</td>
 												<td width="13%"><sf:input type="text"
 														class="form-control" path="expectedresult"
 														id="expectedresult${i.count}" value="${t.expectedresult }" /></td>
-												<td width="10%"><sf:select type="text"
+												<td width="8%"><sf:select type="text"
 														class="form-control" align-items="left" path="steptype"
-														id="steptype${i.count}">
-														<c:if test="${t.steptype==0 }">
-                                                      <sf:option
-																value="0" selected="selected">接口</sf:option>
-															<sf:option value="1">Web UI</sf:option>
-														</c:if>
-                                                <c:if
-															test="${t.steptype==1 }">
-															<sf:option value="0">接口</sf:option>
-															<sf:option value="1" selected="selected">Web UI</sf:option>
-														</c:if> 
-												</sf:select></td>
+														id="steptype${i.count}" onChange="getObIndex(this)">													
+                                                      <option value="0" <c:if test="${t.steptype==0 }"> selected="selected"</c:if>>接口</option>
+													  <option value="1" <c:if test="${t.steptype==1 }"> selected="selected"</c:if>>Web UI</option>
+													  <option value="2" <c:if test="${t.steptype==2 }"> selected="selected"</c:if>>HTTP</option>
+													  <option value="3" <c:if test="${t.steptype==3 }"> selected="selected"</c:if>>SOCKET</option>
+														</sf:select></td>
 												<td width="10%"><sf:input type="text"
 														class="form-control" path="remark" id="remark${i.count}"
 														value="${t.remark }" /></td>
@@ -152,7 +137,7 @@
 			</article>
 		</div>
 	</div>
-
+	<script src="/progressus/assets/js/bootstrap-suggest.min.js"></script>
 	<script type="text/javascript">
 	$(function() {
 		if ('${steps}'.size == 0) {
@@ -161,14 +146,14 @@
 		} else {
 			var oTable = document.getElementById("steptbody");
 			for (var i = 0; i < oTable.rows.length; i++) {
+				initSuggest((i + 1));
 				oTable.rows[i].cells[0].innerHTML = (i + 1);
 				oTable.rows[i].cells[0].value = (i + 1);
 			}
 		}
 	});
 
-		$(document).ready(
-				function() {
+		$(function() {
 					$('#casesteps').bootstrapValidator({
 						message : '当前填写信息无效！',
 						//live: 'submitted',
@@ -181,9 +166,6 @@
 							path : {
 								message : '【包 | 定位路径】无效！',
 								validators : {
-									notEmpty : {
-										message : '【包 | 定位路径】不能为空'
-									},
 									stringLength : {
 										min : 2,
 										max : 100,
@@ -245,13 +227,10 @@
 								}
 							}
 						}
-					}).on(
-							'success.form.bv',
-							function(e) {
+					}).on('success.form.bv',function(e) {
 								// Prevent submit form
 								e.preventDefault();
-								var $form = $(e.target), validator = $form
-										.data('bootstrapValidator');
+								var $form = $(e.target), validator = $form.data('bootstrapValidator');
 								$form.find('.alert').html('步骤创建成功！');
 							});
 				});
@@ -261,7 +240,12 @@
 		}
 
 		// 提交表单
-		function check_form() {
+		function check_form() { 
+	    	$('#casesteps').data('bootstrapValidator').validate();  
+	    	  if(!$('#casesteps').data('bootstrapValidator').isValid()){  
+	    		 return ;  
+	    	  } 
+	    	  
 			var oTable = document.getElementById("steptbody");
 			var json = "";
 			for (var i = 0; i < oTable.rows.length; i++) {
@@ -286,6 +270,7 @@
 				}
 			}
 			json = "[" + json + "]"
+			
 			// 异步提交数据到action页面
 			$.ajax({
 				type : "POST",
@@ -321,19 +306,29 @@
 			var o = clonedNode.childNodes;
 /* 			o[5].childNodes[0].setAttribute("id", "2222"); */
 			parentTR.parentNode.appendChild(clonedNode); // 在父节点插入克隆的节点 
-
 			for (var i = 0; i < oTable.rows.length; i++) {
 				var index = i + 1
 				oTable.rows[i].cells[0].innerHTML = (i + 1);
 				oTable.rows[i].cells[0].value = (i + 1);
 				oTable.rows[i].cells[1].childNodes[0].setAttribute("id","path"+index);
-				oTable.rows[i].cells[2].childNodes[0].setAttribute("id","operation"+index);
+				var opob=oTable.rows[i].cells[2].childNodes[0];
+				if(opob.childNodes[0].tagName.toLocaleLowerCase()=='input'){
+					opob.childNodes[0].setAttribute("id","operation"+index);
+				}else{
+					opob.childNodes[1].setAttribute("id","operation"+index);
+				}
 				oTable.rows[i].cells[3].childNodes[0].setAttribute("id","parameters"+index);
-				oTable.rows[i].cells[4].childNodes[0].setAttribute("id","action"+index);
+				var aob=oTable.rows[i].cells[4].childNodes[0];
+				if(aob.childNodes[0].tagName.toLocaleLowerCase()=='input'){
+					aob.childNodes[0].setAttribute("id","action"+index);
+				}else{
+					aob.childNodes[1].setAttribute("id","action"+index);
+				}
 				oTable.rows[i].cells[5].childNodes[0].setAttribute("id","expectedresult"+index);
 				oTable.rows[i].cells[6].childNodes[0].setAttribute("id","steptype"+index);
 				oTable.rows[i].cells[7].childNodes[0].setAttribute("id","remark"+index);
 			}
+			initSuggest(oTable.rows.length);
 		}
 
 		function delsteps(obj) {
@@ -353,9 +348,19 @@
 				oTable.rows[i].cells[0].innerHTML = (i + 1);
 				oTable.rows[i].cells[0].value = (i + 1);
 				oTable.rows[i].cells[1].childNodes[0].setAttribute("id","path"+index);
-				oTable.rows[i].cells[2].childNodes[0].setAttribute("id","operation"+index);
+				var opob=oTable.rows[i].cells[2].childNodes[0];
+				if(opob.childNodes[0].tagName.toLocaleLowerCase()=='input'){
+					opob.childNodes[0].setAttribute("id","operation"+index);
+				}else{
+					opob.childNodes[1].setAttribute("id","operation"+index);
+				}
 				oTable.rows[i].cells[3].childNodes[0].setAttribute("id","parameters"+index);
-				oTable.rows[i].cells[4].childNodes[0].setAttribute("id","action"+index);
+				var aob=oTable.rows[i].cells[4].childNodes[0];
+				if(aob.childNodes[0].tagName.toLocaleLowerCase()=='input'){
+					aob.childNodes[0].setAttribute("id","action"+index);
+				}else{
+					aob.childNodes[1].setAttribute("id","action"+index);
+				}
 				oTable.rows[i].cells[5].childNodes[0].setAttribute("id","expectedresult"+index);
 				oTable.rows[i].cells[6].childNodes[0].setAttribute("id","steptype"+index);
 				oTable.rows[i].cells[7].childNodes[0].setAttribute("id","remark"+index);
@@ -377,9 +382,19 @@
 					parentTBODY.rows[i].cells[0].innerHTML = (i + 1);
 					parentTBODY.rows[i].cells[0].value = (i + 1);
 					parentTBODY.rows[i].cells[1].childNodes[0].setAttribute("id","path"+index);
-					parentTBODY.rows[i].cells[2].childNodes[0].setAttribute("id","operation"+index);
+					var opob=parentTBODY.rows[i].cells[2].childNodes[0];
+					if(opob.childNodes[0].tagName.toLocaleLowerCase()=='input'){
+						opob.childNodes[0].setAttribute("id","operation"+index);
+					}else{
+						opob.childNodes[1].setAttribute("id","operation"+index);
+					}
 					parentTBODY.rows[i].cells[3].childNodes[0].setAttribute("id","parameters"+index);
-					parentTBODY.rows[i].cells[4].childNodes[0].setAttribute("id","action"+index);
+					var aob=parentTBODY.rows[i].cells[4].childNodes[0];
+					if(aob.childNodes[0].tagName.toLocaleLowerCase()=='input'){
+						aob.childNodes[0].setAttribute("id","action"+index);
+					}else{
+						aob.childNodes[1].setAttribute("id","action"+index);
+					}
 					parentTBODY.rows[i].cells[5].childNodes[0].setAttribute("id","expectedresult"+index);
 					parentTBODY.rows[i].cells[6].childNodes[0].setAttribute("id","steptype"+index);
 					parentTBODY.rows[i].cells[7].childNodes[0].setAttribute("id","remark"+index);
@@ -402,9 +417,19 @@
 					parentTBODY.rows[i].cells[0].innerHTML = (i + 1);
 					parentTBODY.rows[i].cells[0].value = (i + 1);
 					parentTBODY.rows[i].cells[1].childNodes[0].setAttribute("id","path"+index);
-					parentTBODY.rows[i].cells[2].childNodes[0].setAttribute("id","operation"+index);
+					var opob=parentTBODY.rows[i].cells[2].childNodes[0];
+					if(opob.childNodes[0].tagName.toLocaleLowerCase()=='input'){
+						opob.childNodes[0].setAttribute("id","operation"+index);
+					}else{
+						opob.childNodes[1].setAttribute("id","operation"+index);
+					}
 					parentTBODY.rows[i].cells[3].childNodes[0].setAttribute("id","parameters"+index);
-					parentTBODY.rows[i].cells[4].childNodes[0].setAttribute("id","action"+index);
+					var aob=parentTBODY.rows[i].cells[4].childNodes[0];
+					if(aob.childNodes[0].tagName.toLocaleLowerCase()=='input'){
+						aob.childNodes[0].setAttribute("id","action"+index);
+					}else{
+						aob.childNodes[1].setAttribute("id","action"+index);
+					}
 					parentTBODY.rows[i].cells[5].childNodes[0].setAttribute("id","expectedresult"+index);
 					parentTBODY.rows[i].cells[6].childNodes[0].setAttribute("id","steptype"+index);
 					parentTBODY.rows[i].cells[7].childNodes[0].setAttribute("id","remark"+index);
@@ -417,6 +442,73 @@
 			var tBody = tr1.parentNode
 			tBody.replaceChild(tr2, tr1);
 			tBody.insertBefore(tr1, target);
+		}
+		
+		
+		function initSuggest(index) {
+			var steptypetext = $('#steptype'+index+' option:selected').text();
+			var steptype = $('#steptype'+index+' option:selected').val();
+			if(steptype==2||steptype==3){
+				initSuggestOperation(index,steptype);
+				initSuggestAction(index,steptypetext);
+			}else if(steptype==1){
+				$("#action"+index).bsSuggest("destroy");
+				initSuggestOperation(index,steptype);
+			}else{
+				$("#operation"+index).bsSuggest("destroy");
+				$("#action"+index).bsSuggest("destroy");
+			}
+		     }
+		
+		function getObIndex(ob) {
+			var id=$(ob).attr("id").replaceAll("steptype","");
+			initSuggest(id);
+		}
+		
+		function initSuggestAction(index,steptypetext){
+			$("#action"+index).bsSuggest("destroy");
+			$("#action"+index).bsSuggest({
+    	        url: "/projectprotocolTemplate/cgetPTemplateList.do?projectid=${projectid}&steptype="+steptypetext,
+    	        /*effectiveFields: ["userName", "shortAccount"],
+    	        searchFields: [ "shortAccount"],*/
+    	        effectiveFieldsAlias:{name:"模板名称",protocoltype:"协议类型",operationer:"更新人员"},
+    	        ignorecase: true,
+    	        showHeader: true,
+    	        showBtn: false,     //不显示下拉按钮
+    	        delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
+    	        idField: "name",
+    	        keyField: "name",
+    	        clearable: false
+    	    }).on('onDataRequestSuccess', function (e, result) {
+
+    	    }).on('onSetSelectValue', function (e, keyword, data) {
+
+    	    }).on('onUnsetSelectValue', function () {
+
+    	    });
+		}
+		
+		function initSuggestOperation(index,steptype){
+			$("#operation"+index).bsSuggest("destroy");
+			$("#operation"+index).bsSuggest({
+    	        url: "/projectprotocolTemplate/cgetStepParamList.do?parentid=0&steptype="+steptype+"&fieldname=operation",
+    	        /*effectiveFields: ["userName", "shortAccount"],
+    	        searchFields: [ "shortAccount"],*/
+    	        effectiveFieldsAlias:{name:"操作",description:"描述"},
+    	        ignorecase: true,
+    	        showHeader: true,
+    	        showBtn: false,     //不显示下拉按钮
+    	        delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
+    	        idField: "name",
+    	        keyField: "name",
+    	        clearable: false
+    	    }).on('onDataRequestSuccess', function (e, result) {
+
+    	    }).on('onSetSelectValue', function (e, keyword, data) {  
+
+    	    }).on('onUnsetSelectValue', function () {
+
+    	    });
 		}
 	</script>
 </body>

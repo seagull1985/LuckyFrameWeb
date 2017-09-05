@@ -81,6 +81,7 @@ public class ProjectPlanCaseController {
 			ProjectPlan propaln = projectplanservice.load(Integer.valueOf(planid));
 			model.addAttribute("projectid", propaln.getProjectid());
 			model.addAttribute("planid", planid);
+			model.addAttribute("planname", propaln.getName());
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
@@ -200,7 +201,6 @@ public class ProjectPlanCaseController {
 				List<ProjectCase> caselist=viewToSaveCase;
 				for (int i = 0; i < jsonarr.size(); i++) { // 添加列表中多的用例
 					int caseid = Integer.valueOf(jsonarr.get(i).toString());
-					int tag = 0; // 标识在原列表里面是否存在
 					for (ProjectCase  viewcase:caselist) {
 						if (viewcase.getId() == caseid) {
 							if(viewcase.getChecktype()==1){
