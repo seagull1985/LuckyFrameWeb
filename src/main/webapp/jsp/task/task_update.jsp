@@ -504,7 +504,7 @@
 					   
 	function init(){
 		if('${message}'!=''){
-			toastr.info('${message}');
+			alert('${message}');
 		}
 	}
 </script>

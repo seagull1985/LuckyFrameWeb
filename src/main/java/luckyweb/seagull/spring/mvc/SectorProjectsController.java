@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectPlan;
 import luckyweb.seagull.spring.entity.SecondarySector;
@@ -89,10 +90,9 @@ public class SectorProjectsController {
 		}
 		// 得到客户端传递的查询参数
 		if (!StrLib.isEmpty(search)) {
-		    String strutf8 = new String(search.getBytes("ISO-8859-1"),"UTF-8");
-			sectorprojects.setProjectname(strutf8);
-			sectorprojects.setProjectmanager(strutf8);
-			sectorprojects.setProjectsign(strutf8);
+			sectorprojects.setProjectname(search);
+			sectorprojects.setProjectmanager(search);
+			sectorprojects.setProjectsign(search);
 		}
 
 		List<SectorProjects> projects = sectorprojectsservice.findByPage(sectorprojects, offset, limit);
@@ -136,7 +136,26 @@ public class SectorProjectsController {
 			} else {
 				
 				sectorprojectsservice.modify(sectorprojects);
-
+				if(sectorprojects.getProjecttype()==0){
+					List<SectorProjects> qaprolist=QueueListener.qa_projlist;
+					for(int i=0;i<qaprolist.size();i++){
+						SectorProjects sp=qaprolist.get(i);
+						if(sp.getProjectid()==sectorprojects.getProjectid()){
+							qaprolist.set(i, sectorprojects);
+							break;
+						}
+					}
+				}else if(sectorprojects.getProjecttype()==1){
+					List<SectorProjects> prolist=QueueListener.projlist;
+					for(int i=0;i<prolist.size();i++){
+						SectorProjects sp=prolist.get(i);
+						if(sp.getProjectid()==sectorprojects.getProjectid()){
+							prolist.set(i, sectorprojects);
+							break;
+						}
+					}
+				}
+				
 				operationlogservice.add(req, "SectorProjects", sectorprojects.getProjectid(), 
 						sectorprojects.getProjectid(),"项目信息修改成功！项目名"+sectorprojects.getProjectname());
 				json.put("status", "success");
@@ -173,6 +192,15 @@ public class SectorProjectsController {
 				json.put("ms", "增加项目失败,权限不足,请联系管理员!");
 			} else {
 				int proid = sectorprojectsservice.add(sectorprojects);
+				
+				if(sectorprojects.getProjecttype()==0){
+					List<SectorProjects> qaprolist=QueueListener.qa_projlist;
+					qaprolist.add(sectorprojects);
+				}else if(sectorprojects.getProjecttype()==1){
+					List<SectorProjects> prolist=QueueListener.projlist;
+					prolist.add(sectorprojects);
+				}
+				
 				operationlogservice.add(req, "SectorProjects", proid, 
 						proid,"项目添加成功！项目名："+sectorprojects.getProjectname());
 				
@@ -273,6 +301,27 @@ public class SectorProjectsController {
 					
 					operationlogservice.delete(id);
 					sectorprojectsservice.delete(sectorproject);
+					
+					if(sectorproject.getProjecttype()==0){
+						List<SectorProjects> qaprolist=QueueListener.qa_projlist;
+						for(int j=0;j<qaprolist.size();j++){
+							SectorProjects sp=qaprolist.get(j);
+							if(sp.getProjectid()==sectorproject.getProjectid()){
+								qaprolist.remove(j);
+								break;
+							}
+						}
+					}else if(sectorproject.getProjecttype()==1){
+						List<SectorProjects> prolist=QueueListener.projlist;
+						for(int j=0;j<prolist.size();j++){
+							SectorProjects sp=prolist.get(j);
+							if(sp.getProjectid()==sectorproject.getProjectid()){
+								prolist.remove(j);
+								break;
+							}
+						}
+					}
+					
 					operationlogservice.add(req, "SectorProjects", id, 
 							99,"项目信息删除成功！项目名："+sectorproject.getProjectname());
 					status="success";

@@ -62,7 +62,6 @@ public class SecondarySectorController {
 		}
 		// 得到客户端传递的查询参数
 		if (!StrLib.isEmpty(search)) {
-		    String strutf8 = new String(search.getBytes("ISO-8859-1"),"UTF-8");
 		    ss.setDepartmentname(search);
 		}
 

@@ -1,5 +1,7 @@
 package luckyweb.seagull.spring.mvc;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,16 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import net.sf.json.JSONArray;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.Barchart3;
@@ -34,6 +32,8 @@ import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectsVersionService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.util.StrLib;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/projectVersion")
@@ -44,6 +44,8 @@ public class ProjectVersionController {
 	private int allRows;
 	private int page = 1;
 	private int offset;
+	
+	private final String zentaoWeb_ipport="10.211.19.75";
 	
 	@Resource(name = "projectversionService")
 	private ProjectsVersionService projectsversionservice;
@@ -68,7 +70,6 @@ public class ProjectVersionController {
 		return "/jsp/projectversion/projectversion";
 	}
 	
-	
 	/**
 	 * 
 	 * 
@@ -77,76 +78,71 @@ public class ProjectVersionController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/list.do")
-	public String list(HttpServletRequest req, ProjectVersion projectversion, Model model)
-			throws Exception {
-		model.addAttribute("projectversion", projectversion);
+	@RequestMapping(value = "/load.do")
+	public String load(HttpServletRequest req, Model model) throws Exception {
+
 		try {
-			String p = req.getParameter("page");
-			String projectid = req.getParameter("projectid");
-			String startlaunchdate = req.getParameter("startactually_launchdate");
-			String endlaunchdate = req.getParameter("endactually_launchdate");
+			int projectid = 99;
 
-			if (!StrLib.isEmpty(projectid))
-			{
-				projectversion.setProjectid(Integer.valueOf(projectid));
-			}
-			
-			if (startlaunchdate!=null&&!startlaunchdate.equals(""))
-			{
-				projectversion.setStartactually_launchdate(startlaunchdate);
-			}
-			
-			if (endlaunchdate!=null&&!endlaunchdate.equals(""))
-			{
-				projectversion.setEndactually_launchdate(endlaunchdate);
-			}
-			
-			if (StrLib.isEmpty(p) || Integer.valueOf(p) == 0) {
-				page = 1;
-			}
-
-			String page2 = req.getParameter("page");
-			if (StrLib.isEmpty(page2)) {
-				page = 1;
-			} else {
-				try {
-					page = Integer.parseInt(page2);
-				} catch (Exception e) {
-					page = 1;
-				}
-			}
-			allRows = projectsversionservice.findRows(projectversion);
-			offset = (page - 1) * pageSize;
-			if (allRows % pageSize == 0) {
-				allPage = allRows / pageSize;
-			} else {
-				allPage = allRows / pageSize + 1;
-			}
-
-			model.addAttribute("allRows", allRows);
-			model.addAttribute("page", page);
-			model.addAttribute("offset", offset);
-			model.addAttribute("pageSize", pageSize);
-			model.addAttribute("allPage", allPage);
+			List<SectorProjects> prolist = QueueListener.qa_projlist;
+			model.addAttribute("projects", prolist);
 			model.addAttribute("projectid", projectid);
-/*			// 调度列表
-			List<SecondarySector> secondarySector = secondarysectorservice.findSecotorList();
-			model.addAttribute("secondarySector", secondarySector);*/
-			
-			List<ProjectVersion> sssMap = projectsversionservice.findByPage(projectversion, offset,
-					pageSize);
-			model.addAttribute("projects", QueueListener.qa_projlist);
-			model.addAttribute("splist", sssMap);
-			
+			model.addAttribute("zentaoip", zentaoWeb_ipport);
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/projectVersion/list.do");
+			model.addAttribute("url", "/projectVersion/load.do");
 			return "error";
 		}
 		return "/jsp/projectversion/projectversion";
+	}
+
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/list.do")
+	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		response.setCharacterEncoding("utf-8");
+		PrintWriter pw = response.getWriter();
+		String search = request.getParameter("search");
+		String projectid = request.getParameter("projectid");
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+		ProjectVersion projectversion = new ProjectVersion();
+		if (null == offset && null == limit) {
+			offset = 0;
+		}
+		if (null == limit || limit == 0) {
+			limit = 10;
+		}
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(search)) {
+			projectversion.setVersionnumber(search);
+			projectversion.setImprint(search);
+		}
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(projectid)) {
+			projectversion.setProjectid(Integer.valueOf(projectid));
+		}
+		
+		if (!StrLib.isEmpty(startDate)) {
+			projectversion.setStartactually_launchdate(startDate);
+		}
+			
+		if (!StrLib.isEmpty(endDate)) {
+			projectversion.setEndactually_launchdate(endDate);
+		}
+		
+		List<ProjectVersion> projectversions = projectsversionservice.findByPage(projectversion, offset, limit);
+
+		// 转换成json字符串
+		String RecordJson = StrLib.listToJson(projectversions);
+		// 得到总记录数
+		int total = projectsversionservice.findRows(projectversion);
+		// 需要返回的数据有总记录数和行数据
+		JSONObject json = new JSONObject();
+		json.put("total", total);
+		json.put("rows", RecordJson);
+		pw.print(json.toString());
 	}
 	
 	/**
@@ -171,7 +167,7 @@ public class ProjectVersionController {
 			
 			if(!UserLoginController.permissionboolean(req, "pv_1")){
 				model.addAttribute("projectversion", new ProjectVersion());
-				model.addAttribute("url", "/projectVersion/list.do");
+				model.addAttribute("url", "/projectVersion/load.do");
 				model.addAttribute("message", "当前用户无权限添加版本信息，请联系管理员！");
 				return "success";
 			}
@@ -357,7 +353,7 @@ public class ProjectVersionController {
 						projectversion.getProjectid(),"版本信息添加成功！版本号："+projectversion.getVersionnumber());
 				
 				model.addAttribute("message", "添加成功");
-				model.addAttribute("url", "/projectVersion/list.do");
+				model.addAttribute("url", "/projectVersion/load.do");
 				return retVal;
 
 			}
@@ -369,7 +365,7 @@ public class ProjectVersionController {
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/projectVersion/list.do");
+			model.addAttribute("url", "/projectVersion/load.do");
 			return "error";
 		}
 
@@ -393,7 +389,7 @@ public class ProjectVersionController {
 		
 		if(!UserLoginController.permissionboolean(req, "pv_3")){
 			model.addAttribute("projectversion", new ProjectVersion());
-			model.addAttribute("url", "/projectVersion/list.do");
+			model.addAttribute("url", "/projectVersion/load.do");
 			model.addAttribute("message", "当前用户无权限操作修改版本信息，请联系管理员！");
 			return "success";
 		}
@@ -587,7 +583,7 @@ public class ProjectVersionController {
 					projectversion.getProjectid(),"版本信息修改成功！版本号："+projectversion.getVersionnumber());
 			
 			model.addAttribute("message", "修改成功");
-			model.addAttribute("url", "/projectVersion/list.do");
+			model.addAttribute("url", "/projectVersion/load.do");
 			return retVal;
 		}
 			
@@ -621,7 +617,7 @@ public class ProjectVersionController {
 			
 			if(!UserLoginController.permissionboolean(req, "pvp_1")){
 				model.addAttribute("projectversion", new ProjectVersion());
-				model.addAttribute("url", "/projectVersion/list.do");
+				model.addAttribute("url", "/projectVersion/load.do");
 				model.addAttribute("message", "当前用户无权限添加版本计划信息，请联系管理员！");
 				return "success";
 			}
@@ -790,7 +786,7 @@ public class ProjectVersionController {
 						projectversion.getProjectid(),"版本计划添加成功！版本号："+projectversion.getVersionnumber());
 				
 				model.addAttribute("message", "添加成功");
-				model.addAttribute("url", "/projectVersion/list.do");
+				model.addAttribute("url", "/projectVersion/load.do");
 				return retVal;
 
 			}
@@ -802,7 +798,7 @@ public class ProjectVersionController {
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/projectVersion/list.do");
+			model.addAttribute("url", "/projectVersion/load.do");
 			return "error";
 		}
 
@@ -811,41 +807,50 @@ public class ProjectVersionController {
 	/**
 	 * 删除版本记录
 	 * 
-	 * @param id
+	 * @param tj
+	 * @param br
 	 * @param model
+	 * @param req
+	 * @param rsp
 	 * @return
 	 * @throws Exception
+	 * @Description:
 	 */
-	@RequestMapping(value = "/delete.do", method = RequestMethod.GET)
-	public String delete(Model model,HttpServletRequest req) throws Exception
-	{
-		if(!UserLoginController.permissionboolean(req, "pv_2")){
-			model.addAttribute("projectversion", new ProjectVersion());
-			model.addAttribute("url", "/projectVersion/list.do");
-			model.addAttribute("message", "当前用户无权限删除版本信息，请联系管理员！");
-			return "success";
+	@RequestMapping(value = "/delete.do")
+	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "pv_2")) {
+				json.put("status", "fail");
+				json.put("ms", "删除项目版本信息失败,权限不足,请联系管理员!");
+			} else {
+				int versionid = Integer.valueOf(req.getParameter("versionid"));
+				ProjectVersion projectversion = projectsversionservice.load(versionid);
+				try
+				{
+					projectsversionservice.delete(versionid);
+					
+					operationlogservice.add(req, "QA_PROJECTVERSION", versionid, 
+							projectversion.getSectorProjects().getProjectid(),"版本信息删除成功！版本号："+projectversion.getVersionnumber());
+					
+					json.put("status", "success");
+					json.put("ms", "删除项目版本信息成功!");
+				}
+				catch (Exception e)
+				{
+					json.put("status", "fail");
+					json.put("ms", "删除项目版本信息失败!");
+				}
+			}
+			pw.print(json.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		int versionid = Integer.valueOf(req.getParameter("versionid"));
-		ProjectVersion projectversion = projectsversionservice.load(versionid);
-		try
-		{			
-			projectsversionservice.delete(versionid);
-		}
-		catch (Exception e)
-		{
-			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/projectVersion/list.do");
-			return "error";
-		}
-		
-		operationlogservice.add(req, "QA_PROJECTVERSION", versionid, 
-				projectversion.getSectorProjects().getProjectid(),"版本信息删除成功！版本号："+projectversion.getVersionnumber());
-		
-		String message = "删除成功！";
-		model.addAttribute("projectversion", new ProjectVersion());
-		model.addAttribute("message", message);
-		model.addAttribute("url", "/projectVersion/list.do");
-		return "success";
+
 	}
 	
 	/**
@@ -856,11 +861,12 @@ public class ProjectVersionController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/show/{versionid}.do", method = RequestMethod.GET)
-	public String show(@PathVariable int versionid, Model model) throws Exception
+	@RequestMapping(value = "/show.do")
+	public String show(HttpServletRequest req,Model model) throws Exception
 	{
+		String versionid = req.getParameter("versionid");
 		ProjectVersion pv = new ProjectVersion();
-		pv.setVersionid(versionid);
+		pv.setVersionid(Integer.valueOf(versionid));
 		ProjectVersion projectversion = projectsversionservice.load(pv.getVersionid());
 		model.addAttribute("projectversion", projectversion);
 		return "/jsp/projectversion/projectversion_show";
@@ -948,7 +954,7 @@ public class ProjectVersionController {
 	} catch (Exception e) {
 		e.printStackTrace();
 		model.addAttribute("message", e.getMessage());
-		model.addAttribute("url", "/projectVersion/list.do");
+		model.addAttribute("url", "/projectVersion/load.do");
 		return "error";
 	}
 	return "/jsp/projectversion/projectversionreport";
@@ -1122,16 +1128,16 @@ public class ProjectVersionController {
 					columnvalue[j] = Double.valueOf(new DecimalFormat("#.00").format((double)(100.00-(pv.get(j).getCodestandard_zd()*5)-(pv.get(j).getCodestandard_yz()*2)
 							-(pv.get(j).getCodestandard_zy()*0.3))));
 				}				
-				if(pv.get(j).getPer_dev()!=null&&i==1){
+				if(!StrLib.isEmpty(pv.get(j).getPer_dev())&&i==1){
 					columnvalue[j] = Double.valueOf(pv.get(j).getPer_dev());
 				}
-				if(pv.get(j).getPer_test()!=null&&i==2){
+				if(!StrLib.isEmpty(pv.get(j).getPer_test())&&i==2){
 					columnvalue[j] = Double.valueOf(pv.get(j).getPer_test());
 				}
-				if(pv.get(j).getProtime_deviation()!=null&&i==3){
+				if(!StrLib.isEmpty(pv.get(j).getProtime_deviation())&&i==3){
 					columnvalue[j] = Double.valueOf(pv.get(j).getProtime_deviation());
 				}
-				if(pv.get(j).getCode_DI()!=null&&i==4){
+				if(!StrLib.isEmpty(pv.get(j).getCode_DI())&&i==4){
 					columnvalue[j] = Double.valueOf(pv.get(j).getCode_DI());
 				}
 				if(i==5){
@@ -1241,16 +1247,16 @@ public class ProjectVersionController {
 					columnvalue[j] = Double.valueOf(new DecimalFormat("#.00").format((double)(100.00-(pv.get(j).getCodestandard_zd()*5)-(pv.get(j).getCodestandard_yz()*2)
 							-(pv.get(j).getCodestandard_zy()*0.3))));
 				}				
-				if(pv.get(j).getPer_dev()!=null&&i==1){
+				if(!StrLib.isEmpty(pv.get(j).getPer_dev())&&i==1){
 					columnvalue[j] = Double.valueOf(pv.get(j).getPer_dev());
 				}
-				if(pv.get(j).getPer_test()!=null&&i==2){
+				if(!StrLib.isEmpty(pv.get(j).getPer_test())&&i==2){
 					columnvalue[j] = Double.valueOf(pv.get(j).getPer_test());
 				}
-				if(pv.get(j).getProtime_deviation()!=null&&i==3){
+				if(!StrLib.isEmpty(pv.get(j).getProtime_deviation())&&i==3){
 					columnvalue[j] = Double.valueOf(pv.get(j).getProtime_deviation());
 				}
-				if(pv.get(j).getCode_DI()!=null&&i==4){
+				if(!StrLib.isEmpty(pv.get(j).getCode_DI())&&i==4){
 					columnvalue[j] = Double.valueOf(pv.get(j).getCode_DI());
 				}
 				if(i==5){
