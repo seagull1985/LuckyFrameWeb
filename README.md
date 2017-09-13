@@ -5,7 +5,8 @@
 </p>
 
 <p align="center">
-  让你的自动化体系建设更简单  [【www.luckyframe.cn】](https://git.oschina.net/uploads/images/2017/0913/175706_f58b543b_1215415.jpeg)
+  让你的自动化体系建设更简单  
+ > [【www.luckyframe.cn】](http://www.luckyframe.cn)
 </p>
 
 <p align="center">
