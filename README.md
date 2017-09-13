@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  让你的自动化体系建设更简单
+  让你的自动化体系建设更简单  [【www.luckyframe.cn】](https://git.oschina.net/uploads/images/2017/0913/175706_f58b543b_1215415.jpeg)
 </p>
 
 <p align="center">
@@ -46,6 +46,11 @@ LuckyFrame 开源自动化测试平台 - 自动化测试 X 时代来了
 
 ![首页](https://git.oschina.net/uploads/images/2017/0913/193800_d0189b51_1215415.jpeg "首页")
 ![用例管理](https://git.oschina.net/uploads/images/2017/0913/193821_2e58d1cc_1215415.jpeg "用例管理")
+![测试计划管理](https://git.oschina.net/uploads/images/2017/0913/193847_c32f96ff_1215415.jpeg "测试计划管理")
+![测试任务调度](https://git.oschina.net/uploads/images/2017/0913/193913_fdccc46f_1215415.png "测试任务调度")
+![测试任务执行](https://git.oschina.net/uploads/images/2017/0913/193935_3b381747_1215415.png "测试任务执行")
+![用例日志查询](https://git.oschina.net/uploads/images/2017/0913/194004_6414aa59_1215415.png "用例日志查询")
+
 
 # 期待您更多的意见
 
