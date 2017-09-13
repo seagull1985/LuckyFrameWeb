@@ -38,7 +38,7 @@ function gouserInfo(){
 					<div class="col-md-6 widget">
 						<div class="widget-body">
 							<p class="text-right">
-								Copyright &copy; 2017, LuckyFrame. Designed by <a href="javascript:window.open('http://www.luckyframe.cn')">LuckyFrame V2.1</a>
+								Copyright &copy; 2017, LuckyFrame. Designed by <a href="javascript:window.open('http://www.luckyframe.cn')">LuckyFrame V2.2</a>
 							</p>
 						</div>
 					</div>

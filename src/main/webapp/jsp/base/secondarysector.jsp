@@ -269,6 +269,11 @@
 	    // 提交表单
 	    function check_form()
 	    {
+	    	$('#form_data').data('bootstrapValidator').validate();  
+	    	  if(!$('#form_data').data('bootstrapValidator').isValid()){  
+	    		 return ;  
+	    	  } 
+	    	  
 	        var form_data = $('#form_data').serialize();
 	        $.param(form_data); 
 	        // 异步提交数据到action页面
@@ -290,21 +295,18 @@
 	                            $("#tip").html("<span style='color:blueviolet'>恭喜，添加部门成功！</span>");
 	                            // document.location.href='system_notice.php'
 	                            toastr.success(data.ms);
-	                            location.reload();
 	                        }else{
 	                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
 	                            toastr.warning(data.ms); 
-	                            location.reload();
 	                        }
 	                    },
 	                    error:function()
 	                    {
 	                    	toastr.error('请求出错!');
-	                        location.reload();
 	                    },
 	                    complete:function()
 	                    {
-	                        $('#addModal').hide();
+	                      /*   $('#addModal').hide(); */
 	                    }
 	                });
 

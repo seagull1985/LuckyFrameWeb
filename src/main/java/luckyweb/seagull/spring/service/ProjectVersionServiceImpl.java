@@ -97,13 +97,22 @@ public class ProjectVersionServiceImpl implements ProjectsVersionService{
 /*		if (!StrLib.isEmpty(String.valueOf(ss.getSectorid()))) {
 			where += " sectorid=:sectorid  and ";
 		}*/
-		if (pv.getProjectid()!=0) {
+		if (pv.getProjectid()!=0&&pv.getProjectid()!=99) {
 			where += " projectid=:projectid  and ";
 		}
-		if (pv.getStartactually_launchdate()!=null&&pv.getEndactually_launchdate()!=null&&
-				!pv.getStartactually_launchdate().equals("")&&!pv.getEndactually_launchdate().equals("")) {
-			where += " actually_launchdate>=:startactually_launchdate  and actually_launchdate<=:endactually_launchdate  and ";
+		if (!StrLib.isEmpty(pv.getStartactually_launchdate())) {
+			where += " actually_launchdate>=:startactually_launchdate  and ";
 		}
+		if (!StrLib.isEmpty(pv.getEndactually_launchdate())) {
+			where += " actually_launchdate<=:endactually_launchdate  and ";
+		}
+		if (!StrLib.isEmpty(pv.getVersionnumber())){
+			where += " (versionnumber like :versionnumber  or ";
+		}
+		if (!StrLib.isEmpty(pv.getImprint())){
+			where += " imprint like :imprint)  or ";
+		}
+		
 		if (where.length() == 7) {
 			where = "";
 		} 

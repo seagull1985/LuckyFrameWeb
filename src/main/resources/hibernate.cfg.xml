@@ -8,7 +8,7 @@
 <!-- 指定连接数据库所用的驱动 -->
   <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
   <!-- 指定连接数据库的url，hibernate连接的数据库名 -->
-  <property name="connection.url">jdbc:mysql://XX.XX.XX.XX:3306/luckyframedb?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</property>
+  <property name="connection.url">jdbc:mysql://xx.xx.xx.xx:3306/luckyframedb?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</property>
   <property name="connection.useUnicode">true</property>
   <property name="connection.characterEncoding">utf-8</property>
   <!-- 指定连接数据库的用户名 -->
@@ -68,5 +68,6 @@
         <mapping resource="ProjectModule.hbm.xml" />
         <mapping resource="ProjectProtocolTemplate.hbm.xml" />
         <mapping resource="ProjectTemplateParams.hbm.xml" />
+        <mapping resource="TempCasestepDebug.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>

@@ -1,11 +1,8 @@
 package luckyweb.seagull.quartz;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.rmi.Naming;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.annotation.Resource;
 

@@ -48,7 +48,7 @@
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">质量管理</li>
-			<li class="active"><a href="/projectVersion/list.do">版本信息</a></li>
+			<li class="active"><a href="/projectVersion/load.do">版本信息</a></li>
 			<li class="active">修改版本信息</li>
 		</ol>
 
@@ -278,7 +278,7 @@
 			  <td width="40%" height="30" align="center"><input name="addBtn" type="submit"
 					class="button gray" id="addBtn" value="修改" /></td>
 	          <td  align="center" colspan="2"><a
-						href="/projectVersion/list.do" ><span class="btnold STYLE1"  style="width:70px; margin-bottom:10px;">返 回</span></a></td>
+						href="/projectVersion/load.do" ><span class="btnold STYLE1"  style="width:70px; margin-bottom:10px;">返 回</span></a></td>
 	         
 		  </tr>
             

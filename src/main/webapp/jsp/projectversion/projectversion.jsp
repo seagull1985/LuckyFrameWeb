@@ -2,411 +2,549 @@
 	import="java.sql.*" errorPage=""%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script language="JavaScript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>	
-<link href="/css/style.css" rel="stylesheet" type="text/css" />
 
-<title>项目版本信息</title>
-<style type="text/css">
-<!--
-.STYLE1 {
-	color: #ffffff
-}
-.STYLE2 {
-	color: #FF0000
-}
-.STYLE6 {color: #FF0000; font-size: 12px; }
--->
-</style>
+<title>测试计划</title>
+</head>
 
-	
-<style type="text/css">
-<!--
-html,body {height:100%; margin:0px; font-size:12px;}
-
-.mydiv {
-background-color: #D1BDC7;
-border: 1px solid #C5C9C7;
-text-align: center;
-line-height: 40px;
-font-size: 12px;
-font-weight: bold;
-z-index:999;
-width: 300px;
-height: 100px;
-left:50%;
-top:50%;
-margin-left:-150px!important;/*FF IE7 该值为本身宽的一半 */
-margin-top:-60px!important;/*FF IE7 该值为本身高的一半*/
-margin-top:0px;
-position:fixed!important;/* FF IE7*/
-position:absolute;/*IE6*/
-_top:       expression(eval(document.compatMode &&
-            document.compatMode=='CSS1Compat') ?
-            documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
-            document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);/*IE5 IE5.5*/
-
-}
-
-.bg,.popIframe 	{
-background-color: #666; display:none;
-width: 100%;
-height: 100%;
-left:0;
-top:0;/*FF IE7*/
-filter:alpha(opacity=10);/*IE*/
-opacity:0.4;/*FF*/
-z-index:1;
-position:fixed!important;/*FF IE7*/
-position:absolute;/*IE6*/
-_top:       expression(eval(document.compatMode &&
-            document.compatMode=='CSS1Compat') ?
-            documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
-            document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);
-}
-.popIframe {
-filter:alpha(opacity=0);/*IE*/
-opacity:0;/*FF*/
-}
--->
-</style>
-	
-	</head>
-
-<body onload="init()">
-	<div>  
-        <%@ include file="/head.jsp" %>
-    </div> 
+<body>
+	<div>
+		<%@ include file="/head.jsp"%>
+	</div>
 
 	<header id="head" class="secondary"></header>
 
-<div id="descriptiondiv" style="position:absolute;display:none;z-index:99900;width: 500px;">
-<table width="100%"  align="center" class="rect"  style="background-color:rgba(240,255,240,0.9);table-layout:fixed;">
-    <tr>
-      <td id="descriptionid" valign="top" style="white-space:pre;overflow:hidden;word-break:break-all;word-wrap:break-word;color:#FF9224;font-size:11pt">
-      </td>
-    </tr>
-</table>
-</div>
-
 	<!-- container -->
-	<div class="container" style="width:auto;font-size:14px">
+	<div class="container" style="width: auto; font-size: 14px;">
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">质量管理</li>
 			<li class="active">版本信息</li>
 		</ol>
 
-		<div class="row">	
+		<div class="row">
 			<!-- Article main content -->
-		<article class="col-sm-9 maincontent" style="width:100%;">
-		 <header class="page-header">
-				<h1 class="page-title" style="text-align:center;">版本信息</h1>
+			<article class="col-sm-9 maincontent" style="width:100%;">
+			<header class="page-header">
+			<h1 class="page-title" style="text-align: center;">项目版本信息管理</h1>
 			</header>
-					
-	 <sf:form method="post" modelAttribute="projectversion">
-	 	<!-- <input type="hidden" name="versionid" id="versionid" value=""/> -->
-		<input name="page" id="page" type="hidden"  />
-	<!-- 	<input name="startactually_launchdate" id="startactually_launchdate" type="hidden"  /> -->
-																
-		<div align="right"></div>
-		<table width="90%" align="center" class="rect" height=40 cellPadding=1
-			border=1 bordercolor="#CCCCCC">
-			<tr>
-			<td width="10%" align="left" valign="middle" >
-			<font size="2" color="black">项目名称:&nbsp;&nbsp;</font>
-    	<sf:select path="projectid" width="10%">
-   	   <sf:option value="0">全部</sf:option>
-     <c:forEach var="p" items="${projects }">
-	  <sf:option value="${p.projectid}">${p.projectname}</sf:option>
-	  </c:forEach>
-    </sf:select>
-    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size="2" color="black">&nbsp;&nbsp;上线日期:&nbsp;&nbsp;</font>
-<sf:input path="startactually_launchdate" id="startactually_launchdate" onclick="WdatePicker({isShowClear:false,isShowClear:true,readOnly:true});" 
-readonly="true" style="width:100px" value="" />&nbsp;至
-<sf:input path="endactually_launchdate" id="endactually_launchdate" onclick="WdatePicker({isShowClear:false,isShowClear:true,readOnly:true});" 
-readonly="true" style="width:100px" value="" />
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input name="button" style="width:100px;height:26px" type="submit" class="button gray" id="button" align="right" value="上线列表查询" />&nbsp;&nbsp;&nbsp;&nbsp;  
-    &nbsp;&nbsp;&nbsp;&nbsp;<a href="../zentao/list.do" style="text-decoration: none;"> <span	class="btnold STYLE1" style="width: 70px;background:#FFA54F;border:#FFA54F;">禅道报表</span></a>   
-    </td>
-						    
-				<td width="3%" align="right" valign="middle"><a
-					 href="#"  onclick="showDiv('${t.versionid}','4')" style="text-decoration: none;"> <span
-						class="btnold STYLE1"  style="width: 70px;background:#FFA54F;border:#FFA54F;" > 添加计划</span>
-				</a>&nbsp;&nbsp;<a href="#" onclick="showDiv('${t.versionid}','3')"  style="text-decoration: none;"> <span
-						class="btnold STYLE1"  style="width: 70px;background:#FFA54F;border:#FFA54F;" > 添加版本 </span>
-				</a>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+			<div class="panel-body" style="padding-bottom: 0px;">
+				<div class="panel panel-default">
+					<div class="panel-heading">查询条件</div>
+					<div class="panel-body">
+						<div class="form-group" style="margin-top: 15px">
+							<label class="control-label col-sm-1" for="txt_search_project">项目名称:</label>
+							<div class="col-sm-3">
+								<select class="form-control" id="search_project"
+									onchange="searchproject()">
+									<c:forEach var="p" items="${projects }">
+										<option value="${p.projectid}">${p.projectname}</option>
+									</c:forEach>
+								</select>
+							</div>
+							
+							<label class="control-label" for="txt_search_date" style="float: left;">上线日期:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <div class="input-group date form_date col-md-3" id="datepicker" style="float: left;">  
+                                  <input type="text" class="form-control" name="start" id="qBeginTime" readonly/>
+                                  <span class="input-group-addon" ><span class="glyphicon glyphicon-calendar"></span></span>
+                                  <span class="input-group-addon">至</span>  
+                                  <input type="text" class="form-control" name="end" id="qEndTime" readonly/>
+                                  <span class="input-group-addon" ><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+						</div>
+					</div>
+				</div>
+
+				<div id="toolbar" class="btn-group">
+					<button id="btn_addplan" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;新增计划
+					</button>
+					<button id="btn_addversion" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp;新增版本
+					</button>
+					<button id="btn_zdlist" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp;禅道报表
+					</button>
+					<button id="btn_reports" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>&nbsp;项目报表
+					</button>
+				</div>
+				<table id="tb_projectversion"></table>
 				
-			</tr>
-		</table>
+								<!-- 模态框示例（Modal） -->
+				<div class="modal fade" id="reports" tabindex="-1" role="dialog"
+					aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">项目版本信息统计</h4>
+							</div>
+							<div class="modal-body">
+								<form class="form-horizontal" role="form">
+								  <div class="form-group">
+											<label for="clientip" class="col-sm-3 control-label">统计报表</label>
+											<div class="input-group col-md-5">
+												<select class="form-control" name="clientipforupload" id="reportstype" onchange="choosereports()">
+														<option value="0">生成项目质量对比图</option>
+														<option value="1">项目版本质量报表</option>
+														<option value="2">单个项目版本质量趋势图</option>
+														<option value="3">单个项目版本质量柱状图</option>
+												</select>
+											</div>
+									</div>
+									
+									<div class="form-group">
+										<label class="control-label col-sm-3" for="txt_search_project">项目名称:</label>
+										<div class="input-group col-md-5">
+											<select class="form-control" id="choose_project">
+												<c:forEach var="p" items="${projects }">
+													<option value="${p.projectid}">${p.projectname}</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
 
-		<table width="90%" align="center" class="rect" height=40 cellPadding=1
-			border=1 bordercolor="#CCCCCC">
-			<td width="80%" align="left" valign="middle" >
-			<font size="2" color="black">查询日期段:&nbsp;&nbsp;</font>
-<input name="start_date" id="start_date" onclick="WdatePicker({isShowClear:false,isShowClear:true,readOnly:true});"  style="width:100px" value="" />&nbsp;至
-<input name="end_date" id="end_date" onclick="WdatePicker({isShowClear:false,isShowClear:true,readOnly:true});" style="width:100px" value="" />
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<div class="form-group">
+										<label class="control-label col-sm-3" for="txt_choose_date">日期选择:</label>
+										<div class="input-group date form_date col-md-7">
+											<input type="text" class="form-control" name="start" id="cBeginTime" readonly /> 
+											<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span> 
+ 											<span class="input-group-addon">至</span> 
+											<input type="text"	class="form-control" name="end" id="cEndTime" readonly />
+											<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+										</div>
+									</div>
+
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">关闭</button>
+								<button class="btn btn-primary" onclick="goreports()">查看</button>
+								&nbsp;&nbsp;&nbsp;&nbsp;<span id="tip"> </span>
+							</div>
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal -->
+				</div>
 				
-    <a	href="#"  onclick="getoprdate()"  style="text-decoration: none;"> <span
-						class="btnold STYLE1" style="width: 70px;">生成项目质量对比图</span></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a	href="javascript:window.location.href='/projectVersion/showreport.do?startdate='+$('#start_date').val()+
-	  '&enddate='+$('#end_date').val();" style="text-decoration: none;"> <span	class="btnold STYLE1" style="width: 70px;"> 项目版本质量报表</span></a>
-				</td>
-
-					
-		<tr>
-		<td width="10%" align="left" valign="middle" >
-			<font size="2" color="black">项目名称:&nbsp;&nbsp;</font>
-    	<select name="projectidshow" id="projectidshow" width="10%">
-     <c:forEach var="p" items="${projects }">
-	  <option value="${p.projectid}">${p.projectname}</option>
-	  </c:forEach>
-    </select>&nbsp;&nbsp;
-    <font size="2" color="black">日期段:&nbsp;&nbsp;</font>
-<input name="onepro_startdate" id="onepro_startdate" onclick="WdatePicker({isShowClear:false,isShowClear:true,readOnly:true});"  style="width:100px" value="" />&nbsp;至
-<input name="onepro_enddate" id="onepro_enddate" onclick="WdatePicker({isShowClear:false,isShowClear:true,readOnly:true});" style="width:100px" value="" />
-   &nbsp;&nbsp;&nbsp;&nbsp;
-
-	<a	href="javascript:window.location.href='/projectVersion/linechart_html5.do?projectid='+$('#projectidshow').val()+'&startdate='+$('#onepro_startdate').val()+
-	  '&enddate='+$('#onepro_enddate').val();" 
-	target=_blank style="text-decoration: none;"> <span	class="btnold STYLE1" style="width: 70px;"> 单个项目版本质量趋势图</span></a>
-	&nbsp;&nbsp;&nbsp;&nbsp;
-	<a	href="javascript:window.location.href='/projectVersion/onepro_barcharthtml5.do?projectid='+$('#projectidshow').val()+'&startdate='+$('#onepro_startdate').val()+
-	  '&enddate='+$('#onepro_enddate').val();" 
-	target=_blank style="text-decoration: none;"> <span	class="btnold STYLE1" style="width: 70px;"> 单个项目版本质量柱状图</span></a>
-    </td>
-    </tr>
-	</table>
-	   <table width="100%" align="center" class="bordered" style="table-layout: fixed" >  <!--  限定宽度，后面带省略号，此style属性必有 -->
-         <tr>                
-				<th width="10%" height="40" nowrap="nowrap" >项目名称</th>
-				<th width="10%" height="40" nowrap="nowrap" >版本状态</th>
-				<th width="10%" height="40" nowrap="nowrap" >版本号</th>
-				<th width="10%" height="40" nowrap="nowrap" >版本达成日期</th>
-				<th width="10%" height="40" nowrap="nowrap" >项目进度偏差</th>
-				<th width="10%" height="40" nowrap="nowrap" >需求达成率</th>
-				<th height="40" nowrap="nowrap" >版本说明</th>
-				<th width="12%" height="40" nowrap="nowrap" >操作</th>
-		  </tr>
-		  <c:forEach var="t" items="${splist}" begin="0" step="1"
-				varStatus="i">
-			  <tr>	
-   			      <td height="25" align="center">${t.sectorProjects.projectname }</td>
-				  
-				   <c:if test="${t.versiontype==0 }">
-				  <td height="25" align="center" style="color:#FFA54F;">计划执行中...&nbsp;</td>
-				  </c:if>
-				  <c:if test="${t.versiontype==1 }">
-				  <td height="25" align="center" style="color:#00DB00;">已完成</td>
-				  </c:if>
-				  
-				  <c:choose>
-				  <%-- <c:when test="${fn:containsIgnoreCase(t.zt_versionlink, 'http://')}"> --%>
-				  <c:when test="${fn:length(t.zt_versionlink)>0}">
-				  <td height="25" align="center"><a	href="http://10.211.19.75/zentao/project-task-${t.zt_versionlink }.html" target=_blank style="text-decoration: none;color:#0000FF;">${t.versionnumber }</a>&nbsp;</td>
-				  </c:when>
-				  <c:otherwise>
-				  <td height="25" align="center">${t.versionnumber }&nbsp;</td>
-				  </c:otherwise>
-				  </c:choose>
-				  
-				  <td height="25" align="center">${t.actually_launchdate }&nbsp;</td>
-				  
-				  <c:if test="${t.protime_deviation!=null }">
-				  <td height="25" align="center">${t.protime_deviation }%&nbsp;</td>
-				  </c:if>
-				  <c:if test="${t.protime_deviation==null }">
-				  <td height="25" align="center">数据缺失,无法计算</td>
-				  </c:if>
-				  
-				  <c:choose>
-				  <c:when test="${t.plan_demand!=0&&t.actually_demand!=0}">
-				  <td height="25" align="center" ><fmt:formatNumber value="${(t.actually_demand/t.plan_demand)*100 }" pattern="#0.00"/>%&nbsp;</td>
-				  </c:when>
-				  <c:otherwise>
-				  <td height="25" align="center" >0%&nbsp;</td>
-				  </c:otherwise>
-				  </c:choose>		  		  
-				  
-				  <td height="25" width="40" align="center" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis" onmouseout="hiddenPic();" onmousemove="description(this);">${t.imprint }</td>
-				  
-				  <td height="25" align="center" style="word-break:break-all">
-				  <a href="#" onclick="showDiv('${t.versionid}','1')" style="cursor: pointer;"><u>修改</u></a>&nbsp;
-				<%--     <a href="/projectVersion/${t.versionid}/delete.do" style="cursor: pointer;"><u>删除</u></a>&nbsp;--%>
-				<a href="#" onclick="showDiv('${t.versionid}','2')" style="cursor: pointer;"><u>删除</u></a>
-				<a href="/projectVersion/show/${t.versionid}.do" style="cursor: pointer;"><u>详情</u></a> 
-				 <c:if test="${fn:length(t.zt_versionlink)>0&&t.versiontype==1}">
-				  <a href="javascript:window.location.href='/zentao/list.do?versionid=${t.zt_versionlink}'" style="cursor: pointer;"><u>禅道任务</u></a>
-				  </c:if>				
-					</td>
-			  </tr>
-		  </c:forEach>
-		</table>
-<center>
-			<div id="pagelist" align="center">
-				<c:if test="${allRows!=0 }">
-					<ul>
-						<li><a href="#" onclick="return setPage(1)">首页 </a></li>
-						<li><a href="#" onclick="return frontPageCheck(${page-1});">上一页</a></li>
-						<li><a href="#" onclick="return backPageCheck(${page+1});">下一页</a></li>
-						<li><a href="#" onclick="return setPage(${allPage})">末页</a></li>
-						<li>第${page}页</li>
-						<li>共${allRows}条</li>
-						<li>共${allPage}页</li>
-					</ul>
-				</c:if>
-				<c:if test="${allRows==0 }">
-					<font color="#FF0000">没有记录!</font>				</c:if>
 			</div>
-			<br/><br/>
-			</center>
-						
-		</sf:form>
-			<p>&nbsp;</p>
-	</article>
+			</article>
+		</div>
 	</div>
-	</div> 
-	
-	<script type="text/javascript">
 
-	function frontPageCheck(page)
-	{
-		if(${page > 1})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("projectversion").submit();
-			return true;
-		}
-		return false;
-	}
-	
-	function backPageCheck(page)
-	{
+	<script type="text/javascript">
+		$(function() {
+			$('#search_project').val('${projectid }');
+			
+			$('#qBeginTime').datetimepicker({
+				format: 'yyyy-mm-dd',
+		        language:  'zh-CN',
+			    todayBtn : "linked",  
+			    autoclose : true,  
+			    todayHighlight : true,
+			    forceParse: 0,
+			    weekStart: 1,
+			    minView: "month",//设置只显示到月份
+			    startView: 2,
+			    endDate : new Date(),
+			    clearBtn:true,
+			}).on('changeDate',function(e){  
+			    var startTime = e.date;  
+			    $('#qEndTime').datetimepicker('setStartDate',startTime);
+				//1.初始化Table
+				var oTable = new TableInit();
+				$('#tb_projectversion').bootstrapTable('destroy');
+				oTable.Init();
+			});  
+			//结束时间：  
+			$('#qEndTime').datetimepicker({
+				format: 'yyyy-mm-dd',
+		        language:  'zh-CN',
+			    todayBtn : "linked",  
+			    autoclose : true,  
+			    todayHighlight : true,
+			    forceParse: 0,
+			    minView: "month",//设置只显示到月份
+			    weekStart: 1,
+			    endDate : new Date(),
+			    clearBtn:true,
+			}).on('changeDate',function(e){  
+			    var endTime = e.date;  
+			    $('#qBeginTime').datetimepicker('setEndDate',endTime);
+				//1.初始化Table
+				var oTable = new TableInit();
+				$('#tb_projectversion').bootstrapTable('destroy');
+				oTable.Init();
+			});
+			
+			//1.初始化Table
+			var oTable = new TableInit();
+			oTable.Init();
+		});
+
+		var TableInit = function() {
+			var oTableInit = new Object();
+			//初始化Table
+			oTableInit.Init = function() {
+				$('#tb_projectversion').bootstrapTable({
+					url : '/projectVersion/list.do', //请求后台的URL（*）
+					method : 'get', //请求方式（*）
+					toolbar : '#toolbar', //工具按钮用哪个容器
+					striped : true, //是否显示行间隔色
+					cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+					pagination : true, //是否显示分页（*）
+					sortable : false, //是否启用排序
+					sortOrder : "asc", //排序方式
+					queryParams : oTableInit.queryParams,//传递参数（*）
+					sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）
+					pageNumber : 1, //初始化加载第一页，默认第一页
+					pageSize : 10, //每页的记录行数（*）
+					pageList : [ 10, 25, 50, 100 ], //可供选择的每页的行数（*）
+					search : true, //是否显示表格搜索，此搜索会进服务端
+					strictSearch : true,
+					showColumns : false, //是否显示所有的列
+					showRefresh : true, //是否显示刷新按钮
+					minimumCountColumns : 2, //最少允许的列数
+					clickToSelect : true, //是否启用点击选中行
+					height : 500, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+					uniqueId : "ID", //每一行的唯一标识，一般为主键列
+					showToggle : false, //是否显示详细视图和列表视图的切换按钮
+					cardView : false, //是否显示详细视图
+					detailView : false, //是否显示父子表
+					columns : [{
+						field : 'versionid',
+						title : 'versionid',
+						visible : false
+					},  {
+						field : 'projectid',
+						title : 'projectid',
+						visible : false
+					}, {
+						field : 'sectorProjects.projectname',
+						title : '项目名称',
+						width : '15%',
+					}, {
+						field : 'versiontype',
+						title : '版本状态',
+						width : '8%',
+						formatter : function(value,
+								row, index) {
+							if(value==0){
+							    return '<font style="color:#FFA54F">计划执行中...</font>';					
+							}else if(value==1){
+								return '<font style="color:#00DB00">已完成</font>';
+							}else{
+								return value;
+							}						
+						}
+					}, {
+						field : 'versionnumber',
+						title : '版本号',
+						width : '10%',
+						formatter : function(value,
+								row, index) {
+							if(row.zt_versionlink!==""){
+							    return value;					
+							}else{
+								return '<a href="http://${zentaoip }/zentao/project-task-${t.zt_versionlink }.html" target=_blank style="text-decoration: none;color:#0000FF;">'+ value +'</a>';
+							}						
+						}
+					}, {
+						field : 'actually_launchdate',
+						title : '版本达成日期',
+						width : '7%',
+					}, {
+						field : 'protime_deviation',
+						title : '项目进度偏差',
+						width : '10%',
+						formatter : function(value,
+								row, index) {
+							if(value!=''){
+							    return value+"%";					
+							}else{
+								return "数据缺失,无法计算";
+							}						
+						}
+					}, {
+						field : 'plan_demand',
+						title : '需求达成率',
+						width : '7%',
+						formatter : function(value,
+								row, index) {
+							if(value!=0&&row.actually_demand!=0){
+								var xqdcl=(row.actually_demand/value)*100;
+							    return xqdcl.toFixed(2)+'%';					
+							}else{
+								return "0%";
+							}						
+						}
+					}, {
+						field : 'imprint',
+						title : '版本说明',
+						width : '33%',
+					}, {
+						field : 'id',
+						title : '操作',
+						width : '10%',
+						align : 'center',
+						formatter : function(value,
+								row, index) {
+							var e = '<a href="#" mce_href="#" onclick="edit(\''
+									+ index
+									+ '\',\''
+									+ row.versionid
+									+ '\')">编辑</a> ';
+							var d = '<a href="#" mce_href="#" onclick="del(\''
+									+ index
+									+ '\',\''
+									+ row.versionid
+									+ '\')">删除</a> ';
+							var f = '<a href="#" mce_href="#" onclick="show(\''
+									+ index
+									+ '\',\''
+									+ row.versionid
+									+ '\')">详情</a> ';
+							var g = '<a href="#" mce_href="#" onclick="zdlist(\''
+								    + index
+								    + '\',\''
+								    + row.versionid
+								    + '\')">禅道</a> ';
+							if (row.zt_versionlink!=""&&row.versiontype==1) {
+								return e + d + f + g;
+							} else {
+								return e + d + f;
+							}						
+						}
+					} ],
+				});
+			};
+			//得到查询的参数
+			oTableInit.queryParams = function(params) {
+				var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+					limit : params.limit, //页面大小
+					offset : params.offset, //页码偏移量
+					search : params.search, //搜索参数
+					projectid : $('#search_project').val(), //项目ID
+					startDate: $('#qBeginTime').val(), //查询日期段
+					endDate: $('#qEndTime').val(), //查询日期段
+				};
+				return temp;
+			};
+
+			return oTableInit;
+		};
 		
-		if(${page < allPage})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("projectversion").submit();
-			//$("#projectversion").submit();
-			return true;
-		}			
-		return false;
-	}
-	
-	
-	function setPage(page)
-	{
-		if(page==1){
-			document.getElementById("page").value=1;
-		}else{
-			document.getElementById("page").value=page;
+		var searchproject = function() {
+			//1.初始化Table
+			var oTable = new TableInit();
+			$('#tb_projectversion').bootstrapTable('destroy');
+			oTable.Init();
+		};
+	    
+		function del(selectIndex, id) {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			if (confirm("真的要删除此版本信息吗?")) {
+				$.ajax({
+					type : "POST",
+					cache : false,
+					async : true,
+					dataType : "json",
+					url : "delete.do",
+					data : {
+						"jobid" : id
+					},
+					success : function(data, status) {
+						if (data.status == "success") {
+							$('#tb_projectversion').bootstrapTable('hideRow', {
+								index : selectIndex
+							});
+							toastr.success(data.ms);
+							if (reLoad) {
+								$('#tb_projectversion').bootstrapTable('refresh');
+							}
+						} else {
+							toastr.info(data.ms);
+						}
+					},
+					error : function() {
+						toastr.error('删除出错');
+					}
+				});
+			}
 		}
-		document.getElementById("projectversion").submit();
-		return true;
-	}
-	
-	function description(obj){ 
-		document.getElementById("descriptiondiv").style.left = (obj.offsetLeft+80)+"px"; 
-		document.getElementById("descriptiondiv").style.top = (obj.offsetTop+270)+"px"; 
-		document.getElementById("descriptionid").innerHTML = obj.innerHTML;
+
+		function edit(selectIndex, id) {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") { 
+ 				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			var url = '/projectVersion/update.do?versionid=' + id;
+			window.location.href = url;
+		}
+
+		function show(selectIndex, id) {
+			var url = '/projectVersion/show.do?versionid=' + id;
+			window.location.href = url;
+		}
 		
-		document.getElementById("descriptiondiv").style.display = "block"; 
-		//alert("left2:"+document.getElementById("descriptiondiv").style.left+"  top2:"+document.getElementById("descriptiondiv").style.top);
-		} 
-	
-	function hiddenPic(){ 
-		document.getElementById("descriptiondiv").style.display = "none"; 
-		} 
-	
-	function init(){
-		if('${message}'!=''){
-			if('${message}'=='添加成功'){
-				alert("添加成功,请返回查询！");
-			}else{
-				alert('${message}');
+		function zdlist(selectIndex, id) {
+			var url = '/zentao/list.do?versionid=' + id;
+			window.location.href = url;
+		}
+		
+		btn_addplan.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			var url = '/projectVersion/addplan.do';
+			window.location.href = url;
+		}
+		
+		btn_addversion.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			var url = '/projectVersion/add.do';
+			window.location.href = url;
+		}
+		
+		btn_zdlist.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			var url = '/zentao/list.do';
+			window.location.href = url;
+		}
+		
+		btn_reports.onclick = function() {
+			$('#cBeginTime').datetimepicker({
+				format: 'yyyy-mm-dd',
+		        language:  'zh-CN',
+			    todayBtn : "linked",  
+			    autoclose : true,  
+			    todayHighlight : true,
+			    forceParse: 0,
+			    weekStart: 1,
+			    minView: "month",//设置只显示到月份
+			    startView: 2,
+			    endDate : new Date(),
+			}).on('changeDate',function(e){  
+			    var startTime = e.date;  
+			    $('#cEndTime').datetimepicker('setStartDate',startTime);
+			});  
+			//结束时间：  
+			$('#cEndTime').datetimepicker({
+				format: 'yyyy-mm-dd',
+		        language:  'zh-CN',
+			    todayBtn : "linked",  
+			    autoclose : true,  
+			    todayHighlight : true,
+			    forceParse: 0,
+			    minView: "month",//设置只显示到月份
+			    weekStart: 1,
+			    endDate : new Date()
+			}).on('changeDate',function(e){  
+			    var endTime = e.date;  
+			    $('#cBeginTime').datetimepicker('setEndDate',endTime);
+			});
+			
+			$('#cBeginTime').datetimepicker('setDate',new Date(new Date()-7*24*60*60*1000));
+			$('#cEndTime').datetimepicker('setDate',new Date(new Date()-1000));			
+			
+			choosereports();
+			$("#reports").modal('show');
+		}
+		
+		function goreports() {
+			var reportstype=$('#reportstype').val();
+			var startdate=$('#cBeginTime').val();
+			var enddate=$('#cEndTime').val();
+			var projectid=$('#choose_project').val();
+			if(reportstype==0){
+				var url = '/projectVersion/barchart_html5.do?start_date='+startdate+'&end_date='+enddate;
+				window.location.href=url;
+			}else if(reportstype==1){
+				var url = '/projectVersion/showreport.do?startdate='+startdate+'&enddate='+enddate;
+				window.location.href=url;
+			}else if(reportstype==2){
+				var url = '/projectVersion/linechart_html5.do?projectid='+projectid+'&startdate='+startdate+'&enddate='+enddate;
+				window.location.href=url;
+			}else if(reportstype==3){
+				var url = '/projectVersion/onepro_barcharthtml5.do?projectid='+projectid+'&startdate='+startdate+'&enddate='+enddate;
+				window.location.href=url;
 			}
 		}
 		
-	}
-	
-	</script>	
-	
-	<script type="text/javascript">
-	function closeDiv(){
-		document.getElementById('popDiv').style.display='none';
-		document.getElementById('bg').style.display='none';
-	}
-	
-	function showDiv(verid,opr){
-		var status = document.getElementById("loginstatus").value;
-		if(status=="false"){
-			if(window.confirm("你未登录哦，要先去首页登录吗？")){
-				var url = '/progressus/signin.jsp';
-				window.location.href=url;
+		function choosereports(){
+			var reportstype=$('#reportstype').val();
+			if(reportstype==0||reportstype==1){
+				var isExit = false;
+				for (var i = 0; i < $("#choose_project").size() ; i++) {
+					if ($("#choose_project")[i].value == 99) {
+					isExit = true;
+					break;
+					}
+				}
+				if(!isExit){
+					$("#choose_project").append("<option value='99'>全部项目/未知项目</option>");
+				}
+				$('#choose_project').val(99);
+				$("#choose_project").attr("disabled","disabled");
 			}else{
-				return false; 
-			} 
-			//document.getElementById('popDiv').style.display='block';
-			//document.getElementById('bg').style.display='block';		
-		}else{
-			if(opr=="1"){
-				var url = '/projectVersion/update.do?versionid='+verid;
-				window.location.href=url;
-		    }else if(opr=="2"){
-		    	if(window.confirm("你确认要删除吗？")){ 
-					var url = '/projectVersion/delete.do?versionid='+verid;
-					window.location.href=url;
-		    		return true; 
-		    		}else{ 
-		    		return false; 
-		    		}
-		    }else if(opr=="3"){
-		    	var url = '/projectVersion/add.do';
-		    	window.location.href=url;
-		    }else if(opr=="4"){
-		    	var url = '/projectVersion/addplan.do';
-		    	window.location.href=url;
-		    }else{ 
-		       alert("操作码有误，请联系软件质量室相关人员！"); 
-		       return false;
-		    }
-		}
-		
-	}
-	
-	function projectlineshow(){
-	      var select = document.getElementById("projectidshow");
-	      var index = select.selectedIndex;
-		  var projectvalue = select.options[index].value;
-		if(projectvalue!=0){
-			var url = '/projectVersion/'+projectvalue+'/launchlineshow.do';
-			window.location.href=url;
-	    }else{ 
-	       alert("所选项目有误，请重新输入！"); 
-	       return false;
-	    }
-	}
-	
-	function getoprdate(){
-		startdate = document.getElementById("start_date").value;
-		enddate = document.getElementById("end_date").value;
-		if(startdate>enddate){
-			alert("开始日期大于结束日期，请重新选择！"); 
-		}else{
-			var url = '/projectVersion/barchart_html5.do?start_date='+startdate+'&end_date='+enddate;
-			window.location.href=url;
-		}
-	}
+				$("#choose_project").attr("disabled",false);
+				$("#choose_project option[value='99']").remove();
+			}
 
-</script>	
+		}
+	</script>
 </body>
 </html>

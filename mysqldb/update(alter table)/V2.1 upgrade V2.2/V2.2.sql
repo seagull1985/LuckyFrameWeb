@@ -33,6 +33,16 @@ create table PROJECT_CASESTEPSPARAMS
   primary key (ID)
 )default character set utf8;
 
+create table TEMP_CASESTEPDEBUG
+(
+  id                    int(8) not null AUTO_INCREMENT,
+  sign                  VARCHAR(20) not null COMMENT '用例标识',
+  executor              VARCHAR(20) not null COMMENT '执行人',
+  loglevel              VARCHAR(10) not null COMMENT '日志级别',
+  detail                VARCHAR(5000) not null COMMENT '日志', 
+  primary key (ID)
+)default character set utf8;
+
 /*插入部门管理权限*/
 insert into USER_AUTHORITY (id, module, auth_type, alias)
 values (61, '协议模板', '增加', 'ptct_1');
@@ -132,3 +142,5 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (44, 1, 0, 'operation','mousekey(shift)','模拟键盘Shift键');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (45, 1, 0, 'operation','mousekey(enter)','模拟键盘Enter键');
+insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
+values (46, 1, 0, 'operation','runcase','调用指定接口用例');

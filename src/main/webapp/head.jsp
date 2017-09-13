@@ -61,7 +61,7 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">质量管理<b class="caret"></b></a>
 						<ul class="dropdown-menu" style="background-color:rgba(51,204,255,0.6);">
-							<li><a href="/projectVersion/list.do">版本信息</a></li>
+							<li><a href="/projectVersion/load.do">版本信息</a></li>
 							<li><a href="/flowCheck/list.do">过程检查</a></li>
 							<li><a href="/review/list.do">评审信息</a></li>
 							<li><a href="/accident/list.do">生产故障</a></li>

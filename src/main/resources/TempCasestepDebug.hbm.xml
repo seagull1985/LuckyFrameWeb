@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="TempCasestepDebug" table="temp_casestepdebug"	schema="luckyframedb">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" precision="22" scale="0" />
+			<generator class="identity"/>
+		</id>
+		<property name="sign" type="java.lang.String">
+			<column name="sign" length="20" not-null="true" />
+		</property>
+		<property name="executor" type="java.lang.String">
+			<column name="executor" length="20" not-null="true" />
+		</property>
+		<property name="loglevel" type="java.lang.String">
+			<column name="loglevel" length="10" not-null="true" />
+		</property>
+		<property name="detail" type="java.lang.String">
+			<column name="detail" length="5000" not-null="true" />
+		</property>
+	</class>
+</hibernate-mapping>

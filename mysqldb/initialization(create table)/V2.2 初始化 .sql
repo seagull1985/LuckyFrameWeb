@@ -382,6 +382,16 @@ create table PROJECT_CASESTEPSPARAMS
   description           VARCHAR(50) COMMENT '描述',
   primary key (ID)
 )default character set utf8;
+
+create table TEMP_CASESTEPDEBUG
+(
+  id                    int(8) not null AUTO_INCREMENT,
+  sign                  VARCHAR(20) not null COMMENT '用例标识',
+  executor              VARCHAR(20) not null COMMENT '执行人',
+  loglevel              VARCHAR(10) not null COMMENT '日志级别',
+  detail                VARCHAR(5000) not null COMMENT '日志',   /*V1.1  扩展日志明细字段到2000*/
+  primary key (ID)
+)default character set utf8;
 /*插入索引
 CREATE INDEX index_caseid ON TEST_LOGDETAIL (caseid);
 CREATE INDEX index_taskid ON TEST_CASEDETAIL (taskid);*/
@@ -583,6 +593,8 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (44, 1, 0, 'operation','mousekey(shift)','模拟键盘Shift键');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (45, 1, 0, 'operation','mousekey(enter)','模拟键盘Enter键');
+insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
+values (46, 1, 0, 'operation','runcase','调用指定接口用例');
 
 /*插入角色默认定义*/
 insert into USER_ROLE (id, role, permission)

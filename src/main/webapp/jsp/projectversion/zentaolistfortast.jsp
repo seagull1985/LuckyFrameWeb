@@ -43,7 +43,7 @@
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">质量管理</li>
-			<li class="active"><a href="/projectVersion/list.do">版本信息</a></li>
+			<li class="active"><a href="/projectVersion/load.do">版本信息</a></li>
 			<li class="active">禅道任务</li>
 		</ol>
 

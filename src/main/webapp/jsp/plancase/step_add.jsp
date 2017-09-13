@@ -124,13 +124,55 @@
 							</br>
 							<div class="row">
 								<div class="col-lg-4 text-center" style="width: 100%">
-									<button class="btn btn-action" type="submit">保 存</button>
+									<button class="btn btn-action" style="background:#00bf5f" type="submit">保 存</button>
+									<button class="btn btn-action" id="showdebugb" onclick="showdebug()" type="button">调试</button>
 								</div>
 							</div>
 						</sf:form>
 					</div>
 				</div>
+				
+								<!-- 模态框示例（Modal） -->
+				<div class="modal fade" id="debug" tabindex="-1" role="dialog"
+					aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">请选择用例调试所在客户端</h4>
+							</div>
+							<div class="modal-body">
+								<form class="form-horizontal" role="form">
+								  <div class="form-group">
+											<label for="clientip" class="col-sm-3 control-label">客户端IP：</label>
+											<div class="input-group col-md-5">
+												<select class="form-control" name="clientipfordebug" id="clientipfordebug">
+													<c:forEach var="iplist" items="${iplist }">
+														<option value="${iplist}">${iplist}</option>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
 
+								</form>
+							</div>
+							<div id="autoDown" class="modal-footer" style="height: 140px;width:100%;overflow-y:scroll;text-align:left;">
+
+							</div>	
+							
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">关闭</button>
+								<button class="btn btn-primary" onclick="debugcase()">调试</button>
+								&nbsp;&nbsp;&nbsp;&nbsp;<span id="tip"> </span>
+							</div>						
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal -->
+				</div>
+        
 			</div>
 
 			<p>&nbsp;</p>
@@ -150,6 +192,10 @@
 				oTable.rows[i].cells[0].innerHTML = (i + 1);
 				oTable.rows[i].cells[0].value = (i + 1);
 			}
+		}
+		
+		if('${casetype}'!=0){
+			$("#showdebugb").attr("disabled","true");
 		}
 	});
 
@@ -510,6 +556,72 @@
 
     	    });
 		}
+		
+		function showdebug(){
+			$("#debug").modal('show');
+		}
+		
+		function debugcase(){
+			// 异步提交数据到action页面
+			$.ajax({
+				type : "POST",
+				cache : false,
+				async : true,
+				dataType : "json",
+				url : "debugcase.do?casesign=${casesign}"+"&clientip="+$("#clientipfordebug").val(),
+				contentType : "application/json", //必须有
+				data : {},
+				success : function(data, status) {
+ 				if (data.status == "success") {
+ 					 toastr.success(data.ms);
+ 					 refreshlog();
+				}else if(data.status == "info"){
+					 toastr.info(data.ms);
+				}else if(data.status == "warning"){
+					  toastr.warning(data.ms);
+				}else if(data.status == "error"){
+					  toastr.error(data.ms);
+				}
+				},
+				error : function() {
+					toastr.error(data);
+				}
+			});
+		}
+		
+		//ajax
+		function refreshlog(){
+			$.ajax({
+				type : "POST",
+				cache : false,
+				async : true,
+				dataType : "json",
+				url : "refreshlog.do?casesign=${casesign}",
+				contentType : "application/json", //必须有
+				data : {},
+				success : function(data, status) {
+ 				if (data.status == "success") {
+ 					document.getElementById('autoDown').innerHTML=data.ms;
+ 					document.getElementById('autoDown').scrollTop = document.getElementById('autoDown').scrollHeight;
+				}else if(data.status == "info"){
+ 					document.getElementById('autoDown').innerHTML=data.ms;
+ 					document.getElementById('autoDown').scrollTop = document.getElementById('autoDown').scrollHeight;
+					toastr.info("调试程序运行完成！");
+					clearTimeout(t);
+				}else if(data.status == "warning"){
+					  toastr.warning(data.ms);
+				}else if(data.status == "error"){
+					  toastr.error(data.ms);
+				}
+				},
+				error : function() {
+					toastr.error(data);
+				}
+			});
+			
+			var t=setTimeout("refreshlog()", 1500);
+		}
+		
 	</script>
 </body>
 </html>

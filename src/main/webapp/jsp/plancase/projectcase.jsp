@@ -638,7 +638,6 @@
 	                    },
 	                    error:function()
 	                    {
-	                        location.reload();
 	                    	toastr.error('添加用例出错!');
 	                    },
 	                    complete:function()

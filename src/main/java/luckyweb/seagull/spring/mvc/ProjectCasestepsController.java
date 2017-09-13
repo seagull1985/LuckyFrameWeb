@@ -3,6 +3,8 @@ package luckyweb.seagull.spring.mvc;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,15 +23,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
+import luckyweb.seagull.spring.entity.TempCasestepDebug;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectCaseService;
 import luckyweb.seagull.spring.service.ProjectCasestepsService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
+import luckyweb.seagull.spring.service.TempCasestepDebugService;
+import luckyweb.seagull.spring.service.TestJobsService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+import rmi.service.RunService;
 
 @Controller
 @RequestMapping("/projectCasesteps")
@@ -41,6 +47,9 @@ public class ProjectCasestepsController {
 	@Resource(name = "projectCasestepsService")
 	private ProjectCasestepsService casestepsservice;
 
+	@Resource(name = "tempcasestepdebugService")
+	private TempCasestepDebugService tempdebugservice;
+
 	@Resource(name = "sectorprojectsService")
 	private SectorProjectsService sectorprojectsService;
 
@@ -49,6 +58,9 @@ public class ProjectCasestepsController {
 
 	@Resource(name = "userinfoService")
 	private UserInfoService userinfoservice;
+	
+	@Resource(name = "testJobsService")
+	private TestJobsService	 testJobsService;
 
 	/**
 	 * 添加步骤
@@ -99,9 +111,12 @@ public class ProjectCasestepsController {
 			}
 
 			model.addAttribute("casesign", prcase.getSign());
+			model.addAttribute("casetype", prcase.getCasetype());
 			model.addAttribute("caseid", caseid);
 			model.addAttribute("projectid", prcase.getProjectid());
 			model.addAttribute("steps", steps);
+			List iplist = testJobsService.getipList();
+			model.addAttribute("iplist", iplist);
 			return retVal;
 
 		} catch (Exception e) {
@@ -161,7 +176,7 @@ public class ProjectCasestepsController {
 				ProjectCasesteps step = (ProjectCasesteps) list.get(i);
 				if (i == 0) {
 					casestepsservice.delforcaseid(step.getCaseid());
-					projectcase=projectcaseservice.load(step.getCaseid());
+					projectcase = projectcaseservice.load(step.getCaseid());
 				}
 				step.setOperationer(usercode);
 				step.setTime(time);
@@ -172,7 +187,7 @@ public class ProjectCasestepsController {
 				step.setExpectedresult(step.getExpectedresult().replaceAll("&quot;", "\""));
 				step.setRemark(step.getRemark().replaceAll("&quot;", "\""));
 				casestepsservice.add(step);
-				
+
 				projectcase.setOperationer(usercode);
 				projectcase.setTime(time);
 				projectcaseservice.modify(projectcase);
@@ -231,7 +246,7 @@ public class ProjectCasestepsController {
 						&& null != req.getSession().getAttribute("username")) {
 					String usercode = req.getSession().getAttribute("usercode").toString();
 					casesteps.setOperationer(usercode);
-					projectcase=projectcaseservice.load(casesteps.getCaseid());
+					projectcase = projectcaseservice.load(casesteps.getCaseid());
 					projectcase.setOperationer(usercode);
 				}
 				Date currentTime = new Date();
@@ -240,7 +255,7 @@ public class ProjectCasestepsController {
 				casesteps.setTime(time);
 
 				casestepsservice.modify(casesteps);
-				
+
 				projectcase.setTime(time);
 				projectcaseservice.modify(projectcase);
 
@@ -254,6 +269,112 @@ public class ProjectCasestepsController {
 		}
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param tj
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+
+	@RequestMapping(value = "/debugcase.do")
+	private void debugCase(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setCharacterEncoding("utf-8");
+		PrintWriter pw = response.getWriter();
+		JSONObject json = new JSONObject();
+		String casesign = request.getParameter("casesign");
+		String clientip = request.getParameter("clientip");
+		String status="error";
+		String ms="调试用例启动失败！";
+		try {
+			if (null != request.getSession().getAttribute("usercode")
+					&& null != request.getSession().getAttribute("username")) {
+				String usercode = request.getSession().getAttribute("usercode").toString();
+				
+				tempdebugservice.delete(casesign, usercode);
+
+				// 调用远程对象，注意RMI路径与接口必须与服务器配置一致
+				RunService service = (RunService) Naming.lookup("rmi://" + clientip + ":6633/RunService");
+				String result = service.webdebugcase(casesign, usercode);
+				
+				status="success";
+				ms=result;
+			}else{
+				status="fail";
+				ms="检测到用户未登录，请重新登录！";
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			ms="远程链接异常，请检查客户端！";
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		json.put("status", status);
+		json.put("ms", ms);
+
+		pw.print(json.toString());
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param tj
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+
+	@RequestMapping(value = "/refreshlog.do")
+	private void refreshDebugLog(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setCharacterEncoding("utf-8");
+		PrintWriter pw = response.getWriter();
+		JSONObject json = new JSONObject();
+		String casesign = request.getParameter("casesign");
+		String status="error";
+		String ms="获取调试日志失败！";
+		try {
+			if (null != request.getSession().getAttribute("usercode")
+					&& null != request.getSession().getAttribute("username")) {
+				String usercode = request.getSession().getAttribute("usercode").toString();
+
+				List<TempCasestepDebug> tcdlist=tempdebugservice.getList(casesign, usercode);
+				ms="";
+				for(TempCasestepDebug tcd:tcdlist){
+					ms=ms+tcd.getLoglevel()+": "+tcd.getDetail()+"</br>";
+				}
+				
+				if(null!=tcdlist&&tcdlist.size()>1){
+					String lastloglevel=tcdlist.get(tcdlist.size()-1).getLoglevel();
+					if(lastloglevel.indexOf("over")>-1){
+						status="info";
+					}else{
+						status="success";
+					}
+				}else{
+					status="success";
+				}
+
+				
+			}else{
+				status="fail";
+				ms="检测到用户未登录，请重新登录！";
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			status="fail";
+			ms="刷新日志出现异常！";
+			e.printStackTrace();
+		}
+		json.put("status", status);
+		json.put("ms", ms);
+
+		pw.print(json.toString());
+	}
+	
+
 	@RequestMapping(value = "/cgetStepsByCase.do")
 	public void cgetStepsByCase(HttpServletRequest req, HttpServletResponse rsp) {
 		// 更新实体
@@ -263,7 +384,7 @@ public class ProjectCasestepsController {
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
 			String caseid = req.getParameter("caseid");
-			
+
 			List<ProjectCasesteps> steps = casestepsservice.getSteps(Integer.valueOf(caseid));
 
 			// 转换成json字符串
@@ -277,7 +398,7 @@ public class ProjectCasestepsController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@RequestMapping(value = "/cpoststep.do")
 	public void cpoststep(HttpServletRequest req, HttpServletResponse rsp) throws IOException {
 		// 更新实体
@@ -285,23 +406,23 @@ public class ProjectCasestepsController {
 		req.setCharacterEncoding("GBK");
 		PrintWriter pw = rsp.getWriter();
 		try {
-			ProjectCasesteps steps=new ProjectCasesteps();
-			
+			ProjectCasesteps steps = new ProjectCasesteps();
+
 			String path = req.getParameter("path");
-			if(null!=path){
-				path=path.replace("DHDHDH", "=");
+			if (null != path) {
+				path = path.replace("DHDHDH", "=");
 			}
 			String operation = req.getParameter("operation");
 			String parameters = req.getParameter("parameters");
-			if(null!=parameters){
-				parameters=parameters.replace("BBFFHH", "%");
+			if (null != parameters) {
+				parameters = parameters.replace("BBFFHH", "%");
 			}
 			String action = req.getParameter("action");
 			String caseid = req.getParameter("caseid");
 			String stepnum = req.getParameter("stepnum");
 			String expectedresult = req.getParameter("expectedresult");
-			if(null!=expectedresult){
-				expectedresult=expectedresult.replace("BBFFHH", "%");
+			if (null != expectedresult) {
+				expectedresult = expectedresult.replace("BBFFHH", "%");
 			}
 			String projectid = req.getParameter("projectid");
 			String steptype = req.getParameter("steptype");
@@ -314,7 +435,7 @@ public class ProjectCasestepsController {
 			steps.setExpectedresult(expectedresult);
 			steps.setProjectid(Integer.valueOf(projectid));
 			steps.setSteptype(Integer.valueOf(steptype));
-			
+
 			Date currentTime = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String time = formatter.format(currentTime);
@@ -330,7 +451,7 @@ public class ProjectCasestepsController {
 			pw.print("fail");
 		}
 	}
-	
+
 	@RequestMapping(value = "/cUpdateStepExpectedResults.do")
 	public void cUpdateStepExpectedResults(HttpServletRequest req, HttpServletResponse rsp) {
 		try {
@@ -340,30 +461,30 @@ public class ProjectCasestepsController {
 			String caseno = req.getParameter("caseno");
 			String stepnum = req.getParameter("stepnum");
 			String expectedresults = req.getParameter("expectedresults");
-			expectedresults=expectedresults.replace("BBFFHH", "%");
-			expectedresults=expectedresults.replace("DHDHDH", "=");
-			expectedresults=expectedresults.replace("ANDAND", "&");
-			
-			String result="更新用例【"+caseno+"】第【"+stepnum+"】步失败，预期结果【"+expectedresults+"】";
-			ProjectCase pc=projectcaseservice.getCaseBySign(caseno);
-			List<ProjectCasesteps> steps= casestepsservice.getSteps(pc.getId());
-			
-			for(ProjectCasesteps step:steps){
-				if(stepnum.equals(String.valueOf(step.getStepnum()))){				
+			expectedresults = expectedresults.replace("BBFFHH", "%");
+			expectedresults = expectedresults.replace("DHDHDH", "=");
+			expectedresults = expectedresults.replace("ANDAND", "&");
+
+			String result = "更新用例【" + caseno + "】第【" + stepnum + "】步失败，预期结果【" + expectedresults + "】";
+			ProjectCase pc = projectcaseservice.getCaseBySign(caseno);
+			List<ProjectCasesteps> steps = casestepsservice.getSteps(pc.getId());
+
+			for (ProjectCasesteps step : steps) {
+				if (stepnum.equals(String.valueOf(step.getStepnum()))) {
 					Date currentTime = new Date();
 					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					String time = formatter.format(currentTime);
-					
+
 					step.setTime(time);
 					step.setOperationer("http-post");
 					step.setExpectedresult(expectedresults);
-					
+
 					pc.setTime(time);
 					pc.setOperationer("http-post");
-					
+
 					casestepsservice.modify(step);
 					projectcaseservice.modify(pc);
-					result = "更新用例【"+caseno+"】第【"+stepnum+"】步成功，预期结果【"+expectedresults+"】";
+					result = "更新用例【" + caseno + "】第【" + stepnum + "】步成功，预期结果【" + expectedresults + "】";
 					break;
 				}
 			}
@@ -373,7 +494,39 @@ public class ProjectCasestepsController {
 			e.printStackTrace();
 		}
 	}
-	
+
+	@RequestMapping(value = "/cPostDebugLog.do")
+	public void cPostDebugLog(HttpServletRequest req, HttpServletResponse rsp) {
+		// 更新实体
+		try {
+			rsp.setContentType("text/html;charset=GBK");
+			req.setCharacterEncoding("GBK");
+			PrintWriter pw = rsp.getWriter();
+			String sign = req.getParameter("sign");
+			String executor = req.getParameter("executor");
+			String loglevel = req.getParameter("loglevel");
+			String detail = req.getParameter("detail");
+			sign = sign.replace("BBFFHH", "%");
+			sign = sign.replace("DHDHDH", "=");
+			sign = sign.replace("ANDAND", "&");
+			detail = detail.replace("BBFFHH", "%");
+			detail = detail.replace("DHDHDH", "=");
+			detail = detail.replace("ANDAND", "&");
+
+			TempCasestepDebug tcd = new TempCasestepDebug();
+			tcd.setSign(sign);
+			tcd.setExecutor(executor);
+			tcd.setLoglevel(loglevel);
+			tcd.setDetail(detail);
+			int id = tempdebugservice.add(tcd);
+
+			pw.print(id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String[] args) throws Exception {
 
 	}

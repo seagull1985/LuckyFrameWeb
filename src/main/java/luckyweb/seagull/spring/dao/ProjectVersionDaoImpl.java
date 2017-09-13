@@ -12,9 +12,8 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import luckyweb.seagull.spring.entity.Accident;
-import luckyweb.seagull.spring.entity.FlowCheck;
 import luckyweb.seagull.spring.entity.ProjectVersion;
+import luckyweb.seagull.util.StrLib;
 
 @Repository("projectversionDao")
 public class ProjectVersionDaoImpl extends HibernateDaoSupport implements ProjectVersionDao{
@@ -39,15 +38,21 @@ public class ProjectVersionDaoImpl extends HibernateDaoSupport implements Projec
 
 	private void whereParameter(ProjectVersion projectversion, Query query) {
 
-		if (projectversion.getProjectid()!=0) {
+		if (projectversion.getProjectid()!=0&&projectversion.getProjectid()!=99) {
 			query.setParameter("projectid", projectversion.getProjectid());
 		}
-		if (projectversion.getStartactually_launchdate()!=null&&projectversion.getEndactually_launchdate()!=null&&
-				!projectversion.getStartactually_launchdate().equals("")&&!projectversion.getEndactually_launchdate().equals("")) {
+		if (!StrLib.isEmpty(projectversion.getStartactually_launchdate())) {
 			query.setParameter("startactually_launchdate", projectversion.getStartactually_launchdate());
+		}
+		if (!StrLib.isEmpty(projectversion.getEndactually_launchdate())) {
 			query.setParameter("endactually_launchdate", projectversion.getEndactually_launchdate());
 		}
-
+		if (!StrLib.isEmpty(projectversion.getVersionnumber())) {
+			query.setParameter("versionnumber", "%"+projectversion.getVersionnumber().trim()+"%");
+		}
+		if (!StrLib.isEmpty(projectversion.getImprint())) {
+			query.setParameter("imprint", "%"+projectversion.getImprint().trim()+"%");
+		}
 	}
 	
 	@Override

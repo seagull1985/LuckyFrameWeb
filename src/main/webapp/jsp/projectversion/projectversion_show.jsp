@@ -33,7 +33,7 @@
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">质量管理</li>
-			<li class="active"><a href="/projectVersion/list.do">版本信息</a></li>
+			<li class="active"><a href="/projectVersion/load.do">版本信息</a></li>
 			<li class="active">项目版本详情</li>
 		</ol>
 
@@ -190,7 +190,7 @@
     </tr>
     <tr>
       <td height="40" colspan="4" align="center"><a
-						href="/projectVersion/list.do" ><span class="btnold STYLE1"  style="width:70px; margin-bottom:10px;">返 回</span></a></td>
+						href="/projectVersion/load.do" ><span class="btnold STYLE1"  style="width:70px; margin-bottom:10px;">返 回</span></a></td>
     </tr>
   </table>
  
