@@ -23,12 +23,16 @@
   </a>
 </p>
 
+# 捐赠 | 感谢
+> [【捐赠支持(微信)】](https://git.oschina.net/uploads/images/2017/0913/175706_f58b543b_1215415.jpeg)  [【捐赠支持(支付宝)】](https://git.oschina.net/uploads/images/2017/0913/175750_e96add72_1215415.jpeg)
+
+> 感谢你们的认可与支持    [【捐赠记录】](https://git.oschina.net/seagull1985/LuckyFrameWeb/wikis/pages?title=捐赠列表&parent=捐赠)
+
+
 # 介绍
 
 LuckyFrame 开源自动化测试平台 - 自动化测试 X 时代来了
-
-> LuckyFrame QQ官方交流群 487954492 [【捐赠支持(微信)】](https://git.oschina.net/uploads/images/2017/0913/175706_f58b543b_1215415.jpeg)  [【捐赠支持(支付宝)】](https://git.oschina.net/uploads/images/2017/0913/175750_e96add72_1215415.jpeg)
-
+> LuckyFrame QQ官方交流群 487954492 
 # 我能做什么？
 
 - **分布式测试**：使用Web-Client的方式，Web端负责基本信息管理展示，Client负责用例执行，任意无限扩展客户端。
