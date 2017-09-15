@@ -28,7 +28,7 @@
 			<!-- Article main content -->
 			<article class="col-sm-9 maincontent" style="width:100%;">
 			<header class="page-header">
-			<h1 class="page-title" style="text-align: center;">用例管理</h1>
+			<h3 class="page-title" style="text-align: center;">用例管理</h1>
 			</header>
 
 			<div class="panel-body" style="padding-bottom: 0px;">
@@ -36,7 +36,7 @@
 					<div class="panel-heading">查询条件</div>
 					<div class="panel-body">
 						<div class="form-group" style="margin-top: 15px">
-							<label class="control-label col-sm-1" style="width: 6%"
+							<label class="control-label col-sm-1"
 								for="txt_search_project">项目名称:</label>
 							<div class="col-sm-3">
 								<select class="form-control" id="search_project"
@@ -49,7 +49,7 @@
 						</div>
 
 						<div class="form-group" style="margin-top: 15px">
-							<label class="control-label col-sm-1" style="width: 6%"
+							<label class="control-label col-sm-1"
 								for="txt_search_module">用例集:</label>
 							<div class="col-sm-3">
 								<input type="text" class="form-control" id="module_tree"

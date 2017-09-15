@@ -157,14 +157,14 @@
 
 								</form>
 							</div>
-							<div id="autoDown" class="modal-footer" style="height: 140px;width:100%;overflow-y:scroll;text-align:left;">
+							<div id="autoDown" class="modal-footer" style=" background-color:#F0F8FF;height: 140px;width:100%;overflow-y:scroll;text-align:left;">
 
 							</div>	
 							
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default"
 									data-dismiss="modal">关闭</button>
-								<button class="btn btn-primary" onclick="debugcase()">调试</button>
+								<button class="btn btn-primary" onclick="debugcase()">运行</button>
 								&nbsp;&nbsp;&nbsp;&nbsp;<span id="tip"> </span>
 							</div>						
 						</div>
