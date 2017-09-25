@@ -89,7 +89,7 @@ public class ProjectPlanCaseServiceImpl implements ProjectPlanCaseService{
 	@Override
 	public List<ProjectPlanCase> getcases(int planid) throws Exception {
 		// TODO Auto-generated method stub
-		return this.projectplancaseDao.getList(" from ProjectPlanCase where planid="+planid+" order by caseid");
+		return this.projectplancaseDao.getList(" from ProjectPlanCase where planid="+planid+" order by priority,caseid");
 	}
 	
 }
