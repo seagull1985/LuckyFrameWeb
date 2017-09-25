@@ -100,7 +100,7 @@
 											<div class="col-sm-9">
 												<select class="form-control" name="protocoltype" id="protocoltype">
 													<option value="HTTP">HTTP</option>
-													<option value="JSON">JSON</option>
+													<option value="Socket">Socket</option>
 												</select>
 											</div>
 										</div>
