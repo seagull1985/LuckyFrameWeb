@@ -39,10 +39,20 @@ public class QuartzJob implements Job {
 		try {
 			System.out.println("执行命令中。。。");
 			String id = context.getJobDetail().getName();
-			TestJobs job = testJobsService.load(Integer.valueOf(id));
-			toRunTask(job.getPlanproj(), job.getId(),job.getTaskName(),job.getClientip());
-			System.out.println("调用程序结束。。。");
-
+			TestJobs job = null;
+			for (int i = 0; i < QueueListener.list.size(); i++) {
+				job = new TestJobs();
+				job = QueueListener.list.get(i);
+				if (id.equals("" + job.getId())) {
+					break;
+				}
+			}
+			if(null!=job){
+				toRunTask(job.getPlanproj(), job.getId(),job.getTaskName(),job.getClientip());	
+				System.out.println("调用程序结束。。。");
+			}else{
+				System.out.println("没有定时任务需要启动。。。");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
