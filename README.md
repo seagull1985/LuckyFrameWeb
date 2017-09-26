@@ -19,7 +19,7 @@
     <img alt="code style" src="https://img.shields.io/badge/%20LICENSE-GPL--2.0-green.svg">
   </a>
   <a href="http://git.oschina.net/seagull1985/LuckyFrameWeb/releases">
-    <img src="https://img.shields.io/badge/luckyframe-V2.1-blue.svg" >
+    <img src="https://img.shields.io/badge/LuckyFrame-V2.2-lightgrey.svg" >
   </a>
 </p>
 
