@@ -235,6 +235,7 @@ public class StrLib {
 	  } else if (object instanceof String || object instanceof Integer || object instanceof Boolean) {
 		  String str=object.toString().replace("\"", "&quot;");
 		  str=str.replace("\r\n","<br/>");
+		  str=str.replace("\n","&#13;&#10;");
 	      json.append("\"").append(str).append("\"");
 	  } else {
 	      json.append(beanToJson(object));
