@@ -1,6 +1,9 @@
 package luckyweb.seagull.spring.mvc;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,8 +14,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
-import net.sf.json.JSONArray;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,16 +32,12 @@ import luckyweb.seagull.spring.service.AccidentService;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.util.StrLib;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/accident")
 public class AccidentController {
-	
-	private int allPage;
-	private int pageSize = 20;
-	private int allRows;
-	private int page = 1;
-	private int offset; 
 	
 	@Resource(name = "accidentService")
 	private AccidentService accidentservice;
@@ -48,21 +45,9 @@ public class AccidentController {
 	@Resource(name = "sectorprojectsService")
 	private SectorProjectsService sectorprojectsService;
 	
-
-	public AccidentService getaccidentService() {
-		return accidentservice;
-	}
-
-	public void setSectorProjectsService(AccidentService accidentservice) {
-		this.accidentservice = accidentservice;
-	}
-	
 	@Resource(name = "operationlogService")
 	private OperationLogService operationlogservice;
 
-	public OperationLogService getOperationlogService() {
-		return operationlogservice;
-	}
 	
 	/**
 	 * 
@@ -72,83 +57,74 @@ public class AccidentController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/list.do")
-	public String list(HttpServletRequest req, Accident accident, Model model)
-			throws Exception {
-		model.addAttribute("accident", accident);
+	@RequestMapping(value = "/load.do")
+	public String load(HttpServletRequest req, Model model) throws Exception {
 
 		try {
-			String p = req.getParameter("page");
-			String projectid = req.getParameter("projectid");
-			String accstarttime = req.getParameter("accstarttime");
-			String accendtime = req.getParameter("accendtime");
-			String accstatus = req.getParameter("accstatus");
+			int projectid = 99;
 
-			if (!StrLib.isEmpty(projectid))
-			{
-				accident.setProjectid(Integer.valueOf(projectid));
-			}
-			
-			if (accstarttime!=null&&!"".equals(accstarttime))
-			{
-				accident.setAccstarttime(accstarttime);
-			}
-			
-			if (accendtime!=null&&!"".equals(accendtime))
-			{
-				accident.setAccendtime(accendtime);
-			}
-			
-			if (accstatus!=null&&!"".equals(accstatus)&&!"00".equals(accstatus))
-			{
-				accident.setAccstatus(accstatus);
-			}
-			
-			if (StrLib.isEmpty(p) || Integer.valueOf(p) == 0) {
-				page = 1;
-			}
-
-			String page2 = req.getParameter("page");
-			if (StrLib.isEmpty(page2)) {
-				page = 1;
-			} else {
-				try {
-					page = Integer.parseInt(page2);
-				} catch (Exception e) {
-					page = 1;
-				}
-			}
-			allRows = accidentservice.findRows(accident);
-			offset = (page - 1) * pageSize;
-			if (allRows % pageSize == 0) {
-				allPage = allRows / pageSize;
-			} else {
-				allPage = allRows / pageSize + 1;
-			}
-
-			model.addAttribute("allRows", allRows);
-			model.addAttribute("page", page);
-			model.addAttribute("offset", offset);
-			model.addAttribute("pageSize", pageSize);
-			model.addAttribute("allPage", allPage);
+			List<SectorProjects> prolist = QueueListener.qa_projlist;
+			model.addAttribute("projects", prolist);
 			model.addAttribute("projectid", projectid);
-/*			// 调度列表
-			List<SecondarySector> secondarySector = secondarysectorservice.findSecotorList();
-			model.addAttribute("secondarySector", secondarySector);*/
-			
-			List<Accident> sssMap = accidentservice.findByPage(accident, offset,
-					pageSize);
-			model.addAttribute("projects", QueueListener.qa_projlist);
-			model.addAttribute("splist", sssMap);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/accident/list.do");
+			model.addAttribute("url", "/accident/load.do");
 			return "error";
 		}
 		return "/jsp/accident/accident";
+	}
+
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/list.do")
+	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
+			HttpServletResponse response) throws NumberFormatException, Exception {
+		response.setCharacterEncoding("utf-8");
+		PrintWriter pw = response.getWriter();
+		String search = request.getParameter("search");
+		String projectid = request.getParameter("projectid");
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+		String accstatus = request.getParameter("accstatus");
+		Accident accident = new Accident();
+		if (null == offset && null == limit) {
+			offset = 0;
+		}
+		if (null == limit || limit == 0) {
+			limit = 10;
+		}
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(search)) {
+			accident.setAccdescription(search);
+			accident.setCausaltype(search);
+		}
+		if (accstatus!=null&&!"".equals(accstatus)&&!"00".equals(accstatus))
+		{
+			accident.setAccstatus(accstatus);
+		}
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(projectid)&&!"99".equals(projectid)) {
+			accident.setProjectid(Integer.valueOf(projectid));
+		}
+
+		if (!StrLib.isEmpty(startDate)) {
+			accident.setAccstarttime(startDate+" 00:00:00");
+		}
+			
+		if (!StrLib.isEmpty(endDate)) {
+			accident.setAccendtime(endDate+" 23:59:59");
+		}
+		List<Accident> acclist = accidentservice.findByPage(accident, offset, limit);
+
+		// 转换成json字符串
+		String RecordJson = StrLib.listToJson(acclist);
+		// 得到总记录数
+		int total = accidentservice.findRows(accident);
+		// 需要返回的数据有总记录数和行数据
+		JSONObject json = new JSONObject();
+		json.put("total", total);
+		json.put("rows", RecordJson);
+		pw.print(json.toString());
 	}
 	
 	/**
@@ -173,7 +149,7 @@ public class AccidentController {
 
 			if(!UserLoginController.permissionboolean(req, "acc_1")){
 				model.addAttribute("accident", new Accident());
-				model.addAttribute("url", "/accident/list.do");
+				model.addAttribute("url", "/accident/load.do");
 				model.addAttribute("message", "当前用户无权限添加生产事故信息，请联系管理员！");
 				return "success";
 			}
@@ -238,7 +214,7 @@ public class AccidentController {
 						accident.getProjectid(),"生产事故登记成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
 				
 				model.addAttribute("message", "添加成功");
-				model.addAttribute("url", "/accident/list.do");
+				model.addAttribute("url", "/accident/load.do");
 				return retVal;
 
 			}
@@ -250,7 +226,7 @@ public class AccidentController {
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/accident/list.do");
+			model.addAttribute("url", "/accident/load.do");
 			return "error";
 		}
 
@@ -273,7 +249,7 @@ public class AccidentController {
 		
 		if(!UserLoginController.permissionboolean(req, "acc_3")){
 			model.addAttribute("accident", new Accident());
-			model.addAttribute("url", "/accident/list.do");
+			model.addAttribute("url", "/accident/load.do");
 			model.addAttribute("message", "当前用户无权限修改生产事故信息，请联系管理员！");
 			return "success";
 		}
@@ -322,7 +298,7 @@ public class AccidentController {
 
 			
 			model.addAttribute("message", "修改成功");
-			model.addAttribute("url", "/accident/list.do");
+			model.addAttribute("url", "/accident/load.do");
 			return retVal;
 
 		}	
@@ -336,7 +312,7 @@ public class AccidentController {
 	catch (Exception e)
 	{
 		model.addAttribute("message", e.getMessage());
-		model.addAttribute("url", "/accident/list.do");
+		model.addAttribute("url", "/accident/load.do");
 		return "error";
 	 }
 	}
@@ -349,37 +325,49 @@ public class AccidentController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/delete.do", method = RequestMethod.GET)
-	public String delete(Model model,HttpServletRequest req) throws Exception
-	{
-		if(!UserLoginController.permissionboolean(req, "acc_2")){
-			model.addAttribute("accident", new Accident());
-			model.addAttribute("url", "/accident/list.do");
-			model.addAttribute("message", "当前用户无权限删除生产事故信息，请联系管理员！");
-			return "success";
-		}
-		
-		int id = Integer.valueOf(req.getParameter("id"));
-		Accident accident = accidentservice.load(id);
-		try
-		{		
-			accidentservice.delete(id);
-		}
-		catch (Exception e)
-		{
-			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/accident/list.do");
-			return "error";
-		}
-		
-		operationlogservice.add(req, "QA_ACCIDENT", id, 
-				accident.getSectorProjects().getProjectid(),"生产事故信息删除成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
+	@RequestMapping(value = "/delete.do")
+	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "acc_2")) {
+				json.put("status", "fail");
+				json.put("ms", "删除故障记录失败,权限不足,请联系管理员!");
+			} else {
+				StringBuilder sb = new StringBuilder();
+				try (BufferedReader reader = req.getReader();) {
+					char[] buff = new char[1024];
+					int len;
+					while ((len = reader.read(buff)) != -1) {
+						sb.append(buff, 0, len);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
+				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
 
-		String message = "删除成功！";
-		model.addAttribute("accident", new Accident());
-		model.addAttribute("message", message);
-		model.addAttribute("url", "/accident/list.do");
-		return "success";
+				for (int i = 0; i < jsonarr.size(); i++) {
+					int id = Integer.valueOf(jsonarr.get(i).toString());
+					Accident accident = accidentservice.load(id);
+					accidentservice.delete(id);
+
+					operationlogservice.add(req, "QA_ACCIDENT", id, 
+							accident.getSectorProjects().getProjectid(),"生产事故信息删除成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
+
+				}
+				
+				json.put("status", "success");
+				json.put("ms", "删除检查记录成功!");
+			}
+			pw.print(json.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 	
 	/**
@@ -418,8 +406,8 @@ public class AccidentController {
 	@RequestMapping(value = "/piechart_html5.do")
 	public String pieGroupCausaltype(HttpServletRequest req,Model model) throws Exception
 	{
-		String startdate = req.getParameter("pie_startdate");
-		String enddate = req.getParameter("pie_enddate");
+		String startdate = req.getParameter("pie_startdate");//+" 00:00:00";
+		String enddate = req.getParameter("pie_enddate");//+" 23:59:59";
 		String type = req.getParameter("type");
 		String unit = ""; 
 		String title1 = "";
@@ -429,6 +417,7 @@ public class AccidentController {
 				"#F9F900","#FFA042","#AFAF61","#6FB7B7","#B87070","#9999CC",
 				"#B766AD","#FF359A","#CA8EFF","#A6A600","#CECEFF","#C4E1E1","#E2C2DE","#FFD2D2","#743A3A","#7E3D76"};*/
 		
+		@SuppressWarnings("unchecked")
 		List<Object[]> ls = accidentservice.listcausaltype(startdate, enddate, projectid,type);
 		
 		PieLasagna[] data = new PieLasagna[ls.size()];
@@ -536,7 +525,7 @@ public class AccidentController {
 		req.setCharacterEncoding("utf-8");
 		if(!UserLoginController.permissionboolean(req, "acc_upload")){
 			model.addAttribute("message", "当前用户无权限上传事故附件！");
-			model.addAttribute("url", "/accident/list.do");
+			model.addAttribute("url", "/accident/load.do");
 			return "error";
 		}
 		String id = req.getParameter("id");
@@ -583,7 +572,7 @@ public class AccidentController {
 		{
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/accident/list.do");
+			model.addAttribute("url", "/accident/load.do");
 			return "error";
 		}
 		Accident accident = accidentservice.load(id);
@@ -592,7 +581,7 @@ public class AccidentController {
 		operationlogservice.add(request, "QA_ACCIDENT", id, 
 				accident.getProjectid(),"生产事故附件上传成功！附件名称【"+id+filetype+"】");
 
-		model.addAttribute("url", "/accident/list.do");
+		model.addAttribute("url", "/accident/load.do");
 		model.addAttribute("message", "【" + file.getOriginalFilename() + "】文件自动更名为【"+id+filetype+"】上传成功！");
 		return "success";
 	}

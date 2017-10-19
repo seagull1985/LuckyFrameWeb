@@ -50,7 +50,7 @@
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">质量管理</li>
-			<li class="active"><a href="/review/list.do">项目评审记录</a></li>
+			<li class="active"><a href="/review/load.do">项目评审记录</a></li>
 			<li class="active">修改评审详细信息</li>
 		</ol>
 

@@ -60,6 +60,12 @@ public class AccidentServiceImpl implements AccidentService{
 		if (accident.getAccendtime()!=null&&!accident.getAccendtime().equals("")) {
 			where += " eventtime<=:accendtime  and ";
 		}
+		if (null!=accident.getAccdescription()&&!"".equals(accident.getAccdescription())) {
+			where += " (accdescription like :accdescription  or ";
+		}
+        if (null!=accident.getCausaltype()&&!"".equals(accident.getCausaltype())) {
+			where += " causaltype like :causaltype)  or ";
+		}
 		if (where.length() == 7) {
 			where = "";
 		} 
@@ -89,7 +95,7 @@ public class AccidentServiceImpl implements AccidentService{
 		if(enddate!=""&&enddate!=null){
 			where += " eventtime<='"+enddate+"' and ";
 		}
-		if(projectid!=0){
+		if(projectid!=0&&projectid!=99){
 			where += " projectid="+projectid+" and ";
 		}
 		

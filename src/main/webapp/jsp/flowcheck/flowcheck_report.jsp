@@ -39,7 +39,7 @@
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">质量管理</li>
-			<li class="active"><a href="../flowCheck/list.do">流程检查信息</a></li>
+			<li class="active"><a href="../flowCheck/load.do">流程检查信息</a></li>
 			<li class="active">流程检查统计报表</li>
 		</ol>
 		

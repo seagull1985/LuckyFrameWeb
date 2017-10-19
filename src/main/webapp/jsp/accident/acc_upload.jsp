@@ -29,7 +29,7 @@
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">质量管理</li>
-			<li class="active"><a href="/accident/list.do">生产故障</a></li>
+			<li class="active"><a href="/accident/load.do">生产故障</a></li>
 			<li class="active">生产故障报告文档上传</li>
 		</ol>
 

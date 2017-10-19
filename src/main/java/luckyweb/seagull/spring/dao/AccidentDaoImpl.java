@@ -49,6 +49,12 @@ public class AccidentDaoImpl extends HibernateDaoSupport implements AccidentDao{
 		if (accident.getAccendtime()!=null&&!"".equals(accident.getAccendtime())) {
 			query.setParameter("accendtime", accident.getAccendtime());
 		}
+		if (null!=accident.getAccdescription()&&!"".equals(accident.getAccdescription())) {
+			query.setParameter("accdescription", "%"+accident.getAccdescription()+"%");
+		}
+		if (null!=accident.getCausaltype()&&!"".equals(accident.getCausaltype())) {
+			query.setParameter("causaltype", "%"+accident.getCausaltype()+"%");
+		}
 	}
 	
 	@Override
