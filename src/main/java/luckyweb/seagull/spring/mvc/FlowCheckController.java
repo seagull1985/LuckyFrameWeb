@@ -1,40 +1,42 @@
 package luckyweb.seagull.spring.mvc;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.Barchart4;
 import luckyweb.seagull.spring.entity.FlowCheck;
-import luckyweb.seagull.spring.entity.FlowInfo;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.service.FlowCheckService;
 import luckyweb.seagull.spring.service.FlowInfoService;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
+import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/flowCheck")
@@ -54,25 +56,13 @@ public class FlowCheckController {
 	
 	@Resource(name = "flowinfoService")
 	private FlowInfoService flowinfoService;
-
-	public FlowCheckService getflowcheckService() {
-		return flowcheckservice;
-	}
-
-	public void setSectorProjectsService(FlowCheckService flowcheckservice) {
-		this.flowcheckservice = flowcheckservice;
-	}
-	
-	public void setFlowInfoService(FlowInfoService flowinfoservice) {
-		this.flowinfoService = flowinfoservice;
-	}
 	
 	@Resource(name = "operationlogService")
 	private OperationLogService operationlogservice;
-
-	public OperationLogService getOperationlogService() {
-		return operationlogservice;
-	}
+	
+	@Resource(name = "userinfoService")
+	private UserInfoService userinfoservice;
+	
 	/**
 	 * 
 	 * 
@@ -81,90 +71,93 @@ public class FlowCheckController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/list.do")
-	public String list(HttpServletRequest req, FlowCheck flowcheck, Model model)
-			throws Exception {
-		model.addAttribute("flowcheck", flowcheck);
+	@RequestMapping(value = "/load.do")
+	public String load(HttpServletRequest req, Model model) throws Exception {
+
 		try {
-			String p = req.getParameter("page");
-			String projectid = String.valueOf(flowcheck.getProjectid());
-			String checkstartdate = flowcheck.getCheckstartdate();
-			String checkenddate = flowcheck.getCheckenddate();
+			int projectid = 99;
 
-			if (!StrLib.isEmpty(projectid))
-			{
-				flowcheck.setProjectid(Integer.valueOf(projectid));
-			}
-			
-			if (checkstartdate!=null&&!checkstartdate.equals(""))
-			{
-				flowcheck.setCheckstartdate(checkstartdate);
-			}
-			
-			if (checkenddate!=null&&!checkenddate.equals(""))
-			{
-				flowcheck.setCheckenddate(checkenddate);
-			}
-			
-			if (StrLib.isEmpty(p) || Integer.valueOf(p) == 0) {
-				page = 1;
-			}
-
-			String page2 = req.getParameter("page");
-			if (StrLib.isEmpty(page2)) {
-				page = 1;
-			} else {
-				try {
-					page = Integer.parseInt(page2);
-				} catch (Exception e) {
-					page = 1;
-				}
-			}
-			allRows = flowcheckservice.findRows(flowcheck);			
-			/*allRows = aa.size();*/
-			
-			offset = (page - 1) * pageSize;
-			if (allRows % pageSize == 0) {
-				allPage = allRows / pageSize;
-			} else {
-				allPage = allRows / pageSize + 1;
-			}
-
-			model.addAttribute("allRows", allRows);
-			model.addAttribute("page", page);
-			model.addAttribute("offset", offset);
-			model.addAttribute("pageSize", pageSize);
-			model.addAttribute("allPage", allPage);
+			List<SectorProjects> prolist = QueueListener.qa_projlist;
+			model.addAttribute("projects", prolist);
 			model.addAttribute("projectid", projectid);
-/*			// 调度列表
-			List<SecondarySector> secondarySector = secondarysectorservice.findSecotorList();
-			model.addAttribute("secondarySector", secondarySector);*/
-			
-			List<Object[]> sssMap = flowcheckservice.findByPage(flowcheck, offset,
-					pageSize);
-			for(int i=0;i<sssMap.size();i++){	
-				Object[] project = (Object[])sectorprojectsService.load(Integer.valueOf(sssMap.get(i)[0].toString()));
-				sssMap.get(i)[8] = project[1].toString();
-				if(Integer.valueOf(sssMap.get(i)[4].toString())!=0&&Integer.valueOf(sssMap.get(i)[3].toString())!=0){
-					sssMap.get(i)[7] = Double.valueOf(new DecimalFormat("#.00").format((Double.valueOf(sssMap.get(i)[4].toString())/Double.valueOf(sssMap.get(i)[3].toString()))*100));
-				}else{
-					sssMap.get(i)[7] = 0.00;
-				}
-				
-			}
-			model.addAttribute("projects", QueueListener.qa_projlist);
-			model.addAttribute("splist", sssMap);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/flowCheck/list.do");
+			model.addAttribute("url", "/flowCheck/load.do");
 			return "error";
 		}
 		return "/jsp/flowcheck/flowcheck";
 	}
 
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/list.do")
+	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
+			HttpServletResponse response) throws NumberFormatException, Exception {
+		response.setCharacterEncoding("utf-8");
+		PrintWriter pw = response.getWriter();
+		String search = request.getParameter("search");
+		String projectid = request.getParameter("projectid");
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+		FlowCheck flowcheck = new FlowCheck();
+		if (null == offset && null == limit) {
+			offset = 0;
+		}
+		if (null == limit || limit == 0) {
+			limit = 10;
+		}
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(search)) {
+			flowcheck.setVersionnum(search);
+		}
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(projectid)&&!"99".equals(projectid)) {
+			flowcheck.setProjectid(Integer.valueOf(projectid));
+		}
+		
+		if (!StrLib.isEmpty(startDate)) {
+			flowcheck.setCheckstartdate(startDate);
+		}
+			
+		if (!StrLib.isEmpty(endDate)) {
+			flowcheck.setCheckenddate(endDate);
+		}
+		List<Object[]> sssMap = flowcheckservice.findByPage(flowcheck, offset, limit);
+		JSONArray jsonArr = new JSONArray();
+		for(int i=0;i<sssMap.size();i++){	
+			Object[] project = (Object[])sectorprojectsService.load(Integer.valueOf(sssMap.get(i)[0].toString()));
+			sssMap.get(i)[8] = project[1].toString();
+			if(Integer.valueOf(sssMap.get(i)[4].toString())!=0&&Integer.valueOf(sssMap.get(i)[3].toString())!=0){
+				sssMap.get(i)[7] = Double.valueOf(new DecimalFormat("#.00").format((Double.valueOf(sssMap.get(i)[4].toString())/Double.valueOf(sssMap.get(i)[3].toString()))*100));
+			}else{
+				sssMap.get(i)[7] = 0.00;
+			}
+			
+			JSONObject jsonobj = new JSONObject();
+			jsonobj.put("projectid", sssMap.get(i)[0].toString());
+			jsonobj.put("projectname", sssMap.get(i)[8].toString());
+			jsonobj.put("versionnum", sssMap.get(i)[6].toString());
+			jsonobj.put("checkid", sssMap.get(i)[1].toString());
+			jsonobj.put("firstcheckdate", sssMap.get(i)[2].toString());
+			jsonobj.put("checknum", sssMap.get(i)[3].toString());
+			jsonobj.put("checksucnum", sssMap.get(i)[4].toString());
+			jsonobj.put("checkunsucnum", sssMap.get(i)[5].toString());
+			jsonobj.put("unchecknum", sssMap.get(i)[9].toString());
+			jsonobj.put("persuc", sssMap.get(i)[7].toString()+"%");
+			
+			jsonArr.add(jsonobj);
+		}
+		// 转换成json字符串
+		String RecordJson = jsonArr.toString();
+		// 得到总记录数
+		int total = flowcheckservice.findRows(flowcheck);
+		// 需要返回的数据有总记录数和行数据
+		JSONObject json = new JSONObject();
+		json.put("total", total);
+		json.put("rows", RecordJson);
+		pw.print(json.toString());
+	}
+
 	/**
 	 * 
 	 * 
@@ -173,137 +166,98 @@ public class FlowCheckController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/projectchecklist.do")
-	public String projectchecklist(@Valid @ModelAttribute("flowcheck") FlowCheck flowcheck, BindingResult br,HttpServletRequest req, HttpServletResponse rsp, Model model)
-			throws Exception {
+	@RequestMapping(value = "/loadinfo.do")
+	public String loadinfo(HttpServletRequest req, Model model) throws Exception {
 		try {
-			rsp.setContentType("text/html;charset=utf-8");
-			req.setCharacterEncoding("utf-8");
 			int projectid = Integer.valueOf(req.getParameter("projectid"));
 			int checkid = Integer.valueOf(req.getParameter("checkid"));
 			String versionnum = req.getParameter("versionnum");
-			String p = req.getParameter("page");
-			
-			if (req.getMethod().equals("POST")&&(p==null||p.equals("")))
-			{
-				if(!UserLoginController.permissionboolean(req, "fc_1")){
-					model.addAttribute("flowcheck", new FlowCheck());
-					model.addAttribute("url", "/flowCheck/projectchecklist.do?projectid="+projectid+"&checkid="+checkid+"&version="+versionnum);
-					model.addAttribute("message", "当前用户无权限添加项目检查信息，请联系管理员！");
-					return "success";
-				}
-				String result = addinfodetail(flowcheck, br, projectid, checkid, req, rsp, model);
-				if(result!=""){
-					model.addAttribute("message", result);
-				}
-			}//提交结束
-			
-			flowcheck.setId(0);
-		    flowcheck.setCheckid(checkid);
-			String projectname = null;
+			String projectname="";
 			if(projectid!=0){
-				flowcheck.setProjectid(projectid);
-				Object[] project = (Object[])sectorprojectsService.load(projectid);
-				projectname = project[1].toString();
+				SectorProjects project = sectorprojectsService.loadob(projectid);
+				projectname = project.getProjectname();
 			}
-			
-			if (StrLib.isEmpty(p) || Integer.valueOf(p) == 0) {
-				page = 1;
-			}
-
-			String page2 = req.getParameter("page");
-			if (StrLib.isEmpty(page2)) {
-				page = 1;
-			} else {
-				try {
-					page = Integer.parseInt(page2);
-				} catch (Exception e) {
-					page = 1;
-				}
-			}
-			allRows = flowcheckservice.findRowsTable(flowcheck);		
-			/*allRows = aa.size();*/
-			
-			offset = (page - 1) * pageSize;
-			if (allRows % pageSize == 0) {
-				allPage = allRows / pageSize;
-			} else {
-				allPage = allRows / pageSize + 1;
-			}
-
-			model.addAttribute("allRows", allRows);
-			model.addAttribute("page", page);
-			model.addAttribute("offset", offset);
-			model.addAttribute("pageSize", pageSize);
-			model.addAttribute("allPage", allPage);
+			@SuppressWarnings("unchecked")
+			List<Object[]> phaselist = flowinfoService.listphaseinfo();
+			model.addAttribute("phaselist", phaselist);
 			model.addAttribute("projectname", projectname);
 			model.addAttribute("projectid", projectid);
 			model.addAttribute("checkid", checkid);
 			model.addAttribute("versionnum", versionnum);
-/*			// 调度列表
-			List<SecondarySector> secondarySector = secondarysectorservice.findSecotorList();
-			model.addAttribute("secondarySector", secondarySector);*/
-			
-			List<FlowCheck> sssMap = flowcheckservice.findByPageTable(flowcheck, offset,
-					pageSize);
-			
-			List<Object[]> checkinfoMap = flowcheckservice.listcheckinfo(projectid,checkid);
-			
-			//取信息表中的中文名，放到MAP，从页面通过key value取出
-			List<Object[]> allphase = flowinfoService.listphaseallinfo();
-			List<Object[]> allnode = flowinfoService.listnodeallinfo();
-			List<Object[]> allentry = flowinfoService.listentryallinfo();
-
-			Map<String, String> mapphase = new HashMap<String, String>();
-			Map<String, String> mapnode = new HashMap<String, String>();  
-			Map<String, String> mapentry = new HashMap<String, String>();  
-			
-			for(Object[] obph : allphase){  
-				   if(obph==null){  
-				    continue;  
-				   }     
-				   mapphase.put(obph[0].toString(),obph[1].toString());  
-				  }  
-			
-			for(Object[] obno : allnode){  
-				   if(obno==null){  
-				    continue;  
-				   }     
-				   mapnode.put(obno[0].toString(),obno[1].toString());  
-				  } 
-			
-			for(Object[] oben : allentry){  
-				   if(oben==null){  
-				    continue;  
-				   }     
-				   mapentry.put(oben[0].toString(),oben[1].toString());  
-				  }    //结束
-
-			List<Object[]> phaselist = flowinfoService.listphaseinfo();
-			model.addAttribute("phaselist", phaselist);
-			model.addAttribute("projects", QueueListener.qa_projlist);
-			model.addAttribute("splist", sssMap);
-			model.addAttribute("mapphase", mapphase);
-			model.addAttribute("mapnode", mapnode);
-			model.addAttribute("mapentry", mapentry);
-			model.addAttribute("checkinfoMap", checkinfoMap);
-			model.addAttribute("checksum", allRows);
-			model.addAttribute("unchecksum", checkinfoMap.size());
-			Double sumper = (double)allRows/(allRows+checkinfoMap.size());
-			model.addAttribute("checksumper", Double.valueOf(new DecimalFormat("#.00").format(sumper*100)));
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/flowCheck/list.do");
+			model.addAttribute("url", "/flowCheck/load.do");
 			return "error";
 		}
 		return "/jsp/flowcheck/flowcheckinfo";
 	}
+
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/listinfo.do")
+	private void ajaxGetSellRecordinfo(Integer limit, Integer offset, HttpServletRequest request,
+			HttpServletResponse response) throws NumberFormatException, Exception {
+		response.setCharacterEncoding("utf-8");
+		int projectid = Integer.valueOf(request.getParameter("projectid"));
+		int checkid = Integer.valueOf(request.getParameter("checkid"));
+		String versionnum = request.getParameter("versionnum");
+		PrintWriter pw = response.getWriter();
+		FlowCheck flowcheck = new FlowCheck();
+		if (null == offset && null == limit) {
+			offset = 0;
+		}
+		if (null == limit || limit == 0) {
+			limit = 10;
+		}
+
+		flowcheck.setCheckid(checkid);
+		flowcheck.setProjectid(projectid);
+		flowcheck.setVersionnum(versionnum);
+		List<FlowCheck> fclist = flowcheckservice.findByPageTable(flowcheck, offset,limit);
+		
+		//取信息表中的中文名，放到MAP，从页面通过key value取出
+		List<Object[]> allphase = flowinfoService.listphaseallinfo();
+		List<Object[]> allnode = flowinfoService.listnodeallinfo();
+		List<Object[]> allentry = flowinfoService.listentryallinfo();
+		
+		for(int i=0;i<fclist.size();i++){
+			FlowCheck fc = fclist.get(i);
+			
+			for(Object[] obph : allphase){
+				   if(fc.getProjectphase().equals(obph[0].toString())){
+					   fc.setProjectphase(obph[1].toString());
+				   }
+				  }  
+			
+			for(Object[] obno : allnode){  
+				   if(fc.getPhasenode().equals(obno[0].toString())){
+					   fc.setPhasenode(obno[1].toString());
+				   } 
+				  } 
+			
+			for(Object[] oben : allentry){    
+				   if(fc.getCheckentry().equals(oben[0].toString())){
+					   fc.setCheckentry(oben[1].toString());
+				   }
+				  }    //结束
+			
+			
+			fclist.set(i, fc);
+		}
+		// 转换成json字符串
+		String RecordJson = StrLib.listToJson(fclist);
+		// 得到总记录数
+		int total = flowcheckservice.findRowsTable(flowcheck);
+		// 需要返回的数据有总记录数和行数据
+		JSONObject json = new JSONObject();
+		json.put("total", total);
+		json.put("rows", RecordJson);
+		pw.print(json.toString());
+	}
 	
 	/**
 	 * 检查明细添加
+	 * 
 	 * @param tj
 	 * @param br
 	 * @param model
@@ -313,83 +267,46 @@ public class FlowCheckController {
 	 * @throws Exception
 	 * @Description:
 	 */
-	public String addinfodetail(FlowCheck flowcheck, BindingResult br,int projectid,int checkid,HttpServletRequest req, HttpServletResponse rsp, Model model) throws Exception
-			{
-		String result = "";
-		if (br.hasErrors())
-		{
-			result = "添加失败！br.hasErrors()！";
-			List<FieldError>  err=br.getFieldErrors(); 
-	        FieldError fe; 
-	        String field; 
-	        String errorMessage; 
-	        for (int i = 0; i < err.size(); i++) { 
-	            fe=err.get(i); 
-	            field=fe.getField();//得到那个字段验证出错 
-	            errorMessage=fe.getDefaultMessage();//得到错误消息 
-	            System.out.println("错误字段消息："+field +" : "+errorMessage); 
-	        } 
-	  // 打印结果 
-			return result;
+	@RequestMapping(value = "/adddetail.do")
+	public void adddetail(FlowCheck flowcheck, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "fc_1")) {
+				json.put("status", "fail");
+				json.put("ms", "添加失败,权限不足,请联系管理员!");
+			} else {
+				if(!flowcheckservice.determinerecord(flowcheck.getProjectid(), flowcheck.getCheckid(), flowcheck.getCheckentry())){
+					json.put("status", "fail");
+					json.put("ms", "您所添加的数据在本次检查集中已存在!");
+				}else{
+					String regEx_space = "\t|\r|\n";// 定义空格回车换行符
+					Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
+					Matcher m_space = p_space.matcher(flowcheck.getRemark());
+					flowcheck.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
+
+					SectorProjects p = new SectorProjects();
+					p.setProjectid(flowcheck.getProjectid());
+					flowcheck.setSectorProjects(p);
+
+					int id = flowcheckservice.add(flowcheck);
+					String checkentry = flowinfoService.load(Integer.valueOf(flowcheck.getCheckentry())).getCheckentry();
+					operationlogservice.add(req, "QA_FLOWCHECK", id, 
+							flowcheck.getProjectid(),"流程检查明细信息添加成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
+
+					json.put("status", "success");
+					json.put("ms", "添加检查明细成功！");
+				}
+				
+			}
+			pw.print(json.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		String message = "";
-		
-		if(flowcheck.getProjectphase().equals("0")){
-			result = "请选择检查项目阶段!";
-			return result;
-		}
-		
-		if(flowcheck.getPhasenode().equals("0")){
-			result = "请选择检查阶段节点!";
-			return result;
-		}
-		
-		if(flowcheck.getCheckentry().equals("0")){
-			result = "请选择检查内容!";
-			return result;
-		}
-		
-		if(flowcheck.getCheckdate().equals("")){
-			result = "请选择检查日期!";
-			return result;
-		}
-		
-		if(flowcheck.getCheckdescriptions().length()>200){
-			result = "检查描述内容过长，请重新填写！";
-			return result;
-		}
-		
-		if(!flowcheckservice.determinerecord(projectid, checkid, flowcheck.getCheckentry())){
-			result = "您所添加的数据已重复!";
-			return result;
-		}
-		
-		flowcheck.setCheckid(checkid);
-/*		flowcheck.setProjectphase(flowcheck.getProjectphase());
-		flowcheck.setPhasenode(flowcheck.getPhasenode());
-		flowcheck.setCheckentry(flowcheck.getCheckentry());
-		flowcheck.setCheckresult(flowcheck.getCheckresult());
-		flowcheck.setCheckdate(flowcheck.getCheckdate());
-		flowcheck.setCheckdescriptions(flowcheck.getCheckdescriptions());
-		flowcheck.setStateupdate(flowcheck.getStateupdate());
-		flowcheck.setUpdatedate(flowcheck.getUpdatedate());
-		flowcheck.setRemark(flowcheck.getRemark());*/
-		SectorProjects p = new SectorProjects();
-		p.setProjectid(projectid);
-		flowcheck.setSectorProjects(p);
-		try
-		{	
-		int id = flowcheckservice.add(flowcheck);
-		String checkentry = flowinfoService.load(Integer.valueOf(flowcheck.getCheckentry())).getCheckentry();
-		operationlogservice.add(req, "QA_FLOWCHECK", id, 
-				projectid,"流程检查明细信息添加成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
-		
-		return "添加成功";
-		}
-		catch (Exception e)
-		{
-			return "添加出现异常，请检查！";
-		}
+
 	}
 	
 	
@@ -447,7 +364,7 @@ public class FlowCheckController {
 			return "success";
 		} catch (Exception e) {
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/flowCheck/list.do");
+			model.addAttribute("url", "/flowCheck/load.do");
 			return "error";
 		}
 	}
@@ -476,7 +393,7 @@ public class FlowCheckController {
 
 			if(!UserLoginController.permissionboolean(req, "fc_1")){
 				model.addAttribute("flowcheck", new FlowCheck());
-				model.addAttribute("url", "list.do");
+				model.addAttribute("url", "load.do");
 				model.addAttribute("message", "当前用户无权限添加项目检查信息，请联系管理员！");
 				return "success";
 			}
@@ -554,7 +471,7 @@ public class FlowCheckController {
 						flowcheck.getProjectid(),"流程检查信息添加成功（此次检查第一项）！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
 				
 				model.addAttribute("message", "添加成功");
-				model.addAttribute("url", "/flowCheck/list.do");
+				model.addAttribute("url", "/flowCheck/load.do");
 				return retVal;
 
 			}//添加数据
@@ -571,7 +488,7 @@ public class FlowCheckController {
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/flowCheck/list.do");
+			model.addAttribute("url", "/flowCheck/load.do");
 			return "error";
 		}
 
@@ -694,7 +611,7 @@ public class FlowCheckController {
 						fc.getSectorProjects().getProjectid(),"流程检查信息修改成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
 	
 				model.addAttribute("message", "修改成功");
-				model.addAttribute("url", "/flowCheck/list.do");
+				model.addAttribute("url", "/flowCheck/load.do");
 				return retVal;
 
 			}//添加修改数据
@@ -727,64 +644,64 @@ public class FlowCheckController {
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/flowCheck/list.do");
+			model.addAttribute("url", "/flowCheck/load.do");
 			return "error";
 		}
 
 	}
 	
 	/**
-	 * 删除检查记录
+	 * 删除计划检查记录
 	 * 
 	 * @param id
 	 * @param model
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/delete.do", method = RequestMethod.GET)
-	public String delete(FlowCheck flowcheck, HttpServletRequest req, Model model) throws Exception
-	{
-		int id = Integer.valueOf(req.getParameter("id"));		
-		FlowCheck fc = flowcheckservice.load(id); 
-		try
-		{
-			
-			if(!UserLoginController.permissionboolean(req, "fc_2")){
-				model.addAttribute("flowcheck", new FlowCheck());
-				model.addAttribute("url", "/flowCheck/projectchecklist.do?projectid="+fc.getSectorProjects().getProjectid()+"&checkid="+fc.getCheckid()+"&version="+fc.getVersionnum());
-				model.addAttribute("message", "当前用户无权限删除项目检查信息，请联系管理员！");
-				return "success";
+	@RequestMapping(value = "/delete.do")
+	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "fc_2")) {
+				json.put("status", "fail");
+				json.put("ms", "删除检查记录失败,权限不足,请联系管理员!");
+			} else {
+				StringBuilder sb = new StringBuilder();
+				try (BufferedReader reader = req.getReader();) {
+					char[] buff = new char[1024];
+					int len;
+					while ((len = reader.read(buff)) != -1) {
+						sb.append(buff, 0, len);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
+				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
+
+				for (int i = 0; i < jsonarr.size(); i++) {
+					int id = Integer.valueOf(jsonarr.get(i).toString());
+					FlowCheck fc = flowcheckservice.load(id);
+					flowcheckservice.delete(id);
+					String checkentry = flowinfoService.load(Integer.valueOf(fc.getCheckentry())).getCheckentry();
+					operationlogservice.add(req, "QA_FLOWCHECK", id, 
+							fc.getSectorProjects().getProjectid(),"流程检查信息删除成功！检查结果："+fc.getCheckresult()+" 检查内容："+checkentry);
+				}
+				
+				json.put("status", "success");
+				json.put("ms", "删除检查记录成功!");
 			}
+			pw.print(json.toString());
 
-			flowcheckservice.delete(id);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		catch (Exception e)
-		{
-			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/flowCheck/list.do");
-			return "error";
-		}
-		
 
-		String checkentry = flowinfoService.load(Integer.valueOf(fc.getCheckentry())).getCheckentry();
-		operationlogservice.add(req, "QA_FLOWCHECK", id, 
-				fc.getSectorProjects().getProjectid(),"流程检查信息删除成功！检查结果："+fc.getCheckresult()+" 检查内容："+checkentry);
-
-		String message = "删除成功！";
-		
-		fc.setId(0);
-		int count = flowcheckservice.findRowsTable(fc);
-		
-		model.addAttribute("flowcheck", new FlowCheck());
-		model.addAttribute("message", message);
-		
-		if(count==0){
-			model.addAttribute("url", "/flowCheck/list.do");
-		}else{
-			model.addAttribute("url", "/flowCheck/projectchecklist.do?projectid="+fc.getSectorProjects().getProjectid()+"&checkid="+fc.getCheckid()+"&version="+fc.getVersionnum());
-		}
-		return "success";
 	}
+
 	
 	/**
 	 * 修改版本号
@@ -798,8 +715,8 @@ public class FlowCheckController {
 	 * @Description:
 	 */
 	@RequestMapping(value = "/updateversion.do")
-	public void updateversion(HttpServletRequest req, HttpServletResponse rsp,Model model) throws Exception{
-		String result="更新版本号成功！";
+	public void updateversion(HttpServletRequest req, HttpServletResponse rsp) throws Exception{
+/*		String result="更新版本号成功！";
 		try{
 			if(!UserLoginController.permissionboolean(req, "fc_3")){
 				result="当前用户无权限修改项目检查信息，请联系管理员！";
@@ -817,6 +734,31 @@ public class FlowCheckController {
 		    JSONObject jsobjcet = new JSONObject();
 		    jsobjcet.put("result", result); 
 			rsp.getWriter().write(jsobjcet.toString());
+		}*/
+		
+		// 更新实体
+		JSONObject json = new JSONObject();
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+
+			if (!UserLoginController.permissionboolean(req, "fc_3")) {
+				json.put("status", "fail");
+				json.put("ms", "编辑失败,权限不足,请联系管理员!");
+			} else {
+				String versionold = req.getParameter("versionold");
+				String versionnew = req.getParameter("versionnew");
+				int projectid = Integer.valueOf(req.getParameter("projectid"));
+				flowcheckservice.updateversion(projectid, versionold, versionnew);
+				
+				json.put("status", "success");
+				json.put("ms", "编辑版本号成功!");
+			}
+			pw.print(json.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
@@ -1036,7 +978,7 @@ public class FlowCheckController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/flowCheck/list.do");
+			model.addAttribute("url", "/flowCheck/load.do");
 			return "error";
 		}
 		return "/jsp/flowcheck/flowcheck_report";
@@ -1044,8 +986,7 @@ public class FlowCheckController {
 
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-		String temp[]="12|11|".split("\\|");
-		System.out.println(temp.length);
+
 	}
 
 }

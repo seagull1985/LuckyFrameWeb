@@ -6,347 +6,348 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script language="JavaScript" type="text/javascript"
-	src="/js/My97DatePicker/WdatePicker.js"></script>	
-	
-	<title>项目评审记录</title>
-<link href="/css/style.css" rel="stylesheet" type="text/css" />
-<style type="text/css">
-<!--
-.STYLE1 {
-	color: #ffffff
-}
-.STYLE2 {
-	color: #FF0000
-}
-.STYLE6 {color: #FF0000; font-size: 12px; }
--->
-</style>
 
-	<style type="text/css">
-.mydiv {
-background-color: #F5FFE8;
-border: 2px solid #C5C9C7;
-text-align: center;
-font-size: 12px;
-font-weight: bold;
-z-index:999;
-width: auto;
-top:10%;
-left:10%;
-height: 350px;
-margin-left:-10px!important;/*FF IE7 该值为本身宽的一半 */
-margin-top:50px!important;/*FF IE7 该值为本身高的一半*/
-margin-top:0px;
-position:fixed!important;/* FF IE7*/
-position:absolute;/*IE6*/
-_top:       expression(eval(document.compatMode &&
-            document.compatMode=='CSS1Compat') ?
-            documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
-            document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);/*IE5 IE5.5*/
-
-}
-
-.bg,.popIframe 	{
-background-color: #666; display:none;
-width: 100%;
-height: 100%;
-left:0;
-top:0;/*FF IE7*/
-filter:alpha(opacity=10);/*IE*/
-opacity:0.4;/*FF*/
-z-index:1;
-position:fixed!important;/*FF IE7*/
-position:absolute;/*IE6*/
-_top:       expression(eval(document.compatMode &&
-            document.compatMode=='CSS1Compat') ?
-            documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
-            document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);
-}
-	
-</style>
-	</head>
+<title>项目评审记录</title>
+</head>
 
 <body>
-	<div>  
-        <%@ include file="/head.jsp" %>
-    </div> 
+	<div>
+		<%@ include file="/head.jsp"%>
+	</div>
+
 	<header id="head" class="secondary"></header>
 
 	<!-- container -->
-	<div class="container" style="width:auto;font-size:14px">
+	<div class="container" style="width: auto; font-size: 14px;">
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">质量管理</li>
 			<li class="active">项目评审记录</li>
 		</ol>
 
-		<div class="row">	
+		<div class="row">
 			<!-- Article main content -->
-		<article class="col-sm-9 maincontent" style="width:100%;">
-		 <header class="page-header">
-				<h1 class="page-title" style="text-align:center;">项目评审记录</h1>
-			</header>    
-    
-<div id="descriptiondiv" style="position:absolute;display:none;z-index:99900;width: 400px;">
-<table width="100%"  align="center" class="rect"  style="background-color:rgba(240,255,240,0.9);table-layout:fixed;">
-    <tr>
-      <td id="descriptionid" valign="top" style="white-space:pre;overflow:hidden;word-break:break-all;word-wrap:break-word;color:#FF9224;font-size:11pt">
-      </td>
-    </tr>
-</table>
-</div>
+			<article class="col-sm-9 maincontent" style="width:100%;">
+			<header class="page-header">
+			<h1 class="page-title" style="text-align: center;">项目评审记录</h1>
+			</header>
 
-<div id="showaccident" class="mydiv" style="display:none;overflow-y:auto;width: 80%;align:center">
-<td width="3%" height="30" align="center" valign="baseline"><h1>评审工作说明</h1></td>
-<table width="100%" align="center" class="bordered" height="200px;">
-    <tr>
-      <td width="20%" height="5" style="text-align:center;background-color:#A3D1D1;"><font color="#C48888" size="3">  </font></b></td>
-      <td width="80%" style="text-align:center;background-color:#A3D1D1;"><font color="#C48888" size="3">说明</font></td>
-      </tr>
-       <tr>
-      <td width="20%" height="5" style="text-align:center;"><b>评审对象</b></td>
-      <td width="80%"><font color="#FF0000">开发人员：</font><br><font color="#FF0000">测试人员：</font></td>
-      </tr>
-       <tr>
-      <td width="20%" height="5" style="text-align:center;"><b>评审时间</b></td>
-      <td width="80%">项目经理拟定，并通知QA</td>
-      </tr>
-      <tr>
-      <td width="20%" height="5" style="text-align:center;"><b>记录人</b></td>
-      <td width="80%">QA</td>
-      </tr>
-       <tr>
-      <td width="20%" height="5" style="text-align:center;"><b>与会人员</b></td>
-      <td width="80%">项目经理、开发工程师、测试工程师、QA、必要时邀请其余资深技术人员。</td>
-      </tr>
-      <tr>
-      <td width="20%" height="5" style="text-align:center;"><b>操作要求</b></td>
-      <td width="80%">1、QA在评审会议当场跟随评审进度进行记录；<br>2、评审会结束前，将记录单展示给与会人员确认；<br>3、会后跟进修改情况，并更新状态；<br>
-       4、前期根据项目计划进行代码评审的记录，后期慢慢扩大评审对象及进行日期。</td>
-      </tr>
+			<div class="panel-body" style="padding-bottom: 0px;">
+				<div class="panel panel-default">
+					<div class="panel-heading">查询条件</div>
+					<div class="panel-body">
+						<div class="form-group" style="margin-top: 15px">
+							<label class="control-label col-sm-1" for="txt_search_project">项目名称:</label>
+							<div class="col-sm-3">
+								<select class="form-control" id="search_project"
+									onchange="searchproject()">
+									<c:forEach var="p" items="${projects }">
+										<option value="${p.projectid}">${p.projectname}</option>
+									</c:forEach>
+								</select>
+							</div>
 
-		</table>
-		<table width="100%" align="center" class="bordered"">
-		      		<tr>
-				<td width="10%" align="center" valign="middle" style="text-align:center;"><a
-					 href="#" onclick="closeDiv()"  style="text-decoration: none;"> <span
-						class="btnold STYLE1"  style="width: 420px;background-color:#A3D1D1;border:#A3D1D1"> 关闭 </span>
-				</a></td>
-				</tr>
-		</table>
-</div>
+							<label class="control-label" for="txt_search_date"
+								style="float: left;">评审日期:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+							<div class="input-group date form_date col-md-3" id="datepicker"
+								style="float: left;">
+								<input type="text" class="form-control" name="start"
+									id="qBeginTime" readonly /> <span class="input-group-addon"><span
+									class="glyphicon glyphicon-calendar"></span></span> <span
+									class="input-group-addon">至</span> <input type="text"
+									class="form-control" name="end" id="qEndTime" readonly /> <span
+									class="input-group-addon"><span
+									class="glyphicon glyphicon-calendar"></span></span>
+							</div>
+						</div>
+					</div>
+				</div>
 
-<div id="bg" class="bg" style="display:none;"></div>
-	 
-	 <sf:form method="post" modelAttribute="review">
-		<input name="page" id="page" type="hidden"  />					
-		<div align="right"></div>
-		
-		<table width="100%" align="center" class="rect" height=40 cellPadding=1 border=1 bordercolor="#CCCCCC">
-		  <tr>
-		  <td width="25%" align="left" valign="middle"><font size="2"
-					color="black">项目名称:&nbsp;</font> <sf:select path="projectid" width="30%">
-						<sf:option value="0">全部</sf:option>
-						<c:forEach var="p" items="${projects }">
-							<sf:option value="${p.projectid}">${p.projectname}</sf:option>
-						</c:forEach>
-					</sf:select> 
-					
-		   <font size="2" color="black">版本号:&nbsp;</font>
-					<sf:input path="version" id="version" style="width:150px;"/>
-						
-		   <font size="2" color="black">评审时间:&nbsp;</font>
-					<sf:input path="review_startdate" id="review_startdate" onclick="WdatePicker({isShowClear:false,readOnly:true,isShowClear:true,dateFmt:'yyyy-MM-dd'});"
-						readonly="true" style="width:100px" value="" />&nbsp;至 <sf:input path="review_enddate" id="review_enddate"
-						onclick="WdatePicker({isShowClear:false,readOnly:true,isShowClear:true,dateFmt:'yyyy-MM-dd'});" readonly="true" style="width:100px" value="" />
-					&nbsp;&nbsp;
-				<input name="button" style="width:100px;height:26px" type="submit" class="button gray" id="button" align="right" value="查询" />
-					
-				</td>
-		</tr>
-		<tr>
-		<td width="25%" align="center" valign="middle">
-		<a href="#"  onclick="showDiv('0','1')" style="text-decoration: none;"> 
-		      <span class="btnold STYLE1"  style="width: 70px;background:#FFA54F;border:#FFA54F;" > 添加记录</span>
-				</a>&nbsp;
-				<a href="#" onclick="openDiv()" style="text-decoration: none;">
-                <span class="btnold STYLE1"  style="width: 70px;" > 评审说明</span>
-                </a>
-                </td>
-		</tr>
-		  </table> 
-		
-	   <table width="100%" align="center" class="bordered" style="table-layout: fixed">
-          <tr bgcolor="#B9DCFF">                
-				<th width="6%" height="40" nowrap="nowrap"  >项目名称</th>
-				<th width="6%" height="40" nowrap="nowrap"  >项目版本</th>
-				<th width="5%" height="40" nowrap="nowrap"  >评审类型</th>
-				<th width="5%" height="40" nowrap="nowrap"  >评审时间</th>
-				<th width="4%" height="40" nowrap="nowrap"  >发现问题数</th>
-				<th width="5%" height="40" nowrap="nowrap"  >已更正问题数</th>
-				<th width="4%" height="40" nowrap="nowrap"  >评审结果</th>
-				<th width="5%" height="40" nowrap="nowrap"  >最后确认日期</th>
-				<th width="18%" height="40" nowrap="nowrap"  >备注</th>
-				<th width="6%" height="40" nowrap="nowrap"  >操作</th>
-		  </tr>
-		  <c:forEach var="t" items="${splist}" begin="0" step="1" varStatus="i">
-				<tr>
-					<td height="25" align="center">${t.sectorProjects.projectname }</td>
-					<td height="25" align="center">${t.version }</td>
-					<td height="25" align="center">${t.review_type }</td>
-					<td height="25" align="center">${t.review_date }</td>
-					<td height="25" align="center">${t.bug_num }</td>
-					<td height="25" align="center">${t.repair_num }</td>
-					<td height="25" align="center">${t.review_result }</td>
-					<td height="25" align="center">${t.confirm_date }</td>
-					<td height="25" align="center" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis" 
-				onmouseout="hiddenPic();" onmousemove="description(this);">${t.remark }</td>
-					<%-- <td height="25" align="center">${t.remark }</td> --%>
-					<td height="25" align="center" style="word-break: break-all">
-						<a href="#" onclick="showDiv('${t.id}','2')"
-						style="cursor: pointer;"><u>修改</u></a>&nbsp; <a href="#"
-						onclick="showDiv('${t.id}','3')" style="cursor: pointer;"><u>删除</u></a>&nbsp;
-						<a href="/reviewinfo/list.do?reviewid=${t.id}" style="cursor: pointer;"><u>详情</u></a>
-					</td>
-				</tr>
-			</c:forEach>
-		</table>
-<center>
-			<div id="pagelist" align="center">
-				<c:if test="${allRows!=0 }">
-					<ul>
-						<li><a href="#" onclick="return setPage(1)">首页 </a></li>
-						<li><a href="#" onclick="return frontPageCheck(${page-1});">上一页</a></li>
-						<li><a href="#" onclick="return backPageCheck(${page+1});">下一页</a></li>
-						<li><a href="#" onclick="return setPage(${allPage})">末页</a></li>
-						<li>第${page}页</li>
-						<li>共${allRows}条</li>
-						<li>共${allPage}页</li>
-					</ul>
-				</c:if>
-				<c:if test="${allRows==0 }">
-					<font color="#FF0000">没有记录!</font>				</c:if>
+				<div id="toolbar" class="btn-group">
+					<button id="btn_addreview" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;增加评审
+					</button>
+					<button id="btn_reviewdetail" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;评审详情
+					</button>
+					<button id="btn_reviewedit" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;编辑评审
+					</button>
+					<button id="btn_reviewdel" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;删除评审
+					</button>
+				</div>
+				<table id="tb_review"></table>
+
 			</div>
-			<br/><br/>
-			</center>
-						
-		</sf:form>
-		<p>&nbsp;</p>
-	</article>
+			</article>
+		</div>
 	</div>
-	</div>
-	
-	<script type="text/javascript">
 
-	function frontPageCheck(page)
-	{
-		if(${page > 1})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("review").submit();
-			return true;
-		}
-		return false;
-	}
-	
-	function backPageCheck(page)
-	{
-		
-		if(${page < allPage})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("review").submit();
-			//$("#projectversion").submit();
-			return true;
-		}			
-		return false;
-	}
-	
-	
-	function setPage(page){
-		if(page==1){
-			document.getElementById("page").value=1;
-		}else{
-			document.getElementById("page").value=page;
-		}
-		document.getElementById("review").submit();
-		return true;
-	}
-	function showDiv_backup(accid,opr){
-		document.getElementById("accid").value=accid;
-		document.getElementById("opr").value=opr;
-		document.getElementById('passDiv').style.display='block';
-		document.getElementById('bg').style.display='block';
-	}
-	function closepassDiv(){
-		document.getElementById('passDiv').style.display='none';
-		document.getElementById('bg').style.display='none';
-	}
-	
-	function showDiv(rewid,opr){
-		var status = document.getElementById("loginstatus").value;
-		if(status=="false"){
-			if(window.confirm("你未登录哦，要先去首页登录吗？")){
-				var url = '/progressus/signin.jsp';
-				window.location.href=url;
-			}else{
-				return false; 
-			} 	
-		}else{
-		if(opr=="1"){
+	<script type="text/javascript">
+		$(function() {
+			$('#search_project').val('${projectid }');
+
+			$('#qBeginTime').datetimepicker({
+				format : 'yyyy-mm-dd',
+				language : 'zh-CN',
+				todayBtn : "linked",
+				autoclose : true,
+				todayHighlight : true,
+				forceParse : 0,
+				weekStart : 1,
+				minView : "month",//设置只显示到月份
+				startView : 2,
+				endDate : new Date(),
+				clearBtn : true,
+			}).on('changeDate', function(e) {
+				var startTime = e.date;
+				$('#qEndTime').datetimepicker('setStartDate', startTime);
+				//1.初始化Table
+				var oTable = new TableInit();
+				$('#tb_review').bootstrapTable('destroy');
+				oTable.Init();
+			});
+			//结束时间：  
+			$('#qEndTime').datetimepicker({
+				format : 'yyyy-mm-dd',
+				language : 'zh-CN',
+				todayBtn : "linked",
+				autoclose : true,
+				todayHighlight : true,
+				forceParse : 0,
+				minView : "month",//设置只显示到月份
+				weekStart : 1,
+				endDate : new Date(),
+				clearBtn : true,
+			}).on('changeDate', function(e) {
+				var endTime = e.date;
+				$('#qBeginTime').datetimepicker('setEndDate', endTime);
+				//1.初始化Table
+				var oTable = new TableInit();
+				$('#tb_review').bootstrapTable('destroy');
+				oTable.Init();
+			});
+
+			//1.初始化Table
+			var oTable = new TableInit();
+			oTable.Init();
+		});
+
+		var TableInit = function() {
+			var oTableInit = new Object();
+			//初始化Table
+			oTableInit.Init = function() {
+				$('#tb_review').bootstrapTable({
+					url : '/review/list.do', //请求后台的URL（*）
+					method : 'get', //请求方式（*）
+					toolbar : '#toolbar', //工具按钮用哪个容器
+					striped : true, //是否显示行间隔色
+					cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+					pagination : true, //是否显示分页（*）
+					sortable : false, //是否启用排序
+					sortOrder : "asc", //排序方式
+					queryParams : oTableInit.queryParams,//传递参数（*）
+					sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）
+					pageNumber : 1, //初始化加载第一页，默认第一页
+					pageSize : 10, //每页的记录行数（*）
+					pageList : [ 10, 25, 50, 100 ], //可供选择的每页的行数（*）
+					search : true, //是否显示表格搜索，此搜索会进服务端
+					strictSearch : true,
+					showColumns : false, //是否显示所有的列
+					showRefresh : true, //是否显示刷新按钮
+					minimumCountColumns : 2, //最少允许的列数
+					clickToSelect : true, //是否启用点击选中行
+					height : 500, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+					uniqueId : "ID", //每一行的唯一标识，一般为主键列
+					showToggle : false, //是否显示详细视图和列表视图的切换按钮
+					cardView : false, //是否显示详细视图
+					detailView : false, //是否显示父子表
+					columns : [ {
+						checkbox : true,
+						width : '3%',
+					}, {
+						field : 'id',
+						title : 'id',
+						visible : false
+					}, {
+						field : 'projectid',
+						title : 'projectid',
+						visible : false
+					}, {
+						field : 'sectorProjects.projectname',
+						title : '项目名称',
+						width : '15%',
+					}, {
+						field : 'version',
+						title : '版本号',
+						width : '10%',
+					}, {
+						field : 'review_type',
+						title : '评审类型',
+						width : '10%',
+					}, {
+						field : 'review_date',
+						title : '评审时间',
+						width : '7%',
+					}, {
+						field : 'bug_num',
+						title : '发现问题',
+						width : '8%',
+					}, {
+						field : 'repair_num',
+						title : '已更正问题',
+						width : '8%',
+					}, {
+						field : 'review_result',
+						title : '评审结果',
+						width : '10%',
+					}, {
+						field : 'confirm_date',
+						title : '最后确认日期',
+						width : '7%',
+					}, {
+						field : 'remark',
+						title : '备注',
+						width : '25%',
+					} ],
+				});
+			};
+			//得到查询的参数
+			oTableInit.queryParams = function(params) {
+				var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+					limit : params.limit, //页面大小
+					offset : params.offset, //页码偏移量
+					search : params.search, //搜索参数
+					projectid : $('#search_project').val(), //项目ID
+					startDate : $('#qBeginTime').val(), //查询日期段
+					endDate : $('#qEndTime').val(), //查询日期段
+				};
+				return temp;
+			};
+
+			return oTableInit;
+		};
+
+		var searchproject = function() {
+			//1.初始化Table
+			var oTable = new TableInit();
+			$('#tb_review').bootstrapTable('destroy');
+			oTable.Init();
+		};
+
+		btn_addreview.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
 			var url = '/reviewinfo/add.do';
-			window.location.href=url;
-	    }else if(opr=="2"){
-			var url = '/review/update.do?id='+rewid;
-			window.location.href=url;
-	    }else if(opr=="3"){
-	    	if(window.confirm("你确认要删除吗？")){ 
-				var url = '/review/delete.do?id='+rewid;
-				window.location.href=url;
-	    		return true; 
-	    		}else{ 
-	    		return false; 
-	    		}
-	    }else{ 
-	       alert("操作码有误，是否有非法操作，请联系软件质量室！"); 
-	       return false;
-	      }
+			window.location.href = url;
 		}
-	}
-	
-	function description(obj){ 
-		document.getElementById("descriptiondiv").style.left = (obj.offsetLeft+80)+"px"; 
-		document.getElementById("descriptiondiv").style.top = (obj.offsetTop+160)+"px"; 
-		document.getElementById("descriptionid").innerHTML = obj.innerHTML;
 		
-		document.getElementById("descriptiondiv").style.display = "block"; 
-		//alert("left2:"+document.getElementById("descriptiondiv").style.left+"  top2:"+document.getElementById("descriptiondiv").style.top);
-		} 
-	
-	function hiddenPic(){ 
-		document.getElementById("descriptiondiv").style.display = "none"; 
-		} 
-	
-	function openDiv(){
-		document.getElementById('showaccident').style.display='block';
-		document.getElementById('bg').style.display='block';
-	}
-	
-	function closeDiv(){
-		document.getElementById('showaccident').style.display='none';
-		document.getElementById('bg').style.display='none';
-	}
-	
-	function getrediovalue(){
-	var type=document.getElementsByName("type");
-	  for(var i=0;i<type.length;i++){ 
-	    if(type[i].checked){  
-	      return type[i].value;  
-	      break;
-	    }  
-	  }  
-	}
-	</script>	
+		btn_reviewdetail.onclick=function(){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
+			}
+         
+            var id = $.map($('#tb_review').bootstrapTable('getSelections'), function (row) {
+                return row.id;
+                 });
+            if(id.length == 1 ){
+    			var url = '/reviewinfo/load.do?reviewid='+id;
+    			window.location.href=url;
+            }else{
+            	toastr.warning('您有且只能选择一条评审记录查看详情哦！'); 
+            }
+	    }
+		
+		btn_reviewedit.onclick=function(){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
+			}
+         
+            var id = $.map($('#tb_review').bootstrapTable('getSelections'), function (row) {
+                return row.id;
+                 });
+            if(id.length == 1 ){
+    			var url = '/review/update.do?id='+id;
+    			window.location.href=url;
+            }else{
+            	toastr.warning('您有且只能选择一条评审记录编辑哦！'); 
+            }
+	    }
+		
+		btn_reviewdel.onclick=function(){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
+			}
+			
+	        var selectIndex = $('input[name="btSelectItem"]:checked ').val();
+	        deleteItem($('#tb_review'), selectIndex, true);
+	    }
+	    
+	    function deleteItem($table, selectIndex, reLoad){
+            var ids = $.map($table.bootstrapTable('getSelections'), function (row) {
+                      return row.id;
+                       }); 
+	        if(ids.length != 0 ){
+	        	if(confirm("真的要删除选择的评审记录吗?")){
+		                $.ajax({
+		                   type: "POST",
+		                   cache:false,
+		                   async : true,
+		                   dataType : "json",
+		                   url:  "delete.do",
+		                   contentType: "application/json", //必须有
+		                   data: JSON.stringify({"ids":ids}),
+		                   success: function(data, status){
+		                           if (data.status == "success"){
+		                               $table.bootstrapTable('hideRow', {index:selectIndex});
+		                               toastr.success(data.ms);
+		                              if(reLoad){
+		                                  $table.bootstrapTable('refresh');
+		                              }
+		                           }else{
+		                        	   toastr.info(data.ms);
+		                           }
+		                   },error:function()
+		                    {
+		                	   toastr.error('删除出错!');
+		                    }
+		                });
+	            }    
+	        }else{
+	            toastr.warning('请选取要删除的评审记录！');
+	        }
+	    }
+	</script>
 </body>
 </html>

@@ -123,22 +123,6 @@ public class FlowCheckServiceImpl implements FlowCheckService{
 		return where;
 	}
 	
-	private String where(FlowInfo fi) {
-		String where = " where ";
-
-		if (fi.getId()!=0) {
-			where += " id=:id  and ";
-		}
-		if (where.length() == 7) {
-			where = "";
-		} 
-		else{
-			where = where.substring(0, where.length() - 5);
-		}
-
-		return where;
-	}
-	
 	private static String  orderBy="order by checkdate desc";
 	
 	@Override

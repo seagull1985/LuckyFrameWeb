@@ -99,9 +99,7 @@
 											<label for="remark" class="col-sm-3 control-label">备注</label>
 											<div class="col-sm-9">
 												<textarea class="form-control" name="remark" id="remark"
-													placeholder="备注">
-
-                                </textarea>
+													placeholder="备注"></textarea>
 											</div>
 										</div>
 									</form>

@@ -232,7 +232,7 @@ public class StrLib {
 	  } else if (boolean.class.isAssignableFrom(object.getClass())) {
 		  Boolean B = new Boolean((boolean)object);
 	      json.append("\"").append(B.toString().replace("\"", "&quot;")).append("\"");
-	  } else if (object instanceof String || object instanceof Integer || object instanceof Boolean) {
+	  } else if (object instanceof String || object instanceof Integer || object instanceof Boolean || object instanceof Long) {
 		  String str=object.toString().replace("\"", "&quot;");
 		  str=str.replace("\r\n","<br/>");
 		  str=str.replace("\n","&#13;&#10;");

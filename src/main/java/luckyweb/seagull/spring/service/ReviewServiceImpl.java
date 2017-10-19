@@ -57,6 +57,18 @@ public class ReviewServiceImpl implements ReviewService{
 		if (review.getReview_enddate()!=null&&!"".equals(review.getReview_enddate())) {
 			where += " review_date<=:review_enddate  and ";
 		}
+		if (review.getReview_enddate()!=null&&!"".equals(review.getReview_enddate())) {
+			where += " review_date<=:review_enddate  and ";
+		}
+		if (null!=review.getVersion()&&!"".equals(review.getVersion())) {
+			where += " (version like :version  or ";
+		}
+		if (null!=review.getReview_type()&&!"".equals(review.getReview_type())) {
+			where += " review_type like :review_type  or ";
+		}
+		if (null!=review.getReview_result()&&!"".equals(review.getReview_result())) {
+			where += " review_result like :review_result)  or ";
+		}
 		if (where.length() == 7) {
 			where = "";
 		} 

@@ -1,5 +1,8 @@
 package luckyweb.seagull.spring.mvc;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -12,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.Review;
@@ -23,6 +25,8 @@ import luckyweb.seagull.spring.service.ReviewInfoService;
 import luckyweb.seagull.spring.service.ReviewService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.util.StrLib;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/reviewinfo")
@@ -46,10 +50,6 @@ public class ReviewInfoController {
 	@Resource(name = "operationlogService")
 	private OperationLogService operationlogservice;
 
-	public OperationLogService getOperationlogService() {
-		return operationlogservice;
-	}
-	
 	/**
 	 * 
 	 * 
@@ -58,62 +58,50 @@ public class ReviewInfoController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/list.do")
-	public String list(HttpServletRequest req, ReviewInfo reviewinfo, Model model)
-			throws Exception {
-		model.addAttribute("reviewinfo", reviewinfo);
-
+	@RequestMapping(value = "/load.do")
+	public String load(HttpServletRequest req, Model model) throws Exception {
 		try {
-			String p = req.getParameter("page");
-			int reviewid = 0;
-			if(req.getParameter("reviewid")!=null){
-				reviewid = Integer.valueOf(req.getParameter("reviewid"));
-				reviewinfo.setReview_id(reviewid);
-				reviewinfo.setId(0);
-			}
-
-			if (StrLib.isEmpty(p) || Integer.valueOf(p) == 0) {
-				page = 1;
-			}
-
-			String page2 = req.getParameter("page");
-			if (StrLib.isEmpty(page2)) {
-				page = 1;
-			} else {
-				try {
-					page = Integer.parseInt(page2);
-				} catch (Exception e) {
-					page = 1;
-				}
-			}
-			allRows = reviewinfoservice.findRows(reviewinfo);
-			offset = (page - 1) * pageSize;
-			if (allRows % pageSize == 0) {
-				allPage = allRows / pageSize;
-			} else {
-				allPage = allRows / pageSize + 1;
-			}
-
-			model.addAttribute("allRows", allRows);
-			model.addAttribute("page", page);
-			model.addAttribute("offset", offset);
-			model.addAttribute("pageSize", pageSize);
-			model.addAttribute("allPage", allPage);
-			
-			List<Review> sssMap = reviewinfoservice.findByPage(reviewinfo, offset, pageSize);
+			int reviewid = Integer.valueOf(req.getParameter("reviewid"));
 			Review review = reviewservice.load(reviewid);
-			
-			model.addAttribute("splist", sssMap);
-			model.addAttribute("reviewid", reviewid);
+
 			model.addAttribute("review", review);
+			model.addAttribute("reviewid", reviewid);
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/reviewinfo/list.do");
+			model.addAttribute("url", "/review/load.do");
 			return "error";
 		}
 		return "/jsp/review/reviewinfo";
+	}
+
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/list.do")
+	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
+			HttpServletResponse response) throws NumberFormatException, Exception {
+		response.setCharacterEncoding("utf-8");
+		PrintWriter pw = response.getWriter();
+		int reviewid = Integer.valueOf(request.getParameter("reviewid"));
+		ReviewInfo reviewinfo = new ReviewInfo();
+		reviewinfo.setReview_id(reviewid);
+		reviewinfo.setId(0);
+		if (null == offset && null == limit) {
+			offset = 0;
+		}
+		if (null == limit || limit == 0) {
+			limit = 10;
+		}
+		List<ReviewInfo> reviewlist = reviewinfoservice.findByPage(reviewinfo, offset, limit);
+
+		// 转换成json字符串
+		String RecordJson = StrLib.listToJson(reviewlist);
+		// 得到总记录数
+		int total = reviewinfoservice.findRows(reviewinfo);
+		// 需要返回的数据有总记录数和行数据
+		JSONObject json = new JSONObject();
+		json.put("total", total);
+		json.put("rows", RecordJson);
+		pw.print(json.toString());
 	}
 	
 
@@ -139,7 +127,7 @@ public class ReviewInfoController {
 
 			if(!UserLoginController.permissionboolean(req, "revinfo_1")){
 				model.addAttribute("reviewinfo", new ReviewInfo());
-				model.addAttribute("url", "/review/list.do");
+				model.addAttribute("url", "/review/load.do");
 				model.addAttribute("message", "当前用户无权限添加评审信息，请联系管理员！");
 				return "success";
 			}
@@ -211,7 +199,7 @@ public class ReviewInfoController {
 						reviewinfo.getProjectid(),"评审记录登记成功！");
 				
 				model.addAttribute("message", "添加成功");
-				model.addAttribute("url", "/reviewinfo/list.do?reviewid="+reviewid);
+				model.addAttribute("url", "/reviewinfo/load.do?reviewid="+reviewid);
 				return retVal;
 
 			}else{
@@ -228,8 +216,8 @@ public class ReviewInfoController {
 					reviewinfo.setRemark(review.getRemark());
 					reviewinfo.setProjectname(review.getSectorProjects().getProjectname());
 					reviewinfo.setResult_Confirmor(review.getResult_Confirmor());
-					retVal = "/jsp/review/reviewinfo_add2";
-					model.addAttribute("url", "/reviewinfo/list.do?reviewid="+review.getId());
+					retVal = "/jsp/review/reviewinfo_add";
+					model.addAttribute("url", "/reviewinfo/load.do?reviewid="+review.getId());
 				}
 			}
 				model.addAttribute("reviewinfo", reviewinfo);
@@ -240,7 +228,7 @@ public class ReviewInfoController {
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/review/list.do");
+			model.addAttribute("url", "/review/load.do");
 			return "error";
 		}
 
@@ -254,47 +242,59 @@ public class ReviewInfoController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/delete.do", method = RequestMethod.GET)
-	public String delete(Model model,HttpServletRequest req) throws Exception
-	{
-		if(!UserLoginController.permissionboolean(req, "revinfo_2")){
-			model.addAttribute("reviewinfo", new ReviewInfo());
-			model.addAttribute("url", "/review/list.do");
-			model.addAttribute("message", "当前用户无权限删除评审信息，请联系管理员！");
-			return "success";
-		}
-		
-		int id = Integer.valueOf(req.getParameter("id"));
-		ReviewInfo reviewinfo = reviewinfoservice.load(id);
-		Review review = reviewservice.load(reviewinfo.getReview_id());
-		if ("已修复".equals(reviewinfo.getStatus())) {
-			review.setRepair_num(review.getRepair_num() - 1);
-		}
-		
-		review.setBug_num(review.getBug_num()-1);
+	@RequestMapping(value = "/delete.do")
+	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "revinfo_2")) {
+				json.put("status", "fail");
+				json.put("ms", "删除失败,权限不足,请联系管理员!");
+			} else {
+				StringBuilder sb = new StringBuilder();
+				try (BufferedReader reader = req.getReader();) {
+					char[] buff = new char[1024];
+					int len;
+					while ((len = reader.read(buff)) != -1) {
+						sb.append(buff, 0, len);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
+				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
 
-		reviewservice.modify(review);
-		
-		try
-		{		
-			reviewinfoservice.delete(id);
-		}
-		catch (Exception e)
-		{
-			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/reviewinfo/list.do?reviewid="+review.getId());
-			return "error";
-		}
-		
-		operationlogservice.add(req, "QA_REVIEWINFO", id, 
-				review.getSectorProjects().getProjectid(),"评审明细信息删除成功！");
+				for (int i = 0; i < jsonarr.size(); i++) {
+					int id = Integer.valueOf(jsonarr.get(i).toString());
+					ReviewInfo reviewinfo = reviewinfoservice.load(id);
+					Review review = reviewservice.load(reviewinfo.getReview_id());
+					
+					if ("已修复".equals(reviewinfo.getStatus())) {
+						review.setRepair_num(review.getRepair_num() - 1);
+					}
+					
+					review.setBug_num(review.getBug_num()-1);
 
-		String message = "删除成功！";
-		model.addAttribute("reviewinfo", new ReviewInfo());
-		model.addAttribute("message", message);
-		model.addAttribute("url", "/reviewinfo/list.do?reviewid="+review.getId());
-		return "success";
+					reviewservice.modify(review);
+					
+					reviewinfoservice.delete(id);
+					
+					operationlogservice.add(req, "QA_REVIEWINFO", id, 
+							review.getSectorProjects().getProjectid(),"评审明细信息删除成功！");
+				}
+				json.put("status", "success");
+				json.put("ms", "删除成功!");
+			}
+			pw.print(json.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
+
 	
 	/**
 	 * 修改评审信息
@@ -321,7 +321,7 @@ public class ReviewInfoController {
 			
 			if(!UserLoginController.permissionboolean(req, "revinfo_3")){
 				model.addAttribute("reviewinfo", new ReviewInfo());
-				model.addAttribute("url",  "/reviewinfo/list.do?reviewid="+reinfo.getReview_id());
+				model.addAttribute("url",  "/reviewinfo/load.do?reviewid="+reinfo.getReview_id());
 				model.addAttribute("message", "当前用户无权限修改评审信息，请联系管理员！");
 				return "success";
 			}
@@ -353,7 +353,7 @@ public class ReviewInfoController {
 						reinfo.getProjectid(),"评审记录修改成功！");
 				
 				model.addAttribute("message", "修改成功");
-				model.addAttribute("url", "/reviewinfo/list.do?reviewid="+reinfo.getReview_id());
+				model.addAttribute("url", "/reviewinfo/load.do?reviewid="+reinfo.getReview_id());
 				return retVal;
 
 			}else{
@@ -367,7 +367,7 @@ public class ReviewInfoController {
 				reinfo.setProjectname(review.getSectorProjects().getProjectname());
 				reinfo.setResult_Confirmor(review.getResult_Confirmor());
 			}
-			    model.addAttribute("url", "/reviewinfo/list.do?reviewid="+reinfo.getReview_id());
+			    model.addAttribute("url", "/reviewinfo/load.do?reviewid="+reinfo.getReview_id());
 				model.addAttribute("reviewinfo", reinfo);
 				model.addAttribute("projects", QueueListener.qa_projlist);
 				return retVal;
@@ -376,7 +376,7 @@ public class ReviewInfoController {
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/review/list.do");
+			model.addAttribute("url", "/review/load.do");
 			return "error";
 		}
 

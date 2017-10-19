@@ -54,7 +54,7 @@ public class FlowCheckDaoImpl extends HibernateDaoSupport implements FlowCheckDa
 	}
 	
 	private void whereParameter(FlowInfo flowinfo, Query query) {
-		if (flowinfo.getId()!=0) {
+		if (flowinfo.getId()!=0&&flowinfo.getId()!=99) {
 			query.setParameter("projectid", flowinfo.getId());
 		}
 	}

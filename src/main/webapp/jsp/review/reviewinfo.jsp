@@ -6,297 +6,228 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script language="JavaScript" type="text/javascript"
-	src="/js/My97DatePicker/WdatePicker.js"></script>	
 
-
-	<title>评审记录详情</title>
-<link href="/css/style.css" rel="stylesheet" type="text/css" />
-<style type="text/css">
-<!--
-.STYLE1 {
-	color: #ffffff
-}
-.STYLE2 {
-	color: #FF0000
-}
-.STYLE6 {color: #FF0000; font-size: 12px; }
--->
-</style>
-
-	<style type="text/css">
-.mydiv {
-background-color: #F5FFE8;
-border: 2px solid #C5C9C7;
-text-align: center;
-font-size: 12px;
-font-weight: bold;
-z-index:999;
-width: auto;
-top:10%;
-left:10%;
-height: 350px;
-margin-left:-10px!important;/*FF IE7 该值为本身宽的一半 */
-margin-top:-10px!important;/*FF IE7 该值为本身高的一半*/
-margin-top:0px;
-position:fixed!important;/* FF IE7*/
-position:absolute;/*IE6*/
-_top:       expression(eval(document.compatMode &&
-            document.compatMode=='CSS1Compat') ?
-            documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
-            document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);/*IE5 IE5.5*/
-
-}
-
-.bg,.popIframe 	{
-background-color: #666; display:none;
-width: 100%;
-height: 100%;
-left:0;
-top:0;/*FF IE7*/
-filter:alpha(opacity=10);/*IE*/
-opacity:0.4;/*FF*/
-z-index:1;
-position:fixed!important;/*FF IE7*/
-position:absolute;/*IE6*/
-_top:       expression(eval(document.compatMode &&
-            document.compatMode=='CSS1Compat') ?
-            documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
-            document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);
-}
-	
-</style>
-	</head>
+<title>评审记录详情</title>
+</head>
 
 <body>
-	<div>  
-        <%@ include file="/head.jsp" %>
-    </div> 
+	<div>
+		<%@ include file="/head.jsp"%>
+	</div>
+
 	<header id="head" class="secondary"></header>
 
 	<!-- container -->
-	<div class="container" style="width:auto;font-size:14px">
+	<div class="container" style="width: auto; font-size: 14px;">
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">质量管理</li>
-			<li class="active"><a href="/review/list.do">项目评审记录</a></li>
+			<li class="active"><a href="/review/load.do">项目评审记录</a></li>
 			<li class="active">评审详细信息</li>
 		</ol>
 
-		<div class="row">	
+		<div class="row">
 			<!-- Article main content -->
-		<article class="col-sm-9 maincontent" style="width:100%;">
-		 <header class="page-header">
-				<h1 class="page-title" style="text-align:center;">评审详细信息</h1>
-			</header>   
-			
-<div id="descriptiondiv" style="position:absolute;display:none;z-index:99900;width: 400px;">
-<table width="100%"  align="center" class="rect"  style="background-color:rgba(240,255,240,0.9);table-layout:fixed;">
-    <tr>
-      <td id="descriptionid" valign="top" style="white-space:pre;overflow:hidden;word-break:break-all;word-wrap:break-word;color:#FF9224;font-size:11pt">
-      </td>
-    </tr>
-</table>
-</div>
+			<article class="col-sm-9 maincontent" style="width:100%;">
+			<header class="page-header">
+			<h1 class="page-title" style="text-align: center;">评审详细信息</h1>
+			</header>
 
-<div id="bg" class="bg" style="display:none;"></div>
+			<div class="panel-body" style="padding-bottom: 0px;">
+				<div class="panel panel-default">
+					<div class="panel-heading">评审基本信息</div>
+					<div class="panel-body">
+						<div class="form-group" style="margin-top: 15px">
+							<label class="control-label col-sm-4" for="txt_review">项目名称：&nbsp;${review.sectorProjects.projectname}</label>
+							<label class="control-label col-sm-4" for="txt_review">项目版本：&nbsp;${review.version}</label>
+                            <label class="control-label col-sm-4" for="txt_review">评审日期：&nbsp;${review.review_date}</label></br>
+                            <label class="control-label col-sm-4" for="txt_review">评审类型：&nbsp;${review.review_type}</label>
+							<label class="control-label col-sm-4" for="txt_review">评审对象：&nbsp;${review.review_object}</label>
+						</div>
+					</div>
+				</div>
 
-	<div align="center" style="width: 100%">
-		<table width="100%" border="0" align="center" cellpadding="0"
-			cellspacing="0">
-		  <tr>
-		  <td width="25%" height="40"><b><font color="#95CACA" size="3">项目名称：</font></b>${review.sectorProjects.projectname}</td>
-		  <td width="25%" height="40"><b><font color="#95CACA" size="3">版本号： </font></b>${review.version}</td>
-          <td width="50%" height="40"><b><font color="#95CACA" size="3">评审日期： </font></b>${review.review_date}</td>
-		  </tr>
-		  <tr>
-		  <td width="25%" height="40"><b><font color="#95CACA" size="3">评审类型： </font></b>${review.review_type}</td>
-		  <td width="25%" height="40"><b><font color="#95CACA" size="3">评审对象：  </font></b>${review.review_object}</td>
-		  <td width="50%" valign="middle"><a href="#"  onclick="showDiv(${reviewid },'1')" style="text-decoration: none;"> 
-		      <span class="btnold STYLE1"  style="width: 70px;background:#FFA54F;border:#FFA54F;" > <b>添加记录</b></span>
-				</a>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		  </tr>
-		</table>
+				<div id="toolbar" class="btn-group">
+					<button id="btn_addreviewinfo" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;添加记录
+					</button>
+					<button id="btn_editreviewinfo" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;编辑记录
+					</button>
+					<button id="btn_delreviewinfo" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;删除记录
+					</button>
+				</div>
+				<table id="tb_reviewinfo"></table>
 
-	 </div>
-	 
-	 <sf:form method="post" modelAttribute="reviewinfo">
-		<input name="page" id="page" type="hidden"  />					
-		<div align="right"></div>
-		
-	   <table width="100%" align="center" class="bordered" style="table-layout: fixed">
-          <tr bgcolor="#B9DCFF">                
-				<th width="30%" height="40" nowrap="nowrap"  >问题描述</th>
-				<th width="30%" height="40" nowrap="nowrap"  >改正措施</th>
-				<th width="10%" height="40" nowrap="nowrap"  >问题状态</th>
-				<th width="10%" height="40" nowrap="nowrap"  >责任人</th>
-				<th width="10%" height="40" nowrap="nowrap"  >最后确认日期</th>
-				<th width="10%" height="40" nowrap="nowrap"  >操作</th>
-		  </tr>
-		  <c:forEach var="t" items="${splist}" begin="0" step="1" varStatus="i">
-				<tr>
-				<td height="25" align="center" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis" 
-				onmouseout="hiddenPic();" onmousemove="description(this);">${t.bug_description }</td>
-				<td height="25" align="center" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis" 
-				onmouseout="hiddenPic();" onmousemove="description(this);">${t.corrective }</td>
-					<td height="25" align="center">${t.status }</td>
-					<td height="25" align="center">${t.duty_officer }</td>
-					<td height="25" align="center">${t.confirm_date }</td>
-					<td height="25" align="center" style="word-break: break-all">
-						<a href="#" onclick="showDiv('${t.id}','2')"
-						style="cursor: pointer;"><u>修改</u></a>&nbsp;
-						 <a href="#" onclick="showDiv('${t.id}','3')" style="cursor: pointer;"><u>删除</u></a>&nbsp;
-					</td>
-				</tr>
-			</c:forEach>
-		</table>
-<center>
-			<div id="pagelist" align="center">
-				<c:if test="${allRows!=0 }">
-					<ul>
-						<li><a href="#" onclick="return setPage(1)">首页 </a></li>
-						<li><a href="#" onclick="return frontPageCheck(${page-1});">上一页</a></li>
-						<li><a href="#" onclick="return backPageCheck(${page+1});">下一页</a></li>
-						<li><a href="#" onclick="return setPage(${allPage})">末页</a></li>
-						<li>第${page}页</li>
-						<li>共${allRows}条</li>
-						<li>共${allPage}页</li>
-					</ul>
-				</c:if>
-				<c:if test="${allRows==0 }">
-					<font color="#FF0000">没有记录!</font>				</c:if>
 			</div>
-			<br/><br/>
-			</center>
-						
-		</sf:form>
-		      		<p>&nbsp;</p>
-	</article>
-	</div>  
+			</article>
+		</div>
 	</div>
-	
+
 	<script type="text/javascript">
-	function frontPageCheck(page)
-	{
-		if(${page > 1})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("reviewinfo").submit();
-			return true;
+		$(function() {
+			//1.初始化Table
+			var oTable = new TableInit();
+			oTable.Init();
+		});
+
+		var TableInit = function() {
+			var oTableInit = new Object();
+			//初始化Table
+			oTableInit.Init = function() {
+				$('#tb_reviewinfo').bootstrapTable({
+					url : '/reviewinfo/list.do?reviewid=${reviewid}', //请求后台的URL（*）
+					method : 'get', //请求方式（*）
+					toolbar : '#toolbar', //工具按钮用哪个容器
+					striped : true, //是否显示行间隔色
+					cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+					pagination : true, //是否显示分页（*）
+					sortable : false, //是否启用排序
+					sortOrder : "asc", //排序方式
+					queryParams : oTableInit.queryParams,//传递参数（*）
+					sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）
+					pageNumber : 1, //初始化加载第一页，默认第一页
+					pageSize : 10, //每页的记录行数（*）
+					pageList : [ 10, 25, 50, 100 ], //可供选择的每页的行数（*）
+					search : false, //是否显示表格搜索，此搜索会进服务端
+					strictSearch : true,
+					showColumns : false, //是否显示所有的列
+					showRefresh : true, //是否显示刷新按钮
+					minimumCountColumns : 2, //最少允许的列数
+					clickToSelect : true, //是否启用点击选中行
+					height : 500, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+					uniqueId : "ID", //每一行的唯一标识，一般为主键列
+					showToggle : false, //是否显示详细视图和列表视图的切换按钮
+					cardView : false, //是否显示详细视图
+					detailView : false, //是否显示父子表
+					columns : [ {
+						checkbox : true,
+						width : '3%',
+					}, {
+						field : 'id',
+						title : 'id',
+						visible : false
+					}, {
+						field : 'review_id',
+						title : 'review_id',
+						visible : false
+					}, {
+						field : 'bug_description',
+						title : '问题描述',
+						width : '15%',
+					}, {
+						field : 'corrective',
+						title : '改正措施',
+						width : '10%',
+					}, {
+						field : 'status',
+						title : '问题状态',
+						width : '10%',
+					}, {
+						field : 'duty_officer',
+						title : '责任人',
+						width : '7%',
+					}, {
+						field : 'confirm_date',
+						title : '最后确认日期',
+						width : '8%',
+					}],
+				});
+			};
+
+			return oTableInit;
+		};
+
+		btn_addreviewinfo.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			var url = '/reviewinfo/add.do?reviewid=${reviewid}';
+			window.location.href = url;
 		}
-		return false;
-	}
-	
-	function backPageCheck(page)
-	{
 		
-		if(${page < allPage})
-		{
-			document.getElementById("page").value=page;
-			document.getElementById("reviewinfo").submit();
-			//$("#projectversion").submit();
-			return true;
-		}			
-		return false;
-	}
-	
-	
-	function setPage(page){
-		if(page==1){
-			document.getElementById("page").value=1;
-		}else{
-			document.getElementById("page").value=page;
-		}
-		document.getElementById("reviewinfo").submit();
-		return true;
-	}
-	function showDiv_backup(accid,opr){
-		document.getElementById("accid").value=accid;
-		document.getElementById("opr").value=opr;
-		document.getElementById('passDiv').style.display='block';
-		document.getElementById('bg').style.display='block';
-	}
-	function closepassDiv(){
-		document.getElementById('passDiv').style.display='none';
-		document.getElementById('bg').style.display='none';
-	}
-	
-	function showDiv(id,opr){
-		var status = document.getElementById("loginstatus").value;
-		if(status=="false"){
-			if(window.confirm("你未登录哦，要先去首页登录吗？")){
-				var url = '/';
-				window.location.href=url;
-			}else{
-				return false; 
-			} 	
-		}else{
-		if(opr=="1"){
-			var url = '/reviewinfo/add.do?reviewid='+id;
-			window.location.href=url;
-	    }else if(opr=="2"){
-			var url = '/reviewinfo/update.do?id='+id;
-			window.location.href=url;
-	    }else if(opr=="3"){
-	    	if(window.confirm("你确认要删除吗？")){ 
-				var url = '/reviewinfo/delete.do?id='+id;
-				window.location.href=url;
-	    		return true; 
-	    		}else{ 
-	    		return false; 
-	    		}
-	    }else{ 
-	       alert("操作码有误，是否有非法操作，请联系软件质量室！"); 
-	       return false;
-	      }
-		}
-	}
-	
-	function description(obj){ 
-		document.getElementById("descriptiondiv").style.left = (obj.offsetLeft+80)+"px"; 
-		document.getElementById("descriptiondiv").style.top = (obj.offsetTop+200)+"px"; 
-		document.getElementById("descriptionid").innerHTML = obj.innerHTML;
+		btn_editreviewinfo.onclick=function(){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
+			}
+         
+            var id = $.map($('#tb_reviewinfo').bootstrapTable('getSelections'), function (row) {
+                return row.id;
+                 });
+            if(id.length == 1 ){
+    			var url = '/reviewinfo/update.do?id='+id;
+    			window.location.href=url;
+            }else{
+            	toastr.warning('您有且只能选择一条记录编辑哦！'); 
+            }
+	    }
 		
-		document.getElementById("descriptiondiv").style.display = "block"; 
-		//alert("left2:"+document.getElementById("descriptiondiv").style.left+"  top2:"+document.getElementById("descriptiondiv").style.top);
-		} 
-	
-	function hiddenPic(){ 
-		document.getElementById("descriptiondiv").style.display = "none"; 
-		} 
-	
-	function openDiv(){
-		document.getElementById('showaccident').style.display='block';
-		document.getElementById('bg').style.display='block';
-	}
-	
-	function closeDiv(){
-		document.getElementById('showaccident').style.display='none';
-		document.getElementById('bg').style.display='none';
-	}
-	
-	function getrediovalue(){
-	var type=document.getElementsByName("type");
-	  for(var i=0;i<type.length;i++){ 
-	    if(type[i].checked){  
-	      return type[i].value;  
-	      break;
-	    }  
-	  }  
-	}
-	
-	function description(obj){ 
-		document.getElementById("descriptiondiv").style.left = (obj.offsetLeft+100)+"px"; 
-		document.getElementById("descriptiondiv").style.top = (obj.offsetTop+200)+"px"; 
-		document.getElementById("descriptionid").innerHTML = obj.innerHTML;
-		
-		document.getElementById("descriptiondiv").style.display = "block"; 
-		//alert("left2:"+document.getElementById("descriptiondiv").style.left+"  top2:"+document.getElementById("descriptiondiv").style.top);
-		} 
-	
-	function hiddenPic(){ 
-		document.getElementById("descriptiondiv").style.display = "none"; 
-		} 
-	</script>	
+		btn_delreviewinfo.onclick=function(){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
+			}
+			
+	        var selectIndex = $('input[name="btSelectItem"]:checked ').val();
+	        deleteItem($('#tb_reviewinfo'), selectIndex, true);
+	    }
+	    
+	    function deleteItem($table, selectIndex, reLoad){
+            var ids = $.map($table.bootstrapTable('getSelections'), function (row) {
+                      return row.id;
+                       }); 
+	        if(ids.length != 0 ){
+	        	if(confirm("真的要删除选择的评审记录吗?")){
+		                $.ajax({
+		                   type: "POST",
+		                   cache:false,
+		                   async : true,
+		                   dataType : "json",
+		                   url:  "delete.do",
+		                   contentType: "application/json", //必须有
+		                   data: JSON.stringify({"ids":ids}),
+		                   success: function(data, status){
+		                           if (data.status == "success"){
+		                               $table.bootstrapTable('hideRow', {index:selectIndex});
+		                               toastr.success(data.ms);
+		                              if(reLoad){
+		                                  $table.bootstrapTable('refresh');
+		                              }
+		                           }else{
+		                        	   toastr.info(data.ms);
+		                           }
+		                   },error:function()
+		                    {
+		                	   toastr.error('删除出错!');
+		                    }
+		                });
+	            }    
+	        }else{
+	            toastr.warning('请选取要删除的评审记录！');
+	        }
+	    }
+	</script>
 </body>
 </html>

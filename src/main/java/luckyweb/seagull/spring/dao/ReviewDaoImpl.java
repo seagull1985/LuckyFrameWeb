@@ -56,6 +56,15 @@ public class ReviewDaoImpl extends HibernateDaoSupport implements ReviewDao{
 		if (review.getReview_enddate()!=null&&!"".equals(review.getReview_enddate())) {
 			query.setParameter("review_enddate", review.getReview_enddate());
 		}
+		if (null!=review.getVersion()&&!"".equals(review.getVersion())) {
+			query.setParameter("version", "%"+review.getVersion()+"%");
+		}
+		if (null!=review.getReview_type()&&!"".equals(review.getReview_type())) {
+			query.setParameter("review_type", "%"+review.getReview_type()+"%");
+		}
+		if (null!=review.getReview_result()&&!"".equals(review.getReview_result())) {
+			query.setParameter("review_result", "%"+review.getReview_result()+"%");
+		}
 	}
 	
 	@Override

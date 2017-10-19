@@ -7,7 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<title>测试计划</title>
+<title>项目版本信息管理</title>
 </head>
 
 <body>
@@ -90,7 +90,7 @@
 								  <div class="form-group">
 											<label for="clientip" class="col-sm-3 control-label">统计报表</label>
 											<div class="input-group col-md-5">
-												<select class="form-control" name="clientipforupload" id="reportstype" onchange="choosereports()">
+												<select class="form-control" name="reportstype" id="reportstype" onchange="choosereports()">
 														<option value="0">生成项目质量对比图</option>
 														<option value="1">项目版本质量报表</option>
 														<option value="2">单个项目版本质量趋势图</option>
@@ -369,7 +369,7 @@
 					dataType : "json",
 					url : "delete.do",
 					data : {
-						"jobid" : id
+						"versionid" : id
 					},
 					success : function(data, status) {
 						if (data.status == "success") {

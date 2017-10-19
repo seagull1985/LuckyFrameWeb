@@ -51,8 +51,8 @@
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">质量管理</li>
-			<li class="active"><a href="../flowCheck/list.do">流程检查信息</a></li>
-			<li class="active"><a href="../planflowCheck/list.do">流程检查计划</a></li>
+			<li class="active"><a href="../flowCheck/load.do">流程检查信息</a></li>
+			<li class="active"><a href="../planflowCheck/load.do">流程检查计划</a></li>
 			<li class="active">增加流程检查计划</li>
 		</ol>
 		
@@ -123,7 +123,7 @@
 			  <td width="40%" height="30" align="center"><input name="addBtn" type="submit"
 					class="button gray" id="addBtn" value="添加" /></td>
 	          <td  align="center" colspan="2"><a
-						href="/planflowCheck/list.do" ><span class="btnold STYLE1"  style="width:70px; margin-bottom:10px;">返 回</span></a></td>
+						href="/planflowCheck/load.do" ><span class="btnold STYLE1"  style="width:70px; margin-bottom:10px;">返 回</span></a></td>
 	         
 		  </tr>
             

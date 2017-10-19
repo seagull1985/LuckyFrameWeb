@@ -1,5 +1,8 @@
 package luckyweb.seagull.spring.mvc;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.FlowCheck;
@@ -26,7 +28,6 @@ import luckyweb.seagull.spring.service.FlowInfoService;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.PlanFlowCheckService;
 import luckyweb.seagull.util.StrLib;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -35,11 +36,7 @@ import net.sf.json.JSONObject;
 @RequestMapping("/planflowCheck")
 public class PlanFlowCheckController {
 	
-	private int allPage;
-	private int pageSize = 20;
-	private int allRows;
-	private int page = 1;
-	private int offset;
+
 	
 	@Resource(name = "planflowcheckService")
 	private PlanFlowCheckService planflowcheckservice;
@@ -57,6 +54,7 @@ public class PlanFlowCheckController {
 	
 	@Resource(name = "flowcheckService")
 	private FlowCheckService flowcheckservice;
+	
 	/**
 	 * 
 	 * 
@@ -65,71 +63,50 @@ public class PlanFlowCheckController {
 	 * @return
 	 * @throws Exception
 	 */
+	@RequestMapping(value = "/load.do")
+	public String load(HttpServletRequest req) throws Exception {
+		return "/jsp/flowcheck/planflowcheck";
+	}
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/list.do")
-	public String list(HttpServletRequest req, PlanFlowCheck pfc, Model model)
-			throws Exception {
-		model.addAttribute("planflowcheck", pfc);
-
-		try {
-			String p = req.getParameter("page");
-			
-			pfc.setStatus(1);
-			if(pfc.getProjectid()!=0){
-				pfc.setProjectid(pfc.getProjectid());
-			}
-			
-			if (StrLib.isEmpty(p) || Integer.valueOf(p) == 0) {
-				page = 1;
-			}
-
-			String page2 = req.getParameter("page");
-			if (StrLib.isEmpty(page2)) {
-				page = 1;
-			} else {
-				try {
-					page = Integer.parseInt(page2);
-				} catch (Exception e) {
-					page = 1;
-				}
-			}
-			allRows = planflowcheckservice.findRows(pfc);
-			offset = (page - 1) * pageSize;
-			if (allRows % pageSize == 0) {
-				allPage = allRows / pageSize;
-			} else {
-				allPage = allRows / pageSize + 1;
-			}
-
-			model.addAttribute("allRows", allRows);
-			model.addAttribute("page", page);
-			model.addAttribute("offset", offset);
-			model.addAttribute("pageSize", pageSize);
-			model.addAttribute("allPage", allPage);
-/*			// 调度列表
-			List<SecondarySector> secondarySector = secondarysectorservice.findSecotorList();
-			model.addAttribute("secondarySector", secondarySector);*/
-			
-			List<PlanFlowCheck> sssMap = planflowcheckservice.findByPage(pfc, offset,
-					pageSize);
-			
-			for(PlanFlowCheck pfcheck : sssMap){
-				FlowInfo fi = flowinfoService.load(Integer.valueOf(pfcheck.getCheckentryid()));
-				pfcheck.setCheckentryid(fi.getCheckentry());
-				pfcheck.setChecknode(fi.getPhasenodename());
-				pfcheck.setCheckphase(fi.getPhasename());
-			}
-			
-			model.addAttribute("splist", sssMap);
-			model.addAttribute("projects", QueueListener.qa_projlist);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/planflowCheck/list.do");
-			return "error";
+	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
+			HttpServletResponse response) throws NumberFormatException, Exception {
+		response.setCharacterEncoding("utf-8");
+		PrintWriter pw = response.getWriter();
+		String projectid = request.getParameter("projectid");
+		PlanFlowCheck pfcheck = new PlanFlowCheck();
+		pfcheck.setStatus(1);
+		if (null == offset && null == limit) {
+			offset = 0;
 		}
-		return "/jsp/flowcheck/planflowcheck";
+		if (null == limit || limit == 0) {
+			limit = 10;
+		}
+
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(projectid)&&!"99".equals(projectid)) {
+			pfcheck.setProjectid(Integer.valueOf(projectid));
+		}
+		
+		List<PlanFlowCheck> pfclist = planflowcheckservice.findByPage(pfcheck, offset,
+				limit);
+		
+		for(int i=0;i<pfclist.size();i++){
+			FlowInfo fi = flowinfoService.load(Integer.valueOf(pfclist.get(i).getCheckentryid()));
+			pfclist.get(i).setCheckentryid(fi.getCheckentry());
+			pfclist.get(i).setChecknode(fi.getPhasenodename());
+			pfclist.get(i).setCheckphase(fi.getPhasename());
+		}
+		// 转换成json字符串
+		String RecordJson = StrLib.listToJson(pfclist);
+		// 得到总记录数
+		int total = planflowcheckservice.findRows(pfcheck);
+		// 需要返回的数据有总记录数和行数据
+		JSONObject json = new JSONObject();
+		json.put("total", total);
+		json.put("rows", RecordJson);
+		pw.print(json.toString());
 	}
 	
 	/**
@@ -155,7 +132,7 @@ public class PlanFlowCheckController {
 
 			if(!UserLoginController.permissionboolean(req, "pfc_1")){
 				model.addAttribute("planflowcheck", new PlanFlowCheck());
-				model.addAttribute("url", "list.do");
+				model.addAttribute("url", "load.do");
 				model.addAttribute("message", "当前用户无权限添加项目检查计划，请联系管理员！");
 				return "success";
 			}
@@ -252,7 +229,7 @@ public class PlanFlowCheckController {
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/planflowCheck/list.do");
+			model.addAttribute("url", "/planflowCheck/load.do");
 			return "error";
 		}
 
@@ -283,7 +260,7 @@ public class PlanFlowCheckController {
 			PlanFlowCheck pfc = planflowcheckservice.load(id);
 			if(!UserLoginController.permissionboolean(req, "pfc_3")){
 				model.addAttribute("planflowcheck", new PlanFlowCheck());
-				model.addAttribute("url", "list.do");
+				model.addAttribute("url", "load.do");
 				model.addAttribute("message", "当前用户无权修改项目检查计划，请联系管理员！");
 				return "success";
 			}
@@ -340,7 +317,7 @@ public class PlanFlowCheckController {
 						planflowcheck.getProjectid(),"流程检查计划修改成功！计划日期："+planflowcheck.getPlandate()+" 检查内容："+checkentry);
 				
 				model.addAttribute("message", "修改成功");
-				model.addAttribute("url", "/planflowCheck/list.do");
+				model.addAttribute("url", "/planflowCheck/load.do");
 				return retVal;
 
 			}//添加数据
@@ -370,7 +347,7 @@ public class PlanFlowCheckController {
 		catch (Exception e)
 		{
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/planflowCheck/list.do");
+			model.addAttribute("url", "/planflowCheck/load.do");
 			return "error";
 		}
 
@@ -384,42 +361,49 @@ public class PlanFlowCheckController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/delete.do", method = RequestMethod.GET)
-	public String delete(HttpServletRequest req, Model model) throws Exception
-	{
-		int id = Integer.valueOf(req.getParameter("id"));		
-		PlanFlowCheck pfc = planflowcheckservice.load(id); 
-		try
-		{
-			
-			if(!UserLoginController.permissionboolean(req, "pfc_2")){
-				model.addAttribute("flowcheck", new FlowCheck());
-				model.addAttribute("url", "list.do");
-				model.addAttribute("message", "当前用户无权限删除项目检查计划，请联系管理员！");
-				return "success";
+	@RequestMapping(value = "/delete.do")
+	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		try {
+			rsp.setContentType("text/html;charset=utf-8");
+			req.setCharacterEncoding("utf-8");
+			PrintWriter pw = rsp.getWriter();
+			JSONObject json = new JSONObject();
+			if (!UserLoginController.permissionboolean(req, "pfc_2")) {
+				json.put("status", "fail");
+				json.put("ms", "删除检查计划失败,权限不足,请联系管理员!");
+			} else {
+				StringBuilder sb = new StringBuilder();
+				try (BufferedReader reader = req.getReader();) {
+					char[] buff = new char[1024];
+					int len;
+					while ((len = reader.read(buff)) != -1) {
+						sb.append(buff, 0, len);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
+				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
+
+				for (int i = 0; i < jsonarr.size(); i++) {
+					int id = Integer.valueOf(jsonarr.get(i).toString());
+					PlanFlowCheck pfc = planflowcheckservice.load(id); 
+					planflowcheckservice.delete(id);
+					String checkentry = flowinfoService.load(Integer.valueOf(pfc.getCheckentryid())).getCheckentry();
+					operationlogservice.add(req, "QA_PLANFLOWCHECK", id, 
+							pfc.getSectorProjects().getProjectid(),"流程检查计划删除成功！计划日期："+pfc.getPlandate()+" 检查内容："+checkentry);
+				}
+				json.put("status", "success");
+				json.put("ms", "删除检查计划成功!");
 			}
+			pw.print(json.toString());
 
-			planflowcheckservice.delete(id);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		catch (Exception e)
-		{
-			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/planflowCheck/list.do");
-			return "error";
-		}
-		
 
-		String checkentry = flowinfoService.load(Integer.valueOf(pfc.getCheckentryid())).getCheckentry();
-		operationlogservice.add(req, "QA_PLANFLOWCHECK", id, 
-				pfc.getSectorProjects().getProjectid(),"流程检查计划删除成功！计划日期："+pfc.getPlandate()+" 检查内容："+checkentry);
-
-		String message = "删除成功！";
-		
-		model.addAttribute("planflowcheck", new PlanFlowCheck());
-		model.addAttribute("message", message);
-		model.addAttribute("url", "/planflowCheck/list.do");
-		return "success";
 	}
+	
 	
 	/**
 	 * 检查计划转检查记录
@@ -440,7 +424,7 @@ public class PlanFlowCheckController {
 
 		if(!UserLoginController.permissionboolean(req, "fc_tocheck")){
 			model.addAttribute("flowcheck", new FlowCheck());
-			model.addAttribute("url", "list.do");
+			model.addAttribute("url", "load.do");
 			model.addAttribute("message", "当前用户无权限把计划转成检查结果，请联系管理员！");
 			return "success";
 		}
@@ -535,7 +519,7 @@ public class PlanFlowCheckController {
 					flowcheck.getProjectid(),"计划转检查结果添加成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
 			
 			model.addAttribute("message", "转检查结果成功");
-			model.addAttribute("url", "/planflowCheck/list.do");
+			model.addAttribute("url", "/planflowCheck/load.do");
 			return retVal;
 
 		}//添加数据
@@ -569,7 +553,7 @@ public class PlanFlowCheckController {
 		
 		}catch(Exception e){
 			model.addAttribute("message", e.getMessage());
-			model.addAttribute("url", "/planflowCheck/list.do");
+			model.addAttribute("url", "/planflowCheck/load.do");
 			return "error";
 		}
 	}

@@ -77,7 +77,7 @@ _top:       expression(eval(document.compatMode &&
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">质量管理</li>
-			<li class="active"><a href="/accident/list.do">生产故障</a></li>
+			<li class="active"><a href="/accident/load.do">生产故障</a></li>
 			<li class="active">生产故障详情信息</li>
 		</ol>
 
@@ -200,7 +200,7 @@ _top:       expression(eval(document.compatMode &&
     </tr> 
     <tr>
       <td height="40" colspan="4" align="center">
-      <a href="/accident/list.do" ><span class="btnold STYLE1"  style="width:70px; margin-bottom:10px;">返 回</span></a>
+      <a href="/accident/load.do" ><span class="btnold STYLE1"  style="width:70px; margin-bottom:10px;">返 回</span></a>
       <c:if test="${accident.filename!=null }">
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <a href="/upload/${accident.filename}" ><span class="btnold STYLE1"  style="width:70px; margin-bottom:10px;">下载事故报告</span></a>
