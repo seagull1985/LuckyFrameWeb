@@ -105,7 +105,7 @@
 							</br>
 							<div class="row">
 								<div class="col-lg-4 text-center" style="width: 100%">
-									<button class="btn btn-action" type="submit">保 存</button>
+									<button class="btn btn-action" id="submit" type="submit">保 存</button>
 								</div>
 							</div>
 						</form>
@@ -200,6 +200,7 @@
 				data : JSON.stringify(json),
 				success : function(data, status) {
  				if (data.status == "success") {
+ 					$("#submit").attr("disabled",true);
  					toastr.success(data.ms);
 					}else{
 						toastr.info(data.ms);

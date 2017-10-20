@@ -82,8 +82,8 @@
 					</button>
 				</div>
 				<table id="tb_projectcase"></table>
-
-				<!-- 模态框增加用例（Modal） -->
+				
+				<!--增加用例模态框 -->
 				<form method="post" action="" class="form-horizontal" role="form"
 					id="form_data" onsubmit="return check_form()" style="margin: 20px;">
 					<div class="modal fade" id="addModal" tabindex="-1" role="dialog"
@@ -93,10 +93,11 @@
 								<div class="modal-header">
 									<button type="button" class="close" data-dismiss="modal"
 										aria-hidden="true">&times;</button>
-									<h4 class="modal-title" id="myModalLabel">用例信息</h4>
+									<h4 class="modal-title" id="modellabelh">用例信息</h4>
 								</div>
 								<div class="modal-body">
 									<form class="form-horizontal" role="form">
+									<input name="id" id="id" value="0" type="hidden"/>
 										<div class="form-group">
 											<label for="projectid" class="col-sm-3 control-label">项目名称</label>
 											<div class="col-sm-9">
@@ -161,7 +162,7 @@
 								<div class="modal-footer">
 									<button type="button" class="btn btn-default"
 										data-dismiss="modal">关闭</button>
-									<button type="submit" class="btn btn-primary" disabled="disabled">提交</button>
+									<button type="submit" id="submit" class="btn btn-primary" disabled="disabled">提交</button>
 									&nbsp;&nbsp;&nbsp;&nbsp;<span id="tip"> </span>
 								</div>
 							</div>
@@ -610,39 +611,43 @@
 	        var form_data = $('#form_data').serialize();
 	        $.param(form_data);
 
-	        // 异步提交数据到action页面
-	        $.ajax(
-	                {
-	                    url: "caseadd.do",
-	                    data:form_data,
-	                    type: "post",
-	                    dataType : 'JSON',
-	                    beforeSend:function()
-	                    {
-	                        $("#tip").html("<span style='color:blue'>正在处理...</span>");
-	                        return true;
-	                    },
-	                    success:function(data, status)
-	                    {
-	                        if(data.status == "success")
-	                        {
-	                            $("#tip").html("<span style='color:blueviolet'>恭喜，添加用例成功！</span>");
-	                            // document.location.href='system_notice.php'
-	                            toastr.success(data.ms);
-	                        }else{
-	                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
-	                            toastr.info(data.ms);
-	                        }
-	                    },
-	                    error:function()
-	                    {
-	                    	toastr.error('添加用例出错!');
-	                    },
-	                    complete:function()
-	                    {
-	                       /*  $('#addModal').hide(); */
-	                    }
-	                });
+	        var id=$('#id').val();
+	        
+		        // 异步提交数据到action页面
+		        $.ajax(
+		                {
+		                    url: "caseadd.do?copyid="+id,
+		                    data:form_data,
+		                    type: "post",
+		                    dataType : 'JSON',
+		                    beforeSend:function()
+		                    {
+		                        $("#tip").html("<span style='color:blue'>正在处理...</span>");
+		                        return true;
+		                    },
+		                    success:function(data, status)
+		                    {
+		                        if(data.status == "success")
+		                        {
+		                            $("#tip").html("<span style='color:blueviolet'>恭喜，添加用例成功！</span>");
+		                            // document.location.href='system_notice.php'
+		                            $("#submit").attr("disabled",false);
+		                            toastr.success(data.ms);
+		                        }else{
+		                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
+		                            toastr.info(data.ms);
+		                        }
+		                    },
+		                    error:function()
+		                    {
+		                    	toastr.error('添加用例出错!');
+		                    },
+		                    complete:function()
+		                    {
+		                       /*  $('#addModal').hide(); */
+		                    }
+		                });
+
 	    }    
 	    
 	    btn_add.onclick=function(){
@@ -727,31 +732,21 @@
 					return false; 
 				} 	
 			}
-			
-            var ids = $.map($('#tb_projectcase').bootstrapTable('getSelections'), function (row) {
-                return row.id;
+
+            var row = $.map($('#tb_projectcase').bootstrapTable('getSelections'), function (row) {
+                return row;
                  });
-            if(ids.length == 1 ){
+
+            if(row.length == 1 ){
 	        	if(confirm("确定要复制此条用例吗?")){
-	                $.ajax({
-	                   type: "POST",
-	                   cache:false,
-	                   async : true,
-	                   dataType : "json",
-	                   url:  "copycase.do?caseid="+ids,
-	                   data: {},
-	                   success: function(data, status){
-	                           if (data.status == "success"){
-	                        	   $('#tb_projectcase').bootstrapTable('refresh');
-	                        	   toastr.success(data.ms);
-	                           }else{
-	                        	   toastr.info(data.ms);
-	                           }
-	                   },error:function()
-	                    {
-	                	   toastr.error('复制出错!');
-	                    }
-	                });
+	        		$("#projectid").val(row[0].projectid);
+	        		$("#modulename").val(row[0].modulename);
+	        		$("#moduleid").val(row[0].moduleid);        		
+	        		$("#name").val("COPY "+row[0].name);
+	        		$("input[id='casetype'][value='"+row[0].casetype+"']").attr("checked",true);
+	        		$("#remark").val(row[0].remark);
+	        		$("#id").val(row[0].id);
+	        		$("#addModal").modal('show');
             }
             }else{
             	toastr.warning('要复制用例有且只能选择一条用例哦！'); 

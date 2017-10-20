@@ -49,8 +49,8 @@ public class ProjectCaseServiceImpl implements ProjectCaseService{
 		String where = " where ";
 		if (projectcase.getProjectid()!=0&&projectcase.getProjectid()!=99) {
 			where += " projectid =:projectid  and ";
-		}if (projectcase.getModuleid()!=0) {
-			where += " moduleid =:moduleid  and ";
+		}if (projectcase.getModuleid()!=0&&projectcase.getModuleidarr().length>0) {
+			where += " moduleid in (:moduleid)  and ";
 		}if (null!=projectcase.getSign()&&!"".equals(projectcase.getSign())) {
 			where += " (sign like :sign  or ";
 		}if (null!=projectcase.getName()&&!"".equals(projectcase.getName())) {

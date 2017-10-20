@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -56,6 +57,7 @@ public class ProjectCaseController {
 	@Resource(name = "userinfoService")
 	private UserInfoService userinfoservice;
 
+	private List<Integer> listmoduleid=new ArrayList<Integer>();
 	/**
 	 * 
 	 * 
@@ -117,6 +119,17 @@ public class ProjectCaseController {
 		// 得到客户端传递的查询参数
 		if (!StrLib.isEmpty(moduleid)) {
 			projectcase.setModuleid(Integer.valueOf(moduleid));
+			if(0!=projectcase.getModuleid()){
+				listmoduleid.clear();
+				getchildmoduList(projectcase.getProjectid(),projectcase.getModuleid());
+				Integer[] moduleidarr=new Integer[listmoduleid.size()+1];
+				moduleidarr[0]=projectcase.getModuleid();
+				for(int i=0;i<listmoduleid.size();i++){
+					moduleidarr[i+1]=listmoduleid.get(i);
+				}
+				projectcase.setModuleidarr(moduleidarr);
+				listmoduleid.clear();
+			}
 		}
 		List<ProjectCase> projectcases = projectcaseservice.findByPage(projectcase, offset, limit);
 		List<SectorProjects> prolist = QueueListener.qa_projlist;
@@ -212,6 +225,8 @@ public class ProjectCaseController {
 					String usercode = req.getSession().getAttribute("usercode").toString();
 					projectcase.setOperationer(usercode);
 				}
+				int copyid = Integer.valueOf(req.getParameter("copyid"));
+				
 				String regEx_space = "\t|\r|\n";// 定义空格回车换行符
 				Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
 				Matcher m_space = p_space.matcher(projectcase.getRemark());
@@ -230,74 +245,21 @@ public class ProjectCaseController {
 				int caseid = projectcaseservice.add(projectcase);
 				operationlogservice.add(req, "PROJECT_CASE", caseid, projectcase.getProjectid(),
 						"添加用例成功！用例编号：" + projectcase.getSign());
-
-				json.put("status", "success");
-				json.put("ms", "添加用例成功！");
-			}
-			pw.print(json.toString());
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	/**
-	 * 复制用例
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
-	 * @param req
-	 * @param rsp
-	 * @return
-	 * @throws Exception
-	 * @Description:
-	 */
-	@RequestMapping(value = "/copycase.do")
-	public void copyCase(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
-		try {
-			rsp.setContentType("text/html;charset=utf-8");
-			req.setCharacterEncoding("utf-8");
-			PrintWriter pw = rsp.getWriter();
-			JSONObject json = new JSONObject();
-			int id = Integer.valueOf(req.getParameter("caseid"));
-			if (!UserLoginController.permissionboolean(req, "case_1")) {
-				json.put("status", "fail");
-				json.put("ms", "复制失败,权限不足,请联系管理员!");
-			} else {
-				ProjectCase projectcase=projectcaseservice.load(id);
-				projectcase.setName("COPY "+projectcase.getName());
-				if (null != req.getSession().getAttribute("usercode")
-						&& null != req.getSession().getAttribute("username")) {
-					String usercode = req.getSession().getAttribute("usercode").toString();
-					projectcase.setOperationer(usercode);
-				}
-
-				Date currentTime = new Date();
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String time = formatter.format(currentTime);
-				projectcase.setTime(time);
-
-				SectorProjects sp = sectorprojectsService.loadob(projectcase.getProjectid());
-				String maxindex = projectcaseservice.getCaseMaxIndex(projectcase.getProjectid());
-				int index = Integer.valueOf(maxindex) + 1;
-				projectcase.setSign(sp.getProjectsign() + "-" + index);
-				projectcase.setProjectindex(index);
-				int caseid = projectcaseservice.add(projectcase);
-				operationlogservice.add(req, "PROJECT_CASE", caseid, projectcase.getProjectid(),
-						"复制用例成功！用例编号：" + projectcase.getSign());
-
-				List<ProjectCasesteps> steps=casestepsservice.getSteps(id);
-				for(ProjectCasesteps step:steps){
-					step.setCaseid(caseid);
-					int stepid=casestepsservice.add(step);
-				    operationlogservice.add(req, "PROJECT_CASESTEPS", stepid, projectcase.getProjectid(),
-							"复制用例步骤成功！");
-				}
 				
+				String ms="添加用例【"+projectcase.getSign()+"】成功！";
+				if(0!=copyid){
+					List<ProjectCasesteps> steps=casestepsservice.getSteps(copyid);
+					for(ProjectCasesteps step:steps){
+						step.setCaseid(caseid);
+						int stepid=casestepsservice.add(step);
+					    operationlogservice.add(req, "PROJECT_CASESTEPS", stepid, projectcase.getProjectid(),
+								"复制用例步骤成功！");
+					}
+					ms="复制用例【"+projectcase.getSign()+"】成功！";
+				}
+
 				json.put("status", "success");
-				json.put("ms", "复制用例【"+projectcase.getName()+"】成功！");
+				json.put("ms", ms);
 			}
 			pw.print(json.toString());
 
@@ -488,6 +450,17 @@ public class ProjectCaseController {
 
 				ProjectCase projectcase = new ProjectCase();
 				projectcase.setModuleid(id);
+				if(0!=projectcase.getModuleid()){
+					listmoduleid.clear();
+					getchildmoduList(projectcase.getProjectid(),projectcase.getModuleid());
+					Integer[] moduleidarr=new Integer[listmoduleid.size()+1];
+					moduleidarr[0]=projectcase.getModuleid();
+					for(int i=0;i<listmoduleid.size();i++){
+						moduleidarr[i+1]=listmoduleid.get(i);
+					}
+					projectcase.setModuleidarr(moduleidarr);
+					listmoduleid.clear();
+				}
 				int casecount = projectcaseservice.findRows(projectcase);
 
 				if (casecount == 0) {
@@ -641,6 +614,28 @@ public class ProjectCaseController {
 		}
 	}
 
+	/**
+	 * 使用递归查询指定测试ID中的所有子测试集
+	 * 
+	 * @param tj
+	 * @param br
+	 * @param model
+	 * @param req
+	 * @param rsp
+	 * @return
+	 * @throws Exception
+	 * @Description:
+	 */
+    private List<Integer> getchildmoduList(int projectid,int pid){
+    	List<ProjectModule> modules = moduleservice.getModuleListByProjectid(projectid, pid);
+        for(ProjectModule pm: modules){
+        	listmoduleid.add(pm.getId());
+            //递归遍历下一级  
+        	getchildmoduList(projectid,pm.getId());
+        }  
+     return listmoduleid;  
+    }  
+	
 	public static void main(String[] args) throws Exception {
 
 	}
