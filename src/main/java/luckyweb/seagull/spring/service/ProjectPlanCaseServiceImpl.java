@@ -74,7 +74,7 @@ public class ProjectPlanCaseServiceImpl implements ProjectPlanCaseService{
 	
 	@Override
 	public List findByPage(Object value, int offset, int pageSize) {
-		String	hql=" from ProjectPlan  "+where((ProjectPlanCase)value)+orderBy;
+		String	hql=" from ProjectPlanCase  "+where((ProjectPlanCase)value)+orderBy;
 		List list= projectplancaseDao.findByPage(hql, value, offset, pageSize);
 		return list;
 	}

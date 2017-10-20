@@ -49,8 +49,14 @@
 										style="margin-top: 0; width: 160px; height: auto;"></ul>
 								</div>
 
-							</div>
+							</div>							
 						</div>
+						
+						<div class="form-group" style="margin-top: 15px">
+							<label class="control-label col-sm-1"
+								for="txt_search_project" style="width: 15%"><input id="onlypcase" name="onlypcase" type="checkbox" onchange="searchpcase()"/>&nbsp;&nbsp;显示计划中全部用例</label>
+						</div>
+						
 					</div>
 				</div>
 				
@@ -92,7 +98,7 @@
 					pageNumber : 1, //初始化加载第一页，默认第一页
 					pageSize : 25, //每页的记录行数（*）
 					pageList : [ 25, 50, 100, 200], //可供选择的每页的行数（*）
-					search : true, //是否显示表格搜索，此搜索会进服务端
+					search : searchdis(), //是否显示表格搜索，此搜索会进服务端
 					strictSearch : true,
 					showColumns : false, //是否显示所有的列
 					showRefresh : true, //是否显示刷新按钮
@@ -212,11 +218,23 @@
 			};
 			//得到查询的参数
 			oTableInit.queryParams = function(params) {
+				var onlypcase=0;
+				if($('#onlypcase').is(':checked')) {
+					onlypcase=1;
+					$.fn.zTree.destroy();
+					$("#module_tree").val(""); 
+					$("#module_tree").attr("readOnly",true);
+				 }else{
+					$.fn.zTree.init($("#treeDemo"), genJsonConfig());
+					$("#module_tree").attr("readOnly",false);
+				 }
+				
 				var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
 					limit : params.limit, //页面大小
 					offset : params.offset, //页码偏移量
 					search : params.search, //搜索参数
 					moduleid : $('#search_module').val(), //模块ID
+					onlypcase : onlypcase, //是否只显示被选中用例
 				};
 				return temp;
 			};
@@ -224,6 +242,21 @@
 			return oTableInit;
 		};
 	    
+		var searchpcase = function() {
+			//1.初始化Table
+			var oTable = new TableInit();
+			$('#tb_projectplancase').bootstrapTable('destroy');
+			oTable.Init();
+		};
+		
+		var searchdis = function() {
+			if($('#onlypcase').is(':checked')) {
+				return false;
+			}else{
+				return true;
+			}
+		};
+
 		btn_edit.onclick=function(){
 	    	var status = document.getElementById("loginstatus").value;
 			if(status=="false"){
@@ -318,9 +351,12 @@
 
 		//显示菜单
 		function showMenu() {
-		    $("#menuContent2").css({ left: "15px", top: "34px" }).slideDown("fast");
-
-		    $("body").bind("mousedown", onBodyDown);
+			if($('#onlypcase').is(':checked')) {
+				return false;
+			}else{
+			    $("#menuContent2").css({ left: "15px", top: "34px" }).slideDown("fast");
+			    $("body").bind("mousedown", onBodyDown);
+			}
 		}
 		//隐藏菜单
 		function hideMenu() {

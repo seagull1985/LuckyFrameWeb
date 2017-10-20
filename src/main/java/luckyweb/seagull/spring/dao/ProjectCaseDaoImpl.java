@@ -1,5 +1,8 @@
 package luckyweb.seagull.spring.dao;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -35,12 +38,13 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 		
 	}
 
-	private void whereParameter(ProjectCase projectcase, Query query) {
+	private void whereParameter(ProjectCase projectcase, Query query) {		
 		if (projectcase.getProjectid()!=0&&projectcase.getProjectid()!=99) {
 			query.setParameter("projectid", projectcase.getProjectid());
 		}
-		if (projectcase.getModuleid()!=0) {
-			query.setParameter("moduleid", projectcase.getModuleid());
+		if (projectcase.getModuleid()!=0&&projectcase.getModuleidarr().length>0) {
+			Collection<Integer> collection = new ArrayList<Integer>(Arrays.asList(projectcase.getModuleidarr()));
+			query.setParameterList("moduleid", collection);
 		}
 		if (null!=projectcase.getSign()&&!"".equals(projectcase.getSign())) {
 			query.setParameter("sign", "%"+projectcase.getSign()+"%");

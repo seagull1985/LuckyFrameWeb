@@ -157,7 +157,7 @@
 
 								</form>
 							</div>
-							<div id="autoDown" class="modal-footer" style=" background-color:#F0F8FF;height: 140px;width:100%;overflow-y:scroll;text-align:left;">
+							<div id="autoDown" class="modal-footer" style=" background-color:#F0F8FF;height: 300px;width:100%;overflow-y:scroll;text-align:left;">
 
 							</div>	
 							

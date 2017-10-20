@@ -13,6 +13,7 @@ public class ProjectCase implements java.io.Serializable{
     private String name;
 	private int projectid;
 	private int moduleid;
+	private Integer[] moduleidarr;
 	private String modulename;
 	private int projectindex;
 	private String projectname;
@@ -24,6 +25,12 @@ public class ProjectCase implements java.io.Serializable{
     private int checktype;
     
     
+	public Integer[] getModuleidarr() {
+		return moduleidarr;
+	}
+	public void setModuleidarr(Integer[] moduleidarr) {
+		this.moduleidarr = moduleidarr;
+	}
 	public String getModulename() {
 		return modulename;
 	}

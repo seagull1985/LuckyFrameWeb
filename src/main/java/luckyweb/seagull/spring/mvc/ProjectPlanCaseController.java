@@ -57,6 +57,8 @@ public class ProjectPlanCaseController {
 	private UserInfoService userinfoservice;
 	
 	private List<ProjectCase> viewToSaveCase;
+	
+	private List<Integer> listmoduleid=new ArrayList<Integer>();
 
 	/**
 	 * 
@@ -91,6 +93,7 @@ public class ProjectPlanCaseController {
 		return "/jsp/plancase/projectplancase";
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getCaseList.do")
 	private void getCaseList(Integer limit, Integer offset, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -100,7 +103,12 @@ public class ProjectPlanCaseController {
 		String projectid = request.getParameter("projectid");
 		String planidstr = request.getParameter("planid");
 		String moduleid = request.getParameter("moduleid");
-		ProjectCase projectcase = new ProjectCase();
+		String onlypcase = request.getParameter("onlypcase");
+		
+		List<ProjectModule> modulelist = moduleservice.getModuleList();
+		List<ProjectCase> projectcases=new ArrayList<ProjectCase>();
+		List<ProjectPlanCase> plancases=new ArrayList<ProjectPlanCase>();
+		int total=0;
 		if (null == offset && null == limit) {
 			offset = 0;
 		}
@@ -108,50 +116,79 @@ public class ProjectPlanCaseController {
 			limit = 10;
 		}
 		// 得到客户端传递的查询参数
-		if (!StrLib.isEmpty(search)) {
-			projectcase.setSign(search);
-			projectcase.setName(search);
-			projectcase.setOperationer(search);
-			projectcase.setRemark(search);
-		}
-		// 得到客户端传递的查询参数
-		if (!StrLib.isEmpty(projectid) && !"99".equals(projectid)) {
-			projectcase.setProjectid(Integer.valueOf(projectid));
-		}
-		// 得到客户端传递的查询参数
 		int planid = 0;
 		if (!StrLib.isEmpty(planidstr)) {
 			planid = Integer.valueOf(planidstr);
 		}
-		// 得到客户端传递的查询参数
-		if (!StrLib.isEmpty(moduleid)) {
-			projectcase.setModuleid(Integer.valueOf(moduleid));
+		ProjectCase projectcase = new ProjectCase();	
+		if ("0".equals(onlypcase)) {		
+			// 得到客户端传递的查询参数
+			if (!StrLib.isEmpty(search)) {
+				projectcase.setSign(search);
+				projectcase.setName(search);
+				projectcase.setOperationer(search);
+				projectcase.setRemark(search);
+			}
+			// 得到客户端传递的查询参数
+			if (!StrLib.isEmpty(projectid) && !"99".equals(projectid)) {
+				projectcase.setProjectid(Integer.valueOf(projectid));
+			}
+
+			// 得到客户端传递的查询参数
+			if (!StrLib.isEmpty(moduleid)) {
+				projectcase.setModuleid(Integer.valueOf(moduleid));
+				if(0!=projectcase.getModuleid()){
+					listmoduleid.clear();
+					getchildmoduList(projectcase.getProjectid(),projectcase.getModuleid());
+					Integer[] moduleidarr=new Integer[listmoduleid.size()+1];
+					moduleidarr[0]=projectcase.getModuleid();
+					for(int i=0;i<listmoduleid.size();i++){
+						moduleidarr[i+1]=listmoduleid.get(i);
+					}
+					projectcase.setModuleidarr(moduleidarr);
+					listmoduleid.clear();
+				}
+			}
+			
+			projectcases = projectcaseservice.findByPage(projectcase, offset, limit);
+			plancases = projectplancaseservice.getcases(planid);
+			for (int i = 0; i < projectcases.size(); i++) {
+				ProjectCase pc = projectcases.get(i);
+				for (int j = 0; j < plancases.size(); j++) {
+					ProjectPlanCase ppc = plancases.get(j);
+					if (pc.getId() == ppc.getCaseid()) {
+						projectcases.get(i).setChecktype(1);
+						projectcases.get(i).setPriority(plancases.get(j).getPriority());
+					}
+				}
+				// 更新模块名
+				for (ProjectModule module : modulelist) {
+					if (pc.getModuleid() == module.getId()) {
+						projectcases.get(i).setModulename(module.getModulename());
+					}
+				}
+			}
+			// 得到总记录数
+			total = projectcaseservice.findRows(projectcase);
+		} else {
+			ProjectPlanCase plancase = new ProjectPlanCase();
+			plancase.setPlanid(planid);
+			plancases = projectplancaseservice.findByPage(plancase, offset, limit);
+			for(ProjectPlanCase pc: plancases){
+				projectcase=projectcaseservice.load(pc.getCaseid());
+				projectcase.setChecktype(1);
+				projectcase.setPriority(pc.getPriority());
+				projectcases.add(projectcase);
+			}
+			// 得到总记录数
+			total = projectplancaseservice.getcases(planid).size();
 		}
 
-		List<ProjectCase> projectcases = projectcaseservice.findByPage(projectcase, offset, limit);
-		List<ProjectPlanCase> plancases = projectplancaseservice.getcases(planid);
-		List<ProjectModule> modulelist = moduleservice.getModuleList();
-		for (int i = 0; i < projectcases.size(); i++) {
-			ProjectCase pc = projectcases.get(i);
-			for (int j = 0; j < plancases.size(); j++) {
-				ProjectPlanCase ppc = plancases.get(j);
-				if (pc.getId() == ppc.getCaseid()) {
-					projectcases.get(i).setChecktype(1);
-					projectcases.get(i).setPriority(plancases.get(j).getPriority());
-				}
-			}
-			// 更新模块名
-			for (ProjectModule module : modulelist) {
-				if (pc.getModuleid() == module.getId()) {
-					projectcases.get(i).setModulename(module.getModulename());
-				}
-			}
-		}
+		
 		viewToSaveCase = projectcases;
 		// 转换成json字符串
 		String RecordJson = StrLib.listToJson(projectcases);
-		// 得到总记录数
-		int total = projectcaseservice.findRows(projectcase);
+
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
@@ -349,4 +386,26 @@ public class ProjectPlanCaseController {
 		}
 	}
 	
+
+	/**
+	 * 使用递归查询指定测试ID中的所有子测试集
+	 * 
+	 * @param tj
+	 * @param br
+	 * @param model
+	 * @param req
+	 * @param rsp
+	 * @return
+	 * @throws Exception
+	 * @Description:
+	 */
+    private List<Integer> getchildmoduList(int projectid,int pid){
+    	List<ProjectModule> modules = moduleservice.getModuleListByProjectid(projectid, pid);
+        for(ProjectModule pm: modules){
+        	listmoduleid.add(pm.getId());
+            //递归遍历下一级  
+        	getchildmoduList(projectid,pm.getId());
+        }  
+     return listmoduleid;  
+    } 
 }
