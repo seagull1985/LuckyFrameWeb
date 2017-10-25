@@ -32,7 +32,8 @@
 # 介绍
 
 LuckyFrame 开源自动化测试平台 - 自动化测试 X 时代来了
-> LuckyFrame QQ官方交流群 487954492 
+> LuckyFrame QQ官方交流群 487954492
+<a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=32919cc1ee8595efa4c561920f3fdb606606ca8fdb6ff6b2430c5d97587551de"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="LuckyFrame自动化测试" title="LuckyFrame自动化测试"></a> 
 # 我能做什么？
 
 - **分布式测试**：使用Web-Client的方式，Web端负责基本信息管理展示，Client负责用例执行，任意无限扩展客户端。
