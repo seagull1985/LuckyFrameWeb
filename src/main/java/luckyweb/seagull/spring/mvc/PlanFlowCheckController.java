@@ -171,6 +171,16 @@ public class PlanFlowCheckController {
 					model.addAttribute("projects", QueueListener.qa_projlist);			
 					model.addAttribute("planflowcheck", planflowcheck);
 					return retVal;
+				}else{
+					if(!UserLoginController.oppidboolean(req, planflowcheck.getProjectid())){
+						@SuppressWarnings("unchecked")
+						List<Object[]> phaselist = flowinfoService.listphaseinfo();
+						model.addAttribute("phaselist", phaselist);
+						model.addAttribute("projects", QueueListener.qa_projlist);			
+						model.addAttribute("planflowcheck", planflowcheck);
+						model.addAttribute("message", "当前用户无权限添加此项目流程计划检查信息，请联系管理员！");
+						return retVal;
+					}
 				}
 				
 				if(planflowcheck.getCheckentryid().equals("0")){
@@ -322,6 +332,12 @@ public class PlanFlowCheckController {
 
 			}//添加数据
 			
+			if(!UserLoginController.oppidboolean(req, pfc.getSectorProjects().getProjectid())){
+				model.addAttribute("url", "/planflowCheck/load.do");
+				model.addAttribute("message", "当前用户无权限修改此项目的流程检查计划，请联系管理员！");
+				return "error";
+			}
+			
 			@SuppressWarnings("unchecked")
 			List<Object[]> phaselist = flowinfoService.listphaseinfo();
 			@SuppressWarnings("unchecked")
@@ -384,17 +400,35 @@ public class PlanFlowCheckController {
 				}
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
 				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
-
+				String status="fail";
+				String ms="删除检查计划失败!";
+				int suc=0;
+				int fail=0;
 				for (int i = 0; i < jsonarr.size(); i++) {
 					int id = Integer.valueOf(jsonarr.get(i).toString());
 					PlanFlowCheck pfc = planflowcheckservice.load(id); 
+					
+					if(!UserLoginController.oppidboolean(req, pfc.getSectorProjects().getProjectid())){
+						fail++;
+						continue;
+					}
 					planflowcheckservice.delete(id);
 					String checkentry = flowinfoService.load(Integer.valueOf(pfc.getCheckentryid())).getCheckentry();
 					operationlogservice.add(req, "QA_PLANFLOWCHECK", id, 
 							pfc.getSectorProjects().getProjectid(),"流程检查计划删除成功！计划日期："+pfc.getPlandate()+" 检查内容："+checkentry);
+					suc++;
 				}
-				json.put("status", "success");
-				json.put("ms", "删除检查计划成功!");
+				if(suc>0){
+					status="success";
+					ms="删除检查计划成功!";
+					if(fail>0){
+						status="success";
+						ms="删除检查计划"+suc+"条成功！"+fail+"条因为无项目权限删除失败！";
+					}
+				}
+
+				json.put("status", status);
+				json.put("ms", ms);
 			}
 			pw.print(json.toString());
 

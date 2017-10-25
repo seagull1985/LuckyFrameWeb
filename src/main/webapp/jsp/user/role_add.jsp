@@ -62,10 +62,19 @@
 							<h3 class="thin text-center">添加角色权限</h3>
 
 							<sf:form  modelAttribute="userrole" method="post" >
-								<div class="top-margin">
+							<div class="top-margin">
 								<label>角色名称<span class="text-danger">*</span></label>
 								<sf:input type="text" class="form-control" path="role" id="role"/>
 							</div>
+							
+							<div class="top-margin">
+									<label style="color: blue">项目权限<span class="text-danger">*</span></label><br/>
+									<c:forEach items="${projectlist}" var="t">
+									<label>${t.projectname}</label>									
+									<sf:checkbox path="opprojectid" id="prolist${t.projectid}" value="${t.projectid}" />&nbsp;&nbsp;&nbsp;&nbsp;
+								</c:forEach>
+							</div>
+							
 							<div class="top-margin">
 									<label>权限 <span class="text-danger">*</span></label><br/>
 									<c:forEach items="${authoritylist}" var="r">

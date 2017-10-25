@@ -16,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import luckyweb.seagull.comm.QueueListener;
-import luckyweb.seagull.spring.entity.ProjectCasesteps;
 import luckyweb.seagull.spring.entity.ProjectProtocolTemplate;
 import luckyweb.seagull.spring.entity.ProjectTemplateParams;
 import luckyweb.seagull.spring.entity.SectorProjects;
@@ -78,6 +77,12 @@ public class ProjectTemplateParamsController {
 			ProjectProtocolTemplate ppt = null;
 			if (!StrLib.isEmpty(templateid) && !"0".equals(templateid)) {
 				ppt = ptemplateservice.load(Integer.valueOf(templateid));
+				if(!UserLoginController.oppidboolean(req, ppt.getProjectid())){
+					SectorProjects sp=sectorprojectsService.loadob(ppt.getProjectid());
+					model.addAttribute("url", "/projectprotocolTemplate/load.do");
+					model.addAttribute("message", "当前用户无权限编辑项目【"+sp.getProjectname()+"】的协议模板，请联系管理员！");
+					return "error";
+				}
 				List<SectorProjects> prolist = QueueListener.qa_projlist;
 				for (SectorProjects project : prolist) {
 						if (ppt.getProjectid() == project.getProjectid()) {
@@ -148,7 +153,7 @@ public class ProjectTemplateParamsController {
 			String jsonstr = sb.toString().substring(1, sb.toString().length() - 1);
 			jsonstr = jsonstr.replace("\\\"", "\"");
 			jsonstr = jsonstr.replace("undefined", "0");
-			System.out.println(jsonstr);
+
 			JSONArray jsonarr = JSONArray.fromObject(jsonstr);
 			List<?> list = JSONArray.toList(jsonarr, new ProjectTemplateParams(), new JsonConfig());// 参数1为要转换的JSONArray数据，参数2为要转换的目标数据，即List盛装的数据
 			String usercode = "";
@@ -186,7 +191,7 @@ public class ProjectTemplateParamsController {
 				}
 			}
 			
-			for (ProjectTemplateParams oldparam:paramslist) { // 删除原有列表中多的用例
+			for (ProjectTemplateParams oldparam:paramslist) { // 删除原有列表中多的步骤
 				ptemplateparamsService.deleteforob(oldparam);
 			}
 			

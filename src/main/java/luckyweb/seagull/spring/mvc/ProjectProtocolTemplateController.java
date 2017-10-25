@@ -160,28 +160,33 @@ public class ProjectProtocolTemplateController {
 				json.put("status", "fail");
 				json.put("ms", "增加协议模板失败,权限不足,请联系管理员!");
 			} else {
-				if (null != req.getSession().getAttribute("usercode")
-						&& null != req.getSession().getAttribute("username")) {
-					String usercode = req.getSession().getAttribute("usercode").toString();
-					ppt.setOperationer(usercode);
+				if(!UserLoginController.oppidboolean(req, ppt.getProjectid())){
+					json.put("status", "fail");
+					json.put("ms", "增加协议模板失败,项目权限不足,请联系管理员!");
+				}else{
+					if (null != req.getSession().getAttribute("usercode")
+							&& null != req.getSession().getAttribute("username")) {
+						String usercode = req.getSession().getAttribute("usercode").toString();
+						ppt.setOperationer(usercode);
+					}
+
+					String regEx_space = "\t|\r|\n";// 定义空格回车换行符
+					Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
+					Matcher m_space = p_space.matcher(ppt.getRemark());
+					ppt.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
+
+					Date currentTime = new Date();
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String time = formatter.format(currentTime);
+					ppt.setTime(time);
+
+					int id = ptemplateservice.add(ppt);
+
+					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", id, ppt.getProjectid(), "添加协议模板成功!");
+
+					json.put("status", "success");
+					json.put("ms", "添加协议模板成功!");
 				}
-
-				String regEx_space = "\t|\r|\n";// 定义空格回车换行符
-				Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
-				Matcher m_space = p_space.matcher(ppt.getRemark());
-				ppt.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
-
-				Date currentTime = new Date();
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String time = formatter.format(currentTime);
-				ppt.setTime(time);
-
-				int id = ptemplateservice.add(ppt);
-
-				operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", id, ppt.getProjectid(), "添加协议模板成功!");
-
-				json.put("status", "success");
-				json.put("ms", "添加协议模板成功!");
 			}
 			pw.print(json.toString());
 
@@ -204,22 +209,28 @@ public class ProjectProtocolTemplateController {
 				json.put("status", "fail");
 				json.put("ms", "编辑模板失败,权限不足,请联系管理员!");
 			} else {
-				if (null != req.getSession().getAttribute("usercode")
-						&& null != req.getSession().getAttribute("username")) {
-					String usercode = req.getSession().getAttribute("usercode").toString();
-					ppt.setOperationer(usercode);
+				if(!UserLoginController.oppidboolean(req, ppt.getProjectid())){
+					json.put("status", "fail");
+					json.put("ms", "编辑模板失败,项目权限不足,请联系管理员!");
+				}else{
+					if (null != req.getSession().getAttribute("usercode")
+							&& null != req.getSession().getAttribute("username")) {
+						String usercode = req.getSession().getAttribute("usercode").toString();
+						ppt.setOperationer(usercode);
+					}
+					Date currentTime = new Date();
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String time = formatter.format(currentTime);
+					ppt.setTime(time);
+
+					ptemplateservice.modify(ppt);
+
+					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", ppt.getId(), ppt.getProjectid(),
+							"修改测试协议模板成功!");
+					json.put("status", "success");
+					json.put("ms", "编辑测试协议模板成功!");
 				}
-				Date currentTime = new Date();
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String time = formatter.format(currentTime);
-				ppt.setTime(time);
 
-				ptemplateservice.modify(ppt);
-
-				operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", ppt.getId(), ppt.getProjectid(),
-						"修改测试协议模板成功!");
-				json.put("status", "success");
-				json.put("ms", "编辑测试协议模板成功!");
 			}
 			pw.print(json.toString());
 		} catch (Exception e) {
@@ -264,15 +275,35 @@ public class ProjectProtocolTemplateController {
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
 				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("templateids"));
 
+				String status="fail";
+				String ms="删除协议模板失败!";
+				int suc=0;
+				int fail=0;
 				for (int i = 0; i < jsonarr.size(); i++) {
 					int id = Integer.valueOf(jsonarr.get(i).toString());
 					ProjectProtocolTemplate ppt = ptemplateservice.load(id);
+					
+					if(!UserLoginController.oppidboolean(req, ppt.getProjectid())){
+						fail++;
+						continue;
+					}	
 					ptemplateparamsService.delete(id);
 					ptemplateservice.deleteforob(ppt);
 					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", id, ppt.getProjectid(), "删除协议模板成功!");
+					suc++;
 				}
-				json.put("status", "success");
-				json.put("ms", "删除协议模板成功!");
+				
+				if(suc>0){
+					status="success";
+					ms="删除协议模板成功!";
+					if(fail>0){
+						status="success";
+						ms="删除协议模板"+suc+"条成功！"+fail+"条因为无项目权限删除失败！";
+					}
+				}
+
+				json.put("status", status);
+				json.put("ms", ms);
 			}
 			pw.print(json.toString());
 

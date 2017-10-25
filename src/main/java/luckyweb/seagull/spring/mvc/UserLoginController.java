@@ -52,6 +52,7 @@ public class UserLoginController {
 		String[] result = new String[3];
 		if(id!=0){
 			String auth = "";
+			String oppid = "";
 			UserInfo userinfo = userinfoservice.load(id);
 			String temp[]=userinfo.getRole().split(";",-1);
 			for(int i=0;i<temp.length;i++){
@@ -60,9 +61,11 @@ public class UserLoginController {
 				}				
 				UserRole userrole = userroleservice.load(Integer.valueOf(temp[i]));
 				auth = auth+userrole.getPermission();
+				oppid = oppid+userrole.getOpprojectid();
 			}
 			
 			req.getSession().setAttribute("permission", auth);
+			req.getSession().setAttribute("oppid", oppid);
 			req.getSession().setAttribute("usercode", userinfo.getUsercode());
 			req.getSession().setAttribute("username", userinfo.getUsername());
 
@@ -95,6 +98,7 @@ public class UserLoginController {
 		req.getSession().setAttribute("usercode", null);
 		req.getSession().setAttribute("username", null);
 		req.getSession().setAttribute("permission", null);
+		req.getSession().setAttribute("oppid", null);
 		
 		result[0] = "true";		
 		
@@ -146,12 +150,28 @@ public class UserLoginController {
 		boolean result;
 		
 		if(req.getSession().getAttribute("permission")!=null){
-			if(req.getSession().getAttribute("permission").toString().indexOf(opr+",")>=0){
+			if(req.getSession().getAttribute("permission").toString().indexOf(","+opr+",")>=0){
 				result = true;
 			}else{
 				result = false;
 			}
 		}else{
+			result = false;
+		}
+
+		return result;
+	}
+	
+	public static boolean oppidboolean(HttpServletRequest req, int projectids) {
+		boolean result = false;
+
+		if (req.getSession().getAttribute("oppid") != null) {
+			if (req.getSession().getAttribute("oppid").toString().indexOf("," + projectids + ",") >= 0) {
+				result = true;
+			} else {
+				result = false;
+			}
+		} else {
 			result = false;
 		}
 

@@ -17,15 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import luckyweb.seagull.comm.QueueListener;
-import luckyweb.seagull.quartz.QuartzManager;
 import luckyweb.seagull.spring.entity.SecondarySector;
 import luckyweb.seagull.spring.entity.SectorProjects;
-import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.spring.entity.UserAuthority;
 import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.entity.UserRole;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.SecondarySectorService;
+import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.UserAuthorityService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.spring.service.UserRoleService;
@@ -39,12 +38,6 @@ import net.sf.json.JSONObject;
 @RequestMapping("/userInfo")
 public class UserInfoController {
 	
-	private int allPage;
-	private int pageSize = 20;
-	private int allRows;
-	private int page = 1;
-	private int offset;
-	
 	@Resource(name = "userinfoService")
 	private UserInfoService userinfoservice;
 	
@@ -56,6 +49,9 @@ public class UserInfoController {
 	
 	@Resource(name = "secondarysectorService")
 	private SecondarySectorService secondarysectorService;
+	
+	@Resource(name = "sectorprojectsService")
+	private SectorProjectsService sectorprojectsService;
 	
 	@Resource(name = "operationlogService")
 	private OperationLogService operationlogservice;
@@ -574,6 +570,17 @@ public class UserInfoController {
 				return "success";
 			}
 			
+		    List<SectorProjects> lsp=sectorprojectsService.getAllProject();
+		    for(SectorProjects sp:lsp){
+				if(sp.getProjecttype()==1){
+					sp.setProjectname(sp.getProjectname()+"(TestLink项目)");
+				}
+		    	if(null!=sp&&sp.getProjectid()==99){
+				    lsp.remove(sp);
+				    break;
+		    	}
+		    }
+		    
 			String retVal = "/jsp/user/role";
 			if (req.getMethod().equals("POST"))
 			{
@@ -584,6 +591,17 @@ public class UserInfoController {
 				String message = "";
 				if(StrLib.isEmpty(userrole.getRole())||"0".equals(userrole.getRole())){
 					message = "请至少选择一个角色保存";
+					model.addAttribute("projectlist", lsp);
+				    model.addAttribute("rolelist", userroleservice.listall());
+				    model.addAttribute("authoritylist", userauthorityservice.listall());
+					model.addAttribute("userrole", userrole);
+					model.addAttribute("message", message);
+					return retVal;
+				}
+				
+				if(StrLib.isEmpty(userrole.getOpprojectid())){
+					message = "请至少选择一个项目保存";
+					model.addAttribute("projectlist", lsp);
 				    model.addAttribute("rolelist", userroleservice.listall());
 				    model.addAttribute("authoritylist", userauthorityservice.listall());
 					model.addAttribute("userrole", userrole);
@@ -593,6 +611,7 @@ public class UserInfoController {
 				
 				if(StrLib.isEmpty(userrole.getPermission())){
 					message = "请至少选择一个权限项保存";
+					model.addAttribute("projectlist", lsp);
 				    model.addAttribute("rolelist", userroleservice.listall());
 				    model.addAttribute("authoritylist", userauthorityservice.listall());
 					model.addAttribute("userrole", userrole);
@@ -604,6 +623,7 @@ public class UserInfoController {
 				userrole.setId(urole.getId());
 				userrole.setRole(urole.getRole());
 				userrole.setPermission(userrole.getPermission()+",");
+				userrole.setOpprojectid(userrole.getOpprojectid()+",");
 				
 				userroleservice.modify(userrole);
 				
@@ -615,6 +635,8 @@ public class UserInfoController {
 				return "success";
 
 			}
+
+			    model.addAttribute("projectlist", lsp);
 			    model.addAttribute("rolelist", userroleservice.listall());
 			    model.addAttribute("authoritylist", userauthorityservice.listall());
 				model.addAttribute("userrole", userrole);
@@ -657,6 +679,17 @@ public class UserInfoController {
 				return "success";
 			}
 			
+		    List<SectorProjects> lsp=sectorprojectsService.getAllProject();
+		    for(SectorProjects sp:lsp){
+				if(sp.getProjecttype()==1){
+					sp.setProjectname(sp.getProjectname()+"(TestLink项目)");
+				}
+		    	if(null!=sp&&sp.getProjectid()==99){
+				    lsp.remove(sp);
+				    break;
+		    	}
+		    }
+		    
 			String retVal = "/jsp/user/role_add";
 			if (req.getMethod().equals("POST"))
 			{
@@ -667,6 +700,17 @@ public class UserInfoController {
 				String message = "";
 				if(StrLib.isEmpty(userrole.getRole())||"0".equals(userrole.getRole())){
 					message = "请至少选择一个角色保存";
+					model.addAttribute("projectlist", lsp);
+				    model.addAttribute("rolelist", userroleservice.listall());
+				    model.addAttribute("authoritylist", userauthorityservice.listall());
+					model.addAttribute("userrole", userrole);
+					model.addAttribute("message", message);
+					return retVal;
+				}
+				
+				if(StrLib.isEmpty(userrole.getOpprojectid())){
+					message = "请至少选择一个项目保存";
+					model.addAttribute("projectlist", lsp);
 				    model.addAttribute("rolelist", userroleservice.listall());
 				    model.addAttribute("authoritylist", userauthorityservice.listall());
 					model.addAttribute("userrole", userrole);
@@ -676,6 +720,7 @@ public class UserInfoController {
 				
 				if(StrLib.isEmpty(userrole.getPermission())){
 					message = "请至少选择一个权限项保存";
+					model.addAttribute("projectlist", lsp);
 				    model.addAttribute("rolelist", userroleservice.listall());
 				    model.addAttribute("authoritylist", userauthorityservice.listall());
 					model.addAttribute("userrole", userrole);
@@ -684,6 +729,7 @@ public class UserInfoController {
 				}
 				
 				userrole.setPermission(userrole.getPermission()+",");
+				userrole.setOpprojectid(userrole.getOpprojectid()+",");
 				
 				userroleservice.add(userrole);
 				
@@ -695,6 +741,7 @@ public class UserInfoController {
 				return "success";
 
 			}
+			    model.addAttribute("projectlist", lsp);
 			    model.addAttribute("authoritylist", userauthorityservice.listall());
 				model.addAttribute("userrole", userrole);
 				return retVal;
@@ -767,24 +814,39 @@ public class UserInfoController {
 		
 		UserRole urole= userroleservice.load(roleId);
 		List<UserAuthority> listauth = userauthorityservice.listall();
-		ArrayList<String> templist=new ArrayList<String>();
-		
-		String temp[]=urole.getPermission().split(",",-1);
-		for(int i=0;i<temp.length;i++){
-			if(null==temp[i]||"".equals(temp[i])){
-				continue;
-			}				
-			for(UserAuthority usth:listauth){
-				if(temp[i].equals(usth.getAlias())){
-					templist.add(String.valueOf(usth.getId()));
+		ArrayList<String> templistpermi=new ArrayList<String>();
+		ArrayList<String> templistoppro=new ArrayList<String>();
+		if(!StrLib.isEmpty(urole.getPermission())){
+			String temppermi[]=urole.getPermission().split(",",-1);		
+			for(int i=0;i<temppermi.length;i++){
+				if(null==temppermi[i]||"".equals(temppermi[i])){
+					continue;
+				}				
+				for(UserAuthority usth:listauth){
+					if(temppermi[i].equals(usth.getAlias())){
+						templistpermi.add(String.valueOf(usth.getId()));
+					}
 				}
 			}
 		}
+
+		if(!StrLib.isEmpty(urole.getOpprojectid())){
+			String tempoppro[]=urole.getOpprojectid().split(",",-1);
+			for(int i=0;i<tempoppro.length;i++){
+				if(null==tempoppro[i]||"".equals(tempoppro[i])){
+					continue;
+				}				
+				templistoppro.add(tempoppro[i]);
+			}
+		}
+
 		// 取集合
 	    rsp.setContentType("text/xml;charset=utf-8");
-		JSONArray jsonArray = JSONArray.fromObject(templist);
+		JSONArray jsonArraypermi = JSONArray.fromObject(templistpermi);
+		JSONArray jsonArrayoppro = JSONArray.fromObject(templistoppro);
 		JSONObject jsobjcet = new JSONObject();
-		jsobjcet.put("data", jsonArray); 
+		jsobjcet.put("permi", jsonArraypermi);
+		jsobjcet.put("oppro", jsonArrayoppro); 
 		
 		rsp.getWriter().write(jsobjcet.toString());
 		System.out.println(jsobjcet.toString());

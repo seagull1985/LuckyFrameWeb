@@ -12,7 +12,10 @@
 			<column name="role" length="50" not-null="true" />
 		</property>
 		<property name="permission" type="java.lang.String">
-			<column name="permission" length="1000" not-null="true" />
+			<column name="permission" length="1000" not-null="false" />
+		</property>
+		<property name="opprojectid" type="java.lang.String">
+			<column name="opprojectid" length="200" not-null="false" />
 		</property>
 	</class>
 </hibernate-mapping>

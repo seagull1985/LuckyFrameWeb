@@ -32,12 +32,6 @@ import net.sf.json.JSONObject;
 @RequestMapping("/reviewinfo")
 public class ReviewInfoController {
 	
-	private int allPage;
-	private int pageSize = 20;
-	private int allRows;
-	private int page = 1;
-	private int offset; 
-	
 	@Resource(name = "reviewService")
 	private ReviewService reviewservice;
 	
@@ -147,6 +141,13 @@ public class ReviewInfoController {
 					model.addAttribute("message", message);
 					model.addAttribute("projects", QueueListener.qa_projlist);
 					return retVal;
+				}else{
+					if(!UserLoginController.oppidboolean(req, reviewinfo.getProjectid())){
+						SectorProjects sp=sectorprojectsService.loadob(reviewinfo.getProjectid());
+						model.addAttribute("projects", QueueListener.qa_projlist);
+						model.addAttribute("message", "当前用户无权限添加项目【"+sp.getProjectname()+"】评审信息，请联系管理员！");
+						return retVal;
+					}
 				}
 				
 				int reviewid = 0;
@@ -266,11 +267,19 @@ public class ReviewInfoController {
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
 				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
 
+				String status="fail";
+				String ms="删除评审明细信息失败!";
+				int suc=0;
+				int fail=0;
 				for (int i = 0; i < jsonarr.size(); i++) {
 					int id = Integer.valueOf(jsonarr.get(i).toString());
 					ReviewInfo reviewinfo = reviewinfoservice.load(id);
 					Review review = reviewservice.load(reviewinfo.getReview_id());
 					
+					if(!UserLoginController.oppidboolean(req, review.getSectorProjects().getProjectid())){
+						fail++;
+						continue;
+					}
 					if ("已修复".equals(reviewinfo.getStatus())) {
 						review.setRepair_num(review.getRepair_num() - 1);
 					}
@@ -283,9 +292,20 @@ public class ReviewInfoController {
 					
 					operationlogservice.add(req, "QA_REVIEWINFO", id, 
 							review.getSectorProjects().getProjectid(),"评审明细信息删除成功！");
+					suc++;
 				}
-				json.put("status", "success");
-				json.put("ms", "删除成功!");
+				
+				if(suc>0){
+					status="success";
+					ms="删除评审明细信息成功!";
+					if(fail>0){
+						status="success";
+						ms="删除评审明细信息"+suc+"条成功！"+fail+"条因为无项目权限删除失败！";
+					}
+				}
+
+				json.put("status", status);
+				json.put("ms", ms);
 			}
 			pw.print(json.toString());
 
@@ -323,9 +343,15 @@ public class ReviewInfoController {
 				model.addAttribute("reviewinfo", new ReviewInfo());
 				model.addAttribute("url",  "/reviewinfo/load.do?reviewid="+reinfo.getReview_id());
 				model.addAttribute("message", "当前用户无权限修改评审信息，请联系管理员！");
-				return "success";
+				return "error";
 			}
-			
+			if(!UserLoginController.oppidboolean(req, reviewinfo.getProjectid())){
+				SectorProjects sp=sectorprojectsService.loadob(reviewinfo.getProjectid());
+				model.addAttribute("reviewinfo", new ReviewInfo());
+				model.addAttribute("url",  "/reviewinfo/load.do?reviewid="+reinfo.getReview_id());
+				model.addAttribute("message", "当前用户无权限修改项目【"+sp.getProjectname()+"】评审信息，请联系管理员！");
+				return "error";
+			}
 			String retVal = "/jsp/review/reviewinfo_update";
 	
 			if (req.getMethod().equals("POST"))

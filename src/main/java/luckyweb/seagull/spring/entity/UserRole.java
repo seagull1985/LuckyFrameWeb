@@ -11,6 +11,14 @@ public class UserRole implements java.io.Serializable{
 	private int id;
 	private String role;
 	private String permission;
+	private String opprojectid;
+	
+	public String getOpprojectid() {
+		return opprojectid;
+	}
+	public void setOpprojectid(String opprojectid) {
+		this.opprojectid = opprojectid;
+	}
 	public int getId() {
 		return id;
 	}

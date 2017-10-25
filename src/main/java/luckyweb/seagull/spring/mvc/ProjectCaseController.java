@@ -174,21 +174,27 @@ public class ProjectCaseController {
 				json.put("status", "fail");
 				json.put("ms", "编辑失败,权限不足,请联系管理员!");
 			} else {
-				if (null != req.getSession().getAttribute("usercode")
-						&& null != req.getSession().getAttribute("username")) {
-					String usercode = req.getSession().getAttribute("usercode").toString();
-					projectcase.setOperationer(usercode);
-				}
-				Date currentTime = new Date();
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String time = formatter.format(currentTime);
-				projectcase.setTime(time);
+				if(!UserLoginController.oppidboolean(req, projectcase.getProjectid())){
+					json.put("status", "fail");
+					json.put("ms", "编辑失败,项目权限不足,请联系管理员!");
+				}else{
+					if (null != req.getSession().getAttribute("usercode")
+							&& null != req.getSession().getAttribute("username")) {
+						String usercode = req.getSession().getAttribute("usercode").toString();
+						projectcase.setOperationer(usercode);
+					}
+					Date currentTime = new Date();
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String time = formatter.format(currentTime);
+					projectcase.setTime(time);
 
-				projectcaseservice.modify(projectcase);
-				operationlogservice.add(req, "PROJECT_CASE", projectcase.getId(), projectcase.getProjectid(),
-						"编辑用例成功！用例编号：" + projectcase.getSign());
-				json.put("status", "success");
-				json.put("ms", "编辑成功!");
+					projectcaseservice.modify(projectcase);
+					operationlogservice.add(req, "PROJECT_CASE", projectcase.getId(), projectcase.getProjectid(),
+							"编辑用例成功！用例编号：" + projectcase.getSign());
+					json.put("status", "success");
+					json.put("ms", "编辑成功!");
+				}
+
 			}
 			pw.print(json.toString());
 		} catch (Exception e) {
@@ -220,46 +226,57 @@ public class ProjectCaseController {
 				json.put("status", "fail");
 				json.put("ms", "添加失败,权限不足,请联系管理员!");
 			} else {
-				if (null != req.getSession().getAttribute("usercode")
-						&& null != req.getSession().getAttribute("username")) {
-					String usercode = req.getSession().getAttribute("usercode").toString();
-					projectcase.setOperationer(usercode);
-				}
 				int copyid = Integer.valueOf(req.getParameter("copyid"));
-				
-				String regEx_space = "\t|\r|\n";// 定义空格回车换行符
-				Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
-				Matcher m_space = p_space.matcher(projectcase.getRemark());
-				projectcase.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
-
-				Date currentTime = new Date();
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String time = formatter.format(currentTime);
-				projectcase.setTime(time);
-
-				SectorProjects sp = sectorprojectsService.loadob(projectcase.getProjectid());
-				String maxindex = projectcaseservice.getCaseMaxIndex(projectcase.getProjectid());
-				int index = Integer.valueOf(maxindex) + 1;
-				projectcase.setSign(sp.getProjectsign() + "-" + index);
-				projectcase.setProjectindex(index);
-				int caseid = projectcaseservice.add(projectcase);
-				operationlogservice.add(req, "PROJECT_CASE", caseid, projectcase.getProjectid(),
-						"添加用例成功！用例编号：" + projectcase.getSign());
-				
-				String ms="添加用例【"+projectcase.getSign()+"】成功！";
-				if(0!=copyid){
-					List<ProjectCasesteps> steps=casestepsservice.getSteps(copyid);
-					for(ProjectCasesteps step:steps){
-						step.setCaseid(caseid);
-						int stepid=casestepsservice.add(step);
-					    operationlogservice.add(req, "PROJECT_CASESTEPS", stepid, projectcase.getProjectid(),
-								"复制用例步骤成功！");
+				if(!UserLoginController.oppidboolean(req, projectcase.getProjectid())){
+					if(0!=copyid){
+						json.put("status", "fail");
+						json.put("ms", "复制用例失败,项目权限不足,请联系管理员!");
+					}else{
+						json.put("status", "fail");
+						json.put("ms", "添加用例失败,项目权限不足,请联系管理员!");
 					}
-					ms="复制用例【"+projectcase.getSign()+"】成功！";
+				}else{
+					if (null != req.getSession().getAttribute("usercode")
+							&& null != req.getSession().getAttribute("username")) {
+						String usercode = req.getSession().getAttribute("usercode").toString();
+						projectcase.setOperationer(usercode);
+					}
+					
+					String regEx_space = "\t|\r|\n";// 定义空格回车换行符
+					Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
+					Matcher m_space = p_space.matcher(projectcase.getRemark());
+					projectcase.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
+
+					Date currentTime = new Date();
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String time = formatter.format(currentTime);
+					projectcase.setTime(time);
+
+					SectorProjects sp = sectorprojectsService.loadob(projectcase.getProjectid());
+					String maxindex = projectcaseservice.getCaseMaxIndex(projectcase.getProjectid());
+					int index = Integer.valueOf(maxindex) + 1;
+					projectcase.setSign(sp.getProjectsign() + "-" + index);
+					projectcase.setProjectindex(index);
+					int caseid = projectcaseservice.add(projectcase);
+					operationlogservice.add(req, "PROJECT_CASE", caseid, projectcase.getProjectid(),
+							"添加用例成功！用例编号：" + projectcase.getSign());
+					
+					String ms="添加用例【"+projectcase.getSign()+"】成功！";
+					if(0!=copyid){
+						List<ProjectCasesteps> steps=casestepsservice.getSteps(copyid);
+						for(ProjectCasesteps step:steps){
+							step.setCaseid(caseid);
+							int stepid=casestepsservice.add(step);
+						    operationlogservice.add(req, "PROJECT_CASESTEPS", stepid, projectcase.getProjectid(),
+									"复制用例步骤成功！");
+						}
+						ms="复制用例【"+projectcase.getSign()+"】成功！";
+					}
+
+					json.put("status", "success");
+					json.put("ms", ms);
 				}
 
-				json.put("status", "success");
-				json.put("ms", ms);
 			}
 			pw.print(json.toString());
 
@@ -305,15 +322,35 @@ public class ProjectCaseController {
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
 				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("caseids"));
 
+				String status="fail";
+				String ms="删除用例失败!";
+				int suc=0;
+				int fail=0;
 				for (int i = 0; i < jsonarr.size(); i++) {
 					int id = Integer.valueOf(jsonarr.get(i).toString());
 					ProjectCase pc = projectcaseservice.load(id);
+					
+					if(!UserLoginController.oppidboolean(req, pc.getProjectid())){
+						fail++;
+						continue;
+					}
 					casestepsservice.delforcaseid(id);
 					projectcaseservice.delete(id);
 					operationlogservice.add(req, "PROJECT_CASE", pc.getId(), pc.getProjectid(), "删除用例成功！");
+					suc++;
 				}
-				json.put("status", "success");
-				json.put("ms", "删除成功!");
+				
+				if(suc>0){
+					status="success";
+					ms="删除用例成功!";
+					if(fail>0){
+						status="success";
+						ms="删除用例"+suc+"条成功！"+fail+"条因为无项目权限删除失败！";
+					}
+				}
+
+				json.put("status", status);
+				json.put("ms", ms);
 			}
 			pw.print(json.toString());
 
@@ -377,28 +414,33 @@ public class ProjectCaseController {
 				}
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
 				String ms="保存用例集成功!";
-
+				String status="success";
 				int projectid = Integer.valueOf(jsonObject.getString("projectid"));
 				int pid = Integer.valueOf(jsonObject.getString("pid"));
-				String oldName = jsonObject.getString("oldName");
-				String name = jsonObject.getString("name");
-				int id = Integer.valueOf(jsonObject.getString("id"));
+				if(!UserLoginController.oppidboolean(req, projectid)){
+					status="fail";
+					ms="项目权限不足,请联系管理员!";
+				}else{
+					String oldName = jsonObject.getString("oldName");
+					String name = jsonObject.getString("name");
+					int id = Integer.valueOf(jsonObject.getString("id"));
 
-				ProjectModule pm=moduleservice.load(id);
-				if(null!=pm&&pm.getProjectid()==projectid&&pm.getPid()==pid&&pm.getModulename().equals(oldName)){
-					pm.setModulename(name);
-					moduleservice.modify(pm);
-					operationlogservice.add(req, "PROJECT_MODULE", id, pm.getProjectid(), "保存用例集成功！");
-				}else{					
-					projectmodule.setProjectid(projectid);
-					projectmodule.setPid(pid);
-					projectmodule.setModulename(name);
-					id = moduleservice.add(projectmodule);
-					operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(), "新增用例集成功！");
-					ms="新增用例集成功!";
+					ProjectModule pm=moduleservice.load(id);
+					if(null!=pm&&pm.getProjectid()==projectid&&pm.getPid()==pid&&pm.getModulename().equals(oldName)){
+						pm.setModulename(name);
+						moduleservice.modify(pm);
+						operationlogservice.add(req, "PROJECT_MODULE", id, pm.getProjectid(), "保存用例集成功！");
+					}else{					
+						projectmodule.setProjectid(projectid);
+						projectmodule.setPid(pid);
+						projectmodule.setModulename(name);
+						id = moduleservice.add(projectmodule);
+						operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(), "新增用例集成功！");
+						ms="新增用例集成功!";
+					}
 				}
 
-				json.put("status", "success");
+				json.put("status", status);
 				json.put("ms", ms);
 
 			}
@@ -447,31 +489,36 @@ public class ProjectCaseController {
 
 				int id = Integer.valueOf(jsonObject.getString("id"));
 				ProjectModule projectmodule = moduleservice.load(id);
-
-				ProjectCase projectcase = new ProjectCase();
-				projectcase.setModuleid(id);
-				if(0!=projectcase.getModuleid()){
-					listmoduleid.clear();
-					getchildmoduList(projectcase.getProjectid(),projectcase.getModuleid());
-					Integer[] moduleidarr=new Integer[listmoduleid.size()+1];
-					moduleidarr[0]=projectcase.getModuleid();
-					for(int i=0;i<listmoduleid.size();i++){
-						moduleidarr[i+1]=listmoduleid.get(i);
-					}
-					projectcase.setModuleidarr(moduleidarr);
-					listmoduleid.clear();
-				}
-				int casecount = projectcaseservice.findRows(projectcase);
-
-				if (casecount == 0) {
-					moduleservice.delete(projectmodule);
-					operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(), "删除用例集成功！");
-
-					json.put("status", "success");
-					json.put("ms", "删除用例集成功！");
-				} else {
+				
+				if(!UserLoginController.oppidboolean(req, projectmodule.getProjectid())){
 					json.put("status", "fail");
-					json.put("ms", "此用例集中包括了" + casecount + "条用例，不能删除!");
+					json.put("ms", "删除失败,项目权限不足,请联系管理员!");
+				}else{
+					ProjectCase projectcase = new ProjectCase();
+					projectcase.setModuleid(id);
+					if(0!=projectcase.getModuleid()){
+						listmoduleid.clear();
+						getchildmoduList(projectcase.getProjectid(),projectcase.getModuleid());
+						Integer[] moduleidarr=new Integer[listmoduleid.size()+1];
+						moduleidarr[0]=projectcase.getModuleid();
+						for(int i=0;i<listmoduleid.size();i++){
+							moduleidarr[i+1]=listmoduleid.get(i);
+						}
+						projectcase.setModuleidarr(moduleidarr);
+						listmoduleid.clear();
+					}
+					int casecount = projectcaseservice.findRows(projectcase);
+
+					if (casecount == 0) {
+						moduleservice.delete(projectmodule);
+						operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(), "删除用例集成功！");
+
+						json.put("status", "success");
+						json.put("ms", "删除用例集成功！");
+					} else {
+						json.put("status", "fail");
+						json.put("ms", "此用例集中包括了" + casecount + "条用例，不能删除!");
+					}
 				}
 
 			}

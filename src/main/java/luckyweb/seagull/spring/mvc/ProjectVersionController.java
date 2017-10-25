@@ -185,6 +185,12 @@ public class ProjectVersionController {
 					message = "请选择项目!";
 					model.addAttribute("message", message);
 					return retVal;
+				}else{
+					if(!UserLoginController.oppidboolean(req, projectversion.getProjectid())){
+						SectorProjects sp=sectorprojectsService.loadob(projectversion.getProjectid());
+						model.addAttribute("message", "当前用户无权限添加项目【"+sp.getProjectname()+"】版本信息，请联系管理员！");
+						return retVal;
+					}
 				}
 				
 				if(projectversion.getActually_testend().equals("")||projectversion.getPlan_testend().equals("")){
@@ -407,6 +413,12 @@ public class ProjectVersionController {
 				message = "请选择项目!";
 				model.addAttribute("message", message);
 				return retVal;
+			}else{
+				if(!UserLoginController.oppidboolean(req, projectversion.getProjectid())){
+					SectorProjects sp=sectorprojectsService.loadob(projectversion.getProjectid());
+					model.addAttribute("message", "当前用户无权限操作修改项目【"+sp.getProjectname()+"】版本信息，请联系管理员！");
+					return retVal;
+				}
 			}
 			
 			if(projectversion.getPlan_testend().equals("")){
@@ -645,7 +657,14 @@ public class ProjectVersionController {
 					message = "请选择项目!";
 					model.addAttribute("message", message);
 					return retVal;
-				}			
+				}else{
+					if(!UserLoginController.oppidboolean(req, projectversion.getProjectid())){
+						SectorProjects sp=sectorprojectsService.loadob(projectversion.getProjectid());
+						model.addAttribute("message", "当前用户无权限添加项目【"+sp.getProjectname()+"】版本计划信息，请联系管理员！");
+						return retVal;
+					}
+				}
+				
 				if(projectversion.getPlan_demand()==0){
 					message = "请填写计划上线需求数!";
 					model.addAttribute("message", message);
@@ -831,13 +850,19 @@ public class ProjectVersionController {
 				ProjectVersion projectversion = projectsversionservice.load(versionid);
 				try
 				{
-					projectsversionservice.delete(versionid);
-					
-					operationlogservice.add(req, "QA_PROJECTVERSION", versionid, 
-							projectversion.getSectorProjects().getProjectid(),"版本信息删除成功！版本号："+projectversion.getVersionnumber());
-					
-					json.put("status", "success");
-					json.put("ms", "删除项目版本信息成功!");
+					if(!UserLoginController.oppidboolean(req, projectversion.getSectorProjects().getProjectid())){
+						json.put("status", "fail");
+						json.put("ms", "删除项目版本信息失败,项目权限不足,请联系管理员!");
+					}else{
+						projectsversionservice.delete(versionid);
+						
+						operationlogservice.add(req, "QA_PROJECTVERSION", versionid, 
+								projectversion.getSectorProjects().getProjectid(),"版本信息删除成功！版本号："+projectversion.getVersionnumber());
+						
+						json.put("status", "success");
+						json.put("ms", "删除项目版本信息成功!");
+					}
+
 				}
 				catch (Exception e)
 				{

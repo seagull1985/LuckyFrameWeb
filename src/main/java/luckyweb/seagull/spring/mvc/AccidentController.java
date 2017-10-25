@@ -151,7 +151,7 @@ public class AccidentController {
 				model.addAttribute("accident", new Accident());
 				model.addAttribute("url", "/accident/load.do");
 				model.addAttribute("message", "当前用户无权限添加生产事故信息，请联系管理员！");
-				return "success";
+				return "error";
 			}
 			
 			String retVal = "/jsp/accident/accident_add";
@@ -168,6 +168,14 @@ public class AccidentController {
 					model.addAttribute("message", message);
 					model.addAttribute("projects", QueueListener.qa_projlist);
 					return retVal;
+				}else{
+					if(!UserLoginController.oppidboolean(req, accident.getProjectid())){
+						SectorProjects sp=sectorprojectsService.loadob(accident.getProjectid());
+						model.addAttribute("accident", new Accident());
+						model.addAttribute("url", "/accident/load.do");
+						model.addAttribute("message", "当前用户无权限添加项目【"+sp.getProjectname()+"】生产事故信息，请联系管理员！");
+						return "error";
+					}
 				}
 				
 				if(accident.getEventtime().equals("")){
@@ -251,7 +259,7 @@ public class AccidentController {
 			model.addAttribute("accident", new Accident());
 			model.addAttribute("url", "/accident/load.do");
 			model.addAttribute("message", "当前用户无权限修改生产事故信息，请联系管理员！");
-			return "success";
+			return "error";
 		}
 		
 		try{
@@ -270,6 +278,7 @@ public class AccidentController {
 				model.addAttribute("message", message);
 				return retVal;
 			}
+			
 			if(accident.getAccstatus().equals("跟踪处理完成")){
 				if(accident.getCausaltype().equals("暂未选择")||accident.getCausalanalysis().equals("")){
 					message = "跟踪处理完成状态，请选择原因类型或填写原因分析!";
@@ -304,6 +313,14 @@ public class AccidentController {
 		}	
 		accident = accidentservice.load(id);
 		accident.setProjectid(accident.getSectorProjects().getProjectid());
+		
+		if(!UserLoginController.oppidboolean(req, accident.getProjectid())){
+			SectorProjects sp=sectorprojectsService.loadob(accident.getProjectid());
+			model.addAttribute("accident", new Accident());
+			model.addAttribute("url", "/accident/load.do");
+			model.addAttribute("message", "当前用户无权限修改项目【"+sp.getProjectname()+"】生产事故信息，请联系管理员！");
+			return "error";
+		}
 		
 		model.addAttribute("accident", accident);
 		return "/jsp/accident/accident_update";
@@ -348,19 +365,36 @@ public class AccidentController {
 				}
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
 				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
-
+				String status="fail";
+				String ms="删除故障记录失败!";
+				int suc=0;
+				int fail=0;
 				for (int i = 0; i < jsonarr.size(); i++) {
 					int id = Integer.valueOf(jsonarr.get(i).toString());
 					Accident accident = accidentservice.load(id);
+					
+					if(!UserLoginController.oppidboolean(req, accident.getSectorProjects().getProjectid())){
+						fail++;
+						continue;
+					}					
 					accidentservice.delete(id);
 
 					operationlogservice.add(req, "QA_ACCIDENT", id, 
 							accident.getSectorProjects().getProjectid(),"生产事故信息删除成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
-
+					suc++;
 				}
 				
-				json.put("status", "success");
-				json.put("ms", "删除检查记录成功!");
+				if(suc>0){
+					status="success";
+					ms="删除故障记录成功!";
+					if(fail>0){
+						status="success";
+						ms="删除故障记录"+suc+"条成功！"+fail+"条因为无项目权限删除失败！";
+					}
+				}
+
+				json.put("status", status);
+				json.put("ms", ms);
 			}
 			pw.print(json.toString());
 
@@ -528,7 +562,17 @@ public class AccidentController {
 			model.addAttribute("url", "/accident/load.do");
 			return "error";
 		}
+
 		String id = req.getParameter("id");
+		Accident accident=accidentservice.load(Integer.valueOf(id));
+		if(!UserLoginController.oppidboolean(req, accident.getProjectid())){
+			SectorProjects sp=sectorprojectsService.loadob(accident.getProjectid());
+			model.addAttribute("accident", new Accident());
+			model.addAttribute("url", "/accident/load.do");
+			model.addAttribute("message", "当前用户无权限添加项目【"+sp.getProjectname()+"】生产事故信息，请联系管理员！");
+			return "error";
+		}
+		
 		model.addAttribute("id", id);
 		return "/jsp/accident/acc_upload";
 	}

@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import net.sf.json.JSONArray;
+
 public class StrLib {
 	 private static final byte SPACE = 0x20, ZERO = 0x30;
 	 public static final String CHARSET = "ISO-8859-1";
@@ -224,7 +226,14 @@ public class StrLib {
 	 public static String objectToJson(Object object) {
 	  StringBuilder json = new StringBuilder();
 	  if (object == null) {
-	      json.append("\"\"");
+		  if(object.getClass().isArray()){
+			  json.append("[]"); 
+		  }else{
+		      json.append("\"\"");		  
+		  }
+	  } else if (object.getClass().isArray()) {
+		  JSONArray jsonarray = JSONArray.fromObject(object);
+	      json.append("\"").append(jsonarray.toString().replace("\"", "&quot;")).append("\"");
 	  } else if (object instanceof Timestamp) {
 		  SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//定义格式，不显示毫秒
 		  String str = df.format(object);

@@ -11,13 +11,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import luckyweb.seagull.quartz.QuartzJob;
@@ -30,6 +26,8 @@ import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/caseDetail")
@@ -185,44 +183,50 @@ public class CasedetailController
 				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("caseids"));
 				String status="success";
 				String ms="执行任务成功！";
-                 
-				if(jsonarr.size()==1){
-					int id = Integer.valueOf(jsonarr.get(0).toString());
-					TestCasedetail caseDetail = this.casedetailService.load(id);
-					TestTaskexcute task = caseDetail.getTestTaskexcute();
-					QuartzJob qj = new QuartzJob();
-					ms = qj.toRunCase(task.getTestJob().getPlanproj(),task.getId(), caseDetail.getCaseno(), caseDetail.getCaseversion(),task.getTestJob().getClientip());						
-					operationlogservice.add(req, "TEST_CASEDETAIL", id, 
-								sectorprojectsService.getid(task.getTestJob().getPlanproj()),"自动化用例单条开始执行！任务名称："+task.getTaskId()+
-								" 用例编号："+caseDetail.getCaseno()+" 结果："+ms);
-				}else{
-					String projName;
-					if("ALLFAIL".equals(jsonarr.get(0).toString())){
-						int taskid = Integer.valueOf(jsonarr.get(1).toString());
-						TestTaskexcute task = tastExcuteService.load(taskid);
-						projName = task.getTestJob().getPlanproj();
-						// 批量执行用例
-						QuartzJob qj = new QuartzJob();
-						ms = qj.toRunCaseBatch(projName, task.getId(), "ALLFAIL",task.getTestJob().getClientip());
-						operationlogservice.add(req, "TEST_CASEDETAIL", 0, 
-								sectorprojectsService.getid(projName),"全部非成功自动化用例开始执行!"+" 结果："+ms);
-					}else{
-						StringBuffer caseInfo = new StringBuffer();
-						TestTaskexcute task=null;
-						for (int i = 0; i < jsonarr.size(); i++) {
-							int id = Integer.valueOf(jsonarr.get(i).toString());
-							TestCasedetail caseDetail = casedetailService.load(Integer.valueOf(id));
-							String ocase=caseDetail.getCaseno()+"%"+caseDetail.getCaseversion();
-							caseInfo.append(ocase).append("#");
-							task = caseDetail.getTestTaskexcute();
-						}
-						projName = task.getTestJob().getPlanproj();
-						// 批量执行用例
-						QuartzJob qj = new QuartzJob();
-						ms = qj.toRunCaseBatch(projName, task.getId(), caseInfo.toString(),task.getTestJob().getClientip());		
+                
+				int taskid = Integer.valueOf(jsonarr.get(1).toString());
+				TestTaskexcute task = tastExcuteService.load(taskid);
 
-						operationlogservice.add(req, "TEST_CASEDETAIL", 0, 
-								sectorprojectsService.getid(projName),"自动化用例批量(非成功)开始执行!"+" 结果："+ms);
+				if (!UserLoginController.oppidboolean(req, task.getTestJob().getProjectid())) {
+					status = "fail";
+					ms = "您没有执行此项目用例的权限！";
+				} else {
+					if (jsonarr.size() == 1) {
+						int id = Integer.valueOf(jsonarr.get(0).toString());
+						TestCasedetail caseDetail = this.casedetailService.load(id);
+
+						QuartzJob qj = new QuartzJob();
+						ms = qj.toRunCase(task.getTestJob().getPlanproj(), task.getId(), caseDetail.getCaseno(),
+								caseDetail.getCaseversion(), task.getTestJob().getClientip());
+						operationlogservice.add(req, "TEST_CASEDETAIL", id,
+								sectorprojectsService.getid(task.getTestJob().getPlanproj()), "自动化用例单条开始执行！任务名称："
+										+ task.getTaskId() + " 用例编号：" + caseDetail.getCaseno() + " 结果：" + ms);
+					} else {
+						String projName;
+						if ("ALLFAIL".equals(jsonarr.get(0).toString())) {
+							projName = task.getTestJob().getPlanproj();
+							// 批量执行用例
+							QuartzJob qj = new QuartzJob();
+							ms = qj.toRunCaseBatch(projName, task.getId(), "ALLFAIL", task.getTestJob().getClientip());
+							operationlogservice.add(req, "TEST_CASEDETAIL", 0, sectorprojectsService.getid(projName),
+									"全部非成功自动化用例开始执行!" + " 结果：" + ms);
+						} else {
+							StringBuffer caseInfo = new StringBuffer();
+							for (int i = 0; i < jsonarr.size(); i++) {
+								int id = Integer.valueOf(jsonarr.get(i).toString());
+								TestCasedetail caseDetail = casedetailService.load(Integer.valueOf(id));
+								String ocase = caseDetail.getCaseno() + "%" + caseDetail.getCaseversion();
+								caseInfo.append(ocase).append("#");
+							}
+							projName = task.getTestJob().getPlanproj();
+							// 批量执行用例
+							QuartzJob qj = new QuartzJob();
+							ms = qj.toRunCaseBatch(projName, task.getId(), caseInfo.toString(),
+									task.getTestJob().getClientip());
+
+							operationlogservice.add(req, "TEST_CASEDETAIL", 0, sectorprojectsService.getid(projName),
+									"自动化用例批量(非成功)开始执行!" + " 结果：" + ms);
+						}
 					}
 				}
 				
