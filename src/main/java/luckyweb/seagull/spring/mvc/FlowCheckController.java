@@ -282,22 +282,28 @@ public class FlowCheckController {
 					json.put("status", "fail");
 					json.put("ms", "您所添加的数据在本次检查集中已存在!");
 				}else{
-					String regEx_space = "\t|\r|\n";// 定义空格回车换行符
-					Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
-					Matcher m_space = p_space.matcher(flowcheck.getRemark());
-					flowcheck.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
+					if(!UserLoginController.oppidboolean(req, flowcheck.getProjectid())){
+						json.put("status", "fail");
+						json.put("ms", "您没有权限为当前项目添加流程检查项！");
+					}else{
+						String regEx_space = "\t|\r|\n";// 定义空格回车换行符
+						Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
+						Matcher m_space = p_space.matcher(flowcheck.getRemark());
+						flowcheck.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
 
-					SectorProjects p = new SectorProjects();
-					p.setProjectid(flowcheck.getProjectid());
-					flowcheck.setSectorProjects(p);
+						SectorProjects p = new SectorProjects();
+						p.setProjectid(flowcheck.getProjectid());
+						flowcheck.setSectorProjects(p);
 
-					int id = flowcheckservice.add(flowcheck);
-					String checkentry = flowinfoService.load(Integer.valueOf(flowcheck.getCheckentry())).getCheckentry();
-					operationlogservice.add(req, "QA_FLOWCHECK", id, 
-							flowcheck.getProjectid(),"流程检查明细信息添加成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
+						int id = flowcheckservice.add(flowcheck);
+						String checkentry = flowinfoService.load(Integer.valueOf(flowcheck.getCheckentry())).getCheckentry();
+						operationlogservice.add(req, "QA_FLOWCHECK", id, 
+								flowcheck.getProjectid(),"流程检查明细信息添加成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
 
-					json.put("status", "success");
-					json.put("ms", "添加检查明细成功！");
+						json.put("status", "success");
+						json.put("ms", "添加检查明细成功！");
+					}
+
 				}
 				
 			}
@@ -422,6 +428,12 @@ public class FlowCheckController {
 					message = "请选择项目!";
 					model.addAttribute("message", message);
 					return retVal;
+				}else{
+					if(!UserLoginController.oppidboolean(req, flowcheck.getProjectid())){
+						SectorProjects sp=sectorprojectsService.loadob(flowcheck.getProjectid());
+						model.addAttribute("message", "当前用户无权限添加项目【"+sp.getProjectname()+"】的流程检查信息，请联系管理员！");
+						return retVal;
+					}
 				}
 				
 				if(flowcheck.getProjectphase().equals("0")){
@@ -616,6 +628,13 @@ public class FlowCheckController {
 
 			}//添加修改数据
 			
+			if(!UserLoginController.oppidboolean(req, fc.getSectorProjects().getProjectid())){
+				SectorProjects sp=sectorprojectsService.loadob(fc.getSectorProjects().getProjectid());
+				model.addAttribute("url", "/flowCheck/load.do");
+				model.addAttribute("message", "当前用户无权限修改项目【"+sp.getProjectname()+"】的流程检查信息，请联系管理员！");
+				return "error";
+			}
+			
 			@SuppressWarnings("unchecked")
 			List<Object[]> phaselist = flowinfoService.listphaseinfo();
 			@SuppressWarnings("unchecked")
@@ -682,17 +701,36 @@ public class FlowCheckController {
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
 				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
 
+				String status="fail";
+				String ms="删除流程检查信息失败!";
+				int suc=0;
+				int fail=0;
 				for (int i = 0; i < jsonarr.size(); i++) {
 					int id = Integer.valueOf(jsonarr.get(i).toString());
 					FlowCheck fc = flowcheckservice.load(id);
+					
+					if(!UserLoginController.oppidboolean(req, fc.getSectorProjects().getProjectid())){
+						fail++;
+						continue;
+					}
 					flowcheckservice.delete(id);
 					String checkentry = flowinfoService.load(Integer.valueOf(fc.getCheckentry())).getCheckentry();
 					operationlogservice.add(req, "QA_FLOWCHECK", id, 
 							fc.getSectorProjects().getProjectid(),"流程检查信息删除成功！检查结果："+fc.getCheckresult()+" 检查内容："+checkentry);
+					suc++;
 				}
 				
-				json.put("status", "success");
-				json.put("ms", "删除检查记录成功!");
+				if(suc>0){
+					status="success";
+					ms="删除流程检查信息成功!";
+					if(fail>0){
+						status="success";
+						ms="删除流程检查信息"+suc+"条成功！"+fail+"条因为无项目权限删除失败！";
+					}
+				}
+				
+				json.put("status", status);
+				json.put("ms", ms);
 			}
 			pw.print(json.toString());
 
@@ -750,10 +788,16 @@ public class FlowCheckController {
 				String versionold = req.getParameter("versionold");
 				String versionnew = req.getParameter("versionnew");
 				int projectid = Integer.valueOf(req.getParameter("projectid"));
-				flowcheckservice.updateversion(projectid, versionold, versionnew);
-				
-				json.put("status", "success");
-				json.put("ms", "编辑版本号成功!");
+				if(!UserLoginController.oppidboolean(req, projectid)){
+					json.put("status", "fail");
+					json.put("ms", "编辑失败,项目权限不足,请联系管理员!");
+				}else{
+					flowcheckservice.updateversion(projectid, versionold, versionnew);
+					
+					json.put("status", "success");
+					json.put("ms", "编辑版本号成功!");
+				}
+
 			}
 			pw.print(json.toString());
 		} catch (Exception e) {

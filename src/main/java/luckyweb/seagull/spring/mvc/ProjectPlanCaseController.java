@@ -20,6 +20,7 @@ import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectModule;
 import luckyweb.seagull.spring.entity.ProjectPlan;
 import luckyweb.seagull.spring.entity.ProjectPlanCase;
+import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectCaseService;
 import luckyweb.seagull.spring.service.ProjectModuleService;
@@ -81,6 +82,13 @@ public class ProjectPlanCaseController {
 
 			String planid = req.getParameter("planid");
 			ProjectPlan propaln = projectplanservice.load(Integer.valueOf(planid));
+			
+			if(!UserLoginController.oppidboolean(req, propaln.getProjectid())){
+				SectorProjects sp=sectorprojectsService.loadob(propaln.getProjectid());
+				model.addAttribute("url", "/projectPlan/load.do");
+				model.addAttribute("message", "当前用户无权限管理项目【"+sp.getProjectname()+"】的计划用例，请联系管理员！");
+				return "error";
+			}
 			model.addAttribute("projectid", propaln.getProjectid());
 			model.addAttribute("planid", planid);
 			model.addAttribute("planname", propaln.getName());

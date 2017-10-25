@@ -182,39 +182,43 @@ public class LogdetailController
 				String logid = jsonObject.getString("logid");
 				String status="fail";
 				String ms="更新用例预期结果失败！";
-				
-                if(!StrLib.isEmpty(logid)){
-    				TestLogdetail tld=logdetailService.load(Integer.valueOf(logid));
-    				TestCasedetail tcd=casedetailService.load(tld.getCaseid());
-    				ProjectCase pc=projectcaseservice.getCaseBySign(tcd.getCaseno());
-    				List<ProjectCasesteps> steps= casestepsservice.getSteps(pc.getId());
-    				
-    				String testresult=tld.getDetail().substring(tld.getDetail().lastIndexOf("测试结果：")+5);
-    				for(ProjectCasesteps step:steps){
-    					if(tld.getStep().equals(String.valueOf(step.getStepnum()))){
-    						if (null != req.getSession().getAttribute("usercode")
-    								&& null != req.getSession().getAttribute("username")) {
-    							String usercode = req.getSession().getAttribute("usercode").toString();
-    							step.setOperationer(usercode);
-    							pc.setOperationer(usercode);
-    						}
-    						Date currentTime = new Date();
-    						SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    						String time = formatter.format(currentTime);
-    						
-    						step.setTime(time);   						
-    						step.setExpectedresult(testresult);
-    						
-    						pc.setTime(time);
-    						
-    						casestepsservice.modify(step);
-    						projectcaseservice.modify(pc);
-    						status="success";
-    						ms="更新用例【"+pc.getSign()+"】第【"+step.getStepnum()+"】步预期结果成功！";
-    						break;
-    					}
-    				}
-                }
+				TestLogdetail tld=logdetailService.load(Integer.valueOf(logid));
+				TestCasedetail tcd=casedetailService.load(tld.getCaseid());
+				ProjectCase pc=projectcaseservice.getCaseBySign(tcd.getCaseno());
+				if(!UserLoginController.oppidboolean(req, pc.getProjectid())){
+					status="fail";
+					ms="更新用例预期结果失败,项目权限不足,请联系管理员!";					
+				}else{
+	                if(!StrLib.isEmpty(logid)){
+	    				List<ProjectCasesteps> steps= casestepsservice.getSteps(pc.getId());
+	    				
+	    				String testresult=tld.getDetail().substring(tld.getDetail().lastIndexOf("测试结果：")+5);
+	    				for(ProjectCasesteps step:steps){
+	    					if(tld.getStep().equals(String.valueOf(step.getStepnum()))){
+	    						if (null != req.getSession().getAttribute("usercode")
+	    								&& null != req.getSession().getAttribute("username")) {
+	    							String usercode = req.getSession().getAttribute("usercode").toString();
+	    							step.setOperationer(usercode);
+	    							pc.setOperationer(usercode);
+	    						}
+	    						Date currentTime = new Date();
+	    						SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    						String time = formatter.format(currentTime);
+	    						
+	    						step.setTime(time);   						
+	    						step.setExpectedresult(testresult);
+	    						
+	    						pc.setTime(time);
+	    						
+	    						casestepsservice.modify(step);
+	    						projectcaseservice.modify(pc);
+	    						status="success";
+	    						ms="更新用例【"+pc.getSign()+"】第【"+step.getStepnum()+"】步预期结果成功！";
+	    						break;
+	    					}
+	    				}
+	                }
+				}
 				
 				json.put("status", status);
 				json.put("ms", ms);

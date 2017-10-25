@@ -170,14 +170,20 @@ public class TastExcuteController {
 				}
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
 				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("taskids"));
+				
 				String status="success";
-				String ms="删除任务成功！";
-                 
+				String ms="删除任务成功!";             
 				for (int i = 0; i < jsonarr.size(); i++) {
 					int id = Integer.valueOf(jsonarr.get(i).toString());
-					TestTaskexcute tast = tastExcuteService.get(id);
+					TestTaskexcute task = tastExcuteService.get(id);
 
-					if (tast == null) {
+					if(!UserLoginController.oppidboolean(req, task.getTestJob().getProjectid())){
+						status = "fail";
+						ms = "您有任务没有项目权限进行删除，请确认！";
+						break;
+					}	
+					
+					if (task == null) {
 						status = "fail";
 						ms = "有任务不存在或已经删除，请确认！";
 						break;
@@ -186,8 +192,8 @@ public class TastExcuteController {
 					Date date = new Date();
 					date.setMinutes(date.getMinutes() - 30);
 
-					if (("0".equals(tast.getTaskStatus()) || "1".equals(tast.getTaskStatus()))
-							&& tast.getCreateTime().after(date)) {
+					if (("0".equals(task.getTaskStatus()) || "1".equals(task.getTaskStatus()))
+							&& task.getCreateTime().after(date)) {
 						status = "fail";
 						ms = "任务开始30分钟时间内不允许删除！";
 						break;
@@ -204,10 +210,10 @@ public class TastExcuteController {
 					}
 
 					operationlogservice.add(req, "TEST_TASKEXCUTE", id,
-							sectorprojectsService.getid(tast.getTestJob().getPlanproj()),
-							"自动化用例已执行任务记录删除成功！任务名称：" + tast.getTaskId());					
+							task.getTestJob().getProjectid(),
+							"自动化用例已执行任务记录删除成功！任务名称：" + task.getTaskId());
 				}
-				
+
 				json.put("status", status);
 				json.put("ms", ms);
 			}

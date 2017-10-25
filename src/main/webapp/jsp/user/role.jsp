@@ -62,7 +62,7 @@
 
 							<sf:form  modelAttribute="userrole" method="post" onsubmit="return validTime(this)">
 								<div class="top-margin">
-								<label>角色 <span class="text-danger">*</span></label>
+								<label style="color: blue">角色 <span class="text-danger">*</span></label>
 								<sf:select type="text" class="form-control"
 									path="role"	id="role" onChange="getAuth()">
 									<sf:option value="0">请选择</sf:option>
@@ -71,11 +71,20 @@
 									</c:forEach>
 								</sf:select>
 							</div>
+							
 							<div class="top-margin">
-									<label>权限 <span class="text-danger">*</span></label><br/>
+									<label style="color: blue">项目权限<span class="text-danger">*</span></label><br/>
+									<c:forEach items="${projectlist}" var="t">
+									<label>${t.projectname}</label>									
+									<sf:checkbox path="opprojectid" id="prolist${t.projectid}" value="${t.projectid}" />&nbsp;&nbsp;&nbsp;&nbsp;
+								</c:forEach>
+							</div>
+								
+							<div class="top-margin">
+									<label style="color: blue">操作权限 <span class="text-danger">*</span></label><br/>
 									<c:forEach items="${authoritylist}" var="r">
 									<label>${r.module}_${r.auth_type}</label>									
-									<sf:checkbox path="permission" id="${r.id}" value="${r.alias}" />&nbsp;&nbsp;&nbsp;&nbsp;
+									<sf:checkbox path="permission" id="rolelist${r.id}" value="${r.alias}" />&nbsp;&nbsp;&nbsp;&nbsp;
 								</c:forEach>
 								</div>
 
@@ -107,9 +116,13 @@
 		var roleid = $("#role").val();
 		var url = "/userInfo/getauth.do?roleId=" + roleid;
 		$.getJSON(url, null, function call(result) {
-			$.each(result.data, function(i, node) {
-				$("#"+node).attr("checked",true);
-			});			
+			$.each(result.permi, function(i, node) {
+				//  $("#rolelist"+node).attr("checked",true);  jq操作选中有时间会失效，用原生JS可以，奇怪
+				document.getElementById('rolelist'+node).checked = true;
+			});
+			$.each(result.oppro, function(i, node) {
+				document.getElementById('prolist'+node).checked = true;
+			});	
 		});
 	}
 	
@@ -125,10 +138,16 @@
 	}
 
 	function uncheckAll() {
-		var code_Values = document.getElementsByTagName("input");
-		for (i = 0; i < code_Values.length; i++) {
-			if (code_Values[i].type == "checkbox") {
-				code_Values[i].checked = false;
+		var check_permi = document.getElementsByName("permission");
+		var check_oppro = document.getElementsByName("opprojectid");
+		for (i = 0; i < check_permi.length; i++) {
+			if (check_permi[i].type == "checkbox") {
+				check_permi[i].checked = false;				
+			}
+		}
+		for (i = 0; i < check_oppro.length; i++) {
+			if (check_oppro[i].type == "checkbox") {
+				check_oppro[i].checked = false;				
 			}
 		}
 	}
@@ -138,6 +157,7 @@
 			if ('${message}' == '添加成功') {
 				toastr.success('添加成功,请返回查询！');
 			} else {
+				getAuth();
 				toastr.warning('${message}'); 
 			}
 		}

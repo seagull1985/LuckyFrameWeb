@@ -144,22 +144,28 @@ public class ProjectPlanController {
 				json.put("status", "fail");
 				json.put("ms", "编辑计划失败,权限不足,请联系管理员!");
 			} else {
-				if (null != req.getSession().getAttribute("usercode")
-						&& null != req.getSession().getAttribute("username")) {
-					String usercode = req.getSession().getAttribute("usercode").toString();
-					projectplan.setOperationer(usercode);
+				if(!UserLoginController.oppidboolean(req, projectplan.getProjectid())){
+					json.put("status", "fail");
+					json.put("ms", "编辑计划失败,项目权限不足,请联系管理员!");
+				}else{
+					if (null != req.getSession().getAttribute("usercode")
+							&& null != req.getSession().getAttribute("username")) {
+						String usercode = req.getSession().getAttribute("usercode").toString();
+						projectplan.setOperationer(usercode);
+					}
+					Date currentTime = new Date();
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String time = formatter.format(currentTime);
+					projectplan.setTime(time);
+
+					projectplanservice.modify(projectplan);
+
+					operationlogservice.add(req, "PROJECT_PLAN", projectplan.getId(), projectplan.getProjectid(),
+							"修改测试计划成功!");
+					json.put("status", "success");
+					json.put("ms", "编辑计划成功!");
 				}
-				Date currentTime = new Date();
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String time = formatter.format(currentTime);
-				projectplan.setTime(time);
 
-				projectplanservice.modify(projectplan);
-
-				operationlogservice.add(req, "PROJECT_PLAN", projectplan.getId(), projectplan.getProjectid(),
-						"修改测试计划成功!");
-				json.put("status", "success");
-				json.put("ms", "编辑计划成功!");
 			}
 			pw.print(json.toString());
 		} catch (Exception e) {
@@ -191,28 +197,34 @@ public class ProjectPlanController {
 				json.put("status", "fail");
 				json.put("ms", "增加测试计划失败,权限不足,请联系管理员!");
 			} else {
-				if (null != req.getSession().getAttribute("usercode")
-						&& null != req.getSession().getAttribute("username")) {
-					String usercode = req.getSession().getAttribute("usercode").toString();
-					projectplan.setOperationer(usercode);
+				if(!UserLoginController.oppidboolean(req, projectplan.getProjectid())){
+					json.put("status", "fail");
+					json.put("ms", "增加测试计划失败,此项目权限不足,请联系管理员!");
+				}else{
+					if (null != req.getSession().getAttribute("usercode")
+							&& null != req.getSession().getAttribute("username")) {
+						String usercode = req.getSession().getAttribute("usercode").toString();
+						projectplan.setOperationer(usercode);
+					}
+
+					String regEx_space = "\t|\r|\n";// 定义空格回车换行符
+					Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
+					Matcher m_space = p_space.matcher(projectplan.getRemark());
+					projectplan.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
+
+					Date currentTime = new Date();
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String time = formatter.format(currentTime);
+					projectplan.setTime(time);
+
+					int planid = projectplanservice.add(projectplan);
+
+					operationlogservice.add(req, "PROJECT_PLAN", planid, projectplan.getProjectid(), "添加测试计划成功!");
+
+					json.put("status", "success");
+					json.put("ms", "添加测试计划成功!");
 				}
 
-				String regEx_space = "\t|\r|\n";// 定义空格回车换行符
-				Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
-				Matcher m_space = p_space.matcher(projectplan.getRemark());
-				projectplan.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
-
-				Date currentTime = new Date();
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String time = formatter.format(currentTime);
-				projectplan.setTime(time);
-
-				int planid = projectplanservice.add(projectplan);
-
-				operationlogservice.add(req, "PROJECT_PLAN", planid, projectplan.getProjectid(), "添加测试计划成功!");
-
-				json.put("status", "success");
-				json.put("ms", "添加测试计划成功!");
 			}
 			pw.print(json.toString());
 
@@ -258,15 +270,35 @@ public class ProjectPlanController {
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
 				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("planids"));
 
+				String status="fail";
+				String ms="删除计划失败!";
+				int suc=0;
+				int fail=0;
 				for (int i = 0; i < jsonarr.size(); i++) {
 					int id = Integer.valueOf(jsonarr.get(i).toString());
 					ProjectPlan projectplan = projectplanservice.load(id);
+					
+					if(!UserLoginController.oppidboolean(req, projectplan.getProjectid())){
+						fail++;
+						continue;
+					}	
 					projectplancaseservice.delforplanid(id);
 					projectplanservice.delete(projectplan);
 					operationlogservice.add(req, "PROJECT_PLAN", id, projectplan.getProjectid(), "删除测试计划成功!");
+					suc++;
 				}
-				json.put("status", "success");
-				json.put("ms", "删除计划成功!");
+				
+				if(suc>0){
+					status="success";
+					ms="删除计划成功!";
+					if(fail>0){
+						status="success";
+						ms="删除计划"+suc+"条成功！"+fail+"条因为无项目权限删除失败！";
+					}
+				}
+
+				json.put("status", status);
+				json.put("ms", ms);
 			}
 			pw.print(json.toString());
 

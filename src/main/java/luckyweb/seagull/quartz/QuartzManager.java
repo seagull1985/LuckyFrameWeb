@@ -99,8 +99,7 @@ public class QuartzManager {
 			Scheduler sched=QueueListener.gSchedulerFactory.getScheduler();
 			
 			CronTrigger trigger = (CronTrigger) sched.getTrigger(jobName,QueueListener.TRIGGER_GROUP_NAME);
-			if (trigger == null) {
-				
+			if (trigger == null) {				
 				return "任务已经执行过或者不在队列中,请暂定运行后,重启再修改时间.";
 			}
 			String oldTime = trigger.getCronExpression();

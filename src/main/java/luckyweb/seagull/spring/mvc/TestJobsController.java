@@ -198,11 +198,34 @@ public class TestJobsController
 				}
 				
 				String message = "";
-
+				if (tj.getProjecttype()==1&&(StrLib.isEmpty(tj.getPlanproj())||"0".equals(tj.getPlanproj())))
+				{
+					message = "项目名必选!";
+					model.addAttribute("message", message);
+					return retVal;
+				}else{
+					if(!UserLoginController.oppidboolean(req, Integer.valueOf(tj.getPlanproj()))){
+						model.addAttribute("message", "当前用户无权限添加当前项目的调度任务，请联系管理员！");
+						return retVal;
+					}
+				}
+				
+				if (tj.getProjecttype()==0&&tj.getProjectid()==0)
+				{
+					message = "项目名必选!";
+					model.addAttribute("message", message);
+					return retVal;
+				}else{
+					if(!UserLoginController.oppidboolean(req, tj.getProjectid())){
+						model.addAttribute("message", "当前用户无权限添加当前项目的调度任务，请联系管理员！");
+						return retVal;
+					}
+				}
+				
 				if (StrLib.isEmpty(tj.getClientip())) {
 					message = "客户端IP不能为空！";
 					model.addAttribute("message", message);
-					return "/jsp/task/task_add";
+					return retVal;
 				}
 				
 				if (tj.getThreadCount() < 1 || tj.getThreadCount() > 20)
@@ -320,6 +343,7 @@ public class TestJobsController
 					for(int i=0;i<qaprolist.size();i++){
 						if(qaprolist.get(i).getProjectid()==tj.getProjectid()){
 							projectname=qaprolist.get(i).getProjectname();
+							break;
 						}
 					}
 					ProjectPlan pp=projectplanservice.load(tj.getPlanid());
@@ -327,8 +351,10 @@ public class TestJobsController
 					tj.setTestlinkname(pp.getName());
 				}else{
 					for(int i=0;i<prolist.size();i++){
-						if(prolist.get(i).getProjectname().equals(tj.getTestlinkname())){
-							tj.setProjectid(qaprolist.get(i).getProjectid());
+						if(prolist.get(i).getProjectid()==Integer.valueOf(tj.getPlanproj())){
+							tj.setProjectid(prolist.get(i).getProjectid());
+							tj.setPlanproj(prolist.get(i).getProjectname());
+							break;
 						}
 					}
 				}
@@ -445,13 +471,30 @@ public class TestJobsController
 					model.addAttribute("message", message);
 					return "/jsp/task/task_update";
 				}
-				if (StrLib.isEmpty(tj.getPlanproj()))
+				if (tj.getProjecttype()==1&&(StrLib.isEmpty(tj.getPlanproj())||"0".equals(tj.getPlanproj())))
 				{
 					message = "项目名必选!";
 					model.addAttribute("message", message);
 					return "/jsp/task/task_update";
+				}else{
+					if(!UserLoginController.oppidboolean(req, Integer.valueOf(tj.getPlanproj()))){
+						model.addAttribute("message", "当前用户无权限修改当前项目的调度任务，请联系管理员！");
+						return "/jsp/task/task_update";
+					}
 				}
-
+				
+				if (tj.getProjecttype()==0&&tj.getProjectid()==0)
+				{
+					message = "项目名必选!";
+					model.addAttribute("message", message);
+					return "/jsp/task/task_update";
+				}else{
+					if(!UserLoginController.oppidboolean(req, tj.getProjectid())){
+						model.addAttribute("message", "当前用户无权限修改当前项目的调度任务，请联系管理员！");
+						return "/jsp/task/task_update";
+					}
+				}
+				
 				if (tj.getThreadCount() < 1 || tj.getThreadCount() > 20)
 				{
 					message = "线程数在1-20之间";
@@ -588,6 +631,7 @@ public class TestJobsController
 					for(int i=0;i<qaprolist.size();i++){
 						if(qaprolist.get(i).getProjectid()==tj.getProjectid()){
 							projectname=qaprolist.get(i).getProjectname();
+							break;
 						}
 					}
 					ProjectPlan pp=projectplanservice.load(tj.getPlanid());
@@ -595,8 +639,10 @@ public class TestJobsController
 					tj.setTestlinkname(pp.getName());
 				}else{
 					for(int i=0;i<prolist.size();i++){
-						if(prolist.get(i).getProjectname().equals(tj.getTestlinkname())){
-							tj.setProjectid(qaprolist.get(i).getProjectid());
+						if(prolist.get(i).getProjectid()==Integer.valueOf(tj.getPlanproj())){
+							tj.setProjectid(prolist.get(i).getProjectid());
+							tj.setPlanproj(prolist.get(i).getProjectname());
+							break;
 						}
 					}
 				}
@@ -604,34 +650,28 @@ public class TestJobsController
 				// 写入数据库
 				testJobsService.modify(tj);
 				// 更新内存，替换原来的调度
-				TestJobs job = null;
-				for (int i = 0; i < QueueListener.list.size(); i++)
-				{
-					job = new TestJobs();
-					job = QueueListener.list.get(i);
-					if (job.getId() == tj.getId())
+				if("D".equals(tj.getTaskType())){
+					TestJobs job = null;
+					for (int i = 0; i < QueueListener.list.size(); i++)
 					{
-						QueueListener.list.remove(job);
-						QueueListener.list.add(tj);
-						break;
+						job = new TestJobs();
+						job = QueueListener.list.get(i);
+						if (job.getId() == tj.getId())
+						{
+							QueueListener.list.remove(job);
+							QueueListener.list.add(tj);
+							break;
+						}
+					}
+
+					String msg = QuartzManager.modifyJobTime(id + "", tj.getStartTimestr());
+					if (!msg.equals(""))
+					{
+						model.addAttribute("message", msg);
+						return "/jsp/task/task_update";
 					}
 				}
 
-				for (int i = 0; i < QueueListener.list.size(); i++)
-				{
-					job = new TestJobs();
-					job = QueueListener.list.get(i);
-					if (job.getId() == tj.getId())
-					{
-						break;
-					}
-				}
-				String msg = QuartzManager.modifyJobTime(id + "", tj.getStartTimestr());
-				if (!msg.equals(""))
-				{
-					model.addAttribute("message", msg);
-					return "/jsp/task/task_update";
-				}
 				model.addAttribute("message", "修改成功,请返回查询！");
 				model.addAttribute("url", "/testJobs/load.do");
 				return "/jsp/task/task_update";
@@ -685,29 +725,34 @@ public class TestJobsController
 			} else {
 				int id = Integer.valueOf(req.getParameter("jobid"));
 				TestJobs tj = testJobsService.get(id);
-				List idlist = tastExcuteService.getidlist(id);
-				try
-				{
-					int tastid = 0;
-					for(int i=0;i<idlist.size();i++){
-						tastid = Integer.valueOf(idlist.get(i).toString());
-						this.logdetailService.delete(tastid);
-						this.casedetailService.delete(tastid);
-						this.tastExcuteService.delete(tastid);
-					}
-					testJobsService.delete(id);
-					QuartzManager.removeJob(id + "");
-					
-					operationlogservice.add(req, "TESTJOBS", id, 
-							sectorprojectsService.getid(tj.getPlanproj()),"自动化用例计划任务删除成功！计划名称："+tj.getTaskName());
-					
-					json.put("status", "success");
-					json.put("ms", "删除调度任务成功!");
-				}
-				catch (Exception e)
-				{
+				if(!UserLoginController.oppidboolean(req, tj.getProjectid())){
 					json.put("status", "fail");
-					json.put("ms", "删除调度过程中失败!");
+					json.put("ms", "删除调度失败,项目权限不足,请联系管理员!");
+				}else{					
+					List idlist = tastExcuteService.getidlist(id);
+					try
+					{
+						int tastid = 0;
+						for(int i=0;i<idlist.size();i++){
+							tastid = Integer.valueOf(idlist.get(i).toString());
+							this.logdetailService.delete(tastid);
+							this.casedetailService.delete(tastid);
+							this.tastExcuteService.delete(tastid);
+						}
+						testJobsService.delete(id);
+						QuartzManager.removeJob(id + "");
+						
+						operationlogservice.add(req, "TESTJOBS", id, 
+								tj.getProjectid(),"自动化用例计划任务删除成功！计划名称："+tj.getTaskName());
+						
+						json.put("status", "success");
+						json.put("ms", "删除调度任务成功!");
+					}
+					catch (Exception e)
+					{
+						json.put("status", "fail");
+						json.put("ms", "删除调度过程中失败!");
+					}
 				}
 			}
 			pw.print(json.toString());

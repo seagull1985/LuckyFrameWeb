@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
+import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.TempCasestepDebug;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectCaseService;
@@ -93,6 +94,14 @@ public class ProjectCasestepsController {
 			if (!StrLib.isEmpty(caseid) && !"0".equals(caseid)) {
 				prcase = projectcaseservice.load(Integer.valueOf(caseid));
 			}
+			
+			if(!UserLoginController.oppidboolean(req, prcase.getProjectid())){
+				SectorProjects sp=sectorprojectsService.loadob(prcase.getProjectid());
+				model.addAttribute("url", "/projectCase/load.do");
+				model.addAttribute("message", "当前用户无权限管理项目【"+sp.getProjectname()+"】用例步骤，请联系管理员！");
+				return "error";
+			}
+			
 			String retVal = "/jsp/plancase/step_add";
 			List<ProjectCasesteps> steps = casestepsservice.getSteps(Integer.valueOf(caseid));
 			if (steps.size() == 0) {
@@ -249,18 +258,24 @@ public class ProjectCasestepsController {
 					projectcase = projectcaseservice.load(casesteps.getCaseid());
 					projectcase.setOperationer(usercode);
 				}
-				Date currentTime = new Date();
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String time = formatter.format(currentTime);
-				casesteps.setTime(time);
+				if(!UserLoginController.oppidboolean(req, projectcase.getProjectid())){
+					json.put("status", "fail");
+					json.put("ms", "编辑失败,项目权限不足,请联系管理员!");
+				}else{
+					Date currentTime = new Date();
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String time = formatter.format(currentTime);
+					casesteps.setTime(time);
 
-				casestepsservice.modify(casesteps);
+					casestepsservice.modify(casesteps);
 
-				projectcase.setTime(time);
-				projectcaseservice.modify(projectcase);
+					projectcase.setTime(time);
+					projectcaseservice.modify(projectcase);
 
-				json.put("status", "success");
-				json.put("ms", "编辑步骤成功!");
+					json.put("status", "success");
+					json.put("ms", "编辑步骤成功!");
+				}
+
 			}
 			pw.print(json.toString());
 		} catch (Exception e) {
