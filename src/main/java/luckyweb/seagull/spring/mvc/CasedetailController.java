@@ -184,9 +184,16 @@ public class CasedetailController
 				String status="success";
 				String ms="执行任务成功！";
                 
-				int taskid = Integer.valueOf(jsonarr.get(1).toString());
-				TestTaskexcute task = tastExcuteService.load(taskid);
-
+				TestTaskexcute task=null;
+				if ("ALLFAIL".equals(jsonarr.get(0).toString())){
+					int taskid = Integer.valueOf(jsonarr.get(1).toString());
+					task = tastExcuteService.load(taskid);
+				}else{
+					int id = Integer.valueOf(jsonarr.get(0).toString());
+					TestCasedetail caseDetail = this.casedetailService.load(id);
+					task = caseDetail.getTestTaskexcute();
+				}
+				
 				if (!UserLoginController.oppidboolean(req, task.getTestJob().getProjectid())) {
 					status = "fail";
 					ms = "您没有执行此项目用例的权限！";
@@ -194,7 +201,7 @@ public class CasedetailController
 					if (jsonarr.size() == 1) {
 						int id = Integer.valueOf(jsonarr.get(0).toString());
 						TestCasedetail caseDetail = this.casedetailService.load(id);
-
+						
 						QuartzJob qj = new QuartzJob();
 						ms = qj.toRunCase(task.getTestJob().getPlanproj(), task.getId(), caseDetail.getCaseno(),
 								caseDetail.getCaseversion(), task.getTestJob().getClientip());
