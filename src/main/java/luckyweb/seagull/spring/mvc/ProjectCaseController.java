@@ -392,11 +392,12 @@ public class ProjectCaseController {
 	 */
 	@RequestMapping(value = "/moduleadd.do")
 	public void addModule(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		rsp.setContentType("text/html;charset=utf-8");
+		req.setCharacterEncoding("utf-8");
+		PrintWriter pw = rsp.getWriter();
+		JSONObject json = new JSONObject();
+		int id=0;
 		try {
-			rsp.setContentType("text/html;charset=utf-8");
-			req.setCharacterEncoding("utf-8");
-			PrintWriter pw = rsp.getWriter();
-			JSONObject json = new JSONObject();
 			ProjectModule projectmodule = new ProjectModule();
 			if (!UserLoginController.permissionboolean(req, "case_1")) {
 				json.put("status", "fail");
@@ -413,23 +414,27 @@ public class ProjectCaseController {
 					e.printStackTrace();
 				}
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				String ms="保存用例集成功!";
-				String status="success";
+				String ms="保存用例集失败!";
+				String status="fail";
 				int projectid = Integer.valueOf(jsonObject.getString("projectid"));
 				int pid = Integer.valueOf(jsonObject.getString("pid"));
+				String oldName = jsonObject.getString("oldName");
+				String name = jsonObject.getString("name");
+				id = Integer.valueOf(jsonObject.getString("id"));
+				
 				if(!UserLoginController.oppidboolean(req, projectid)){
 					status="fail";
 					ms="项目权限不足,请联系管理员!";
 				}else{
-					String oldName = jsonObject.getString("oldName");
-					String name = jsonObject.getString("name");
-					int id = Integer.valueOf(jsonObject.getString("id"));
-
-					ProjectModule pm=moduleservice.load(id);
-					if(null!=pm&&pm.getProjectid()==projectid&&pm.getPid()==pid&&pm.getModulename().equals(oldName)){
-						pm.setModulename(name);
-						moduleservice.modify(pm);
-						operationlogservice.add(req, "PROJECT_MODULE", id, pm.getProjectid(), "保存用例集成功！");
+					if(id!=0){
+						ProjectModule pm=moduleservice.load(id);
+						if(null!=pm&&pm.getProjectid()==projectid&&pm.getPid()==pid&&pm.getModulename().equals(oldName)){
+							pm.setModulename(name);
+							moduleservice.modify(pm);
+							operationlogservice.add(req, "PROJECT_MODULE", id, pm.getProjectid(), "编辑用例集成功！");
+							ms="编辑用例集成功!";
+							status="success";
+						}
 					}else{					
 						projectmodule.setProjectid(projectid);
 						projectmodule.setPid(pid);
@@ -437,17 +442,21 @@ public class ProjectCaseController {
 						id = moduleservice.add(projectmodule);
 						operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(), "新增用例集成功！");
 						ms="新增用例集成功!";
+						status="success";
 					}
 				}
 
 				json.put("status", status);
 				json.put("ms", ms);
-
+				json.put("id", id);
 			}
 			pw.print(json.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			json.put("status", "保存用例集出现异常!");
+			json.put("ms", "fail");
+			pw.print(json.toString());
 		}
 
 	}

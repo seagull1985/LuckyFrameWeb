@@ -910,8 +910,9 @@
 	                   data: dataSend,
 	                   success: function(data, status){
 	                           if (data.status == "success"){
-	                        	   $.fn.zTree.destroy("treeDemo");
-	                        	   $.fn.zTree.init($("#treeDemo"), genJsonConfig());
+	                        	   treeNode.editName(newName);
+/* 	                        	   $.fn.zTree.destroy("treeDemo");
+	                        	   $.fn.zTree.init($("#treeDemo"), genJsonConfig()); */
 	                        	   toastr.success(data.ms);
 	                           }else{
 	                        	   $.fn.zTree.init($("#treeDemo"), genJsonConfig());
@@ -937,7 +938,28 @@
 			var btn = $("#addBtn_"+treeNode.tId);
 			if (btn) btn.bind("click", function(){
 				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-				zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, name:"new node" + (newCount++)});
+				var dataSend = JSON.stringify({"id":0,"oldName":"新建测试集节点","pid":treeNode.id,"name":"新建测试集节点","projectid":$('#search_project').val()});
+                $.ajax({
+	                   type: "POST",
+	                   cache:false,
+	                   async : true,
+	                   dataType : "json",
+	                   url:  "moduleadd.do",
+	                   data: dataSend,
+	                   success: function(data, status){
+	                           if (data.status == "success"){
+	               				   zTree.addNodes(treeNode, {id:data.id, pId:treeNode.id, name:"新建测试集节点"});
+	                        	   toastr.success(data.ms);
+	                           }else{
+	                        	   $.fn.zTree.init($("#treeDemo"), genJsonConfig());
+	                        	   toastr.info(data.ms);
+	                           }
+	                   },error:function()
+	                    {
+	                	   $.fn.zTree.init($("#treeDemo"), genJsonConfig());
+	                        toastr.error('保存出错!');
+	                    }
+	                });
 				return false;
 			});
 		};
