@@ -203,7 +203,7 @@ public class TestJobsController
 					message = "项目名必选!";
 					model.addAttribute("message", message);
 					return retVal;
-				}else{
+				}else if(tj.getProjecttype()==1){
 					if(!UserLoginController.oppidboolean(req, Integer.valueOf(tj.getPlanproj()))){
 						model.addAttribute("message", "当前用户无权限添加当前项目的调度任务，请联系管理员！");
 						return retVal;
@@ -215,7 +215,7 @@ public class TestJobsController
 					message = "项目名必选!";
 					model.addAttribute("message", message);
 					return retVal;
-				}else{
+				}else if(tj.getProjecttype()==0){
 					if(!UserLoginController.oppidboolean(req, tj.getProjectid())){
 						model.addAttribute("message", "当前用户无权限添加当前项目的调度任务，请联系管理员！");
 						return retVal;
@@ -476,7 +476,7 @@ public class TestJobsController
 					message = "项目名必选!";
 					model.addAttribute("message", message);
 					return "/jsp/task/task_update";
-				}else{
+				}else if(tj.getProjecttype()==1){
 					if(!UserLoginController.oppidboolean(req, Integer.valueOf(tj.getPlanproj()))){
 						model.addAttribute("message", "当前用户无权限修改当前项目的调度任务，请联系管理员！");
 						return "/jsp/task/task_update";
@@ -488,7 +488,7 @@ public class TestJobsController
 					message = "项目名必选!";
 					model.addAttribute("message", message);
 					return "/jsp/task/task_update";
-				}else{
+				}else if(tj.getProjecttype()==0){
 					if(!UserLoginController.oppidboolean(req, tj.getProjectid())){
 						model.addAttribute("message", "当前用户无权限修改当前项目的调度任务，请联系管理员！");
 						return "/jsp/task/task_update";
