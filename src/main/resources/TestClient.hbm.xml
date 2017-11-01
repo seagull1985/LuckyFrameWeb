@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="TestClient" table="test_client"	schema="luckyframedb">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" precision="22" scale="0" />
+			<generator class="identity"/>
+		</id>
+		<property name="clientip" type="java.lang.String">
+			<column name="clientip" length="30" not-null="true" />
+		</property>
+		<property name="name" type="java.lang.String">
+			<column name="name" length="30" not-null="true" />
+		</property>
+		<property name="projectper" type="java.lang.String">
+			<column name="projectper" length="200" not-null="false" />
+		</property>
+		<property name="status" type="java.lang.Integer">
+			<column name="status" length="2" not-null="false" />
+		</property>
+		<property name="checkinterval" type="java.lang.Integer">
+			<column name="checkinterval" length="6" not-null="true" />
+		</property>
+		<property name="remark" type="java.lang.String">
+			<column name="remark" length="100" not-null="false" />
+		</property>
+	</class>
+</hibernate-mapping>

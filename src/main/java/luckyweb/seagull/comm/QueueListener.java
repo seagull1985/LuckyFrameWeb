@@ -15,6 +15,7 @@ import org.springframework.web.context.ContextLoaderListener;
 
 import luckyweb.seagull.spring.dao.TestJobsDaoImpl;
 import luckyweb.seagull.spring.entity.SectorProjects;
+import luckyweb.seagull.spring.entity.TestClient;
 import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.util.HibernateSessionFactoryUtil;
 
@@ -25,6 +26,7 @@ public class QueueListener extends ContextLoaderListener implements
 	public static List<TestJobs> list = new ArrayList<TestJobs>();
 	public static List<SectorProjects> projlist = new ArrayList<SectorProjects>();
 	public static List<SectorProjects> qa_projlist = new ArrayList<SectorProjects>();
+	public static List<TestClient> listen_Clientlist = new ArrayList<TestClient>();
 	public static Session session = HibernateSessionFactoryUtil.getCurrentSession();
 
 	public static SchedulerFactory gSchedulerFactory = null;

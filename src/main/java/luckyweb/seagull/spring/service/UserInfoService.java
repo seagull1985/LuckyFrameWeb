@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import luckyweb.seagull.spring.entity.Review;
 import luckyweb.seagull.spring.entity.UserInfo;
 
 

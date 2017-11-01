@@ -87,24 +87,16 @@
 				<sf:radiobutton	path="browsertype" id="browsertype" value="3" /> Edge浏览器</td>
 			</tr>
 			<tr>
-				<td height="30" align="left">客户端IP</td>
-				<td height="30" colspan="3"><sf:input cols="30" rows="5"
-						path="clientip" id="clientip" value="127.0.0.1"
-						cssClass="easyui-validatebox" required="true"
-						data-options="validType:'minLength[0,30]'"
-						missingMessage="客户端IP不能为空" invalidMessage="客户端IP不能为空" />&nbsp;<sf:errors
-						path="clientip" cssClass="error_msg" /></td>
-			</tr>
-			<tr>
 				<td height="30" align="left">项目类型</td>
 				<td height="30" colspan="3">
-				<sf:radiobutton path="projecttype" id="projecttype" value="1" onclick="isShow6('1')" /> TestLink项目&nbsp;&nbsp;&nbsp;&nbsp; 
-				<sf:radiobutton	path="projecttype" id="projecttype" value="0" onclick="isShow6('0')" /> 系统项目</td>
+				<sf:radiobutton	path="projecttype" id="projecttype" value="0" onclick="isShow6('0')" /> 系统项目&nbsp;&nbsp;&nbsp;&nbsp;
+				<sf:radiobutton path="projecttype" id="projecttype" value="1" onclick="isShow6('1')" /> TestLink项目 
+				</td>
 			</tr>
 			<tr id="testlinkpro">
 				<td height="30" align="left">项目名（testlink中）</td>
 				<td height="30" colspan="3"><sf:select path="planproj"
-						id="planproj" class="easyui-combobox" >
+						id="planproj" onChange="getClient(1)" onFocus="getClient(1)">
 						<sf:option value="0">请选择</sf:option>
 						<c:forEach var="p" items="${projects}">
 							<sf:option value="${p.projectid}">${p.projectname}</sf:option>
@@ -130,6 +122,12 @@
 				<td height="30" align="left">测试计划</td>
 				<td height="30" colspan="3"><sf:select path="planid" id="planid" width="20%">
    	               <sf:option value="0">请选择测试计划...</sf:option>
+                       </sf:select></td>
+			</tr>
+			<tr>
+				<td height="30" align="left">客户端IP</td>
+				<td height="30" colspan="3"><sf:select path="clientip" id="clientip" width="20%">
+   	               <sf:option value="0">请选择执行客户端...</sf:option>
                        </sf:select></td>
 			</tr>
 			<tr>
@@ -334,6 +332,8 @@
 	}
 	
 	$(function(){
+		$("input[name=projecttype][value=0]").attr("checked",true);
+		isShow6('0');
 			
 			$.extend($.fn.validatebox.defaults.rules, {    
 			   	 minLength: {    
@@ -429,6 +429,7 @@
 	
 	function  isShow6(isSend){
 		if(isSend=='0'){
+			clearClient();
 			jQuery("#projectid option[value='99']").remove();
 			document.getElementById('testlinkpro').style.display='none';
 			document.getElementById('testlinkplan').style.display='none';
@@ -437,7 +438,9 @@
 			document.getElementById('plan').style.display='block';
 			document.getElementById('plan').style.display = 'table-row';
 		}else{
+			clearClient();
 			document.getElementById('pro').style.display='none';
+			document.getElementById('plan').style.display='none';
 			document.getElementById('testlinkpro').style.display='block';
 			document.getElementById('testlinkplan').style.display='block';
 			document.getElementById('testlinkpro').style.display = 'table-row';
@@ -494,7 +497,8 @@
 //	    clearSel(); //清空节点	    
 	    if(jQuery("#projectid").val() == "") return;
 	    var projectid = jQuery("#projectid").val();
-	     var url ="/projectPlan/getplanlist.do?projectid="+projectid;
+	    var url ="/projectPlan/getplanlist.do?projectid="+projectid;
+	    getClient(0);
 	     jQuery.getJSON(url,null,function call(result){
 	    	 clearSel();
 	    	 setPlan(result); 
@@ -515,6 +519,47 @@
      function clearSel(){  
 	  while(jQuery("#planid").length>1){
 		  $("#planid option[index='1']").remove();
+	//	 document.getElementById("checkentry").options.remove("1"); 
+	    }
+	   }
+	 
+     //按上级ID取客户端列表
+	 function getClient(type){
+		 var projectid=0
+    	 if(type==0){
+    		if(jQuery("#projectid").val() == "") return;
+    		projectid = jQuery("#projectid").val();
+    	 }else{
+    		 if(jQuery("#planproj").val() == "") return;
+     		 projectid = jQuery("#planproj").val(); 		 
+    	 }
+	     var url ="/testClient/getclientlist.do?projectid="+projectid;
+	     jQuery.getJSON(url,null,function call(result){
+	    	 clearClient();
+	    	 setClient(result); 
+	      });
+    
+	    }
+     
+	  //设置子列表
+	 function setClient(result){	    
+  	   var options = "";
+	   jQuery.each(result.data, function(i, node){
+		   if(node.status==0){
+		       options +=  "<option style='color:green' value='"+node.clientip+"'>【"+node.name+"】"+node.clientip+" 【客户端状态正常】</option>";
+		   }else if(node.status==1){
+			   options +=  "<option style='color:red' value='"+node.clientip+"'>【"+node.name+"】"+node.clientip+" 【客户端状态异常】</option>";
+		   }else{
+			   options +=  "<option style='color:yellow' value='"+node.clientip+"'>【"+node.name+"】"+node.clientip+" 【客户端状态未知】</option>";
+		   }
+	      }); 
+	      jQuery("#clientip").html(options);
+	    }
+	  
+	 // 清空下拉列表
+     function clearClient(){
+	  while(jQuery("#clientip").length>1){
+		  $("#clientip option[index='1']").remove();
 	//	 document.getElementById("checkentry").options.remove("1"); 
 	    }
 	   }

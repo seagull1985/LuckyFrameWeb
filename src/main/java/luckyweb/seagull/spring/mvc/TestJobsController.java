@@ -362,7 +362,7 @@ public class TestJobsController
 				if (id != 0)
 				{
 					QuratzJobDataMgr mgr = new QuratzJobDataMgr();
-					mgr.addRunTime(tj, id);
+					mgr.addJobRunTime(tj, id);
 					QueueListener.list.add(tj);
 					
 					operationlogservice.add(req, "TESTJOBS", id, 
@@ -664,7 +664,7 @@ public class TestJobsController
 						}
 					}
 
-					String msg = QuartzManager.modifyJobTime(id + "", tj.getStartTimestr());
+					String msg = QuartzManager.modifyJobTime(id + "*JOB", tj.getStartTimestr());
 					if (!msg.equals(""))
 					{
 						model.addAttribute("message", msg);
@@ -687,6 +687,7 @@ public class TestJobsController
 		model.addAttribute("isSendMail", jobload.getIsSendMail());
 		model.addAttribute("isrestart", jobload.getIsrestart());
 		model.addAttribute("isbuilding", jobload.getIsbuilding());
+		model.addAttribute("projectid", jobload.getProjectid());
 		model.addAttribute("extype", jobload.getExtype());
 		model.addAttribute("browsertype", jobload.getBrowsertype());
 		model.addAttribute("projecttype", jobload.getProjecttype());
@@ -740,7 +741,8 @@ public class TestJobsController
 							this.tastExcuteService.delete(tastid);
 						}
 						testJobsService.delete(id);
-						QuartzManager.removeJob(id + "");
+						QuartzManager.removeJob(id + "*JOB");
+						QueueListener.list.remove(tj);
 						
 						operationlogservice.add(req, "TESTJOBS", id, 
 								tj.getProjectid(),"自动化用例计划任务删除成功！计划名称："+tj.getTaskName());
@@ -785,7 +787,7 @@ public class TestJobsController
 			// String startTime = setStartTime(tb);
 			String startTime = tb.getStartTimestr();
 			testJobsService.modify(tb);
-			QuartzManager.addJob(id, QuartzJob.class, startTime);
+			QuartzManager.addJob(id + "*JOB", QuartzJob.class, startTime);
 			
 			operationlogservice.add(req, "TESTJOBS", Integer.valueOf(id), 
 					sectorprojectsService.getid(tb.getPlanproj()),"自动化用例计划任务被启动成功！计划名称："+tb.getTaskName());
@@ -824,7 +826,7 @@ public class TestJobsController
 			TestJobs tb = testJobsService.get(Integer.valueOf(id));
 			tb.setState("0");
 			testJobsService.modify(tb);
-			QuartzManager.removeJob(id);
+			QuartzManager.removeJob(id+"*JOB");
 			
 			operationlogservice.add(req, "TESTJOBS", Integer.valueOf(id), 
 					sectorprojectsService.getid(tb.getPlanproj()),"自动化用例计划任务被关闭成功！计划名称："+tb.getTaskName());
