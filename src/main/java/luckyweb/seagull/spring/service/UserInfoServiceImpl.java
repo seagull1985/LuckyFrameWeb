@@ -7,8 +7,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import luckyweb.seagull.spring.dao.UserInfoDao;
-import luckyweb.seagull.spring.entity.ProjectVersion;
-import luckyweb.seagull.spring.entity.Review;
 import luckyweb.seagull.spring.entity.UserInfo;
 
 

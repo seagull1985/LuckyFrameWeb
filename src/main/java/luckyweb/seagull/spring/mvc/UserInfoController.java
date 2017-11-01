@@ -622,8 +622,8 @@ public class UserInfoController {
 				UserRole urole = userroleservice.load(Integer.valueOf(userrole.getRole()));
 				userrole.setId(urole.getId());
 				userrole.setRole(urole.getRole());
-				userrole.setPermission(userrole.getPermission()+",");
-				userrole.setOpprojectid(userrole.getOpprojectid()+",");
+				userrole.setPermission(","+userrole.getPermission()+",");
+				userrole.setOpprojectid(","+userrole.getOpprojectid()+",");
 				
 				userroleservice.modify(userrole);
 				
@@ -728,8 +728,8 @@ public class UserInfoController {
 					return retVal;
 				}
 				
-				userrole.setPermission(userrole.getPermission()+",");
-				userrole.setOpprojectid(userrole.getOpprojectid()+",");
+				userrole.setPermission(","+userrole.getPermission()+",");
+				userrole.setOpprojectid(","+userrole.getOpprojectid()+",");
 				
 				userroleservice.add(userrole);
 				

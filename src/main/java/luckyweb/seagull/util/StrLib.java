@@ -226,11 +226,7 @@ public class StrLib {
 	 public static String objectToJson(Object object) {
 	  StringBuilder json = new StringBuilder();
 	  if (object == null) {
-		  if(object.getClass().isArray()){
-			  json.append("[]"); 
-		  }else{
-		      json.append("\"\"");		  
-		  }
+		  json.append("\"\"");		  
 	  } else if (object.getClass().isArray()) {
 		  JSONArray jsonarray = JSONArray.fromObject(object);
 	      json.append("\"").append(jsonarray.toString().replace("\"", "&quot;")).append("\"");

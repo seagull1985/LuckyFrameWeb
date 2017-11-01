@@ -2,11 +2,13 @@ package luckyweb.seagull.quartz;
 
 import java.io.IOException;
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.quartz.Job;
@@ -14,6 +16,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import luckyweb.seagull.comm.QueueListener;
+import luckyweb.seagull.spring.entity.TestClient;
 import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.spring.entity.TestTaskexcute;
 import luckyweb.seagull.spring.service.TestJobsService;
@@ -33,26 +36,73 @@ public class QuartzJob implements Job {
 	@Resource(name = "testJobsService")
 	private TestJobsService	 testJobsService;
 	
+	public static Session session = HibernateSessionFactoryUtil.getCurrentSession();
 	@Override
 	public void execute(JobExecutionContext context)
 			throws JobExecutionException {
 		try {
-			System.out.println("执行命令中。。。");
-			String id = context.getJobDetail().getName();
-			TestJobs job = null;
-			for (int i = 0; i < QueueListener.list.size(); i++) {
-				job = new TestJobs();
-				job = QueueListener.list.get(i);
-				if (id.equals("" + job.getId())) {
-					break;
+			String name = context.getJobDetail().getName();
+			
+			if(name.indexOf("*JOB")>-1){
+				TestJobs job = new TestJobs();
+				String id=name.substring(0,name.indexOf("*JOB"));
+				System.out.println("执行命令中。。。");
+				for (int i = 0; i < QueueListener.list.size(); i++) {
+					job = QueueListener.list.get(i);
+					if (id.equals("" + job.getId())) {
+						break;
+					}else{
+						job=null;
+					}
+				}
+				if(null!=job){
+					toRunTask(job.getPlanproj(), job.getId(),job.getTaskName(),job.getClientip());	
+					System.out.println("调用程序结束。。。");
+				}else{
+					System.out.println("没有定时任务需要启动。。。");
+				}
+			}else if(name.indexOf("*CLIENT")>-1){
+				TestClient tc = new TestClient();
+				String id=name.substring(0,name.indexOf("*CLIENT"));
+				for (int i = 0; i < QueueListener.listen_Clientlist.size(); i++) {
+					tc = QueueListener.listen_Clientlist.get(i);
+					if (id.equals("" + tc.getId())) {
+						if(null!=tc){
+							String clientip=tc.getClientip();
+							try{
+							 //调用远程对象，注意RMI路径与接口必须与服务器配置一致
+							RunService service=(RunService)Naming.lookup("rmi://"+clientip+":6633/RunService");
+							String result=service.getClientStatus();
+							if("success".equals(result)){
+								if(tc.getStatus()!=0){
+									tc.setStatus(0);
+									QueueListener.listen_Clientlist.set(i, tc);
+									Query query = session.createQuery("update TestClient t set t.status =0  where id="+tc.getId());
+									query.executeUpdate();
+								}
+							}else{
+								if(tc.getStatus()!=1){
+									tc.setStatus(1);
+									QueueListener.listen_Clientlist.set(i, tc);
+									Query query = session.createQuery("update TestClient t set t.status =1  where id="+tc.getId());
+									query.executeUpdate();
+								}
+							}
+							}catch (RemoteException e) {
+								if(tc.getStatus()!=1){
+									tc.setStatus(1);
+									QueueListener.listen_Clientlist.set(i, tc);
+									Query query = session.createQuery("update TestClient t set t.status =1  where id="+tc.getId());
+									query.executeUpdate();
+								}
+								break;
+							}
+						}
+						break;
+					}
 				}
 			}
-			if(null!=job){
-				toRunTask(job.getPlanproj(), job.getId(),job.getTaskName(),job.getClientip());	
-				System.out.println("调用程序结束。。。");
-			}else{
-				System.out.println("没有定时任务需要启动。。。");
-			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -177,5 +227,6 @@ public class QuartzJob implements Job {
 	
 	
 	public static void main(String[] args) throws IOException {
+
 	}
 }

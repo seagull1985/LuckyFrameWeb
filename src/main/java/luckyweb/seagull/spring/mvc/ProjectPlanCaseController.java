@@ -186,8 +186,15 @@ public class ProjectPlanCaseController {
 				projectcase=projectcaseservice.load(pc.getCaseid());
 				projectcase.setChecktype(1);
 				projectcase.setPriority(pc.getPriority());
+				// 更新模块名
+				for (ProjectModule module : modulelist) {
+					if (projectcase.getModuleid() == module.getId()) {
+						projectcase.setModulename(module.getModulename());
+					}
+				}
 				projectcases.add(projectcase);
 			}
+			
 			// 得到总记录数
 			total = projectplancaseservice.getcases(planid).size();
 		}
@@ -349,6 +356,8 @@ public class ProjectPlanCaseController {
 
 			for(int i=0;i<plancases.size();i++){
 				ProjectCase projectcase=projectcaseservice.load(plancases.get(i).getCaseid());
+				Integer[] moduleidarr={projectcase.getModuleid()};
+				projectcase.setModuleidarr(moduleidarr);
 				projectcases.add(i, projectcase);
 			}
 
@@ -379,6 +388,8 @@ public class ProjectPlanCaseController {
 
 			for(int i=0;i<plancases.size();i++){
 				ProjectCase projectcase=projectcaseservice.load(plancases.get(i).getCaseid());
+				Integer[] moduleidarr={projectcase.getModuleid()};
+				projectcase.setModuleidarr(moduleidarr);
 				projectcases.add(i, projectcase);
 			}
 

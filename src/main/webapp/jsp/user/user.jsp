@@ -43,6 +43,9 @@
 					<button id="btn_authority" type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;权限管理
 					</button>
+					<button id="btn_client" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>&nbsp;客户端管理
+					</button>
 					<button id="btn_project" type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-list" aria-hidden="true"></span>&nbsp;项目管理
 					</button>
@@ -204,6 +207,22 @@
 			}
 
 			var url = '/userInfo/role.do';
+			window.location.href = url;
+		}
+
+		btn_client.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			var url = '/testClient/load.do';
 			window.location.href = url;
 		}
 		

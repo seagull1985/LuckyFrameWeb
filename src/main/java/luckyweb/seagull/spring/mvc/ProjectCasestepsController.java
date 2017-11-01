@@ -25,12 +25,13 @@ import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.TempCasestepDebug;
+import luckyweb.seagull.spring.entity.TestClient;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectCaseService;
 import luckyweb.seagull.spring.service.ProjectCasestepsService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.TempCasestepDebugService;
-import luckyweb.seagull.spring.service.TestJobsService;
+import luckyweb.seagull.spring.service.TestClientService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
@@ -60,8 +61,8 @@ public class ProjectCasestepsController {
 	@Resource(name = "userinfoService")
 	private UserInfoService userinfoservice;
 	
-	@Resource(name = "testJobsService")
-	private TestJobsService	 testJobsService;
+	@Resource(name = "testclientService")
+	private TestClientService tcservice;
 
 	/**
 	 * 添加步骤
@@ -124,7 +125,16 @@ public class ProjectCasestepsController {
 			model.addAttribute("caseid", caseid);
 			model.addAttribute("projectid", prcase.getProjectid());
 			model.addAttribute("steps", steps);
-			List iplist = testJobsService.getipList();
+			List<TestClient> iplist = tcservice.getClientListForProid(prcase.getProjectid());
+			for(TestClient tc:iplist){
+				if(tc.getStatus()==0){
+					tc.setProjectper("【"+tc.getName()+"】"+tc.getClientip()+" 状态正常");
+				}else if(tc.getStatus()==1){
+					tc.setProjectper("【"+tc.getName()+"】"+tc.getClientip()+" 状态异常");
+				}else{
+					tc.setProjectper("【"+tc.getName()+"】"+tc.getClientip()+" 状态未知");
+				}
+			}
 			model.addAttribute("iplist", iplist);
 			return retVal;
 
@@ -169,7 +179,7 @@ public class ProjectCasestepsController {
 			String jsonstr = sb.toString().substring(1, sb.toString().length() - 1);
 			jsonstr = jsonstr.replace("\\\"", "\"");
 			jsonstr = jsonstr.replace("undefined", "0");
-			System.out.println(jsonstr);
+
 			JSONArray jsonarr = JSONArray.fromObject(jsonstr);
 			List<?> list = JSONArray.toList(jsonarr, new ProjectCasesteps(), new JsonConfig());// 参数1为要转换的JSONArray数据，参数2为要转换的目标数据，即List盛装的数据
 			String usercode = "";

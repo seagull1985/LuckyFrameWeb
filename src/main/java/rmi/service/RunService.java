@@ -16,4 +16,5 @@ public interface RunService extends Remote {
     public byte[] getlogimg(String imgName) throws RemoteException;
     public String uploadjar(byte[] fileContent,String name) throws RemoteException;
     public String webdebugcase(String sign,String executor) throws RemoteException;
+    public String getClientStatus() throws RemoteException;
 }

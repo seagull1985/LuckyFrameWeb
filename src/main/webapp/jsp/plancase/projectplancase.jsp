@@ -167,7 +167,7 @@
 					}, {
 						field : 'remark',
 						title : '备注',
-						width : '20%'
+						width : '20%',
 					} ],
 					onEditableSave : function(field, row, oldValue, $el) {
 				    	var status = document.getElementById("loginstatus").value;

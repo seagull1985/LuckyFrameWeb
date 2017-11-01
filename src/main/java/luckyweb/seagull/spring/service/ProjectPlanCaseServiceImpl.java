@@ -7,8 +7,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import luckyweb.seagull.spring.dao.ProjectPlanCaseDao;
-import luckyweb.seagull.spring.entity.ProjectCasesteps;
-import luckyweb.seagull.spring.entity.ProjectPlan;
 import luckyweb.seagull.spring.entity.ProjectPlanCase;
 
 @Service("projectPlanCaseService")
@@ -70,7 +68,7 @@ public class ProjectPlanCaseServiceImpl implements ProjectPlanCaseService{
 		return where;
 	}
 	
-	private static String  orderBy=" order by id desc ";
+	private static String  orderBy=" order by caseid desc ";
 	
 	@Override
 	public List findByPage(Object value, int offset, int pageSize) {

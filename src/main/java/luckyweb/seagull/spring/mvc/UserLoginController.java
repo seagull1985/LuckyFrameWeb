@@ -166,7 +166,7 @@ public class UserLoginController {
 		boolean result = false;
 
 		if (req.getSession().getAttribute("oppid") != null) {
-			if (req.getSession().getAttribute("oppid").toString().indexOf("," + projectids + ",") >= 0) {
+			if (req.getSession().getAttribute("oppid").toString().indexOf(","+projectids + ",") >= 0) {
 				result = true;
 			} else {
 				result = false;
@@ -235,7 +235,7 @@ public class UserLoginController {
 		String	opr = req.getParameter("permissioncode");
 		
 		if(req.getSession().getAttribute("permission")!=null){
-			if(req.getSession().getAttribute("permission").toString().indexOf(opr)>=0){
+			if(req.getSession().getAttribute("permission").toString().indexOf(","+opr+",")>=0){
 				status[0] = "true";
 			}else{
 				status[0]  = "false";

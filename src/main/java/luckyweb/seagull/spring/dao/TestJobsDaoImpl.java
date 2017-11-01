@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.quartz.QuratzJobDataMgr;
+import luckyweb.seagull.spring.entity.TestClient;
 import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.util.StrLib;
 
@@ -48,15 +49,28 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 				
 				Query query = session.createQuery("from TestJobs where (tasktype ='D') or  (tasktype ='O' and runtime>sysdate()) ");
 				QueueListener.list = query.list();
-				QuratzJobDataMgr mgr = new QuratzJobDataMgr();
+				
 				QueueListener.qa_projlist = session.createQuery("from SectorProjects where projecttype=0 order by projectid asc").list();
-				//将任务加入到缓存中
+				
+				QueueListener.listen_Clientlist=session.createQuery("from TestClient order by id asc").list();
+				//将测试调度任务加入到定时任务中
+				QuratzJobDataMgr mgr = new QuratzJobDataMgr();
 				for (TestJobs tb : QueueListener.list) {
 					try{
-						mgr.addRunTime(tb, tb.getId());
+						mgr.addJobRunTime(tb, tb.getId());
 					}catch(Exception e){
-						log.error("启动 定时任务失败：" + e.getMessage());
-						System.out.println("任务ID号"+tb.getId()+"启动失败，请检查任务配置情况，尤其是Cron表达式是否正确！！！！");
+						log.error("启动 测试调度定时任务失败：" + e.getMessage());
+						System.out.println("任务ID号"+tb.getId()+"启动失败，请检查测试调度任务配置情况，尤其是Cron表达式是否正确！！！！");
+						continue;
+					}					
+				}
+				//将客户端心跳加入到定时任务中
+				for (TestClient tc : QueueListener.listen_Clientlist) {
+					try{
+						mgr.addTestClient(tc, tc.getId());
+					}catch(Exception e){
+						log.error("启动 客户端心跳检测监听失败：" + e.getMessage());
+						System.out.println("任务ID号"+tc.getId()+"启动失败，请检查客户端心跳检测任务配置情况，尤其是Cron表达式是否正确！！！！");
 						continue;
 					}					
 				}
