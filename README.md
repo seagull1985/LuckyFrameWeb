@@ -66,7 +66,7 @@ LuckyFrame 开源自动化测试平台 - 自动化测试 X 时代来了
 > [【查看版本Releases日志】](https://git.oschina.net/seagull1985/LuckyFrameWeb/wikis/pages?title=更新日志&parent=项目信息)
 
 # 大家安静下，我再说一句
-此项目是LuckyFrame的Web端项目，此外还有一个LuckyFrame的项目做为客户端，如果您只需要先看看界面，那么单独下载这个项目就够了，如果您需要搭建整套环境，那还要把LuckyFrmae项目下载下来。
+此项目是LuckyFrame的Web端项目，此外还有一个LuckyFrame的项目做为客户端，如果您只需要先看看界面，那么单独下载这个项目就够了，如果您需要搭建整套环境，那还要把LuckyFrame项目下载下来。
 
 # 期待您更多的意见
 
