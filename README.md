@@ -16,7 +16,7 @@
     <img alt="maven" src="https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg">
   </a>
   <a href="#">
-    <img alt="code style" src="https://img.shields.io/badge/%20LICENSE-GPL--2.0-green.svg">
+   <img alt="code style" src="https://img.shields.io/badge/%20LICENSE-GPL--2.0-blue.svg">
   </a>
   <a href="#">
    <img alt="code style" src="https://img.shields.io/badge/BUILD-PASSING-green.svg">
