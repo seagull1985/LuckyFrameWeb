@@ -112,7 +112,16 @@ public class TestJobsController
 				}
 			}
 			
-			List iplist = testJobsService.getipList();
+			List<TestClient> iplist = tcservice.getClientList();
+			for(TestClient tc:iplist){
+				if(tc.getStatus()==0){
+					tc.setName("【"+tc.getName()+"】"+tc.getClientip()+" 【客户端状态正常】");
+				}else if(tc.getStatus()==1){
+					tc.setName("【"+tc.getName()+"】"+tc.getClientip()+" 【客户端状态异常】");
+				}else{
+					tc.setName("【"+tc.getName()+"】"+tc.getClientip()+" 【客户端状态未知】");
+				}
+			}
 			model.addAttribute("iplist", iplist);
 			
 			model.addAttribute("projects", prolist);
@@ -130,7 +139,7 @@ public class TestJobsController
 	@SuppressWarnings({ "unchecked" })
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+			HttpServletResponse response) throws Exception {
 		response.setCharacterEncoding("utf-8");
 		PrintWriter pw = response.getWriter();
 		String search = request.getParameter("search");
@@ -153,6 +162,14 @@ public class TestJobsController
 		}
 
 		List<TestJobs> jobs = testJobsService.findByPage(tj, offset, limit);
+		List<TestClient> iplist = tcservice.getClientList();
+		for(TestJobs tjs:jobs){
+			for(TestClient tc:iplist){
+				if(tc.getClientip().equals(tjs.getClientip())){
+					tjs.setClientip(tjs.getClientip()+"**"+tc.getStatus());
+				}
+			}
+		}
 		// 转换成json字符串
 		String RecordJson = StrLib.listToJson(jobs);
 		// 得到总记录数

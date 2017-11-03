@@ -77,10 +77,10 @@
 								<form class="form-horizontal" role="form">
 								  <div class="form-group">
 											<label for="clientip" class="col-sm-3 control-label">客户端IP：</label>
-											<div class="input-group col-md-5">
+											<div class="input-group col-md-8">
 												<select class="form-control" name="clientip" id="clientip">
 													<c:forEach var="iplist" items="${iplist }">
-														<option value="${iplist}">${iplist}</option>
+														<option value="${iplist.clientip}">${iplist.name}</option>
 													</c:forEach>
 												</select>
 											</div>
@@ -245,6 +245,16 @@
 												field : 'clientip',
 												title : '客户端IP',
 												width : '7%',
+												formatter : function(value,
+														row, index) {
+													if(value.indexOf("**0")>-1){
+														return '<font style="color:#00bf5f">'+value.substring(0,value.indexOf("**0"))+'</font>';
+													}else if(value.indexOf("**1")>-1){
+														return '<font style="color:#ff0000">'+value.substring(0,value.indexOf("**1"))+'</font>';
+													}else{
+														return '<font style="color:#FF7F00">'+value+'</font>';
+													}
+												}
 											},
 											{
 												field : 'threadCount',

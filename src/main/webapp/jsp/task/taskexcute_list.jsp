@@ -253,7 +253,7 @@
 												width : '5%',
 												formatter : function(value,
 														row, index) {
-													return '<a href="/caseDetail/load.do?taskId='+ row.id+ '&status=0" id="casesucc'+row.id+'">'	+ value + '</a> ';
+													return '<a href="/caseDetail/load.do?taskId='+ row.id+ '&status=0" id="casesucc'+row.id+'" style="color:#00bf5f">'	+ value + '</a> ';
 												}
 											},
 											{
@@ -262,7 +262,7 @@
 												width : '5%',
 												formatter : function(value,
 														row, index) {
-													return '<a href="/caseDetail/load.do?taskId='+ row.id+ '&status=1" id="casefail'+row.id+'">'	+ value + '</a> ';
+													return '<a href="/caseDetail/load.do?taskId='+ row.id+ '&status=1" id="casefail'+row.id+'" style="color:#ff0000">'	+ value + '</a> ';
 												}
 											},
 											{
@@ -271,7 +271,7 @@
 												width : '5%',
 												formatter : function(value,
 														row, index) {
-													return '<a href="/caseDetail/load.do?taskId='+ row.id+ '&status=2" id="caselock'+row.id+'">'	+ value + '</a> ';
+													return '<a href="/caseDetail/load.do?taskId='+ row.id+ '&status=2" id="caselock'+row.id+'" style="color:#FF7F00">'	+ value + '</a> ';
 												}
 											},
 											{
