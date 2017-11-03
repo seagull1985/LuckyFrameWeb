@@ -213,7 +213,7 @@
 												width : '10%',
 											},
 											{
-												field : 'taskName',
+												field : 'testlinkname',
 												title : '计划名称',
 												width : '17%',
 											},

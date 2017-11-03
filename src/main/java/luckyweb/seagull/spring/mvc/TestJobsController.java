@@ -33,6 +33,7 @@ import luckyweb.seagull.quartz.QuartzManager;
 import luckyweb.seagull.quartz.QuratzJobDataMgr;
 import luckyweb.seagull.spring.entity.ProjectPlan;
 import luckyweb.seagull.spring.entity.SectorProjects;
+import luckyweb.seagull.spring.entity.TestClient;
 import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.service.CaseDetailService;
@@ -40,6 +41,7 @@ import luckyweb.seagull.spring.service.LogDetailService;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectPlanService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
+import luckyweb.seagull.spring.service.TestClientService;
 import luckyweb.seagull.spring.service.TestJobsService;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
 import luckyweb.seagull.spring.service.UserInfoService;
@@ -79,6 +81,9 @@ public class TestJobsController
 	
 	@Resource(name = "sectorprojectsService")
 	private SectorProjectsService sectorprojectsService;
+	
+	@Resource(name = "testclientService")
+	private TestClientService tcservice;
 	
 	/**
 	 * 
@@ -691,6 +696,17 @@ public class TestJobsController
 		model.addAttribute("extype", jobload.getExtype());
 		model.addAttribute("browsertype", jobload.getBrowsertype());
 		model.addAttribute("projecttype", jobload.getProjecttype());
+		List<TestClient> tclist=tcservice.getClientListForProid(jobload.getProjectid());
+		for(TestClient tc:tclist){
+			if(tc.getStatus()==0){
+				tc.setName("【"+tc.getName()+"】"+tc.getClientip()+" 【客户端状态正常】");
+			}else if(tc.getStatus()==1){
+				tc.setName("【"+tc.getName()+"】"+tc.getClientip()+" 【客户端状态异常】");
+			}else{
+				tc.setName("【"+tc.getName()+"】"+tc.getClientip()+" 【客户端状态未知】");
+			}
+		}
+		model.addAttribute("tclist", tclist);
 		if(jobload.getProjecttype()==0){
 			ProjectPlan projectplan=new ProjectPlan();
 			projectplan.setProjectid(jobload.getProjectid());

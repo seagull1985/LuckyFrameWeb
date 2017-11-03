@@ -143,6 +143,9 @@
 				<td height="30" align="left">客户端IP</td>
 				<td height="30" colspan="3"><sf:select path="clientip" id="clientip" width="20%">
    	               <sf:option value="0">请选择执行客户端...</sf:option>
+   	                  <c:forEach var="tc" items="${tclist}">
+							<sf:option value="${tc.clientip}">${tc.name}</sf:option>
+						</c:forEach>
                        </sf:select></td>
 			</tr>
 					<tr>
@@ -385,11 +388,9 @@
 		$(function(){
 			if("${projecttype}"==0){
 				isShow6('0');
-				getPlan();
 			}else{
 				isShow6('1');
 				$("#planproj").val("${projectid}");
-				getClient(1);
 			}
 
 			$.extend($.fn.validatebox.defaults.rules, {    
@@ -416,7 +417,7 @@
 			
 			$("#taskjob").form({
 				validate:true
-			});
+			});			
 		});
 		
 				 
@@ -468,7 +469,7 @@
 			  //设置子列表
 			 function setPlan(result){	    
 		  	   var options = "";
-			   jQuery.each(result.data, function(i, node){
+			   jQuery.each(result.data, function(i, node){				   
 					   options +=  "<option value='"+node.id+"'>"+node.name+"</option>";
 			      }); 
 			      jQuery("#planid").html(options);
@@ -551,6 +552,7 @@
 			alert('${message}');
 		}
 	}
+	
 </script>
 </body>
 </html>
