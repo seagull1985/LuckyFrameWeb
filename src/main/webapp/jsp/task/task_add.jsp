@@ -111,7 +111,7 @@
 			<tr id="pro"  style="display: none">
 				<td height="30" align="left">项目名</td>
 				<td height="30" colspan="3"><sf:select path="projectid"
-						id="projectid" onChange="getPlan()" onFocus="getPlan()" >
+						id="projectid" onChange="getPlan()">
 						<sf:option value="0">请选择</sf:option>
 						<c:forEach var="p" items="${sysprojects}">
 							<sf:option value="${p.projectid}">${p.projectname}</sf:option>
@@ -126,8 +126,14 @@
 			</tr>
 			<tr>
 				<td height="30" align="left">客户端IP</td>
-				<td height="30" colspan="3"><sf:select path="clientip" id="clientip" width="20%">
+				<td height="30" colspan="3"><sf:select path="clientip" id="clientip" width="20%" onChange="getClientpath()" onFocus="getClientpath()">
    	               <sf:option value="0">请选择执行客户端...</sf:option>
+                       </sf:select></td>
+			</tr>
+			<tr>
+				<td height="30" align="left">客户端驱动桩路径</td>
+				<td height="30" colspan="3"><sf:select path="clientpath" id="clientpath" width="20%">
+   	               <sf:option value="0">请选择客户端驱动桩路径...</sf:option>
                        </sf:select></td>
 			</tr>
 			<tr>
@@ -538,7 +544,6 @@
 	    	 clearClient();
 	    	 setClient(result); 
 	      });
-    
 	    }
      
 	  //设置子列表
@@ -554,12 +559,43 @@
 		   }
 	      }); 
 	      jQuery("#clientip").html(options);
+		  getClientpath();
 	    }
 	  
 	 // 清空下拉列表
      function clearClient(){
 	  while(jQuery("#clientip").length>1){
 		  $("#clientip option[index='1']").remove();
+	//	 document.getElementById("checkentry").options.remove("1"); 
+	    }
+	   }
+	 
+	    //按上级ID取子列表
+	 function getClientpath(){
+//	    clearSel(); //清空节点	    
+	    if(jQuery("#clientip").val() == "0") return;
+	    var clientip = jQuery("#clientip").val();
+	    var url ="/testClient/getclientpathlist.do?clientip="+clientip;
+	     jQuery.getJSON(url,null,function call(result){
+	    	 clearSel();
+	    	 setClientpath(result); 
+	      });
+    
+	    }
+    
+	  //设置子列表
+	 function setClientpath(result){	    
+  	   var options = "";
+	   jQuery.each(result.data, function(i, node){
+		  options +=  "<option value='"+node+"'>"+node+"</option>";
+	      }); 
+	      jQuery("#clientpath").html(options);
+	    }
+	  
+	 // 清空下拉列表
+     function clearSel(){  
+	  while(jQuery("#clientpath").length>1){
+		  $("#clientpath option[index='1']").remove();
 	//	 document.getElementById("checkentry").options.remove("1"); 
 	    }
 	   }

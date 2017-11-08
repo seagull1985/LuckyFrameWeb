@@ -147,14 +147,20 @@
 								  <div class="form-group">
 											<label for="clientip" class="col-sm-3 control-label">客户端IP：</label>
 											<div class="input-group col-md-7">
-												<select class="form-control" name="clientipfordebug" id="clientipfordebug">
+												<select class="form-control" name="clientipfordebug" id="clientipfordebug" onChange="getClientpath()" onFocus="getClientpath()">
 													<c:forEach var="iplist" items="${iplist }">
 														<option value="${iplist.clientip}">${iplist.projectper}</option>
 													</c:forEach>
 												</select>
 											</div>
-										</div>
-
+									</div>
+								   <div class="form-group">
+											<label for="clientip" class="col-sm-3 control-label">驱动桩路径：</label>
+											<div class="input-group col-md-7">
+												<select class="form-control" name="clientpathfordebug" id="clientpathfordebug">
+												</select>
+											</div>
+									</div>
 								</form>
 							</div>
 							<div id="autoDown" class="modal-footer" style=" background-color:#F0F8FF;height: 300px;width:100%;overflow-y:scroll;text-align:left;">
@@ -559,6 +565,7 @@
 		
 		function showdebug(){
 			$("#debug").modal('show');
+			getClientpath();
 		}
 		
 		function debugcase(){
@@ -568,7 +575,7 @@
 				cache : false,
 				async : true,
 				dataType : "json",
-				url : "debugcase.do?casesign=${casesign}"+"&clientip="+$("#clientipfordebug").val(),
+				url : "debugcase.do?casesign=${casesign}"+"&clientip="+$("#clientipfordebug").val()+"&clientpath="+$("#clientpathfordebug").val(),
 				contentType : "application/json", //必须有
 				data : {},
 				success : function(data, status) {
@@ -622,6 +629,36 @@
 			var t=setTimeout("refreshlog()", 1500);
 		}
 		
+		
+	    //按上级ID取子列表
+		 function getClientpath(){
+//		    clearSel(); //清空节点	    
+		    if(jQuery("#clientipfordebug").val() == "") return;
+		    var clientip = jQuery("#clientipfordebug").val();
+		    var url ="/testClient/getclientpathlist.do?clientip="+clientip;
+		     jQuery.getJSON(url,null,function call(result){
+		    	 clearSel();
+		    	 setClientpath(result); 
+		      });
+	    
+		    }
+	    
+		  //设置子列表
+		 function setClientpath(result){	    
+	  	   var options = "";
+		   jQuery.each(result.data, function(i, node){
+			  options +=  "<option value='"+node+"'>"+node+"</option>";
+		      }); 
+		      jQuery("#clientpathfordebug").html(options);
+		    }
+		  
+		 // 清空下拉列表
+	     function clearSel(){  
+		  while(jQuery("#clientpathfordebug").length>1){
+			  $("#clientpathfordebug option[index='1']").remove();
+		//	 document.getElementById("checkentry").options.remove("1"); 
+		    }
+		   }
 	</script>
 </body>
 </html>

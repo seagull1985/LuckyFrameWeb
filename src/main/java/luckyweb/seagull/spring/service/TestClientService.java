@@ -21,4 +21,5 @@ public interface TestClientService {
 	public int findRows(TestClient tc) ;
 	public List<TestClient> getClientListForProid(int projectid)  throws Exception;
 	public List<TestClient> getClientList() throws Exception;
+	public TestClient getClient(String ip) throws Exception;
 }

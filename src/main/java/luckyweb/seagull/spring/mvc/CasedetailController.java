@@ -204,7 +204,7 @@ public class CasedetailController
 						
 						QuartzJob qj = new QuartzJob();
 						ms = qj.toRunCase(task.getTestJob().getPlanproj(), task.getId(), caseDetail.getCaseno(),
-								caseDetail.getCaseversion(), task.getTestJob().getClientip());
+								caseDetail.getCaseversion(), task.getTestJob().getClientip(),task.getTestJob().getClientpath());
 						operationlogservice.add(req, "TEST_CASEDETAIL", id,
 								sectorprojectsService.getid(task.getTestJob().getPlanproj()), "自动化用例单条开始执行！任务名称："
 										+ task.getTaskId() + " 用例编号：" + caseDetail.getCaseno() + " 结果：" + ms);
@@ -214,7 +214,7 @@ public class CasedetailController
 							projName = task.getTestJob().getPlanproj();
 							// 批量执行用例
 							QuartzJob qj = new QuartzJob();
-							ms = qj.toRunCaseBatch(projName, task.getId(), "ALLFAIL", task.getTestJob().getClientip());
+							ms = qj.toRunCaseBatch(projName, task.getId(), "ALLFAIL", task.getTestJob().getClientip(),task.getTestJob().getClientpath());
 							operationlogservice.add(req, "TEST_CASEDETAIL", 0, sectorprojectsService.getid(projName),
 									"全部非成功自动化用例开始执行!" + " 结果：" + ms);
 						} else {
@@ -229,7 +229,7 @@ public class CasedetailController
 							// 批量执行用例
 							QuartzJob qj = new QuartzJob();
 							ms = qj.toRunCaseBatch(projName, task.getId(), caseInfo.toString(),
-									task.getTestJob().getClientip());
+									task.getTestJob().getClientip(),task.getTestJob().getClientpath());
 
 							operationlogservice.add(req, "TEST_CASEDETAIL", 0, sectorprojectsService.getid(projName),
 									"自动化用例批量(非成功)开始执行!" + " 结果：" + ms);

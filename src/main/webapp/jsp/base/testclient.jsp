@@ -77,6 +77,17 @@
 											</div>
 										</div>
 										<div class="form-group">
+											<label for="clientip" class="col-sm-12 control-label" style="color:blue">
+											客户端根目录下存放驱动桩JAR的路径,多个路径以;分隔 </label>
+										</div>
+										<div class="form-group">
+											<label for="clientip" class="col-sm-3 control-label">驱动桩路径</label>
+											<div class="col-sm-9">
+												<input type="text" class="form-control" name="clientpath"
+													id="clientpath" placeholder="默认示例/TestDriven 多个路径以;分隔 " value="/TestDriven">
+											</div>
+										</div>
+										<div class="form-group">
 											<label for="checkinterval" class="col-sm-3 control-label">心跳间隔</label>
 											<div class="col-sm-9">
 												<input type="text" class="form-control" name="checkinterval"
@@ -175,15 +186,19 @@
 					}, {
 						field : 'clientip',
 						title : '客户端IP',
+						width : '8%',
+					}, {
+						field : 'clientpath',
+						title : '驱动桩路径',
 						width : '10%',
 					}, {
 						field : 'projectpername',
 						title : '使用项目',
-						width : '45%',
+						width : '43%',
 					},  {
 						field : 'checkinterval',
 						title : '心跳间隔',
-						width : '7%',
+						width : '6%',
 						align : 'center',
 						formatter : function(value,
 								row, index) {
@@ -192,7 +207,7 @@
 					},  {
 						field : 'status',
 						title : '客户端状态',
-						width : '10%',
+						width : '8%',
 						align : 'center',
 						formatter : function(value,
 								row, index) {
@@ -207,7 +222,7 @@
 					}, {
 						field : 'remark',
 						title : '备注',
-						width : '15%',
+						width : '12%',
 					}],
 				});
 			};
@@ -256,6 +271,19 @@
 									},
 									ip : {
 										message : '客户端IP格式验证错误'
+									}
+								}
+							},
+							clientpath : {
+								message : '驱动桩路径无效！',
+								validators : {
+									notEmpty : {
+										message : '驱动桩路径不能为空'
+									},
+									stringLength : {
+										min : 2,
+										max : 100,
+										message : '驱动桩路径长度必须在2~100个字符区间'
 									}
 								}
 							},

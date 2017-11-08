@@ -89,4 +89,15 @@ public class TestClientServiceImpl implements TestClientService{
 		String hql="from TestClient order by id asc";
 		return tcdao.listsql(hql);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public TestClient getClient(String ip) throws Exception {
+		String hql="from TestClient where clientip='"+ip+"'";
+		List<TestClient> ltc=tcdao.listsql(hql);
+		if(ltc.size()==0){
+			return null;
+		}
+		return ltc.get(0);
+	}
 }

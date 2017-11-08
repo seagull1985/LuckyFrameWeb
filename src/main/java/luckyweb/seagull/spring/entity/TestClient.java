@@ -15,8 +15,15 @@ public class TestClient implements java.io.Serializable{
 	private String projectpername;
 	private int status;
 	private int checkinterval;
+	private String clientpath;
 	private String remark;
 	
+	public String getClientpath() {
+		return clientpath;
+	}
+	public void setClientpath(String clientpath) {
+		this.clientpath = clientpath;
+	}
 	public String getProjectpername() {
 		return projectpername;
 	}

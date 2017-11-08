@@ -97,6 +97,7 @@ public class UserInfoController {
 			for(SectorProjects projectlist:prolist){
 				if(users.get(i).getProjectid()==projectlist.getProjectid()){
 					users.get(i).setProjectname(projectlist.getProjectname());
+					break;
 				}
 			}
 			
@@ -112,6 +113,7 @@ public class UserInfoController {
 				}					
 			}
 			users.get(i).setRole(role);
+			users.get(i).setPassword("");
 		}
 		// 转换成json字符串
 		String RecordJson = StrLib.listToJson(users);

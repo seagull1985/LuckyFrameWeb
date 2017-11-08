@@ -92,6 +92,9 @@
 		<property name="clientip" type="java.lang.String">
 			<column name="clientip" length="30" />
 		</property>
+		<property name="clientpath" type="java.lang.String">
+			<column name="clientpath" length="100" />
+		</property>
 	    <property name="projecttype" type="java.lang.Integer">
 			<column name="projecttype" length="8" />
 		</property>

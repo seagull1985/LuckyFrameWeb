@@ -23,6 +23,9 @@
 		<property name="checkinterval" type="java.lang.Integer">
 			<column name="checkinterval" length="6" not-null="true" />
 		</property>
+		<property name="clientpath" type="java.lang.String">
+			<column name="clientpath" length="100" />
+		</property>
 		<property name="remark" type="java.lang.String">
 			<column name="remark" length="100" not-null="false" />
 		</property>

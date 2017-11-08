@@ -122,10 +122,10 @@
 								<form class="form-horizontal" role="form">
 								  <div class="form-group">
 											<label for="clientip" class="col-sm-3 control-label">客户端IP：</label>
-											<div class="input-group col-md-5">
+											<div class="input-group col-md-8">
 												<select class="form-control" name="clientipforupload" id="clientipforupload">
 													<c:forEach var="iplist" items="${iplist }">
-														<option value="${iplist}">${iplist}</option>
+														<option value="${iplist.clientip}">${iplist.name}</option>
 													</c:forEach>
 												</select>
 											</div>

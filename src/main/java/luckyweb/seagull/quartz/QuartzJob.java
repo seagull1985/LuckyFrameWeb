@@ -23,6 +23,7 @@ import luckyweb.seagull.spring.service.TestJobsService;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
 import luckyweb.seagull.util.DateUtil;
 import luckyweb.seagull.util.HibernateSessionFactoryUtil;
+import luckyweb.seagull.util.StrLib;
 import rmi.model.RunBatchCaseEntity;
 import rmi.model.RunCaseEntity;
 import rmi.model.RunTaskEntity;
@@ -56,7 +57,7 @@ public class QuartzJob implements Job {
 					}
 				}
 				if(null!=job){
-					toRunTask(job.getPlanproj(), job.getId(),job.getTaskName(),job.getClientip());	
+					toRunTask(job.getPlanproj(), job.getId(),job.getTaskName(),job.getClientip(),job.getClientpath());	
 					System.out.println("调用程序结束。。。");
 				}else{
 					System.out.println("没有定时任务需要启动。。。");
@@ -108,7 +109,7 @@ public class QuartzJob implements Job {
 		}
 	}
 
-	public String toRunTask(String projname,int jobId,String jobname,String clientip){
+	public String toRunTask(String projname,int jobId,String jobname,String clientip,String loadpath){
 		Session s = null;
 		Transaction tx = null;
 		//System.out.println(tastId);
@@ -126,7 +127,10 @@ public class QuartzJob implements Job {
     		RunTaskEntity tasken = new RunTaskEntity();
     		tasken.setProjectname(projname);
     		tasken.setTaskid(String.valueOf(task.getId()));
-    		result=service.runtask(tasken);
+    		if(StrLib.isEmpty(loadpath)){
+    			loadpath="/TestDriven";
+    		}
+    		result=service.runtask(tasken,loadpath);
     		System.out.println(result);
     		return result;
 		}catch (Exception e) {
@@ -138,7 +142,7 @@ public class QuartzJob implements Job {
 	}
 	
 	
-	public String toRunCase(String projname,int tastId,String  caseName,String casVersion,String clientip) {
+	public String toRunCase(String projname,int tastId,String  caseName,String casVersion,String clientip,String loadpath) {
 		String result="启动失败！";
 		try{
     		//调用远程对象，注意RMI路径与接口必须与服务器配置一致
@@ -148,7 +152,10 @@ public class QuartzJob implements Job {
     		onecase.setTaskid(String.valueOf(tastId));
     		onecase.setTestCaseExternalId(caseName);
     		onecase.setVersion(casVersion);
-    		result=service.runcase(onecase);
+    		if(StrLib.isEmpty(loadpath)){
+    			loadpath="/TestDriven";
+    		}
+    		result=service.runcase(onecase,loadpath);
     		System.out.println(result);
     		return result;
 		} catch (Exception e) {
@@ -159,7 +166,7 @@ public class QuartzJob implements Job {
 	
 	
 	
-	public String toRunCaseBatch(String projname,int taskid,String  caseInfo,String clientip) {
+	public String toRunCaseBatch(String projname,int taskid,String  caseInfo,String clientip,String loadpath) {
 		String result="启动失败！";
 		try{
     		//调用远程对象，注意RMI路径与接口必须与服务器配置一致
@@ -168,7 +175,10 @@ public class QuartzJob implements Job {
     		batchcase.setProjectname(projname);
     		batchcase.setTaskid(String.valueOf(taskid));
     		batchcase.setBatchcase(caseInfo);
-    		result=service.runbatchcase(batchcase);
+    		if(StrLib.isEmpty(loadpath)){
+    			loadpath="/TestDriven";
+    		}
+    		result=service.runbatchcase(batchcase,loadpath);
     		System.out.println(result);
     		return result;
 		} catch (Exception e) {

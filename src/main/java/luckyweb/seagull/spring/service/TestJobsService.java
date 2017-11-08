@@ -36,5 +36,5 @@ public interface TestJobsService {
 //	public List<TestJobs> getListForPage( final int offset,final int lengh);
 
 	public List<TestJobs> findJobsList();
-	public List getipList();
+	public List getpathList(int projectid);
 }

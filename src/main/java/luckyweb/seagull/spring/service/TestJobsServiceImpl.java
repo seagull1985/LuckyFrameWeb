@@ -147,9 +147,9 @@ public class TestJobsServiceImpl implements TestJobsService
 	}
 
 	@Override
-	public List getipList()
+	public List getpathList(int projectid)
 	{
-		return testJobsDao.findJobsList("SELECT clientip FROM test_jobs GROUP BY clientip ");
+		return testJobsDao.findJobsList("SELECT clientpath FROM test_jobs where projectid="+projectid+" GROUP BY clientpath ");
 	}
 	
 	/**

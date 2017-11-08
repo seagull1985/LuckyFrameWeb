@@ -310,6 +310,7 @@ public class ProjectCasestepsController {
 		JSONObject json = new JSONObject();
 		String casesign = request.getParameter("casesign");
 		String clientip = request.getParameter("clientip");
+		String clientpath = request.getParameter("clientpath");
 		String status="error";
 		String ms="调试用例启动失败！";
 		try {
@@ -321,7 +322,7 @@ public class ProjectCasestepsController {
 
 				// 调用远程对象，注意RMI路径与接口必须与服务器配置一致
 				RunService service = (RunService) Naming.lookup("rmi://" + clientip + ":6633/RunService");
-				String result = service.webdebugcase(casesign, usercode);
+				String result = service.webdebugcase(casesign, usercode,clientpath);
 				
 				status="success";
 				ms=result;
@@ -332,15 +333,16 @@ public class ProjectCasestepsController {
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			ms="远程链接异常，请检查客户端！";
-			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		json.put("status", status);
-		json.put("ms", ms);
+		}finally{
+			json.put("status", status);
+			json.put("ms", ms);
 
-		pw.print(json.toString());
+			pw.print(json.toString());
+		}
+
 	}
 	
 	/**

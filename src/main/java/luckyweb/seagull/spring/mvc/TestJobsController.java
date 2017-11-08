@@ -10,6 +10,7 @@ import java.rmi.Naming;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -244,8 +245,21 @@ public class TestJobsController
 					}
 				}
 				
-				if (StrLib.isEmpty(tj.getClientip())) {
+				if (StrLib.isEmpty(tj.getClientip())||"0".equals(tj.getClientip())) {
 					message = "客户端IP不能为空！";
+					model.addAttribute("message", message);
+					return retVal;
+				}
+				
+				if (StrLib.isEmpty(tj.getClientpath())||"0".equals(tj.getClientpath())) {
+					message = "客户端驱动桩路径不能为空！";
+					model.addAttribute("message", message);
+					return retVal;
+				}
+				
+				if (StrLib.isEmpty(tj.getTaskName())||"0".equals(tj.getTaskName()))
+				{
+					message = "计划名称不能为空!";
 					model.addAttribute("message", message);
 					return retVal;
 				}
@@ -481,18 +495,25 @@ public class TestJobsController
 				}
 				String message = "";
 				
-				if (StrLib.isEmpty(tj.getClientip())) {
+				if (StrLib.isEmpty(tj.getClientip())||"0".equals(tj.getClientip())) {
 					message = "客户端IP不能为空！";
 					model.addAttribute("message", message);
 					return "/jsp/task/task_add";
 				}
 				
-				if (StrLib.isEmpty(tj.getTaskName()))
+				if (StrLib.isEmpty(tj.getClientpath())||"0".equals(tj.getClientpath())) {
+					message = "客户端驱动桩路径不能为空！";
+					model.addAttribute("message", message);
+					return "/jsp/task/task_add";
+				}
+				
+				if (StrLib.isEmpty(tj.getTaskName())||"0".equals(tj.getTaskName()))
 				{
 					message = "计划名称不能为空!";
 					model.addAttribute("message", message);
 					return "/jsp/task/task_update";
 				}
+				
 				if (tj.getProjecttype()==1&&(StrLib.isEmpty(tj.getPlanproj())||"0".equals(tj.getPlanproj())))
 				{
 					message = "项目名必选!";
@@ -724,6 +745,18 @@ public class TestJobsController
 			}
 		}
 		model.addAttribute("tclist", tclist);
+		ArrayList<String> pathlist=new ArrayList<String>();
+		TestClient tc=tcservice.getClient(jobload.getClientip());
+
+		String clientpath = tc.getClientpath();
+		String temp[] = clientpath.split(";", -1);
+		for (String pathtemp : temp) {
+			if (!StrLib.isEmpty(pathtemp)) {
+				pathlist.add(pathtemp);
+			}
+		}
+
+		model.addAttribute("tcpathlist", pathlist);
 		if(jobload.getProjecttype()==0){
 			ProjectPlan projectplan=new ProjectPlan();
 			projectplan.setProjectid(jobload.getProjectid());
@@ -909,7 +942,7 @@ public class TestJobsController
 			try
 			{
 				QuartzJob qj = new QuartzJob();
-				String message = qj.toRunTask(tj.getPlanproj(), id,tj.getTaskName(),tj.getClientip());				
+				String message = qj.toRunTask(tj.getPlanproj(), id,tj.getTaskName(),tj.getClientip(),tj.getClientpath());				
 				
 				operationlogservice.add(req, "TESTJOBS", Integer.valueOf(id), 
 						sectorprojectsService.getid(tj.getPlanproj()),"自动化用例计划任务被执行！计划名称："+tj.getTaskName()+" 结果："+message);
@@ -990,7 +1023,17 @@ public class TestJobsController
 			return "error";
 		}
 		String clientip = req.getParameter("clientip");
+		TestClient tc=tcservice.getClient(clientip);
+		ArrayList<String> pathlist=new ArrayList<String>();
+		String path=tc.getClientpath();
+		String temp[]=path.split(";",-1);
+		for(String pathtemp:temp){
+			if(!StrLib.isEmpty(pathtemp)){
+				pathlist.add(pathtemp);
+			}
+		}
 		model.addAttribute("clientip", clientip);
+		model.addAttribute("pathlist", pathlist);
 		return "/jsp/task/file_upload";
 	}
 
@@ -1014,6 +1057,7 @@ public class TestJobsController
 		String fileName = file.getOriginalFilename().substring(file.getOriginalFilename().length() - 4,
 		        file.getOriginalFilename().length());
 		String clientip = request.getParameter("clientip");
+		String clientpath = request.getParameter("clientpath");
 		if (!fileName.toLowerCase().equals(".jar"))
 		{
 			String message = "只能上传.jar的文件！";
@@ -1054,7 +1098,7 @@ public class TestJobsController
 			try{
 	    		//调用远程对象，注意RMI路径与接口必须与服务器配置一致
 	    		RunService service=(RunService)Naming.lookup("rmi://"+clientip+":6633/RunService");
-	    		result=service.uploadjar(b, file.getOriginalFilename());
+	    		result=service.uploadjar(b, file.getOriginalFilename(),clientpath);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
