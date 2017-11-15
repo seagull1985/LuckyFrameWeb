@@ -65,7 +65,7 @@ public class ProjectCasestepsController {
 	private TestClientService tcservice;
 
 	/**
-	 * 娣诲姞姝ラ
+	 * 添加步骤
 	 * 
 	 * @param tj
 	 * @param br
@@ -86,7 +86,7 @@ public class ProjectCasestepsController {
 			if (!UserLoginController.permissionboolean(req, "case_step")) {
 				model.addAttribute("casesteps", new ProjectCasesteps());
 				model.addAttribute("url", "/projectCase/load.do");
-				model.addAttribute("message", "褰撳墠鐢ㄦ埛鏃犳潈闄愮鐞嗙敤渚嬫楠わ紝璇疯仈绯荤鐞嗗憳锛�");
+				model.addAttribute("message", "当前用户无权限管理用例步骤，请联系管理员！");
 				return "success";
 			}
 
@@ -99,7 +99,7 @@ public class ProjectCasestepsController {
 			if(!UserLoginController.oppidboolean(req, prcase.getProjectid())){
 				SectorProjects sp=sectorprojectsService.loadob(prcase.getProjectid());
 				model.addAttribute("url", "/projectCase/load.do");
-				model.addAttribute("message", "褰撳墠鐢ㄦ埛鏃犳潈闄愮鐞嗛」鐩��"+sp.getProjectname()+"銆戠敤渚嬫楠わ紝璇疯仈绯荤鐞嗗憳锛�");
+				model.addAttribute("message", "当前用户无权限管理项目【"+sp.getProjectname()+"】用例步骤，请联系管理员！");
 				return "error";
 			}
 			
@@ -129,11 +129,11 @@ public class ProjectCasestepsController {
 			List<TestClient> iplist = tcservice.getClientListForProid(prcase.getProjectid());
 			for(TestClient tc:iplist){
 				if(tc.getStatus()==0){
-					tc.setProjectper("銆�"+tc.getName()+"銆�"+tc.getClientip()+" 鐘舵�佹甯�");
+					tc.setProjectper("【"+tc.getName()+"】"+tc.getClientip()+" 状态正常");
 				}else if(tc.getStatus()==1){
-					tc.setProjectper("銆�"+tc.getName()+"銆�"+tc.getClientip()+" 鐘舵�佸紓甯�");
+					tc.setProjectper("【"+tc.getName()+"】"+tc.getClientip()+" 状态异常");
 				}else{
-					tc.setProjectper("銆�"+tc.getName()+"銆�"+tc.getClientip()+" 鐘舵�佹湭鐭�");
+					tc.setProjectper("【"+tc.getName()+"】"+tc.getClientip()+" 状态未知");
 				}
 			}
 			model.addAttribute("iplist", iplist);
@@ -166,7 +166,7 @@ public class ProjectCasestepsController {
 		JSONObject json = new JSONObject();
 		if (!UserLoginController.permissionboolean(request, "case_step")) {
 			json.put("status", "fail");
-			json.put("ms", "缂栬緫澶辫触,鏉冮檺涓嶈冻,璇疯仈绯荤鐞嗗憳!");
+			json.put("ms", "编辑失败,权限不足,请联系管理员!");
 		} else {
 			try (BufferedReader reader = request.getReader();) {
 				char[] buff = new char[1024];
@@ -182,7 +182,7 @@ public class ProjectCasestepsController {
 			jsonstr = jsonstr.replace("undefined", "0");
 
 			JSONArray jsonarr = JSONArray.fromObject(jsonstr);
-			List<?> list = JSONArray.toList(jsonarr, new ProjectCasesteps(), new JsonConfig());// 鍙傛暟1涓鸿杞崲鐨凧SONArray鏁版嵁锛屽弬鏁�2涓鸿杞崲鐨勭洰鏍囨暟鎹紝鍗矻ist鐩涜鐨勬暟鎹�
+			List<?> list = JSONArray.toList(jsonarr, new ProjectCasesteps(), new JsonConfig());// 参数1为要转换的JSONArray数据，参数2为要转换的目标数据，即List盛装的数据
 			String usercode = "";
 			if (null != request.getSession().getAttribute("usercode")
 					&& null != request.getSession().getAttribute("username")) {
@@ -213,7 +213,7 @@ public class ProjectCasestepsController {
 				projectcaseservice.modify(projectcase);
 			}
 			json.put("status", "success");
-			json.put("ms", "缂栬緫姝ラ鎴愬姛!");
+			json.put("ms", "编辑步骤成功!");
 		}
 		pw.print(json.toString());
 	}
@@ -243,14 +243,14 @@ public class ProjectCasestepsController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// 杞崲鎴恓son瀛楃涓�
+		// 转换成json字符串
 		String RecordJson = StrLib.listToJson(casesteps);
 		pw.print(RecordJson);
 	}
 
 	@RequestMapping(value = "/update.do")
 	public void updatestep(HttpServletRequest req, HttpServletResponse rsp, ProjectCasesteps casesteps) {
-		// 鏇存柊瀹炰綋
+		// 更新实体
 		try {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
@@ -259,7 +259,7 @@ public class ProjectCasestepsController {
 			JSONObject json = new JSONObject();
 			if (!UserLoginController.permissionboolean(req, "case_step")) {
 				json.put("status", "fail");
-				json.put("ms", "缂栬緫澶辫触,鏉冮檺涓嶈冻,璇疯仈绯荤鐞嗗憳!");
+				json.put("ms", "编辑失败,权限不足,请联系管理员!");
 			} else {
 				ProjectCase projectcase = new ProjectCase();
 				if (null != req.getSession().getAttribute("usercode")
@@ -271,7 +271,7 @@ public class ProjectCasestepsController {
 				}
 				if(!UserLoginController.oppidboolean(req, projectcase.getProjectid())){
 					json.put("status", "fail");
-					json.put("ms", "缂栬緫澶辫触,椤圭洰鏉冮檺涓嶈冻,璇疯仈绯荤鐞嗗憳!");
+					json.put("ms", "编辑失败,项目权限不足,请联系管理员!");
 				}else{
 					Date currentTime = new Date();
 					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -284,7 +284,7 @@ public class ProjectCasestepsController {
 					projectcaseservice.modify(projectcase);
 
 					json.put("status", "success");
-					json.put("ms", "缂栬緫姝ラ鎴愬姛!");
+					json.put("ms", "编辑步骤成功!");
 				}
 
 			}
@@ -313,7 +313,7 @@ public class ProjectCasestepsController {
 		String clientip = request.getParameter("clientip");
 		String clientpath = request.getParameter("clientpath");
 		String status="error";
-		String ms="璋冭瘯鐢ㄤ緥鍚姩澶辫触锛�";
+		String ms="调试用例启动失败！";
 		try {
 			if (null != request.getSession().getAttribute("usercode")
 					&& null != request.getSession().getAttribute("username")) {
@@ -321,7 +321,7 @@ public class ProjectCasestepsController {
 				
 				tempdebugservice.delete(casesign, usercode);
 
-				// 璋冪敤杩滅▼瀵硅薄锛屾敞鎰廟MI璺緞涓庢帴鍙ｅ繀椤讳笌鏈嶅姟鍣ㄩ厤缃竴鑷�
+				// 调用远程对象，注意RMI路径与接口必须与服务器配置一致
 				RunService service = (RunService) Naming.lookup("rmi://" + clientip + ":6633/RunService");
 				String result = service.webdebugcase(casesign, usercode,clientpath);
 				
@@ -329,11 +329,11 @@ public class ProjectCasestepsController {
 				ms=result;
 			}else{
 				status="fail";
-				ms="妫�娴嬪埌鐢ㄦ埛鏈櫥褰曪紝璇烽噸鏂扮櫥褰曪紒";
+				ms="检测到用户未登录，请重新登录！";
 			}
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
-			ms="杩滅▼閾炬帴寮傚父锛岃妫�鏌ュ鎴风锛�";
+			ms="远程链接异常，请检查客户端！";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -362,7 +362,7 @@ public class ProjectCasestepsController {
 		JSONObject json = new JSONObject();
 		String casesign = request.getParameter("casesign");
 		String status="error";
-		String ms="鑾峰彇璋冭瘯鏃ュ織澶辫触锛�";
+		String ms="获取调试日志失败！";
 		try {
 			if (null != request.getSession().getAttribute("usercode")
 					&& null != request.getSession().getAttribute("username")) {
@@ -388,12 +388,12 @@ public class ProjectCasestepsController {
 				
 			}else{
 				status="fail";
-				ms="妫�娴嬪埌鐢ㄦ埛鏈櫥褰曪紝璇烽噸鏂扮櫥褰曪紒";
+				ms="检测到用户未登录，请重新登录！";
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			status="fail";
-			ms="鍒锋柊鏃ュ織鍑虹幇寮傚父锛�";
+			ms="刷新日志出现异常！";
 			e.printStackTrace();
 		}
 		json.put("status", status);
@@ -405,7 +405,7 @@ public class ProjectCasestepsController {
 
 	@RequestMapping(value = "/cgetStepsByCase.do")
 	public void cgetStepsByCase(HttpServletRequest req, HttpServletResponse rsp) {
-		// 鏇存柊瀹炰綋
+		// 更新实体
 		try {
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
@@ -415,10 +415,10 @@ public class ProjectCasestepsController {
 
 			List<ProjectCasesteps> steps = casestepsservice.getSteps(Integer.valueOf(caseid));
 
-			// 杞崲鎴恓son瀛楃涓�
+			// 转换成json字符串
 			String RecordJson = StrLib.listToJson(steps);
 
-			// 闇�瑕佽繑鍥炵殑鏁版嵁鏈夋�昏褰曟暟鍜岃鏁版嵁
+			// 需要返回的数据有总记录数和行数据
 			json.put("steps", RecordJson);
 			pw.print(json.toString());
 		} catch (Exception e) {
@@ -429,7 +429,7 @@ public class ProjectCasestepsController {
 
 	@RequestMapping(value = "/cpoststep.do")
 	public void cpoststep(HttpServletRequest req, HttpServletResponse rsp) throws IOException {
-		// 鏇存柊瀹炰綋
+		// 更新实体
 		rsp.setContentType("text/html;charset=GBK");
 		req.setCharacterEncoding("GBK");
 		PrintWriter pw = rsp.getWriter();
@@ -493,7 +493,7 @@ public class ProjectCasestepsController {
 			expectedresults = expectedresults.replace("DHDHDH", "=");
 			expectedresults = expectedresults.replace("ANDAND", "&");
 
-			String result = "鏇存柊鐢ㄤ緥銆�" + caseno + "銆戠銆�" + stepnum + "銆戞澶辫触锛岄鏈熺粨鏋溿��" + expectedresults + "銆�";
+			String result = "更新用例【" + caseno + "】第【" + stepnum + "】步失败，预期结果【" + expectedresults + "】";
 			ProjectCase pc = projectcaseservice.getCaseBySign(caseno);
 			List<ProjectCasesteps> steps = casestepsservice.getSteps(pc.getId());
 
@@ -512,7 +512,7 @@ public class ProjectCasestepsController {
 
 					casestepsservice.modify(step);
 					projectcaseservice.modify(pc);
-					result = "鏇存柊鐢ㄤ緥銆�" + caseno + "銆戠銆�" + stepnum + "銆戞鎴愬姛锛岄鏈熺粨鏋溿��" + expectedresults + "銆�";
+					result = "更新用例【" + caseno + "】第【" + stepnum + "】步成功，预期结果【" + expectedresults + "】";
 					break;
 				}
 			}
@@ -525,7 +525,7 @@ public class ProjectCasestepsController {
 
 	@RequestMapping(value = "/cPostDebugLog.do")
 	public void cPostDebugLog(HttpServletRequest req, HttpServletResponse rsp) {
-		// 鏇存柊瀹炰綋
+		// 更新实体
 		try {
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
