@@ -28,7 +28,7 @@
 			<!-- Article main content -->
 			<article class="col-sm-9 maincontent" style="width:100%;">
 			<header class="page-header">
-			<h1 class="page-title" style="text-align: center;">编辑步骤</h1>
+			<h1 class="page-title" style="text-align: center;">${casename}</h1>
 			</header>
 
 			<div class="col-md-12 col-sm-12">
