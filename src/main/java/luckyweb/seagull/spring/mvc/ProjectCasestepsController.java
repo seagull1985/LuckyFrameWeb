@@ -121,6 +121,7 @@ public class ProjectCasestepsController {
 			}
 
 			model.addAttribute("casesign", prcase.getSign());
+			
 			model.addAttribute("casename", prcase.getName());
 			model.addAttribute("casetype", prcase.getCasetype());
 			model.addAttribute("caseid", caseid);
