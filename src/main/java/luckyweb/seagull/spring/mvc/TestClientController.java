@@ -165,7 +165,8 @@ public class TestClientController {
 					json.put("status", "fail");
 					json.put("ms", "编辑客户端失败,权限不足,请联系管理员!");
 				} else {
-					if(tctest==null){
+					TestClient tctemp=tcservice.load(tc.getId());
+					if(tctest==null||tctemp.getClientip().equals(tc.getClientip())){
 						tc.setProjectper(","+tc.getProjectper()+",");
 						tc.setStatus(2);
 						tcservice.modify(tc);

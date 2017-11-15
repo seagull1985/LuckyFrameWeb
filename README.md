@@ -57,6 +57,7 @@ LuckyFrame 开源自动化测试平台 - 自动化测试 X 时代来了
 
 ![首页](https://git.oschina.net/uploads/images/2017/0913/193800_d0189b51_1215415.jpeg "首页")
 ![用例管理](https://git.oschina.net/uploads/images/2017/0913/193821_2e58d1cc_1215415.jpeg "用例管理")
+![步骤管理自动联想](https://gitee.com/uploads/images/2017/1110/150236_b5e0d674_1215415.png "步骤管理自动联想")
 ![测试计划管理](https://git.oschina.net/uploads/images/2017/0913/193847_c32f96ff_1215415.jpeg "测试计划管理")
 ![测试任务调度](https://git.oschina.net/uploads/images/2017/0913/193913_fdccc46f_1215415.png "测试任务调度")
 ![测试任务执行](https://git.oschina.net/uploads/images/2017/0913/193935_3b381747_1215415.png "测试任务执行")

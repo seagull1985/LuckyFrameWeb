@@ -402,6 +402,7 @@
             	$("#id").val(row[0].id);
             	$("#name").val(row[0].name);
             	$("#clientip").val(row[0].clientip);
+            	$("#clientpath").val(row[0].clientpath);
             	$("#checkinterval").val(row[0].checkinterval);
             	$("#remark").val(row[0].remark);
             	

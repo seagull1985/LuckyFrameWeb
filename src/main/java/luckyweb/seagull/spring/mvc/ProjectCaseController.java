@@ -23,12 +23,14 @@ import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
 import luckyweb.seagull.spring.entity.ProjectModule;
 import luckyweb.seagull.spring.entity.ProjectModuleJson;
+import luckyweb.seagull.spring.entity.ProjectPlanCase;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectCaseService;
 import luckyweb.seagull.spring.service.ProjectCasestepsService;
 import luckyweb.seagull.spring.service.ProjectModuleService;
+import luckyweb.seagull.spring.service.ProjectPlanCaseService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
@@ -42,6 +44,9 @@ public class ProjectCaseController {
 	@Resource(name = "projectCaseService")
 	private ProjectCaseService projectcaseservice;
 
+	@Resource(name = "projectPlanCaseService")
+	private ProjectPlanCaseService projectplancaseservice;
+	
 	@Resource(name = "projectCasestepsService")
 	private ProjectCasestepsService casestepsservice;
 
@@ -325,13 +330,21 @@ public class ProjectCaseController {
 				String status="fail";
 				String ms="删除用例失败!";
 				int suc=0;
-				int fail=0;
+				int planfail=0;
+				int proprefail=0;
+				ProjectPlanCase projectplancase=new ProjectPlanCase();
 				for (int i = 0; i < jsonarr.size(); i++) {
 					int id = Integer.valueOf(jsonarr.get(i).toString());
+					projectplancase.setCaseid(id);
+					int plancase=projectplancaseservice.findRows(projectplancase);
 					ProjectCase pc = projectcaseservice.load(id);
-					
+
+					if(plancase>0){
+						planfail++;
+						continue;
+					}
 					if(!UserLoginController.oppidboolean(req, pc.getProjectid())){
-						fail++;
+						proprefail++;
 						continue;
 					}
 					casestepsservice.delforcaseid(id);
@@ -343,9 +356,15 @@ public class ProjectCaseController {
 				if(suc>0){
 					status="success";
 					ms="删除用例成功!";
-					if(fail>0){
-						status="success";
-						ms="删除用例"+suc+"条成功！"+fail+"条因为无项目权限删除失败！";
+					if(proprefail>0&&planfail==0){
+						status="warning";
+						ms="删除用例"+suc+"条成功！"+proprefail+"条因为无项目权限删除失败！";
+					}else if(proprefail==0&&planfail>0){
+						status="warning";
+						ms="删除用例"+suc+"条成功！"+planfail+"条因为在测试计划中无法删除！";
+					}else if(proprefail>0&&planfail>0){
+						status="warning";
+						ms="删除用例"+suc+"条成功！"+planfail+"条因为在测试计划中无法删除！"+proprefail+"条因为无项目权限删除失败！";
 					}
 				}
 

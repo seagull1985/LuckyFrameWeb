@@ -708,7 +708,7 @@
 		                                  $table.bootstrapTable('refresh');
 		                              }
 		                           }else{
-		                        	   toastr.info(data.ms);
+		                        	   toastr.warning(data.ms);
 		                           }
 		                   },error:function()
 		                    {
