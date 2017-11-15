@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<!--hibernate 这个文件里 配置数据源 连接池 -->
+	<session-factory>
+<!-- 指定连接数据库所用的驱动 -->
+  <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+  <!-- 指定连接数据库的url，hibernate连接的数据库名 -->
+  <property name="connection.url">jdbc:mysql://XX.XX.XX.XX:3306/luckyframedb?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</property>
+  <property name="connection.useUnicode">true</property>
+  <property name="connection.characterEncoding">utf-8</property>
+  <!-- 指定连接数据库的用户名 -->
+  <property name="connection.username">luckyframe</property>
+  <!-- 指定连接数据库的密码 -->
+  <property name="connection.password">luckyframe</property>
+  <!-- C3P0连接池设定-->
+  <property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+  <!-- 连接池大小 -->
+  <property name="connection.pool_size">50</property>
+  <!-- 指定连接池里最大连接数 -->
+  <property name="hibernate.c3p0.max_size">50</property>
+  <!-- 指定连接池里最小连接数 -->
+  <property name="hibernate.c3p0.min_size">10</property>
+  <!-- 指定连接池里连接的超时时长 -->
+  <property name="hibernate.c3p0.timeout">1800</property>
+  <!-- 指定连接池里最大缓存多少个Statement对象 -->
+  <property name="hibernate.c3p0.max_statements">20</property>
+  <property name="hibernate.c3p0.idle_test_period">30</property>
+  <property name="hibernate.c3p0.acquire_increment">10</property>
+  <property name="hibernate.c3p0.validate">true</property>
+  <property name="hibernate.c3p0.preferredTestQuery ">SELECT 1 </property>
+  <property name="hibernate.c3p0.testConnectionOnCheckout">true</property>
+  <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
+  <property name="connection.autocommit">true</property>
+  <!-- 指定数据库方言 -->
+  <property name="dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
+   <!-- 根据需要自动创建数据库 -->
+   <property name="hbm2ddl.auto">update</property>
+  <!-- 显示Hibernate持久化操作所生成的SQL -->
+        <property name="show_sql">true</property>
+  <!-- 将SQL脚本进行格式化后再输出--> 
+<!--         <property name="hibernate.format_sql">true</property> -->
+        
+		<mapping resource="TestJobs.hbm.xml" />
+		<mapping resource="TestTaskexcute.hbm.xml" />
+		<mapping resource="TestCasedetail.hbm.xml" />
+		<mapping resource="TestLogdetail.hbm.xml" />
+		<mapping resource="SecondarySector.hbm.xml" />
+		<mapping resource="SectorProjects.hbm.xml" />
+        <mapping resource="ProjectVersion.hbm.xml" />
+        <mapping resource="FlowCheck.hbm.xml" />
+        <mapping resource="FlowInfo.hbm.xml" />
+        <mapping resource="Accident.hbm.xml" />
+        <mapping resource="UserInfo.hbm.xml" />
+        <mapping resource="OperationLog.hbm.xml" />
+        <mapping resource="PlanFlowCheck.hbm.xml" />
+        <mapping resource="ZtTask.hbm.xml" />
+        <mapping resource="Review.hbm.xml" />
+        <mapping resource="ReviewInfo.hbm.xml" />
+        <mapping resource="UserAuthority.hbm.xml" />
+        <mapping resource="UserRole.hbm.xml" />
+        <mapping resource="ProjectCase.hbm.xml" />
+        <mapping resource="ProjectCasesteps.hbm.xml" />
+        <mapping resource="ProjectPlan.hbm.xml" />
+        <mapping resource="ProjectPlanCase.hbm.xml" />
+        <mapping resource="ProjectModule.hbm.xml" />
+        <mapping resource="ProjectProtocolTemplate.hbm.xml" />
+        <mapping resource="ProjectTemplateParams.hbm.xml" />
+        <mapping resource="TempCasestepDebug.hbm.xml" />
+        <mapping resource="TestClient.hbm.xml" />
+	</session-factory>
+</hibernate-configuration>
