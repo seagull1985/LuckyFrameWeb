@@ -434,6 +434,10 @@
 					}, {
 						field : 'expectedresult',
 						title : '预期结果',
+						formatter : function(value,
+								row, index) {
+								return value+' ';
+						},
 						editable : {
 							type : 'text',
 							title : '预期结果',
@@ -515,6 +519,13 @@
 							} 	
 						}
 						
+ 						if(field=='expectedresult'){
+ 							var str=row.expectedresult.split("");
+							if(str[str.length-1]==' '){
+								row.expectedresult=row.expectedresult.substring(0,row.expectedresult.length-1);
+							}
+						}
+
 						$('#cur_table').bootstrapTable("resetView");
 						$.ajax({
 							type : "post",

@@ -155,6 +155,17 @@ public class ProjectTemplateParamsController {
 			jsonstr = jsonstr.replace("undefined", "0");
 
 			JSONArray jsonarr = JSONArray.fromObject(jsonstr);
+
+			//处理json-lib 2.4版本当遇到json格式字符串时，把它当成对象处理的bug
+			for(int i=0;i<jsonarr.size();i++){
+				JSONObject tempobj=(JSONObject) jsonarr.get(i);
+				String str=tempobj.get("param").toString();
+				if("[".equals(str.substring(0, 1))&&"]".equals(str.substring(str.length()-1))){
+				   tempobj.element("param", "***"+str);
+				   jsonarr.set(i, tempobj);
+				}
+			}
+
 			List<?> list = JSONArray.toList(jsonarr, new ProjectTemplateParams(), new JsonConfig());// 参数1为要转换的JSONArray数据，参数2为要转换的目标数据，即List盛装的数据
 			String usercode = "";
 			if (null != request.getSession().getAttribute("usercode")
@@ -169,6 +180,10 @@ public class ProjectTemplateParamsController {
 			List<ProjectTemplateParams> paramslist =oldParamsList;
 			for (int i = 0; i < list.size(); i++) {
 				ProjectTemplateParams param = (ProjectTemplateParams) list.get(i);
+				if(param.getParam().indexOf("***[")>-1&&"***[".equals(param.getParam().substring(0, 4))){
+					param.setParam(param.getParam().substring(3));
+				}
+				
 				if(i==0){
 					ppt = ptemplateservice.load(param.getTemplateid());
 				}

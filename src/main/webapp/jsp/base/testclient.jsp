@@ -290,6 +290,9 @@
 							checkinterval : {
 								message : '心跳间隔时间无效！',
 								validators : {
+									notEmpty : {
+										message : '心跳间隔时间不能为空'
+									},
 									numeric: {message: '心跳间隔时间只能输入数字'},
 				                    callback: {  
 				                         message: '心跳间隔时间最大59秒',  
