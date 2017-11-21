@@ -115,7 +115,7 @@
 											<div class="col-sm-9">
 												<input type="text" class="form-control" id="modulename"
 													name="modulename" placeholder="点击选择用例集"
-													onclick="showMenuAddCase()" /> <input class="form-control"
+													onclick="showMenuAddCase()" /><input class="form-control"
 													type="hidden" name="moduleid" id="moduleid" />
 												<div id="menuContent" class="menuContent"
 													style="display: none; position: absolute; width: 90%; border: 1px solid rgb(170, 170, 170); z-index: 10; background-color: rgba(51, 204, 255, 0.8);">
@@ -673,6 +673,12 @@
 				} 	
 			}
 			
+			var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+			var nodes = treeObj.getSelectedNodes();
+			if(nodes.length>0){
+				$("#modulename").val(nodes[0].name);
+				$("#moduleid").val(nodes[0].id);
+			}
 	    	$("#addModal").modal('show');
 	    }
 	    

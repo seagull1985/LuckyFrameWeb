@@ -401,7 +401,7 @@ create table TEMP_CASESTEPDEBUG
   sign                  VARCHAR(20) not null COMMENT '用例标识',
   executor              VARCHAR(20) not null COMMENT '执行人',
   loglevel              VARCHAR(10) not null COMMENT '日志级别',
-  detail                VARCHAR(5000) not null COMMENT '日志',   /*V1.1  扩展日志明细字段到2000*/
+  detail                VARCHAR(5000) not null COMMENT '日志',   /*V1.1  扩展日志明细字段到5000*/
   primary key (ID)
 )default character set utf8;
 /*插入索引
@@ -613,7 +613,12 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (45, 1, 0, 'operation','mousekey(enter)','模拟键盘Enter键');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (46, 1, 0, 'operation','runcase','调用指定接口用例');
-
+insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
+values (47, 2, 0, 'operation','HttpClientPostJSON','使用HttpClient发送JSON格式post请求');
+insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
+values (48, 2, 0, 'operation','HttpURLDelete','使用HttpURLDelete发送delete请求');
+insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
+values (49, 2, 0, 'operation','httpClientPut','使用httpClientPut发送put请求');
 /*插入角色默认定义*/
 insert into USER_ROLE (id, role, permission)
 values (2, '测试工程师', 'acc_1,acc_2,acc_3,');
