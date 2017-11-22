@@ -57,12 +57,15 @@
 						<h3 class="thin text-center">协议模板基本信息</h3>
 						<table class="table table-striped" id="templatetable">
 							<tr>
-							    <td width="18%" style="font-weight:bold;">项目名称：${ptemplate.projectname}</td>
-								<td width="25%" style="font-weight:bold;">模板名称：${ptemplate.name}</td>
-								<td width="10%" style="font-weight:bold;">协议类型：${ptemplate.protocoltype}</td>
-							    <td width="10%" style="font-weight:bold;">编码格式：${ptemplate.contentencoding}</td>
-								<td width="10%" style="font-weight:bold;">超时时间：${ptemplate.connecttimeout}</td>
-								<td width="27%" style="font-weight:bold;">备注：${ptemplate.remark}</td>
+							    <td width="20%" style="font-weight:bold;">项目名称：${ptemplate.projectname}</td>
+								<td width="20%" style="font-weight:bold;">模板名称：${ptemplate.name}</td>
+								<td width="60%" style="font-weight:bold;" colspan="2">请求头域：${ptemplate.headmsg}</td>
+							</tr>
+							<tr>
+								<td width="20%" style="font-weight:bold;">协议类型：${ptemplate.protocoltype}</td>
+							    <td width="20%" style="font-weight:bold;">编码格式：${ptemplate.contentencoding}</td>
+								<td width="20%" style="font-weight:bold;">超时时间：${ptemplate.connecttimeout}</td>
+								<td width="40%" style="font-weight:bold;">备注：${ptemplate.remark}</td>
 							</tr>
 						</table>
 
@@ -148,13 +151,10 @@
 							param : {
 								message : '【参数默认值】无效！',
 								validators : {
-									notEmpty : {
-										message : '【参数默认值】不能为空'
-									},
 									stringLength : {
-										min : 1,
+										min : 0,
 										max : 2000,
-										message : '【参数默认值】长度必须在1~2000个字符区间'
+										message : '【参数默认值】长度必须在0~2000个字符区间'
 									}
 								}
 							},

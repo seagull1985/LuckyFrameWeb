@@ -18,8 +18,15 @@ public class ProjectProtocolTemplate implements java.io.Serializable{
 	private String operationer;
 	private String remark;
     private String projectname;
+    private String headmsg;
 	
     
+	public String getHeadmsg() {
+		return headmsg;
+	}
+	public void setHeadmsg(String headmsg) {
+		this.headmsg = headmsg;
+	}
 	public String getProjectname() {
 		return projectname;
 	}

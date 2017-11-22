@@ -198,7 +198,7 @@ public class ProjectProtocolTemplateController {
 	
 	
 	@RequestMapping(value = "/update.do")
-	public void updateplan(HttpServletRequest req, HttpServletResponse rsp, ProjectProtocolTemplate ppt) {
+	public void update(HttpServletRequest req, HttpServletResponse rsp, ProjectProtocolTemplate ppt) {
 		// 更新实体
 		try {
 			rsp.setContentType("text/html;charset=utf-8");

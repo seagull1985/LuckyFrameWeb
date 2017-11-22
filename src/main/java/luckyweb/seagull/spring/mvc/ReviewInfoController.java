@@ -345,8 +345,8 @@ public class ReviewInfoController {
 				model.addAttribute("message", "当前用户无权限修改评审信息，请联系管理员！");
 				return "error";
 			}
-			if(!UserLoginController.oppidboolean(req, reviewinfo.getProjectid())){
-				SectorProjects sp=sectorprojectsService.loadob(reviewinfo.getProjectid());
+			if(!UserLoginController.oppidboolean(req, review.getSectorProjects().getProjectid())){
+				SectorProjects sp=sectorprojectsService.loadob(review.getSectorProjects().getProjectid());
 				model.addAttribute("reviewinfo", new ReviewInfo());
 				model.addAttribute("url",  "/reviewinfo/load.do?reviewid="+reinfo.getReview_id());
 				model.addAttribute("message", "当前用户无权限修改项目【"+sp.getProjectname()+"】评审信息，请联系管理员！");

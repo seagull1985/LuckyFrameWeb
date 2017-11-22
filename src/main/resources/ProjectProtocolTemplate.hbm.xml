@@ -14,6 +14,9 @@
 		<property name="name" type="java.lang.String">
 			<column name="name" length="50" not-null="true" />
 		</property>
+		<property name="headmsg" type="java.lang.String">
+			<column name="headmsg" length="500" not-null="false" />
+		</property>
 		<property name="protocoltype" type="java.lang.String">
 			<column name="protocoltype" length="20" not-null="true" />
 		</property>

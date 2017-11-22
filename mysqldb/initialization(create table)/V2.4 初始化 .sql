@@ -367,6 +367,7 @@ create table PROJECT_PROTOCOLTEMPLATE
   id                    int(8) not null AUTO_INCREMENT,
   projectid             int(8) not null COMMENT '项目ID',
   name                  VARCHAR(50) not null COMMENT '模板名称',
+  headmsg               VARCHAR(500) COMMENT '消息头',
   protocoltype          VARCHAR(20) not null COMMENT '协议类型',
   contentencoding       VARCHAR(20) not null COMMENT '编码格式',
   time                  VARCHAR(30) COMMENT '最后更新时间',

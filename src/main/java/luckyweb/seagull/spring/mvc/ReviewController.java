@@ -219,8 +219,8 @@ public class ReviewController {
 				return "success";
 			}
 			
-			if(!UserLoginController.oppidboolean(req, review.getProjectid())){
-				SectorProjects sp=sectorprojectsService.loadob(review.getProjectid());
+			if(!UserLoginController.oppidboolean(req, review_update.getSectorProjects().getProjectid())){
+				SectorProjects sp=sectorprojectsService.loadob(review_update.getSectorProjects().getProjectid());
 				model.addAttribute("review", new Review());
 				model.addAttribute("url",  "/review/load.do");
 				model.addAttribute("message", "当前用户无权限修改项目【"+sp.getProjectname()+"】评审信息，请联系管理员！");

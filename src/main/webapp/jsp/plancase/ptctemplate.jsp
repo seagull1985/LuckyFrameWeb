@@ -96,6 +96,14 @@
 										</div>
 										
 										<div class="form-group">
+											<label for="remark" class="col-sm-3 control-label">请求头域</label>
+											<div class="col-sm-9">
+												<textarea class="form-control" name="headmsg" id="headmsg"
+													placeholder="示例:Authorization:=Base64(admin:123456);Content-Type=application/json    多个头域以;分隔"></textarea>
+											</div>
+										</div>
+										
+										<div class="form-group">
 											<label for="projectid" class="col-sm-3 control-label">协议类型</label>
 											<div class="col-sm-9">
 												<select class="form-control" name="protocoltype" id="protocoltype">
@@ -126,9 +134,7 @@
 										<div class="form-group">
 											<label for="remark" class="col-sm-3 control-label">备注</label>
 											<div class="col-sm-9">
-												<textarea class="form-control" name="remark" id="remark"
-													placeholder="备注">
-                                                  </textarea>
+												<textarea class="form-control" name="remark" id="remark" placeholder="备注"></textarea>
 											</div>
 										</div>
 									</form>
@@ -351,6 +357,16 @@
 										min : 2,
 										max : 50,
 										message : '模板名称长度必须在2~50个字符区间'
+									}
+								}
+							},
+							headmsg : {
+								message : '请求头域无效！',
+								validators : {
+									stringLength : {
+										min : 0,
+										max : 500,
+										message : '请求头域长度必须小于500个字符'
 									}
 								}
 							},

@@ -160,7 +160,7 @@ public class ProjectTemplateParamsController {
 			for(int i=0;i<jsonarr.size();i++){
 				JSONObject tempobj=(JSONObject) jsonarr.get(i);
 				String str=tempobj.get("param").toString();
-				if("[".equals(str.substring(0, 1))&&"]".equals(str.substring(str.length()-1))){
+				if(str.length()>0&&"[".equals(str.substring(0, 1))&&"]".equals(str.substring(str.length()-1))){
 				   tempobj.element("param", "***"+str);
 				   jsonarr.set(i, tempobj);
 				}
