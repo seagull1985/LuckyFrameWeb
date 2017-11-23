@@ -53,6 +53,9 @@
 					<button id="btn_add" type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增模板
 					</button>
+					<button id="btn_copy" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-share" aria-hidden="true"></span>复制模板
+					</button>
 					<button id="btn_delete" type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除模板
 					</button>
@@ -76,6 +79,7 @@
 								</div>
 								<div class="modal-body">
 									<form class="form-horizontal" role="form">
+									<input name="id" id="id" value="0" type="hidden"/>
 										<div class="form-group">
 											<label for="projectid" class="col-sm-3 control-label">项目名称</label>
 											<div class="col-sm-9">
@@ -424,6 +428,41 @@
 	    	$("#addModal").modal('show');
 	    }
 	    
+	    btn_copy.onclick=function(){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
+			}
+
+            var row = $.map($('#tb_ptctemplate').bootstrapTable('getSelections'), function (row) {
+                return row;
+                 });
+
+            if(row.length == 1 ){
+	        	if(confirm("确定要复制此协议模板吗?")){
+	        		$("#projectid").val(row[0].projectid);
+	        		$("#name").val("COPY "+row[0].name);
+	        		$("#protocoltype").val(row[0].protocoltype);
+	        		$("#headmsg").val(row[0].headmsg);
+	        		$("#contentencoding").val(row[0].contentencoding);
+	        		$("#connecttimeout").val(row[0].connecttimeout);
+	        		$("#remark").val(row[0].remark);
+	        		$("#id").val(row[0].id);
+	        		$("#addModal").modal('show');
+            }
+            }else{
+            	toastr.warning('要复制模板有且只能选择一条记录哦！'); 
+            }
+
+	    }
+	    
+	    
 	    $(function () { $('#addModal').on('hide.bs.modal', function () {
 	        // 关闭时清空edit状态为add
 	        location.reload();
@@ -440,10 +479,12 @@
 	    	  
 	        var form_data = $('#form_data').serialize();
 	        $.param(form_data); 
+	        
+	        var id=$('#id').val();
 	        // 异步提交数据到action页面
 	        $.ajax(
 	                {
-	                    url: "add.do",
+	                    url: "add.do?copyid="+id,
 	                    data:form_data,
 	                    type: "post",
 	                    dataType : "json",

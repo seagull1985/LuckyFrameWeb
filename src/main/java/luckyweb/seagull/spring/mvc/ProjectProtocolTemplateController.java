@@ -22,6 +22,7 @@ import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
 import luckyweb.seagull.spring.entity.ProjectPlan;
 import luckyweb.seagull.spring.entity.ProjectProtocolTemplate;
+import luckyweb.seagull.spring.entity.ProjectTemplateParams;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.service.OperationLogService;
@@ -160,9 +161,15 @@ public class ProjectProtocolTemplateController {
 				json.put("status", "fail");
 				json.put("ms", "增加协议模板失败,权限不足,请联系管理员!");
 			} else {
+				int copyid = Integer.valueOf(req.getParameter("copyid"));
 				if(!UserLoginController.oppidboolean(req, ppt.getProjectid())){
-					json.put("status", "fail");
-					json.put("ms", "增加协议模板失败,项目权限不足,请联系管理员!");
+					if(0!=copyid){
+						json.put("status", "fail");
+						json.put("ms", "复制协议模板失败,项目权限不足,请联系管理员!");
+					}else{
+						json.put("status", "fail");
+						json.put("ms", "增加协议模板失败,项目权限不足,请联系管理员!");
+					}
 				}else{
 					if (null != req.getSession().getAttribute("usercode")
 							&& null != req.getSession().getAttribute("username")) {
@@ -184,8 +191,20 @@ public class ProjectProtocolTemplateController {
 
 					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", id, ppt.getProjectid(), "添加协议模板成功!");
 
+					String ms="添加协议模板【"+ppt.getName()+"】成功！";
+					if(0!=copyid){
+						List<ProjectTemplateParams> params=ptemplateparamsService.getParamsList(copyid);
+						for(ProjectTemplateParams param:params){
+							param.setTemplateid(id);
+							int paramid=ptemplateparamsService.add(param);
+						    operationlogservice.add(req, "PROJECT_TEMPLATEPARAMS", paramid, ppt.getProjectid(),
+									"复制协议模板内容参数成功！");
+						}
+						ms="复制协议模板【"+ppt.getName()+"】成功！";
+					}
+
 					json.put("status", "success");
-					json.put("ms", "添加协议模板成功!");
+					json.put("ms", ms);
 				}
 			}
 			pw.print(json.toString());

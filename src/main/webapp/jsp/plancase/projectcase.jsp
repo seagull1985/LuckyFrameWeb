@@ -766,7 +766,7 @@
 	        		$("#addModal").modal('show');
             }
             }else{
-            	toastr.warning('要复制用例有且只能选择一条用例哦！'); 
+            	toastr.warning('要复制用例有且只能选择一条记录哦！'); 
             }
 
 	    }
