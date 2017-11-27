@@ -70,5 +70,6 @@
         <mapping resource="ProjectTemplateParams.hbm.xml" />
         <mapping resource="TempCasestepDebug.hbm.xml" />
         <mapping resource="TestClient.hbm.xml" />
+        <mapping resource="PublicCaseParams.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>
