@@ -261,13 +261,26 @@ public class PublicCaseParamsController {
      */  
     @RequestMapping(value = "/checkParamsNameExists", produces = "application/json;charset=UTF-8")  
     public @ResponseBody  
-    String checkParamsNameExists(@RequestParam String paramsname,@RequestParam String projectid) throws Exception { 
-        PublicCaseParams pcp = pcpservice.getParamByName(paramsname,projectid);
-        if(null!=pcp){
-        	 return "{\"valid\":false}";  
+    String checkParamsNameExists(@RequestParam String paramsname,@RequestParam String projectid,@RequestParam String id) throws Exception {
+    	Boolean result=false;
+        if(!"0".equals(id)){
+        	PublicCaseParams pcp = pcpservice.load(Integer.valueOf(id));
+        	if(paramsname.equals(pcp.getParamsname())){
+        		result=true;
+        	}else{
+        		pcp=pcpservice.getParamByName(paramsname,projectid);
+                if(null==pcp){
+                	result=true;
+                }
+        	}
+        	
         }else{
-        	 return "{\"valid\":true}"; 
+        	PublicCaseParams pcp = pcpservice.getParamByName(paramsname,projectid);           
+            if(null==pcp){
+            	result=true;
+            }
         }
+        return "{\"valid\":"+result+"}";
     }  
 	
 	@RequestMapping(value = "/cgetParamsByProjectid.do")

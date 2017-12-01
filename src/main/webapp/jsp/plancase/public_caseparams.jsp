@@ -245,7 +245,7 @@
 				                         data: function(validator) {  
 				                               return {  
 				                            	   projectid: $('#projectid').val(),
-				                            	   //paramsname: $('#paramsname').val()
+				                            	   id: $('#id').val()
 				                               };  
 				                            }
 				                     }
