@@ -12,6 +12,14 @@ public class ProjectTemplateParams implements java.io.Serializable{
 	private int templateid;
 	private String paramname;
 	private String param;
+	private int paramtype;
+	
+	public int getParamtype() {
+		return paramtype;
+	}
+	public void setParamtype(int paramtype) {
+		this.paramtype = paramtype;
+	}
 	public int getId() {
 		return id;
 	}

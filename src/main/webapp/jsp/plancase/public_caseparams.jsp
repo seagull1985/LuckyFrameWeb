@@ -7,7 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<title>测试协议模板</title>
+<title>用例公共参数管理</title>
 </head>
 
 <body>
@@ -21,14 +21,15 @@
 	<div class="container" style="width: auto; font-size: 14px;">
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
-			<li class="active">测试协议模板</li>
+			<li class="active"><a href="/projectCase/load.do">用例管理</a></li>
+			<li class="active">用例公共参数</li>
 		</ol>
 
 		<div class="row">
 			<!-- Article main content -->
 			<article class="col-sm-9 maincontent" style="width:100%;">
 			<header class="page-header">
-			<h1 class="page-title" style="text-align: center;">协议模板管理</h1>
+			<h1 class="page-title" style="text-align:center;">用例公共参数</h1>
 			</header>
 			
 			<div class="panel-body" style="padding-bottom: 0px;">
@@ -36,36 +37,36 @@
 					<div class="panel-heading">查询条件</div>
 					<div class="panel-body">
 						<div class="form-group" style="margin-top: 15px">
-							<label class="control-label col-sm-1" for="txt_search_project">项目名称:</label>
+							<label class="control-label col-sm-1"
+								for="txt_search_project">项目名称:</label>
 							<div class="col-sm-3">
 								<select class="form-control" id="search_project"
 									onchange="searchproject()">
-									<c:forEach var="p" items="${projects }">
+									<c:forEach var="p" items="${projectlist }">
 										<option value="${p.projectid}">${p.projectname}</option>
 									</c:forEach>
 								</select>
 							</div>
 						</div>
+
 					</div>
 				</div>
-
+				
+				
 				<div id="toolbar" class="btn-group">
 					<button id="btn_add" type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增模板
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增参数
 					</button>
-					<button id="btn_copy" type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-share" aria-hidden="true"></span>复制模板
+					<button id="btn_update" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑参数
 					</button>
 					<button id="btn_delete" type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除模板
-					</button>
-					<button id="btn_edit" type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>模板参数
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除参数
 					</button>
 				</div>
-				<table id="tb_ptctemplate"></table>
-				
-								<!-- 模态框示例（Modal） -->
+				<table id="tb_params"></table>
+
+				<!-- 模态框示例（Modal） -->
 				<form method="post" action="" class="form-horizontal" role="form"
 					id="form_data" onsubmit="return check_form()" style="margin: 20px;">
 					<div class="modal fade" id="addModal" tabindex="-1" role="dialog"
@@ -75,78 +76,52 @@
 								<div class="modal-header">
 									<button type="button" class="close" data-dismiss="modal"
 										aria-hidden="true">&times;</button>
-									<h4 class="modal-title" id="myModalLabel">协议模板基本信息</h4>
+									<h4 class="modal-title" id="myModalLabel">参数信息</h4>
 								</div>
-								<div class="modal-body">
+								<div class="modal-body" style="height:320px;">
 									<form class="form-horizontal" role="form">
 									<input name="id" id="id" value="0" type="hidden"/>
-										<div class="form-group">
+									<div class="form-group">
 											<label for="projectid" class="col-sm-3 control-label">项目名称</label>
 											<div class="col-sm-9">
 												<select class="form-control" name="projectid" id="projectid">
-													<c:forEach var="p" items="${projects }">
+													<c:forEach var="p" items="${projectlist }">
 														<option value="${p.projectid}">${p.projectname}</option>
 													</c:forEach>
 												</select>
 											</div>
 										</div>
+																			
+										<div class="form-group">
+											<label for="paramsname" class="col-sm-3 control-label">参数名称</label>
+											<div class="col-sm-9">
+												<input type="text" class="form-control" name="paramsname"
+													id="paramsname" placeholder="参数名称">
+											</div>
+										</div>
+										
+										<div class="form-group">
+											<label for="paramsvalue" class="col-sm-3 control-label">参数值</label>
+											<div class="col-sm-9">
+												<textarea class="form-control" name="paramsvalue"
+													id="paramsvalue" placeholder="参数值"></textarea>
+											</div>
+										</div>
 
-										<div class="form-group">
-											<label for="name" class="col-sm-3 control-label">模板名称</label>
-											<div class="col-sm-9">
-												<input type="text" class="form-control" name="name"
-													id="name" placeholder="模板名称">
-											</div>
-										</div>
-										
-										<div class="form-group">
-											<label for="remark" class="col-sm-3 control-label">请求头域</label>
-											<div class="col-sm-9">
-												<textarea class="form-control" name="headmsg" id="headmsg"
-													placeholder="示例:Authorization=Base64(admin:123456);Content-Type=application/json    多个头域以;分隔"></textarea>
-											</div>
-										</div>
-										
-										<div class="form-group">
-											<label for="projectid" class="col-sm-3 control-label">协议类型</label>
-											<div class="col-sm-9">
-												<select class="form-control" name="protocoltype" id="protocoltype">
-													<option value="HTTP">HTTP</option>
-													<option value="Socket">Socket</option>
-												</select>
-											</div>
-										</div>
-										
-										<div class="form-group">
-											<label for="projectid" class="col-sm-3 control-label">编码格式</label>
-											<div class="col-sm-9">
-												<select class="form-control" name="contentencoding" id="contentencoding">
-													<option value="UTF-8">UTF-8</option>
-													<option value="GBK">GBK</option>
-												</select>
-											</div>
-										</div>
-										
-										<div class="form-group">
-											<label for="name" class="col-sm-3 control-label">超时时间(秒)</label>
-											<div class="col-sm-9">
-												<input type="text" class="form-control" value="60" name="connecttimeout"
-													id="connecttimeout" placeholder="超时时间">
-											</div>
-										</div>
-										
 										<div class="form-group">
 											<label for="remark" class="col-sm-3 control-label">备注</label>
 											<div class="col-sm-9">
-												<textarea class="form-control" name="remark" id="remark" placeholder="备注"></textarea>
+												<textarea class="form-control" name="remark" id="remark"
+													placeholder="备注"></textarea>
 											</div>
 										</div>
+
 									</form>
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-default"
 										data-dismiss="modal">关闭</button>
-									<button type="submit" class="btn btn-primary">提交</button>
+									<button type="submit" class="btn btn-primary" disabled="disabled">提交</button>
 									&nbsp;&nbsp;&nbsp;&nbsp;<span id="tip"> </span>
 								</div>
 							</div>
@@ -164,9 +139,6 @@
 	<script type="text/javascript">
 		$(function() {
 			$('#search_project').val('${projectid }');
-			if(${projectid }!=99){
-				$('#projectid').val('${projectid }');
-			} 
 			//1.初始化Table
 			var oTable = new TableInit();
 			oTable.Init();
@@ -176,8 +148,8 @@
 			var oTableInit = new Object();
 			//初始化Table
 			oTableInit.Init = function() {
-				$('#tb_ptctemplate').bootstrapTable({
-					url : '/projectprotocolTemplate/list.do', //请求后台的URL（*）
+				$('#tb_params').bootstrapTable({
+					url : '/publicCaseParams/list.do', //请求后台的URL（*）
 					method : 'get', //请求方式（*）
 					toolbar : '#toolbar', //工具按钮用哪个容器
 					striped : true, //是否显示行间隔色
@@ -197,7 +169,7 @@
 					minimumCountColumns : 2, //最少允许的列数
 					clickToSelect : true, //是否启用点击选中行
 					height : 500, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-					uniqueId : "ID", //每一行的唯一标识，一般为主键列
+					uniqueId : "id", //每一行的唯一标识，一般为主键列
 					showToggle : false, //是否显示详细视图和列表视图的切换按钮
 					cardView : false, //是否显示详细视图
 					detailView : false, //是否显示父子表
@@ -208,122 +180,23 @@
 						field : 'id',
 						title : 'id',
 						visible : false
-					},  {
-						field : 'projectid',
-						title : 'projectid',
-						visible : false
+					}, {
+						field : 'paramsname',
+						title : '参数名称',
+						width : '15%',
+					}, {
+						field : 'paramsvalue',
+						title : '参数值',
+						width : '25%',
 					}, {
 						field : 'projectname',
 						title : '项目名称',
-						width : '10%',
+						width : '15%',
 					}, {
-						field : 'name',
-						title : '模板名称',
-						width : '33%',
-						editable : {
-							type : 'text',
-							title : '模板名称',
-							emptytext : "无模板名称",
-							validate : function(value) {
-								if (!$.trim(value))
-									return '模板名称不能为空';
-								if (value.length > 50)
-									return '模板名称不能超过50个字符';
-								if (value.length < 2)
-									return '模板名称不能小于2个字符';
-							}
-						}
-					}, {
-						field : 'protocoltype',
-						title : '协议类型',
-						width : '7%',
-						editable : {
-							type : 'select',
-							title : '协议类型',
-							source : [ {
-								value : "HTTP",
-								text : "HTTP"
-							}, {
-								value : "Socket",
-								text : "Socket"
-							} ]
-						}
-					}, {
-						field : 'contentencoding',
-						title : '编码格式',
-						width : '7%',
-						editable : {
-							type : 'select',
-							title : '编码类型',
-							source : [ {
-								value : "UTF-8",
-								text : "UTF-8"
-							}, {
-								value : "GBK",
-								text : "GBK"
-							} ]
-						}
-					}, {
-						field : 'connecttimeout',
-						title : '超时时间',
-						width : '7%',
-					}, {
-						field : 'time',
-						title : '更新时间',
-						width : '10%',
-					},{
-						field : 'operationer',
-						title : '更新人员',
-						width : '7%',
-					},{
 						field : 'remark',
 						title : '备注',
-						width : '16%',
-						editable : {
-							type : 'textarea',
-							title : '备注',
-							emptytext : "无备注",
-							validate : function(value) {
-								if (value.length > 200)
-									return '备注不能超过200个字符';
-							}
-						}
-					} ],
-					onEditableSave : function(field, row, oldValue, $el) {
-				    	var status = document.getElementById("loginstatus").value;
-						if(status=="false"){
-							if(window.confirm("你未登录哦，要先去登录吗？")){
-								var url = '/progressus/signin.jsp';
-								window.location.href=url;
-								return true; 
-							}else{
-								return false; 
-							} 	
-						}
-						
-						$('#tb_ptctemplate').bootstrapTable("resetView");
-						$.ajax({
-							type : "post",
-							url : "/projectprotocolTemplate/update.do",
-							data : row,
-							dataType : 'JSON',
-							success : function(data, status) {
-								if (data.status == "success") {
-									toastr.success(data.ms);
-								}else{
-									$('#tb_ptctemplate').bootstrapTable('refresh');
-									toastr.info(data.ms);
-								}
-							},
-							error : function() {
-								toastr.error('编辑失败!');
-							},
-							complete : function() {
-
-							}
-
-						});
-					}
+						width : '45%',
+					}],
 				});
 			};
 			//得到查询的参数
@@ -339,7 +212,7 @@
 
 			return oTableInit;
 		};
-		
+
 		$(document).ready(
 				function() {
 					$('#form_data').bootstrapValidator({
@@ -351,47 +224,53 @@
 							validating : 'glyphicon glyphicon-refresh'
 						},
 						fields : {
-							name : {
-								message : '模板名称无效！',
+							paramsname : {
+								message : '参数名称无效！',
 								validators : {
 									notEmpty : {
-										message : '模板名称不能为空'
+										message : '参数名称不能为空'
 									},
 									stringLength : {
-										min : 2,
+										min : 1,
 										max : 50,
-										message : '模板名称长度必须在2~50个字符区间'
-									}
+										message : '参数名称长度必须在1~50个字符区间'
+									},
+									//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}
+									remote: {    
+				                         url: 'checkParamsNameExists.do',//验证地址  
+				                         message: '参数名已存在,请重新输入',//提示消息  
+				                         delay :  1000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）  
+				                         type: 'POST',//请求方式  
+				                         /**自定义提交数据，默认值提交当前input value**/  
+				                         data: function(validator) {  
+				                               return {  
+				                            	   projectid: $('#projectid').val(),
+				                            	   //paramsname: $('#paramsname').val()
+				                               };  
+				                            }
+				                     }
 								}
 							},
-							headmsg : {
-								message : '请求头域无效！',
+							paramsvalue : {
+								message : '参数值无效！',
 								validators : {
+									notEmpty : {
+										message : '参数值不能为空'
+									},
 									stringLength : {
-										min : 0,
+										min : 1,
 										max : 500,
-										message : '请求头域长度必须小于500个字符'
-									}
-								}
-							},
-							connecttimeout : {
-								message : '超时时间无效！',
-								validators : {
-									numeric: {message: '超时时间只能输入数字'},
-									stringLength : {
-										min : 0,
-										max : 8,
-										message : '超时时间长度必须小于8个字符'
+										message : '参数值长度必须在1~500个字符区间'
 									}
 								}
 							},
 							remark : {
-								message : '模板备注无效！',
+								message : '备注无效！',
 								validators : {
 									stringLength : {
-										min : 0,
+										min : 1,
 										max : 200,
-										message : '模板备注长度必须小于200个字符'
+										message : '备注长度必须在1~200个字符区间'
 									}
 								}
 							}
@@ -403,72 +282,17 @@
 								e.preventDefault();
 								var $form = $(e.target), validator = $form
 										.data('bootstrapValidator');
-								$form.find('.alert').html('计划创建成功！');
+								$form.find('.alert').html('公共参数创建成功！');
 							});
 				});
-		
+	    
 		var searchproject = function() {
 			//1.初始化Table
 			var oTable = new TableInit();
-			$('#tb_ptctemplate').bootstrapTable('destroy');
+			$('#tb_params').bootstrapTable('destroy');
 			oTable.Init();
 		};
 		
-	    btn_add.onclick=function(){
-	    	var status = document.getElementById("loginstatus").value;
-			if(status=="false"){
-				if(window.confirm("你未登录哦，要先去登录吗？")){
-					var url = '/progressus/signin.jsp';
-					window.location.href=url;
-					return true; 
-				}else{
-					return false; 
-				} 	
-			}
-	    	$("#addModal").modal('show');
-	    }
-	    
-	    btn_copy.onclick=function(){
-	    	var status = document.getElementById("loginstatus").value;
-			if(status=="false"){
-				if(window.confirm("你未登录哦，要先去登录吗？")){
-					var url = '/progressus/signin.jsp';
-					window.location.href=url;
-					return true; 
-				}else{
-					return false; 
-				} 	
-			}
-
-            var row = $.map($('#tb_ptctemplate').bootstrapTable('getSelections'), function (row) {
-                return row;
-                 });
-
-            if(row.length == 1 ){
-	        	if(confirm("确定要复制此协议模板吗?")){
-	        		$("#projectid").val(row[0].projectid);
-	        		$("#name").val("COPY "+row[0].name);
-	        		$("#protocoltype").val(row[0].protocoltype);
-	        		$("#headmsg").val(row[0].headmsg);
-	        		$("#contentencoding").val(row[0].contentencoding);
-	        		$("#connecttimeout").val(row[0].connecttimeout);
-	        		$("#remark").val(row[0].remark);
-	        		$("#id").val(row[0].id);
-	        		$("#addModal").modal('show');
-            }
-            }else{
-            	toastr.warning('要复制模板有且只能选择一条记录哦！'); 
-            }
-
-	    }
-	    
-	    
-	    $(function () { $('#addModal').on('hide.bs.modal', function () {
-	        // 关闭时清空edit状态为add
-	        location.reload();
-	    })
-	    });
-	    
 	    // 提交表单
 	    function check_form()
 	    {
@@ -476,15 +300,13 @@
 	    	  if(!$('#form_data').data('bootstrapValidator').isValid()){  
 	    		 return ;  
 	    	  } 
-	    	  
+	    	
 	        var form_data = $('#form_data').serialize();
 	        $.param(form_data); 
-	        
-	        var id=$('#id').val();
 	        // 异步提交数据到action页面
 	        $.ajax(
 	                {
-	                    url: "add.do?copyid="+id,
+	                    url: "add.do",
 	                    data:form_data,
 	                    type: "post",
 	                    dataType : "json",
@@ -497,28 +319,52 @@
 	                    {
 	                        if(data.status == "success")
 	                        {
-	                            $("#tip").html("<span style='color:blueviolet'>恭喜，添加模板成功！</span>");
+	                            $("#tip").html("<span style='color:blueviolet'>"+data.ms+"</span>");
 	                            // document.location.href='system_notice.php'
 	                            toastr.success(data.ms);
 	                        }else{
 	                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
-	                            toastr.info(data.ms);
+	                            toastr.warning(data.ms); 
 	                        }
 	                    },
 	                    error:function()
 	                    {
-	                        toastr.error('请求出错!');
+	                    	toastr.error('请求出错!');
 	                    },
 	                    complete:function()
 	                    {
-	               /*          $('#addModal').hide(); */
+	                       /*  $('#addModal').hide(); */
 	                    }
 	                });
 
 	        return false;
 	    }
+
+	    btn_add.onclick=function(){
+	    	var status = document.getElementById("loginstatus").value;
+			if(status=="false"){
+				if(window.confirm("你未登录哦，要先去登录吗？")){
+					var url = '/progressus/signin.jsp';
+					window.location.href=url;
+					return true; 
+				}else{
+					return false; 
+				} 	
+			}
+			if($('#search_project').val()!=99){
+				$('#projectid').val($('#search_project').val());
+			}
+
+	    	$("#addModal").modal('show');
+	    }
 	    
-	    btn_edit.onclick=function(){
+	    $(function () { $('#addModal').on('hide.bs.modal', function () {
+	        // 关闭时清空edit状态为add
+	    	$("#tb_params").bootstrapTable('refresh');
+	    })
+	    });
+	    
+	    btn_update.onclick=function(){
 	    	var status = document.getElementById("loginstatus").value;
 			if(status=="false"){
 				if(window.confirm("你未登录哦，要先去登录吗？")){
@@ -530,15 +376,20 @@
 				} 	
 			}
 			
-            var ids = $.map($('#tb_ptctemplate').bootstrapTable('getSelections'), function (row) {
-                return row.id;
+            var row = $.map($('#tb_params').bootstrapTable('getSelections'), function (row) {
+                return row;
                  });
             
-            if(ids.length == 1 ){
-    			var url = '/projectTemplateParams/templateParams.do?templateid='+ids;
-    			window.location.href=url;
+            if(row.length == 1 ){
+            	$("#id").val(row[0].id);
+            	$("#projectid").val(row[0].projectid);
+            	$("#paramsname").val(row[0].paramsname);
+            	$("#paramsvalue").val(row[0].paramsvalue);
+            	$("#remark").val(row[0].remark);
+            	
+            	$("#addModal").modal('show');
             }else{
-            	toastr.warning('要进行模板参数编辑有且选择一条记录哦！'); 
+            	toastr.warning('要编辑公共参数有且只能选择一条记录哦！'); 
             }
 	    }
 	    
@@ -555,7 +406,7 @@
 			}
 			
 	        var selectIndex = $('input[name="btSelectItem"]:checked ').val();
-	        deleteItem($('#tb_ptctemplate'), selectIndex, true);
+	        deleteItem($('#tb_params'), selectIndex, true);
 	    }
 	    
 	    function deleteItem($table, selectIndex, reLoad){
@@ -563,7 +414,7 @@
                       return row.id;
                        }); 
 	        if(ids.length != 0 ){
-	        	if(confirm("真的要删除所选择的模板吗?")){
+	        	if(confirm("真的要删除参数吗?")){
 		                $.ajax({
 		                   type: "POST",
 		                   cache:false,
@@ -571,7 +422,7 @@
 		                   dataType : "json",
 		                   url:  "delete.do",
 		                   contentType: "application/json", //必须有
-		                   data: JSON.stringify({"templateids":ids}),
+		                   data: JSON.stringify({"ids":ids}),
 		                   success: function(data, status){
 		                           if (data.status == "success"){
 		                               $table.bootstrapTable('hideRow', {index:selectIndex});
@@ -580,7 +431,8 @@
 		                                  $table.bootstrapTable('refresh');
 		                              }
 		                           }else{
-		                        	   toastr.info(data.ms);
+		                        	   $table.bootstrapTable('refresh');
+		                        	   toastr.warning(data.ms); 
 		                           }
 		                   },error:function()
 		                    {
@@ -589,9 +441,10 @@
 		                });
 	            }    
 	        }else{
-	            toastr.warning('请选取要删除的协议模板！');
+	            toastr.warning('请选取要删除的数据行！'); 
 	        }
 	    }
+	   
 	</script>
 </body>
 </html>

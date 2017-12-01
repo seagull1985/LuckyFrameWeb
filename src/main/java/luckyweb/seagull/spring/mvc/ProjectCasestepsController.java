@@ -416,10 +416,10 @@ public class ProjectCasestepsController {
 			List<ProjectCasesteps> steps = casestepsservice.getSteps(Integer.valueOf(caseid));
 
 			// 转换成json字符串
-			String RecordJson = StrLib.listToJson(steps);
+			String recordJson = StrLib.listToJson(steps);
 
 			// 需要返回的数据有总记录数和行数据
-			json.put("steps", RecordJson);
+			json.put("steps", recordJson);
 			pw.print(json.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

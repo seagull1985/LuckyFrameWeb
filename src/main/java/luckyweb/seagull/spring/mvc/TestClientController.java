@@ -113,7 +113,7 @@ public class TestClientController {
 	}
 	
 	/**
-	 * 添加项目
+	 * 添加客户端
 	 * 
 	 * @param tj
 	 * @param br
@@ -206,7 +206,7 @@ public class TestClientController {
 	}
 	
 	/**
-	 * 删除项目
+	 * 删除参数
 	 * 
 	 * @param tj
 	 * @param br

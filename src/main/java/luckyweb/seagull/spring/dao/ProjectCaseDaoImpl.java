@@ -213,8 +213,13 @@ public class ProjectCaseDaoImpl extends HibernateDaoSupport implements ProjectCa
 			e.printStackTrace();
 		}finally{
 			session.close();
-		}	
-		return list.get(0).toString();
+		}
+		if(list.size()==0){
+			return "0";
+		}else{
+			return list.get(0).toString();
+		}
+
 	}
 
 }

@@ -80,6 +80,9 @@
 					<button id="btn_edit" type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;编辑步骤
 					</button>
+					<button id="btn_params" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;公共参数
+					</button>
 				</div>
 				<table id="tb_projectcase"></table>
 				
@@ -604,7 +607,9 @@
 				});
 		
 		var searchproject = function() {
-			//1.初始化Table						
+			//1.初始化Table
+			$("#module_tree").val('');
+			$('#search_module').val('0');
 			$.fn.zTree.init($("#treeDemo"), genJsonConfig());
 			var oTable = new TableInit();
 			$('#tb_projectcase').bootstrapTable('destroy');
@@ -673,18 +678,21 @@
 				} 	
 			}
 			
-			var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-			var nodes = treeObj.getSelectedNodes();
-			if(nodes.length>0){
-				$("#modulename").val(nodes[0].name);
-				$("#moduleid").val(nodes[0].id);
+			if($('#search_project').val()!=99){
+				$('#projectid').val($('#search_project').val());
+				var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+				var nodes = treeObj.getSelectedNodes();
+				if(nodes.length>0){
+					$("#modulename").val(nodes[0].name);
+					$("#moduleid").val(nodes[0].id);
+				}
 			}
+
 	    	$("#addModal").modal('show');
 	    }
 	    
 	    $(function () { $('#addModal').on('hide.bs.modal', function () {
-	        // 关闭时清空edit状态为add
-	        location.reload();
+			$("#tb_projectcase").bootstrapTable('refresh');
 	    })
 	    });
 	    
@@ -792,6 +800,11 @@
             	toastr.warning('要进行步骤编辑有且选择一条用例哦！'); 
             }
 
+	    }
+	    
+	    btn_params.onclick=function(){
+    		var url = '/publicCaseParams/load.do';
+    		window.location.href=url;
 	    }
 	//=========================================================================================		
 		function genJsonConfig(){
@@ -988,7 +1001,6 @@
 		//显示菜单
 		function showMenu() {
 		    $("#menuContent2").css({ left: "15px", top: "34px" }).slideDown("fast");
-
 		    $("body").bind("mousedown", onBodyDown);
 		}
 		//隐藏菜单

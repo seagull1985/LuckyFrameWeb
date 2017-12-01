@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping package="luckyweb.seagull.spring.entity">
+	<class name="PublicCaseParams" table="public_caseparams"	schema="luckyframedb">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" precision="22" scale="0" />
+			<generator class="identity"/>
+		</id>
+		<property name="paramsname" type="java.lang.String">
+			<column name="paramsname" length="50" not-null="true" />
+		</property>
+		<property name="paramsvalue" type="java.lang.String">
+			<column name="paramsvalue" length="500" not-null="true" />
+		</property>
+		<property name="projectid" type="java.lang.Integer">
+			<column name="projectid" length="8" not-null="true" />
+		</property>
+		<property name="remark" type="java.lang.String">
+			<column name="remark" length="200" not-null="false" />
+		</property>
+	</class>
+</hibernate-mapping>

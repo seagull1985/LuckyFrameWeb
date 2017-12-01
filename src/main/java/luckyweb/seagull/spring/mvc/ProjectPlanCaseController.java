@@ -318,17 +318,16 @@ public class ProjectPlanCaseController {
 			} else {
 				String planid = req.getParameter("planid");
 				String result = "编辑成功！";
-				ProjectPlanCase projectplancase = new ProjectPlanCase();
-				projectplancase.setCaseid(projectcase.getId());
-				projectplancase.setPlanid(Integer.valueOf(planid));
-				projectplancase.setPriority(projectcase.getPriority());
-				int id = projectplancaseservice.findRows(projectplancase);
-				if (id == 0) {
+				ProjectPlanCase ppc = projectplancaseservice.getplancase(Integer.valueOf(planid), projectcase.getId());
+				if (ppc.getId() == 0) {
+					ppc.setCaseid(projectcase.getId());
+					ppc.setPlanid(Integer.valueOf(planid));
+					ppc.setPriority(projectcase.getPriority());
 					result = "编辑成功！并已帮您把此用例加入到计划中！";
-					projectplancaseservice.add(projectplancase);
+					projectplancaseservice.add(ppc);
 				} else {
-					projectplancase.setId(id);
-					projectplancaseservice.modify(projectplancase);
+					ppc.setPriority(projectcase.getPriority());
+					projectplancaseservice.modify(ppc);
 				}
 
 				json.put("status", "success");

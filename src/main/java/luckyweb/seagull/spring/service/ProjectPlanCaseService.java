@@ -18,4 +18,5 @@ public interface ProjectPlanCaseService {
 	public List findByPage( final Object value,final int offset, final int pageSize);
 	public int findRows(ProjectPlanCase projectplancase) ;
 	public List<ProjectPlanCase> getcases(int planid) throws Exception;
+	public ProjectPlanCase getplancase(int planid,int caseid) throws Exception;
 }

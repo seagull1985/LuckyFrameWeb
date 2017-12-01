@@ -33,8 +33,8 @@
 				</header>
 				
 				<p>
-					<span id="mes" style="color:#242424; font-size: 18px;">系统组一：</span><span id="mes" style="color:#B8B8B8; font-size: 16px;">test1&nbsp;&nbsp;test2&nbsp;&nbsp;</span>
-					<br><span id="mes" style="color:#242424; font-size: 18px;">系统组二：</span><span id="mes" style="color:#B8B8B8; font-size: 16px;">test3&nbsp;&nbsp;test4&nbsp;&nbsp;</span>
+					<span id="mes" style="color:#242424; font-size: 18px;">项目组一：</span><span id="mes" style="color:#B8B8B8; font-size: 16px;">张三&nbsp;&nbsp;李四&nbsp;&nbsp;</span>
+					<br><span id="mes" style="color:#242424; font-size: 18px;">项目组二：</span><span id="mes" style="color:#B8B8B8; font-size: 16px;">王五&nbsp;&nbsp;赵六&nbsp;&nbsp;</span>
 				</p>
 				<br>
 
@@ -51,7 +51,8 @@
 					</address>
 					<h4>LuckyFrame官方交流群</h4>
 					<address>
-						QQ:487954492
+						QQ:487954492 
+						<a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=ecd7cafef5202bb071b599948e7a7827122c87680f187fc96663a025096316bd"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="LuckyFrame自动化测试" title="LuckyFrame自动化测试"></a>
 					</address>
 				</div>
 

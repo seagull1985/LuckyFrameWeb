@@ -77,20 +77,40 @@
 										<tr>
 											<th>参数名</th>
 											<th>参数默认值</th>
+											<th>参数类型</th>
 										</tr>
 									</thead>
 									<tbody id="paramtbody">
 										<c:forEach var="t" items="${templateparams}" begin="0" step="1"
 											varStatus="i">
 											<tr id="paramrow-${i.count}">
-												<td width="20%">
-												<input type="text"	class="form-control" name="paramname" id="paramname${i.count}" value="${t.paramname }" />
-												</td>
-												<td width="76%">
-												<input type="text"	class="form-control" name="param" id="param${i.count}" value="${t.param }" />
-												<input id="id${i.count}" type="hidden" value="${t.id }" />
-												</td>
-												
+												<td width="15%"><input type="text" class="form-control"
+													name="paramname" id="paramname${i.count}"
+													value="${t.paramname }" /></td>
+												<td width="71%"><input type="text" class="form-control"
+													name="param" id="param${i.count}" value="${t.param }" /> <input
+													id="id${i.count}" type="hidden" value="${t.id }" /></td>
+												<td width="10%"><select class="form-control"
+													name="paramtype" id="paramtype${i.count}">
+														<c:choose>
+															<c:when test="${t.paramtype=='1' }">
+																<option value="0">String</option>
+														        <option value="1" selected = "selected">JSON对象</option>
+														        <option value="2">JSONARR对象</option>
+                                                            </c:when>
+                                                            <c:when test="${t.paramtype=='2' }">
+																<option value="0">String</option>
+														        <option value="1">JSON对象</option>
+														        <option value="2" selected = "selected">JSONARR对象</option>
+                                                            </c:when>
+															<c:otherwise>
+																<option value="0" selected = "selected">String</option>
+														        <option value="1">JSON对象</option>
+														        <option value="2">JSONARR对象</option>
+                                                            </c:otherwise>
+														</c:choose>
+												</select></td>
+
 												<td width="4%" style="vertical-align: middle;"><a
 													class="fa fa-plus-circle fa-5"
 													style="font-size: 20px; cursor: pointer;"
@@ -183,12 +203,13 @@
 				json = json + "{\"id\":" + $("#id" + index).val()+ ",";
 				json = json + "\"paramname\":\"" + $("#paramname" + index).val().replaceAll("\"", "&quot;") + "\",";
 				json = json + "\"param\":\"" + $("#param" + index).val().replaceAll("\"", "&quot;")	+ "\",";
+				json = json + "\"paramtype\":\"" + $("#paramtype" + index).val().replaceAll("\"", "&quot;")	+ "\",";
 				json = json + "\"templateid\":\"" + '${ptemplate.id}' + "\"}";
 				if (i != oTable.rows.length - 1) {
 					json = json + ",";
 				}
 			}
-			json = "[" + json + "]"
+			json = "[" + json + "]";
 			// 异步提交数据到action页面
 			$.ajax({
 				type : "POST",
@@ -227,8 +248,9 @@
 
 			for (var i = 0; i < oTable.rows.length; i++) {
 				var index = i + 1
- 				oTable.rows[i].cells[0].childNodes[1].setAttribute("id","paramname"+index);
-				oTable.rows[i].cells[1].childNodes[1].setAttribute("id","param"+index);
+ 				oTable.rows[i].cells[0].childNodes[0].setAttribute("id","paramname"+index);
+				oTable.rows[i].cells[1].childNodes[0].setAttribute("id","param"+index);
+				oTable.rows[i].cells[2].childNodes[0].setAttribute("id","paramtype"+index);
 			}
 		}
 
@@ -246,8 +268,9 @@
 
 			for (var i = 0; i < oTable.rows.length; i++) {
 				var index = i + 1
-				oTable.rows[i].cells[0].childNodes[1].setAttribute("id","paramname"+index);
-				oTable.rows[i].cells[1].childNodes[1].setAttribute("id","param"+index);
+				oTable.rows[i].cells[0].childNodes[0].setAttribute("id","paramname"+index);
+				oTable.rows[i].cells[1].childNodes[0].setAttribute("id","param"+index);
+				oTable.rows[i].cells[2].childNodes[0].setAttribute("id","paramtype"+index);
 			}
 		}
 	</script>

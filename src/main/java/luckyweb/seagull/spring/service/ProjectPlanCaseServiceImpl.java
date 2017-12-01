@@ -90,4 +90,12 @@ public class ProjectPlanCaseServiceImpl implements ProjectPlanCaseService{
 		return this.projectplancaseDao.getList(" from ProjectPlanCase where planid="+planid+" order by priority,caseid");
 	}
 	
+	public ProjectPlanCase getplancase(int planid,int caseid) throws Exception {
+		// TODO Auto-generated method stub
+		List<ProjectPlanCase> ppcs=this.projectplancaseDao.getList(" from ProjectPlanCase where planid="+planid+" and caseid="+caseid+" order by id desc");
+		if(ppcs.size()==0){
+			return new ProjectPlanCase();
+		}
+		return ppcs.get(0);
+	}
 }

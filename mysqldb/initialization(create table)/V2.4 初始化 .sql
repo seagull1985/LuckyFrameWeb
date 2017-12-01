@@ -382,6 +382,7 @@ create table PROJECT_TEMPLATEPARAMS
   templateid            int(8) not null COMMENT '模块ID',
   paramname             VARCHAR(50) not null COMMENT '参数名',
   param                 VARCHAR(2000) COMMENT '参数默认值',
+  paramtype             int(4) not null COMMENT '0 String 1 JSON对象 2 JSONARR对象'
   primary key (ID)
 )default character set utf8;
 
@@ -403,6 +404,16 @@ create table TEMP_CASESTEPDEBUG
   executor              VARCHAR(20) not null COMMENT '执行人',
   loglevel              VARCHAR(10) not null COMMENT '日志级别',
   detail                VARCHAR(5000) not null COMMENT '日志',   /*V1.1  扩展日志明细字段到5000*/
+  primary key (ID)
+)default character set utf8;
+
+create table PUBLIC_CASEPARAMS
+(
+  id                    int(8) not null AUTO_INCREMENT,
+  paramsname            VARCHAR(50) not null COMMENT '变量名称',
+  paramsvalue           VARCHAR(500) not null COMMENT '变量值',
+  projectid             int(8) not null COMMENT '项目ID',
+  remark                VARCHAR(200) COMMENT '备注',
   primary key (ID)
 )default character set utf8;
 /*插入索引
@@ -520,7 +531,12 @@ insert into USER_AUTHORITY (id, module, auth_type, alias)
 values (65, '客户端管理', '删除', 'client_2');
 insert into USER_AUTHORITY (id, module, auth_type, alias)
 values (66, '客户端管理', '修改', 'client_3');
-
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (67, '公共参数', '增加', 'pcp_1');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (68, '公共参数', '删除', 'pcp_2');
+insert into USER_AUTHORITY (id, module, auth_type, alias)
+values (69, '公共参数', '修改', 'pcp_3');
 /*插入步骤界面定义各个字段的默认值*/
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (1, 2, 0, 'operation','HttpURLPost','使用HttpURLConnection发送post请求');
@@ -628,7 +644,7 @@ values (3, '自动化工程师', 'acc_1,acc_2,acc_3,tast_run,tast_remove,tast_ex
 insert into USER_ROLE (id, role, permission)
 values (4, '质量工程师', 'pv_1,pv_2,pv_3,pvp_1,fc_1,fc_2,fc_3,acc_1,acc_2,acc_3,pfc_1,pfc_2,pfc_3,fc_tocheck,revinfo_1,revinfo_2,revinfo_3,rev_2,rev_3,acc_upload,');
 insert into USER_ROLE (id, role, permission)
-values (1, '管理员', 'pv_1,pv_2,pv_3,pvp_1,fc_1,fc_2,fc_3,acc_1,acc_2,acc_3,tast_run,tast_remove,tast_ex,tast_1,tast_3,tast_2,tast_upload,tastex_2,case_ex,pfc_1,pfc_2,pfc_3,fc_tocheck,revinfo_1,revinfo_2,revinfo_3,rev_2,rev_3,acc_upload,ui_1,ui_2,ui_3,ui_4,role_3,role_1,role_2,pro_1,pro_2,pro_3,case_1,case_2,case_3,case_step,proplan_1,proplan_2,proplan_3,dpmt_1,dpmt_2,dpmt_3,ptct_1,ptct_2,ptct_3,client_1,client_2,client_3,');
+values (1, '管理员', 'pv_1,pv_2,pv_3,pvp_1,fc_1,fc_2,fc_3,acc_1,acc_2,acc_3,tast_run,tast_remove,tast_ex,tast_1,tast_3,tast_2,tast_upload,tastex_2,case_ex,pfc_1,pfc_2,pfc_3,fc_tocheck,revinfo_1,revinfo_2,revinfo_3,rev_2,rev_3,acc_upload,ui_1,ui_2,ui_3,ui_4,role_3,role_1,role_2,pro_1,pro_2,pro_3,case_1,case_2,case_3,case_step,proplan_1,proplan_2,proplan_3,dpmt_1,dpmt_2,dpmt_3,ptct_1,ptct_2,ptct_3,client_1,client_2,client_3,pcp_1,pcp_2,pcp_3,');
 
 /*插入默认部门分级*/
 insert into QA_SECONDARYSECTOR (sectorid, departmenthead, departmentname)
