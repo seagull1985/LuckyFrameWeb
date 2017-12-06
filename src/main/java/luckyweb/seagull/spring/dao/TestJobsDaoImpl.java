@@ -15,12 +15,22 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.quartz.QuratzJobDataMgr;
 import luckyweb.seagull.spring.entity.TestClient;
 import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.util.StrLib;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Repository("testJobsDao")
 public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao {
 	private static final Logger log = Logger.getLogger(TestJobsDaoImpl.class);
@@ -45,7 +55,8 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 		if (isRun == false) {
 			try {
 				Query queryproj = session.createQuery("from SectorProjects where projecttype=1 order by projectid asc");
-				QueueListener.projlist = queryproj.list();//获取所有项目
+				//获取所有项目
+				QueueListener.projlist = queryproj.list();
 				
 				Query query = session.createQuery("from TestJobs where (tasktype ='D') or  (tasktype ='O' and runtime>sysdate()) ");
 				QueueListener.list = query.list();
@@ -206,7 +217,7 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 		if (!StrLib.isEmpty(jb.getPlanproj())) {
 			query.setParameter("planproj", "%"+jb.getPlanproj().trim()+"%");
 		}
-		if (jb.getProjectid()!=0&&jb.getProjectid()!=99) {
+		if (jb.getProjectid()!=0&&jb.getProjectid()!=PublicConst.STATUS99) {
 			query.setParameter("projectid", jb.getProjectid());
 		}
 	}
@@ -268,13 +279,14 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 	 *            每页需要显示的记录条数
 	 * @return 当前页的所有记录
 	 */
+	@Override
 	public List findByPage(final String hql, final Object value,
 			final int offset, final int pageSize) {
 		// 通过一个HibernateCallback 对象来执行查询
 		//System.out.println(hql);
 		List list = getHibernateTemplate().executeFind(new HibernateCallback() {
 			// 实现hibernateCallback接口必须实现的方法
-			
+			@Override
 			public Object doInHibernate(Session session)
 					throws HibernateException {
 				// 执行hibernate 分页查询
@@ -292,7 +304,7 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 	}
 
 	
-
+	@Override
 	public int findRows(TestJobs jobs,String hql) {
 		int s=0;
 		Session session=this.getSession(true);
@@ -317,6 +329,7 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 		try {
 			List list = getHibernateTemplate().executeFind(
 					new HibernateCallback() {
+						@Override
 						public Object doInHibernate(Session session)
 								throws HibernateException, SQLException {
 							List list2 = session.createQuery(hql)

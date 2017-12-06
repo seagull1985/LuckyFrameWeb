@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.Review;
 import luckyweb.seagull.spring.entity.SectorProjects;
@@ -27,6 +28,15 @@ import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/review")
 public class ReviewController {
@@ -93,7 +103,7 @@ public class ReviewController {
 			review.setReview_result(search);
 		}
 		// 得到客户端传递的查询参数
-		if (!StrLib.isEmpty(projectid)&&!"99".equals(projectid)) {
+		if (!StrLib.isEmpty(projectid)&&!PublicConst.STATUSSTR99.equals(projectid)) {
 			review.setProjectid(Integer.valueOf(projectid));
 		}
 		
@@ -108,13 +118,13 @@ public class ReviewController {
 		List<Review> reviewlist = reviewservice.findByPage(review, offset, limit);
 
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(reviewlist);
+		String recordJson = StrLib.listToJson(reviewlist);
 		// 得到总记录数
 		int total = reviewservice.findRows(review);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 	
@@ -134,7 +144,7 @@ public class ReviewController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "rev_2")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHREVIEWDEL)) {
 				json.put("status", "fail");
 				json.put("ms", "删除失败,权限不足,请联系管理员!");
 			} else {
@@ -163,7 +173,7 @@ public class ReviewController {
 						fail++;
 						continue;
 					}
-					reviewinfoservice.delete_reviewid(id);
+					reviewinfoservice.deleteReviewid(id);
 					reviewservice.delete(id);
 					operationlogservice.add(req, "QA_REVIEW", id, 
 							review.getSectorProjects().getProjectid(),"评审信息删除成功！");
@@ -210,17 +220,17 @@ public class ReviewController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 
-			Review review_update = reviewservice.load(Integer.valueOf(req.getParameter("id")));
+			Review reviewUpdate = reviewservice.load(Integer.valueOf(req.getParameter("id")));
 			
-			if(!UserLoginController.permissionboolean(req, "rev_3")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHREVIEWMOD)){
 				model.addAttribute("review", new Review());
 				model.addAttribute("url",  "/review/load.do");
 				model.addAttribute("message", "当前用户无权限修改评审信息，请联系管理员！");
 				return "success";
 			}
 			
-			if(!UserLoginController.oppidboolean(req, review_update.getSectorProjects().getProjectid())){
-				SectorProjects sp=sectorprojectsService.loadob(review_update.getSectorProjects().getProjectid());
+			if(!UserLoginController.oppidboolean(req, reviewUpdate.getSectorProjects().getProjectid())){
+				SectorProjects sp=sectorprojectsService.loadob(reviewUpdate.getSectorProjects().getProjectid());
 				model.addAttribute("review", new Review());
 				model.addAttribute("url",  "/review/load.do");
 				model.addAttribute("message", "当前用户无权限修改项目【"+sp.getProjectname()+"】评审信息，请联系管理员！");
@@ -228,7 +238,7 @@ public class ReviewController {
 			}
 			String retVal = "/jsp/review/review_update";
 	
-			if (req.getMethod().equals("POST"))
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 				if (br.hasErrors()) {
 					return retVal;
@@ -236,29 +246,29 @@ public class ReviewController {
 
 				SectorProjects p = new SectorProjects();
 				p.setProjectid(review.getProjectid());
-				review_update.setSectorProjects(p);
-				review_update.setVersion(review.getVersion());
-				review_update.setReview_date(review.getReview_date());
-				review_update.setReview_type(review.getReview_type());
-				review_update.setReview_object(review.getReview_object());
-				review_update.setConfirm_date(review.getConfirm_date());
-				review_update.setResult_Confirmor(review.getResult_Confirmor());
-				review_update.setReview_result(review.getReview_result());
-				review_update.setRemark(review.getRemark());
+				reviewUpdate.setSectorProjects(p);
+				reviewUpdate.setVersion(review.getVersion());
+				reviewUpdate.setReview_date(review.getReview_date());
+				reviewUpdate.setReview_type(review.getReview_type());
+				reviewUpdate.setReview_object(review.getReview_object());
+				reviewUpdate.setConfirm_date(review.getConfirm_date());
+				reviewUpdate.setResult_Confirmor(review.getResult_Confirmor());
+				reviewUpdate.setReview_result(review.getReview_result());
+				reviewUpdate.setRemark(review.getRemark());
 				
-				reviewservice.modify(review_update);
+				reviewservice.modify(reviewUpdate);
 				
-				operationlogservice.add(req, "QA_REVIEW", review_update.getId(), 
-						review_update.getSectorProjects().getProjectid(),"评审记录修改成功！");
+				operationlogservice.add(req, "QA_REVIEW", reviewUpdate.getId(), 
+						reviewUpdate.getSectorProjects().getProjectid(),"评审记录修改成功！");
 				
 				model.addAttribute("message", "修改成功");
 				model.addAttribute("url", "/reviewinfo/load.do");
 				return retVal;
 
 			}
-			    review_update.setProjectid(review_update.getSectorProjects().getProjectid());
+			reviewUpdate.setProjectid(reviewUpdate.getSectorProjects().getProjectid());
 			    model.addAttribute("url", "/review/load.do");
-				model.addAttribute("review", review_update);
+				model.addAttribute("review", reviewUpdate);
 				model.addAttribute("projects", QueueListener.qa_projlist);
 				return retVal;
 

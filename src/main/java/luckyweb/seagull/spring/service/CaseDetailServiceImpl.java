@@ -6,10 +6,20 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.TestCasedetailDao;
 import luckyweb.seagull.spring.entity.TestCasedetail;
 import luckyweb.seagull.util.StrLib;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Service("casedetailService")
 public class CaseDetailServiceImpl implements CaseDetailService {
 
@@ -62,13 +72,17 @@ public class CaseDetailServiceImpl implements CaseDetailService {
 		if(StrLib.isEmpty(status)){
 			return "其他";
 		}else{
-			if(status.equals("0")){
+			String suc="0";
+			String fail="1";
+			String lock="2";
+			String unexe="4";
+			if(suc.equals(status)){
 				return "成功";
-			}else if(status.equals("1")){
+			}else if(fail.equals(status)){
 				return "失败";
-			}else if(status.equals("2")){
+			}else if(lock.equals(status)){
 				return "锁定";
-			}else if(status.equals("4")){
+			}else if(unexe.equals(status)){
 				return "未执行";
 			}
 		}
@@ -95,7 +109,7 @@ public class CaseDetailServiceImpl implements CaseDetailService {
 			where += " casename like :casename)  or ";
 		}
 
-		if (where.length() == 7) {
+		if (where.length() == PublicConst.WHERENUM) {
 			where = "";
 		} else {
 			where = where.substring(0, where.length() - 5);
@@ -104,6 +118,7 @@ public class CaseDetailServiceImpl implements CaseDetailService {
 		return where;
 	}
 	
+	@Override
 	public int findRows(TestCasedetail caseDetail ) {
 		String hql="select count(*) from TestCasedetail "+where(caseDetail);
 		return casedetailDao.findRows(hql,caseDetail);

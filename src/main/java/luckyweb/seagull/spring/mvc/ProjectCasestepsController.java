@@ -21,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
 import luckyweb.seagull.spring.entity.SectorProjects;
@@ -39,6 +40,15 @@ import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import rmi.service.RunService;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/projectCasesteps")
 public class ProjectCasestepsController {
@@ -83,7 +93,7 @@ public class ProjectCasestepsController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 
-			if (!UserLoginController.permissionboolean(req, "case_step")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHCASESTEPS)) {
 				model.addAttribute("casesteps", new ProjectCasesteps());
 				model.addAttribute("url", "/projectCase/load.do");
 				model.addAttribute("message", "当前用户无权限管理用例步骤，请联系管理员！");
@@ -92,7 +102,7 @@ public class ProjectCasestepsController {
 
 			String caseid = req.getParameter("caseid");
 			ProjectCase prcase = null;
-			if (!StrLib.isEmpty(caseid) && !"0".equals(caseid)) {
+			if (!StrLib.isEmpty(caseid) && !PublicConst.STATUSSTR0.equals(caseid)) {
 				prcase = projectcaseservice.load(Integer.valueOf(caseid));
 			}
 			
@@ -164,7 +174,7 @@ public class ProjectCasestepsController {
 		PrintWriter pw = response.getWriter();
 		StringBuilder sb = new StringBuilder();
 		JSONObject json = new JSONObject();
-		if (!UserLoginController.permissionboolean(request, "case_step")) {
+		if (!UserLoginController.permissionboolean(request, PublicConst.AUTHCASESTEPS)) {
 			json.put("status", "fail");
 			json.put("ms", "编辑失败,权限不足,请联系管理员!");
 		} else {
@@ -182,11 +192,12 @@ public class ProjectCasestepsController {
 			jsonstr = jsonstr.replace("undefined", "0");
 
 			JSONArray jsonarr = JSONArray.fromObject(jsonstr);
-			List<?> list = JSONArray.toList(jsonarr, new ProjectCasesteps(), new JsonConfig());// 参数1为要转换的JSONArray数据，参数2为要转换的目标数据，即List盛装的数据
+			// 参数1为要转换的JSONArray数据，参数2为要转换的目标数据，即List盛装的数据
+			List<?> list = JSONArray.toList(jsonarr, new ProjectCasesteps(), new JsonConfig());
 			String usercode = "";
-			if (null != request.getSession().getAttribute("usercode")
-					&& null != request.getSession().getAttribute("username")) {
-				usercode = request.getSession().getAttribute("usercode").toString();
+			if (null != request.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+					&& null != request.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+				usercode = request.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 			}
 			Date currentTime = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -244,8 +255,8 @@ public class ProjectCasestepsController {
 			e.printStackTrace();
 		}
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(casesteps);
-		pw.print(RecordJson);
+		String recordJson = StrLib.listToJson(casesteps);
+		pw.print(recordJson);
 	}
 
 	@RequestMapping(value = "/update.do")
@@ -257,14 +268,14 @@ public class ProjectCasestepsController {
 			PrintWriter pw = rsp.getWriter();
 			StringBuilder sb = new StringBuilder();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "case_step")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHCASESTEPS)) {
 				json.put("status", "fail");
 				json.put("ms", "编辑失败,权限不足,请联系管理员!");
 			} else {
 				ProjectCase projectcase = new ProjectCase();
-				if (null != req.getSession().getAttribute("usercode")
-						&& null != req.getSession().getAttribute("username")) {
-					String usercode = req.getSession().getAttribute("usercode").toString();
+				if (null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+						&& null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+					String usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 					casesteps.setOperationer(usercode);
 					projectcase = projectcaseservice.load(casesteps.getCaseid());
 					projectcase.setOperationer(usercode);
@@ -315,9 +326,9 @@ public class ProjectCasestepsController {
 		String status="error";
 		String ms="调试用例启动失败！";
 		try {
-			if (null != request.getSession().getAttribute("usercode")
-					&& null != request.getSession().getAttribute("username")) {
-				String usercode = request.getSession().getAttribute("usercode").toString();
+			if (null != request.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+					&& null != request.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+				String usercode = request.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 				
 				tempdebugservice.delete(casesign, usercode);
 
@@ -364,19 +375,20 @@ public class ProjectCasestepsController {
 		String status="error";
 		String ms="获取调试日志失败！";
 		try {
-			if (null != request.getSession().getAttribute("usercode")
-					&& null != request.getSession().getAttribute("username")) {
-				String usercode = request.getSession().getAttribute("usercode").toString();
+			if (null != request.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+					&& null != request.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+				String usercode = request.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 
 				List<TempCasestepDebug> tcdlist=tempdebugservice.getList(casesign, usercode);
-				ms="";
+				StringBuilder stringBuilder = new StringBuilder();
 				for(TempCasestepDebug tcd:tcdlist){
-					ms=ms+tcd.getLoglevel()+": "+tcd.getDetail()+"</br>";
+					stringBuilder.append(tcd.getLoglevel()+": "+tcd.getDetail()+"</br>");
 				}
-				
+				ms=stringBuilder.toString();
 				if(null!=tcdlist&&tcdlist.size()>1){
 					String lastloglevel=tcdlist.get(tcdlist.size()-1).getLoglevel();
-					if(lastloglevel.indexOf("over")>-1){
+					String over="over";
+					if(lastloglevel.indexOf(over)>-1){
 						status="info";
 					}else{
 						status="success";

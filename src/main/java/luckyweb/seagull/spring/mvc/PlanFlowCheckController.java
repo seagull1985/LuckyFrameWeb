@@ -18,6 +18,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.FlowCheck;
 import luckyweb.seagull.spring.entity.FlowInfo;
@@ -31,7 +32,15 @@ import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/planflowCheck")
 public class PlanFlowCheckController {
@@ -85,7 +94,7 @@ public class PlanFlowCheckController {
 		}
 
 		// 得到客户端传递的查询参数
-		if (!StrLib.isEmpty(projectid)&&!"99".equals(projectid)) {
+		if (!StrLib.isEmpty(projectid)&&!PublicConst.STATUSSTR99.equals(projectid)) {
 			pfcheck.setProjectid(Integer.valueOf(projectid));
 		}
 		
@@ -99,13 +108,13 @@ public class PlanFlowCheckController {
 			pfclist.get(i).setCheckphase(fi.getPhasename());
 		}
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(pfclist);
+		String recordJson = StrLib.listToJson(pfclist);
 		// 得到总记录数
 		int total = planflowcheckservice.findRows(pfcheck);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 	
@@ -130,7 +139,7 @@ public class PlanFlowCheckController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 
-			if(!UserLoginController.permissionboolean(req, "pfc_1")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHPFCADD)){
 				model.addAttribute("planflowcheck", new PlanFlowCheck());
 				model.addAttribute("url", "load.do");
 				model.addAttribute("message", "当前用户无权限添加项目检查计划，请联系管理员！");
@@ -138,7 +147,7 @@ public class PlanFlowCheckController {
 			}
 			
 			String retVal = "/jsp/flowcheck/planflowcheck_add";
-			if (req.getMethod().equals("POST"))
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 				if (br.hasErrors())
 				{
@@ -148,8 +157,10 @@ public class PlanFlowCheckController {
 			        String errorMessage; 
 			        for (int i = 0; i < err.size(); i++) { 
 			            fe=err.get(i); 
-			            field=fe.getField();//得到那个字段验证出错 
-			            errorMessage=fe.getDefaultMessage();//得到错误消息 
+			          //得到那个字段验证出错 
+			            field=fe.getField();
+			          //得到错误消息 
+			            errorMessage=fe.getDefaultMessage();
 			            System.out.println("错误字段消息："+field +" : "+errorMessage); 
 			        } 
 			  // 打印结果 
@@ -183,7 +194,7 @@ public class PlanFlowCheckController {
 					}
 				}
 				
-				if(planflowcheck.getCheckentryid().equals("0")){
+				if(PublicConst.STATUSSTR0.equals(planflowcheck.getCheckentryid())){
 					message = "请选择检查内容!";
 					model.addAttribute("message", message);
 					@SuppressWarnings("unchecked")
@@ -194,7 +205,7 @@ public class PlanFlowCheckController {
 					return retVal;
 				}
 				
-				if(planflowcheck.getPlandate().equals("")){
+				if("".equals(planflowcheck.getPlandate())){
 					message = "请选择计划检查日期!";
 					model.addAttribute("message", message);
 					@SuppressWarnings("unchecked")
@@ -268,7 +279,7 @@ public class PlanFlowCheckController {
 
 			int id  = Integer.valueOf(req.getParameter("id"));
 			PlanFlowCheck pfc = planflowcheckservice.load(id);
-			if(!UserLoginController.permissionboolean(req, "pfc_3")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHPFCMOD)){
 				model.addAttribute("planflowcheck", new PlanFlowCheck());
 				model.addAttribute("url", "load.do");
 				model.addAttribute("message", "当前用户无权修改项目检查计划，请联系管理员！");
@@ -276,7 +287,7 @@ public class PlanFlowCheckController {
 			}
 			
 			String retVal = "/jsp/flowcheck/planflowcheck_update";
-			if (req.getMethod().equals("POST"))
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 				if (br.hasErrors())
 				{
@@ -286,8 +297,10 @@ public class PlanFlowCheckController {
 			        String errorMessage; 
 			        for (int i = 0; i < err.size(); i++) { 
 			            fe=err.get(i); 
-			            field=fe.getField();//得到那个字段验证出错 
-			            errorMessage=fe.getDefaultMessage();//得到错误消息 
+			          //得到那个字段验证出错 
+			            field=fe.getField();
+			          //得到错误消息
+			            errorMessage=fe.getDefaultMessage(); 
 			            System.out.println("错误字段消息："+field +" : "+errorMessage); 
 			        } 
 			  // 打印结果 
@@ -301,13 +314,13 @@ public class PlanFlowCheckController {
 					return retVal;
 				}
 				
-				if(planflowcheck.getCheckentryid().equals("0")){
+				if(PublicConst.STATUSSTR0.equals(planflowcheck.getCheckentryid())){
 					message = "请选择检查内容!";
 					model.addAttribute("message", message);
 					return retVal;
 				}
 				
-				if(planflowcheck.getPlandate().equals("")){
+				if("".equals(planflowcheck.getPlandate())){
 					message = "请选择计划检查日期!";
 					model.addAttribute("message", message);
 					return retVal;
@@ -384,7 +397,7 @@ public class PlanFlowCheckController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "pfc_2")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHPFCDEL)) {
 				json.put("status", "fail");
 				json.put("ms", "删除检查计划失败,权限不足,请联系管理员!");
 			} else {
@@ -456,7 +469,7 @@ public class PlanFlowCheckController {
 		rsp.setContentType("text/html;charset=utf-8");
 		req.setCharacterEncoding("utf-8");
 
-		if(!UserLoginController.permissionboolean(req, "fc_tocheck")){
+		if(!UserLoginController.permissionboolean(req, PublicConst.AUTHPFCTOCHECK)){
 			model.addAttribute("flowcheck", new FlowCheck());
 			model.addAttribute("url", "load.do");
 			model.addAttribute("message", "当前用户无权限把计划转成检查结果，请联系管理员！");
@@ -470,7 +483,7 @@ public class PlanFlowCheckController {
 		int checkid = Integer.valueOf(req.getParameter("checkid"));
 		PlanFlowCheck pfc = planflowcheckservice.load(id); 
 		
-		if (req.getMethod().equals("POST"))
+		if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 		{
 			if (br.hasErrors())
 			{
@@ -480,8 +493,10 @@ public class PlanFlowCheckController {
 		        String errorMessage; 
 		        for (int i = 0; i < err.size(); i++) { 
 		            fe=err.get(i); 
-		            field=fe.getField();//得到那个字段验证出错 
-		            errorMessage=fe.getDefaultMessage();//得到错误消息 
+		          //得到那个字段验证出错 
+		            field=fe.getField();
+		          //得到错误消息 
+		            errorMessage=fe.getDefaultMessage();
 		            System.out.println("错误字段消息："+field +" : "+errorMessage); 
 		        } 
 		  // 打印结果 
@@ -495,25 +510,25 @@ public class PlanFlowCheckController {
 				return retVal;
 			}
 			
-			if(flowcheck.getProjectphase().equals("0")){
+			if(PublicConst.STATUSSTR0.equals(flowcheck.getProjectphase())){
 				message = "请选择检查项目阶段!";
 				model.addAttribute("message", message);
 				return retVal;
 			}
 			
-			if(flowcheck.getPhasenode().equals("0")){
+			if(PublicConst.STATUSSTR0.equals(flowcheck.getPhasenode())){
 				message = "请选择检查阶段节点!";
 				model.addAttribute("message", message);
 				return retVal;
 			}
 			
-			if(flowcheck.getCheckentry().equals("0")){
+			if(PublicConst.STATUSSTR0.equals(flowcheck.getCheckentry())){
 				message = "请选择检查内容!";
 				model.addAttribute("message", message);
 				return retVal;
 			}
 			
-			if(flowcheck.getCheckdate().equals("")){
+			if("".equals(flowcheck.getCheckdate())){
 				message = "请选择检查日期!";
 				model.addAttribute("message", message);
 				return retVal;
@@ -546,7 +561,8 @@ public class PlanFlowCheckController {
 			flowcheck.setSectorProjects(p);
 			
 			int addid = flowcheckservice.add(flowcheck);
-			pfc.setStatus(2);  //修改成已转检查记录状态
+			//修改成已转检查记录状态
+			pfc.setStatus(2);  
 			planflowcheckservice.modify(pfc);
 			String checkentry = flowinfoService.load(Integer.valueOf(flowcheck.getCheckentry())).getCheckentry();
 			operationlogservice.add(req, "QA_FLOWCHECK", addid, 
@@ -572,7 +588,8 @@ public class PlanFlowCheckController {
 		
 		flowcheck.setProjectid(pfc.getSectorProjects().getProjectid());
 		flowcheck.setCheckdate(pfc.getPlandate());
-		if(checkid==0){  //如果插入已有检查，那么版本号自动更改成原有的
+		//如果插入已有检查，那么版本号自动更改成原有的
+		if(checkid==0){  
 			flowcheck.setVersionnum(pfc.getVersionnum());
 		}else{			
 			flowcheck.setVersionnum(flowcheckservice.getversionnum(pfc.getSectorProjects().getProjectid(), checkid));
@@ -610,7 +627,8 @@ public class PlanFlowCheckController {
 		int checkid = flowcheckservice.getcheckid(projectid);
 		List<String> list = new ArrayList<String>();
 		int size;
-		if(checkid<=5){
+		int checknum=5;
+		if(checkid<=checknum){
 			size = checkid;
 		}else{
 			size = 5;

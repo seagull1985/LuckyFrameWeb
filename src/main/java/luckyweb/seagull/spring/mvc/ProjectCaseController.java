@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
@@ -37,6 +38,15 @@ import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/projectCase")
 public class ProjectCaseController {
@@ -76,9 +86,9 @@ public class ProjectCaseController {
 
 		try {
 			int projectid = 99;
-			if (null != req.getSession().getAttribute("usercode")
-					&& null != req.getSession().getAttribute("username")) {
-				String usercode = req.getSession().getAttribute("usercode").toString();
+			if (null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+					&& null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+				String usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 				UserInfo userinfo = userinfoservice.getUseinfo(usercode);
 				projectid = userinfo.getProjectid();
 			}
@@ -118,7 +128,7 @@ public class ProjectCaseController {
 			projectcase.setRemark(search);
 		}
 		// 得到客户端传递的查询参数
-		if (!StrLib.isEmpty(projectid) && !"99".equals(projectid)) {
+		if (!StrLib.isEmpty(projectid) && !PublicConst.STATUSSTR99.equals(projectid)) {
 			projectcase.setProjectid(Integer.valueOf(projectid));
 		}
 		// 得到客户端传递的查询参数
@@ -156,13 +166,13 @@ public class ProjectCaseController {
 
 		}
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(projectcases);
+		String recordJson = StrLib.listToJson(projectcases);
 		// 得到总记录数
 		int total = projectcaseservice.findRows(projectcase);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 
@@ -175,7 +185,7 @@ public class ProjectCaseController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 
-			if (!UserLoginController.permissionboolean(req, "case_3")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHCASEMOD)) {
 				json.put("status", "fail");
 				json.put("ms", "编辑失败,权限不足,请联系管理员!");
 			} else {
@@ -183,9 +193,9 @@ public class ProjectCaseController {
 					json.put("status", "fail");
 					json.put("ms", "编辑失败,项目权限不足,请联系管理员!");
 				}else{
-					if (null != req.getSession().getAttribute("usercode")
-							&& null != req.getSession().getAttribute("username")) {
-						String usercode = req.getSession().getAttribute("usercode").toString();
+					if (null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+							&& null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+						String usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 						projectcase.setOperationer(usercode);
 					}
 					Date currentTime = new Date();
@@ -227,7 +237,7 @@ public class ProjectCaseController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "case_1")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHCASEADD)) {
 				json.put("status", "fail");
 				json.put("ms", "添加失败,权限不足,请联系管理员!");
 			} else {
@@ -241,16 +251,17 @@ public class ProjectCaseController {
 						json.put("ms", "添加用例失败,项目权限不足,请联系管理员!");
 					}
 				}else{
-					if (null != req.getSession().getAttribute("usercode")
-							&& null != req.getSession().getAttribute("username")) {
-						String usercode = req.getSession().getAttribute("usercode").toString();
+					if (null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+							&& null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+						String usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 						projectcase.setOperationer(usercode);
 					}
-					
-					String regEx_space = "\t|\r|\n";// 定义空格回车换行符
-					Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
-					Matcher m_space = p_space.matcher(projectcase.getRemark());
-					projectcase.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
+					// 定义空格回车换行符
+					String regExSpace = "\t|\r|\n";
+					Pattern pSpace = Pattern.compile(regExSpace, Pattern.CASE_INSENSITIVE);
+					Matcher mSpace = pSpace.matcher(projectcase.getRemark());
+					 // 过滤空格回车标签
+					projectcase.setRemark(mSpace.replaceAll(""));
 
 					Date currentTime = new Date();
 					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -310,7 +321,7 @@ public class ProjectCaseController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "case_2")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHCASEDEL)) {
 				json.put("status", "fail");
 				json.put("ms", "删除失败,权限不足,请联系管理员!");
 			} else {
@@ -418,7 +429,7 @@ public class ProjectCaseController {
 		int id=0;
 		try {
 			ProjectModule projectmodule = new ProjectModule();
-			if (!UserLoginController.permissionboolean(req, "case_1")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHCASEADD)) {
 				json.put("status", "fail");
 				json.put("ms", "添加失败,权限不足,请联系管理员!");
 			} else {
@@ -499,7 +510,7 @@ public class ProjectCaseController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "case_2")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHCASEDEL)) {
 				json.put("status", "fail");
 				json.put("ms", "删除失败,权限不足,请联系管理员!");
 			} else {
@@ -577,7 +588,6 @@ public class ProjectCaseController {
 		int id = 0;
 		int projectid = Integer.valueOf(req.getParameter("projectid"));
 		String idstr = req.getParameter("id");
-		JSONObject json = new JSONObject();
 		JSONArray jsonarr = new JSONArray();
 		if (!StrLib.isEmpty(idstr)) {
 			id = Integer.valueOf(idstr);
@@ -589,7 +599,7 @@ public class ProjectCaseController {
 				modulejson.setName(projectmodule.getModulename());
 				boolean isParent = moduleservice.getModuleIsParent(projectmodule.getId());
 				modulejson.setisParent(isParent);
-				jsonarr.add(json.fromObject(modulejson));
+				jsonarr.add(JSONObject.fromObject(modulejson));
 			}
 		} else {
 			List<SectorProjects> prolist = QueueListener.qa_projlist;
@@ -605,7 +615,7 @@ public class ProjectCaseController {
 						modulejson.setisParent(false);
 					}
 
-					jsonarr.add(json.fromObject(modulejson));
+					jsonarr.add(JSONObject.fromObject(modulejson));
 				}
 			}
 		}

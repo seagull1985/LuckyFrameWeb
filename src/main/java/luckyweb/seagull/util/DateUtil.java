@@ -4,7 +4,15 @@ import java.sql.*;
 import java.text.*;
 import java.util.Calendar;
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 public class DateUtil {
 	
 	/**
@@ -92,7 +100,9 @@ public class DateUtil {
 	public static Date today() {
 		return new Date(System.currentTimeMillis());
 	}
-	//昨天
+	/**
+	 * 昨天
+	 */
 	public static Date yesterday() {
 		Calendar c = Calendar.getInstance();
 		int date = c.get(Calendar.DATE);
@@ -100,7 +110,9 @@ public class DateUtil {
 		c.set(Calendar.DATE,date);
 		return new Date(c.getTimeInMillis());
 	}
-	//前天
+	/**
+	 * 前天
+	 */
 	public static Date beforeYesterday() {
 		Calendar c = Calendar.getInstance();
 		int date = c.get(Calendar.DATE);
@@ -128,7 +140,7 @@ public class DateUtil {
 		return diff;
 	}
 	
-	/*
+	/**
 	 * 判断是否为当前月,返回真表示在最终历史库
 	 */
 	public static boolean isHistory(Date copitime)throws Exception{
@@ -138,21 +150,27 @@ public class DateUtil {
 		long currenttime = d.getTime();
 		long histime=copitime.getTime();
 		cal.setTimeInMillis(currenttime);
-		int f_year=cal.get(Calendar.YEAR);
-		int f_month=cal.get(Calendar.MONTH);
-		if(histime>currenttime)
+		int fYear=cal.get(Calendar.YEAR);
+		int fMonth=cal.get(Calendar.MONTH);
+		if(histime>currenttime){
 			throw new Exception("日期选择有误。");
+		}
 		cal.setTimeInMillis(histime);
-		int s_year=cal.get(Calendar.YEAR);
-		int s_month=cal.get(Calendar.MONTH);
-		if(f_year!=s_year){
+		int sYear=cal.get(Calendar.YEAR);
+		int sMonth=cal.get(Calendar.MONTH);
+		if(fYear!=sYear){
 			return true;
 		}
-		if(f_month!=s_month)
+		if(fMonth!=sMonth){
 			bol=true;
+		}
+
 		return bol;
 	}
-	//判断是否为当前日
+	
+	/**
+	 * 	判断是否为当前日
+	 */
 	public static boolean isBakDate(Date d) {
 		Date today = Date.valueOf(DateUtil.today().toString());
 		if (d.getTime() < today.getTime()) {
@@ -172,7 +190,9 @@ public class DateUtil {
 		}
 		return str;
 	}
-	/*根据传进来的日期字符串，获取上一个年月yyyyMM*/
+	/**
+	 * 根据传进来的日期字符串，获取上一个年月yyyyMM
+	 */
 	public static String prMonth(String d)throws Exception
 	{		
 		java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(d);
@@ -183,9 +203,9 @@ public class DateUtil {
 		c.set(Calendar.MONTH, mn);
 		return new SimpleDateFormat("yyyyMM").format(c.getTime());
 	}
-	/*
+	/**
 	 *  以当前时间按pattern指定的格式，格式化时间为字符串返回
-	 * */
+	 */
 	public static String getCurrentTimeCharPattern(String pattern)throws Exception{
 		return new SimpleDateFormat(pattern).format(new java.util.Date());
 	}
@@ -201,34 +221,13 @@ public class DateUtil {
 	public static final long diffHour(java.util.Date startdate,
 			java.util.Date enddate) {
 
-		long diff = (startdate.getTime() - enddate.getTime()) / (3600 * 1000l);
+		long diff = (startdate.getTime() - enddate.getTime()) / (3600 * 1000L);
 		return diff;
 
 	}
 	
 	
 	public static void main(String args[])throws Exception{
-		
-
-		
-		
-//	       BigDecimal b1 = new BigDecimal("14.145"); 
-//	       BigDecimal b2 = new BigDecimal(1); 
-//		   System.out.println(b1.divide(b2,2,BigDecimal.ROUND_HALF_UP));
-			  
-		   
-//		Date today = Date.valueOf(DateLib.today().toString());
-//		Calendar c = Calendar.getInstance();
-//		int date = c.get(Calendar.DATE);
-//		date=date-7;
-//		c.set(Calendar.DATE,date);
-//		System.out.println( new Date(c.getTimeInMillis()));
-//		
-//		int j=c.get(Calendar.DATE);
-//		j=j-45;
-//		c.set(Calendar.DATE,j);
-//		System.out.println( new Date(c.getTimeInMillis()));
-		//System.out.println(MD5Util.MD5Encode("20001001423011010111110yskjop120897technology2hdkf0sdfd"));
 		
 	}
 }

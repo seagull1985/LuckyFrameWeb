@@ -695,7 +695,8 @@ public class StringUtility {
 			match = true;
 			i++;
 		}
-		if (match || (preserveAllTokens && lastMatch)) {
+		boolean existed = match || (preserveAllTokens && lastMatch);
+		if (existed) {
 			list.add(str.substring(start, i));
 		}
 		return (String[]) list.toArray(new String[list.size()]);
@@ -903,7 +904,8 @@ public class StringUtility {
 				i++;
 			}
 		}
-		if (match || (preserveAllTokens && lastMatch)) {
+		boolean existed = match || (preserveAllTokens && lastMatch);
+		if (existed) {
 			list.add(str.substring(start, i));
 		}
 		return (String[]) list.toArray(new String[list.size()]);

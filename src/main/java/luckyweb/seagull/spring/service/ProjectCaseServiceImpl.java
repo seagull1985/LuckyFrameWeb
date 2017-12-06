@@ -6,9 +6,19 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.ProjectCaseDao;
 import luckyweb.seagull.spring.entity.ProjectCase;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Service("projectCaseService")
 public class ProjectCaseServiceImpl implements ProjectCaseService{
 	
@@ -47,7 +57,7 @@ public class ProjectCaseServiceImpl implements ProjectCaseService{
 
 	private String where(ProjectCase projectcase) {
 		String where = " where ";
-		if (projectcase.getProjectid()!=0&&projectcase.getProjectid()!=99) {
+		if (projectcase.getProjectid()!=0&&projectcase.getProjectid()!=PublicConst.STATUS99) {
 			where += " projectid =:projectid  and ";
 		}if (projectcase.getModuleid()!=0&&projectcase.getModuleidarr().length>0) {
 			where += " moduleid in (:moduleid)  and ";
@@ -60,7 +70,7 @@ public class ProjectCaseServiceImpl implements ProjectCaseService{
 		}if (null!=projectcase.getRemark()&&!"".equals(projectcase.getRemark())) {
 			where += " remark like :remark)  or ";
 		}
-		if (where.length() == 7) {
+		if (where.length() == PublicConst.WHERENUM) {
 			where = "";
 		} 
 		else{

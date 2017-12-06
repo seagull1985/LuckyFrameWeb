@@ -6,10 +6,19 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.PlanFlowCheckDao;
 import luckyweb.seagull.spring.entity.PlanFlowCheck;
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Service("planflowcheckService")
 public class PlanFlowCheckServiceImpl implements PlanFlowCheckService{
 	
@@ -58,7 +67,7 @@ public class PlanFlowCheckServiceImpl implements PlanFlowCheckService{
 		if (pfc.getStatus()!=0) {
 			where += " status=:status  and ";
 		}
-		if (where.length() == 7) {
+		if (where.length() == PublicConst.WHERENUM) {
 			where = "";
 		} 
 		else{

@@ -6,12 +6,22 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.ProjectVersionDao;
 import luckyweb.seagull.spring.dao.SectorProjectsDao;
 import luckyweb.seagull.spring.entity.ProjectVersion;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.util.StrLib;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Service("projectversionService")
 public class ProjectVersionServiceImpl implements ProjectsVersionService{
 	
@@ -37,22 +47,11 @@ public class ProjectVersionServiceImpl implements ProjectsVersionService{
 		
 	}
 
-	@Override
-	public void modifyState(ProjectVersion projectversion) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void delete(int id) throws Exception {
 		this.projectversiondao.delete(id);
 		
-	}
-
-	@Override
-	public List<ProjectVersion> list(ProjectVersion projectversion) throws Exception {
-		// TODO Auto-generated method stub
-		return this.projectversiondao.list(projectversion);
 	}
 
 	@Override
@@ -74,30 +73,18 @@ public class ProjectVersionServiceImpl implements ProjectsVersionService{
 	}
 
 	@Override
-	public boolean isExist(String name, String cmdType, String planPath)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public ProjectVersion load(int versionid) throws Exception {
 		// TODO Auto-generated method stub
 		return this.projectversiondao.load(versionid);
 	}
 
-	@Override
-	public ProjectVersion get(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	private String where(ProjectVersion pv) {
 		String where = " where ";
 /*		if (!StrLib.isEmpty(String.valueOf(ss.getSectorid()))) {
 			where += " sectorid=:sectorid  and ";
 		}*/
-		if (pv.getProjectid()!=0&&pv.getProjectid()!=99) {
+		if (pv.getProjectid()!=0&&pv.getProjectid()!=PublicConst.STATUS99) {
 			where += " projectid=:projectid  and ";
 		}
 		if (!StrLib.isEmpty(pv.getStartactually_launchdate())) {
@@ -113,7 +100,7 @@ public class ProjectVersionServiceImpl implements ProjectsVersionService{
 			where += " imprint like :imprint)  or ";
 		}
 		
-		if (where.length() == 7) {
+		if (where.length() == PublicConst.WHERENUM) {
 			where = "";
 		} 
 		else{
@@ -158,6 +145,7 @@ public class ProjectVersionServiceImpl implements ProjectsVersionService{
 				+ "from QA_PROJECTVERSION t where t.versiontype = 1 and t.actually_launchdate >= '"+startdate+"' and t.actually_launchdate<='"+enddate+"' group by t.projectid  order by t.projectid ");	
 	}
 	
+	@Override
 	public List findByPagereport(int offset, int pageSize,String startdate,String enddate) throws Exception {
 		// TODO Auto-generated method stub
 		String hql = "select projectid,sum(t.plan_demand),sum(t.actually_demand),"

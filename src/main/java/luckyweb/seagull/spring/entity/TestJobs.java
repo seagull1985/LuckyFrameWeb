@@ -5,6 +5,15 @@ import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Entity
 @Table(name = "TestJobs")
 public class TestJobs implements java.io.Serializable {
@@ -25,27 +34,72 @@ public class TestJobs implements java.io.Serializable {
 	private String planproj;
 	private String state;
 	private String state_str;
-	private int threadCount;// 线程数
-	private int time;// 自定义时间
+	/**
+	 * 线程数
+	 */
+	private int threadCount;
+	/**
+	 * 自定义时间
+	 */
+	private int time;
 	private String timeType;
-
-	private String isSendMail;// 是否发送邮件
-	private String emailer;// 收件人
+	/**
+	 * 是否发送邮件
+	 */
+	private String isSendMail;
+	/**
+	 * 收件人
+	 */
+	private String emailer;
 	private String testlinkname;
-
-	private String isbuilding;// 是否构建
-	private String buildname;// 构建在JENKINS中的名称
-
-	private String isrestart;// 是否重
-	private String restartcomm;// 构建在JENKINS中的名称
-	private int extype; // 0:接口自动化 1:WebDriver自动化
-	private Integer browsertype; // 0:ie 1:火狐 2:谷歌 3：Edge
-	private Integer timeout; // 任务超时时间 单位：分钟
-	private String clientip; // 客户端IP
-	private String clientpath; // 客户端测试驱动桩路径
-	private Integer projecttype; // 项目类型 0testlink 1系统内项目
-	private Integer projectid; // 系统内项目ID
-	private Integer planid; // 系统内项目关联计划ID
+	/**
+	 * 是否构建
+	 */
+	private String isbuilding;
+	/**
+	 * 构建在JENKINS中的名称
+	 */
+	private String buildname;
+	/**
+	 * 是否重启
+	 */
+	private String isrestart;
+	/**
+	 * 构建在JENKINS中的名称
+	 */
+	private String restartcomm;
+	/**
+	 * 0:接口自动化 1:WebDriver自动化
+	 */
+	private int extype;
+	/**
+	 * 0:ie 1:火狐 2:谷歌 3：Edge
+	 */
+	private Integer browsertype; 
+	/**
+	 * 任务超时时间 单位：分钟
+	 */
+	private Integer timeout;
+	/**
+	 * 客户端IP
+	 */
+	private String clientip; 
+	/**
+	 * 客户端测试驱动桩路径
+	 */
+	private String clientpath;
+	/**
+	 * 项目类型 0testlink 1系统内项目
+	 */
+	private Integer projecttype; 
+	/**
+	 * 系统内项目ID
+	 */
+	private Integer projectid; 
+	/**
+	 * 系统内项目关联计划ID
+	 */
+	private Integer planid;
 	private String taskType;
 	private String startTimestr;
 	private String endTimestr;
@@ -217,7 +271,6 @@ public class TestJobs implements java.io.Serializable {
 		this.id = id;
 	}
 
-	// @NotEmpty(message="任务名称不能为空")
 	public String getTaskName() {
 		return taskName;
 	}
@@ -226,8 +279,9 @@ public class TestJobs implements java.io.Serializable {
 		this.taskName = taskName;
 	}
 
-	// @NotEmpty(message="开始日期的时间格式应为：yyyy-MM-dd")
-	// @DateTimeFormat(pattern="yyyy-MM-dd")
+	/**
+	 * @param"开始日期的时间格式应为：yyyy-MM-dd"
+	 */
 	public String getStartDate() {
 		return startDate;
 	}
@@ -236,8 +290,9 @@ public class TestJobs implements java.io.Serializable {
 		this.startDate = startDate;
 	}
 
-	// @NotEmpty(message="开始时间的时间格式应为：HH:mm:ss")
-	// @DateTimeFormat(pattern="HH:mm:ss")
+	/**
+	 * @param"开始时间的时间格式应为：HH:mm:ss"
+	 */
 	public String getStartTime() {
 		return startTime;
 	}

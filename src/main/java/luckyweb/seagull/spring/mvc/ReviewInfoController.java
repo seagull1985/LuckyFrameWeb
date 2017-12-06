@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.Review;
 import luckyweb.seagull.spring.entity.ReviewInfo;
@@ -28,6 +29,15 @@ import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/reviewinfo")
 public class ReviewInfoController {
@@ -88,13 +98,13 @@ public class ReviewInfoController {
 		List<ReviewInfo> reviewlist = reviewinfoservice.findByPage(reviewinfo, offset, limit);
 
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(reviewlist);
+		String recordJson = StrLib.listToJson(reviewlist);
 		// 得到总记录数
 		int total = reviewinfoservice.findRows(reviewinfo);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 	
@@ -119,7 +129,7 @@ public class ReviewInfoController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 
-			if(!UserLoginController.permissionboolean(req, "revinfo_1")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHPVERSIONINFOADD)){
 				model.addAttribute("reviewinfo", new ReviewInfo());
 				model.addAttribute("url", "/review/load.do");
 				model.addAttribute("message", "当前用户无权限添加评审信息，请联系管理员！");
@@ -128,7 +138,9 @@ public class ReviewInfoController {
 			
 			String retVal = "/jsp/review/reviewinfo_add";
 			Review review = null;
-			if (req.getMethod().equals("POST"))
+			String reviewidstr="reviewid";
+			String reviewstatusover="已修复";
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 				if (br.hasErrors())
 				{
@@ -151,7 +163,7 @@ public class ReviewInfoController {
 				}
 				
 				int reviewid = 0;
-				if(req.getParameter("reviewid")==null||Integer.valueOf(req.getParameter("reviewid"))==0){
+				if(req.getParameter(reviewidstr)==null||Integer.valueOf(req.getParameter(reviewidstr))==0){
 					review = new Review();
 					SectorProjects p = new SectorProjects();
 					p.setProjectid(reviewinfo.getProjectid());
@@ -161,7 +173,7 @@ public class ReviewInfoController {
 					review.setReview_type(reviewinfo.getReview_type());
 					review.setReview_date(reviewinfo.getReview_date());
 					review.setBug_num(1);
-					if("已修复".equals(reviewinfo.getStatus())){
+					if(reviewstatusover.equals(reviewinfo.getStatus())){
 						review.setRepair_num(review.getRepair_num()+1);
 					}else{
 						review.setRepair_num(0);
@@ -178,7 +190,7 @@ public class ReviewInfoController {
 					reviewid = review.getId();
 
 					review.setBug_num(review.getBug_num()+1);
-					if("已修复".equals(reviewinfo.getStatus())){
+					if(reviewstatusover.equals(reviewinfo.getStatus())){
 						review.setRepair_num(review.getRepair_num()+1);
 					}
 					review.setConfirm_date(reviewinfo.getConfirm_date());
@@ -205,7 +217,7 @@ public class ReviewInfoController {
 
 			}else{
 
-				if(req.getParameter("reviewid")!=null&&Integer.valueOf(req.getParameter("reviewid"))!=0){
+				if(req.getParameter(reviewidstr)!=null&&Integer.valueOf(req.getParameter(reviewidstr))!=0){
 					review = reviewservice.load(Integer.valueOf(req.getParameter("reviewid")));
 					
 					reviewinfo.setProjectid(review.getSectorProjects().getProjectid());
@@ -250,7 +262,7 @@ public class ReviewInfoController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "revinfo_2")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHPVERSIONINFODEL)) {
 				json.put("status", "fail");
 				json.put("ms", "删除失败,权限不足,请联系管理员!");
 			} else {
@@ -339,7 +351,7 @@ public class ReviewInfoController {
 			ReviewInfo reinfo = reviewinfoservice.load(Integer.valueOf(req.getParameter("id")));
 			Review review = reviewservice.load(reinfo.getReview_id());
 			
-			if(!UserLoginController.permissionboolean(req, "revinfo_3")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHPVERSIONINFOMOD)){
 				model.addAttribute("reviewinfo", new ReviewInfo());
 				model.addAttribute("url",  "/reviewinfo/load.do?reviewid="+reinfo.getReview_id());
 				model.addAttribute("message", "当前用户无权限修改评审信息，请联系管理员！");
@@ -354,14 +366,13 @@ public class ReviewInfoController {
 			}
 			String retVal = "/jsp/review/reviewinfo_update";
 	
-			if (req.getMethod().equals("POST"))
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 				if (br.hasErrors()) {
 					return retVal;
 				}
-				String message = "";
-
-				if ("已修复".equals(reviewinfo.getStatus())) {
+				String reviewover = "已修复";
+				if (reviewover.equals(reviewinfo.getStatus())) {
 					review.setRepair_num(review.getRepair_num() + 1);
 				}
 				review.setConfirm_date(reviewinfo.getConfirm_date());

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.Barchart4;
 import luckyweb.seagull.spring.entity.FlowCheck;
@@ -38,6 +39,15 @@ import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/flowCheck")
 public class FlowCheckController {
@@ -111,7 +121,7 @@ public class FlowCheckController {
 			flowcheck.setVersionnum(search);
 		}
 		// 得到客户端传递的查询参数
-		if (!StrLib.isEmpty(projectid)&&!"99".equals(projectid)) {
+		if (!StrLib.isEmpty(projectid)&&!PublicConst.STATUSSTR99.equals(projectid)) {
 			flowcheck.setProjectid(Integer.valueOf(projectid));
 		}
 		
@@ -148,13 +158,13 @@ public class FlowCheckController {
 			jsonArr.add(jsonobj);
 		}
 		// 转换成json字符串
-		String RecordJson = jsonArr.toString();
+		String recordJson = jsonArr.toString();
 		// 得到总记录数
 		int total = flowcheckservice.findRows(flowcheck);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 
@@ -245,13 +255,13 @@ public class FlowCheckController {
 			fclist.set(i, fc);
 		}
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(fclist);
+		String recordJson = StrLib.listToJson(fclist);
 		// 得到总记录数
 		int total = flowcheckservice.findRowsTable(flowcheck);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 	
@@ -274,7 +284,7 @@ public class FlowCheckController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "fc_1")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHFCADD)) {
 				json.put("status", "fail");
 				json.put("ms", "添加失败,权限不足,请联系管理员!");
 			} else {
@@ -286,10 +296,12 @@ public class FlowCheckController {
 						json.put("status", "fail");
 						json.put("ms", "您没有权限为当前项目添加流程检查项！");
 					}else{
-						String regEx_space = "\t|\r|\n";// 定义空格回车换行符
-						Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
-						Matcher m_space = p_space.matcher(flowcheck.getRemark());
-						flowcheck.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
+						// 定义空格回车换行符
+						String regExSpace = "\t|\r|\n";
+						Pattern pSpace = Pattern.compile(regExSpace, Pattern.CASE_INSENSITIVE);
+						Matcher mSpace = pSpace.matcher(flowcheck.getRemark());
+						// 过滤空格回车标签
+						flowcheck.setRemark(mSpace.replaceAll("")); 
 
 						SectorProjects p = new SectorProjects();
 						p.setProjectid(flowcheck.getProjectid());
@@ -336,12 +348,12 @@ public class FlowCheckController {
 		String idstr = req.getParameter("idstr");
 
 		try {
-			String temp[]=idstr.split("\\|");
+			String[] temp=idstr.split("\\|");
 			
-		    String temp_datestr="";   
+		    String tempDateStr="";   
 		    Date dt = new Date();   
 		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");   
-		    temp_datestr=sdf.format(dt);
+		    tempDateStr=sdf.format(dt);
 			for (int i = 0; i < temp.length; i++) {
 				FlowCheck flowcheck = new FlowCheck();
 
@@ -351,7 +363,7 @@ public class FlowCheckController {
 				flowcheck.setPhasenode(temp[i]);
 				flowcheck.setCheckentry(temp[i]);
 				flowcheck.setCheckresult("未检查");
-				flowcheck.setCheckdate(temp_datestr);
+				flowcheck.setCheckdate(tempDateStr);
 				flowcheck.setCheckdescriptions("");
 				flowcheck.setStateupdate("");
 				flowcheck.setUpdatedate("");
@@ -397,7 +409,7 @@ public class FlowCheckController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 
-			if(!UserLoginController.permissionboolean(req, "fc_1")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHFCADD)){
 				model.addAttribute("flowcheck", new FlowCheck());
 				model.addAttribute("url", "load.do");
 				model.addAttribute("message", "当前用户无权限添加项目检查信息，请联系管理员！");
@@ -405,7 +417,7 @@ public class FlowCheckController {
 			}
 			
 			String retVal = "/jsp/flowcheck/flowcheck_add";
-			if (req.getMethod().equals("POST"))
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 				if (br.hasErrors())
 				{
@@ -415,8 +427,10 @@ public class FlowCheckController {
 			        String errorMessage; 
 			        for (int i = 0; i < err.size(); i++) { 
 			            fe=err.get(i); 
-			            field=fe.getField();//得到那个字段验证出错 
-			            errorMessage=fe.getDefaultMessage();//得到错误消息 
+			          //得到那个字段验证出错 
+			            field=fe.getField();
+			          //得到错误消息 
+			            errorMessage=fe.getDefaultMessage();
 			            System.out.println("错误字段消息："+field +" : "+errorMessage); 
 			        } 
 			  // 打印结果 
@@ -436,25 +450,25 @@ public class FlowCheckController {
 					}
 				}
 				
-				if(flowcheck.getProjectphase().equals("0")){
+				if(PublicConst.STATUSSTR0.equals(flowcheck.getProjectphase())){
 					message = "请选择检查项目阶段!";
 					model.addAttribute("message", message);
 					return retVal;
 				}
 				
-				if(flowcheck.getPhasenode().equals("0")){
+				if(PublicConst.STATUSSTR0.equals(flowcheck.getPhasenode())){
 					message = "请选择检查阶段节点!";
 					model.addAttribute("message", message);
 					return retVal;
 				}
 				
-				if(flowcheck.getCheckentry().equals("0")){
+				if(PublicConst.STATUSSTR0.equals(flowcheck.getCheckentry())){
 					message = "请选择检查内容!";
 					model.addAttribute("message", message);
 					return retVal;
 				}
 				
-				if(flowcheck.getCheckdate().equals("")){
+				if("".equals(flowcheck.getCheckdate())){
 					message = "请选择检查日期!";
 					model.addAttribute("message", message);
 					return retVal;
@@ -529,7 +543,7 @@ public class FlowCheckController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 			
-			if(!UserLoginController.permissionboolean(req, "fc_3")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHFCMOD)){
 				model.addAttribute("flowcheck", new FlowCheck());
 				model.addAttribute("url", "/flowCheck/projectchecklist.do?projectid="+fc.getSectorProjects().getProjectid()+"&checkid="+fc.getCheckid()+"&version="+fc.getVersionnum());
 				model.addAttribute("message", "当前用户无权限修改项目检查信息，请联系管理员！");
@@ -537,7 +551,7 @@ public class FlowCheckController {
 			}
 			
 			String retVal = "/jsp/flowcheck/flowcheck_update";
-			if (req.getMethod().equals("POST"))
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 				if (br.hasErrors())
 				{
@@ -547,8 +561,10 @@ public class FlowCheckController {
 			        String errorMessage; 
 			        for (int i = 0; i < err.size(); i++) { 
 			            fe=err.get(i); 
-			            field=fe.getField();//得到那个字段验证出错 
-			            errorMessage=fe.getDefaultMessage();//得到错误消息 
+			          //得到那个字段验证出错 
+			            field=fe.getField();
+			          //得到错误消息 
+			            errorMessage=fe.getDefaultMessage();
 			            System.out.println("错误字段消息："+field +" : "+errorMessage); 
 			        } 
 			  // 打印结果 
@@ -562,31 +578,31 @@ public class FlowCheckController {
 					return retVal;
 				}
 				
-				if(flowcheck.getProjectphase().equals("0")){
+				if(PublicConst.STATUSSTR0.equals(flowcheck.getProjectphase())){
 					message = "请选择检查项目阶段!";
 					model.addAttribute("message", message);
 					return retVal;
 				}
 				
-				if(flowcheck.getPhasenode().equals("0")){
+				if(PublicConst.STATUSSTR0.equals(flowcheck.getPhasenode())){
 					message = "请选择检查阶段节点!";
 					model.addAttribute("message", message);
 					return retVal;
 				}
 				
-				if(flowcheck.getCheckentry().equals("0")){
+				if(PublicConst.STATUSSTR0.equals(flowcheck.getCheckentry())){
 					message = "请选择检查内容!";
 					model.addAttribute("message", message);
 					return retVal;
 				}
 				
-				if(flowcheck.getCheckdate().equals("")){
+				if("".equals(flowcheck.getCheckdate())){
 					message = "请选择检查日期!";
 					model.addAttribute("message", message);
 					return retVal;
 				}	
 				
-				if(!flowcheck.getStateupdate().equals("0")&&flowcheck.getUpdatedate().equals("")){
+				if(!PublicConst.STATUSSTR0.equals(flowcheck.getStateupdate())&&"".equals(flowcheck.getUpdatedate())){
 					message = "如果你已经更新二次检查结果，请选择更新二次检查日期";
 					model.addAttribute("message", message);
 					return retVal;
@@ -601,7 +617,7 @@ public class FlowCheckController {
 				flowcheck.setCheckdate(flowcheck.getCheckdate());
 				flowcheck.setCheckdescriptions(flowcheck.getCheckdescriptions());
 				
-				if(!flowcheck.getStateupdate().equals("0")&&!flowcheck.getUpdatedate().equals("")){
+				if(!PublicConst.STATUSSTR0.equals(flowcheck.getStateupdate())&&!"".equals(flowcheck.getUpdatedate())){
 					flowcheck.setStateupdate(flowcheck.getStateupdate());
 					flowcheck.setUpdatedate(flowcheck.getUpdatedate());
 				}else{
@@ -684,7 +700,7 @@ public class FlowCheckController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "fc_2")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHFCDEL)) {
 				json.put("status", "fail");
 				json.put("ms", "删除检查记录失败,权限不足,请联系管理员!");
 			} else {
@@ -781,7 +797,7 @@ public class FlowCheckController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 
-			if (!UserLoginController.permissionboolean(req, "fc_3")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHFCMOD)) {
 				json.put("status", "fail");
 				json.put("ms", "编辑失败,权限不足,请联系管理员!");
 			} else {
@@ -893,9 +909,9 @@ public class FlowCheckController {
         datamapList1.add(innerliMap);
         lineMap.put("data", datamapList1);*/
 		
-		Map itemStyleMap = new HashMap<String, Object>();
-		Map normalMap = new HashMap<String, Object>();
-		Map labelMap = new HashMap<String, Object>();
+		Map itemStyleMap = new HashMap<String, Object>(0);
+		Map normalMap = new HashMap<String, Object>(0);
+		Map labelMap = new HashMap<String, Object>(0);
 		labelMap.put("show", true);
 		labelMap.put("position", "insideRight");
 		normalMap.put("label", labelMap);
@@ -934,10 +950,10 @@ public class FlowCheckController {
 		if(ls.size()!=0){
 			String startdatestr = checkstartdate+"至";
 			String enddatestr = checkenddate;
-			if(checkstartdate.equals("")||checkstartdate==null||checkstartdate.equals("0")){
+			if(checkstartdate.equals("")||checkstartdate==null||PublicConst.STATUSSTR0.equals(checkstartdate)){
 				startdatestr = "初始数据日期至";
 			}
-			if(checkenddate.equals("")||checkenddate==null||checkenddate.equals("9")){
+			if(checkenddate.equals("")||checkenddate==null||PublicConst.STATUSSTR0.equals(checkenddate)){
 				enddatestr = "今天";
 			}
 			title = "所有项目检查情况汇总("+startdatestr+enddatestr+")";

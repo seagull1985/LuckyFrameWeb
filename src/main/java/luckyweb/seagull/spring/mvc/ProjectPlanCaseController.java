@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectModule;
 import luckyweb.seagull.spring.entity.ProjectPlan;
@@ -32,6 +33,15 @@ import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/projectPlanCase")
 public class ProjectPlanCaseController {
@@ -74,7 +84,7 @@ public class ProjectPlanCaseController {
 	public String casesload(HttpServletRequest req, Model model) throws Exception {
 
 		try {
-			if (!UserLoginController.permissionboolean(req, "proplan_3")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHTESTPLANMOD)) {
 				model.addAttribute("url", "/projectPlan/load.do");
 				model.addAttribute("message", "当前用户无权限管理计划用例，请联系管理员！");
 				return "success";
@@ -129,7 +139,7 @@ public class ProjectPlanCaseController {
 			planid = Integer.valueOf(planidstr);
 		}
 		ProjectCase projectcase = new ProjectCase();	
-		if ("0".equals(onlypcase)) {		
+		if (PublicConst.STATUSSTR0.equals(onlypcase)) {		
 			// 得到客户端传递的查询参数
 			if (!StrLib.isEmpty(search)) {
 				projectcase.setSign(search);
@@ -138,7 +148,7 @@ public class ProjectPlanCaseController {
 				projectcase.setRemark(search);
 			}
 			// 得到客户端传递的查询参数
-			if (!StrLib.isEmpty(projectid) && !"99".equals(projectid)) {
+			if (!StrLib.isEmpty(projectid) && !PublicConst.STATUSSTR99.equals(projectid)) {
 				projectcase.setProjectid(Integer.valueOf(projectid));
 			}
 
@@ -202,12 +212,12 @@ public class ProjectPlanCaseController {
 		
 		viewToSaveCase = projectcases;
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(projectcases);
+		String recordJson = StrLib.listToJson(projectcases);
 
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 
@@ -231,7 +241,7 @@ public class ProjectPlanCaseController {
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
 			String planid = req.getParameter("planid");
-			if (!UserLoginController.permissionboolean(req, "proplan_3")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHTESTPLANMOD)) {
 				json.put("status", "fail");
 				json.put("ms", "编辑计划用例失败,权限不足,请联系管理员!");
 			} else {
@@ -251,7 +261,8 @@ public class ProjectPlanCaseController {
 				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
 				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("caseids"));
 				List<ProjectCase> caselist=viewToSaveCase;
-				for (int i = 0; i < jsonarr.size(); i++) { // 添加列表中多的用例
+				// 添加列表中多的用例
+				for (int i = 0; i < jsonarr.size(); i++) { 
 					int caseid = Integer.valueOf(jsonarr.get(i).toString());
 					for (ProjectCase  viewcase:caselist) {
 						if (viewcase.getId() == caseid) {
@@ -270,8 +281,8 @@ public class ProjectPlanCaseController {
 						}
 					}
 				}
-
-				for (int k = 0; k < caselist.size(); k++) { // 删除原有列表中多的用例
+				// 删除原有列表中多的用例
+				for (int k = 0; k < caselist.size(); k++) { 
 					for(ProjectPlanCase ppc:plancases){
 						if(ppc.getCaseid()==caselist.get(k).getId()){
 							projectplancaseservice.delete(ppc);
@@ -279,9 +290,9 @@ public class ProjectPlanCaseController {
 					}
 				}
 
-				if (null != req.getSession().getAttribute("usercode")
-						&& null != req.getSession().getAttribute("username")) {
-					String usercode = req.getSession().getAttribute("usercode").toString();
+				if (null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+						&& null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+					String usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 					pc.setOperationer(usercode);
 				}
 				Date currentTime = new Date();
@@ -312,7 +323,7 @@ public class ProjectPlanCaseController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "proplan_3")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHTESTPLANMOD)) {
 				json.put("status", "fail");
 				json.put("ms", "编辑计划用例失败,权限不足,请联系管理员!");
 			} else {
@@ -361,10 +372,10 @@ public class ProjectPlanCaseController {
 			}
 
 			// 转换成json字符串
-			String RecordJson = StrLib.listToJson(projectcases);
+			String recordJson = StrLib.listToJson(projectcases);
 
 			// 需要返回的数据有总记录数和行数据
-			json.put("cases", RecordJson);
+			json.put("cases", recordJson);
 			pw.print(json.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -393,10 +404,10 @@ public class ProjectPlanCaseController {
 			}
 
 			// 转换成json字符串
-			String RecordJson = StrLib.listToJson(projectcases);
+			String recordJson = StrLib.listToJson(projectcases);
 
 			// 需要返回的数据有总记录数和行数据
-			json.put("cases", RecordJson);
+			json.put("cases", recordJson);
 			pw.print(json.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -8,7 +8,15 @@ import org.quartz.SchedulerException;
 
 import luckyweb.seagull.comm.QueueListener;
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 public class QuartzManager {
 	
 	//private static SchedulerFactory gSchedulerFactory = new StdSchedulerFactory();
@@ -32,11 +40,13 @@ public class QuartzManager {
 	@SuppressWarnings("unchecked") 
 	public static void addJob(String jobName, Class cls, String time) {
 		try {
-			JobDetail jobDetail = new JobDetail(jobName, QueueListener.JOB_GROUP_NAME, cls);// 任务名，任务组，任务执行类
+			// 任务名，任务组，任务执行类
+			JobDetail jobDetail = new JobDetail(jobName, QueueListener.JOB_GROUP_NAME, cls);
 			//System.out.println("jobDetail 's  Name :"+jobDetail.getName());
-			// 触发器
-			CronTrigger trigger = new CronTrigger(jobDetail.getName(), QueueListener.TRIGGER_GROUP_NAME);// 触发器名,触发器组
-			trigger.setCronExpression(time);// 触发器时间设定
+			// 触发器名,触发器组
+			CronTrigger trigger = new CronTrigger(jobDetail.getName(), QueueListener.TRIGGER_GROUP_NAME);
+			// 触发器时间设定
+			trigger.setCronExpression(time);
 			QueueListener.sched.scheduleJob(jobDetail, trigger);
 			// 启动
 			if (!QueueListener.sched.isShutdown()) {
@@ -74,10 +84,12 @@ public class QuartzManager {
 			String time) throws SchedulerException {
 	//	QueueListener.sched=QueueListener.gSchedulerFactory.getScheduler();
 		try {
-			JobDetail jobDetail = new JobDetail(jobName, jobGroupName, jobClass);// 任务名，任务组，任务执行类
-			// 触发器
-			CronTrigger trigger = new CronTrigger(triggerName, triggerGroupName);// 触发器名,触发器组
-			trigger.setCronExpression(time);// 触发器时间设定
+			// 任务名，任务组，任务执行类
+			JobDetail jobDetail = new JobDetail(jobName, jobGroupName, jobClass);
+			// 触发器名,触发器组
+			CronTrigger trigger = new CronTrigger(triggerName, triggerGroupName);
+			// 触发器时间设定
+			trigger.setCronExpression(time);
 			QueueListener.sched.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -155,9 +167,12 @@ public class QuartzManager {
 	public static void removeJob(String jobName) {
 		try {
 			QueueListener.sched = QueueListener.gSchedulerFactory.getScheduler();
-			QueueListener.sched.pauseTrigger(jobName, QueueListener.TRIGGER_GROUP_NAME);// 停止触发器
-			QueueListener.sched.unscheduleJob(jobName, QueueListener.TRIGGER_GROUP_NAME);// 移除触发器
-			QueueListener.sched.deleteJob(jobName, QueueListener.TRIGGER_GROUP_NAME);// 删除任务
+			// 停止触发器
+			QueueListener.sched.pauseTrigger(jobName, QueueListener.TRIGGER_GROUP_NAME);
+			// 移除触发器
+			QueueListener.sched.unscheduleJob(jobName, QueueListener.TRIGGER_GROUP_NAME);
+			// 删除任务
+			QueueListener.sched.deleteJob(jobName, QueueListener.TRIGGER_GROUP_NAME);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -177,9 +192,12 @@ public class QuartzManager {
 			String triggerName, String triggerGroupName) {
 		try {
 			Scheduler sched = QueueListener.gSchedulerFactory.getScheduler();
-			sched.pauseTrigger(triggerName, triggerGroupName);// 停止触发器
-			sched.unscheduleJob(triggerName, triggerGroupName);// 移除触发器
-			sched.deleteJob(jobName, jobGroupName);// 删除任务
+			// 停止触发器
+			sched.pauseTrigger(triggerName, triggerGroupName);
+			// 移除触发器
+			sched.unscheduleJob(triggerName, triggerGroupName);
+			// 删除任务
+			sched.deleteJob(jobName, jobGroupName);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

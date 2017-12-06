@@ -6,11 +6,21 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.SecondarySectorDao;
 import luckyweb.seagull.spring.entity.SecondarySector;
 import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.util.StrLib;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Service("secondarysectorService")
 public class SecondarySectorServiceImpl implements SecondarySectorService{
 	
@@ -26,27 +36,21 @@ public class SecondarySectorServiceImpl implements SecondarySectorService{
 	}
 
 	@Override
-	public int add(SecondarySector Sector) throws Exception {
+	public int add(SecondarySector sector) throws Exception {
 		// TODO Auto-generated method stub
-		return this.secondarysectordao.add(Sector);
+		return this.secondarysectordao.add(sector);
 	}
 
 	@Override
-	public void modify(SecondarySector Sector) throws Exception {
-		this.secondarysectordao.modify(Sector);
+	public void modify(SecondarySector sector) throws Exception {
+		this.secondarysectordao.modify(sector);
 		
 	}
 
 	@Override
-	public void modifyState(SecondarySector Sector) throws Exception {
+	public void delete(SecondarySector sector) throws Exception {
 		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void delete(SecondarySector Sector) throws Exception {
-		// TODO Auto-generated method stub
-		this.secondarysectordao.delete(Sector);
+		this.secondarysectordao.delete(sector);
 	}
 
 	@Override
@@ -59,13 +63,6 @@ public class SecondarySectorServiceImpl implements SecondarySectorService{
 	public List<SecondarySector> listall() throws Exception {
 		// TODO Auto-generated method stub
 		return this.secondarysectordao.list();
-	}
-
-	@Override
-	public boolean isExist(String name, String cmdType, String planPath)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -87,7 +84,7 @@ public class SecondarySectorServiceImpl implements SecondarySectorService{
 		}
 		
 		
-		if (where.length() == 7) {
+		if (where.length() == PublicConst.WHERENUM) {
 			where = "";
 		} 
 		else{
@@ -107,9 +104,9 @@ public class SecondarySectorServiceImpl implements SecondarySectorService{
 	}
 
 	@Override
-	public int findRows(SecondarySector Sector) {
-		String hql="select count(*) from SecondarySector "+where(Sector);
-		return secondarysectordao.findRows(Sector,hql);
+	public int findRows(SecondarySector sector) {
+		String hql="select count(*) from SecondarySector "+where(sector);
+		return secondarysectordao.findRows(sector,hql);
 	}
 
 	@Override

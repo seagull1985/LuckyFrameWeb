@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
@@ -34,7 +35,15 @@ import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/projectprotocolTemplate")
 public class ProjectProtocolTemplateController {
@@ -65,9 +74,9 @@ public class ProjectProtocolTemplateController {
 	public String load(HttpServletRequest req, Model model) throws Exception {
 		try {
 			int projectid = 99;
-			if (null != req.getSession().getAttribute("usercode")
-					&& null != req.getSession().getAttribute("username")) {
-				String usercode = req.getSession().getAttribute("usercode").toString();
+			if (null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+					&& null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+				String usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 				UserInfo userinfo = userinfoservice.getUseinfo(usercode);
 				projectid = userinfo.getProjectid();
 			}
@@ -117,24 +126,24 @@ public class ProjectProtocolTemplateController {
 		List<ProjectProtocolTemplate> ptlist = ptemplateservice.findByPage(ppt, offset, limit);
 		List<SectorProjects> prolist = QueueListener.qa_projlist;
 		for (int i = 0; i < ptlist.size(); i++) {
-			ProjectProtocolTemplate Template = ptlist.get(i);
+			ProjectProtocolTemplate template = ptlist.get(i);
 			for (SectorProjects projectlist : prolist) {
-				if (Template.getProjectid() == projectlist.getProjectid()) {
-					Template.setProjectname(projectlist.getProjectname());
-					ptlist.set(i, Template);
+				if (template.getProjectid() == projectlist.getProjectid()) {
+					template.setProjectname(projectlist.getProjectname());
+					ptlist.set(i, template);
 					break;
 				}
 			}
 
 		}
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(ptlist);
+		String recordJson = StrLib.listToJson(ptlist);
 		// 得到总记录数
 		int total = ptemplateservice.findRows(ppt);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 	
@@ -157,7 +166,7 @@ public class ProjectProtocolTemplateController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "ptct_1")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHPPTEMPLATEADD)) {
 				json.put("status", "fail");
 				json.put("ms", "增加协议模板失败,权限不足,请联系管理员!");
 			} else {
@@ -171,16 +180,17 @@ public class ProjectProtocolTemplateController {
 						json.put("ms", "增加协议模板失败,项目权限不足,请联系管理员!");
 					}
 				}else{
-					if (null != req.getSession().getAttribute("usercode")
-							&& null != req.getSession().getAttribute("username")) {
-						String usercode = req.getSession().getAttribute("usercode").toString();
+					if (null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+							&& null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+						String usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 						ppt.setOperationer(usercode);
 					}
-
-					String regEx_space = "\t|\r|\n";// 定义空格回车换行符
-					Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
-					Matcher m_space = p_space.matcher(ppt.getRemark());
-					ppt.setRemark(m_space.replaceAll("")); // 过滤空格回车标签
+					// 定义空格回车换行符
+					String regExSpace = "\t|\r|\n";
+					Pattern pSpace = Pattern.compile(regExSpace, Pattern.CASE_INSENSITIVE);
+					Matcher mSpace = pSpace.matcher(ppt.getRemark());
+					// 过滤空格回车标签
+					ppt.setRemark(mSpace.replaceAll("")); 
 
 					Date currentTime = new Date();
 					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -224,7 +234,7 @@ public class ProjectProtocolTemplateController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "ptct_3")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHPPTEMPLATEMOD)) {
 				json.put("status", "fail");
 				json.put("ms", "编辑模板失败,权限不足,请联系管理员!");
 			} else {
@@ -232,9 +242,9 @@ public class ProjectProtocolTemplateController {
 					json.put("status", "fail");
 					json.put("ms", "编辑模板失败,项目权限不足,请联系管理员!");
 				}else{
-					if (null != req.getSession().getAttribute("usercode")
-							&& null != req.getSession().getAttribute("username")) {
-						String usercode = req.getSession().getAttribute("usercode").toString();
+					if (null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+							&& null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+						String usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 						ppt.setOperationer(usercode);
 					}
 					Date currentTime = new Date();
@@ -277,7 +287,7 @@ public class ProjectProtocolTemplateController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "ptct_2")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHPPTEMPLATEDEL)) {
 				json.put("status", "fail");
 				json.put("ms", "删除模板失败,权限不足,请联系管理员!");
 			} else {
@@ -358,8 +368,8 @@ public class ProjectProtocolTemplateController {
                 jo.put("operationer", obppt.getOperationer());
                 jsonarr.add(jo);
 			}
-			String RecordJson = jsonarr.toString();
-			String str = "{\"message\": \"\",\"value\": "+RecordJson+",\"code\": 200,\"redirect\": \"\" }";
+			String recordJson = jsonarr.toString();
+			String str = "{\"message\": \"\",\"value\": "+recordJson+",\"code\": 200,\"redirect\": \"\" }";
 					
 			json = JSONObject.fromObject(str);
 			pw.print(json.toString());
@@ -397,8 +407,8 @@ public class ProjectProtocolTemplateController {
                 jo.put("description", obparam[1]);
                 jsonarr.add(jo);
 			}
-			String RecordJson = jsonarr.toString();
-			String str = "{\"message\": \"\",\"value\": "+RecordJson+",\"code\": 200,\"redirect\": \"\" }";
+			String recordJson = jsonarr.toString();
+			String str = "{\"message\": \"\",\"value\": "+recordJson+",\"code\": 200,\"redirect\": \"\" }";
 					
 			json = JSONObject.fromObject(str);
 			pw.print(json.toString());

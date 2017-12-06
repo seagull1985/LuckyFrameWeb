@@ -14,6 +14,15 @@ import java.util.StringTokenizer;
 
 import net.sf.json.JSONArray;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 public class StrLib {
 	 private static final byte SPACE = 0x20, ZERO = 0x30;
 	 public static final String CHARSET = "ISO-8859-1";
@@ -21,14 +30,17 @@ public class StrLib {
 	
 	private static StringTokenizer sto;
 	private static StringBuffer buf;
-	private static SimpleDateFormat format;
-	public static String format(String str) {
+	private SimpleDateFormat format;
+	
+	public String format(String str) {
 		return (str == null ? "" : str);
 	}
 
 
 	public static String formatHtml(String str) {
-		if (str == null) return "";
+		if (str == null){
+			return "";
+		}
 		str = str.replaceAll("<","&lt;");
 		str = str.replaceAll(">","&gt;");
 		str = str.replaceAll("  ","&nbsp;&nbsp;");
@@ -49,7 +61,9 @@ public class StrLib {
 	
 
 	public static String toChinese(String str) {
-		if (str == null) return null;
+		if (str == null){
+			return null;
+		}
 		try {
 			return new String(str.getBytes("ISO8859_1"), "UTF-8");
 		} catch (Exception e) {
@@ -69,7 +83,9 @@ public class StrLib {
 		if (arr != null) {
 			length = arr.length;
 			for (i = 0; i < length; i ++) {
-				if (StrLib.isEmpty(arr[i])) continue;
+				if (StrLib.isEmpty(arr[i])){
+					continue;
+				}
 				if (str == null) {
 					str = arr[i];
 				} else {
@@ -81,7 +97,7 @@ public class StrLib {
 	}
 	public static String conFo(String str)
 	{
-		if(str.equals("")){return "";}
+		if("".equals(str)){return "";}
 		 sto=new StringTokenizer(str,"-");
 		 buf=new StringBuffer();
 		while(sto.hasMoreElements())
@@ -91,31 +107,16 @@ public class StrLib {
 		return buf.toString();
 
 	}
-	public static String getCurrenttime(String formatString)
-	{
-		format=new SimpleDateFormat(formatString);
-		return format.format(new Date());
-	}
-	public static String getyestoday(String formatString)
-	{
-		Date today=new Date();
-		format=new SimpleDateFormat(formatString);
-		Date yestoday=new Date(today.getTime()-24*3600*1000);
-		return format.format(yestoday);
-	}
-//	public static String convertDou(double b)
-//	{
-//	    String te=String.valueOf(b);
-//	    if(te.substring(te.indexOf('.')).length()<=2)
-//	    {
-//	    	te+="0";
-//	    }
-//	    return te;
-//	}
+	
 	public static String convertTime(String str)
 	{
-	    if(str==null)return "";
-	    if(str.trim().length()<8)return str;
+	    if(str==null){
+	    	return "";
+	    }
+	    int trimMaxLength=8;
+	    if(str.trim().length()<trimMaxLength){
+	    	return str;
+	    }
 	    return (str.substring(0,4)+"-"+str.substring(4,6)+"-"+str.substring(6,8)).trim();
 	}
 	/**
@@ -125,7 +126,8 @@ public class StrLib {
 	public static String generatePwd() {
 		StringBuffer pwd = new StringBuffer(6);
 		java.util.Random r = new java.util.Random();
-		for (int i = 0;i < 6; i ++) {
+		 int Length=6;
+		for (int i = 0;i < Length; i ++) {
 			pwd.append(r.nextInt(10));
 		}
 		return pwd.toString();
@@ -231,12 +233,13 @@ public class StrLib {
 		  JSONArray jsonarray = JSONArray.fromObject(object);
 	      json.append("\"").append(jsonarray.toString().replace("\"", "&quot;")).append("\"");
 	  } else if (object instanceof Timestamp) {
-		  SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//定义格式，不显示毫秒
+		//定义格式，不显示毫秒
+		  SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		  String str = df.format(object);
 	      json.append("\"").append(str.replace("\"", "&quot;")).append("\"");
 	  } else if (boolean.class.isAssignableFrom(object.getClass())) {
-		  Boolean B = new Boolean((boolean)object);
-	      json.append("\"").append(B.toString().replace("\"", "&quot;")).append("\"");
+		  Boolean tempB = new Boolean((boolean)object);
+	      json.append("\"").append(tempB.toString().replace("\"", "&quot;")).append("\"");
 	  } else if (object instanceof String || object instanceof Integer || object instanceof Boolean || object instanceof Long) {
 		  String str=object.toString().replace("\"", "&quot;");
 		  str=str.replace("\r\n","<br/>");

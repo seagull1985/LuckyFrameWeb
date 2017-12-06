@@ -6,12 +6,21 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.PublicCaseParamsDao;
 import luckyweb.seagull.spring.entity.PublicCaseParams;
 import luckyweb.seagull.spring.entity.TestClient;
 
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Service("publiccaseparamsService")
 public class PublicCaseParamsServiceImpl implements PublicCaseParamsService{
 	
@@ -32,21 +41,24 @@ public class PublicCaseParamsServiceImpl implements PublicCaseParamsService{
 		return this.pcpdao.load(id);
 	}
 	
+	@Override
 	public int add(PublicCaseParams pcp) throws Exception{
 		return this.pcpdao.add(pcp);
 	}
 	
+	@Override
 	public void modify(PublicCaseParams pcp) throws Exception{
 		this.pcpdao.modify(pcp);
 	}
 	
+	@Override
 	public void delete(PublicCaseParams pcp) throws Exception{
 		this.pcpdao.delete(pcp);
 	}
 
 	private String where(PublicCaseParams pcp) {
 		String where = " where ";
-		if (pcp.getProjectid()!=0&&pcp.getProjectid()!=99) {
+		if (pcp.getProjectid()!=0&&pcp.getProjectid()!=PublicConst.STATUS99) {
 			where += " projectid =:projectid  and ";
 		}
 		if (null!=pcp.getParamsname()&&!"".equals(pcp.getParamsname())) {
@@ -58,7 +70,7 @@ public class PublicCaseParamsServiceImpl implements PublicCaseParamsService{
 		if (null!=pcp.getRemark()&&!"".equals(pcp.getRemark())) {
 			where += " remark like :remark)  or ";
 		}
-		if (where.length() == 7) {
+		if (where.length() == PublicConst.WHERENUM) {
 			where = "";
 		} 
 		else{

@@ -6,11 +6,20 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.ZtTaskDao;
 import luckyweb.seagull.spring.entity.ZtTask;
 
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Service("zttaskService")
 public class ZtTaskServiceImpl implements ZtTaskService{
 	
@@ -78,7 +87,7 @@ public class ZtTaskServiceImpl implements ZtTaskService{
 		if (zt.getAssendDate()!=null&&!"".equals(zt.getAssendDate())) {
 			where += " assignedDate<=:assendDate  and ";
 		}
-		if (where.length() == 7) {
+		if (where.length() == PublicConst.WHERENUM) {
 			where = "";
 		} 
 		else{
@@ -87,6 +96,7 @@ public class ZtTaskServiceImpl implements ZtTaskService{
 		return where;
 	}
 	
+	@Override
 	public List findByPagereport(int offset, int pageSize,String startdate,String enddate,int type) throws Exception {
 		String hql="";
 		if(type==1){
@@ -101,6 +111,7 @@ public class ZtTaskServiceImpl implements ZtTaskService{
 		return this.zttaskdao.findByPagereport(hql, offset, pageSize);
 	}
 	
+	@Override
 	public int findRowsreport(String startdate,String enddate,int type) {
 		String hql="";
 		if(type==1){

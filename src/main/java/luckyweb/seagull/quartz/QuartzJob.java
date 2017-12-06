@@ -15,6 +15,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.TestClient;
 import luckyweb.seagull.spring.entity.TestJobs;
@@ -29,6 +30,16 @@ import rmi.model.RunCaseEntity;
 import rmi.model.RunTaskEntity;
 import rmi.service.RunService;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ * 
+ */
 public class QuartzJob implements Job {
 	private static final Logger log = Logger.getLogger(QuartzJob.class);
 	@Resource(name = "tastExcuteService")
@@ -44,9 +55,9 @@ public class QuartzJob implements Job {
 		try {
 			String name = context.getJobDetail().getName();
 			
-			if(name.indexOf("*JOB")>-1){
+			if(name.indexOf(PublicConst.JOBTASKNAMETYPE)>-1){
 				TestJobs job = new TestJobs();
-				String id=name.substring(0,name.indexOf("*JOB"));
+				String id=name.substring(0,name.indexOf(PublicConst.JOBTASKNAMETYPE));
 				System.out.println("执行命令中。。。");
 				for (int i = 0; i < QueueListener.list.size(); i++) {
 					job = QueueListener.list.get(i);
@@ -62,9 +73,9 @@ public class QuartzJob implements Job {
 				}else{
 					System.out.println("没有定时任务需要启动。。。");
 				}
-			}else if(name.indexOf("*CLIENT")>-1){
+			}else if(name.indexOf(PublicConst.JOBCLIENTNAMETYPE)>-1){
 				TestClient tc = new TestClient();
-				String id=name.substring(0,name.indexOf("*CLIENT"));
+				String id=name.substring(0,name.indexOf(PublicConst.JOBCLIENTNAMETYPE));
 				for (int i = 0; i < QueueListener.listen_Clientlist.size(); i++) {
 					tc = QueueListener.listen_Clientlist.get(i);
 					if (id.equals("" + tc.getId())) {
@@ -118,7 +129,8 @@ public class QuartzJob implements Job {
 		tastName ="【"+jobname+ "】_"+time;
 		
 		TestTaskexcute task=add(tastName, jobId, s, tx);
-		projname = projname.replaceAll(" ","\" \""); //防止计划名称或是项目名称带了空格符号,在run.exec中会执行出错
+		//防止计划名称或是项目名称带了空格符号,在run.exec中会执行出错
+		projname = projname.replaceAll(" ","\" \""); 
 		String result="启动失败！";
 		try{
 			 //调用远程对象，注意RMI路径与接口必须与服务器配置一致

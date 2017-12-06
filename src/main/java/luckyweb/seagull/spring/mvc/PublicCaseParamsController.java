@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
 import luckyweb.seagull.spring.entity.PublicCaseParams;
 import luckyweb.seagull.spring.entity.SectorProjects;
@@ -71,9 +72,9 @@ public class PublicCaseParamsController {
 			}
 	    }
 	    int projectid = 99;
-		if (null != req.getSession().getAttribute("usercode")
-				&& null != req.getSession().getAttribute("username")) {
-			String usercode = req.getSession().getAttribute("usercode").toString();
+		if (null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+				&& null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+			String usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 			UserInfo userinfo = userinfoservice.getUseinfo(usercode);
 			projectid = userinfo.getProjectid();
 		}
@@ -263,7 +264,7 @@ public class PublicCaseParamsController {
     public @ResponseBody  
     String checkParamsNameExists(@RequestParam String paramsname,@RequestParam String projectid,@RequestParam String id) throws Exception {
     	Boolean result=false;
-        if(!"0".equals(id)){
+        if(!PublicConst.STATUSSTR0.equals(id)){
         	PublicCaseParams pcp = pcpservice.load(Integer.valueOf(id));
         	if(paramsname.equals(pcp.getParamsname())){
         		result=true;

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.Accident;
 import luckyweb.seagull.spring.entity.PieLasagna;
@@ -35,6 +36,15 @@ import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/accident")
 public class AccidentController {
@@ -48,7 +58,6 @@ public class AccidentController {
 	@Resource(name = "operationlogService")
 	private OperationLogService operationlogservice;
 
-	
 	/**
 	 * 
 	 * 
@@ -98,12 +107,12 @@ public class AccidentController {
 			accident.setAccdescription(search);
 			accident.setCausaltype(search);
 		}
-		if (accstatus!=null&&!"".equals(accstatus)&&!"00".equals(accstatus))
+		if (accstatus!=null&&!"".equals(accstatus)&&!PublicConst.STATUSSTR00.equals(accstatus))
 		{
 			accident.setAccstatus(accstatus);
 		}
 		// 得到客户端传递的查询参数
-		if (!StrLib.isEmpty(projectid)&&!"99".equals(projectid)) {
+		if (!StrLib.isEmpty(projectid)&&!PublicConst.STATUSSTR99.equals(projectid)) {
 			accident.setProjectid(Integer.valueOf(projectid));
 		}
 
@@ -117,13 +126,13 @@ public class AccidentController {
 		List<Accident> acclist = accidentservice.findByPage(accident, offset, limit);
 
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(acclist);
+		String recordJson = StrLib.listToJson(acclist);
 		// 得到总记录数
 		int total = accidentservice.findRows(accident);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 	
@@ -147,7 +156,7 @@ public class AccidentController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 
-			if(!UserLoginController.permissionboolean(req, "acc_1")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHACCADD)){
 				model.addAttribute("accident", new Accident());
 				model.addAttribute("url", "/accident/load.do");
 				model.addAttribute("message", "当前用户无权限添加生产事故信息，请联系管理员！");
@@ -155,7 +164,7 @@ public class AccidentController {
 			}
 			
 			String retVal = "/jsp/accident/accident_add";
-			if (req.getMethod().equals("POST"))
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 				if (br.hasErrors())
 				{
@@ -178,28 +187,29 @@ public class AccidentController {
 					}
 				}
 				
-				if(accident.getEventtime().equals("")){
+				if("".equals(accident.getEventtime())){
 					message = "请选择事故出现时间!";
 					model.addAttribute("message", message);
 					model.addAttribute("projects", QueueListener.qa_projlist);
 					return retVal;
 				}
 				
-				if(accident.getReporter().equals("")){
+				if("".equals(accident.getReporter())){
 					message = "请填写事故报告人!";
 					model.addAttribute("message", message);
 					model.addAttribute("projects", QueueListener.qa_projlist);
 					return retVal;
 				}
-				
-				if(accident.getAccstatus().equals("跟踪处理完成")){
-					if(accident.getCausaltype().equals("暂未选择")||accident.getCausalanalysis().equals("")){
+				String accStatusOver="跟踪处理完成";
+				String causalTypeChoose="暂未选择";
+				if(accStatusOver.equals(accident.getAccstatus())){
+					if(causalTypeChoose.equals(accident.getCausaltype())||"".equals(accident.getCausalanalysis())){
 						message = "跟踪处理完成状态，请选择原因类型或填写原因分析!";
 						model.addAttribute("message", message);
 						model.addAttribute("projects", QueueListener.qa_projlist);
 						return retVal;
 					}
-					if(accident.getResolutiontime().equals("")){
+					if("".equals(accident.getResolutiontime())){
 						message = "跟踪处理完成状态，请填写解决时间!";
 						model.addAttribute("message", message);
 						model.addAttribute("projects", QueueListener.qa_projlist);
@@ -208,7 +218,7 @@ public class AccidentController {
 
 				}
 				
-				if(!accident.getEventtime().equals("")&&!accident.getResolutiontime().equals("")){
+				if(!"".equals(accident.getEventtime())&&!"".equals(accident.getResolutiontime())){
 					accident.setTrouble_duration(interval(accident.getEventtime(),accident.getResolutiontime()));
 				}		
 				
@@ -255,7 +265,7 @@ public class AccidentController {
 		req.setCharacterEncoding("utf-8");
 		int id = Integer.valueOf(req.getParameter("id"));
 		
-		if(!UserLoginController.permissionboolean(req, "acc_3")){
+		if(!UserLoginController.permissionboolean(req, PublicConst.AUTHACCMOD)){
 			model.addAttribute("accident", new Accident());
 			model.addAttribute("url", "/accident/load.do");
 			model.addAttribute("message", "当前用户无权限修改生产事故信息，请联系管理员！");
@@ -265,7 +275,7 @@ public class AccidentController {
 		try{
 		model.addAttribute("projects", QueueListener.qa_projlist);
 		String retVal = "/jsp/accident/accident_update";
-		if (req.getMethod().equals("POST"))
+		if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 		{
 			if (br.hasErrors())
 			{
@@ -278,21 +288,22 @@ public class AccidentController {
 				model.addAttribute("message", message);
 				return retVal;
 			}
-			
-			if(accident.getAccstatus().equals("跟踪处理完成")){
-				if(accident.getCausaltype().equals("暂未选择")||accident.getCausalanalysis().equals("")){
+			String accStatusOver="跟踪处理完成";
+			String causalTypeChoose="暂未选择";
+			if(accStatusOver.equals(accident.getAccstatus())){
+				if(causalTypeChoose.equals(accident.getCausaltype())||"".equals(accident.getCausalanalysis())){
 					message = "跟踪处理完成状态，请选择原因类型或填写原因分析!";
 					model.addAttribute("message", message);
 					return retVal;
 				}
-				if(accident.getResolutiontime().equals("")){
+				if("".equals(accident.getResolutiontime())){
 					message = "跟踪处理完成状态，请填写解决时间!";
 					model.addAttribute("message", message);
 					return retVal;
 				}
 			}
 			
-			if(!accident.getEventtime().equals("")&&!accident.getResolutiontime().equals("")){
+			if(!"".equals(accident.getEventtime())&&!"".equals(accident.getResolutiontime())){
 				accident.setTrouble_duration(interval(accident.getEventtime(),accident.getResolutiontime()));
 			}		
 			
@@ -349,7 +360,7 @@ public class AccidentController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "acc_2")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHACCDEL)) {
 				json.put("status", "fail");
 				json.put("ms", "删除故障记录失败,权限不足,请联系管理员!");
 			} else {
@@ -440,8 +451,10 @@ public class AccidentController {
 	@RequestMapping(value = "/piechart_html5.do")
 	public String pieGroupCausaltype(HttpServletRequest req,Model model) throws Exception
 	{
-		String startdate = req.getParameter("pie_startdate");//+" 00:00:00";
-		String enddate = req.getParameter("pie_enddate");//+" 23:59:59";
+		//+" 00:00:00";
+		String startdate = req.getParameter("pie_startdate");
+		//+" 23:59:59";
+		String enddate = req.getParameter("pie_enddate");
 		String type = req.getParameter("type");
 		String unit = ""; 
 		String title1 = "";
@@ -457,11 +470,13 @@ public class AccidentController {
 		PieLasagna[] data = new PieLasagna[ls.size()];
 		
 		//初始化显示数据单位
-		if(type.equals("count")){
+		String count="count";
+		if(count.equals(type)){
 			unit = " 次";
 			title1 = "生产事故原因类型图(按累计次数)";
 		}
-		if(type.equals("sumimpact")){
+		String sumimpact="sumimpact";
+		if(sumimpact.equals(type)){
 			unit = " 小时";
 			title1 = "生产事故原因类型图(按累计影响时间)";
 		}
@@ -471,9 +486,9 @@ public class AccidentController {
 					PieLasagna lasagna = new PieLasagna();
 					lasagna.setName(ls.get(i)[0].toString());
 					if(ls.get(i)[1]!=null){
-						if(type.equals("count")){
+						if("count".equals(type)){
 							lasagna.setValue(Double.valueOf(ls.get(i)[1].toString()));
-						}else if(type.equals("sumimpact")){
+						}else if("sumimpact".equals(type)){
 							lasagna.setValue(Double.valueOf(new DecimalFormat("#.00").format(Double.valueOf(ls.get(i)[1].toString())/60)));
 						}
 						
@@ -525,7 +540,7 @@ public class AccidentController {
 	}
 	
 	public static long interval(String str1,String str2) throws ParseException{
-		if(str1.equals("")||str2.equals("")){
+		if("".equals(str1)||"".equals(str2)){
 			return 0;
 		}
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");  
@@ -554,10 +569,10 @@ public class AccidentController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/to_upload.do")
-	public String to_upload(Model model,HttpServletRequest req, HttpServletResponse response) throws Exception
+	public String toUpload(Model model,HttpServletRequest req, HttpServletResponse response) throws Exception
 	{
 		req.setCharacterEncoding("utf-8");
-		if(!UserLoginController.permissionboolean(req, "acc_upload")){
+		if(!UserLoginController.permissionboolean(req, PublicConst.AUTHACCUPLOAD)){
 			model.addAttribute("message", "当前用户无权限上传事故附件！");
 			model.addAttribute("url", "/accident/load.do");
 			return "error";
@@ -592,7 +607,10 @@ public class AccidentController {
 		int id = Integer.valueOf(request.getParameter("id"));
 		String filetype = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."),
 		        file.getOriginalFilename().length()).toLowerCase();
-		if (!filetype.equals(".docx")&&!filetype.equals(".doc")&&!filetype.equals(".pdf"))
+		String filetypedoc=".doc";
+		String filetypedocx=".docx";
+		String filetypepdf=".pdf";
+		if (!filetypedocx.equals(filetype)&&!filetypedoc.equals(filetype)&&!filetypepdf.equals(filetype))
 		{
 			String message = "只能上传word或是pdf的文件！";
 			model.addAttribute("message", message);

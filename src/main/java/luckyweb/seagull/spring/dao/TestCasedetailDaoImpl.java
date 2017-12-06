@@ -16,6 +16,15 @@ import org.springframework.stereotype.Repository;
 import luckyweb.seagull.spring.entity.TestCasedetail;
 import luckyweb.seagull.util.StrLib;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Repository("casedetailDao")
 public class TestCasedetailDaoImpl extends HibernateDaoSupport implements TestCasedetailDao {
 	private static final Logger logger = Logger.getLogger(TestCasedetailDaoImpl.class);
@@ -48,7 +57,7 @@ public class TestCasedetailDaoImpl extends HibernateDaoSupport implements TestCa
 		return (TestCasedetail) this.getHibernateTemplate().get(TestCasedetail.class, id);
 	}
 	
-
+	@Override
 	/**
 	 * 使用hql语句进行分页查询
 	 * 
@@ -70,7 +79,7 @@ public class TestCasedetailDaoImpl extends HibernateDaoSupport implements TestCa
 
 		List list = getHibernateTemplate().executeFind(new HibernateCallback() {
 			// 实现hibernateCallback接口必须实现的方法
-
+			@Override
 			public Object doInHibernate(Session session)
 					throws HibernateException {
 				// 执行hibernate 分页查询
@@ -111,7 +120,8 @@ public class TestCasedetailDaoImpl extends HibernateDaoSupport implements TestCa
 			query.setParameter("casename", "%"+caseDetail.getCasename().trim()+"%");
 		}
 	}
-
+	
+	@Override
 	public int findRows(String hql, TestCasedetail caseDetail) {
 		int s=0;
 		Session session=this.getSession(true);

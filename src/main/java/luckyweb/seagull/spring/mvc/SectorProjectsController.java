@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectPlan;
@@ -31,6 +32,15 @@ import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/sectorProjects")
 public class SectorProjectsController {
@@ -112,13 +122,13 @@ public class SectorProjectsController {
 		}
 		
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(projects);
+		String recordJson = StrLib.listToJson(projects);
 		// 得到总记录数
 		int total = sectorprojectsservice.findRows(sectorprojects);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total-1);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 	
@@ -130,7 +140,7 @@ public class SectorProjectsController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "pro_3")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHPROJECTMOD)) {
 				json.put("status", "fail");
 				json.put("ms", "当前用户无权限修改项目信息，请联系管理员！");
 			} else {
@@ -187,7 +197,7 @@ public class SectorProjectsController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "pro_1")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHPROJECTADD)) {
 				json.put("status", "fail");
 				json.put("ms", "增加项目失败,权限不足,请联系管理员!");
 			} else {
@@ -234,7 +244,7 @@ public class SectorProjectsController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "pro_2")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHPROJECTDEL)) {
 				json.put("status", "fail");
 				json.put("ms", "删除项目失败,权限不足,请联系管理员!");
 			} else {

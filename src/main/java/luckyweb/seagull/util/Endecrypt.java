@@ -11,8 +11,17 @@ import javax.crypto.spec.DESedeKeySpec;
 import sun.misc.BASE64Decoder;  
 import sun.misc.BASE64Encoder;  
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 public class Endecrypt {
-	private String SPKEY = "123456321";
+	private String spKEY = "123456321";
 
 	/**
 	 * 进行MD5加密
@@ -43,15 +52,16 @@ public class Endecrypt {
 
 	private byte[] getEnKey(String spKey) {
 		byte[] desKey = null;
+		int keylength=24;
 		try {
 			byte[] desKey1 = md5(spKey);
 			desKey = new byte[24];
 			int i = 0;
-			while (i < desKey1.length && i < 24) {
+			while (i < desKey1.length && i < keylength) {
 				desKey[i] = desKey1[i];
 				i++;
 			}
-			if (i < 24) {
+			if (i < keylength) {
 				desKey[i] = 0;
 				i++;
 			}
@@ -72,7 +82,7 @@ public class Endecrypt {
 	 * @return byte[] 3-DES加密后的byte[]
 	 */
 
-	public byte[] Encrypt(byte[] src, byte[] enKey) {
+	public byte[] encrypt(byte[] src, byte[] enKey) {
 		byte[] encryptedData = null;
 		try {
 			DESedeKeySpec dks = new DESedeKeySpec(enKey);
@@ -121,8 +131,10 @@ public class Endecrypt {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < str.length(); i++) {
 			int asc = str.charAt(i);
-			if (asc != 10 && asc != 13)
+			if (asc != 10 && asc != 13){
 				sb.append(str.subSequence(i, i + 1));
+			}
+
 		}
 		output = new String(sb);
 		return output;
@@ -141,7 +153,7 @@ public class Endecrypt {
 		String requestValue = "";
 		try {
 
-			requestValue = URLEncoder.encode(src);
+			requestValue = URLEncoder.encode(src,"UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -164,11 +176,11 @@ public class Endecrypt {
 		try {
 
 			// 得到3-DES的密钥匙
-			byte[] enKey = getEnKey(SPKEY);
+			byte[] enKey = getEnKey(spKEY);
 			// 要进行3-DES加密的内容在进行/"UTF-16LE/"取字节
 			byte[] src2 = src.getBytes("UTF-16LE");
 			// 进行3-DES加密后的内容的字节
-			byte[] encryptedData = Encrypt(src2, enKey);
+			byte[] encryptedData = encrypt(src2, enKey);
 
 			// 进行3-DES加密后的内容进行BASE64编码
 			String base64String = getBase64Encode(encryptedData);
@@ -198,7 +210,7 @@ public class Endecrypt {
 		String requestValue = "";
 		try {
 
-			requestValue = URLDecoder.decode(src);
+			requestValue = URLDecoder.decode(src, "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -252,16 +264,16 @@ public class Endecrypt {
 			// 得到3-DES的密钥匙
 
 			// URLDecoder.decodeTML控制码进行转义的过程
-			String URLValue = getURLDecoderdecode(src);
+			String urlValue = getURLDecoderdecode(src);
 
 			// 进行3-DES加密后的内容进行BASE64编码
 
 			BASE64Decoder base64Decode = new BASE64Decoder();
-			byte[] base64DValue = base64Decode.decodeBuffer(URLValue);
+			byte[] base64DValue = base64Decode.decodeBuffer(urlValue);
 
 			// 要进行3-DES加密的内容在进行/"UTF-16LE/"取字节
 
-			requestValue = deCrypt(base64DValue, SPKEY);
+			requestValue = deCrypt(base64DValue, spKEY);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

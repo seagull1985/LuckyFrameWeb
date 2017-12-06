@@ -14,7 +14,15 @@ import luckyweb.seagull.spring.service.TestTastExcuteService;
 
 import net.sf.json.JSONArray;
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/autoTestChar")
 public class AutoTestChartController {
@@ -41,14 +49,14 @@ public class AutoTestChartController {
 		try {
 			List<Object[]> taskinfo = tastExcuteService.listtastinfo();
 			
-			String jobname[] = new String[taskinfo.size()];
-			String casetotal[] = new String[taskinfo.size()];
-			String casesuc[] = new String[taskinfo.size()];
-			String casefail[] = new String[taskinfo.size()];
-			String caselock[] = new String[taskinfo.size()];
-			String casenoex[] = new String[taskinfo.size()];
-			String createtime[] = new String[taskinfo.size()];
-			String taskid[] = new String[taskinfo.size()];
+			String[] jobname = new String[taskinfo.size()];
+			String[] casetotal = new String[taskinfo.size()];
+			String[] casesuc = new String[taskinfo.size()];
+			String[] casefail = new String[taskinfo.size()];
+			String[] caselock = new String[taskinfo.size()];
+			String[] casenoex = new String[taskinfo.size()];
+			String[] createtime = new String[taskinfo.size()];
+			String[] taskid = new String[taskinfo.size()];
 			int j=0;
 			for(int i=0;i<taskinfo.size();i++){
 				if(Integer.valueOf(taskinfo.get(i)[2].toString())==0){

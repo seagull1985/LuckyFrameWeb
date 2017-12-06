@@ -1,18 +1,27 @@
 package luckyweb.seagull.spring.service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.TestJobsDao;
 import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Service("testJobsService")
 public class TestJobsServiceImpl implements TestJobsService
 {
@@ -63,9 +72,9 @@ public class TestJobsServiceImpl implements TestJobsService
 		List<TestJobs> list = this.testJobsDao.list(tjob);
 		for (TestJobs job : list)
 		{
-			String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date().getTime());
-			int res = DateLib.compare_date(job.getStartDate() + " " + job.getStartTime(), now);
-			if (job.getTaskType().equals("O"))
+			String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis());
+			int res = DateLib.compareDate(job.getStartDate() + " " + job.getStartTime(), now);
+			if ("O".equals(job.getTaskType()))
 			{
 				if (res == 2)
 				{
@@ -82,9 +91,9 @@ public class TestJobsServiceImpl implements TestJobsService
 		List<TestJobs> list = this.testJobsDao.list();
 		for (TestJobs job : list)
 		{
-			String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date().getTime());
-			int res = DateLib.compare_date(job.getStartDate() + " " + job.getStartTime(), now);
-			if (job.getTaskType().equals("O"))
+			String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis());
+			int res = DateLib.compareDate(job.getStartDate() + " " + job.getStartTime(), now);
+			if ("O".equals(job.getTaskType()))
 			{
 				if (res < 1)
 				{
@@ -134,6 +143,7 @@ public class TestJobsServiceImpl implements TestJobsService
 		return list;
 	}
 
+	@Override
 	public int findRows(TestJobs jobs)
 	{
 		String hql = "select count(*) from TestJobs " + where(jobs);
@@ -166,11 +176,13 @@ public class TestJobsServiceImpl implements TestJobsService
 		}
 		else
 		{
-			if (status.equals("0"))
+			String unstart="0";
+			String start="1";
+			if (unstart.equals(status))
 			{
 				return "未启动";
 			}
-			else if (status.equals("1"))
+			else if (start.equals(status))
 			{
 				return "任务生效中";
 			}
@@ -181,7 +193,7 @@ public class TestJobsServiceImpl implements TestJobsService
 	private String where(TestJobs jb)
 	{
 		String where = " where ";
-		if (jb.getProjectid()!=0&&jb.getProjectid()!=99){
+		if (jb.getProjectid()!=0&&jb.getProjectid()!=PublicConst.STATUS99){
 			where += " projectid=:projectid  and ";
 		}
 		if (!StrLib.isEmpty(jb.getTaskName())){
@@ -191,7 +203,7 @@ public class TestJobsServiceImpl implements TestJobsService
 			where += " planproj like :planproj)  or ";
 		}
 
-		if (where.length() == 7)
+		if (where.length() == PublicConst.WHERENUM)
 		{
 			where = "";
 		}

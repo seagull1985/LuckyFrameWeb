@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.quartz.QuartzJob;
 import luckyweb.seagull.quartz.QuartzManager;
@@ -52,6 +53,15 @@ import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONObject;
 import rmi.service.RunService;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/testJobs")
 public class TestJobsController
@@ -99,9 +109,9 @@ public class TestJobsController
 
 		try {
 			int projectid = 99;
-			if (null != req.getSession().getAttribute("usercode")
-					&& null != req.getSession().getAttribute("username")) {
-				String usercode = req.getSession().getAttribute("usercode").toString();
+			if (null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+					&& null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+				String usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 				UserInfo userinfo = userinfoservice.getUseinfo(usercode);
 				projectid = userinfo.getProjectid();
 			}
@@ -172,13 +182,13 @@ public class TestJobsController
 			}
 		}
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(jobs);
+		String recordJson = StrLib.listToJson(jobs);
 		// 得到总记录数
 		int total = testJobsService.findRows(tj);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 	
@@ -202,7 +212,7 @@ public class TestJobsController
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 			
-			if(!UserLoginController.permissionboolean(req, "tast_1")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHJOBADD)){
 				model.addAttribute("taskjob", new TestJobs());
 				model.addAttribute("url",  "/testJobs/load.do");
 				model.addAttribute("message", "当前用户无权限添加计划任务，请联系管理员！");
@@ -212,7 +222,7 @@ public class TestJobsController
 			List<SectorProjects> qaprolist=QueueListener.qa_projlist;
 			List<SectorProjects> prolist=QueueListener.projlist;
 			String retVal = "/jsp/task/task_add";
-			if (req.getMethod().equals("POST"))
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 
 				if (br.hasErrors())
@@ -221,7 +231,8 @@ public class TestJobsController
 				}
 				
 				String message = "";
-				if (tj.getProjecttype()==1&&(StrLib.isEmpty(tj.getPlanproj())||"0".equals(tj.getPlanproj())))
+				boolean existed = tj.getProjecttype()==1&&(StrLib.isEmpty(tj.getPlanproj())||"0".equals(tj.getPlanproj()));
+				if (existed)
 				{
 					message = "项目名必选!";
 					model.addAttribute("message", message);
@@ -245,33 +256,33 @@ public class TestJobsController
 					}
 				}
 				
-				if (StrLib.isEmpty(tj.getClientip())||"0".equals(tj.getClientip())) {
+				if (StrLib.isEmpty(tj.getClientip())||PublicConst.STATUSSTR0.equals(tj.getClientip())) {
 					message = "客户端IP不能为空！";
 					model.addAttribute("message", message);
 					return retVal;
 				}
 				
-				if (StrLib.isEmpty(tj.getClientpath())||"0".equals(tj.getClientpath())) {
+				if (StrLib.isEmpty(tj.getClientpath())||PublicConst.STATUSSTR0.equals(tj.getClientpath())) {
 					message = "客户端驱动桩路径不能为空！";
 					model.addAttribute("message", message);
 					return retVal;
 				}
 				
-				if (StrLib.isEmpty(tj.getTaskName())||"0".equals(tj.getTaskName()))
+				if (StrLib.isEmpty(tj.getTaskName())||PublicConst.STATUSSTR0.equals(tj.getTaskName()))
 				{
 					message = "计划名称不能为空!";
 					model.addAttribute("message", message);
 					return retVal;
 				}
-				
-				if (tj.getThreadCount() < 1 || tj.getThreadCount() > 20)
+				int threadMax=20;
+				if (tj.getThreadCount() < 1 || tj.getThreadCount() > threadMax)
 				{
 					message = "线程数在1-20之间";
 					model.addAttribute("message", message);
 					return retVal;
 				}
-				
-				if (tj.getTimeout() < 1 || tj.getTimeout() > 120)
+				int timeOutMax=120;
+				if (tj.getTimeout() < 1 || tj.getTimeout() > timeOutMax)
 				{
 					message = "超时时间必须在1-120分钟之间";
 					model.addAttribute("message", message);
@@ -290,7 +301,8 @@ public class TestJobsController
 				tj.setRunTime(new Timestamp(runtime));
 				tj.setCreateTime(DateUtil.now());
 				//邮件处理
-				if (tj.getIsSendMail().equals("1"))
+				String sendMail="1";
+				if (tj.getIsSendMail().equals(sendMail))
 				{
 					message = "";
 					if (StrLib.isEmpty(tj.getEmailer()))
@@ -299,11 +311,13 @@ public class TestJobsController
 					}
 					else
 					{
-						if (!tj.getEmailer().contains(";"))
+						String fgf=";";
+						if (!tj.getEmailer().contains(fgf))
 						{
 							message = "收件人分隔格式不对！";
 						}
-						if (!tj.getEmailer().contains("@"))
+						String gz="@";
+						if (!tj.getEmailer().contains(gz))
 						{// 未用正则表达式
 							message = "收件人邮箱格式不对！";
 						}
@@ -321,7 +335,8 @@ public class TestJobsController
 				}
 				
 				//构建方式处理
-				if (tj.getIsbuilding().equals("1"))
+				String building="1";
+				if (tj.getIsbuilding().equals(building))
 				{
 					message = "";
 					if (StrLib.isEmpty(tj.getBuildname()))
@@ -330,7 +345,8 @@ public class TestJobsController
 					}
 					else
 					{
-						if (!tj.getBuildname().contains(";"))
+						String fgf=";";
+						if (!tj.getBuildname().contains(fgf))
 						{
 							message = "构建项目名分隔格式不对！";
 						}
@@ -348,7 +364,8 @@ public class TestJobsController
 				}
 				
 				//重启TOMCAT处理
-				if (tj.getIsrestart().equals("1"))
+				String restart="1";
+				if (tj.getIsrestart().equals(restart))
 				{
 					message = "";
 					if (StrLib.isEmpty(tj.getRestartcomm()))
@@ -357,7 +374,8 @@ public class TestJobsController
 					}
 					else
 					{
-						if (!tj.getRestartcomm().contains(";"))
+						String fgf=";";
+						if (!tj.getRestartcomm().contains(fgf))
 						{
 							message = "构建项目名分隔格式不对！";
 						}
@@ -477,7 +495,7 @@ public class TestJobsController
 		
 		model.addAttribute("projects", prolist);
 		model.addAttribute("sysprojects", qaprolist);
-		if(!UserLoginController.permissionboolean(req, "tast_3")){
+		if(!UserLoginController.permissionboolean(req, PublicConst.AUTHJOBMOD)){
 			model.addAttribute("taskjob", new TestJobs());
 			model.addAttribute("url",  "/testJobs/load.do");
 			model.addAttribute("message", "当前用户无权限修改计划任务，请联系管理员！");
@@ -485,7 +503,7 @@ public class TestJobsController
 		}
 		
 		TestJobs jobload = testJobsService.load(id);
-		if (req.getMethod().equals("POST"))
+		if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 		{
 			try
 			{
@@ -495,26 +513,26 @@ public class TestJobsController
 				}
 				String message = "";
 				
-				if (StrLib.isEmpty(tj.getClientip())||"0".equals(tj.getClientip())) {
+				if (StrLib.isEmpty(tj.getClientip())||PublicConst.STATUSSTR0.equals(tj.getClientip())) {
 					message = "客户端IP不能为空！";
 					model.addAttribute("message", message);
 					return "/jsp/task/task_add";
 				}
 				
-				if (StrLib.isEmpty(tj.getClientpath())||"0".equals(tj.getClientpath())) {
+				if (StrLib.isEmpty(tj.getClientpath())||PublicConst.STATUSSTR0.equals(tj.getClientpath())) {
 					message = "客户端驱动桩路径不能为空！";
 					model.addAttribute("message", message);
 					return "/jsp/task/task_add";
 				}
 				
-				if (StrLib.isEmpty(tj.getTaskName())||"0".equals(tj.getTaskName()))
+				if (StrLib.isEmpty(tj.getTaskName())||PublicConst.STATUSSTR0.equals(tj.getTaskName()))
 				{
 					message = "计划名称不能为空!";
 					model.addAttribute("message", message);
 					return "/jsp/task/task_update";
 				}
-				
-				if (tj.getProjecttype()==1&&(StrLib.isEmpty(tj.getPlanproj())||"0".equals(tj.getPlanproj())))
+				boolean existed = tj.getProjecttype()==1&&(StrLib.isEmpty(tj.getPlanproj())||"0".equals(tj.getPlanproj()));
+				if (existed)
 				{
 					message = "项目名必选!";
 					model.addAttribute("message", message);
@@ -537,22 +555,22 @@ public class TestJobsController
 						return "/jsp/task/task_update";
 					}
 				}
-				
-				if (tj.getThreadCount() < 1 || tj.getThreadCount() > 20)
+				int threadMax=20;
+				if (tj.getThreadCount() < 1 || tj.getThreadCount() > threadMax)
 				{
 					message = "线程数在1-20之间";
 					model.addAttribute("message", message);
 					return "/jsp/task/task_update";
 				}
-
-				if (tj.getTimeout() < 1 || tj.getTimeout() > 120)
+				int timeOutMax=120;
+				if (tj.getTimeout() < 1 || tj.getTimeout() > timeOutMax)
 				{
 					message = "超时时间必须在1-120分钟之间";
 					model.addAttribute("message", message);
 					return "/jsp/task/task_update";
 				}
-
-				if (tj.getIsSendMail().equals("1"))
+				String sendMail="1";
+				if (tj.getIsSendMail().equals(sendMail))
 				{
 					message = "";
 					if (StrLib.isEmpty(tj.getEmailer()))
@@ -561,11 +579,13 @@ public class TestJobsController
 					}
 					else
 					{
-						if (!tj.getEmailer().contains(";"))
+						String fgf=";";
+						if (!tj.getEmailer().contains(fgf))
 						{
 							message = "收件人分隔格式不对！";
 						}
-						if (!tj.getEmailer().contains("@"))
+						String gz="@";
+						if (!tj.getEmailer().contains(gz))
 						{// 未用正则表达式
 							message = "收件人邮箱格式不对！";
 						}
@@ -583,7 +603,8 @@ public class TestJobsController
 				}
 				
 				//构建方式处理
-				if (tj.getIsbuilding().equals("1"))
+				String building="1";
+				if (tj.getIsbuilding().equals(building))
 				{
 					message = "";
 					if (StrLib.isEmpty(tj.getBuildname()))
@@ -592,7 +613,8 @@ public class TestJobsController
 					}
 					else
 					{
-						if (!tj.getBuildname().contains(";"))
+						String fgf=";";
+						if (!tj.getBuildname().contains(fgf))
 						{
 							message = "构建项目名分隔格式不对！";
 						}
@@ -611,7 +633,8 @@ public class TestJobsController
 				
 				
 				//重启TOMCAT处理
-				if (tj.getIsrestart().equals("1"))
+				String restart="1";
+				if (tj.getIsrestart().equals(restart))
 				{
 					message = "";
 					if (StrLib.isEmpty(tj.getRestartcomm()))
@@ -620,7 +643,8 @@ public class TestJobsController
 					}
 					else
 					{
-						if (!tj.getRestartcomm().contains(";"))
+						String fgf=";";
+						if (!tj.getRestartcomm().contains(fgf))
 						{
 							message = "构建项目名分隔格式不对！";
 						}
@@ -637,20 +661,20 @@ public class TestJobsController
 					tj.setRestartcomm("");
 				}
 				
-				
-				if("1".equals(tj.getIsSendMail())){
+				String yes="1";
+				if(yes.equals(tj.getIsSendMail())){
 					tj.setEmailer(tj.getEmailer());
 				}else{
 					tj.setEmailer(jobload.getEmailer());
 				}				
 				
-				if("1".equals(tj.getIsbuilding())){
+				if(yes.equals(tj.getIsbuilding())){
 					tj.setBuildname(tj.getBuildname());
 				}else{
 					tj.setBuildname(jobload.getBuildname());
 				}
 				
-				if("1".equals(tj.getIsrestart())){
+				if(yes.equals(tj.getIsrestart())){
 					tj.setRestartcomm(tj.getRestartcomm());
 				}else{
 					tj.setRestartcomm(jobload.getRestartcomm());
@@ -693,7 +717,8 @@ public class TestJobsController
 				// 写入数据库
 				testJobsService.modify(tj);
 				// 更新内存，替换原来的调度
-				if("D".equals(tj.getTaskType())){
+				String crontabtype="D";
+				if(crontabtype.equals(tj.getTaskType())){
 					TestJobs job = null;
 					for (int i = 0; i < QueueListener.list.size(); i++)
 					{
@@ -749,7 +774,7 @@ public class TestJobsController
 		TestClient tc=tcservice.getClient(jobload.getClientip());
 
 		String clientpath = tc.getClientpath();
-		String temp[] = clientpath.split(";", -1);
+		String[] temp = clientpath.split(";", -1);
 		for (String pathtemp : temp) {
 			if (!StrLib.isEmpty(pathtemp)) {
 				pathlist.add(pathtemp);
@@ -786,7 +811,7 @@ public class TestJobsController
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "tast_2")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHJOBDEL)) {
 				json.put("status", "fail");
 				json.put("ms", "删除调度失败,权限不足,请联系管理员!");
 			} else {
@@ -986,8 +1011,8 @@ public class TestJobsController
 		String storeName = "ERROR.log";
 		String startDate = request.getParameter("startDate");
 		String clientip = request.getParameter("clientip");
-		// String name = date;
-		if (!DateLib.today("yyyy-MM-dd").equals(startDate))
+		String dateformat = "yyyy-MM-dd";
+		if (!DateLib.today(dateformat).equals(startDate))
 		{
 			storeName = storeName + "." + startDate;
 		}
@@ -1014,9 +1039,9 @@ public class TestJobsController
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/to_upload.do")
-	public String to_upload(Model model,HttpServletRequest req, HttpServletResponse response) throws Exception
+	public String toUpload(Model model,HttpServletRequest req, HttpServletResponse response) throws Exception
 	{
-		if(!UserLoginController.permissionboolean(req, "tast_upload")){
+		if(!UserLoginController.permissionboolean(req, PublicConst.AUTHJOBUPLOAD)){
 			model.addAttribute("taskjob", new TestJobs());
 			model.addAttribute("url",  "/testJobs/load.do");
 			model.addAttribute("message", "当前用户无权限上传测试项目，请联系管理员！");
@@ -1026,7 +1051,7 @@ public class TestJobsController
 		TestClient tc=tcservice.getClient(clientip);
 		ArrayList<String> pathlist=new ArrayList<String>();
 		String path=tc.getClientpath();
-		String temp[]=path.split(";",-1);
+		String[] temp=path.split(";",-1);
 		for(String pathtemp:temp){
 			if(!StrLib.isEmpty(pathtemp)){
 				pathlist.add(pathtemp);
@@ -1049,7 +1074,8 @@ public class TestJobsController
 	public String upload(@RequestParam(value = "file", required = false) MultipartFile file, Model model,
 	        HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		if(null==file.getOriginalFilename()||file.getOriginalFilename().length()<4){
+		int filelength=4;
+		if(null==file.getOriginalFilename()||file.getOriginalFilename().length()<filelength){
 			String message = "请选择一个文件后，再进行上传操作！";
 			model.addAttribute("message", message);
 			return "/jsp/task/file_upload";
@@ -1058,7 +1084,8 @@ public class TestJobsController
 		        file.getOriginalFilename().length());
 		String clientip = request.getParameter("clientip");
 		String clientpath = request.getParameter("clientpath");
-		if (!fileName.toLowerCase().equals(".jar"))
+		String filetype=".jar";
+		if (!fileName.toLowerCase().equals(filetype))
 		{
 			String message = "只能上传.jar的文件！";
 			model.addAttribute("message", message);

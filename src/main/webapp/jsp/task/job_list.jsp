@@ -461,7 +461,7 @@
 			var url = "/userlogin/permissionboolean.do?permissioncode=" + code;
 			jQuery.getJSON(url, null, function call(result) {
 				if (result.data[0] == null) {
-					toastr.warning('你好，当前用户无权限进行此操作，请联系软件质量室！'); 
+					toastr.warning('你好，当前用户无权限进行此操作，请联系管理员！'); 
 					return false;
 				} else if (result.data[0] == "true") {
 					if (code == "tast_run") {
@@ -509,7 +509,7 @@
 					}
 					return true;
 				} else {
-					toastr.warning('你好，当前用户无权限进行此操作，请联系软件质量室！'); 
+					toastr.warning('你好，当前用户无权限进行此操作，请联系管理员！'); 
 					return false;
 				}
 			});

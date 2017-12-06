@@ -6,10 +6,20 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.SectorProjectsDao;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.util.StrLib;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Service("sectorprojectsService")
 public class SectorProjectsServiceImpl implements SectorProjectsService{
 	
@@ -37,34 +47,9 @@ public class SectorProjectsServiceImpl implements SectorProjectsService{
 	}
 
 	@Override
-	public void modifyState(SectorProjects sectorprojects) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void delete(SectorProjects sectorprojects) throws Exception {
 		// TODO Auto-generated method stub
 		this.sectorprojectsdao.delete(sectorprojects);
-	}
-
-	@Override
-	public List<SectorProjects> list(SectorProjects sectorprojects) throws Exception {
-		// TODO Auto-generated method stub
-		return this.sectorprojectsdao.list(sectorprojects);
-	}
-
-	@Override
-	public List<SectorProjects> list() throws Exception {
-		// TODO Auto-generated method stub
-		return this.sectorprojectsdao.list();
-	}
-
-	@Override
-	public boolean isExist(String name, String cmdType, String planPath)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -102,7 +87,7 @@ public class SectorProjectsServiceImpl implements SectorProjectsService{
 			where += " projectmanager like :projectmanager  or ";
 		}if (!StrLib.isEmpty(sp.getProjectname())) {
 			where += " projectsign like :projectsign  or ";
-		}if (where.length() == 7) {
+		}if (where.length() == PublicConst.WHERENUM) {
 			where = "";
 		} 
 		else{

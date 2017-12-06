@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectProtocolTemplate;
 import luckyweb.seagull.spring.entity.ProjectTemplateParams;
@@ -29,6 +30,15 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/projectTemplateParams")
 public class ProjectTemplateParamsController {
@@ -67,7 +77,7 @@ public class ProjectTemplateParamsController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 
-			if (!UserLoginController.permissionboolean(req, "ptct_3")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHPPTEMPLATEMOD)) {
 				model.addAttribute("url", "/projectprotocolTemplate/load.do");
 				model.addAttribute("message", "当前用户无权限编辑协议模板，请联系管理员！");
 				return "success";
@@ -75,7 +85,7 @@ public class ProjectTemplateParamsController {
 
 			String templateid = req.getParameter("templateid");
 			ProjectProtocolTemplate ppt = null;
-			if (!StrLib.isEmpty(templateid) && !"0".equals(templateid)) {
+			if (!StrLib.isEmpty(templateid) && !PublicConst.STATUSSTR0.equals(templateid)) {
 				ppt = ptemplateservice.load(Integer.valueOf(templateid));
 				if(!UserLoginController.oppidboolean(req, ppt.getProjectid())){
 					SectorProjects sp=sectorprojectsService.loadob(ppt.getProjectid());
@@ -137,7 +147,7 @@ public class ProjectTemplateParamsController {
 		PrintWriter pw = response.getWriter();
 		StringBuilder sb = new StringBuilder();
 		JSONObject json = new JSONObject();
-		if (!UserLoginController.permissionboolean(request, "ptct_3")) {
+		if (!UserLoginController.permissionboolean(request, PublicConst.AUTHPPTEMPLATEMOD)) {
 			json.put("status", "fail");
 			json.put("ms", "保存参数失败,权限不足,请联系管理员!");
 		} else {
@@ -165,12 +175,12 @@ public class ProjectTemplateParamsController {
 				   jsonarr.set(i, tempobj);
 				}
 			}
-
-			List<?> list = JSONArray.toList(jsonarr, new ProjectTemplateParams(), new JsonConfig());// 参数1为要转换的JSONArray数据，参数2为要转换的目标数据，即List盛装的数据
+			// 参数1为要转换的JSONArray数据，参数2为要转换的目标数据，即List盛装的数据
+			List<?> list = JSONArray.toList(jsonarr, new ProjectTemplateParams(), new JsonConfig());
 			String usercode = "";
-			if (null != request.getSession().getAttribute("usercode")
-					&& null != request.getSession().getAttribute("username")) {
-				usercode = request.getSession().getAttribute("usercode").toString();
+			if (null != request.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+					&& null != request.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+				usercode = request.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 			}
 			Date currentTime = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -187,7 +197,8 @@ public class ProjectTemplateParamsController {
 				if(i==0){
 					ppt = ptemplateservice.load(param.getTemplateid());
 				}
-				int tag=0;   //标识是否已有参数
+				//标识是否已有参数
+				int tag=0;   
 				for (ProjectTemplateParams oldparam:paramslist) {
 					if(param.getId()==oldparam.getId()&&oldparam.getId()!=0){
 						tag=1;
@@ -205,8 +216,8 @@ public class ProjectTemplateParamsController {
 					ptemplateparamsService.add(param);
 				}
 			}
-			
-			for (ProjectTemplateParams oldparam:paramslist) { // 删除原有列表中多的步骤
+			// 删除原有列表中多的步骤
+			for (ProjectTemplateParams oldparam:paramslist) { 
 				ptemplateparamsService.deleteforob(oldparam);
 			}
 			
@@ -233,10 +244,10 @@ public class ProjectTemplateParamsController {
 			List<ProjectTemplateParams> params = ptemplateparamsService.getParamsList(Integer.valueOf(templateid));
 
 			// 转换成json字符串
-			String RecordJson = StrLib.listToJson(params);
+			String recordJson = StrLib.listToJson(params);
 
 			// 需要返回的数据有总记录数和行数据
-			json.put("params", RecordJson);
+			json.put("params", recordJson);
 			pw.print(json.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

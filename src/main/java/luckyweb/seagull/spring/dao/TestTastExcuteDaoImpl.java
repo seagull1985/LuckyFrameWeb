@@ -17,6 +17,15 @@ import luckyweb.seagull.spring.entity.Accident;
 import luckyweb.seagull.spring.entity.TestTaskexcute;
 import luckyweb.seagull.util.StrLib;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Repository("tastExcuteDao")
 public class TestTastExcuteDaoImpl extends HibernateDaoSupport implements
 		TestTastExcuteDao {
@@ -63,7 +72,7 @@ public class TestTastExcuteDaoImpl extends HibernateDaoSupport implements
 		return (TestTaskexcute) this.getHibernateTemplate().get(TestTaskexcute.class, id);
 	}
 
-	/*
+	/**
 	 * 使用hql语句进行分页查询
 	 * 
 	 * @param hql 需要查询的hql语句
@@ -80,7 +89,7 @@ public class TestTastExcuteDaoImpl extends HibernateDaoSupport implements
 
 		List list = getHibernateTemplate().executeFind(new HibernateCallback() {
 			// 实现hibernateCallback接口必须实现的方法
-
+			@Override
 			public Object doInHibernate(Session session)
 					throws HibernateException {
 				// 执行hibernate 分页查询
@@ -118,13 +127,14 @@ public class TestTastExcuteDaoImpl extends HibernateDaoSupport implements
 	 *            每页需要显示的记录条数
 	 * @return 当前页的所有记录
 	 */
+	@Override
 	public List findByPage(final String hql, final Object value,
 			final int offset, final int pageSize) {
 		// 通过一个HibernateCallback 对象来执行查询
 
 		List list = getHibernateTemplate().executeFind(new HibernateCallback() {
 			// 实现hibernateCallback接口必须实现的方法
-
+			@Override
 			public Object doInHibernate(Session session)
 					throws HibernateException {
 				// 执行hibernate 分页查询
@@ -148,6 +158,7 @@ public class TestTastExcuteDaoImpl extends HibernateDaoSupport implements
 
 	}
 
+	@Override
 	public int findRows(String hql, TestTaskexcute tast) {
 		int s = 0;
 		Session session = this.getSession(true);
@@ -206,7 +217,7 @@ public class TestTastExcuteDaoImpl extends HibernateDaoSupport implements
 	}
 	
 	@Override
-	public void delete_forjobid(String hql, int jobid) throws Exception {
+	public void deleteForJobid(String hql, int jobid) throws Exception {
 		Session session=this.getSession(true);
 		session.beginTransaction();
 		Query query =session .createQuery(hql);
@@ -216,16 +227,5 @@ public class TestTastExcuteDaoImpl extends HibernateDaoSupport implements
 		session.getTransaction().commit();
 		session.close();
 	}
-
-	/*
-	 * public List<TestTastexcute> getListForPage(final String hql, final int
-	 * offset, final int lengh) { log.debug("finding ListForPage"); try { List
-	 * list = getHibernateTemplate().executeFind( new HibernateCallback() {
-	 * public Object doInHibernate(Session session) throws HibernateException,
-	 * SQLException { List list2 = session.createQuery(hql) .setInteger(0, val)
-	 * .setFirstResult(offset) .setMaxResults(lengh).list(); return list2; } });
-	 * return list; } catch (RuntimeException re) {
-	 * log.error("find ListForPage failed", re); throw re; } }
-	 */
 
 }

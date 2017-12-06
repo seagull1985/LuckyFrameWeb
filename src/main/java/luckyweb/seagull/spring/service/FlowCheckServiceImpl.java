@@ -6,10 +6,20 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.FlowCheckDao;
 import luckyweb.seagull.spring.entity.FlowCheck;
 import luckyweb.seagull.spring.entity.FlowInfo;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Service("flowcheckService")
 public class FlowCheckServiceImpl implements FlowCheckService{
 	
@@ -36,22 +46,9 @@ public class FlowCheckServiceImpl implements FlowCheckService{
 	}
 
 	@Override
-	public void modifyState(FlowCheck flowcheck) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void delete(int id) throws Exception {
 		this.flowcheckdao.delete(id);
 		
-	}
-
-	@Override
-	public boolean isExist(String name, String cmdType, String planPath)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -113,7 +110,7 @@ public class FlowCheckServiceImpl implements FlowCheckService{
 				!fc.getCheckenddate().equals("")&&!fc.getCheckstartdate().equals("")) {
 			where += " checkdate>=:checkstartdate  and checkdate<=:checkenddate  and ";
 		}
-		if (where.length() == 7) {
+		if (where.length() == PublicConst.WHERENUM) {
 			where = "";
 		} 
 		else{
@@ -168,16 +165,11 @@ public class FlowCheckServiceImpl implements FlowCheckService{
 		return flowcheckdao.findRows(flowcheck,sql);
 	}
 	
+	@Override
 	public int findRowsTable(FlowCheck flowcheck)
 	{
 		String hql = "select count(*) from FlowCheck " + where(flowcheck);
 		return flowcheckdao.findRowsTable(flowcheck, hql);
-	}
-
-	@Override
-	public List<FlowCheck> findProjectsList() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

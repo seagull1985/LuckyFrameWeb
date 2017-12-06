@@ -23,6 +23,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.Barchart3;
 import luckyweb.seagull.spring.entity.ProjectVersion;
@@ -35,6 +36,15 @@ import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/projectVersion")
 public class ProjectVersionController {
@@ -135,13 +145,13 @@ public class ProjectVersionController {
 		List<ProjectVersion> projectversions = projectsversionservice.findByPage(projectversion, offset, limit);
 
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(projectversions);
+		String recordJson = StrLib.listToJson(projectversions);
 		// 得到总记录数
 		int total = projectsversionservice.findRows(projectversion);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 	
@@ -165,7 +175,7 @@ public class ProjectVersionController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 			
-			if(!UserLoginController.permissionboolean(req, "pv_1")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHPVERSIONADD)){
 				model.addAttribute("projectversion", new ProjectVersion());
 				model.addAttribute("url", "/projectVersion/load.do");
 				model.addAttribute("message", "当前用户无权限添加版本信息，请联系管理员！");
@@ -173,7 +183,7 @@ public class ProjectVersionController {
 			}
 
 			String retVal = "/jsp/projectversion/projectversion_add";
-			if (req.getMethod().equals("POST"))
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 				if (br.hasErrors())
 				{
@@ -193,7 +203,7 @@ public class ProjectVersionController {
 					}
 				}
 				
-				if(projectversion.getActually_testend().equals("")||projectversion.getPlan_testend().equals("")){
+				if("".equals(projectversion.getActually_testend())||"".equals(projectversion.getPlan_testend())){
 					message = "版本已完成,请选择测试计划结束日期以及测试实际结束日期!";
 					model.addAttribute("message", message);
 					return retVal;
@@ -243,7 +253,8 @@ public class ProjectVersionController {
 				int testhuman = member(projectversion.getTest_member()).length*actuallytestinterval;
 				projectversion.setHuman_costdev(String.valueOf(devhuman));
 				projectversion.setHuman_costtest(String.valueOf(testhuman));
-				if(membernum>0){    //耗费人力资源
+				//耗费人力资源
+				if(membernum>0){    
 					projectversion.setHuman_cost(String.valueOf(devhuman+testhuman));
 				}else{
 					projectversion.setHuman_cost(projectversion.getHuman_cost());
@@ -251,24 +262,24 @@ public class ProjectVersionController {
 				
 				//开发效率
 				if(member(projectversion.getDev_member()).length>0&&actuallydevinterval!=0){ 
-					double per_dev = Double.valueOf(new DecimalFormat("#.00").format((double)(projectversion.getCodeline())/devhuman));
-					projectversion.setPer_dev(String.valueOf(per_dev));
+					double perDev = Double.valueOf(new DecimalFormat("#.00").format((double)(projectversion.getCodeline())/devhuman));
+					projectversion.setPer_dev(String.valueOf(perDev));
 				}else{
 					projectversion.setPer_dev(projectversion.getPer_dev());
 				}
 				
 				//测试效率
 				if(member(projectversion.getTest_member()).length>0&&actuallytestinterval!=0){
-					double per_test = Double.valueOf(new DecimalFormat("#.00").format((double)projectversion.getTestcasenum()/testhuman));
-					projectversion.setPer_test(String.valueOf(per_test));					
+					double perTest = Double.valueOf(new DecimalFormat("#.00").format((double)projectversion.getTestcasenum()/testhuman));
+					projectversion.setPer_test(String.valueOf(perTest));					
 				}else{
 					projectversion.setPer_test(projectversion.getPer_test());
 				}
 				
 				//开发工期偏差+延期
 				if(actuallydevinterval!=0&&plandevinterval!=0){
-					double devtime_deviation = Double.valueOf(new DecimalFormat("#.00").format(((double)(actuallydevinterval-plandevinterval)/plandevinterval)*100));
-					projectversion.setDevtime_deviation(String.valueOf(devtime_deviation));
+					double devTimeDeviation = Double.valueOf(new DecimalFormat("#.00").format(((double)(actuallydevinterval-plandevinterval)/plandevinterval)*100));
+					projectversion.setDevtime_deviation(String.valueOf(devTimeDeviation));
 					projectversion.setDevdelay_days(String.valueOf(interval(projectversion.getPlan_devend(),projectversion.getActually_devend(),0)));
 					
 				}else{
@@ -278,8 +289,8 @@ public class ProjectVersionController {
 				
 				//测试工期偏差+延期
 				if(actuallydevinterval!=0&&plandevinterval!=0){
-					double testtime_deviation = Double.valueOf(new DecimalFormat("#.00").format(((double)(actuallytestinterval-plantestinterval)/plantestinterval)*100));
-					projectversion.setTesttime_deviation(String.valueOf(testtime_deviation));
+					double testTimeDeviation = Double.valueOf(new DecimalFormat("#.00").format(((double)(actuallytestinterval-plantestinterval)/plantestinterval)*100));
+					projectversion.setTesttime_deviation(String.valueOf(testTimeDeviation));
 					projectversion.setTestdelay_days(String.valueOf(interval(projectversion.getPlan_testend(),projectversion.getActually_testend(),0)));
 					
 				}else{
@@ -393,7 +404,7 @@ public class ProjectVersionController {
 		int versionid = Integer.valueOf(req.getParameter("versionid"));
 		String retVal = "/jsp/projectversion/projectversion_add";
 		
-		if(!UserLoginController.permissionboolean(req, "pv_3")){
+		if(!UserLoginController.permissionboolean(req, PublicConst.AUTHPVERSIONMOD)){
 			model.addAttribute("projectversion", new ProjectVersion());
 			model.addAttribute("url", "/projectVersion/load.do");
 			model.addAttribute("message", "当前用户无权限操作修改版本信息，请联系管理员！");
@@ -401,7 +412,7 @@ public class ProjectVersionController {
 		}
 			
 		model.addAttribute("projects", QueueListener.qa_projlist);
-		if (req.getMethod().equals("POST"))
+		if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 		{
 			if (br.hasErrors())
 			{
@@ -421,13 +432,13 @@ public class ProjectVersionController {
 				}
 			}
 			
-			if(projectversion.getPlan_testend().equals("")){
+			if("".equals(projectversion.getPlan_testend())){
 				message = "请选择测试计划结束日期!";
 				model.addAttribute("message", message);
 				return retVal;
 			}				
 			
-			if(projectversion.getActually_testend().equals("")&&projectversion.getVersiontype()==1){
+			if("".equals(projectversion.getActually_testend())&&projectversion.getVersiontype()==1){
 				message = "版本已完成,请选择测试实际结束日期!";
 				model.addAttribute("message", message);
 				return retVal;
@@ -481,7 +492,8 @@ public class ProjectVersionController {
 			int testhuman = member(projectversion.getTest_member()).length*actuallytestinterval;
 			projectversion.setHuman_costdev(String.valueOf(devhuman));
 			projectversion.setHuman_costtest(String.valueOf(testhuman));
-			if(membernum>0){    //耗费人力资源
+			 //耗费人力资源
+			if(membernum>0){   
 				projectversion.setHuman_cost(String.valueOf(devhuman+testhuman));
 			}else{
 				projectversion.setHuman_cost(projectversion.getHuman_cost());
@@ -489,24 +501,24 @@ public class ProjectVersionController {
 			
 			//开发效率
 			if(member(projectversion.getDev_member()).length>0&&actuallydevinterval!=0){ 
-				double per_dev = Double.valueOf(new DecimalFormat("#.00").format((double)(projectversion.getCodeline())/devhuman));
-				projectversion.setPer_dev(String.valueOf(per_dev));
+				double perDev = Double.valueOf(new DecimalFormat("#.00").format((double)(projectversion.getCodeline())/devhuman));
+				projectversion.setPer_dev(String.valueOf(perDev));
 			}else{
 				projectversion.setPer_dev(projectversion.getPer_dev());
 			}
 			
 			//测试效率
 			if(member(projectversion.getTest_member()).length>0&&actuallytestinterval!=0){
-				double per_test = Double.valueOf(new DecimalFormat("#.00").format((double)projectversion.getTestcasenum()/testhuman));
-				projectversion.setPer_test(String.valueOf(per_test));					
+				double perTest = Double.valueOf(new DecimalFormat("#.00").format((double)projectversion.getTestcasenum()/testhuman));
+				projectversion.setPer_test(String.valueOf(perTest));					
 			}else{
 				projectversion.setPer_test(projectversion.getPer_test());
 			}
 			
 			//开发工期偏差+延期
 			if(actuallydevinterval!=0&&plandevinterval!=0){
-				double devtime_deviation = Double.valueOf(new DecimalFormat("#.00").format(((double)(actuallydevinterval-plandevinterval)/plandevinterval)*100));
-				projectversion.setDevtime_deviation(String.valueOf(devtime_deviation));
+				double devTimeDeviation = Double.valueOf(new DecimalFormat("#.00").format(((double)(actuallydevinterval-plandevinterval)/plandevinterval)*100));
+				projectversion.setDevtime_deviation(String.valueOf(devTimeDeviation));
 				projectversion.setDevdelay_days(String.valueOf(interval(projectversion.getPlan_devend(),projectversion.getActually_devend(),0)));
 				
 			}else{
@@ -516,8 +528,8 @@ public class ProjectVersionController {
 			
 			//测试工期偏差+延期
 			if(actuallydevinterval!=0&&plandevinterval!=0){
-				double testtime_deviation = Double.valueOf(new DecimalFormat("#.00").format(((double)(actuallytestinterval-plantestinterval)/plantestinterval)*100));
-				projectversion.setTesttime_deviation(String.valueOf(testtime_deviation));
+				double testTimeDeviation = Double.valueOf(new DecimalFormat("#.00").format(((double)(actuallytestinterval-plantestinterval)/plantestinterval)*100));
+				projectversion.setTesttime_deviation(String.valueOf(testTimeDeviation));
 				projectversion.setTestdelay_days(String.valueOf(interval(projectversion.getPlan_testend(),projectversion.getActually_testend(),0)));
 				
 			}else{
@@ -627,7 +639,7 @@ public class ProjectVersionController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 			
-			if(!UserLoginController.permissionboolean(req, "pvp_1")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHPVERSIONPLANADD)){
 				model.addAttribute("projectversion", new ProjectVersion());
 				model.addAttribute("url", "/projectVersion/load.do");
 				model.addAttribute("message", "当前用户无权限添加版本计划信息，请联系管理员！");
@@ -635,7 +647,7 @@ public class ProjectVersionController {
 			}
 
 			String retVal = "/jsp/projectversion/projectversion_addplan";
-			if (req.getMethod().equals("POST"))
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 				if (br.hasErrors())
 				{
@@ -645,8 +657,10 @@ public class ProjectVersionController {
 			        String errorMessage; 
 			        for (int i = 0; i < err.size(); i++) { 
 			            fe=err.get(i); 
-			            field=fe.getField();//得到那个字段验证出错 
-			            errorMessage=fe.getDefaultMessage();//得到错误消息 
+			          //得到那个字段验证出错 
+			            field=fe.getField();
+			          //得到错误消息 
+			            errorMessage=fe.getDefaultMessage();
 			            System.out.println("错误字段消息："+field +" : "+errorMessage); 
 			        } 
 					return retVal;
@@ -671,7 +685,7 @@ public class ProjectVersionController {
 					return retVal;
 				}
 								
-				if(projectversion.getPlan_testend().equals("")){
+				if("".equals(projectversion.getPlan_testend())){
 					message = "请选择测试计划结束日期!";
 					model.addAttribute("message", message);
 					return retVal;
@@ -690,7 +704,8 @@ public class ProjectVersionController {
 				int testhuman = member(projectversion.getTest_member()).length*actuallytestinterval;
 				projectversion.setHuman_costdev(String.valueOf(devhuman));
 				projectversion.setHuman_costtest(String.valueOf(testhuman));
-				if(membernum>0){    //耗费人力资源
+				 //耗费人力资源
+				if(membernum>0){   
 					projectversion.setHuman_cost(String.valueOf(devhuman+testhuman));
 				}else{
 					projectversion.setHuman_cost(projectversion.getHuman_cost());
@@ -698,24 +713,24 @@ public class ProjectVersionController {
 				
 				//开发效率
 				if(member(projectversion.getDev_member()).length>0&&actuallydevinterval!=0){ 
-					double per_dev = Double.valueOf(new DecimalFormat("#.00").format((double)(projectversion.getCodeline())/devhuman));
-					projectversion.setPer_dev(String.valueOf(per_dev));
+					double perDev = Double.valueOf(new DecimalFormat("#.00").format((double)(projectversion.getCodeline())/devhuman));
+					projectversion.setPer_dev(String.valueOf(perDev));
 				}else{
 					projectversion.setPer_dev(projectversion.getPer_dev());
 				}
 				
 				//测试效率
 				if(member(projectversion.getTest_member()).length>0&&actuallytestinterval!=0){
-					double per_test = Double.valueOf(new DecimalFormat("#.00").format((double)projectversion.getTestcasenum()/testhuman));
-					projectversion.setPer_test(String.valueOf(per_test));					
+					double perTest = Double.valueOf(new DecimalFormat("#.00").format((double)projectversion.getTestcasenum()/testhuman));
+					projectversion.setPer_test(String.valueOf(perTest));					
 				}else{
 					projectversion.setPer_test(projectversion.getPer_test());
 				}
 				
 				//开发工期偏差+延期
 				if(actuallydevinterval!=0&&plandevinterval!=0){
-					double devtime_deviation = Double.valueOf(new DecimalFormat("#.00").format(((double)(actuallydevinterval-plandevinterval)/plandevinterval)*100));
-					projectversion.setDevtime_deviation(String.valueOf(devtime_deviation));
+					double devTimeDeviation = Double.valueOf(new DecimalFormat("#.00").format(((double)(actuallydevinterval-plandevinterval)/plandevinterval)*100));
+					projectversion.setDevtime_deviation(String.valueOf(devTimeDeviation));
 					projectversion.setDevdelay_days(String.valueOf(interval(projectversion.getPlan_devend(),projectversion.getActually_devend(),0)));
 					
 				}else{
@@ -725,8 +740,8 @@ public class ProjectVersionController {
 				
 				//测试工期偏差+延期
 				if(actuallydevinterval!=0&&plandevinterval!=0){
-					double testtime_deviation = Double.valueOf(new DecimalFormat("#.00").format(((double)(actuallytestinterval-plantestinterval)/plantestinterval)*100));
-					projectversion.setTesttime_deviation(String.valueOf(testtime_deviation));
+					double testTimeDeviation = Double.valueOf(new DecimalFormat("#.00").format(((double)(actuallytestinterval-plantestinterval)/plantestinterval)*100));
+					projectversion.setTesttime_deviation(String.valueOf(testTimeDeviation));
 					projectversion.setTestdelay_days(String.valueOf(interval(projectversion.getPlan_testend(),projectversion.getActually_testend(),0)));
 					
 				}else{
@@ -842,7 +857,7 @@ public class ProjectVersionController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "pv_2")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHPVERSIONDEL)) {
 				json.put("status", "fail");
 				json.put("ms", "删除项目版本信息失败,权限不足,请联系管理员!");
 			} else {
@@ -1009,13 +1024,13 @@ public class ProjectVersionController {
 		
 		Barchart3[] data = new Barchart3[columnname.length];
 				
-        Map pointMap = new HashMap<String, Object>();
+        Map pointMap = new HashMap<String, Object>(0);
         
-        Map innerptMap = new HashMap<String, Object>();
+        Map innerptMap = new HashMap<String, Object>(0);
         innerptMap.put("type", "max");
         innerptMap.put("name", "最大值");
         
-        Map innerptMap1 = new HashMap<String, Object>();
+        Map innerptMap1 = new HashMap<String, Object>(0);
         innerptMap1.put("type", "min");
         innerptMap1.put("name", "最小值");
         List<Map> datamapList = new ArrayList<Map>();
@@ -1024,9 +1039,9 @@ public class ProjectVersionController {
         pointMap.put("data", datamapList);
         
         
-		Map lineMap = new HashMap<String, Object>();
+		Map lineMap = new HashMap<String, Object>(0);
         
-        Map innerliMap = new HashMap<String, Object>();
+        Map innerliMap = new HashMap<String, Object>(0);
         innerliMap.put("type", "average");
         innerliMap.put("name", "平均值");
         List<Map> datamapList1 = new ArrayList<Map>();
@@ -1116,13 +1131,13 @@ public class ProjectVersionController {
 		
 		Barchart3[] data = new Barchart3[columnname.length];				
 		
-        Map pointMap = new HashMap<String, Object>();
+        Map pointMap = new HashMap<String, Object>(0);
         
-        Map innerptMap = new HashMap<String, Object>();
+        Map innerptMap = new HashMap<String, Object>(0);
         innerptMap.put("type", "max");
         innerptMap.put("name", "最大值");
         
-        Map innerptMap1 = new HashMap<String, Object>();
+        Map innerptMap1 = new HashMap<String, Object>(0);
         innerptMap1.put("type", "min");
         innerptMap1.put("name", "最小值");
         List<Map> datamapList = new ArrayList<Map>();
@@ -1131,9 +1146,9 @@ public class ProjectVersionController {
         pointMap.put("data", datamapList);
         
         
-		Map lineMap = new HashMap<String, Object>();
+		Map lineMap = new HashMap<String, Object>(0);
         
-        Map innerliMap = new HashMap<String, Object>();
+        Map innerliMap = new HashMap<String, Object>(0);
         innerliMap.put("type", "average");
         innerliMap.put("name", "平均值");
         List<Map> datamapList1 = new ArrayList<Map>();
@@ -1235,13 +1250,13 @@ public class ProjectVersionController {
 		
 		Barchart3[] data = new Barchart3[columnname.length];				
 		
-        Map pointMap = new HashMap<String, Object>();
+        Map pointMap = new HashMap<String, Object>(0);
         
-        Map innerptMap = new HashMap<String, Object>();
+        Map innerptMap = new HashMap<String, Object>(0);
         innerptMap.put("type", "max");
         innerptMap.put("name", "最大值");
         
-        Map innerptMap1 = new HashMap<String, Object>();
+        Map innerptMap1 = new HashMap<String, Object>(0);
         innerptMap1.put("type", "min");
         innerptMap1.put("name", "最小值");
         List<Map> datamapList = new ArrayList<Map>();
@@ -1250,9 +1265,9 @@ public class ProjectVersionController {
         pointMap.put("data", datamapList);
         
         
-		Map lineMap = new HashMap<String, Object>();
+		Map lineMap = new HashMap<String, Object>(0);
         
-        Map innerliMap = new HashMap<String, Object>();
+        Map innerliMap = new HashMap<String, Object>(0);
         innerliMap.put("type", "average");
         innerliMap.put("name", "平均值");
         List<Map> datamapList1 = new ArrayList<Map>();
@@ -1336,7 +1351,7 @@ public class ProjectVersionController {
 	}
 	
 	public static boolean checkdate(String str1,String str2){
-		if(str1.equals("")&&str2.equals("")){
+		if("".equals(str1)&&"".equals(str2)){
 			return true;
 		}
 		if("".equals(str1)||"".equals(str2)){
@@ -1359,11 +1374,12 @@ public class ProjectVersionController {
 	
 	public static String[] member(String str){
 		String splitFlag = ";";
-		String temp[] = new String[0];
-		if(str.equals("")){
+		String[] temp = new String[0];
+		if("".equals(str)){
 		return temp;
 		}
-		if(str.substring(str.length()-1,str.length()).indexOf(";")>-1){
+		String strfh=";";
+		if(str.substring(str.length()-1,str.length()).indexOf(strfh)>-1){
 			str = str.substring(0,str.length()-1);
 		}
 		temp=str.split(splitFlag,-1);
@@ -1373,7 +1389,7 @@ public class ProjectVersionController {
 	public static int interval(String str1,String str2,int type){
 		try  
 		{  
-			if(str1.equals("")||str2.equals("")){
+			if("".equals(str1)||"".equals(str2)){
 				return 0;
 			}
 		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  

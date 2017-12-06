@@ -12,8 +12,19 @@ function gouserInfo(){
 			return false; 
 		} 	
 	}else{
-		var url = '/userInfo/load.do';
-		window.location.href=url;
+		var url = "/userlogin/permissionboolean.do?permissioncode=ui_4";
+		jQuery.getJSON(url, null, function call(result) {
+			if (result.data[0] == null) {
+				toastr.warning('你好，当前用户无权限进入系统管理，请联系管理员！'); 
+				return false;
+			} else if (result.data[0] == "true") {
+				var url = '/userInfo/load.do';
+				window.location.href=url;
+			}else{
+				toastr.warning('你好，当前用户无权限进入系统管理，请联系管理员！'); 
+				return false;
+			}
+		});
 	}
 }
 

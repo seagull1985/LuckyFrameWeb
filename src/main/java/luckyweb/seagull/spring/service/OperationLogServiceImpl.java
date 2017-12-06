@@ -9,12 +9,21 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.OperationLogDao;
 import luckyweb.seagull.spring.entity.OperationLog;
 import luckyweb.seagull.spring.entity.SectorProjects;
 
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Service("operationlogService")
 public class OperationLogServiceImpl implements OperationLogService{
 	
@@ -50,7 +59,7 @@ public class OperationLogServiceImpl implements OperationLogService{
 		if (oplog.getOperation_description()!=null&&!oplog.getOperation_description().equals("")) {
 			where += " operation_description like :operation_description)  or ";
 		}
-		if (where.length() == 7) {
+		if (where.length() == PublicConst.WHERENUM) {
 			where = "";
 		}
 		else{
@@ -77,19 +86,19 @@ public class OperationLogServiceImpl implements OperationLogService{
 	
 	
 	@Override
-	public int add(HttpServletRequest req,String tablename,int tableid,int id,String operation_description) throws Exception {
+	public int add(HttpServletRequest req,String tablename,int tableid,int id,String operationDescription) throws Exception {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		OperationLog op_log = new OperationLog();
-		String operation_time = df.format(new Date()).toString();	
-		op_log.setTableid(tableid);
-		op_log.setOperation_time(operation_time);
-		op_log.setOperationer(req.getSession().getAttribute("username").toString());			
-		op_log.setTablename(tablename);
+		OperationLog opLog = new OperationLog();
+		String operationTime = df.format(new Date()).toString();	
+		opLog.setTableid(tableid);
+		opLog.setOperation_time(operationTime);
+		opLog.setOperationer(req.getSession().getAttribute("username").toString());			
+		opLog.setTablename(tablename);
 		SectorProjects p = new SectorProjects();
 		p.setProjectid(id);
-		op_log.setSectorProjects(p);
-		op_log.setOperation_description(operation_description);
-		return this.operationlogdao.add(op_log);
+		opLog.setSectorProjects(p);
+		opLog.setOperation_description(operationDescription);
+		return this.operationlogdao.add(opLog);
 	}
 	
 	@Override

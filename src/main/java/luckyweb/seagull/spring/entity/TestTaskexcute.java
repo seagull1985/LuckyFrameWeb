@@ -4,6 +4,15 @@ import java.sql.Timestamp;
 
 import javax.persistence.Entity;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Entity(name = "testTaskexcute")
 public class TestTaskexcute implements java.io.Serializable {
 
@@ -17,13 +26,19 @@ public class TestTaskexcute implements java.io.Serializable {
 	private int casesuccCount = 0;
 	private int casefailCount = 0;
 	private int caselockCount = 0;
-	private int casenoexecCount = 0;// 未执行用例数
+	/**
+	 * 未执行用例数
+	 */
+	private int casenoexecCount = 0;
 	private TestJobs testJob = new TestJobs();
 
 	private int jobid;
 	private String caseIsExec;
 	private Timestamp finishtime;
-	private String taskStatus;   //0 未执行   1执行中  2 成功    4失败
+	/**
+	 * 0 未执行   1执行中  2 成功    4失败
+	 */
+	private String taskStatus;   
 
 	private String startDate;
 	private String endDate;

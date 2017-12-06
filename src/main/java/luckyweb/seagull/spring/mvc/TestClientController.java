@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.quartz.QuartzManager;
 import luckyweb.seagull.quartz.QuratzJobDataMgr;
@@ -26,7 +27,15 @@ import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/testClient")
 public class TestClientController {
@@ -102,13 +111,13 @@ public class TestClientController {
 			tct.setProjectpername(sbnames.toString());
 		}
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(tcs);
+		String recordJson = StrLib.listToJson(tcs);
 		// 得到总记录数
 		int total = tcservice.findRows(tc);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 	
@@ -133,7 +142,7 @@ public class TestClientController {
 			JSONObject json = new JSONObject();
 			TestClient tctest =tcservice.getClient(tc.getClientip());
 			if(tc.getId()==0){
-				if (!UserLoginController.permissionboolean(req, "client_1")) {
+				if (!UserLoginController.permissionboolean(req, PublicConst.AUTHCLIENTADD)) {
 					json.put("status", "fail");
 					json.put("ms", "增加客户端失败,权限不足,请联系管理员!");
 				} else {
@@ -161,7 +170,7 @@ public class TestClientController {
 
 				}
 			}else{
-				if (!UserLoginController.permissionboolean(req, "client_3")) {
+				if (!UserLoginController.permissionboolean(req, PublicConst.AUTHCLIENTMOD)) {
 					json.put("status", "fail");
 					json.put("ms", "编辑客户端失败,权限不足,请联系管理员!");
 				} else {
@@ -224,7 +233,7 @@ public class TestClientController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "client_2")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHCLIENTDEL)) {
 				json.put("status", "fail");
 				json.put("ms", "删除客户端失败,权限不足,请联系管理员!");
 			} else {
@@ -312,7 +321,7 @@ public class TestClientController {
 		TestClient tc=tcservice.getClient(clientip);
 		ArrayList<String> pathlist=new ArrayList<String>();
 		String path=tc.getClientpath();
-		String temp[]=path.split(";",-1);
+		String[] temp=path.split(";",-1);
 		for(String pathtemp:temp){
 			if(!StrLib.isEmpty(pathtemp)){
 				pathlist.add(pathtemp);

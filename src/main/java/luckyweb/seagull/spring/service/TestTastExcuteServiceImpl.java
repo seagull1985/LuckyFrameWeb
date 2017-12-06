@@ -6,10 +6,20 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.TestTastExcuteDao;
 import luckyweb.seagull.spring.entity.TestTaskexcute;
 import luckyweb.seagull.util.StrLib;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Service("tastExcuteService")
 public class TestTastExcuteServiceImpl implements TestTastExcuteService {
 
@@ -61,7 +71,7 @@ public class TestTastExcuteServiceImpl implements TestTastExcuteService {
 		if (!StrLib.isEmpty(tast.getTaskStatus())) {
 			where += " taskStatus =:taskStatus and ";
 		}
-		if (where.length() == 7) {
+		if (where.length() == PublicConst.WHERENUM) {
 			where = "";
 		} else {
 			where = where.substring(0, where.length() - 5);
@@ -92,19 +102,24 @@ public class TestTastExcuteServiceImpl implements TestTastExcuteService {
 		if(StrLib.isEmpty(status)){
 			return "其他";
 		}else{
-			if(status.equals("0")){
+			String unex="0";
+			String exing="1";
+			String exsuc="2";
+			String exfail="3";
+			if(unex.equals(status)){
 				return "未执行";
-			}else if(status.equals("1")){
+			}else if(exing.equals(status)){
 				return "执行中";
-			}else if(status.equals("2")){
+			}else if(exsuc.equals(status)){
 				return "执行成功";
-			}else if(status.equals("3")){
+			}else if(exfail.equals(status)){
 				return "调起失败|超时";
 			}
 		}
 		return "其他";
 	}
 
+	@Override
 	public int findRows(TestTaskexcute tast ) {
 		String hql="select count(*) from TestTaskexcute"+where(tast);
 		return tastExcuteDao.findRows(hql,tast);
@@ -133,15 +148,17 @@ public class TestTastExcuteServiceImpl implements TestTastExcuteService {
 	}
 	
 	@Override
-	public void delete_forjobid(int jobid) throws Exception {
+	public void deleteForjobid(int jobid) throws Exception {
 		String hql="delete from TestTaskexcute where jobId=:jobId";
-		this.tastExcuteDao.delete_forjobid(hql, jobid);
+		this.tastExcuteDao.deleteForJobid(hql, jobid);
 	}
 	
+	@Override
 	public List getidlist(int jobid) throws Exception{
 		return this.tastExcuteDao.listtastinfo("select id from TEST_TASKEXCUTE where jobid="+jobid);
 	}
 	
+	@Override
 	@SuppressWarnings("rawtypes")
 	public List listtastinfo() throws Exception{
 		return this.tastExcuteDao.listtastinfo("select t.id,b.name,t.casetotal_count,t.casesucc_count,t.casefail_count,t.caselock_count,t.casenoexec_count,date_format(t.createtime,'%Y-%m-%d %T') "

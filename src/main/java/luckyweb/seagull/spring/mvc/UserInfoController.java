@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.SecondarySector;
 import luckyweb.seagull.spring.entity.SectorProjects;
@@ -33,7 +34,15 @@ import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/userInfo")
 public class UserInfoController {
@@ -93,7 +102,7 @@ public class UserInfoController {
 		List<UserInfo> users = userinfoservice.findByPage(userinfo, offset, limit);
 		for(int i=0;i<users.size();i++){
 			String role="";
-			String temp[]=users.get(i).getRole().split(";",-1);
+			String[] temp=users.get(i).getRole().split(";",-1);
 			for(SectorProjects projectlist:prolist){
 				if(users.get(i).getProjectid()==projectlist.getProjectid()){
 					users.get(i).setProjectname(projectlist.getProjectname());
@@ -105,24 +114,26 @@ public class UserInfoController {
 				if(null==temp[k]||"".equals(temp[k])){
 					continue;
 				}
+				StringBuilder stringBuilder = new StringBuilder();
 				for(int j=0;j<roleMap.size();j++){
 					if(Integer.valueOf(temp[k])==roleMap.get(j).getId()){
-						role = role+roleMap.get(j).getRole()+";";
+						stringBuilder.append(roleMap.get(j).getRole()+";");
 						break;
 					}
-				}					
+				}
+				role = role+stringBuilder.toString();
 			}
 			users.get(i).setRole(role);
 			users.get(i).setPassword("");
 		}
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(users);
+		String recordJson = StrLib.listToJson(users);
 		// 得到总记录数
 		int total = userinfoservice.findRows(userinfo);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 
@@ -146,7 +157,7 @@ public class UserInfoController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 			
-			if(!UserLoginController.permissionboolean(req, "ui_1")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHUSERINFOADD)){
 				model.addAttribute("userinfo", new UserInfo());
 				model.addAttribute("url", "/userInfo/load.do");
 				model.addAttribute("message", "当前用户无权限添加用户，请联系管理员！");
@@ -154,7 +165,7 @@ public class UserInfoController {
 			}
 
 			String retVal = "/jsp/user/user_add";
-			if (req.getMethod().equals("POST"))
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 				if (br.hasErrors())
 				{
@@ -195,7 +206,7 @@ public class UserInfoController {
 					return retVal;
 				}
 				
-				String temp[] = userinfo.getPassword().split(",",-1);
+				String[] temp = userinfo.getPassword().split(",",-1);
 				if(!temp[0].equals(temp[1])){
 					message = "两次输入的密码不一致，请确认！";
 					model.addAttribute("userrole", userroleservice.listall());
@@ -269,7 +280,7 @@ public class UserInfoController {
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			if (!UserLoginController.permissionboolean(req, "ui_2")) {
+			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHUSERINFODEL)) {
 				json.put("status", "fail");
 				json.put("ms", "删除用户失败,权限不足,请联系管理员!");
 			} else {
@@ -314,7 +325,7 @@ public class UserInfoController {
 		req.setCharacterEncoding("utf-8");
 		int id = Integer.valueOf(req.getParameter("id"));
 		
-		if(!UserLoginController.permissionboolean(req, "ui_3")){
+		if(!UserLoginController.permissionboolean(req, PublicConst.AUTHUSERINFOMOD)){
 			model.addAttribute("userinfo", new UserInfo());
 			model.addAttribute("url", "/userInfo/load.do");
 			model.addAttribute("message", "当前用户无权限修改用户信息，请联系管理员！");
@@ -323,7 +334,7 @@ public class UserInfoController {
 		Endecrypt endecrypt = new Endecrypt();
 		try{
 		String retVal = "/jsp/user/user_update";
-		if (req.getMethod().equals("POST"))
+		if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 		{
 			if (br.hasErrors())
 			{
@@ -362,7 +373,7 @@ public class UserInfoController {
 				model.addAttribute("message", message);
 				return retVal;
 			}
-			String temp[] = userinfo.getPassword().split(",",-1);
+			String[] temp = userinfo.getPassword().split(",",-1);
 			if(!temp[0].equals(temp[1])){
 				message = "两次输入的密码不一致，请确认！";
 				model.addAttribute("userrole", userroleservice.listall());
@@ -425,8 +436,8 @@ public class UserInfoController {
 	{
 		req.setCharacterEncoding("utf-8");
 		String usercode="";
-		if(req.getSession().getAttribute("usercode")!=null&&req.getSession().getAttribute("username")!=null){
-			usercode = req.getSession().getAttribute("usercode").toString();
+		if(req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)!=null&&req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)!=null){
+			usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 		}else{
 			model.addAttribute("message", "获取用户信息失败！");
 			model.addAttribute("url", "../index.jsp");
@@ -436,7 +447,7 @@ public class UserInfoController {
 		Endecrypt endecrypt = new Endecrypt();
 		try{
 		String retVal = "/jsp/user/user_pswupdate";
-		if (req.getMethod().equals("POST"))
+		if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 		{
 			if (br.hasErrors())
 			{
@@ -453,7 +464,7 @@ public class UserInfoController {
 				model.addAttribute("message", message);
 				return retVal;
 			}
-			String temp[] = userinfo.getPassword().split(",",-1);
+			String[] temp = userinfo.getPassword().split(",",-1);
 			if(!temp[0].equals(temp[1])){
 				message = "新密码两次输入的不一致，请确认！";
 				model.addAttribute("message", message);
@@ -508,8 +519,8 @@ public class UserInfoController {
 		
 		req.setCharacterEncoding("utf-8");
 		String usercode="";
-		if(req.getSession().getAttribute("usercode")!=null&&req.getSession().getAttribute("username")!=null){
-			usercode = req.getSession().getAttribute("usercode").toString();
+		if(req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)!=null&&req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)!=null){
+			usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 		}else{
 			model.addAttribute("message", "获取用户信息失败！");
 			model.addAttribute("url", "../index.jsp");
@@ -519,7 +530,7 @@ public class UserInfoController {
 		try{
 		String retVal = "/jsp/user/user_proupdate";
 		UserInfo ui = userinfoservice.getUseinfo(usercode);
-		if (req.getMethod().equals("POST"))
+		if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 		{
 			if (br.hasErrors())
 			{
@@ -565,7 +576,7 @@ public class UserInfoController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 
-			if(!UserLoginController.permissionboolean(req, "role_3")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHUSERROLEMOD)){
 				model.addAttribute("userinfo", new UserInfo());
 				model.addAttribute("url", "/userInfo/load.do");
 				model.addAttribute("message", "当前用户无权限查看角色权限信息，请联系管理员！");
@@ -584,14 +595,14 @@ public class UserInfoController {
 		    }
 		    
 			String retVal = "/jsp/user/role";
-			if (req.getMethod().equals("POST"))
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 				if (br.hasErrors())
 				{
 					return retVal;
 				}
 				String message = "";
-				if(StrLib.isEmpty(userrole.getRole())||"0".equals(userrole.getRole())){
+				if(StrLib.isEmpty(userrole.getRole())||PublicConst.STATUSSTR0.equals(userrole.getRole())){
 					message = "请至少选择一个角色保存";
 					model.addAttribute("projectlist", lsp);
 				    model.addAttribute("rolelist", userroleservice.listall());
@@ -674,7 +685,7 @@ public class UserInfoController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 
-			if(!UserLoginController.permissionboolean(req, "role_1")){
+			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHUSERINFOADD)){
 				model.addAttribute("userinfo", new UserInfo());
 				model.addAttribute("url", "/userInfo/load.do");
 				model.addAttribute("message", "当前用户无权限添加角色权限信息，请联系管理员！");
@@ -693,14 +704,14 @@ public class UserInfoController {
 		    }
 		    
 			String retVal = "/jsp/user/role_add";
-			if (req.getMethod().equals("POST"))
+			if (PublicConst.REQPOSTTYPE.equals(req.getMethod()))
 			{
 				if (br.hasErrors())
 				{
 					return retVal;
 				}
 				String message = "";
-				if(StrLib.isEmpty(userrole.getRole())||"0".equals(userrole.getRole())){
+				if(StrLib.isEmpty(userrole.getRole())||PublicConst.STATUSSTR0.equals(userrole.getRole())){
 					message = "请至少选择一个角色保存";
 					model.addAttribute("projectlist", lsp);
 				    model.addAttribute("rolelist", userroleservice.listall());
@@ -769,7 +780,7 @@ public class UserInfoController {
 	@RequestMapping(value = "/roledelete.do", method = RequestMethod.GET)
 	public String roledelete(Model model,HttpServletRequest req) throws Exception
 	{
-		if(!UserLoginController.permissionboolean(req, "role_2")){
+		if(!UserLoginController.permissionboolean(req, PublicConst.AUTHUSERINFODEL)){
 			model.addAttribute("userinfo", new UserInfo());
 			model.addAttribute("url", "/userInfo/load.do");
 			model.addAttribute("message", "当前用户无权限删除角色，请联系管理员！");
@@ -819,7 +830,7 @@ public class UserInfoController {
 		ArrayList<String> templistpermi=new ArrayList<String>();
 		ArrayList<String> templistoppro=new ArrayList<String>();
 		if(!StrLib.isEmpty(urole.getPermission())){
-			String temppermi[]=urole.getPermission().split(",",-1);		
+			String[] temppermi=urole.getPermission().split(",",-1);		
 			for(int i=0;i<temppermi.length;i++){
 				if(null==temppermi[i]||"".equals(temppermi[i])){
 					continue;
@@ -833,7 +844,7 @@ public class UserInfoController {
 		}
 
 		if(!StrLib.isEmpty(urole.getOpprojectid())){
-			String tempoppro[]=urole.getOpprojectid().split(",",-1);
+			String[] tempoppro=urole.getOpprojectid().split(",",-1);
 			for(int i=0;i<tempoppro.length;i++){
 				if(null==tempoppro[i]||"".equals(tempoppro[i])){
 					continue;
@@ -866,8 +877,8 @@ public class UserInfoController {
 	public String getloginuserinfo(Model model,HttpServletRequest req) throws Exception
 	{
 		String usercode="";
-		if(req.getSession().getAttribute("usercode")!=null&&req.getSession().getAttribute("username")!=null){
-			usercode = req.getSession().getAttribute("usercode").toString();
+		if(req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)!=null&&req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)!=null){
+			usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 		}else{
 			model.addAttribute("message", "获取用户信息失败！");
 			model.addAttribute("url", "../index.jsp");
@@ -880,7 +891,7 @@ public class UserInfoController {
 			UserInfo userinfo = userinfoservice.getUseinfo(usercode);
 			
 			List<UserRole> rolelist = userroleservice.listall();
-			String temp[]=userinfo.getRole().split(";",-1);
+			String[] temp=userinfo.getRole().split(";",-1);
 			List<String[]> list = new ArrayList<String[]>();
 			UserRole[] urarr = new UserRole[temp.length];
 			

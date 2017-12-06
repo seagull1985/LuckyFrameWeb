@@ -21,7 +21,15 @@ import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
 import net.sf.json.JSONObject;
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/operationLog")
 public class OperationLogController {
@@ -49,7 +57,7 @@ public class OperationLogController {
 					prolist.get(i).setProjectname(prolist.get(i).getProjectname()+"(TestLink项目)");
 				}
 			}
-			String startdate=DateLib.befor_Nd_format("yyyy-MM-dd HH:mm:ss", 7);
+			String startdate=DateLib.beforNdFormat("yyyy-MM-dd HH:mm:ss", 7);
 			String enddate=DateLib.today("yyyy-MM-dd HH:mm:ss");
 			model.addAttribute("projects", prolist);
 			model.addAttribute("projectid", 0);
@@ -92,7 +100,7 @@ public class OperationLogController {
 		}
 
 		if (StrLib.isEmpty(startTime)) {
-			oplog.setStarttime(DateLib.befor_Nd_format("yyyy-MM-dd HH:mm:ss", 7));
+			oplog.setStarttime(DateLib.beforNdFormat("yyyy-MM-dd HH:mm:ss", 7));
 		} else {
 			oplog.setStarttime(startTime);
 		}
@@ -104,13 +112,13 @@ public class OperationLogController {
 		
 		List<OperationLog> loglist = operationlogservice.findByPage(oplog, offset, limit);
 		// 转换成json字符串
-		String RecordJson = StrLib.listToJson(loglist);
+		String recordJson = StrLib.listToJson(loglist);
 		// 得到总记录数
 		int total = operationlogservice.findRows(oplog);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", RecordJson);
+		json.put("rows", recordJson);
 		pw.print(json.toString());
 	}
 	

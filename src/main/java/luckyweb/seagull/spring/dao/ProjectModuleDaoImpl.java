@@ -12,8 +12,18 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.entity.ProjectModule;
 
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Repository("projectModuleDao")
 public class ProjectModuleDaoImpl extends HibernateDaoSupport implements ProjectModuleDao{
 	
@@ -35,7 +45,7 @@ public class ProjectModuleDaoImpl extends HibernateDaoSupport implements Project
 	}
 
 	private void whereParameter(ProjectModule projectmodule, Query query) {
-		if (projectmodule.getProjectid()!=0&&projectmodule.getProjectid()!=99) {
+		if (projectmodule.getProjectid()!=0&&projectmodule.getProjectid()!=PublicConst.STATUS99) {
 			query.setParameter("projectid", projectmodule.getProjectid());
 		}
 	}
@@ -47,7 +57,7 @@ public class ProjectModuleDaoImpl extends HibernateDaoSupport implements Project
 		//System.out.println(hql);
 		List list = getHibernateTemplate().executeFind(new HibernateCallback() {
 			// 实现hibernateCallback接口必须实现的方法
-			
+			@Override
 			public Object doInHibernate(Session session)
 					throws HibernateException {
 				// 执行hibernate 分页查询
@@ -98,33 +108,6 @@ public class ProjectModuleDaoImpl extends HibernateDaoSupport implements Project
 		
 	}
 
-
-
-	@Override
-	public void modifyState(ProjectModule projectmodule) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void modifyInfo(ProjectModule projectmodule) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public List<ProjectModule> list(ProjectModule projectmodule)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ProjectModule> list(String hql) throws Exception {
@@ -137,33 +120,6 @@ public class ProjectModuleDaoImpl extends HibernateDaoSupport implements Project
 	public ProjectModule load(int id) throws Exception {		
 		return (ProjectModule) this.getHibernateTemplate().get(ProjectModule.class, id);
 	}
-
-
-
-	@Override
-	public List<ProjectModule> load(String name, String cmdType,
-			String planPath) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-	@Override
-	public ProjectModule get(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-	@Override
-	public List<ProjectModule> findJobsList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 
 	@SuppressWarnings("rawtypes")
 	@Override

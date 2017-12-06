@@ -14,6 +14,7 @@ import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.entity.UserAuthority;
 import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.entity.UserRole;
@@ -21,7 +22,15 @@ import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.spring.service.UserRoleService;
 import luckyweb.seagull.util.Endecrypt;
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Controller
 @RequestMapping("/userlogin")
 public class UserLoginController {	
@@ -54,7 +63,7 @@ public class UserLoginController {
 			String auth = "";
 			String oppid = "";
 			UserInfo userinfo = userinfoservice.load(id);
-			String temp[]=userinfo.getRole().split(";",-1);
+			String[] temp=userinfo.getRole().split(";",-1);
 			for(int i=0;i<temp.length;i++){
 				if(null==temp[i]||"".equals(temp[i])){
 					continue;
@@ -120,10 +129,10 @@ public class UserLoginController {
 	@RequestMapping(value = "/loginboolean.do")
 	public void loginboolean(HttpServletRequest req, HttpServletResponse rsp) throws IOException, InterruptedException{
 		String[] status = new String[3];
-		if(req.getSession().getAttribute("usercode")!=null&&req.getSession().getAttribute("username")!=null){
+		if(req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)!=null&&req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)!=null){
 			status[0] = "login";
-			status[1] = req.getSession().getAttribute("usercode").toString();
-			status[2] = req.getSession().getAttribute("username").toString();
+			status[1] = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
+			status[2] = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME).toString();
 		}else{
 			status[0] = "logout";
 			status[1] = "未登录";
@@ -148,9 +157,9 @@ public class UserLoginController {
 	 */
 	public static boolean permissionboolean(HttpServletRequest req,String opr) throws IOException, InterruptedException{
 		boolean result;
-		
-		if(req.getSession().getAttribute("permission")!=null){
-			if(req.getSession().getAttribute("permission").toString().indexOf(","+opr+",")>=0){
+		String fgf=",";
+		if(req.getSession().getAttribute(PublicConst.SESSIONKEYPERMISSION)!=null){
+			if(req.getSession().getAttribute(PublicConst.SESSIONKEYPERMISSION).toString().indexOf(fgf+opr+fgf)>=0){
 				result = true;
 			}else{
 				result = false;
@@ -164,9 +173,9 @@ public class UserLoginController {
 	
 	public static boolean oppidboolean(HttpServletRequest req, int projectids) {
 		boolean result = false;
-
-		if (req.getSession().getAttribute("oppid") != null) {
-			if (req.getSession().getAttribute("oppid").toString().indexOf(","+projectids + ",") >= 0) {
+		String fgf=",";
+		if (req.getSession().getAttribute(PublicConst.SESSIONKEYPROJECTID) != null) {
+			if (req.getSession().getAttribute(PublicConst.SESSIONKEYPROJECTID).toString().indexOf(fgf+projectids + fgf) >= 0) {
 				result = true;
 			} else {
 				result = false;
@@ -196,7 +205,7 @@ public class UserLoginController {
 			if(null==role){
 				continue;
 			}
-			String temp[] = role.getPermission().split(",", -1);
+			String[] temp = role.getPermission().split(",", -1);
 			authlist:for (int i = 0; i < temp.length; i++) {
 				if (null == temp[i] || "".equals(temp[i])) {
 					continue;
@@ -214,12 +223,12 @@ public class UserLoginController {
 			}
 		}
 		
-		String authstr="";
-		for (UserAuthority auth : newlistauth) {
-			authstr = authstr+auth.getModule()+"_"+auth.getAuth_type()+";&nbsp;&nbsp;&nbsp;&nbsp;";
-		}
 		
-		return authstr;
+		StringBuilder stringBuilder = new StringBuilder();
+		for (UserAuthority auth : newlistauth) {
+			stringBuilder.append(auth.getModule()+"_"+auth.getAuth_type()+";&nbsp;&nbsp;&nbsp;&nbsp;");
+		}
+		return stringBuilder.toString();
 	}
 	
 	/**
@@ -230,12 +239,12 @@ public class UserLoginController {
 	 * @Description:
 	 */
 	@RequestMapping(value = "/permissionboolean.do")
-	public void permissionboolean_jason(HttpServletRequest req, HttpServletResponse rsp) throws IOException, InterruptedException{
+	public void permissionBooleanJson(HttpServletRequest req, HttpServletResponse rsp) throws IOException, InterruptedException{
 		String[] status = new String[2];
 		String	opr = req.getParameter("permissioncode");
-		
-		if(req.getSession().getAttribute("permission")!=null){
-			if(req.getSession().getAttribute("permission").toString().indexOf(","+opr+",")>=0){
+		String fgf=",";
+		if(req.getSession().getAttribute(PublicConst.SESSIONKEYPERMISSION)!=null){
+			if(req.getSession().getAttribute(PublicConst.SESSIONKEYPERMISSION).toString().indexOf(fgf+opr+fgf)>=0){
 				status[0] = "true";
 			}else{
 				status[0]  = "false";

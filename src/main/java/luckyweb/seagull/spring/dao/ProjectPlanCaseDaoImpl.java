@@ -15,7 +15,15 @@ import org.springframework.stereotype.Repository;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
 import luckyweb.seagull.spring.entity.ProjectPlanCase;
 
-
+/**
+ * =================================================================
+ * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
+ * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改
+ * 有任何疑问欢迎联系作者讨论。 QQ:1573584944  seagull1985
+ * =================================================================
+ * 
+ * @author seagull
+ */
 @Repository("projectPlanCaseDao")
 public class ProjectPlanCaseDaoImpl extends HibernateDaoSupport implements ProjectPlanCaseDao{
 	
@@ -64,7 +72,7 @@ public class ProjectPlanCaseDaoImpl extends HibernateDaoSupport implements Proje
 		//System.out.println(hql);
 		List list = getHibernateTemplate().executeFind(new HibernateCallback() {
 			// 实现hibernateCallback接口必须实现的方法
-			
+			@Override
 			public Object doInHibernate(Session session)
 					throws HibernateException {
 				// 执行hibernate 分页查询
@@ -118,33 +126,6 @@ public class ProjectPlanCaseDaoImpl extends HibernateDaoSupport implements Proje
 		
 	}
 
-
-
-	@Override
-	public void modifyState(ProjectPlanCase projectplancase) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void modifyInfo(ProjectPlanCase projectplancase) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public List<ProjectPlanCase> list(ProjectPlanCase projectplancase)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ProjectPlanCase> list(String hql) throws Exception {
@@ -159,33 +140,6 @@ public class ProjectPlanCaseDaoImpl extends HibernateDaoSupport implements Proje
 		return (ProjectPlanCase) this.getHibernateTemplate().get(ProjectPlanCase.class, id);
 		//return (ProjectCase) this.getSession().load(ProjectCase.class, id);
 	}
-
-
-
-	@Override
-	public List<ProjectPlanCase> load(String name, String cmdType,
-			String planPath) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-	@Override
-	public ProjectPlanCase get(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-	@Override
-	public List<ProjectPlanCase> findJobsList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 
 	@SuppressWarnings("rawtypes")
 	@Override
