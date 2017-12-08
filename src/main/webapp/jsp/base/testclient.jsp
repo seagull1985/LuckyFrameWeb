@@ -381,7 +381,7 @@
 	    
 	    $(function () { $('#addModal').on('hide.bs.modal', function () {
 	        // 关闭时清空edit状态为add
-	        $("#tb_testclient").bootstrapTable('refresh');
+	    	location.reload();
 	    })
 	    });
 	    

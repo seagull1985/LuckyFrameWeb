@@ -155,10 +155,16 @@ public class PublicCaseParamsController {
 					json.put("status", "fail");
 					json.put("ms", "增加公共参数失败,项目权限不足,请联系管理员!");
 				}else {
-					int id=pcpservice.add(pcp);
-					operationlogservice.add(req, "PUBLIC_CASEPARAMS", id, pcp.getProjectid(),"公共参数【"+pcp.getParamsname()+"】添加成功！");
-					json.put("status", "success");
-					json.put("ms", "添加客户端成功!");
+		        	PublicCaseParams existPcp = pcpservice.getParamByName(pcp.getParamsname(),String.valueOf(pcp.getProjectid()));           
+		            if(null!=existPcp){
+						json.put("status", "fail");
+						json.put("ms", "增加公共参数失败,参数名称已经在项目中存在!");
+		            }else{
+						int id=pcpservice.add(pcp);
+						operationlogservice.add(req, "PUBLIC_CASEPARAMS", id, pcp.getProjectid(),"公共参数【"+pcp.getParamsname()+"】添加成功！");
+						json.put("status", "success");
+						json.put("ms", "添加客户端成功!");
+		            }
 				}
 			}else{
 				if (!UserLoginController.permissionboolean(req, accesscode_paramupdate)) {
@@ -168,10 +174,25 @@ public class PublicCaseParamsController {
 					json.put("status", "fail");
 					json.put("ms", "编辑公共参数失败,项目权限不足,请联系管理员!");
 				} else {
-					pcpservice.modify(pcp);
-					operationlogservice.add(req, "PUBLIC_CASEPARAMS", pcp.getId(), pcp.getProjectid(), "公共参数【"+pcp.getParamsname()+"】编辑成功！");
-					json.put("status", "success");
-					json.put("ms", "编辑公共参数成功!");
+		        	PublicCaseParams existPcp = pcpservice.load(Integer.valueOf(pcp.getId()));
+		        	Boolean result=false;
+		        	if(pcp.getParamsname().equals(existPcp.getParamsname())){
+		        		result=true;
+		        	}else{
+		        		existPcp=pcpservice.getParamByName(pcp.getParamsname(),String.valueOf(pcp.getProjectid()));
+		                if(null==existPcp){
+		                	result=true;
+		                }
+		        	}
+		        	if(result){
+						pcpservice.modify(pcp);
+						operationlogservice.add(req, "PUBLIC_CASEPARAMS", pcp.getId(), pcp.getProjectid(), "公共参数【"+pcp.getParamsname()+"】编辑成功！");
+						json.put("status", "success");
+						json.put("ms", "编辑公共参数成功!");
+		        	}else{
+						json.put("status", "fail");
+						json.put("ms", "增加公共参数失败,参数名称已经在项目中存在!");
+		        	}
 
 				}
 			}
@@ -282,8 +303,8 @@ public class PublicCaseParamsController {
             }
         }
         return "{\"valid\":"+result+"}";
-    }  
-	
+    } 
+    
 	@RequestMapping(value = "/cgetParamsByProjectid.do")
 	public void cgetParamsByProjectid(HttpServletRequest req, HttpServletResponse rsp) {
 		// 更新实体

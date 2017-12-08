@@ -296,7 +296,7 @@
 	    // 提交表单
 	    function check_form()
 	    {
-	    	$('#form_data').data('bootstrapValidator').validate();  
+	    	  $('#form_data').data('bootstrapValidator').validate();  
 	    	  if(!$('#form_data').data('bootstrapValidator').isValid()){  
 	    		 return ;  
 	    	  } 
@@ -333,7 +333,6 @@
 	                    },
 	                    complete:function()
 	                    {
-	                       /*  $('#addModal').hide(); */
 	                    }
 	                });
 
@@ -360,7 +359,7 @@
 	    
 	    $(function () { $('#addModal').on('hide.bs.modal', function () {
 	        // 关闭时清空edit状态为add
-	    	$("#tb_params").bootstrapTable('refresh');
+	    	location.reload();
 	    })
 	    });
 	    

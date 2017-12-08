@@ -136,7 +136,7 @@ create table QA_REVIEW
   review_result    VARCHAR(50) COMMENT '评审结果',
   result_confirmor VARCHAR(50) COMMENT '结果确认人',
   remark           VARCHAR(500) COMMENT '备注',
-   primary key (id)
+  primary key (id)
 )default character set utf8;
 create table QA_REVIEWINFO
 (
@@ -292,7 +292,7 @@ create table TEST_CLIENT
   projectper  VARCHAR(200) COMMENT '使用项目',
   status  int(2) COMMENT '客户端超时 0 正常 1 链接失败 2 状态未知',
   checkinterval int(6) not null COMMENT '检查客户端状态心跳间隔时间 单位:秒',
-  clientpath VARCHAR(100) COMMENT '客户端测试驱动桩路径 多个;做分隔';
+  clientpath VARCHAR(100) COMMENT '客户端测试驱动桩路径 多个;做分隔',
   remark  VARCHAR(100) COMMENT '备注',
   primary key (id)
 )default character set utf8;
@@ -382,7 +382,7 @@ create table PROJECT_TEMPLATEPARAMS
   templateid            int(8) not null COMMENT '模块ID',
   paramname             VARCHAR(50) not null COMMENT '参数名',
   param                 VARCHAR(2000) COMMENT '参数默认值',
-  paramtype             int(4) not null COMMENT '0 String 1 JSON对象 2 JSONARR对象'
+  paramtype             int(4) not null COMMENT '0 String 1 JSON对象 2 JSONARR对象',
   primary key (ID)
 )default character set utf8;
 

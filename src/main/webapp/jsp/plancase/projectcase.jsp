@@ -692,7 +692,8 @@
 	    }
 	    
 	    $(function () { $('#addModal').on('hide.bs.modal', function () {
-			$("#tb_projectcase").bootstrapTable('refresh');
+	    	// 关闭时清空edit状态为add
+	    	location.reload();
 	    })
 	    });
 	    

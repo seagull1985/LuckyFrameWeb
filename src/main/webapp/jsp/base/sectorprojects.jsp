@@ -428,8 +428,8 @@
 	    }
 	    
 	    $(function () { $('#addModal').on('hide.bs.modal', function () {
-	        // 关闭时清空edit状态为add
-	        $("#tb_sectorproject").bootstrapTable('refresh');
+	    	// 关闭时清空edit状态为add
+	    	location.reload();
 	    })
 	    });
 	    
