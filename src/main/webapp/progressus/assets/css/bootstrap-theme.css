@@ -8,7 +8,7 @@
 }
 
 .navbar-inverse .navbar-nav > li > a,
-.navbar-inverse .navbar-nav > .open ul > a { color:rgba(255, 255, 255, .4); }
+.navbar-inverse .navbar-nav > .open ul > a { color:rgba(255, 255, 255, .8); }
 
 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .active > a:hover, 
