@@ -23,6 +23,8 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (48, 2, 0, 'operation','HttpURLDelete','使用HttpURLDelete发送delete请求');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (49, 2, 0, 'operation','httpClientPut','使用httpClientPut发送put请求');
+insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
+values (50, 2, 0, 'operation','httpClientPutJson','使用httpClientPutJson发送put请求');
 /*增加公共参加控制权限*/
 insert into USER_AUTHORITY (id, module, auth_type, alias)
 values (67, '公共参数', '增加', 'pcp_1');

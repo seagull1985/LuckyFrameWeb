@@ -636,6 +636,8 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (48, 2, 0, 'operation','HttpURLDelete','使用HttpURLDelete发送delete请求');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (49, 2, 0, 'operation','httpClientPut','使用httpClientPut发送put请求');
+insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
+values (50, 2, 0, 'operation','httpClientPutJson','使用httpClientPutJson发送put请求');
 /*插入角色默认定义*/
 insert into USER_ROLE (id, role, permission)
 values (2, '测试工程师', 'acc_1,acc_2,acc_3,');
