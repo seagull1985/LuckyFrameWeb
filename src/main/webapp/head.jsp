@@ -37,18 +37,18 @@
     toastr.options.positionClass = 'toast-bottom-center';  
  </script> 
 
-	<div class="navbar navbar-inverse navbar-fixed-top headroom" style="background-color:rgba(128,138,135,0.6);font-size:20px;font-family:Microsoft YaHei;">
+	<div class="navbar navbar-inverse navbar-fixed-top headroom" style="background-color:rgba(128,138,135,0.6);font-size:18px;font-family:Microsoft YaHei;">
 		<div class="container" style="width:100%;">
-			<div class="navbar-header" style="margin-left:5%">
+			<div class="navbar-header" style="margin-left:3%">
 				<!-- Button for smallest screens -->
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
 				<a class="navbar-brand" href="/index.jsp"><img src="/progressus/assets/images/logo.png" alt="Progressus HTML5 template"></a>
 			</div>
 			<div class="navbar-collapse collapse" style="float:left;">
 				<ul class="nav navbar-nav pull-right">
-					<li><a href="/" style="font-size:20px;font-weight:bold;">主页</a></li>
+					<li><a href="/" style="font-weight:bold;">主页</a></li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-size:20px;font-weight:bold;">UTP<b class="caret"></b></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-weight:bold;">UTP<b class="caret"></b></a>
 						<ul class="dropdown-menu" style="background-color:rgba(88,87,86,0.6);">
 							<li><a href="/projectPlan/load.do">测试计划</a></li>
 							<li><a href="/projectCase/load.do">用例管理</a></li>
@@ -59,7 +59,7 @@
 						</ul>
 					</li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-size:20px;font-weight:bold;">质量管理<b class="caret"></b></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-weight:bold;">质量管理<b class="caret"></b></a>
 						<ul class="dropdown-menu" style="background-color:rgba(88,87,86,0.6);">
 							<li><a href="/projectVersion/load.do">版本信息</a></li>
 							<li><a href="/flowCheck/load.do">过程检查</a></li>
@@ -68,7 +68,7 @@
 						</ul>
 					</li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-size:20px;font-weight:bold;">测试工具<b class="caret"></b></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-weight:bold;">测试工具<b class="caret"></b></a>
 						<ul class="dropdown-menu" style="background-color:rgba(88,87,86,0.6);">
 							<li><a href="javascript:window.open('http://XXX.XX.XX.XX/testlink/login.php')">用例管理(TestLink)</a></li>
 							<li><a href="javascript:window.open('http://XXX.XX.XX.XX:8080')">缺陷管理(JIRA)</a></li>
@@ -79,28 +79,28 @@
 						</ul>
 					</li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-size:20px;font-weight:bold;">测试环境<b class="caret"></b></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-weight:bold;">测试环境<b class="caret"></b></a>
 						<ul class="dropdown-menu" style="background-color:rgba(88,87,86,0.6);">
 							<li><a href="javascript:window.open('http://XXX.XX.XX.XX:8080/test1/')">测试系统一</a></li>
                             <li><a href="javascript:window.open('http://XXX.XX.XX.XX:8080/tesst2/')">测试系统二</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-size:20px;font-weight:bold;">关于<b class="caret"></b></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-weight:bold;">关于<b class="caret"></b></a>
 						<ul class="dropdown-menu" style="background-color:rgba(88,87,86,0.6);">
 							<li><a href="/progressus/contact.jsp">联系我们</a></li>
 						</ul>
 					</li>
-					<li>
-					<a id="logoutbt" class="btn" href="/progressus/signin.jsp">登录</a>
-					<a id="loginbt" class="btn" onclick="logout()" style="display:none;">注销</a>
-					</li>
 				</ul>
 			</div><!--/.nav-collapse -->
-			<div class="navbar-collapse collapse" style="float:left;">
+			<div class="navbar-collapse collapse" style="margin-right:3%">
 			     <ul class="nav navbar-nav pull-right">
-			     <li>
+			     	<li>
 					<a id="loginmess" href="/userInfo/getlogininfo.do" style="display:none;"></a>
+					</li>
+			     	<li>
+					<a id="logoutbt" class="btn" href="/progressus/signin.jsp">登录</a>
+					<a id="loginbt" class="btn" onclick="logout()" style="display:none;">注销</a>
 					</li>
 				 </ul>
 			</div>
@@ -126,9 +126,9 @@ jQuery(function loginboolean(){
 	    	}else if(result.data[0]=="login"){
 	    		document.getElementById("loginstatus").value = "true";
 	    		document.getElementById("loginmess").innerHTML = result.data[2]+"("+result.data[1]+")&nbsp;&nbsp;欢迎您！";
-				 document.getElementById("logoutbt").style.display = "none"; 
-				 document.getElementById("loginbt").style.display = "block";
-				 document.getElementById("loginmess").style.display = "block";
+				document.getElementById("logoutbt").style.display = "none"; 
+				document.getElementById("loginbt").style.display = "block";
+				document.getElementById("loginmess").style.display = "block";
 				 return true;
 			 }else{
 				document.getElementById("loginstatus").value = "false";
