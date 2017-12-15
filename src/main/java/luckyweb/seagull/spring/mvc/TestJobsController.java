@@ -939,7 +939,7 @@ public class TestJobsController
 	 * @throws SQLException
 	 */
 	@RequestMapping(value = "/startNow.do")
-	public String startNow(Model model, HttpServletRequest req, HttpServletResponse rsp)
+	public void startNow(Model model, HttpServletRequest req, HttpServletResponse rsp)
 	        throws Exception
 	{
 		PrintWriter pw = null;
@@ -972,13 +972,11 @@ public class TestJobsController
 				operationlogservice.add(req, "TESTJOBS", Integer.valueOf(id), 
 						sectorprojectsService.getid(tj.getPlanproj()),"自动化用例计划任务被执行！计划名称："+tj.getTaskName()+" 结果："+message);
 				pw.write(message);
-				return null;
 			}
 			catch (Exception e)
 			{
 				String message = "当前项目在服务器不存在！";
 				pw.write(message);
-				return null;
 			}
 
 		}
@@ -986,7 +984,6 @@ public class TestJobsController
 		{
 			model.addAttribute("message", e.getMessage());
 			pw.write(e.getMessage());
-			return null;
 		}
 
 	}
@@ -1151,4 +1148,54 @@ public class TestJobsController
 		return "success";
 	}
 	
+	/**
+	 * 提供任务调度接口
+	 * 
+	 * @param tj
+	 * @return
+	 * @throws SQLException
+	 */
+	@RequestMapping(value = "/runJobForInterface.do")
+	public void runJobForInterface(HttpServletRequest req, HttpServletResponse rsp)throws Exception{
+		PrintWriter pw = null;
+		rsp.setContentType("text/html;charset=utf-8");
+		int jobid = Integer.valueOf(req.getParameter("jobid"));
+		try
+		{
+			TestJobs tj = testJobsService.load(jobid);
+			pw = rsp.getWriter();
+
+			String startDate = DateLib.today("yyyy-MM-dd");
+			String startTime = DateLib.today("HH:mm:ss");
+			tj.setStartDate(startDate);
+			tj.setStartTime(startTime);
+
+			long runtime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(
+			        tj.getStartDate() + " " + tj.getStartTime()).getTime();
+			tj.setRunTime(new Timestamp(runtime));
+
+			String startTimestr = tj.getStartTimestr();
+			tj.setStartTimestr(startTimestr);
+
+			tj.setCreateTime(DateUtil.now());
+
+			try
+			{
+				QuartzJob qj = new QuartzJob();
+				String message = qj.toRunTask(tj.getPlanproj(), jobid,tj.getTaskName(),tj.getClientip(),tj.getClientpath());
+				pw.write(JSONObject.fromObject("{result:\""+message+"\"}").toString());
+			}
+			catch (Exception e)
+			{
+				String message = "当前项目在服务器不存在！";
+				pw.write(JSONObject.fromObject("{result:"+message+"}").toString());
+			}
+
+		}
+		catch (Exception e)
+		{
+			pw.write(JSONObject.fromObject("{result:"+e.getMessage()+"}").toString());
+		}
+
+	}
 }

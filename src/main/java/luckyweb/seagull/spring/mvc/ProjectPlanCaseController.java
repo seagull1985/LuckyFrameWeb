@@ -67,7 +67,7 @@ public class ProjectPlanCaseController {
 	@Resource(name = "userinfoService")
 	private UserInfoService userinfoservice;
 	
-	private List<ProjectCase> viewToSaveCase;
+	private List<ProjectCase> viewToSaveCase=new ArrayList<ProjectCase>();
 	
 	private List<Integer> listmoduleid=new ArrayList<Integer>();
 
@@ -334,8 +334,14 @@ public class ProjectPlanCaseController {
 					ppc.setCaseid(projectcase.getId());
 					ppc.setPlanid(Integer.valueOf(planid));
 					ppc.setPriority(projectcase.getPriority());
-					result = "编辑成功！并已帮您把此用例加入到计划中！";
 					projectplancaseservice.add(ppc);
+					//修改全局变量里面用例的勾选状态
+					for(ProjectCase pc:viewToSaveCase){
+						if(pc.getId()==projectcase.getId()){
+							pc.setChecktype(1);
+						}
+					}
+					result = "编辑成功！并已帮您把此用例加入到计划中！";
 				} else {
 					ppc.setPriority(projectcase.getPriority());
 					projectplancaseservice.modify(ppc);
