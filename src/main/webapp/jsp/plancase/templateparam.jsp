@@ -97,16 +97,25 @@
 																<option value="0">String</option>
 														        <option value="1" selected = "selected">JSON对象</option>
 														        <option value="2">JSONARR对象</option>
+														        <option value="3">File对象</option>
                                                             </c:when>
                                                             <c:when test="${t.paramtype=='2' }">
 																<option value="0">String</option>
 														        <option value="1">JSON对象</option>
 														        <option value="2" selected = "selected">JSONARR对象</option>
+														        <option value="3">File对象</option>
+                                                            </c:when>
+                                                            <c:when test="${t.paramtype=='3' }">
+																<option value="0">String</option>
+														        <option value="1">JSON对象</option>
+														        <option value="2">JSONARR对象</option>
+														        <option value="3" selected = "selected">File对象</option>
                                                             </c:when>
 															<c:otherwise>
 																<option value="0" selected = "selected">String</option>
 														        <option value="1">JSON对象</option>
 														        <option value="2">JSONARR对象</option>
+														        <option value="3">File对象</option>
                                                             </c:otherwise>
 														</c:choose>
 												</select></td>

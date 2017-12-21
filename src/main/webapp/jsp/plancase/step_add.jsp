@@ -68,7 +68,7 @@
 												<td width="18%"><sf:input type="text"
 														class="form-control" path="path" id="path${i.count}"
 														value="${t.path }" /></td>
-												<td width="13%"><div class="input-group"><sf:input type="text"
+												<td width="13%"><div class="input-group" style="width:100%;"><sf:input type="text"
 														class="form-control" path="operation"
 														id="operation${i.count}" value="${t.operation }" />
 														<div class="input-group-btn">

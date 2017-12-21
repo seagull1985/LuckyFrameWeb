@@ -382,7 +382,7 @@ create table PROJECT_TEMPLATEPARAMS
   templateid            int(8) not null COMMENT '模块ID',
   paramname             VARCHAR(50) not null COMMENT '参数名',
   param                 VARCHAR(2000) COMMENT '参数默认值',
-  paramtype             int(4) not null COMMENT '0 String 1 JSON对象 2 JSONARR对象',
+  paramtype             int(4) not null COMMENT '0 String 1 JSON对象 2 JSONARR对象 3 文件类型',
   primary key (ID)
 )default character set utf8;
 
@@ -638,6 +638,8 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (49, 2, 0, 'operation','httpClientPut','使用httpClientPut发送put请求');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (50, 2, 0, 'operation','httpClientPutJson','使用httpClientPutJson发送put请求');
+insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
+values (51, 2, 0, 'operation','httpClientUploadFile','使用httpClientUploadFile上传文件');
 /*插入角色默认定义*/
 insert into USER_ROLE (id, role, permission)
 values (2, '测试工程师', 'acc_1,acc_2,acc_3,');

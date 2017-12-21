@@ -58,7 +58,6 @@ public class ProjectTemplateParamsController {
 	@Resource(name = "userinfoService")
 	private UserInfoService userinfoservice;
 
-	private List<ProjectTemplateParams> oldParamsList;
 	/**
 	 * 添加步骤
 	 * 
@@ -103,7 +102,6 @@ public class ProjectTemplateParamsController {
 			}
 			String retVal = "/jsp/plancase/templateparam";
 			List<ProjectTemplateParams> paramslist = ptemplateparamsService.getParamsList(Integer.valueOf(templateid));
-			oldParamsList = paramslist;
 			
 			if (paramslist.size() == 0) {
 				ProjectTemplateParams ptp = new ProjectTemplateParams();
@@ -185,18 +183,16 @@ public class ProjectTemplateParamsController {
 			Date currentTime = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String time = formatter.format(currentTime);
-			ProjectProtocolTemplate ppt = new ProjectProtocolTemplate();
 			
-			List<ProjectTemplateParams> paramslist =oldParamsList;
+			ProjectTemplateParams oldtempparam = (ProjectTemplateParams) list.get(0);
+			ProjectProtocolTemplate ppt = ptemplateservice.load(oldtempparam.getTemplateid());
+			List<ProjectTemplateParams> paramslist =ptemplateparamsService.getParamsList(oldtempparam.getTemplateid());
 			for (int i = 0; i < list.size(); i++) {
 				ProjectTemplateParams param = (ProjectTemplateParams) list.get(i);
 				if(param.getParam().indexOf("***[")>-1&&"***[".equals(param.getParam().substring(0, 4))){
 					param.setParam(param.getParam().substring(3));
 				}
 				
-				if(i==0){
-					ppt = ptemplateservice.load(param.getTemplateid());
-				}
 				//标识是否已有参数
 				int tag=0;   
 				for (ProjectTemplateParams oldparam:paramslist) {
@@ -217,7 +213,7 @@ public class ProjectTemplateParamsController {
 				}
 			}
 			// 删除原有列表中多的步骤
-			for (ProjectTemplateParams oldparam:paramslist) { 
+			for (ProjectTemplateParams oldparam:paramslist) {
 				ptemplateparamsService.deleteforob(oldparam);
 			}
 			

@@ -15,7 +15,7 @@ alter table TEST_CLIENT add clientpath VARCHAR(100) COMMENT '客户端测试驱�
 /*协议模板表增加消息头字段*/
 alter table PROJECT_PROTOCOLTEMPLATE add headmsg VARCHAR(500) COMMENT '消息头';
 /*协议模板参数表增加参数类型*/
-alter table PROJECT_TEMPLATEPARAMS add paramtype int(4) default 0 COMMENT '0 String 1 JSON对象 2 JSONARR对象';
+alter table PROJECT_TEMPLATEPARAMS add paramtype int(4) default 0 COMMENT '0 String 1 JSON对象 2 JSONARR对象 3 文件类型';
 /*HTTP请求增加三种请求模式*/
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (47, 2, 0, 'operation','HttpClientPostJSON','使用HttpClient发送JSON格式post请求');
@@ -25,6 +25,8 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (49, 2, 0, 'operation','httpClientPut','使用httpClientPut发送put请求');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (50, 2, 0, 'operation','httpClientPutJson','使用httpClientPutJson发送put请求');
+insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
+values (51, 2, 0, 'operation','httpClientUploadFile','使用httpClientUploadFile上传文件');
 /*增加公共参加控制权限*/
 insert into USER_AUTHORITY (id, module, auth_type, alias)
 values (67, '公共参数', '增加', 'pcp_1');

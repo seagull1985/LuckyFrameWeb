@@ -18,6 +18,8 @@ import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectPlan;
+import luckyweb.seagull.spring.entity.ProjectProtocolTemplate;
+import luckyweb.seagull.spring.entity.PublicCaseParams;
 import luckyweb.seagull.spring.entity.SecondarySector;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.TestCasedetail;
@@ -25,6 +27,8 @@ import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectCaseService;
 import luckyweb.seagull.spring.service.ProjectPlanService;
+import luckyweb.seagull.spring.service.ProjectProtocolTemplateService;
+import luckyweb.seagull.spring.service.PublicCaseParamsService;
 import luckyweb.seagull.spring.service.SecondarySectorService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.TestJobsService;
@@ -59,6 +63,12 @@ public class SectorProjectsController {
 	
 	@Resource(name = "projectPlanService")
 	private ProjectPlanService projectplanservice;
+	
+	@Resource(name = "projectprotocoltemplateService")
+	private ProjectProtocolTemplateService ptemplateservice;
+	
+	@Resource(name = "publiccaseparamsService")
+	private PublicCaseParamsService pcpservice;
 	
 	@Resource(name = "operationlogService")
 	private OperationLogService operationlogservice;
@@ -267,46 +277,66 @@ public class SectorProjectsController {
 					int id = Integer.valueOf(jsonarr.get(i).toString());
 					SectorProjects sectorproject = sectorprojectsservice.loadob(id);
 					
-					if(null!=sectorproject&&sectorproject.getProjecttype()==0){
-						int rows = sectorprojectsservice.projectrow(id);
-						if(rows>=1){
+					if(null!=sectorproject){
+						
+						//检查质量模块项目关联
+						int qarows = sectorprojectsservice.projectrow(id);
+						if(qarows>=1){
 							status="fail";
 							ms=sectorproject.getProjectname()+"有关联质量模块的记录，不能删除!";
 							break;
 						}
-					}
-					
-					if(null!=sectorproject&&sectorproject.getProjecttype()==1){
+						
+						//检查调度任务项目关联
 						TestJobs testjobs = new TestJobs();
 						testjobs.setPlanproj(sectorproject.getProjectname());
-						int rows = testJobsService.findRows(testjobs);
-						if(rows>=1){
+						int jobrows = testJobsService.findRows(testjobs);
+						if(jobrows>=1){
 							status="fail";
 							ms=sectorproject.getProjectname()+"有关联自动化调度任务的记录，不能删除!";
 							break;
 						}
-					}
-					
-					if(null!=sectorproject&&sectorproject.getProjecttype()==0){
+						
+						//检查测试计划项目关联
 						ProjectPlan plan = new ProjectPlan();
 						plan.setProjectid(id);
-						int rows = projectplanservice.findRows(plan);
-						if(rows>=1){
+						int planrows = projectplanservice.findRows(plan);
+						if(planrows>=1){
 							status="fail";
 							ms=sectorproject.getProjectname()+"有关联测试计划的记录，不能删除!";
 							break;
 						}
-					}
-					
-					if(null!=sectorproject&&sectorproject.getProjecttype()==0){
+						
+						//检查测试用例项目关联
 						ProjectCase cases = new ProjectCase();
 						cases.setProjectid(id);
-						int rows = projectcaseservice.findRows(cases);
-						if(rows>=1){
+						int caserows = projectcaseservice.findRows(cases);
+						if(caserows>=1){
 							status="fail";
 							ms=sectorproject.getProjectname()+"有关联测试用例的记录，不能删除!";
 							break;
 						}
+						
+						//检查协议模板项目关联
+						ProjectProtocolTemplate ppt = new ProjectProtocolTemplate();
+						ppt.setProjectid(id);
+						int templaterows = ptemplateservice.findRows(ppt);
+						if(templaterows>=1){
+							status="fail";
+							ms=sectorproject.getProjectname()+"有关联协议模板的记录，不能删除!";
+							break;
+						}
+						
+						//检查用例公共参数项目关联
+                        PublicCaseParams pcp = new PublicCaseParams();
+                        pcp.setProjectid(id);
+						int pcprows = pcpservice.findRows(pcp);
+						if(pcprows>=1){
+							status="fail";
+							ms=sectorproject.getProjectname()+"有关联用例公共参数的记录，不能删除!";
+							break;
+						}
+						
 					}
 					
 					operationlogservice.delete(id);
@@ -345,11 +375,6 @@ public class SectorProjectsController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-	}
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import luckyweb.seagull.comm.PublicConst;
-import luckyweb.seagull.spring.entity.ProjectCasesteps;
 import luckyweb.seagull.spring.entity.PublicCaseParams;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.UserInfo;
