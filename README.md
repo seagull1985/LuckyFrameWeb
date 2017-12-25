@@ -13,7 +13,7 @@
  
 <p align="center">
   <a href="#">
-    <img alt="maven" src="https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg">
+   <img alt="maven" src="https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg">
   </a>
   <a href="#">
    <img alt="code style" src="https://img.shields.io/badge/%20LICENSE-GPL--2.0-blue.svg">
@@ -22,7 +22,7 @@
    <img alt="code style" src="https://img.shields.io/badge/BUILD-PASSING-green.svg">
   </a>
   <a href="http://git.oschina.net/seagull1985/LuckyFrameWeb/releases">
-   <img src="https://img.shields.io/badge/LuckyFrame-V2.4 Beta-green.svg" >
+   <img src="https://img.shields.io/badge/LuckyFrame-V2.4 releases-green.svg" >
   </a>
 </p>
 
