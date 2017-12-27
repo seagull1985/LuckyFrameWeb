@@ -160,6 +160,7 @@ public class ProjectTemplateParamsController {
 			}
 			String jsonstr = sb.toString().substring(1, sb.toString().length() - 1);
 			jsonstr = jsonstr.replace("\\\"", "\"");
+			jsonstr = jsonstr.replaceAll("&quot;", "\\\\\"");
 			jsonstr = jsonstr.replace("undefined", "0");
 
 			JSONArray jsonarr = JSONArray.fromObject(jsonstr);
@@ -241,7 +242,7 @@ public class ProjectTemplateParamsController {
 
 			// 转换成json字符串
 			String recordJson = StrLib.listToJson(params);
-
+			recordJson = recordJson.replaceAll("&quot;", "\\\\\"");
 			// 需要返回的数据有总记录数和行数据
 			json.put("params", recordJson);
 			pw.print(json.toString());
