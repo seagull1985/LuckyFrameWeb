@@ -378,7 +378,7 @@ public class FlowCheckController {
 					"批量自动生成流程检查明细信息成功！");
 
 			model.addAttribute("message", "批量添加成功");
-			model.addAttribute("url", "/flowCheck/projectchecklist.do?projectid="+projectid+"&checkid="+checkid+"&version="+version);
+			model.addAttribute("url", "/flowCheck/loadinfo.do?projectid="+projectid+"&checkid="+checkid+"&version="+version);
 			return "success";
 		} catch (Exception e) {
 			model.addAttribute("message", e.getMessage());
@@ -545,7 +545,7 @@ public class FlowCheckController {
 			
 			if(!UserLoginController.permissionboolean(req, PublicConst.AUTHFCMOD)){
 				model.addAttribute("flowcheck", new FlowCheck());
-				model.addAttribute("url", "/flowCheck/projectchecklist.do?projectid="+fc.getSectorProjects().getProjectid()+"&checkid="+fc.getCheckid()+"&version="+fc.getVersionnum());
+				model.addAttribute("url", "/flowCheck/loadinfo.do?projectid="+fc.getSectorProjects().getProjectid()+"&checkid="+fc.getCheckid()+"&version="+fc.getVersionnum());
 				model.addAttribute("message", "当前用户无权限修改项目检查信息，请联系管理员！");
 				return "success";
 			}
