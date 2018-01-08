@@ -1,11 +1,7 @@
 package luckyweb.seagull.util;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
 
 /**
  * @category 字符串的工具类
@@ -13,9 +9,8 @@ import java.util.List;
  * 
  */
 public class StringUtility {
-	
-	private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
+	private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
 	/**
 	 * 判断字符串是否为空
@@ -27,10 +22,9 @@ public class StringUtility {
 		return (s == null || s.trim().length() <= 0);
 	}
 
-	public static String trimToEmpty(String s){
-		return isNull(s)?"" : s.trim();
+	public static String trimToEmpty(String s) {
+		return isNull(s) ? "" : s.trim();
 	}
-
 
 	public static String leftString(String str, int len) {
 		try {
@@ -49,8 +43,7 @@ public class StringUtility {
 	/**
 	 * 填充字符串到定长 str-被处理串，length-总长，fill-填充字符，filllef-左边填充
 	 */
-	public static String fillString(String str, int length, char fill,
-			boolean fillLeft) {
+	public static String fillString(String str, int length, char fill, boolean fillLeft) {
 		StringBuffer buffer = new StringBuffer(50);
 		if (str == null) {
 			str = "";
@@ -135,8 +128,7 @@ public class StringUtility {
 	 * @return 返回被替换后的字符串信息。
 	 */
 	public static String replace(String repl, String with, String text, int max) {
-		if ((text == null) || (repl == null) || (with == null)
-				|| (repl.length() == 0) || (max == 0)) {
+		if ((text == null) || (repl == null) || (with == null) || (repl.length() == 0) || (max == 0)) {
 			return text;
 		}
 		StringBuffer objBuffer = new StringBuffer(text.length());
@@ -339,8 +331,8 @@ public class StringUtility {
 	 * @param str
 	 *            the String to parse, may be null
 	 * @param separatorChar
-	 *            the character used as the delimiter, <code>null</code>
-	 *            splits on whitespace
+	 *            the character used as the delimiter, <code>null</code> splits
+	 *            on whitespace
 	 * @return an array of parsed Strings, <code>null</code> if null String
 	 *         input
 	 * @since 2.0
@@ -462,8 +454,8 @@ public class StringUtility {
 	 * @param separator
 	 *            String containing the String to be used as a delimiter,
 	 *            <code>null</code> splits on whitespace
-	 * @return an array of parsed Strings, <code>null</code> if null String
-	 *         was input
+	 * @return an array of parsed Strings, <code>null</code> if null String was
+	 *         input
 	 */
 	public static String[] splitByWholeSeparator(String str, String separator) {
 		return splitByWholeSeparator(str, separator, -1);
@@ -503,11 +495,10 @@ public class StringUtility {
 	 * @param max
 	 *            the maximum number of elements to include in the returned
 	 *            array. A zero or negative value implies no limit.
-	 * @return an array of parsed Strings, <code>null</code> if null String
-	 *         was input
+	 * @return an array of parsed Strings, <code>null</code> if null String was
+	 *         input
 	 */
-	public static String[] splitByWholeSeparator(String str, String separator,
-			int max) {
+	public static String[] splitByWholeSeparator(String str, String separator, int max) {
 		if (str == null) {
 			return null;
 		}
@@ -639,8 +630,8 @@ public class StringUtility {
 	 * @param str
 	 *            the String to parse, may be <code>null</code>
 	 * @param separatorChar
-	 *            the character used as the delimiter, <code>null</code>
-	 *            splits on whitespace
+	 *            the character used as the delimiter, <code>null</code> splits
+	 *            on whitespace
 	 * @return an array of parsed Strings, <code>null</code> if null String
 	 *         input
 	 * @since 2.1
@@ -651,22 +642,21 @@ public class StringUtility {
 
 	/**
 	 * Performs the logic for the <code>split</code> and
-	 * <code>splitPreserveAllTokens</code> methods that do not return a
-	 * maximum array length.
+	 * <code>splitPreserveAllTokens</code> methods that do not return a maximum
+	 * array length.
 	 * 
 	 * @param str
 	 *            the String to parse, may be <code>null</code>
 	 * @param separatorChar
 	 *            the separate character
 	 * @param preserveAllTokens
-	 *            if <code>true</code>, adjacent separators are treated as
-	 *            empty token separators; if <code>false</code>, adjacent
-	 *            separators are treated as one separator.
+	 *            if <code>true</code>, adjacent separators are treated as empty
+	 *            token separators; if <code>false</code>, adjacent separators
+	 *            are treated as one separator.
 	 * @return an array of parsed Strings, <code>null</code> if null String
 	 *         input
 	 */
-	private static String[] splitWorker(String str, char separatorChar,
-			boolean preserveAllTokens) {
+	private static String[] splitWorker(String str, char separatorChar, boolean preserveAllTokens) {
 		// Performance tuned for 2.0 (JDK1.4)
 
 		if (str == null) {
@@ -744,8 +734,7 @@ public class StringUtility {
 	 *         input
 	 * @since 2.1
 	 */
-	public static String[] splitPreserveAllTokens(String str,
-			String separatorChars) {
+	public static String[] splitPreserveAllTokens(String str, String separatorChars) {
 		return splitWorker(str, separatorChars, -1, true);
 	}
 
@@ -797,8 +786,7 @@ public class StringUtility {
 	 *         input
 	 * @since 2.1
 	 */
-	public static String[] splitPreserveAllTokens(String str,
-			String separatorChars, int max) {
+	public static String[] splitPreserveAllTokens(String str, String separatorChars, int max) {
 		return splitWorker(str, separatorChars, max, true);
 	}
 
@@ -815,14 +803,13 @@ public class StringUtility {
 	 *            the maximum number of elements to include in the array. A zero
 	 *            or negative value implies no limit.
 	 * @param preserveAllTokens
-	 *            if <code>true</code>, adjacent separators are treated as
-	 *            empty token separators; if <code>false</code>, adjacent
-	 *            separators are treated as one separator.
+	 *            if <code>true</code>, adjacent separators are treated as empty
+	 *            token separators; if <code>false</code>, adjacent separators
+	 *            are treated as one separator.
 	 * @return an array of parsed Strings, <code>null</code> if null String
 	 *         input
 	 */
-	private static String[] splitWorker(String str, String separatorChars,
-			int max, boolean preserveAllTokens) {
+	private static String[] splitWorker(String str, String separatorChars, int max, boolean preserveAllTokens) {
 		// Performance tuned for 2.0 (JDK1.4)
 		// Direct code is quicker than StringTokenizer.
 		// Also, StringTokenizer uses isSpace() not isWhitespace()
@@ -923,57 +910,60 @@ public class StringUtility {
 		str = str.replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
 		return str;
 	}
-	
-	public static String toUtf8Encode(String str){
-	    str=str.replaceAll("&amp;","&");
-	    str=str.replaceAll("&lt;","<");
-	    str=str.replaceAll("&gt;",">");
-	    str=str.replaceAll("&apos;","\'");
-	    str=str.replaceAll("&quot;","\"");
-	    str=str.replaceAll("<br>","\n");
-	    str=str.replaceAll("<BR>","\n");
-	    str=str.replaceAll("&nbsp;"," ");
-	    str=str.replaceAll("&nbsp;&nbsp;&nbsp;&nbsp;","\t");
-	    return str;
+
+	public static String toUtf8Encode(String str) {
+		str = str.replaceAll("&amp;", "&");
+		str = str.replaceAll("&lt;", "<");
+		str = str.replaceAll("&gt;", ">");
+		str = str.replaceAll("&apos;", "\'");
+		str = str.replaceAll("&quot;", "\"");
+		str = str.replaceAll("<br>", "\n");
+		str = str.replaceAll("<BR>", "\n");
+		str = str.replaceAll("&nbsp;", " ");
+		str = str.replaceAll("&nbsp;&nbsp;&nbsp;&nbsp;", "\t");
+		return str;
 	}
-	
+
 	/**
-     * 从源字符串(source)中取前len个字符，如果len小于源字符串的长度，则在返回值后加上字符串concat。
-     * <pre>
-     * String strSource = "a中华人民共和国";
-     * PubFunctions.getFixedLengthString(strSource,10,"...")= "a中华人民共..."
-     * PubFunctions.getFixedLengthString(strSource,10,null)= “a中华人民共”
-     * PubFunctions.getFixedLengthString(strSource,10,"")=”a中华人民共”
-     * PubFunctions.getFixedLengthString(strSource,10," ")=”a中华人民共”
-     * PubFunctions.getFixedLengthString(strSource,-1,"")=””
-     * PubFunctions.getFixedLengthString(strSource,0,"")=””
-     * PubFunctions.getFixedLengthString(strSource,0,null)=””
-     * PubFunctions.getFixedLengthString(strSource,-1,null)=””
-     * </pre>
-     *
-     * @param source 源字符串信息
-     * @param len 需要截取的字符个数
-     * @param concat 需要填补的字符串
-     * @return 返回获取的字符串信息。
-     */
-    public static String getFixedLengthString(String source, int len, String concat) {
-        String strRet = "";
-        if (source == null || concat == null) {
-            return "";
-        }
-        if (len <= 0) {
-            return strRet;
-        }
-        for (int i = 1; i <= source.length(); i++) {
-            strRet = source.substring(0, i);
-            if (strRet.getBytes().length >= len) {
-                break;
-            }
-        }
-        if ((source != null) && (strRet != null)
-                && (strRet.getBytes().length < source.getBytes().length)) {
-            strRet += concat;
-        }
-        return strRet;
-    }
+	 * 从源字符串(source)中取前len个字符，如果len小于源字符串的长度，则在返回值后加上字符串concat。
+	 * 
+	 * <pre>
+	 * String strSource = "a中华人民共和国";
+	 * PubFunctions.getFixedLengthString(strSource,10,"...")= "a中华人民共..."
+	 * PubFunctions.getFixedLengthString(strSource,10,null)= “a中华人民共”
+	 * PubFunctions.getFixedLengthString(strSource,10,"")=”a中华人民共”
+	 * PubFunctions.getFixedLengthString(strSource,10," ")=”a中华人民共”
+	 * PubFunctions.getFixedLengthString(strSource,-1,"")=””
+	 * PubFunctions.getFixedLengthString(strSource,0,"")=””
+	 * PubFunctions.getFixedLengthString(strSource,0,null)=””
+	 * PubFunctions.getFixedLengthString(strSource,-1,null)=””
+	 * </pre>
+	 *
+	 * @param source
+	 *            源字符串信息
+	 * @param len
+	 *            需要截取的字符个数
+	 * @param concat
+	 *            需要填补的字符串
+	 * @return 返回获取的字符串信息。
+	 */
+	public static String getFixedLengthString(String source, int len, String concat) {
+		String strRet = "";
+		if (source == null || concat == null) {
+			return "";
+		}
+		if (len <= 0) {
+			return strRet;
+		}
+		for (int i = 1; i <= source.length(); i++) {
+			strRet = source.substring(0, i);
+			if (strRet.getBytes().length >= len) {
+				break;
+			}
+		}
+		if ((source != null) && (strRet != null) && (strRet.getBytes().length < source.getBytes().length)) {
+			strRet += concat;
+		}
+		return strRet;
+	}
 }
