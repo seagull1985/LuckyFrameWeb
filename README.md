@@ -36,9 +36,10 @@
 
 LuckyFrame 开源自动化测试平台 - 自动化测试 X 时代来了
 > LuckyFrame QQ官方交流群 487954492
-<a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=32919cc1ee8595efa4c561920f3fdb606606ca8fdb6ff6b2430c5d97587551de"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="LuckyFrame自动化测试" title="LuckyFrame自动化测试"></a> 
-> LuckyFrame测试平台公众号  欢迎关注
-<img alt="扫一扫公众号吧" src="https://gitee.com/uploads/images/2018/0108/100931_2a461a5d_1215415.jpeg">
+<a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=32919cc1ee8595efa4c561920f3fdb606606ca8fdb6ff6b2430c5d97587551de"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="LuckyFrame自动化测试" title="LuckyFrame自动化测试"></a>
+ 
+LuckyFrame测试平台公众号  欢迎关注
+> <img alt="扫一扫公众号吧" src="https://gitee.com/uploads/images/2018/0108/100931_2a461a5d_1215415.jpeg">
 
 # 我能做什么？
 
