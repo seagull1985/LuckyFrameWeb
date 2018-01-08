@@ -7,7 +7,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>编辑协议模板内容</title>
-
 <style type="text/css">
 <!--
 .STYLE1 {
