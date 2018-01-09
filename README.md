@@ -1,6 +1,6 @@
 <p align="center">
   <a href="http://www.luckyframe.cn">
-   <img alt="luckyframe_Logo" src="http://git.oschina.net/seagull1985/LuckyFrameWeb/raw/master/src/main/webapp/pic/haiou-11.png">
+   <img alt="luckyframe_Logo" src="https://gitee.com/uploads/images/2018/0109/091959_ed8e1127_1215415.jpeg">
   </a>
 </p>
 
