@@ -1,6 +1,6 @@
 <p align="center">
   <a href="http://www.luckyframe.cn">
-   <img alt="luckyframe_Logo" src="https://gitee.com/uploads/images/2018/0109/091959_ed8e1127_1215415.jpeg">
+   <img alt="luckyframe_Logo" src="https://gitee.com/uploads/images/2018/0109/092746_9f6c55ac_1215415.png">
   </a>
 </p>
 
