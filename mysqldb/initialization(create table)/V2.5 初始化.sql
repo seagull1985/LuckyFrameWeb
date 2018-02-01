@@ -597,7 +597,7 @@ values (28, 1, 0, 'operation','getwindowhandle','获取窗口句柄');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (29, 1, 0, 'operation','gotowindow','跳转窗口句柄');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
-values (30, 1, 0, 'operation','wait','等待时间(S)');
+values (30, 1, 0, 'operation','timeout','设置全局隐式等待时间(S)');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (31, 1, 0, 'operation','alertaccept','弹出框点击OK');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)

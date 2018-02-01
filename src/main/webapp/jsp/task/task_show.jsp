@@ -52,8 +52,11 @@
       <c:if test="${taskjob.extype==0 }">
 		 <td height="25" style="color:#FFA54F;">接口自动化</td>
 	  </c:if>
-	  <c:if test="${taskjob.extype!=0 }">
-		 <td height="25" style="color:#FFA54F;">UI自动化</td>
+	  <c:if test="${taskjob.extype==1 }">
+		 <td height="25" style="color:#FFA54F;">Web自动化</td>
+	  </c:if>
+	  <c:if test="${taskjob.extype==2 }">
+		 <td height="25" style="color:#FFA54F;">移动端自动化</td>
 	  </c:if>
     </tr>
     <tr>

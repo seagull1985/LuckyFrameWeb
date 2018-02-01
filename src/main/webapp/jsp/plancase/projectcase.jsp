@@ -149,7 +149,12 @@
 													style="width: 25px; height: 25px; float: left; cursor: pointer;"
 													name="casetype" id="casetype" value="1" /> <label
 													style="float: left; margin-top: 8px; cursor: pointer;"
-													for="casetype">&nbsp;&nbsp;UI自动化</label>
+													for="casetype">&nbsp;&nbsp;Web自动化&nbsp;&nbsp;&nbsp;&nbsp;</label><input
+													type="radio" class="form-control"
+													style="width: 25px; height: 25px; float: left; cursor: pointer;"
+													name="casetype" id="casetype" value="4" /> <label
+													style="float: left; margin-top: 8px; cursor: pointer;"
+													for="casetype">&nbsp;&nbsp;移动端自动化</label>
 											</div>
 										</div>
 
@@ -275,6 +280,9 @@
 							}, {
 								value : "1",
 								text : "Web自动化"
+							}, {
+								value : "4",
+								text : "移动端自动化"
 							} ]
 						}
 					}, {

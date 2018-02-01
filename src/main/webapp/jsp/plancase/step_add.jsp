@@ -99,6 +99,7 @@
 													  <option value="1" <c:if test="${t.steptype==1 }"> selected="selected"</c:if>>Web UI</option>
 													  <option value="2" <c:if test="${t.steptype==2 }"> selected="selected"</c:if>>HTTP</option>
 													  <option value="3" <c:if test="${t.steptype==3 }"> selected="selected"</c:if>>SOCKET</option>
+													  <option value="4" <c:if test="${t.steptype==4 }"> selected="selected"</c:if>>移动端</option>
 														</sf:select></td>
 												<td width="10%"><sf:input type="text"
 														class="form-control" path="remark" id="remark${i.count}"
@@ -505,7 +506,7 @@
 			if(steptype==2||steptype==3){
 				initSuggestOperation(index,steptype);
 				initSuggestAction(index,steptypetext);
-			}else if(steptype==1){
+			}else if(steptype==1||steptype==4){
 				$("#action"+index).bsSuggest("destroy");
 				initSuggestOperation(index,steptype);
 			}else{

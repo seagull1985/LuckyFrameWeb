@@ -76,7 +76,9 @@
 				<td height="30" align="left">自动化类型</td>
 				<td height="30" colspan="3">
 				<sf:radiobutton path="extype" id="extype" value="0" onclick="isShow5('0')" /> 接口自动化&nbsp;&nbsp;&nbsp;&nbsp; 
-				<sf:radiobutton	path="extype" id="extype" value="1" onclick="isShow5('1')" /> UI自动化</td>
+				<sf:radiobutton	path="extype" id="extype" value="1" onclick="isShow5('1')" /> Web自动化&nbsp;&nbsp;&nbsp;&nbsp;
+				<sf:radiobutton	path="extype" id="extype" value="2" onclick="isShow5('2')" /> 移动自动化
+				</td>
 			</tr>
 			<tr id="uiclientipdis" style="display: none">
 				<td height="30" align="left">UI自动化浏览器类型</td>

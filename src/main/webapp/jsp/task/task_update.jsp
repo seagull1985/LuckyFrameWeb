@@ -1,5 +1,6 @@
-<%@ page contentType="text/html; charset=utf-8" language="java" import="java.sql.*" errorPage="" %>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ page contentType="text/html; charset=utf-8" language="java"
+	import="java.sql.*" errorPage=""%>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -9,12 +10,12 @@
 
 <style type="text/css">
 <!--
-.STYLE1 {	font-size: 12px;
+.STYLE1 {
+	font-size: 12px;
 	color: #CC0000;
 }
+
 -->
-
-
 <!--
 .STYLE1 {
 	font-size: 12px;
@@ -26,6 +27,7 @@
 	font-size: 12px;
 	color: #f00;
 }
+
 .tip {
 	font-size: 12px;
 	color: blue;
@@ -37,26 +39,29 @@
 	type="text/css" />
 <link href="/js/easyui/themes/icon.css" rel="stylesheet" type="text/css" />
 
-<script language="JavaScript" type="text/javascript"  src="/js/jslib.js"></script>
-<script language="JavaScript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/jslib.js"></script>
+<script language="JavaScript" type="text/javascript"
+	src="/js/My97DatePicker/WdatePicker.js"></script>
 
 <style type="text/css">
 <!--
-.STYLE2 {	font-size: 12px;
+.STYLE2 {
+	font-size: 12px;
 	color: #ffffff;
 }
 -->
 </style>
 </head>
 
-<body onload="init();isShow2('${isSendMail}');isShow3('${isbuilding}');isShow4('${isrestart}');isShow5('${extype}')">
-	<div>  
-        <%@ include file="/head.jsp" %>
-    </div> 
+<body
+	onload="init();isShow2('${isSendMail}');isShow3('${isbuilding}');isShow4('${isrestart}');isShow5('${extype}')">
+	<div>
+		<%@ include file="/head.jsp"%>
+	</div>
 	<header id="head" class="secondary"></header>
 
 	<!-- container -->
-	<div class="container" style="width:auto;">
+	<div class="container" style="width: auto;">
 		<ol class="breadcrumb">
 			<li><a href="/">主页</a></li>
 			<li class="active">UTP</li>
@@ -64,16 +69,15 @@
 			<li class="active">调度任务修改</li>
 		</ol>
 
-		<div class="row">	
+		<div class="row">
 			<!-- Article main content -->
-		<article class="col-sm-9 maincontent" style="width:100%;">
-		 <header class="page-header">
-				<h1 class="page-title" style="text-align:center;">调度任务修改</h1>
-			</header>
-			
-<sf:form modelAttribute="taskjob"  method="post"  onsubmit="return validTime(this);">
-<sf:hidden path="id" />
-<sf:hidden path="state" />
+			<article class="col-sm-9 maincontent" style="width:100%;">
+			<header class="page-header">
+			<h1 class="page-title" style="text-align: center;">调度任务修改</h1>
+			</header> <sf:form modelAttribute="taskjob" method="post"
+				onsubmit="return validTime(this);">
+				<sf:hidden path="id" />
+				<sf:hidden path="state" />
 
 				<table width="75%" align="center" class="rect" height=510
 					cellPadding=1 border=1 bordercolor="#CCCCCC">
@@ -89,23 +93,28 @@
 						<td height="30" colspan="3"><sf:radiobutton path="extype"
 								value="0" onclick="isShow5('0')" />
 							接口自动化&nbsp;&nbsp;&nbsp;&nbsp; <sf:radiobutton path="extype"
-								value="1" onclick="isShow5('1')" /> UI自动化</td>
+								value="1" onclick="isShow5('1')" />
+							Web自动化&nbsp;&nbsp;&nbsp;&nbsp; <sf:radiobutton path="extype"
+								id="extype" value="2" onclick="isShow5('2')" /> 移动自动化</td>
 					</tr>
 					<tr id="uiclientipdis" style="display: none">
 						<td height="30" align="left">UI自动化浏览器类型</td>
-						<td height="30" colspan="3">
-						<sf:radiobutton	path="browsertype" id="browsertype0" value="0" />IE浏览器&nbsp;&nbsp;&nbsp;&nbsp;
-						<sf:radiobutton path="browsertype" id="browsertype1" value="1" /> 火狐浏览器&nbsp;&nbsp;&nbsp;&nbsp;
-						<sf:radiobutton	path="browsertype" id="browsertype2" value="2" /> 谷歌浏览器&nbsp;&nbsp;&nbsp;&nbsp;
-						<sf:radiobutton	path="browsertype" id="browsertype3" value="3" /> Edge浏览器</td>
+						<td height="30" colspan="3"><sf:radiobutton
+								path="browsertype" id="browsertype0" value="0" />IE浏览器&nbsp;&nbsp;&nbsp;&nbsp;
+							<sf:radiobutton path="browsertype" id="browsertype1" value="1" />
+							火狐浏览器&nbsp;&nbsp;&nbsp;&nbsp; <sf:radiobutton path="browsertype"
+								id="browsertype2" value="2" /> 谷歌浏览器&nbsp;&nbsp;&nbsp;&nbsp; <sf:radiobutton
+								path="browsertype" id="browsertype3" value="3" /> Edge浏览器</td>
 					</tr>
-			<tr>
-				<td height="30" align="left">项目类型</td>
-				<td height="30" colspan="3">
-				<sf:radiobutton	path="projecttype" id="projecttype" value="0" onclick="isShow6('0')" /> 系统项目&nbsp;&nbsp;&nbsp;&nbsp;
-				<sf:radiobutton path="projecttype" id="projecttype" value="1" onclick="isShow6('1')" /> TestLink项目</td>
-			</tr>																										 
-					<tr id="testlinkpro">					   
+					<tr>
+						<td height="30" align="left">项目类型</td>
+						<td height="30" colspan="3"><sf:radiobutton
+								path="projecttype" id="projecttype" value="0"
+								onclick="isShow6('0')" /> 系统项目&nbsp;&nbsp;&nbsp;&nbsp; <sf:radiobutton
+								path="projecttype" id="projecttype" value="1"
+								onclick="isShow6('1')" /> TestLink项目</td>
+					</tr>
+					<tr id="testlinkpro">
 						<td width="140" height="32">项目名（testlink中）</td>
 						<td height="32" colspan="3"><sf:select path="planproj"
 								id="planproj" onChange="getClient(1)" onFocus="getClient(1)">
@@ -120,43 +129,46 @@
 						<td height="30" colspan="3"><sf:textarea cols="50" rows="5"
 								path="testlinkname" id="testlinkname" /></td>
 					</tr>
-				<tr id="pro"  style="display: none">
-				<td height="30" align="left">项目名</td>
-				<td height="30" colspan="3"><sf:select path="projectid"
-						id="projectid" onChange="getPlan()">
-						<sf:option value="0">请选择</sf:option>
-						<c:forEach var="p" items="${sysprojects}">
-							<sf:option value="${p.projectid}">${p.projectname}</sf:option>
-						</c:forEach>
-					</sf:select></td>
-			</tr>
-			<tr id="plan"  style="display: none">
-				<td height="30" align="left">测试计划</td>
-				<td height="30" colspan="3">
-				<sf:select path="planid" id="planid" width="20%">
-   	               <c:forEach var="p" items="${planlist}">
-							<sf:option value="${p.id}">${p.name}</sf:option>
-						</c:forEach>
-                       </sf:select></td>
-			</tr>							
-			<tr>
-				<td height="30" align="left">客户端IP</td>
-				<td height="30" colspan="3"><sf:select path="clientip" id="clientip" width="20%" onChange="getClientpath()" onFocus="getClientpath()">
-   	               <sf:option value="0">请选择执行客户端...</sf:option>
-   	                  <c:forEach var="tc" items="${tclist}">
-							<sf:option value="${tc.clientip}">${tc.name}</sf:option>
-						</c:forEach>
-                       </sf:select></td>
-			</tr>
-			<tr>
-				<td height="30" align="left">客户端驱动桩路径</td>
-				<td height="30" colspan="3"><sf:select path="clientpath" id="clientpath" width="20%">
-   	               <sf:option value="0">请选择客户端驱动桩路径...</sf:option>
-   	                  	<c:forEach var="tcpath" items="${tcpathlist}">
-							<sf:option value="${tcpath}">${tcpath}</sf:option>
-						</c:forEach>
-                       </sf:select></td>
-			</tr>
+					<tr id="pro" style="display: none">
+						<td height="30" align="left">项目名</td>
+						<td height="30" colspan="3"><sf:select path="projectid"
+								id="projectid" onChange="getPlan()">
+								<sf:option value="0">请选择</sf:option>
+								<c:forEach var="p" items="${sysprojects}">
+									<sf:option value="${p.projectid}">${p.projectname}</sf:option>
+								</c:forEach>
+							</sf:select></td>
+					</tr>
+					<tr id="plan" style="display: none">
+						<td height="30" align="left">测试计划</td>
+						<td height="30" colspan="3"><sf:select path="planid"
+								id="planid" width="20%">
+								<c:forEach var="p" items="${planlist}">
+									<sf:option value="${p.id}">${p.name}</sf:option>
+								</c:forEach>
+							</sf:select></td>
+					</tr>
+					<tr>
+						<td height="30" align="left">客户端IP</td>
+						<td height="30" colspan="3"><sf:select path="clientip"
+								id="clientip" width="20%" onChange="getClientpath()"
+								onFocus="getClientpath()">
+								<sf:option value="0">请选择执行客户端...</sf:option>
+								<c:forEach var="tc" items="${tclist}">
+									<sf:option value="${tc.clientip}">${tc.name}</sf:option>
+								</c:forEach>
+							</sf:select></td>
+					</tr>
+					<tr>
+						<td height="30" align="left">客户端驱动桩路径</td>
+						<td height="30" colspan="3"><sf:select path="clientpath"
+								id="clientpath" width="20%">
+								<sf:option value="0">请选择客户端驱动桩路径...</sf:option>
+								<c:forEach var="tcpath" items="${tcpathlist}">
+									<sf:option value="${tcpath}">${tcpath}</sf:option>
+								</c:forEach>
+							</sf:select></td>
+					</tr>
 					<tr>
 						<td width="140" height="32" align="left" valign="top">调度任务描述</td>
 						<td height="32" colspan="3"><sf:textarea cols="50" rows="5"
@@ -243,7 +255,7 @@
 						<td height="30" align="left">自动重启命令</td>
 						<td height="30" colspan="3"><sf:textarea cols="200" rows="5"
 								path="restartcomm" id="restartcomm" style=" width:600px;" /><br />
-						<div style="font-size: 12px; color: blue">格式：服务器IP;服务器用户名;服务器密码;ssh端口;Shell命令;
+							<div style="font-size: 12px; color: blue">格式：服务器IP;服务器用户名;服务器密码;ssh端口;Shell命令;
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例：10.211.19.72;pospsettle;pospsettle;22;cd
 								/home/pospsettle/tomcat-7.0-7080/bin&&./restart.sh;</div></td>
 					</tr>
@@ -256,8 +268,8 @@
 							*&quot;，每10秒中执行调试一次)，对使用者要求比较，要会写Cron表达式） 注意hour只支持00-23点</td>
 					</tr>
 					<tr>
-						<td width="174" height="32" colspan="4" align="center">
-						<input type="submit" name="updBtn" id="updBtn" value="修 改"
+						<td width="174" height="32" colspan="4" align="center"><input
+							type="submit" name="updBtn" id="updBtn" value="修 改"
 							class="button gray" />&nbsp;&nbsp;&nbsp;&nbsp; <a
 							href="/testJobs/load.do"><span class="btnold STYLE1"
 								style="width: 70px; margin-bottom: 10px;">返 回</span></a></td>
@@ -304,11 +316,11 @@
 					</tr>
 				</table>
 			</sf:form>
-<p>&nbsp;</p>
-	</article>
+			<p>&nbsp;</p>
+			</article>
+		</div>
 	</div>
-	</div>
-	
+
 	<script type="text/javascript">
 
 					   
