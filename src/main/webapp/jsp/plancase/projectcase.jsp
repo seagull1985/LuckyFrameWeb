@@ -478,6 +478,9 @@
 							}, {
 								value : "3",
 								text : "SOCKET"
+							}, {
+								value : "4",
+								text : "移动端自动化"
 							} ]
 						}
 					}, {
