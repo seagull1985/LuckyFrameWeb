@@ -48,7 +48,7 @@ values (72, 4, 0, 'operation','getcontexthandles','获取指定context的值(参
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (73, 4, 0, 'operation','exjs','执行JS脚本');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
-values (74, 4, 0, 'operation','keycode','模拟手机键盘发送指令，同PressKeyCode');
+values (74, 4, 0, 'operation','androidkeycode','安卓模拟手机键盘发送指令，同PressKeyCode');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (75, 4, 0, 'operation','gotocontext','跳转到指定的context');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
@@ -77,3 +77,5 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (87, 4, 0, 'operation','screenshot','保存当前页面截图');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (88, 4, 0, 'operation','timeout','设置全局页面加载&元素出现最大等待时间(S)');
+insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
+values (89, 4, 0, 'operation','hideKeyboard','隐藏系统手机键盘');
