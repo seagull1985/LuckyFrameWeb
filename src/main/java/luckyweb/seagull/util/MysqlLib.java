@@ -23,9 +23,9 @@ public class MysqlLib {
 	public static String driver = "com.mysql.jdbc.Driver";
 
     /**
-     * URL指向要访问的数据库名zentao
+     * URL指向要访问的数据库名zentao ip指向禅道IP
      */
-    private static String url = "jdbc:mysql://10.211.19.75:3308/zentao?zeroDateTimeBehavior=convertToNull";
+    private static String url = "jdbc:mysql://XX.XXX.XX.XX:3308/zentao?zeroDateTimeBehavior=convertToNull";
 
     /**
      * MySQL配置时的用户名

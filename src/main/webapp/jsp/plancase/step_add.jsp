@@ -127,7 +127,7 @@
 							</br>
 							<div class="row">
 								<div class="col-lg-4 text-center" style="width: 100%">
-									<button class="btn btn-action" style="background:#00bf5f" type="submit">保 存</button>
+									<button class="btn btn-action" style="background:#00bf5f" id="save" type="submit">保 存</button>
 									<button class="btn btn-action" id="showdebugb" onclick="showdebug()" type="button">调试</button>
 								</div>
 							</div>
@@ -341,13 +341,14 @@
 					}else{
 						toastr.info(data.ms);
 					}
+ 				$('#save').attr('disabled',false);
 				},
 				error : function() {
 					toastr.error(data);
 				}
 			});
-
-			return false;
+			
+			return true;
 		}
 
 		function addsteps(obj) {
