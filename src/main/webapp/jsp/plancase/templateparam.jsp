@@ -98,7 +98,7 @@
 														        <option value="1" selected = "selected">JSON对象</option>
 														        <option value="2">JSONARR对象</option>
 														        <option value="3">File对象</option>
-														        <option value="4">数字类型</option>
+														        <option value="4">Number</option>
 														        <option value="5">Boolean</option>
                                                             </c:when>
                                                             <c:when test="${t.paramtype=='2' }">
@@ -106,7 +106,7 @@
 														        <option value="1">JSON对象</option>
 														        <option value="2" selected = "selected">JSONARR对象</option>
 														        <option value="3">File对象</option>
-														        <option value="4">数字类型</option>
+														        <option value="4">Number</option>
 														        <option value="5">Boolean</option>
                                                             </c:when>
                                                             <c:when test="${t.paramtype=='3' }">
@@ -114,7 +114,7 @@
 														        <option value="1">JSON对象</option>
 														        <option value="2">JSONARR对象</option>
 														        <option value="3" selected = "selected">File对象</option>
-														        <option value="4">数字类型</option>
+														        <option value="4">Number</option>
 														        <option value="5">Boolean</option>
                                                             </c:when>
                                                             <c:when test="${t.paramtype=='4' }">
@@ -122,7 +122,7 @@
 														        <option value="1">JSON对象</option>
 														        <option value="2">JSONARR对象</option>
 														        <option value="3">File对象</option>
-														        <option value="4" selected = "selected">数字类型</option>
+														        <option value="4" selected = "selected">Number</option>
 														        <option value="5">Boolean</option>
                                                             </c:when>
                                                             <c:when test="${t.paramtype=='5' }">
@@ -130,7 +130,7 @@
 														        <option value="1">JSON对象</option>
 														        <option value="2">JSONARR对象</option>
 														        <option value="3">File对象</option>
-														        <option value="4">数字类型</option>
+														        <option value="4">Number</option>
 														        <option value="5" selected = "selected">Boolean</option>
                                                             </c:when>
 															<c:otherwise>
@@ -138,7 +138,7 @@
 														        <option value="1">JSON对象</option>
 														        <option value="2">JSONARR对象</option>
 														        <option value="3">File对象</option>
-														        <option value="4">数字类型</option>
+														        <option value="4">Number</option>
 														        <option value="5">Boolean</option>
                                                             </c:otherwise>
 														</c:choose>
@@ -229,6 +229,7 @@
 
 		// 提交表单
 		function check_form() {
+			$("#submit").attr("disabled",true);
 			var oTable = document.getElementById("paramtbody");
 			var json = "";
 			for (var i = 0; i < oTable.rows.length; i++) {
@@ -254,7 +255,7 @@
 				data : JSON.stringify(json),
 				success : function(data, status) {
  				if (data.status == "success") {
- 					$("#submit").attr("disabled",true);
+ 					$("#submit").attr("disabled",false);
  					toastr.success(data.ms);
 					}else{
 						toastr.info(data.ms);
