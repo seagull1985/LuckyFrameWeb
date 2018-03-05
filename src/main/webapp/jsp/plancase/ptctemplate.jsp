@@ -219,7 +219,7 @@
 					}, {
 						field : 'name',
 						title : '模板名称',
-						width : '33%',
+						width : '25%',
 						editable : {
 							type : 'text',
 							title : '模板名称',
@@ -232,21 +232,6 @@
 								if (value.length < 2)
 									return '模板名称不能小于2个字符';
 							}
-						}
-					}, {
-						field : 'protocoltype',
-						title : '协议类型',
-						width : '7%',
-						editable : {
-							type : 'select',
-							title : '协议类型',
-							source : [ {
-								value : "HTTP",
-								text : "HTTP"
-							}, {
-								value : "Socket",
-								text : "Socket"
-							} ]
 						}
 					}, {
 						field : 'contentencoding',
@@ -264,9 +249,18 @@
 							} ]
 						}
 					}, {
-						field : 'connecttimeout',
-						title : '超时时间',
-						width : '7%',
+						field : 'headmsg',
+						title : '消息头域',
+						width : '30%',
+						editable : {
+							type : 'text',
+							title : '消息头域',
+							emptytext : "消息头域为空",
+							validate : function(value) {
+								if (value.length > 500)
+									return '消息头域不能超过500个字符';
+							}
+						}
 					}, {
 						field : 'time',
 						title : '更新时间',
@@ -278,7 +272,7 @@
 					},{
 						field : 'remark',
 						title : '备注',
-						width : '16%',
+						width : '10%',
 						editable : {
 							type : 'textarea',
 							title : '备注',
