@@ -717,27 +717,19 @@ public class TestJobsController
 				// 写入数据库
 				testJobsService.modify(tj);
 				// 更新内存，替换原来的调度
-				String crontabtype="D";
-				if(crontabtype.equals(tj.getTaskType())){
-					TestJobs job = null;
-					for (int i = 0; i < QueueListener.list.size(); i++)
-					{
-						job = new TestJobs();
-						job = QueueListener.list.get(i);
-						if (job.getId() == tj.getId())
-						{
-							QueueListener.list.remove(job);
-							QueueListener.list.add(tj);
-							break;
-						}
+				for (int i = 0; i < QueueListener.list.size(); i++) {
+					TestJobs job = QueueListener.list.get(i);
+					if (job.getId() == tj.getId()) {
+						QueueListener.list.remove(job);
+						QueueListener.list.add(tj);
+						break;
 					}
+				}
 
-					String msg = QuartzManager.modifyJobTime(id + "*JOB", tj.getStartTimestr());
-					if (!msg.equals(""))
-					{
-						model.addAttribute("message", msg);
-						return "/jsp/task/task_update";
-					}
+				String msg = QuartzManager.modifyJobTime(id + "*JOB", tj.getStartTimestr());
+				if (!msg.equals("")) {
+					model.addAttribute("message", msg);
+					return "/jsp/task/task_update";
 				}
 
 				model.addAttribute("message", "修改成功,请返回查询！");
