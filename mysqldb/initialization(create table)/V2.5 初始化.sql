@@ -370,6 +370,7 @@ create table PROJECT_PROTOCOLTEMPLATE
   headmsg               VARCHAR(500) COMMENT '消息头',
   protocoltype          VARCHAR(20) not null COMMENT '协议类型',
   contentencoding       VARCHAR(20) not null COMMENT '编码格式',
+  connecttimeout        int(8) not null COMMENT '超时时间',
   time                  VARCHAR(30) COMMENT '最后更新时间',
   operationer           VARCHAR(20) COMMENT '最后更新人员',
   remark                VARCHAR(200) COMMENT '备注',

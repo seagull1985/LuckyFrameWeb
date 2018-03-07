@@ -5,7 +5,9 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (53, 1, 0, 'operation','getcssvalue','获取对象指定CSS属性值');
 /*修改wait方法为timeout 设置全局隐式等待时间*/
 update PROJECT_CASESTEPSPARAMS set paramvalue='timeout',description='设置全局页面加载&元素出现最大等待时间(S)' where id=30;
- 
+/*补充协议模板中漏掉的connecttimeout字段*/
+alter table PROJECT_PROTOCOLTEMPLATE add connecttimeout int(8) not null COMMENT '超时时间';
+
 /*增加APP测试封装方法*/
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (54, 4, 0, 'operation','selectbyvisibletext','通过下拉框的文本进行选择');
