@@ -104,6 +104,7 @@ public class FlowCheckController {
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws NumberFormatException, Exception {
 		response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json");
 		PrintWriter pw = response.getWriter();
 		String search = request.getParameter("search");
 		String projectid = request.getParameter("projectid");

@@ -169,7 +169,7 @@ public class ProjectCasestepsController {
 
 	@RequestMapping(value = "/editsteps.do")
 	private void editsteps(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		response.setContentType("text/html;charset=utf-8");
+		response.setContentType("application/json");
 		request.setCharacterEncoding("utf-8");
 		PrintWriter pw = response.getWriter();
 		StringBuilder sb = new StringBuilder();

@@ -37,7 +37,6 @@ public class QuartzManager {
 	 *            时间设置，参考quartz说明文档
 	 * 
 	 */
-	@SuppressWarnings("unchecked") 
 	public static void addJob(String jobName, Class cls, String time) {
 		try {
 			// 任务名，任务组，任务执行类
@@ -78,7 +77,6 @@ public class QuartzManager {
 	 * @Title: QuartzManager.java
 	 * 
 	 */
-	@SuppressWarnings("unchecked")
 	public static void addJob(String jobName, String jobGroupName,
 			String triggerName, String triggerGroupName, Class jobClass,
 			String time) throws SchedulerException {
@@ -105,7 +103,6 @@ public class QuartzManager {
 	 * @Title: QuartzManager.java
 	 * 
 	 */
-	@SuppressWarnings("unchecked")
 	public static String modifyJobTime(String jobName, String time) {
 		try {
 			Scheduler sched=QueueListener.gSchedulerFactory.getScheduler();

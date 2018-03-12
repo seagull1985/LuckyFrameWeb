@@ -82,6 +82,7 @@ public class PlanFlowCheckController {
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws NumberFormatException, Exception {
 		response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json");
 		PrintWriter pw = response.getWriter();
 		String projectid = request.getParameter("projectid");
 		PlanFlowCheck pfcheck = new PlanFlowCheck();

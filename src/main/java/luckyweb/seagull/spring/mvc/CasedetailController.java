@@ -102,11 +102,11 @@ public class CasedetailController
 		return "/jsp/task/casedetail_list";
 	}
 
-	@SuppressWarnings({ "unused", "unchecked" })
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json");
 		PrintWriter pw = response.getWriter();
 		String search = request.getParameter("search");
 		String startDate = request.getParameter("startDate");

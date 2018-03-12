@@ -84,6 +84,7 @@ public class ReviewInfoController {
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws NumberFormatException, Exception {
 		response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json");
 		PrintWriter pw = response.getWriter();
 		int reviewid = Integer.valueOf(request.getParameter("reviewid"));
 		ReviewInfo reviewinfo = new ReviewInfo();

@@ -94,10 +94,10 @@ public class TastExcuteController {
 		return "/jsp/task/taskexcute_list";
 	}
 
-	@SuppressWarnings({ "unused", "unchecked" })
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
+		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
 		PrintWriter pw = response.getWriter();
 		String search = request.getParameter("search");
