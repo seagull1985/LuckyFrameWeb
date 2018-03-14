@@ -77,6 +77,7 @@ public class TestClientController {
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
 		PrintWriter pw = response.getWriter();
 		String search = request.getParameter("search");
@@ -92,7 +93,6 @@ public class TestClientController {
 			tc.setClientip(search);
 			tc.setName(search);
 		}
-		List<SectorProjects> prolist = sectorprojectsService.getAllProject();
 		List<TestClient> tcs = tcservice.findByPage(tc, offset, limit);
 		for(TestClient tct:tcs){
 			String[] projectids=tct.getProjectper().split(",");
@@ -145,6 +145,9 @@ public class TestClientController {
 				if (!UserLoginController.permissionboolean(req, PublicConst.AUTHCLIENTADD)) {
 					json.put("status", "fail");
 					json.put("ms", "增加客户端失败,权限不足,请联系管理员!");
+				} else if(null==tc.getProjectper()||"".equals(tc.getProjectper())){
+					json.put("status", "fail");
+					json.put("ms", "增加客户端失败,请至少选择一个项目添加至客户端中!");
 				} else {
 					tc.setProjectper(","+tc.getProjectper()+",");
 					tc.setStatus(2);
@@ -153,7 +156,7 @@ public class TestClientController {
 						int tcid = tcservice.add(tc);
 						tc.setId(tcid);
 						
-						//将测试调度任务加入到定时任务中
+						//将客户端心跳监听加入到定时任务中
 						QueueListener.listen_Clientlist.add(tc);
 						QuratzJobDataMgr mgr = new QuratzJobDataMgr();
 						mgr.addTestClient(tc, tcid);
@@ -173,6 +176,9 @@ public class TestClientController {
 				if (!UserLoginController.permissionboolean(req, PublicConst.AUTHCLIENTMOD)) {
 					json.put("status", "fail");
 					json.put("ms", "编辑客户端失败,权限不足,请联系管理员!");
+				} else if(null==tc.getProjectper()||"".equals(tc.getProjectper())){
+					json.put("status", "fail");
+					json.put("ms", "增加客户端失败,请至少选择一个项目添加至客户端中!");
 				} else {
 					TestClient tctemp=tcservice.load(tc.getId());
 					if(tctest==null||tctemp.getClientip().equals(tc.getClientip())){
@@ -186,13 +192,13 @@ public class TestClientController {
 							tct = QueueListener.listen_Clientlist.get(i);
 							if (tc.getId() == tct.getId())
 							{
-								QueueListener.listen_Clientlist.remove(i);
+								QueueListener.listen_Clientlist.remove(tct);
 								QueueListener.listen_Clientlist.add(tc);
 								break;
 							}
 						}
 
-						String msg = QuartzManager.modifyJobTime(tc.getId() + "*CLIENT", "0/"+tc.getCheckinterval()+" * * * * ?");
+						QuartzManager.modifyJobTime(tc.getId() + "*CLIENT", "0/"+tc.getCheckinterval()+" * * * * ?");
 						
 						operationlogservice.add(req, "TestClient", tc.getId(), 
 								99,"客户端【"+tc.getName()+"】编辑成功！");

@@ -82,6 +82,7 @@ public class UserInfoController {
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
 		PrintWriter pw = response.getWriter();
 		String search = request.getParameter("search");

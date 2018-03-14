@@ -9,6 +9,9 @@ update PROJECT_CASESTEPSPARAMS set paramvalue='timeout',description='设置全�
 /*修改用例步骤中path的长度限制*/
 ALTER TABLE project_casesteps MODIFY path VARCHAR(200) COMMENT '包路径|定位路径';
  
+/*补充协议模板中漏掉的connecttimeout字段*/
+alter table PROJECT_PROTOCOLTEMPLATE add connecttimeout int(8) not null COMMENT '超时时间';
+
 /*增加APP测试封装方法*/
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (54, 4, 0, 'operation','selectbyvisibletext','通过下拉框的文本进行选择');

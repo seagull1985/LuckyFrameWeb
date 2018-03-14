@@ -87,7 +87,8 @@ public class UserLoginController {
 		}
 
 
-	    rsp.setContentType("text/xml;charset=utf-8");
+		rsp.setContentType("application/json");
+		rsp.setCharacterEncoding("utf-8");
 		JSONArray jsonArray = JSONArray.fromObject(result);
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray); 
@@ -111,7 +112,8 @@ public class UserLoginController {
 		
 		result[0] = "true";		
 		
-	    rsp.setContentType("text/xml;charset=utf-8");
+		rsp.setContentType("application/json");
+		rsp.setCharacterEncoding("utf-8");
 		JSONArray jsonArray = JSONArray.fromObject(result);
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray); 
@@ -139,7 +141,8 @@ public class UserLoginController {
 			status[2] = "未登录";
 		}
 		
-		rsp.setContentType("text/xml;charset=utf-8");
+		rsp.setContentType("application/json");
+		rsp.setCharacterEncoding("utf-8");
 		JSONArray jsonArray = JSONArray.fromObject(status);
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray); 
@@ -253,7 +256,8 @@ public class UserLoginController {
 			status[0]  = "false";
 		}
 		
-		rsp.setContentType("text/xml;charset=utf-8");
+		rsp.setContentType("application/json");
+		rsp.setCharacterEncoding("utf-8");
 		JSONArray jsonArray = JSONArray.fromObject(status);
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray); 

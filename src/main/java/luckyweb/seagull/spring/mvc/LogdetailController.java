@@ -69,7 +69,6 @@ public class LogdetailController
 	@Resource(name = "projectCasestepsService")
 	private ProjectCasestepsService casestepsservice;
 	
-	@SuppressWarnings({ "unused", "unchecked" })
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {

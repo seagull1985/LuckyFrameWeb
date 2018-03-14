@@ -108,7 +108,6 @@ public class AutoTestChartController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings({ "unchecked" })
 	@RequestMapping(value = "/testchart.do")
 	public String testchart(HttpServletRequest req,Model model) {
 		return "/jsp/echart/echarts_pie6";
