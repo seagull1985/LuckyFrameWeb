@@ -222,8 +222,8 @@
 								message : '【包 | 定位路径】无效！',
 								validators : {
 									stringLength : {
-										min : 2,
-										max : 100,
+										min : 0,
+										max : 200,
 										message : '【包 | 定位路径】长度必须在2~100个字符区间'
 									}
 								}

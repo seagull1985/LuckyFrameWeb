@@ -190,7 +190,7 @@
 		$(function() {
 			$("#projectid option[value='99']").remove();
 			$('#search_project').val('${projectid }');
-			if(${projectid }!=99){
+			if(${projectid}!=99){
 				$('#projectid').val('${projectid }');
 				$.fn.zTree.init($("#treeDemo"), genJsonConfig());
 			}
@@ -394,10 +394,10 @@
 							title : '包路径|定位路径',
 							emptytext : "【包路径|定位路径】为空",
 							validate : function(value) {
-								if (value.length > 100)
-									return '包路径|定位路径不能超过100个字符';
-								if (value.length < 2)
-									return '包路径|定位路径不能小于2个字符';
+								if (value.length > 200)
+									return '包路径|定位路径不能超过200个字符';
+//								if (value.length < 2)
+//									return '包路径|定位路径不能小于2个字符';
 							}
 						}
 					}, {
@@ -424,8 +424,8 @@
 							validate : function(value) {
 								if (value.length > 500)
 									return '参数不能超过500个字符';
-								if (value.length < 2)
-									return '参数不能小于2个字符';
+//								if (value.length < 2)
+//									return '参数不能小于2个字符';
 							}
 						}
 					}, {
@@ -438,8 +438,8 @@
 							validate : function(value) {
 								if (value.length > 50)
 									return '步骤动作不能超过50个字符';
-								if (value.length < 2)
-									return '步骤动作不能小于2个字符';
+//								if (value.length < 2)
+//									return '步骤动作不能小于2个字符';
 							}
 						}
 					}, {
@@ -456,8 +456,8 @@
 							validate : function(value) {
 								if (value.length > 2000)
 									return '预期结果不能超过2000个字符';
-								if (value.length < 2)
-									return '预期结果不能小于2个字符';
+//								if (value.length < 2)
+//									return '预期结果不能小于2个字符';
 							}
 						}
 					}, {
@@ -499,8 +499,8 @@
 							validate : function(value) {
 								if (value.length > 200)
 									return '备注不能超过200个字符';
-								if (value.length < 2)
-									return '备注不能小于2个字符';
+//								if (value.length < 2)
+//									return '备注不能小于2个字符';
 							}
 						}
 					}, {
