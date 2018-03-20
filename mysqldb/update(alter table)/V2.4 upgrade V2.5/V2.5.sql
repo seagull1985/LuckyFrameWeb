@@ -5,9 +5,6 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (53, 1, 0, 'operation','getcssvalue','获取对象指定CSS属性值');
 /*修改wait方法为timeout 设置全局隐式等待时间*/
 update PROJECT_CASESTEPSPARAMS set paramvalue='timeout',description='设置全局页面加载&元素出现最大等待时间(S)' where id=30;
-
-/*修改用例步骤中path的长度限制*/
-ALTER TABLE project_casesteps MODIFY path VARCHAR(200) COMMENT '包路径|定位路径';
  
 /*补充协议模板中漏掉的connecttimeout字段*/
 alter table PROJECT_PROTOCOLTEMPLATE add connecttimeout int(8) not null COMMENT '超时时间';
@@ -85,11 +82,4 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (88, 4, 0, 'operation','timeout','设置全局页面加载&元素出现最大等待时间(S)');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (89, 4, 0, 'operation','hideKeyboard','隐藏系统手机键盘');
-/*增加WEB测试封装方法*/
-insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
-values (90, 1, 0, 'operation','gotoparentframe','跳转回到上一级iframe');
-insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
-values (91, 1, 0, 'operation','scrollto','滚动到目标对象');
-insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
-values (92, 1, 0, 'operation','scrollintoview','将目标对象滚动到可视');
 

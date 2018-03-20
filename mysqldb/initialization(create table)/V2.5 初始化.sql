@@ -315,7 +315,7 @@ create table PROJECT_CASE
 create table PROJECT_CASESTEPS
 (
   id                    int(8) not null AUTO_INCREMENT,
-  path                  VARCHAR(200) COMMENT '包路径|定位路径',
+  path                  VARCHAR(100) COMMENT '包路径|定位路径',
   operation             VARCHAR(100) COMMENT '方法名|操作',
   parameters            VARCHAR(500) COMMENT '参数',
   action                VARCHAR(50) COMMENT '步骤动作',
@@ -717,12 +717,6 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (88, 4, 0, 'operation','timeout','设置全局页面加载&元素出现最大等待时间(S)');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (89, 4, 0, 'operation','hideKeyboard','隐藏系统手机键盘');
-insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
-values (90, 1, 0, 'operation','gotoparentframe','跳转回到上一级iframe');
-insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
-values (91, 1, 0, 'operation','scrollto','滚动到目标对象');
-insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
-values (92, 1, 0, 'operation','scrollintoview','将目标对象滚动到可视');
 /*插入角色默认定义*/
 insert into USER_ROLE (id, role, permission)
 values (2, '测试工程师', 'acc_1,acc_2,acc_3,');
