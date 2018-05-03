@@ -357,6 +357,7 @@ public class ProjectCaseController {
 					}
 					if(!UserLoginController.oppidboolean(req, pc.getProjectid())){
 						proprefail++;
+						ms="因为没有项目删除权限导致用例删除失败！";
 						continue;
 					}
 					casestepsservice.delforcaseid(id);

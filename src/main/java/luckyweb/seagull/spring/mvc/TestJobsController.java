@@ -68,7 +68,6 @@ public class TestJobsController
 {
 	private static final Logger	log	     = Logger.getLogger(TestJobsController.class);
 	
-	
 	@Resource(name = "testJobsService")
 	private TestJobsService	 testJobsService;
 	

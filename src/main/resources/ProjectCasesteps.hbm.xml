@@ -10,7 +10,7 @@
 			<generator class="identity"/>
 		</id>
 		<property name="path" type="java.lang.String">
-			<column name="path" length="100" not-null="false" />
+			<column name="path" length="200" not-null="false" />
 		</property>
 		<property name="operation" type="java.lang.String">
 			<column name="operation" length="100" not-null="false" />

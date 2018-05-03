@@ -93,19 +93,23 @@ public class QuartzJob implements Job {
 									query.executeUpdate();
 								}
 							}else{
+								log.error("【IP:"+tc.getClientip()+"】检查客户端异常！");
 								if(tc.getStatus()!=1){
 									tc.setStatus(1);
 									QueueListener.listen_Clientlist.set(i, tc);
 									Query query = session.createQuery("update TestClient t set t.status =1  where id="+tc.getId());
 									query.executeUpdate();
+									log.error("【IP:"+tc.getClientip()+"】客户端异常，修改客户端状态！");
 								}
 							}
 							}catch (RemoteException e) {
+								log.error("【IP:"+tc.getClientip()+"】检查客户端异常(RemoteException)！");
 								if(tc.getStatus()!=1){
 									tc.setStatus(1);
 									QueueListener.listen_Clientlist.set(i, tc);
 									Query query = session.createQuery("update TestClient t set t.status =1  where id="+tc.getId());
 									query.executeUpdate();
+									log.error("【IP:"+tc.getClientip()+"】客户端异常(RemoteException)，修改客户端状态！");
 								}
 								break;
 							}

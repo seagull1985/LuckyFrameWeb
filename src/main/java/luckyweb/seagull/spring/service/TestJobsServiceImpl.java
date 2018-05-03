@@ -193,7 +193,7 @@ public class TestJobsServiceImpl implements TestJobsService
 	private String where(TestJobs jb)
 	{
 		String where = " where ";
-		if (jb.getProjectid()!=0&&jb.getProjectid()!=PublicConst.STATUS99){
+		if (null!=jb.getProjectid()&&jb.getProjectid()!=0&&jb.getProjectid()!=PublicConst.STATUS99){
 			where += " projectid=:projectid  and ";
 		}
 		if (!StrLib.isEmpty(jb.getTaskName())){

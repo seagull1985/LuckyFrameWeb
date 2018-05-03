@@ -69,6 +69,7 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 				for (TestJobs tb : QueueListener.list) {
 					try{
 						mgr.addJobRunTime(tb, tb.getId());
+						log.info("启动定时任务【"+tb.getTaskName()+"】,任务ID【"+tb.getId()+"】...");
 					}catch(Exception e){
 						log.error("启动 测试调度定时任务失败：" + e.getMessage());
 						System.out.println("任务ID号"+tb.getId()+"启动失败，请检查测试调度任务配置情况，尤其是Cron表达式是否正确！！！！");
@@ -79,6 +80,7 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 				for (TestClient tc : QueueListener.listen_Clientlist) {
 					try{
 						mgr.addTestClient(tc, tc.getId());
+						log.info("启动客户端心跳监听【"+tc.getClientip()+"】,监听频率【"+tc.getCheckinterval()+"秒】...");
 					}catch(Exception e){
 						log.error("启动 客户端心跳检测监听失败：" + e.getMessage());
 						System.out.println("任务ID号"+tc.getId()+"启动失败，请检查客户端心跳检测任务配置情况，尤其是Cron表达式是否正确！！！！");
