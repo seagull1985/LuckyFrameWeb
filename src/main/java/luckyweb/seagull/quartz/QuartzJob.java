@@ -103,6 +103,7 @@ public class QuartzJob implements Job {
 								}
 							}
 							}catch (RemoteException e) {
+								log.error(e);
 								log.error("【IP:"+tc.getClientip()+"】检查客户端异常(RemoteException)！");
 								if(tc.getStatus()!=1){
 									tc.setStatus(1);

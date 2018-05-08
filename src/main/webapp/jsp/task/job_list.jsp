@@ -251,6 +251,8 @@
 														return '<font style="color:#00bf5f">'+value.substring(0,value.indexOf("**0"))+'</font>';
 													}else if(value.indexOf("**1")>-1){
 														return '<font style="color:#ff0000">'+value.substring(0,value.indexOf("**1"))+'</font>';
+													}else if(value.indexOf("**2")>-1){
+														return '<font style="color:#FF7F00">'+value.substring(0,value.indexOf("**1"))+'</font>';
 													}else{
 														return '<font style="color:#FF7F00">'+value+'</font>';
 													}
@@ -499,12 +501,15 @@
 							async : true,
 							url : encodeURI("/testJobs/startNow.do?id=" + id),
 							success : function(json) {
-								toastr.success(json);
+								if(json.indexOf("失败") != -1){
+									toastr.error(json);
+								}else{
+									toastr.success(json);
+								}						
 							},
 							error : function() {
 								toastr.error('系统异常，请稍后再试!');
 							}
-
 						});
 					}
 					return true;
