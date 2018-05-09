@@ -41,6 +41,7 @@ function gouserInfo(){
 								<a href="javascript:window.open('http://www.luckyframe.cn')">官网</a>|
 								<a href="javascript:window.open('http://www.luckyframe.cn/page/aboutme.html')">关于</a> |
 								<a href="javascript:window.open('http://www.luckyframe.cn/book/yhsc/syschyy-24.html')">用户手册</a> |
+								<a href="javascript:window.open('http://www.luckyframe.cn/allwz.html')">技巧分享</a>|
 								<a href="#" onclick="gouserInfo()">系统管理</a>
 							</p>
 						</div>
