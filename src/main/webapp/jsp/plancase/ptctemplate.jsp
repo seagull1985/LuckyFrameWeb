@@ -118,6 +118,14 @@
 										</div>
 										
 										<div class="form-group">
+											<label for="cerpath" class="col-sm-3 control-label">证书路径</label>
+											<div class="col-sm-9">
+												<textarea class="form-control" name="cerpath" id="cerpath"
+													placeholder="非必填项，HTTPS双向认证才会用到，HTTPS单向认证此项请保持为空，格式：【https证书路径;密钥】"></textarea>
+											</div>
+										</div>
+										
+										<div class="form-group">
 											<label for="projectid" class="col-sm-3 control-label">编码格式</label>
 											<div class="col-sm-9">
 												<select class="form-control" name="contentencoding" id="contentencoding">
@@ -379,6 +387,16 @@
 									}
 								}
 							},
+							cerpath : {
+								message : '证书路径无效！',
+								validators : {
+									stringLength : {
+										min : 0,
+										max : 300,
+										message : '证书存放路径长度必须小于300个字符'
+									}
+								}
+							},
 							remark : {
 								message : '模板备注无效！',
 								validators : {
@@ -443,13 +461,14 @@
 	        		$("#projectid").val(row[0].projectid);
 	        		$("#name").val("COPY "+row[0].name);
 	        		$("#protocoltype").val(row[0].protocoltype);
+	        		$("#cerpath").val(row[0].cerpath);
 	        		$("#headmsg").val(row[0].headmsg);
 	        		$("#contentencoding").val(row[0].contentencoding);
 	        		$("#connecttimeout").val(row[0].connecttimeout);
 	        		$("#remark").val(row[0].remark);
 	        		$("#id").val(row[0].id);
 	        		$("#addModal").modal('show');
-            }
+              }
             }else{
             	toastr.warning('要复制模板有且只能选择一条记录哦！'); 
             }

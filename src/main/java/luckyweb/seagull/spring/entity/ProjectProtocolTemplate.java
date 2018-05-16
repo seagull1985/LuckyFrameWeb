@@ -21,6 +21,7 @@ public class ProjectProtocolTemplate implements java.io.Serializable{
 	private int projectid;
 	private String name;
 	private String protocoltype;
+	private String cerpath;
 	private String contentencoding;
 	private int connecttimeout;
 	private String time;
@@ -30,6 +31,12 @@ public class ProjectProtocolTemplate implements java.io.Serializable{
     private String headmsg;
 	
     
+	public String getCerpath() {
+		return cerpath;
+	}
+	public void setCerpath(String cerpath) {
+		this.cerpath = cerpath;
+	}
 	public String getHeadmsg() {
 		return headmsg;
 	}

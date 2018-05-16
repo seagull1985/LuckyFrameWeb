@@ -20,6 +20,9 @@
 		<property name="protocoltype" type="java.lang.String">
 			<column name="protocoltype" length="20" not-null="true" />
 		</property>
+		<property name="cerpath" type="java.lang.String">
+			<column name="cerpath" length="300" not-null="false" />
+		</property>
 		<property name="contentencoding" type="java.lang.String">
 			<column name="contentencoding" length="20" not-null="true" />
 		</property>

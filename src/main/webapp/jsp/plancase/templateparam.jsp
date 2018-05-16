@@ -59,13 +59,14 @@
 							<tr>
 							    <td width="20%" style="font-weight:bold;">项目名称：${ptemplate.projectname}</td>
 								<td width="20%" style="font-weight:bold;">模板名称：${ptemplate.name}</td>
-								<td width="60%" style="font-weight:bold;" colspan="2">请求头域：${ptemplate.headmsg}</td>
+								<td width="50%" style="font-weight:bold;">请求头域：${ptemplate.headmsg}</td>
+								<td width="10%" style="font-weight:bold;">协议类型：${ptemplate.protocoltype}</td>
 							</tr>
 							<tr>
-								<td width="20%" style="font-weight:bold;">协议类型：${ptemplate.protocoltype}</td>
-							    <td width="20%" style="font-weight:bold;">编码格式：${ptemplate.contentencoding}</td>
-								<td width="20%" style="font-weight:bold;">超时时间：${ptemplate.connecttimeout}</td>
-								<td width="40%" style="font-weight:bold;">备注：${ptemplate.remark}</td>
+							    <td style="font-weight:bold;">编码格式：${ptemplate.contentencoding}</td>
+							    <td style="font-weight:bold;">备注：${ptemplate.remark}</td>
+							    <td style="font-weight:bold;">证书路径：${ptemplate.cerpath}</td>
+								<td style="font-weight:bold;">超时时间：${ptemplate.connecttimeout}</td>								
 							</tr>
 						</table>
 
