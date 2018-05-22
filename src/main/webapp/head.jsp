@@ -88,7 +88,10 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-weight:bold;">关于<b class="caret"></b></a>
 						<ul class="dropdown-menu" style="background-color:rgba(88,87,86,0.6);">
-							<li><a href="/progressus/contact.jsp">联系我们</a></li>
+							<li><a href="javascript:window.open('http://www.luckyframe.cn')">官网首页</a></li>
+							<li><a href="javascript:window.open('http://www.luckyframe.cn/book/yhsc/syschyy-24.html')">用户手册</a></li>
+							<li><a href="javascript:window.open('http://www.luckyframe.cn/allwz.html')">技巧分享</a></li>
+							<li><a href="javascript:window.open('http://www.luckyframe.cn/page/aboutme.html')">关于LuckyFrame</a></li>
 						</ul>
 					</li>
 				</ul>

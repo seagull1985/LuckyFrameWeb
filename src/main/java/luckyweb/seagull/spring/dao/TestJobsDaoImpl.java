@@ -219,7 +219,7 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 		if (!StrLib.isEmpty(jb.getPlanproj())) {
 			query.setParameter("planproj", "%"+jb.getPlanproj().trim()+"%");
 		}
-		if (jb.getProjectid()!=0&&jb.getProjectid()!=PublicConst.STATUS99) {
+		if (null!=jb.getProjectid()&&jb.getProjectid()!=0&&jb.getProjectid()!=PublicConst.STATUS99) {
 			query.setParameter("projectid", jb.getProjectid());
 		}
 	}
