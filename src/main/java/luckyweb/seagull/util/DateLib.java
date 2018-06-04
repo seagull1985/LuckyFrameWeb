@@ -1,11 +1,10 @@
 package luckyweb.seagull.util;
 
-import java.sql.Date;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Date;
 
 /**
  * =================================================================
@@ -197,6 +196,25 @@ public class DateLib {
 		return 0;
 	}
 
+	/**
+	 * 计算入参日期到今天的间隔天数
+	 * @param beforedate
+	 * @return
+	 * @throws ParseException 
+	 */
+	public static int getDays(String beforedatestr) throws ParseException {
+		if(null==beforedatestr){
+			return 0;
+		}
+		String todaystr = DateLib.today("yyyy-MM-dd");  //第二个日期
+		//算两个日期间隔多少天
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date today = format.parse(todaystr);
+		Date beforedate = format.parse(beforedatestr);
+		int days = (int) ((today.getTime() - beforedate.getTime()) / (1000*3600*24));
+		return days;
+	}
+	
 	public static void main(String[] args) {
 	}
 

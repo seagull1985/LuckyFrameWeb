@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.ProjectCaseDao;
 import luckyweb.seagull.spring.entity.ProjectCase;
+import luckyweb.seagull.util.DateLib;
 
 /**
  * =================================================================
@@ -105,5 +106,12 @@ public class ProjectCaseServiceImpl implements ProjectCaseService{
 	public String getCaseMaxIndex(int projectid) throws Exception {
 		// TODO Auto-generated method stub
 		return this.projectcaseDao.getCaseMaxIndex("select IFNULL(MAX(projectindex),0) from project_case where projectid="+projectid);
+	}
+	
+	@Override
+	public String getBeforeDayRows(int beforedays) throws Exception {
+		// TODO Auto-generated method stub
+		String date=DateLib.beforNdFormat("yyyy-MM-dd", beforedays);
+		return this.projectcaseDao.getCaseMaxIndex("select count(*) from project_case t where t.time<'"+date+"'");
 	}
 }

@@ -79,10 +79,13 @@ public class LogDetailServiceImpl implements LogDetailService {
 	private String where(TestLogdetail logs)
 	{
 		String where = " where ";
-		if (logs.getCaseid()!=0){
+		if (null!=logs.getLogGrade()&&logs.getCaseid()!=0){
 			where += " caseid=:caseid  and ";
 		}
-		if (logs.getTaskid()!=0){
+		if (null!=logs.getLogGrade()){
+			where += " logGrade=:logGrade  and ";
+		}
+		if (null!=logs.getLogGrade()&&logs.getTaskid()!=0){
 			where += " taskid=:taskid  and ";
 		}
 		if (where.length() == PublicConst.WHERENUM)

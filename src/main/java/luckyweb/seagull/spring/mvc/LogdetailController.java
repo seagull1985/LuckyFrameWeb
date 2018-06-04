@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.rmi.Naming;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,7 +34,9 @@ import luckyweb.seagull.spring.service.ProjectCaseService;
 import luckyweb.seagull.spring.service.ProjectCasestepsService;
 import luckyweb.seagull.spring.service.TestJobsService;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
+import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import rmi.service.RunService;
 
@@ -246,4 +249,128 @@ public class LogdetailController
 
 	}
 	
+
+	@RequestMapping(value = "/getindexdata.do")
+	public void getIndexData(HttpServletRequest req, HttpServletResponse rsp) throws Exception{
+		String[] taskdata = new String[2];
+		String[] casedata = new String[2];
+		String[] logdata = new String[2];
+		String[] caseadddata = new String[2];
+		
+		TestTaskexcute task = new TestTaskexcute();
+		String startdate=(String)tastExcuteService.getTopTaskDate().get(0);
+		int days=DateLib.getDays(startdate);
+		taskdata[0] = String.valueOf(days);
+		int taskcount=tastExcuteService.findRows(task);
+		taskdata[1] = String.valueOf(taskcount);
+		
+		TestCasedetail caseDetail = new TestCasedetail();
+		int casecount=casedetailService.findRows(caseDetail);
+		casedata[0] = String.valueOf(casecount);
+		caseDetail.setCasestatus("0");
+		int casesuccount=casedetailService.findRows(caseDetail);
+		if(0==casecount&&0==casesuccount){
+			casedata[1]="0";
+		}else{
+			double percase =(double)casesuccount/casecount;
+			BigDecimal bcase =new BigDecimal(percase*100);    
+			percase=bcase.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue(); 
+			casedata[1] = String.valueOf(percase);
+		}
+		
+		TestLogdetail logDetail = new TestLogdetail();
+		if(0==casecount){
+			logdata[0]="0";
+		}else{
+			double perrl =(double)casecount/45;
+			perrl = perrl/days;
+			BigDecimal bperrl =new BigDecimal(perrl);
+			perrl=bperrl.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+			logdata[0] = String.valueOf(perrl);
+		}
+		int logcount=logdetailService.findRows(logDetail);
+		logdata[1] = String.valueOf(logcount);
+		
+		ProjectCase projectcase = new ProjectCase();
+		int caseaddcount=projectcaseservice.findRows(projectcase);
+		caseadddata[0] = String.valueOf(caseaddcount);
+		String beforeccount=projectcaseservice.getBeforeDayRows(30);
+		caseadddata[1] = String.valueOf(caseaddcount-Integer.valueOf(beforeccount));
+		
+		rsp.setContentType("application/json");
+		rsp.setCharacterEncoding("utf-8");
+		JSONArray taskArray = JSONArray.fromObject(taskdata);
+		JSONArray caseArray = JSONArray.fromObject(casedata);
+		JSONArray logArray = JSONArray.fromObject(logdata);
+		JSONArray caseaddArray = JSONArray.fromObject(caseadddata);
+		JSONObject jsobjcet = new JSONObject();
+		jsobjcet.put("taskdata", taskArray);
+		jsobjcet.put("casedata", caseArray); 
+		jsobjcet.put("logdata", logArray); 
+		jsobjcet.put("caseadddata", caseaddArray); 
+		
+		rsp.getWriter().write(jsobjcet.toString());
+	}
+	
+	@RequestMapping(value = "/getindexreport.do")
+	public void getIndexReport(HttpServletRequest req, HttpServletResponse rsp) throws Exception{
+		List<Object[]> taskreport = tastExcuteService.listindexreport(30);
+		
+
+		String[] casetotal;
+		String[] casesuc;
+		String[] casefail;
+		String[] caselock;
+		String[] casenoex;
+		String[] createdate;
+		
+		if(null!=taskreport&&0!=taskreport.size()){
+		    casetotal = new String[taskreport.size()];
+			casesuc = new String[taskreport.size()];
+			casefail = new String[taskreport.size()];
+			caselock = new String[taskreport.size()];
+			casenoex = new String[taskreport.size()];
+			createdate = new String[taskreport.size()];	
+		}else{
+		    casetotal = new String[1];
+			casesuc = new String[1];
+			casefail = new String[1];
+			caselock = new String[1];
+			casenoex = new String[1];
+			createdate = new String[1];
+			
+		    casetotal[0] = "0";
+			casesuc[0] = "0";
+			casefail[0] = "0";
+			caselock[0] = "0";
+			casenoex[0] = "0";
+			createdate[0] = DateLib.today("yyyy-MM-dd");
+		}
+
+		for(int i=0;i<taskreport.size();i++){
+			casetotal[i] = taskreport.get(i)[0].toString();
+			casesuc[i] = taskreport.get(i)[1].toString();
+			casefail[i] = taskreport.get(i)[2].toString();
+			caselock[i] = taskreport.get(i)[3].toString();
+			casenoex[i] = taskreport.get(i)[4].toString();
+			createdate[i] = taskreport.get(i)[5].toString();
+		}
+		
+		JSONArray  jsoncasetotal=JSONArray.fromObject(casetotal);
+		JSONArray  jsoncasesuc=JSONArray.fromObject(casesuc);
+		JSONArray  jsoncasefail=JSONArray.fromObject(casefail);
+		JSONArray  jsoncaselock=JSONArray.fromObject(caselock);
+		JSONArray  jsoncasenoex=JSONArray.fromObject(casenoex);
+		JSONArray  jsoncreatedate=JSONArray.fromObject(createdate);
+		
+		JSONObject jsobjcet = new JSONObject();
+		jsobjcet.put("casetotal", jsoncasetotal);
+		jsobjcet.put("casesuc", jsoncasesuc); 
+		jsobjcet.put("casefail", jsoncasefail); 
+		jsobjcet.put("caselock", jsoncaselock); 
+		jsobjcet.put("casenoex", jsoncasenoex); 
+		jsobjcet.put("casedate", jsoncreatedate);
+		
+		rsp.getWriter().write(jsobjcet.toString());
+	}
 }

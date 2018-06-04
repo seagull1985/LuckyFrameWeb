@@ -2,7 +2,6 @@ package luckyweb.seagull.spring.service;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import luckyweb.seagull.spring.entity.TestTaskexcute;
@@ -92,4 +91,17 @@ public interface TestTastExcuteService {
 	 * @throws Exception
 	 */
 	public List listtastinfo() throws Exception;
+	/**
+	 * 获取N天内，任务执行每天的统计数据
+	 * @param days
+	 * @return
+	 * @throws Exception
+	 */
+	public List listindexreport(int days) throws Exception;
+	/**
+	 * 获取最早一条任务的执行日期
+	 * @return
+	 * @throws Exception
+	 */
+	public List getTopTaskDate() throws Exception;
 }

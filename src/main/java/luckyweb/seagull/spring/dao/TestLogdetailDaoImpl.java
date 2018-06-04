@@ -117,11 +117,14 @@ public class TestLogdetailDaoImpl extends HibernateDaoSupport implements
 	}
 	
 	private void whereParameter(TestLogdetail log, Query query) {
-		if (log.getTaskid()!=0) {
+		if (null!=log.getLogGrade()&&log.getTaskid()!=0) {
 			query.setParameter("taskid", log.getTaskid());
 		}
-		if (log.getCaseid()!=0) {
+		if (null!=log.getLogGrade()&&log.getCaseid()!=0) {
 			query.setParameter("caseid", log.getCaseid());
+		}
+		if (null!=log.getLogGrade()) {
+			query.setParameter("logGrade", log.getLogGrade());
 		}
 	}
 }
