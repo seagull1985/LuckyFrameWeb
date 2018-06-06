@@ -171,7 +171,7 @@ public class ProjectPlanController {
 
 					projectplanservice.modify(projectplan);
 
-					operationlogservice.add(req, "PROJECT_PLAN", projectplan.getId(), projectplan.getProjectid(),
+					operationlogservice.add(req, "PROJECT_PLAN", projectplan.getId(), projectplan.getProjectid(),1,
 							"修改测试计划成功!");
 					json.put("status", "success");
 					json.put("ms", "编辑计划成功!");
@@ -231,7 +231,7 @@ public class ProjectPlanController {
 
 					int planid = projectplanservice.add(projectplan);
 
-					operationlogservice.add(req, "PROJECT_PLAN", planid, projectplan.getProjectid(), "添加测试计划成功!");
+					operationlogservice.add(req, "PROJECT_PLAN", planid, projectplan.getProjectid(),3, "添加测试计划成功!");
 
 					json.put("status", "success");
 					json.put("ms", "添加测试计划成功!");
@@ -296,7 +296,7 @@ public class ProjectPlanController {
 					}	
 					projectplancaseservice.delforplanid(id);
 					projectplanservice.delete(projectplan);
-					operationlogservice.add(req, "PROJECT_PLAN", id, projectplan.getProjectid(), "删除测试计划成功!");
+					operationlogservice.add(req, "PROJECT_PLAN", id, projectplan.getProjectid(),0, "删除测试计划成功!");
 					suc++;
 				}
 				

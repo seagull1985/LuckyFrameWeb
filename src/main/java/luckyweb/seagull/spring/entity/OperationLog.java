@@ -21,6 +21,7 @@ public class OperationLog implements java.io.Serializable{
 	private String tablename;
 	private int tableid;
 	private int projectid;
+	private int operation_integral;
 	private String operation_time;
 	private String operationer;
 	private String operation_description;
@@ -28,6 +29,12 @@ public class OperationLog implements java.io.Serializable{
 	private String endtime;
 	private SectorProjects sectorProjects;
 
+	public int getOperation_integral() {
+		return operation_integral;
+	}
+	public void setOperation_integral(int operation_integral) {
+		this.operation_integral = operation_integral;
+	}
 	public SectorProjects getSectorProjects() {
 		return sectorProjects;
 	}

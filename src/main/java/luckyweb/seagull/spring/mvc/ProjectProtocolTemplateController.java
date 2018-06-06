@@ -199,7 +199,7 @@ public class ProjectProtocolTemplateController {
 
 					int id = ptemplateservice.add(ppt);
 
-					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", id, ppt.getProjectid(), "添加协议模板成功!");
+					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", id, ppt.getProjectid(),5, "添加协议模板成功!");
 
 					String ms="添加协议模板【"+ppt.getName()+"】成功！";
 					if(0!=copyid){
@@ -207,7 +207,7 @@ public class ProjectProtocolTemplateController {
 						for(ProjectTemplateParams param:params){
 							param.setTemplateid(id);
 							int paramid=ptemplateparamsService.add(param);
-						    operationlogservice.add(req, "PROJECT_TEMPLATEPARAMS", paramid, ppt.getProjectid(),
+						    operationlogservice.add(req, "PROJECT_TEMPLATEPARAMS", paramid, ppt.getProjectid(),2,
 									"复制协议模板内容参数成功！");
 						}
 						ms="复制协议模板【"+ppt.getName()+"】成功！";
@@ -254,7 +254,7 @@ public class ProjectProtocolTemplateController {
 
 					ptemplateservice.modify(ppt);
 
-					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", ppt.getId(), ppt.getProjectid(),
+					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", ppt.getId(), ppt.getProjectid(),1,
 							"修改测试协议模板成功!");
 					json.put("status", "success");
 					json.put("ms", "编辑测试协议模板成功!");
@@ -318,7 +318,7 @@ public class ProjectProtocolTemplateController {
 					}	
 					ptemplateparamsService.delete(id);
 					ptemplateservice.deleteforob(ppt);
-					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", id, ppt.getProjectid(), "删除协议模板成功!");
+					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", id, ppt.getProjectid(),0, "删除协议模板成功!");
 					suc++;
 				}
 				

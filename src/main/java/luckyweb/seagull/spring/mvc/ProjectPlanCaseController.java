@@ -304,7 +304,7 @@ public class ProjectPlanCaseController {
 				pc.setCasecount(count);
 				projectplanservice.modify(pc);
 
-				operationlogservice.add(req, "PROJECT_PLAN", Integer.valueOf(planid), pc.getProjectid(), "保存计划用例成功!");
+				operationlogservice.add(req, "PROJECT_PLAN", Integer.valueOf(planid), pc.getProjectid(),2, "保存计划用例成功!");
 				json.put("status", "success");
 				json.put("ms", "保存计划用例成功!");
 			}

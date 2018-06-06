@@ -228,7 +228,7 @@ public class PlanFlowCheckController {
 				int id = planflowcheckservice.add(planflowcheck);
 				String checkentry = flowinfoService.load(Integer.valueOf(planflowcheck.getCheckentryid())).getCheckentry();
 				operationlogservice.add(req, "QA_PLANFLOWCHECK", id, 
-						planflowcheck.getProjectid(),"流程检查计划添加成功！计划日期："+planflowcheck.getPlandate()+" 检查内容："+checkentry);
+						planflowcheck.getProjectid(),2,"流程检查计划添加成功！计划日期："+planflowcheck.getPlandate()+" 检查内容："+checkentry);
 				
 				model.addAttribute("message", "添加成功");
 				@SuppressWarnings("unchecked")
@@ -338,7 +338,7 @@ public class PlanFlowCheckController {
 				planflowcheckservice.modify(planflowcheck);
 				String checkentry = flowinfoService.load(Integer.valueOf(planflowcheck.getCheckentryid())).getCheckentry();
 				operationlogservice.add(req, "QA_PLANFLOWCHECK", id, 
-						planflowcheck.getProjectid(),"流程检查计划修改成功！计划日期："+planflowcheck.getPlandate()+" 检查内容："+checkentry);
+						planflowcheck.getProjectid(),1,"流程检查计划修改成功！计划日期："+planflowcheck.getPlandate()+" 检查内容："+checkentry);
 				
 				model.addAttribute("message", "修改成功");
 				model.addAttribute("url", "/planflowCheck/load.do");
@@ -429,7 +429,7 @@ public class PlanFlowCheckController {
 					planflowcheckservice.delete(id);
 					String checkentry = flowinfoService.load(Integer.valueOf(pfc.getCheckentryid())).getCheckentry();
 					operationlogservice.add(req, "QA_PLANFLOWCHECK", id, 
-							pfc.getSectorProjects().getProjectid(),"流程检查计划删除成功！计划日期："+pfc.getPlandate()+" 检查内容："+checkentry);
+							pfc.getSectorProjects().getProjectid(),0,"流程检查计划删除成功！计划日期："+pfc.getPlandate()+" 检查内容："+checkentry);
 					suc++;
 				}
 				if(suc>0){
@@ -567,7 +567,7 @@ public class PlanFlowCheckController {
 			planflowcheckservice.modify(pfc);
 			String checkentry = flowinfoService.load(Integer.valueOf(flowcheck.getCheckentry())).getCheckentry();
 			operationlogservice.add(req, "QA_FLOWCHECK", addid, 
-					flowcheck.getProjectid(),"计划转检查结果添加成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
+					flowcheck.getProjectid(),1,"计划转检查结果添加成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
 			
 			model.addAttribute("message", "转检查结果成功");
 			model.addAttribute("url", "/planflowCheck/load.do");

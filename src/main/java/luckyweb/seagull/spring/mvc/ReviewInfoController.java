@@ -210,7 +210,7 @@ public class ReviewInfoController {
 				int infoid = reviewinfoservice.add(reviewinfo);
 				
 				operationlogservice.add(req, "QA_REVIEWINFO", infoid, 
-						reviewinfo.getProjectid(),"评审记录登记成功！");
+						reviewinfo.getProjectid(),2,"评审记录登记成功！");
 				
 				model.addAttribute("message", "添加成功");
 				model.addAttribute("url", "/reviewinfo/load.do?reviewid="+reviewid);
@@ -304,7 +304,7 @@ public class ReviewInfoController {
 					reviewinfoservice.delete(id);
 					
 					operationlogservice.add(req, "QA_REVIEWINFO", id, 
-							review.getSectorProjects().getProjectid(),"评审明细信息删除成功！");
+							review.getSectorProjects().getProjectid(),0,"评审明细信息删除成功！");
 					suc++;
 				}
 				
@@ -388,7 +388,7 @@ public class ReviewInfoController {
 				reviewinfoservice.modify(reinfo);
 				
 				operationlogservice.add(req, "QA_REVIEWINFO", reinfo.getId(), 
-						reinfo.getProjectid(),"评审记录修改成功！");
+						reinfo.getProjectid(),1,"评审记录修改成功！");
 				
 				model.addAttribute("message", "修改成功");
 				model.addAttribute("url", "/reviewinfo/load.do?reviewid="+reinfo.getReview_id());

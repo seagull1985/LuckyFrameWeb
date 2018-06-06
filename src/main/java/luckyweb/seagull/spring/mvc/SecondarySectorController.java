@@ -103,7 +103,7 @@ public class SecondarySectorController {
 				secondarysectorservice.modify(sectors);
 
 				operationlogservice.add(req, "SecondarySector", sectors.getSectorid(), 
-						99,"部门信息修改成功！部门名称："+sectors.getDepartmentname());
+						99,1,"部门信息修改成功！部门名称："+sectors.getDepartmentname());
 				
 				json.put("status", "success");
 				json.put("ms", "编辑部门成功!");
@@ -140,7 +140,7 @@ public class SecondarySectorController {
 			} else {
 				int sid = secondarysectorservice.add(sectors);
 				operationlogservice.add(req, "SectorProjects", sid, 
-						99,"部门添加成功！部门名："+sectors.getDepartmentname());
+						99,1,"部门添加成功！部门名："+sectors.getDepartmentname());
 				
 				json.put("status", "success");
 				json.put("ms", "添加部门成功!");
@@ -206,7 +206,7 @@ public class SecondarySectorController {
 					
 					secondarysectorservice.delete(sectors);
 					operationlogservice.add(req, "SectorProjects", id, 
-							99,"部门删除成功！部门名："+sectors.getDepartmentname());
+							99,0,"部门删除成功！部门名："+sectors.getDepartmentname());
 					status="success";
 					ms="删除部门成功!";
 				}

@@ -368,7 +368,7 @@ public class ProjectVersionController {
 				int versionid = projectsversionservice.add(projectversion);
 				
 				operationlogservice.add(req, "QA_PROJECTVERSION", versionid, 
-						projectversion.getProjectid(),"版本信息添加成功！版本号："+projectversion.getVersionnumber());
+						projectversion.getProjectid(),5,"版本信息添加成功！版本号："+projectversion.getVersionnumber());
 				
 				model.addAttribute("message", "添加成功");
 				model.addAttribute("url", "/projectVersion/load.do");
@@ -605,7 +605,7 @@ public class ProjectVersionController {
 			projectsversionservice.modify(projectversion);
 			
 			operationlogservice.add(req, "QA_PROJECTVERSION", versionid, 
-					projectversion.getProjectid(),"版本信息修改成功！版本号："+projectversion.getVersionnumber());
+					projectversion.getProjectid(),1,"版本信息修改成功！版本号："+projectversion.getVersionnumber());
 			
 			model.addAttribute("message", "修改成功");
 			model.addAttribute("url", "/projectVersion/load.do");
@@ -818,7 +818,7 @@ public class ProjectVersionController {
 				int versionid = projectsversionservice.add(projectversion);
 				
 				operationlogservice.add(req, "QA_PROJECTVERSION", versionid, 
-						projectversion.getProjectid(),"版本计划添加成功！版本号："+projectversion.getVersionnumber());
+						projectversion.getProjectid(),2,"版本计划添加成功！版本号："+projectversion.getVersionnumber());
 				
 				model.addAttribute("message", "添加成功");
 				model.addAttribute("url", "/projectVersion/load.do");
@@ -873,7 +873,7 @@ public class ProjectVersionController {
 						projectsversionservice.delete(versionid);
 						
 						operationlogservice.add(req, "QA_PROJECTVERSION", versionid, 
-								projectversion.getSectorProjects().getProjectid(),"版本信息删除成功！版本号："+projectversion.getVersionnumber());
+								projectversion.getSectorProjects().getProjectid(),0,"版本信息删除成功！版本号："+projectversion.getVersionnumber());
 						
 						json.put("status", "success");
 						json.put("ms", "删除项目版本信息成功!");

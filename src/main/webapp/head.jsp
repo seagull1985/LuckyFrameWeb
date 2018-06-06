@@ -56,6 +56,7 @@
 							<li><a href="/testJobs/load.do">调度配置</a></li>
 							<li><a href="/tastExecute/load.do">任务查询</a></li>
 							<li><a href="/autoTestChar/chart.do">任务概况图表</a></li>
+							<li><a href="/autoTestChar/autostar.do">自动化之星</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">

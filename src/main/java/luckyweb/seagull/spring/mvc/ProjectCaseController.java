@@ -205,7 +205,7 @@ public class ProjectCaseController {
 					projectcase.setTime(time);
 
 					projectcaseservice.modify(projectcase);
-					operationlogservice.add(req, "PROJECT_CASE", projectcase.getId(), projectcase.getProjectid(),
+					operationlogservice.add(req, "PROJECT_CASE", projectcase.getId(), projectcase.getProjectid(),1,
 							"编辑用例成功！用例编号：" + projectcase.getSign());
 					json.put("status", "success");
 					json.put("ms", "编辑成功!");
@@ -275,7 +275,7 @@ public class ProjectCaseController {
 					projectcase.setSign(sp.getProjectsign() + "-" + index);
 					projectcase.setProjectindex(index);
 					int caseid = projectcaseservice.add(projectcase);
-					operationlogservice.add(req, "PROJECT_CASE", caseid, projectcase.getProjectid(),
+					operationlogservice.add(req, "PROJECT_CASE", caseid, projectcase.getProjectid(),3,
 							"添加用例成功！用例编号：" + projectcase.getSign());
 					
 					String ms="添加用例【"+projectcase.getSign()+"】成功！";
@@ -284,7 +284,7 @@ public class ProjectCaseController {
 						for(ProjectCasesteps step:steps){
 							step.setCaseid(caseid);
 							int stepid=casestepsservice.add(step);
-						    operationlogservice.add(req, "PROJECT_CASESTEPS", stepid, projectcase.getProjectid(),
+						    operationlogservice.add(req, "PROJECT_CASESTEPS", stepid, projectcase.getProjectid(),1,
 									"复制用例步骤成功！");
 						}
 						ms="复制用例【"+projectcase.getSign()+"】成功！";
@@ -362,7 +362,7 @@ public class ProjectCaseController {
 					}
 					casestepsservice.delforcaseid(id);
 					projectcaseservice.delete(id);
-					operationlogservice.add(req, "PROJECT_CASE", pc.getId(), pc.getProjectid(), "删除用例成功！");
+					operationlogservice.add(req, "PROJECT_CASE", pc.getId(), pc.getProjectid(), 0,"删除用例成功！");
 					suc++;
 				}
 				
@@ -463,7 +463,7 @@ public class ProjectCaseController {
 						if(null!=pm&&pm.getProjectid()==projectid&&pm.getPid()==pid&&pm.getModulename().equals(oldName)){
 							pm.setModulename(name);
 							moduleservice.modify(pm);
-							operationlogservice.add(req, "PROJECT_MODULE", id, pm.getProjectid(), "编辑用例集成功！");
+							operationlogservice.add(req, "PROJECT_MODULE", id, pm.getProjectid(),1, "编辑用例集成功！");
 							ms="编辑用例集成功!";
 							status="success";
 						}
@@ -472,7 +472,7 @@ public class ProjectCaseController {
 						projectmodule.setPid(pid);
 						projectmodule.setModulename(name);
 						id = moduleservice.add(projectmodule);
-						operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(), "新增用例集成功！");
+						operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(),1, "新增用例集成功！");
 						ms="新增用例集成功!";
 						status="success";
 					}
@@ -552,7 +552,7 @@ public class ProjectCaseController {
 
 					if (casecount == 0) {
 						moduleservice.delete(projectmodule);
-						operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(), "删除用例集成功！");
+						operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(),0, "删除用例集成功！");
 
 						json.put("status", "success");
 						json.put("ms", "删除用例集成功！");

@@ -420,7 +420,7 @@ public class TestJobsController
 					QueueListener.list.add(tj);
 					
 					operationlogservice.add(req, "TESTJOBS", id, 
-							sectorprojectsService.getid(tj.getPlanproj()),"自动化用例计划任务添加成功！计划名称："+tj.getTaskName());
+							sectorprojectsService.getid(tj.getPlanproj()),8,"自动化用例计划任务添加成功！计划名称："+tj.getTaskName());
 		
 					model.addAttribute("message", "添加成功");
 					model.addAttribute("url", "/testJobs/load.do");
@@ -828,7 +828,7 @@ public class TestJobsController
 						QueueListener.list.remove(tj);
 						
 						operationlogservice.add(req, "TESTJOBS", id, 
-								tj.getProjectid(),"自动化用例计划任务删除成功！计划名称："+tj.getTaskName());
+								tj.getProjectid(),0,"自动化用例计划任务删除成功！计划名称："+tj.getTaskName());
 						
 						json.put("status", "success");
 						json.put("ms", "删除调度任务成功!");
@@ -873,7 +873,7 @@ public class TestJobsController
 			QuartzManager.addJob(id + "*JOB", QuartzJob.class, startTime);
 			
 			operationlogservice.add(req, "TESTJOBS", Integer.valueOf(id), 
-					sectorprojectsService.getid(tb.getPlanproj()),"自动化用例计划任务被启动成功！计划名称："+tb.getTaskName());
+					sectorprojectsService.getid(tb.getPlanproj()),2,"自动化用例计划任务被启动成功！计划名称："+tb.getTaskName());
 
 		}
 		catch (Exception e)
@@ -912,7 +912,7 @@ public class TestJobsController
 			QuartzManager.removeJob(id+"*JOB");
 			
 			operationlogservice.add(req, "TESTJOBS", Integer.valueOf(id), 
-					sectorprojectsService.getid(tb.getPlanproj()),"自动化用例计划任务被关闭成功！计划名称："+tb.getTaskName());
+					sectorprojectsService.getid(tb.getPlanproj()),1,"自动化用例计划任务被关闭成功！计划名称："+tb.getTaskName());
 		}
 		catch (Exception e)
 		{
@@ -962,7 +962,7 @@ public class TestJobsController
 				String message = qj.toRunTask(tj.getPlanproj(), id,tj.getTaskName(),tj.getClientip(),tj.getClientpath());				
 				
 				operationlogservice.add(req, "TESTJOBS", Integer.valueOf(id), 
-						sectorprojectsService.getid(tj.getPlanproj()),"自动化用例计划任务被执行！计划名称："+tj.getTaskName()+" 结果："+message);
+						sectorprojectsService.getid(tj.getPlanproj()),2,"自动化用例计划任务被执行！计划名称："+tj.getTaskName()+" 结果："+message);
 				pw.write(message);
 			}
 			catch (Exception e)
@@ -1124,7 +1124,7 @@ public class TestJobsController
 				targetFile.delete();
 			}
 			operationlogservice.add(request, "TESTJOBS", 0, 
-					99,"项目jar包被上传，包名："+file.getOriginalFilename());
+					99,5,"项目jar包被上传，包名："+file.getOriginalFilename());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

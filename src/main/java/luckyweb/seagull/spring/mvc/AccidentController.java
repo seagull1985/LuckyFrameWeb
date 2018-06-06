@@ -230,7 +230,7 @@ public class AccidentController {
 				int accid = accidentservice.add(accident);
 				
 				operationlogservice.add(req, "QA_ACCIDENT", accid, 
-						accident.getProjectid(),"生产事故登记成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
+						accident.getProjectid(),10,"生产事故登记成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
 				
 				model.addAttribute("message", "添加成功");
 				model.addAttribute("url", "/accident/load.do");
@@ -315,7 +315,7 @@ public class AccidentController {
 			accidentservice.modify(accident);
 			
 			operationlogservice.add(req, "QA_ACCIDENT", id, 
-					accident.getProjectid(),"生产事故信息修改成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
+					accident.getProjectid(),1,"生产事故信息修改成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
 
 			
 			model.addAttribute("message", "修改成功");
@@ -392,7 +392,7 @@ public class AccidentController {
 					accidentservice.delete(id);
 
 					operationlogservice.add(req, "QA_ACCIDENT", id, 
-							accident.getSectorProjects().getProjectid(),"生产事故信息删除成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
+							accident.getSectorProjects().getProjectid(),0,"生产事故信息删除成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
 					suc++;
 				}
 				
@@ -642,7 +642,7 @@ public class AccidentController {
 		accident.setFilename(id+filetype);
 		accidentservice.modify(accident);		
 		operationlogservice.add(request, "QA_ACCIDENT", id, 
-				accident.getProjectid(),"生产事故附件上传成功！附件名称【"+id+filetype+"】");
+				accident.getProjectid(),2,"生产事故附件上传成功！附件名称【"+id+filetype+"】");
 
 		model.addAttribute("url", "/accident/load.do");
 		model.addAttribute("message", "【" + file.getOriginalFilename() + "】文件自动更名为【"+id+filetype+"】上传成功！");

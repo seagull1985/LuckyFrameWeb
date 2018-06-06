@@ -177,7 +177,7 @@ public class ReviewController {
 					reviewinfoservice.deleteReviewid(id);
 					reviewservice.delete(id);
 					operationlogservice.add(req, "QA_REVIEW", id, 
-							review.getSectorProjects().getProjectid(),"评审信息删除成功！");
+							review.getSectorProjects().getProjectid(),0,"评审信息删除成功！");
 					suc++;
 				}
 				
@@ -260,7 +260,7 @@ public class ReviewController {
 				reviewservice.modify(reviewUpdate);
 				
 				operationlogservice.add(req, "QA_REVIEW", reviewUpdate.getId(), 
-						reviewUpdate.getSectorProjects().getProjectid(),"评审记录修改成功！");
+						reviewUpdate.getSectorProjects().getProjectid(),1,"评审记录修改成功！");
 				
 				model.addAttribute("message", "修改成功");
 				model.addAttribute("url", "/reviewinfo/load.do");

@@ -221,7 +221,7 @@ public class TastExcuteController {
 					}
 
 					operationlogservice.add(req, "TEST_TASKEXCUTE", id,
-							task.getTestJob().getProjectid(),
+							task.getTestJob().getProjectid(),1,
 							"自动化用例已执行任务记录删除成功！任务名称：" + task.getTaskId());
 				}
 

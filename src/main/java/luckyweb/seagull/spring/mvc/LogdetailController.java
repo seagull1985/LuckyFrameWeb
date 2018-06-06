@@ -371,6 +371,8 @@ public class LogdetailController
 		jsobjcet.put("casenoex", jsoncasenoex); 
 		jsobjcet.put("casedate", jsoncreatedate);
 		
+		rsp.setContentType("application/json");
+		rsp.setCharacterEncoding("utf-8");
 		rsp.getWriter().write(jsobjcet.toString());
 	}
 }

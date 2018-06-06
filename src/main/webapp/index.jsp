@@ -9,7 +9,7 @@
 <style type="text/css">
 .ibox {
     clear: both;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
     margin-top: 0;
     padding: 0;
 }
@@ -132,9 +132,9 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
-                <div class="ibox-title">
+<!--                 <div class="ibox-title">
                     <h5>近30天用例执行概况</h5>
-                </div>
+                </div> -->
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-sm-12">
@@ -151,7 +151,7 @@
 	<!-- /Intro-->
 
 	<!-- Highlights - jumbotron -->
-	<div class="jumbotron top-space" style="margin-top:5px">
+	<div class="jumbotron top-space" style="margin-top:10px">
 		<div class="container">
 
 			<h3 class="text-center thin">LuckyFrame 能做的不止于此...</h3>

@@ -162,7 +162,7 @@ public class TestClientController {
 						mgr.addTestClient(tc, tcid);
 						
 						operationlogservice.add(req, "TestClient", tcid, 
-								99,"客户端【"+tc.getName()+"】添加成功！");
+								99,5,"客户端【"+tc.getName()+"】添加成功！");
 						
 						json.put("status", "success");
 						json.put("ms", "添加客户端成功!");
@@ -201,7 +201,7 @@ public class TestClientController {
 						QuartzManager.modifyJobTime(tc.getId() + "*CLIENT", "0/"+tc.getCheckinterval()+" * * * * ?");
 						
 						operationlogservice.add(req, "TestClient", tc.getId(), 
-								99,"客户端【"+tc.getName()+"】编辑成功！");
+								99,3,"客户端【"+tc.getName()+"】编辑成功！");
 						
 						json.put("status", "success");
 						json.put("ms", "编辑客户端成功!");
@@ -267,7 +267,7 @@ public class TestClientController {
 					QueueListener.listen_Clientlist.remove(tc);
 					
 					operationlogservice.add(req, "TestClient", id, 
-							99,"客户端删除成功！");
+							99,1,"客户端删除成功！");
 					status="success";
 					ms="删除客户端成功!";
 				}

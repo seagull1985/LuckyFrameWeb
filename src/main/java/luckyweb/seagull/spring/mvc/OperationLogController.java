@@ -2,6 +2,7 @@ package luckyweb.seagull.spring.mvc;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -18,6 +19,7 @@ import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
@@ -121,8 +123,60 @@ public class OperationLogController {
 		pw.print(json.toString());
 	}
 	
+	@RequestMapping(value = "/getautostar.do")
+	public void getAutoStar(HttpServletRequest req, HttpServletResponse rsp) throws Exception{
+		List<Object[]> oplist = operationlogservice.getSumIntegral();
+		
+
+		String[] name;
+		String[] integral;
+		int maxvalue=0;
+		
+		if(null!=oplist&&0!=oplist.size()){
+			name = new String[oplist.size()];
+			integral = new String[oplist.size()];	
+		}else{
+			name = new String[1];
+			integral = new String[1];
+
+			
+			name[0] = "暂无数据";
+			integral[0] = "0";
+		}
+
+		for(int i=0;i<oplist.size();i++){
+			name[i] = oplist.get(i)[0].toString();
+			if(null!=oplist.get(i)[1]){
+				integral[i] = oplist.get(i)[1].toString();
+				if(i==oplist.size()-1){
+					double maxdb=Double.valueOf(integral[i]);
+					//取最高值的90%进行显示
+					maxdb = maxdb*0.9;
+					BigDecimal bd=new BigDecimal(maxdb).setScale(0, BigDecimal.ROUND_HALF_UP);
+					maxvalue=Integer.valueOf(bd.toString());
+				}
+			}else{
+				integral[i]="0";
+			}
+			
+		}
+		
+		JSONArray  jsonname=JSONArray.fromObject(name);
+		JSONArray  jsonintegral=JSONArray.fromObject(integral);
+		
+		JSONObject jsobjcet = new JSONObject();
+		jsobjcet.put("name", jsonname);
+		jsobjcet.put("integral", jsonintegral);
+		jsobjcet.put("maxvalue", maxvalue);
+		
+		rsp.setContentType("application/json");
+		rsp.setCharacterEncoding("utf-8");
+		rsp.getWriter().write(jsobjcet.toString());
+	}
+	
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
+
 	}
 
 }

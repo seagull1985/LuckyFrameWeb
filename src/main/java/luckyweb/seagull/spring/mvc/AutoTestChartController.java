@@ -101,14 +101,14 @@ public class AutoTestChartController {
 	
 	/**
 	 * 
-	 * Job查询
+	 * 统计自动化操作积分
 	 * @param tj
 	 * @param model
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/testchart.do")
-	public String testchart(HttpServletRequest req,Model model) {
-		return "/jsp/echart/echarts_line2";
+	@RequestMapping(value = "/autostar.do")
+	public String autoStar() {
+		return "/jsp/echart/echarts_autostar";
 	}
 }

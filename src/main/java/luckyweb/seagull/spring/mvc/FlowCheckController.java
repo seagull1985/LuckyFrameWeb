@@ -311,7 +311,7 @@ public class FlowCheckController {
 						int id = flowcheckservice.add(flowcheck);
 						String checkentry = flowinfoService.load(Integer.valueOf(flowcheck.getCheckentry())).getCheckentry();
 						operationlogservice.add(req, "QA_FLOWCHECK", id, 
-								flowcheck.getProjectid(),"流程检查明细信息添加成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
+								flowcheck.getProjectid(),1,"流程检查明细信息添加成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
 
 						json.put("status", "success");
 						json.put("ms", "添加检查明细成功！");
@@ -375,7 +375,7 @@ public class FlowCheckController {
 
 				flowcheckservice.add(flowcheck);
 			}
-			operationlogservice.add(req, "QA_FLOWCHECK", checkid, projectid,
+			operationlogservice.add(req, "QA_FLOWCHECK", checkid, projectid,2,
 					"批量自动生成流程检查明细信息成功！");
 
 			model.addAttribute("message", "批量添加成功");
@@ -495,7 +495,7 @@ public class FlowCheckController {
 				int id = flowcheckservice.add(flowcheck);
 				String checkentry = flowinfoService.load(Integer.valueOf(flowcheck.getCheckentry())).getCheckentry();
 				operationlogservice.add(req, "QA_FLOWCHECK", id, 
-						flowcheck.getProjectid(),"流程检查信息添加成功（此次检查第一项）！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
+						flowcheck.getProjectid(),3,"流程检查信息添加成功（此次检查第一项）！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
 				
 				model.addAttribute("message", "添加成功");
 				model.addAttribute("url", "/flowCheck/load.do");
@@ -637,7 +637,7 @@ public class FlowCheckController {
 				flowcheckservice.modify(flowcheck);
 				String checkentry = flowinfoService.load(Integer.valueOf(flowcheck.getCheckentry())).getCheckentry();
 				operationlogservice.add(req, "QA_FLOWCHECK", id, 
-						fc.getSectorProjects().getProjectid(),"流程检查信息修改成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
+						fc.getSectorProjects().getProjectid(),1,"流程检查信息修改成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
 	
 				model.addAttribute("message", "修改成功");
 				model.addAttribute("url", "/flowCheck/load.do");
@@ -733,7 +733,7 @@ public class FlowCheckController {
 					flowcheckservice.delete(id);
 					String checkentry = flowinfoService.load(Integer.valueOf(fc.getCheckentry())).getCheckentry();
 					operationlogservice.add(req, "QA_FLOWCHECK", id, 
-							fc.getSectorProjects().getProjectid(),"流程检查信息删除成功！检查结果："+fc.getCheckresult()+" 检查内容："+checkentry);
+							fc.getSectorProjects().getProjectid(),0,"流程检查信息删除成功！检查结果："+fc.getCheckresult()+" 检查内容："+checkentry);
 					suc++;
 				}
 				

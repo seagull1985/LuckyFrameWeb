@@ -161,9 +161,9 @@ public class PublicCaseParamsController {
 						json.put("ms", "增加公共参数失败,参数名称已经在项目中存在!");
 		            }else{
 						int id=pcpservice.add(pcp);
-						operationlogservice.add(req, "PUBLIC_CASEPARAMS", id, pcp.getProjectid(),"公共参数【"+pcp.getParamsname()+"】添加成功！");
+						operationlogservice.add(req, "PUBLIC_CASEPARAMS", id, pcp.getProjectid(),3,"公共参数【"+pcp.getParamsname()+"】添加成功！");
 						json.put("status", "success");
-						json.put("ms", "添加客户端成功!");
+						json.put("ms", "添加公共参数成功!");
 		            }
 				}
 			}else{
@@ -186,7 +186,7 @@ public class PublicCaseParamsController {
 		        	}
 		        	if(result){
 						pcpservice.modify(pcp);
-						operationlogservice.add(req, "PUBLIC_CASEPARAMS", pcp.getId(), pcp.getProjectid(), "公共参数【"+pcp.getParamsname()+"】编辑成功！");
+						operationlogservice.add(req, "PUBLIC_CASEPARAMS", pcp.getId(), pcp.getProjectid(),1, "公共参数【"+pcp.getParamsname()+"】编辑成功！");
 						json.put("status", "success");
 						json.put("ms", "编辑公共参数成功!");
 		        	}else{
@@ -253,7 +253,7 @@ public class PublicCaseParamsController {
 						continue;
 					}
 					pcpservice.delete(pcp);
-					operationlogservice.add(req, "PUBLIC_CASEPARAMS", pcp.getId(), pcp.getProjectid(), "删除公共参数【"+pcp.getParamsname()+"】成功！");
+					operationlogservice.add(req, "PUBLIC_CASEPARAMS", pcp.getId(), pcp.getProjectid(),0, "删除公共参数【"+pcp.getParamsname()+"】成功！");
 					suc++;
 				}
 				
