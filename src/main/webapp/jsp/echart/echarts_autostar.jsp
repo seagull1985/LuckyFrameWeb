@@ -16,6 +16,44 @@
 
 	<header id="head" class="secondary"></header>
 
+	<div class="modal fade" id="checkchart" tabindex="-1" role="dialog"
+					aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="myModalLabel">质量之星积分策略：</h4>
+							</div>
+							<div class="modal-body">
+							  <form class="form-horizontal">
+								<div class="form-group">
+									<label class="col-sm-12" style="font-weight:normal"><b>测试用例：</b>编辑(1分)  添加(3分)  复制(1分)  新增|编辑用例集(1分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>用例执行：</b>单条执行(1分) 批量执行(1分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>协议模板：</b>添加(5分) 复制(2分) 修改(1分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>公共参数：</b>添加(3分) 修改(1分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>测试计划：</b>添加(3分) 修改(1分) 保存计划用例(2分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>执行任务：</b>删除(1分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>调度任务：</b>添加(5分) 启动(2分) 关闭(1分) 执行(2分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>客户端驱动jar包：</b>上传(5分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>流程检查：</b>明细添加(2分) 批量生成明细(2分) 添加(3分) 修改(1分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>流程检查计划：</b>添加(2分) 修改(1分) 计划转检查(1分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>版本信息：</b>添加(5分) 版本信息修改(1分) 版本计划添加成功(2分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>事故登记：</b>增加(10分) 修改(1分) 上传附件(2分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>客户端：</b>增加(5分) 修改(3分) 删除(1分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>项目：</b>增加(3分) 修改(1分)</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>其他管理类操作：</b>增加(1分)</label>
+								</div>
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">关闭</button>
+							</div>
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal -->
+				</div>
+				
 	<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 	<div id="main" style="height: 600px"></div>
 
@@ -53,7 +91,7 @@
         					option = {
         			                   "title": {
         			                      "text": "LuckyFrame质量之星",
-        			                      subtext: '积分排行榜   From LuckyFrame',
+        			                      "subtext": "积分排行榜   From LuckyFrame",
         			                      "left": "center",
         			                      "y": "10",
         			                      "textStyle": {
@@ -165,6 +203,9 @@
             	    myChart.setOption(option);
             	},2200);
 
+        	    myChart.on('click', function (params) {
+        	    	$("#checkchart").modal('show');
+        	    });
             // 为echarts对象加载数据 
            // myChart.setOption(option); 
 

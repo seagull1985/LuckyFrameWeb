@@ -85,7 +85,7 @@
 							<div class="modal-body">
 								<form class="form-horizontal" role="form">
 								  <div class="form-group">
-											<label for="clientip" class="col-sm-3 control-label">统计报表</label>
+											<label for="selectre" class="col-sm-3 control-label">统计报表</label>
 											<div class="input-group col-md-5">
 												<select class="form-control" name="reportstype" id="reportstype">
 														<option value="0">生成数据图表</option>
