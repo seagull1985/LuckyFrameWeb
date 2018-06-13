@@ -25,6 +25,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.Barchart4;
@@ -36,8 +40,6 @@ import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -158,14 +160,13 @@ public class FlowCheckController {
 			
 			jsonArr.add(jsonobj);
 		}
-		// 转换成json字符串
-		String recordJson = jsonArr.toString();
+
 		// 得到总记录数
 		int total = flowcheckservice.findRows(flowcheck);
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
 		json.put("total", total);
-		json.put("rows", recordJson);
+		json.put("rows", jsonArr);
 		pw.print(json.toString());
 	}
 
@@ -256,7 +257,7 @@ public class FlowCheckController {
 			fclist.set(i, fc);
 		}
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(fclist);
+		JSONArray recordJson = StrLib.listToJson(fclist);
 		// 得到总记录数
 		int total = flowcheckservice.findRowsTable(flowcheck);
 		// 需要返回的数据有总记录数和行数据
@@ -715,8 +716,8 @@ public class FlowCheckController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("ids"));
 
 				String status="fail";
 				String ms="删除流程检查信息失败!";
@@ -849,7 +850,7 @@ public class FlowCheckController {
 			}
 		// 取集合
 	    rsp.setContentType("text/xml;charset=utf-8");
-		JSONArray jsonArray = JSONArray.fromObject(list);
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(list));
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray); 
 		
@@ -962,9 +963,9 @@ public class FlowCheckController {
 			title = "当前选择日期段内无数据";
 		}
 		
-		JSONArray  jsondata=JSONArray.fromObject(data);
-		JSONArray  jsonprojectname=JSONArray.fromObject(projectname);
-		JSONArray  jsoncolumnname=JSONArray.fromObject(columnname);
+		JSONArray  jsondata=(JSONArray) JSONArray.toJSON(data);
+		JSONArray  jsonprojectname=(JSONArray) JSONArray.toJSON(projectname);
+		JSONArray  jsoncolumnname=(JSONArray) JSONArray.toJSON(columnname);
 		
 		req.setAttribute("gdata", jsondata.toString());
 		req.setAttribute("labels", jsonprojectname.toString());

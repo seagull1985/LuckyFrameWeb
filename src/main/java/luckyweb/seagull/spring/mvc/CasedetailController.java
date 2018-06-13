@@ -16,6 +16,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.quartz.QuartzJob;
 import luckyweb.seagull.spring.entity.SectorProjects;
@@ -27,8 +31,6 @@ import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -146,7 +148,7 @@ public class CasedetailController
 		
 		List<TestCasedetail> caselist = casedetailService.findByPage(caseDetail, offset, limit);
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(caselist);
+		JSONArray recordJson = StrLib.listToJson(caselist);
 		// 得到总记录数
 		int total = casedetailService.findRows(caseDetail);
 		// 需要返回的数据有总记录数和行数据
@@ -189,8 +191,8 @@ public class CasedetailController
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("caseids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("caseids"));
 				String status="success";
 				String ms="执行任务成功！";
                 
@@ -272,7 +274,7 @@ public class CasedetailController
 			String endDate = req.getParameter("endDate");
 			String projid = req.getParameter("projid");
 			List<Object[]> tasks = tastExcuteService.findTastList(startDate, projid, endDate);
-			JSONArray array = JSONArray.fromObject(tasks);
+			JSONArray array = JSONArray.parseArray(JSON.toJSONString(tasks));
 			pw.write(array.toString());
 		}
 		catch (IOException e)

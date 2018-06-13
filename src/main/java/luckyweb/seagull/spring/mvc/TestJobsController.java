@@ -28,6 +28,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.quartz.QuartzJob;
@@ -50,7 +53,6 @@ import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.DateUtil;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONObject;
 import rmi.service.RunService;
 
 /**
@@ -182,7 +184,7 @@ public class TestJobsController
 			}
 		}
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(jobs);
+		JSONArray recordJson = StrLib.listToJson(jobs);
 		// 得到总记录数
 		int total = testJobsService.findRows(tj);
 		// 需要返回的数据有总记录数和行数据
@@ -1175,18 +1177,18 @@ public class TestJobsController
 			{
 				QuartzJob qj = new QuartzJob();
 				String message = qj.toRunTask(tj.getPlanproj(), jobid,tj.getTaskName(),tj.getClientip(),tj.getClientpath());
-				pw.write(JSONObject.fromObject("{result:\""+message+"\"}").toString());
+				pw.write(JSONObject.parseObject("{result:\""+message+"\"}").toString());
 			}
 			catch (Exception e)
 			{
 				String message = "当前项目在服务器不存在！";
-				pw.write(JSONObject.fromObject("{result:"+message+"}").toString());
+				pw.write(JSONObject.parseObject("{result:"+message+"}").toString());
 			}
 
 		}
 		catch (Exception e)
 		{
-			pw.write(JSONObject.fromObject("{result:"+e.getMessage()+"}").toString());
+			pw.write(JSONObject.parseObject("{result:"+e.getMessage()+"}").toString());
 		}
 
 	}

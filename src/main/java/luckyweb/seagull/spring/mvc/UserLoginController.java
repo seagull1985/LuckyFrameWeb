@@ -8,11 +8,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.entity.UserAuthority;
@@ -89,7 +89,7 @@ public class UserLoginController {
 
 		rsp.setContentType("application/json");
 		rsp.setCharacterEncoding("utf-8");
-		JSONArray jsonArray = JSONArray.fromObject(result);
+		JSONArray jsonArray =  (JSONArray)JSONArray.toJSON(result);
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray); 
 		
@@ -114,7 +114,7 @@ public class UserLoginController {
 		
 		rsp.setContentType("application/json");
 		rsp.setCharacterEncoding("utf-8");
-		JSONArray jsonArray = JSONArray.fromObject(result);
+		JSONArray jsonArray =  (JSONArray)JSONArray.toJSON(result);
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray); 
 		
@@ -143,7 +143,7 @@ public class UserLoginController {
 		
 		rsp.setContentType("application/json");
 		rsp.setCharacterEncoding("utf-8");
-		JSONArray jsonArray = JSONArray.fromObject(status);
+		JSONArray jsonArray =  (JSONArray)JSONArray.toJSON(status);
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray); 
 		
@@ -258,7 +258,7 @@ public class UserLoginController {
 		
 		rsp.setContentType("application/json");
 		rsp.setCharacterEncoding("utf-8");
-		JSONArray jsonArray = JSONArray.fromObject(status);
+		JSONArray jsonArray =  (JSONArray)JSONArray.toJSON(status);
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray); 
 		

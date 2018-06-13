@@ -21,6 +21,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
@@ -35,9 +39,6 @@ import luckyweb.seagull.spring.service.TempCasestepDebugService;
 import luckyweb.seagull.spring.service.TestClientService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
 import rmi.service.RunService;
 
 /**
@@ -192,9 +193,7 @@ public class ProjectCasestepsController {
 			jsonstr = jsonstr.replace("\\\"", "\"");
 			jsonstr = jsonstr.replace("undefined", "0");
 
-			JSONArray jsonarr = JSONArray.fromObject(jsonstr);
-			// 参数1为要转换的JSONArray数据，参数2为要转换的目标数据，即List盛装的数据
-			List<?> list = JSONArray.toList(jsonarr, new ProjectCasesteps(), new JsonConfig());
+			List<ProjectCasesteps> list = JSON.parseArray(jsonstr, ProjectCasesteps.class);
 			String usercode = "";
 			if (null != request.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
 					&& null != request.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
@@ -205,19 +204,19 @@ public class ProjectCasestepsController {
 			String time = formatter.format(currentTime);
 			ProjectCase projectcase = new ProjectCase();
 			for (int i = 0; i < list.size(); i++) {
-				ProjectCasesteps step = (ProjectCasesteps) list.get(i);
+				ProjectCasesteps step = list.get(i);
 				if (i == 0) {
 					casestepsservice.delforcaseid(step.getCaseid());
 					projectcase = projectcaseservice.load(step.getCaseid());
 				}
 				step.setOperationer(usercode);
 				step.setTime(time);
-				step.setOperation(step.getOperation().replaceAll("&quot;", "\""));
-				step.setPath(step.getPath().replaceAll("&quot;", "\""));
-				step.setParameters(step.getParameters().replaceAll("&quot;", "\""));
-				step.setAction(step.getAction().replaceAll("&quot;", "\""));
-				step.setExpectedresult(step.getExpectedresult().replaceAll("&quot;", "\""));
-				step.setRemark(step.getRemark().replaceAll("&quot;", "\""));
+				step.setOperation(step.getOperation().replace("&quot;", "\""));
+				step.setPath(step.getPath().replace("&quot;", "\""));
+				step.setParameters(step.getParameters().replace("&quot;", "\""));
+				step.setAction(step.getAction().replace("&quot;", "\""));
+				step.setExpectedresult(step.getExpectedresult().replace("&quot;", "\""));
+				step.setRemark(step.getRemark().replace("&quot;", "\""));
 				casestepsservice.add(step);
 
 				projectcase.setOperationer(usercode);
@@ -256,7 +255,7 @@ public class ProjectCasestepsController {
 			e.printStackTrace();
 		}
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(casesteps);
+		JSONArray recordJson = StrLib.listToJson(casesteps);
 		pw.print(recordJson);
 	}
 
@@ -429,7 +428,7 @@ public class ProjectCasestepsController {
 			List<ProjectCasesteps> steps = casestepsservice.getSteps(Integer.valueOf(caseid));
 
 			// 转换成json字符串
-			String recordJson = StrLib.listToJson(steps);
+			JSONArray recordJson = StrLib.listToJson(steps);
 
 			// 需要返回的数据有总记录数和行数据
 			json.put("steps", recordJson);

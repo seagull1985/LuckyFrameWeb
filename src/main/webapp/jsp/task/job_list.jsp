@@ -235,6 +235,19 @@
 												field : 'runTime',
 												title : '开始时间',
 												width : '10%',
+												formatter : function(value,
+														row, index) {
+													var now = new Date(value);
+												    var year=now.getFullYear();    
+												    var month=now.getMonth()+1;    
+												    var date=now.getDate();    
+												    var hour=now.getHours();    
+												    var minute=now.getMinutes();    
+												    var second=now.getSeconds();    
+												     //var time= year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;
+												    var time=year+'-'+add0(month)+'-'+add0(date)+' '+add0(hour)+':'+add0(minute)+':'+add0(second);
+												    return time;
+												}
 											},
 											{
 												field : 'startTimestr',
@@ -519,6 +532,8 @@
 				}
 			});
 		}
+		
+		function add0(m){return m<10?'0'+m:m }
 	</script>
 </body>
 </html>

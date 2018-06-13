@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
@@ -35,8 +37,6 @@ import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.TestClientService;
 import luckyweb.seagull.spring.service.TestJobsService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -137,7 +137,7 @@ public class SectorProjectsController {
 		}
 		
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(projects);
+		JSONArray recordJson = StrLib.listToJson(projects);
 		// 得到总记录数
 		int total = sectorprojectsservice.findRows(sectorprojects);
 		// 需要返回的数据有总记录数和行数据
@@ -273,8 +273,8 @@ public class SectorProjectsController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("proids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("proids"));
 
 				String status="fail";
 				String ms="删除项目失败!";

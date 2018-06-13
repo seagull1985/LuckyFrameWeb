@@ -13,14 +13,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.spring.entity.OperationLog;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -113,7 +114,7 @@ public class OperationLogController {
 		
 		List<OperationLog> loglist = operationlogservice.findByPage(oplog, offset, limit);
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(loglist);
+		JSONArray recordJson = StrLib.listToJson(loglist);
 		// 得到总记录数
 		int total = operationlogservice.findRows(oplog);
 		// 需要返回的数据有总记录数和行数据
@@ -161,8 +162,8 @@ public class OperationLogController {
 			
 		}
 		
-		JSONArray  jsonname=JSONArray.fromObject(name);
-		JSONArray  jsonintegral=JSONArray.fromObject(integral);
+		JSONArray  jsonname=(JSONArray) JSONArray.toJSON(name);
+		JSONArray  jsonintegral=(JSONArray) JSONArray.toJSON(integral);
 		
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("name", jsonname);

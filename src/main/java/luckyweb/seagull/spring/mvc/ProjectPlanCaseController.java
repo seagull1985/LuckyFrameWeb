@@ -16,6 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectModule;
@@ -30,8 +33,6 @@ import luckyweb.seagull.spring.service.ProjectPlanService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -213,7 +214,7 @@ public class ProjectPlanCaseController {
 		
 		viewToSaveCase = projectcases;
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(projectcases);
+		JSONArray recordJson = StrLib.listToJson(projectcases);
 
 		// 需要返回的数据有总记录数和行数据
 		JSONObject json = new JSONObject();
@@ -259,8 +260,8 @@ public class ProjectPlanCaseController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("caseids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("caseids"));
 				List<ProjectCase> caselist=viewToSaveCase;
 				// 添加列表中多的用例
 				for (int i = 0; i < jsonarr.size(); i++) { 
@@ -379,7 +380,7 @@ public class ProjectPlanCaseController {
 			}
 
 			// 转换成json字符串
-			String recordJson = StrLib.listToJson(projectcases);
+			JSONArray recordJson = StrLib.listToJson(projectcases);
 
 			// 需要返回的数据有总记录数和行数据
 			json.put("cases", recordJson);
@@ -411,7 +412,7 @@ public class ProjectPlanCaseController {
 			}
 
 			// 转换成json字符串
-			String recordJson = StrLib.listToJson(projectcases);
+			JSONArray recordJson = StrLib.listToJson(projectcases);
 
 			// 需要返回的数据有总记录数和行数据
 			json.put("cases", recordJson);

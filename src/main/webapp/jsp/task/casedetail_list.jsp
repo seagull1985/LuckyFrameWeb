@@ -206,6 +206,18 @@
 												field : 'casetime',
 												title : '执行时间',
 												width : '10%',
+												formatter : function(value,
+														row, index) {
+													var now = new Date(value);
+												    var year=now.getFullYear();    
+												    var month=now.getMonth()+1;    
+												    var date=now.getDate();    
+												    var hour=now.getHours();    
+												    var minute=now.getMinutes();    
+												    var second=now.getSeconds();
+												    var time=year+'-'+add0(month)+'-'+add0(date)+' '+add0(hour)+':'+add0(minute)+':'+add0(second);
+												    return time;
+												}
 											},
 											{
 												field : 'casestatus_str',
@@ -299,6 +311,18 @@
 						field : 'logtime',
 						title : '打印时间',
 						width : '10%',
+						formatter : function(value,
+								row, index) {
+							var now = new Date(value);
+						    var year=now.getFullYear();    
+						    var month=now.getMonth()+1;    
+						    var date=now.getDate();    
+						    var hour=now.getHours();    
+						    var minute=now.getMinutes();    
+						    var second=now.getSeconds();
+						    var time=year+'-'+add0(month)+'-'+add0(date)+' '+add0(hour)+':'+add0(minute)+':'+add0(second);
+						    return time;
+						}
 					}, {
 						field : 'logGrade',
 						title : '日志级别',
@@ -516,6 +540,8 @@
                 });
         }  
 	    }
+	    
+	    function add0(m){return m<10?'0'+m:m }
 	</script>
 </body>
 </html>

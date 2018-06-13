@@ -9,10 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONArray;
+
 import luckyweb.seagull.spring.entity.TestCasedetail;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
-
-import net.sf.json.JSONArray;
 
 /**
  * =================================================================
@@ -72,14 +72,14 @@ public class AutoTestChartController {
 				createtime[i] = taskinfo.get(i)[7].toString();
 			}
 			
-			JSONArray  jsontaskid=JSONArray.fromObject(taskid);
-			JSONArray  jsonjobname=JSONArray.fromObject(jobname);
-			JSONArray  jsoncasetotal=JSONArray.fromObject(casetotal);
-			JSONArray  jsoncasesuc=JSONArray.fromObject(casesuc);
-			JSONArray  jsoncasefail=JSONArray.fromObject(casefail);
-			JSONArray  jsoncaselock=JSONArray.fromObject(caselock);
-			JSONArray  jsoncasenoex=JSONArray.fromObject(casenoex);
-			JSONArray  jsoncreatetime=JSONArray.fromObject(createtime);
+			JSONArray  jsontaskid=(JSONArray)JSONArray.toJSON(taskid);
+			JSONArray  jsonjobname=(JSONArray)JSONArray.toJSON(jobname);
+			JSONArray  jsoncasetotal=(JSONArray)JSONArray.toJSON(casetotal);
+			JSONArray  jsoncasesuc=(JSONArray)JSONArray.toJSON(casesuc);
+			JSONArray  jsoncasefail=(JSONArray)JSONArray.toJSON(casefail);
+			JSONArray  jsoncaselock=(JSONArray)JSONArray.toJSON(caselock);
+			JSONArray  jsoncasenoex=(JSONArray)JSONArray.toJSON(casenoex);
+			JSONArray  jsoncreatetime=(JSONArray)JSONArray.toJSON(createtime);
 
 			req.setAttribute("taskid", jsontaskid);
 			req.setAttribute("jobname", jsonjobname);

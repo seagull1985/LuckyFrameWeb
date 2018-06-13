@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.SecondarySector;
@@ -31,8 +35,6 @@ import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.spring.service.UserRoleService;
 import luckyweb.seagull.util.Endecrypt;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -128,7 +130,7 @@ public class UserInfoController {
 			users.get(i).setPassword("");
 		}
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(users);
+		JSONArray recordJson = StrLib.listToJson(users);
 		// 得到总记录数
 		int total = userinfoservice.findRows(userinfo);
 		// 需要返回的数据有总记录数和行数据
@@ -856,8 +858,8 @@ public class UserInfoController {
 
 		// 取集合
 	    rsp.setContentType("text/xml;charset=utf-8");
-		JSONArray jsonArraypermi = JSONArray.fromObject(templistpermi);
-		JSONArray jsonArrayoppro = JSONArray.fromObject(templistoppro);
+		JSONArray jsonArraypermi = JSONArray.parseArray(JSON.toJSONString(templistpermi));
+		JSONArray jsonArrayoppro = JSONArray.parseArray(JSON.toJSONString(templistoppro));
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("permi", jsonArraypermi);
 		jsobjcet.put("oppro", jsonArrayoppro); 

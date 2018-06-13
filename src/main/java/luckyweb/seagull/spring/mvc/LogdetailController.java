@@ -22,6 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectCasesteps;
@@ -36,8 +39,6 @@ import luckyweb.seagull.spring.service.TestJobsService;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import rmi.service.RunService;
 
 /**
@@ -91,7 +92,7 @@ public class LogdetailController
 			loglist.set(i, log);
 		}
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(loglist);
+		JSONArray recordJson = StrLib.listToJson(loglist);
 		pw.print(recordJson);
 	}
 	
@@ -196,7 +197,7 @@ public class LogdetailController
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
 				String logid = jsonObject.getString("logid");
 				String status="fail";
 				String ms="更新用例预期结果失败！";
@@ -299,10 +300,10 @@ public class LogdetailController
 		
 		rsp.setContentType("application/json");
 		rsp.setCharacterEncoding("utf-8");
-		JSONArray taskArray = JSONArray.fromObject(taskdata);
-		JSONArray caseArray = JSONArray.fromObject(casedata);
-		JSONArray logArray = JSONArray.fromObject(logdata);
-		JSONArray caseaddArray = JSONArray.fromObject(caseadddata);
+		JSONArray taskArray = (JSONArray) JSONArray.toJSON(taskdata);
+		JSONArray caseArray = (JSONArray) JSONArray.toJSON(casedata);
+		JSONArray logArray = (JSONArray) JSONArray.toJSON(logdata);
+		JSONArray caseaddArray = (JSONArray) JSONArray.toJSON(caseadddata);
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("taskdata", taskArray);
 		jsobjcet.put("casedata", caseArray); 
@@ -356,12 +357,12 @@ public class LogdetailController
 			createdate[i] = taskreport.get(i)[5].toString();
 		}
 		
-		JSONArray  jsoncasetotal=JSONArray.fromObject(casetotal);
-		JSONArray  jsoncasesuc=JSONArray.fromObject(casesuc);
-		JSONArray  jsoncasefail=JSONArray.fromObject(casefail);
-		JSONArray  jsoncaselock=JSONArray.fromObject(caselock);
-		JSONArray  jsoncasenoex=JSONArray.fromObject(casenoex);
-		JSONArray  jsoncreatedate=JSONArray.fromObject(createdate);
+		JSONArray  jsoncasetotal=(JSONArray) JSONArray.toJSON(casetotal);
+		JSONArray  jsoncasesuc=(JSONArray) JSONArray.toJSON(casesuc);
+		JSONArray  jsoncasefail=(JSONArray) JSONArray.toJSON(casefail);
+		JSONArray  jsoncaselock=(JSONArray) JSONArray.toJSON(caselock);
+		JSONArray  jsoncasenoex=(JSONArray) JSONArray.toJSON(casenoex);
+		JSONArray  jsoncreatedate=(JSONArray) JSONArray.toJSON(createdate);
 		
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("casetotal", jsoncasetotal);

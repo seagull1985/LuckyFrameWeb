@@ -16,6 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.entity.TestCasedetail;
 import luckyweb.seagull.spring.entity.TestJobs;
@@ -28,9 +31,6 @@ import luckyweb.seagull.spring.service.TestJobsService;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -136,7 +136,7 @@ public class TastExcuteController {
 		}
 		List<TestTaskexcute> tasklist = tastExcuteService.findByPage(task, offset, limit);
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(tasklist);
+		JSONArray recordJson = StrLib.listToJson(tasklist);
 		// 得到总记录数
 		int total = tastExcuteService.findRows(task);
 		// 需要返回的数据有总记录数和行数据
@@ -179,8 +179,8 @@ public class TastExcuteController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("taskids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("taskids"));
 				
 				String status="success";
 				String ms="删除任务成功!";             
@@ -276,7 +276,7 @@ public class TastExcuteController {
 		}
 
 		rsp.setContentType("text/xml;charset=utf-8");
-		JSONArray jsonArray = JSONArray.fromObject(per);
+		JSONArray jsonArray =  (JSONArray)JSONArray.toJSON(per);
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray);
 
@@ -293,7 +293,7 @@ public class TastExcuteController {
 			String taskid = req.getParameter("taskid");
 
 			TestTaskexcute task = tastExcuteService.load(Integer.valueOf(taskid));
-			String jsonStr = JSONObject.fromObject(task).toString();
+			String jsonStr = JSONObject.toJSONString(task);
 			pw.print(jsonStr);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

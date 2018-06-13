@@ -16,6 +16,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.Review;
@@ -26,8 +29,6 @@ import luckyweb.seagull.spring.service.ReviewInfoService;
 import luckyweb.seagull.spring.service.ReviewService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -99,7 +100,7 @@ public class ReviewInfoController {
 		List<ReviewInfo> reviewlist = reviewinfoservice.findByPage(reviewinfo, offset, limit);
 
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(reviewlist);
+		JSONArray recordJson = StrLib.listToJson(reviewlist);
 		// 得到总记录数
 		int total = reviewinfoservice.findRows(reviewinfo);
 		// 需要返回的数据有总记录数和行数据
@@ -277,8 +278,8 @@ public class ReviewInfoController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("ids"));
 
 				String status="fail";
 				String ms="删除评审明细信息失败!";
