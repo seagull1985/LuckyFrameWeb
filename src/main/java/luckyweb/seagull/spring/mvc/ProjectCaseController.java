@@ -602,7 +602,7 @@ public class ProjectCaseController {
 				modulejson.setName(projectmodule.getModulename());
 				boolean isParent = moduleservice.getModuleIsParent(projectmodule.getId());
 				modulejson.setisParent(isParent);
-				jsonarr.add(JSONObject.toJSONString(modulejson));
+				jsonarr.add(JSONObject.toJSON(modulejson));
 			}
 		} else {
 			List<SectorProjects> prolist = QueueListener.qa_projlist;
@@ -618,7 +618,7 @@ public class ProjectCaseController {
 						modulejson.setisParent(false);
 					}
 
-					jsonarr.add(JSONObject.toJSONString(modulejson));
+					jsonarr.add(JSONObject.toJSON(modulejson));
 				}
 			}
 		}
