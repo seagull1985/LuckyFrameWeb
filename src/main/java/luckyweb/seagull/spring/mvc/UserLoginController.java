@@ -152,7 +152,7 @@ public class UserLoginController {
 	
 	
 	/**
-	 * 判断用户权限范围，后台判断
+	 * 判断用户操作权限范围，后台判断
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 * @throws Exception
@@ -164,6 +164,8 @@ public class UserLoginController {
 		if(req.getSession().getAttribute(PublicConst.SESSIONKEYPERMISSION)!=null){
 			if(req.getSession().getAttribute(PublicConst.SESSIONKEYPERMISSION).toString().indexOf(fgf+opr+fgf)>=0){
 				result = true;
+			}else if("admin".equals(req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString())){
+				result = true;
 			}else{
 				result = false;
 			}
@@ -174,13 +176,22 @@ public class UserLoginController {
 		return result;
 	}
 	
+	/**
+	 * 判断用户项目权限范围，后台判断
+	 * @throws IOException 
+	 * @throws InterruptedException 
+	 * @throws Exception
+	 * @Description:
+	 */
 	public static boolean oppidboolean(HttpServletRequest req, int projectids) {
 		boolean result = false;
 		String fgf=",";
 		if (req.getSession().getAttribute(PublicConst.SESSIONKEYPROJECTID) != null) {
 			if (req.getSession().getAttribute(PublicConst.SESSIONKEYPROJECTID).toString().indexOf(fgf+projectids + fgf) >= 0) {
 				result = true;
-			} else {
+			}else if("admin".equals(req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString())){
+				result = true;
+			}else {
 				result = false;
 			}
 		} else {
