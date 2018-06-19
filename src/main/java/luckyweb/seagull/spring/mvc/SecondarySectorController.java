@@ -13,14 +13,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.entity.SecondarySector;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.SecondarySectorService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -78,7 +79,7 @@ public class SecondarySectorController {
 		List<SecondarySector> sectors = secondarysectorservice.findByPage(ss, offset, limit);
 		
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(sectors);
+		JSONArray recordJson = StrLib.listToJson(sectors);
 		// 得到总记录数
 		int total = secondarysectorservice.findRows(ss);
 		// 需要返回的数据有总记录数和行数据
@@ -103,7 +104,7 @@ public class SecondarySectorController {
 				secondarysectorservice.modify(sectors);
 
 				operationlogservice.add(req, "SecondarySector", sectors.getSectorid(), 
-						99,"部门信息修改成功！部门名称："+sectors.getDepartmentname());
+						99,1,"部门信息修改成功！部门名称："+sectors.getDepartmentname());
 				
 				json.put("status", "success");
 				json.put("ms", "编辑部门成功!");
@@ -140,7 +141,7 @@ public class SecondarySectorController {
 			} else {
 				int sid = secondarysectorservice.add(sectors);
 				operationlogservice.add(req, "SectorProjects", sid, 
-						99,"部门添加成功！部门名："+sectors.getDepartmentname());
+						99,1,"部门添加成功！部门名："+sectors.getDepartmentname());
 				
 				json.put("status", "success");
 				json.put("ms", "添加部门成功!");
@@ -186,8 +187,8 @@ public class SecondarySectorController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("seids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("seids"));
 
 				String status="fail";
 				String ms="删除失败!";
@@ -206,7 +207,7 @@ public class SecondarySectorController {
 					
 					secondarysectorservice.delete(sectors);
 					operationlogservice.add(req, "SectorProjects", id, 
-							99,"部门删除成功！部门名："+sectors.getDepartmentname());
+							99,0,"部门删除成功！部门名："+sectors.getDepartmentname());
 					status="success";
 					ms="删除部门成功!";
 				}

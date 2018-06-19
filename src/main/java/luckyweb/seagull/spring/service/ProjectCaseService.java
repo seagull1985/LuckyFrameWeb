@@ -71,4 +71,11 @@ public interface ProjectCaseService {
 	 * @throws Exception
 	 */
 	public String getCaseMaxIndex(int projectid) throws Exception;
+	/**
+	 * 获取N天前的用例总数量
+	 * @param beforedays
+	 * @return
+	 * @throws Exception
+	 */
+	public String getBeforeDayRows(int beforedays) throws Exception;
 }

@@ -120,4 +120,12 @@ public class OperationLogDaoImpl extends HibernateDaoSupport implements Operatio
 		}
 	}
 	
+	@Override
+	public List listinfo(String sql) throws Exception {
+		// TODO Auto-generated method stub
+		Session session = this.getSession(true);
+		List count = session.createSQLQuery(sql).list();
+		session.close();
+		return count;
+	}
 }

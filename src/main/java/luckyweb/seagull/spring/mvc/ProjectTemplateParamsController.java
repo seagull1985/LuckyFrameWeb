@@ -15,6 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectProtocolTemplate;
@@ -26,9 +30,6 @@ import luckyweb.seagull.spring.service.ProjectTemplateParamsService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
 
 /**
  * =================================================================
@@ -112,7 +113,7 @@ public class ProjectTemplateParamsController {
 			}else{
 				for(int i=0;i<paramslist.size();i++){
 					ProjectTemplateParams ptp = paramslist.get(i);
-					ptp.setParam(ptp.getParam().replaceAll("\"", "&quot;"));
+					ptp.setParam(ptp.getParam().replace("\"", "&quot;"));
 				}
 			}
 
@@ -160,26 +161,12 @@ public class ProjectTemplateParamsController {
 			}
 			String jsonstr = sb.toString().substring(1, sb.toString().length() - 1);
 			jsonstr = jsonstr.replace("\\\"", "\"");
-			jsonstr = jsonstr.replaceAll("&quot;", "\\\\\"");
+			jsonstr = jsonstr.replace("&quot;", "\"");
 			jsonstr = jsonstr.replace("undefined", "0");
 
-			JSONArray jsonarr = JSONArray.fromObject(jsonstr);
-
-			//处理json-lib 2.4版本当遇到json格式字符串时，把它当成对象处理的bug
-			for(int i=0;i<jsonarr.size();i++){
-				JSONObject tempobj=(JSONObject) jsonarr.get(i);
-				String str=tempobj.get("param").toString();
-				if(str.length()>0&&str.startsWith("[")&&str.endsWith("]")){
-				   tempobj.element("param", str+" ");
-				   jsonarr.set(i, tempobj);
-				}
-				if (str.length() > 0 && str.startsWith("{") && str.endsWith("}")) {
-					tempobj.element("param", str + " ");
-					jsonarr.set(i, tempobj);
-				}
-			}
 			// 参数1为要转换的JSONArray数据，参数2为要转换的目标数据，即List盛装的数据
-			List<?> list = JSONArray.toList(jsonarr, new ProjectTemplateParams(), new JsonConfig());
+			//List<?> list = JSONArray.toList(jsonarr, new ProjectTemplateParams(), new JsonConfig());
+			List<ProjectTemplateParams> list = JSON.parseArray(jsonstr, ProjectTemplateParams.class);
 			String usercode = "";
 			if (null != request.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
 					&& null != request.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
@@ -189,7 +176,7 @@ public class ProjectTemplateParamsController {
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String time = formatter.format(currentTime);
 			
-			ProjectTemplateParams oldtempparam = (ProjectTemplateParams) list.get(0);
+			ProjectTemplateParams oldtempparam = list.get(0);
 			ProjectProtocolTemplate ppt = ptemplateservice.load(oldtempparam.getTemplateid());
 			List<ProjectTemplateParams> paramslist =ptemplateparamsService.getParamsList(oldtempparam.getTemplateid());
 			for (int i = 0; i < list.size(); i++) {
@@ -203,8 +190,8 @@ public class ProjectTemplateParamsController {
 				for (ProjectTemplateParams oldparam:paramslist) {
 					if(param.getId()==oldparam.getId()&&oldparam.getId()!=0){
 						tag=1;
-						param.setParam(param.getParam().replaceAll("&quot;", "\""));
-						param.setParamname(param.getParamname().replaceAll("&quot;", "\""));
+						param.setParam(param.getParam().replace("&quot;", "\""));
+						param.setParamname(param.getParamname().replace("&quot;", "\""));
 						ptemplateparamsService.modify(param);
 						paramslist.remove(oldparam);
 						break;
@@ -212,8 +199,8 @@ public class ProjectTemplateParamsController {
 				}
 				
 				if(tag==0){
-					param.setParam(param.getParam().replaceAll("&quot;", "\""));
-					param.setParamname(param.getParamname().replaceAll("&quot;", "\""));
+					param.setParam(param.getParam().replace("&quot;", "\""));
+					param.setParamname(param.getParamname().replace("&quot;", "\""));
 					ptemplateparamsService.add(param);
 				}
 			}
@@ -245,8 +232,7 @@ public class ProjectTemplateParamsController {
 			List<ProjectTemplateParams> params = ptemplateparamsService.getParamsList(Integer.valueOf(templateid));
 
 			// 转换成json字符串
-			String recordJson = StrLib.listToJson(params);
-			recordJson = recordJson.replaceAll("&quot;", "\\\\\"");
+			JSONArray recordJson = StrLib.listToJson(params);
 			// 需要返回的数据有总记录数和行数据
 			json.put("params", recordJson);
 			pw.print(json.toString());

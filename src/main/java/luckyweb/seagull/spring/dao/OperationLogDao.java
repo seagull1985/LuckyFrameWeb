@@ -53,5 +53,12 @@ public interface OperationLogDao {
 	 * @throws Exception
 	 */
 	public void delete(String hql) throws Exception;
-
+	
+	/**
+	 * 
+	 * @param sql
+	 * @return 根据SQL查询数据
+	 * @throws Exception
+	 */
+	public List listinfo(String sql) throws Exception;
 }

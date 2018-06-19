@@ -14,6 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.quartz.QuartzManager;
@@ -24,8 +28,6 @@ import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.TestClientService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -111,7 +113,7 @@ public class TestClientController {
 			tct.setProjectpername(sbnames.toString());
 		}
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(tcs);
+		JSONArray recordJson = StrLib.listToJson(tcs);
 		// 得到总记录数
 		int total = tcservice.findRows(tc);
 		// 需要返回的数据有总记录数和行数据
@@ -162,7 +164,7 @@ public class TestClientController {
 						mgr.addTestClient(tc, tcid);
 						
 						operationlogservice.add(req, "TestClient", tcid, 
-								99,"客户端【"+tc.getName()+"】添加成功！");
+								99,5,"客户端【"+tc.getName()+"】添加成功！");
 						
 						json.put("status", "success");
 						json.put("ms", "添加客户端成功!");
@@ -201,7 +203,7 @@ public class TestClientController {
 						QuartzManager.modifyJobTime(tc.getId() + "*CLIENT", "0/"+tc.getCheckinterval()+" * * * * ?");
 						
 						operationlogservice.add(req, "TestClient", tc.getId(), 
-								99,"客户端【"+tc.getName()+"】编辑成功！");
+								99,3,"客户端【"+tc.getName()+"】编辑成功！");
 						
 						json.put("status", "success");
 						json.put("ms", "编辑客户端成功!");
@@ -253,8 +255,8 @@ public class TestClientController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("ids"));
 
 				String status="fail";
 				String ms="删除客户端失败!";
@@ -267,7 +269,7 @@ public class TestClientController {
 					QueueListener.listen_Clientlist.remove(tc);
 					
 					operationlogservice.add(req, "TestClient", id, 
-							99,"客户端删除成功！");
+							99,1,"客户端删除成功！");
 					status="success";
 					ms="删除客户端成功!";
 				}
@@ -302,7 +304,7 @@ public class TestClientController {
 		// 取集合
 	    rsp.setContentType("text/xml;charset=utf-8");
 
-		JSONArray jsonArray = JSONArray.fromObject(listc);
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(listc));
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray);
 		
@@ -337,7 +339,7 @@ public class TestClientController {
 		// 取集合
 	    rsp.setContentType("text/xml;charset=utf-8");
 
-		JSONArray jsonArray = JSONArray.fromObject(pathlist);
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(pathlist));
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray);
 		

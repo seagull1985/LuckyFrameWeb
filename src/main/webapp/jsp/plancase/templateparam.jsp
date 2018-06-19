@@ -44,6 +44,40 @@
 			<li class="active">编辑协议模板内容</li>
 		</ol>
 
+	<div class="modal fade" id="sample_params" tabindex="-1" role="dialog"
+					aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="myModalLabel">协议模板参数示例：</h4>
+							</div>
+							<div class="modal-body">
+							  <form class="form-horizontal">
+								<div class="form-group">
+								    <label class="col-sm-12" style="font-weight:normal">如果您是form表单方式或是URL方式提交参数，直接按参数分隔，普通类型选择String，文件类型选择File对象即可。</label>
+								    <label class="col-sm-12" style="font-weight:normal"></label>
+								    <label class="col-sm-12" style="font-weight:normal"></label>
+								    <label class="col-sm-12" style="font-weight:normal">如果您是RESTful API方式，以Json格式请求，请参照如下格式：</label>
+									<label class="col-sm-12" style="font-weight:normal"><b>Json格式示例：</b>{"params0":"v0","params1":{"test1":"pv1","test2":50221},"params2":[{"test1":"pv1","test2":1212},{"test1":"pv2","test2":1414}]}</label>
+								    <label class="col-sm-12" style="font-weight:normal"></label>
+								    <label class="col-sm-12" style="font-weight:normal"></label>
+								    <label class="col-sm-12" style="font-weight:normal"><b>模板参数填写如下：</b></label>
+								    <label class="col-sm-12" style="font-weight:normal">第一个参数：参数名：params0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;默认值：v0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;参数类型：String</label>
+								    <label class="col-sm-12" style="font-weight:normal">第二个参数：参数名：params1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;默认值：{"test1":"pv1","test2":50221}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;参数类型：JSON对象</label>
+								    <label class="col-sm-12" style="font-weight:normal">第三个参数：参数名：params2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;默认值：[{"test1":"pv1","test2":1212},{"test1":"pv2","test2":1414}]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;参数类型：JSONARR对象</label>
+								</div>
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">关闭</button>
+							</div>
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal -->
+				</div>
+				
 		<div class="row">
 			<!-- Article main content -->
 			<article class="col-sm-9 maincontent" style="width:100%;">
@@ -71,6 +105,7 @@
 						</table>
 
                         <h3 class="thin text-center">协议模板参数</h3>
+                        <p style="text-align: left"><a href="javascript:void(0);" onclick="sample()">参数示例</a></p>
 						<form id="templateparams" onsubmit="return check_form()">
 							<div class="form-group">
 								<table class="table table-striped" id="paramtable">
@@ -177,7 +212,6 @@
 	</div>
 
 	<script type="text/javascript">
-
 		$(document).ready(
 				function() {
 					$('#paramtable').bootstrapValidator({
@@ -307,6 +341,10 @@
 				oTable.rows[i].cells[1].childNodes[0].setAttribute("id","param"+index);
 				oTable.rows[i].cells[2].childNodes[0].setAttribute("id","paramtype"+index);
 			}
+		}
+		
+		function sample(){
+			$("#sample_params").modal('show');
 		}
 	</script>
 </body>

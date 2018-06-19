@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
@@ -23,6 +25,7 @@ import luckyweb.seagull.spring.entity.PublicCaseParams;
 import luckyweb.seagull.spring.entity.SecondarySector;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.TestCasedetail;
+import luckyweb.seagull.spring.entity.TestClient;
 import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectCaseService;
@@ -31,10 +34,9 @@ import luckyweb.seagull.spring.service.ProjectProtocolTemplateService;
 import luckyweb.seagull.spring.service.PublicCaseParamsService;
 import luckyweb.seagull.spring.service.SecondarySectorService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
+import luckyweb.seagull.spring.service.TestClientService;
 import luckyweb.seagull.spring.service.TestJobsService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -72,6 +74,9 @@ public class SectorProjectsController {
 	
 	@Resource(name = "operationlogService")
 	private OperationLogService operationlogservice;
+	
+	@Resource(name = "testclientService")
+	private TestClientService tcservice;
 	
 	@RequestMapping(value = "/sectorprojects.do")
 	public String qualityshow(TestCasedetail caseDetail, HttpServletRequest req,HttpServletResponse rsp,
@@ -132,7 +137,7 @@ public class SectorProjectsController {
 		}
 		
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(projects);
+		JSONArray recordJson = StrLib.listToJson(projects);
 		// 得到总记录数
 		int total = sectorprojectsservice.findRows(sectorprojects);
 		// 需要返回的数据有总记录数和行数据
@@ -177,7 +182,7 @@ public class SectorProjectsController {
 				}
 				
 				operationlogservice.add(req, "SectorProjects", sectorprojects.getProjectid(), 
-						sectorprojects.getProjectid(),"项目信息修改成功！项目名"+sectorprojects.getProjectname());
+						sectorprojects.getProjectid(),1,"项目信息修改成功！项目名"+sectorprojects.getProjectname());
 				json.put("status", "success");
 				json.put("ms", "编辑项目成功!");
 			}
@@ -222,7 +227,7 @@ public class SectorProjectsController {
 				}
 				
 				operationlogservice.add(req, "SectorProjects", proid, 
-						proid,"项目添加成功！项目名："+sectorprojects.getProjectname());
+						proid,3,"项目添加成功！项目名："+sectorprojects.getProjectname());
 				
 				json.put("status", "success");
 				json.put("ms", "添加项目成功!");
@@ -268,8 +273,8 @@ public class SectorProjectsController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("proids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("proids"));
 
 				String status="fail";
 				String ms="删除项目失败!";
@@ -284,6 +289,14 @@ public class SectorProjectsController {
 						if(qarows>=1){
 							status="fail";
 							ms=sectorproject.getProjectname()+"有关联质量模块的记录，不能删除!";
+							break;
+						}
+						
+						//检查质量模块项目关联
+						List <TestClient> tcrows = tcservice.getClientListForProid(id);
+						if(tcrows.size()>=1){
+							status="fail";
+							ms=sectorproject.getProjectname()+"有关联客户端IP，不能删除!";
 							break;
 						}
 						
@@ -363,7 +376,7 @@ public class SectorProjectsController {
 					}
 					
 					operationlogservice.add(req, "SectorProjects", id, 
-							99,"项目信息删除成功！项目名："+sectorproject.getProjectname());
+							99,0,"项目信息删除成功！项目名："+sectorproject.getProjectname());
 					status="success";
 					ms="删除项目成功!";
 				}

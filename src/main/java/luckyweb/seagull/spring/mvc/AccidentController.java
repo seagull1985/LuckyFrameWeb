@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.Accident;
@@ -33,8 +36,7 @@ import luckyweb.seagull.spring.service.AccidentService;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+
 
 /**
  * =================================================================
@@ -127,7 +129,7 @@ public class AccidentController {
 		List<Accident> acclist = accidentservice.findByPage(accident, offset, limit);
 
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(acclist);
+		JSONArray recordJson = StrLib.listToJson(acclist);
 		// 得到总记录数
 		int total = accidentservice.findRows(accident);
 		// 需要返回的数据有总记录数和行数据
@@ -230,7 +232,7 @@ public class AccidentController {
 				int accid = accidentservice.add(accident);
 				
 				operationlogservice.add(req, "QA_ACCIDENT", accid, 
-						accident.getProjectid(),"生产事故登记成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
+						accident.getProjectid(),10,"生产事故登记成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
 				
 				model.addAttribute("message", "添加成功");
 				model.addAttribute("url", "/accident/load.do");
@@ -315,7 +317,7 @@ public class AccidentController {
 			accidentservice.modify(accident);
 			
 			operationlogservice.add(req, "QA_ACCIDENT", id, 
-					accident.getProjectid(),"生产事故信息修改成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
+					accident.getProjectid(),1,"生产事故信息修改成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
 
 			
 			model.addAttribute("message", "修改成功");
@@ -375,8 +377,8 @@ public class AccidentController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("ids"));
 				String status="fail";
 				String ms="删除故障记录失败!";
 				int suc=0;
@@ -392,7 +394,7 @@ public class AccidentController {
 					accidentservice.delete(id);
 
 					operationlogservice.add(req, "QA_ACCIDENT", id, 
-							accident.getSectorProjects().getProjectid(),"生产事故信息删除成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
+							accident.getSectorProjects().getProjectid(),0,"生产事故信息删除成功！事故等级："+accident.getAcclevel()+" 事故发生时间："+accident.getEventtime());
 					suc++;
 				}
 				
@@ -528,7 +530,7 @@ public class AccidentController {
 		}		
 		
 				
-		JSONArray jsondata = JSONArray.fromObject(data);
+		JSONArray jsondata = (JSONArray)JSONArray.toJSON(data);
 
 		req.setAttribute("gdata", jsondata.toString());
 		model.addAttribute("title1", title1);
@@ -642,7 +644,7 @@ public class AccidentController {
 		accident.setFilename(id+filetype);
 		accidentservice.modify(accident);		
 		operationlogservice.add(request, "QA_ACCIDENT", id, 
-				accident.getProjectid(),"生产事故附件上传成功！附件名称【"+id+filetype+"】");
+				accident.getProjectid(),2,"生产事故附件上传成功！附件名称【"+id+filetype+"】");
 
 		model.addAttribute("url", "/accident/load.do");
 		model.addAttribute("message", "【" + file.getOriginalFilename() + "】文件自动更名为【"+id+filetype+"】上传成功！");

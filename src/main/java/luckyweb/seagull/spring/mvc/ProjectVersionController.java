@@ -23,6 +23,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.Barchart3;
@@ -33,8 +36,6 @@ import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.ProjectsVersionService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -146,7 +147,7 @@ public class ProjectVersionController {
 		List<ProjectVersion> projectversions = projectsversionservice.findByPage(projectversion, offset, limit);
 
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(projectversions);
+		JSONArray recordJson = StrLib.listToJson(projectversions);
 		// 得到总记录数
 		int total = projectsversionservice.findRows(projectversion);
 		// 需要返回的数据有总记录数和行数据
@@ -368,7 +369,7 @@ public class ProjectVersionController {
 				int versionid = projectsversionservice.add(projectversion);
 				
 				operationlogservice.add(req, "QA_PROJECTVERSION", versionid, 
-						projectversion.getProjectid(),"版本信息添加成功！版本号："+projectversion.getVersionnumber());
+						projectversion.getProjectid(),5,"版本信息添加成功！版本号："+projectversion.getVersionnumber());
 				
 				model.addAttribute("message", "添加成功");
 				model.addAttribute("url", "/projectVersion/load.do");
@@ -605,7 +606,7 @@ public class ProjectVersionController {
 			projectsversionservice.modify(projectversion);
 			
 			operationlogservice.add(req, "QA_PROJECTVERSION", versionid, 
-					projectversion.getProjectid(),"版本信息修改成功！版本号："+projectversion.getVersionnumber());
+					projectversion.getProjectid(),1,"版本信息修改成功！版本号："+projectversion.getVersionnumber());
 			
 			model.addAttribute("message", "修改成功");
 			model.addAttribute("url", "/projectVersion/load.do");
@@ -818,7 +819,7 @@ public class ProjectVersionController {
 				int versionid = projectsversionservice.add(projectversion);
 				
 				operationlogservice.add(req, "QA_PROJECTVERSION", versionid, 
-						projectversion.getProjectid(),"版本计划添加成功！版本号："+projectversion.getVersionnumber());
+						projectversion.getProjectid(),2,"版本计划添加成功！版本号："+projectversion.getVersionnumber());
 				
 				model.addAttribute("message", "添加成功");
 				model.addAttribute("url", "/projectVersion/load.do");
@@ -873,7 +874,7 @@ public class ProjectVersionController {
 						projectsversionservice.delete(versionid);
 						
 						operationlogservice.add(req, "QA_PROJECTVERSION", versionid, 
-								projectversion.getSectorProjects().getProjectid(),"版本信息删除成功！版本号："+projectversion.getVersionnumber());
+								projectversion.getSectorProjects().getProjectid(),0,"版本信息删除成功！版本号："+projectversion.getVersionnumber());
 						
 						json.put("status", "success");
 						json.put("ms", "删除项目版本信息成功!");
@@ -1097,9 +1098,9 @@ public class ProjectVersionController {
 			title = "当前选择日期段内无数据";
 		}
 		
-		JSONArray  jsondata=JSONArray.fromObject(data);
-		JSONArray  jsonprojectname=JSONArray.fromObject(projectname);
-		JSONArray  jsoncolumnname=JSONArray.fromObject(columnname);
+		JSONArray  jsondata= (JSONArray)JSONArray.toJSON(data);
+		JSONArray  jsonprojectname= (JSONArray)JSONArray.toJSON(projectname);
+		JSONArray  jsoncolumnname= (JSONArray)JSONArray.toJSON(columnname);
 		
 		req.setAttribute("gdata", jsondata.toString());
 		req.setAttribute("labels", jsonprojectname.toString());
@@ -1217,9 +1218,9 @@ public class ProjectVersionController {
 			title = "当前项目无数据";
 		}
 		
-		JSONArray  jsondata=JSONArray.fromObject(data);
-		JSONArray  jsonlaunchdate=JSONArray.fromObject(launchdate);
-		JSONArray  jsoncolumnname=JSONArray.fromObject(columnname);
+		JSONArray  jsondata= (JSONArray)JSONArray.toJSON(data);
+		JSONArray  jsonlaunchdate= (JSONArray)JSONArray.toJSON(launchdate);
+		JSONArray  jsoncolumnname= (JSONArray)JSONArray.toJSON(columnname);
 		
 		req.setAttribute("gdata", jsondata.toString());
 		req.setAttribute("launchdate", jsonlaunchdate.toString());
@@ -1336,9 +1337,9 @@ public class ProjectVersionController {
 			title = "当前项目无数据";
 		}
 		
-		JSONArray  jsondata=JSONArray.fromObject(data);
-		JSONArray  jsonlaunchdate=JSONArray.fromObject(launchdate);
-		JSONArray  jsoncolumnname=JSONArray.fromObject(columnname);
+		JSONArray  jsondata= (JSONArray)JSONArray.toJSON(data);
+		JSONArray  jsonlaunchdate= (JSONArray)JSONArray.toJSON(launchdate);
+		JSONArray  jsoncolumnname= (JSONArray)JSONArray.toJSON(columnname);
 		
 		req.setAttribute("gdata", jsondata.toString());
 		req.setAttribute("labels", jsonlaunchdate.toString());

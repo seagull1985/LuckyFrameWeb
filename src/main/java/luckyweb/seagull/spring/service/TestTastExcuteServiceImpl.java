@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.TestTastExcuteDao;
 import luckyweb.seagull.spring.entity.TestTaskexcute;
+import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
 
 /**
@@ -165,6 +166,18 @@ public class TestTastExcuteServiceImpl implements TestTastExcuteService {
 				+ "from TEST_TASKEXCUTE t left join test_jobs b on t.jobid = b.id where t.id in "
 				+ "(select max(t.id) from TEST_TASKEXCUTE t  where t.taskstatus != '0' and t.taskstatus != '3' and t.taskstatus != '1' group by t.jobid) order by t.createtime desc");
 	}
-	
 
+	@Override
+	@SuppressWarnings("rawtypes")
+	public List listindexreport(int days) throws Exception{
+		String date=DateLib.beforNdFormat("yyyy-MM-dd", days);
+		return this.tastExcuteDao.listtastinfo("SELECT SUM(t.casetotal_count),SUM(t.casesucc_count),SUM(t.casefail_count),"
+				+ "SUM(t.caselock_count),SUM(t.casenoexec_count),LEFT(t.createtime,10) as createdate "
+				+ "from test_taskexcute t where t.createtime>'"+date+"' GROUP BY createdate");
+	}
+	
+	@Override
+	public List getTopTaskDate() throws Exception{
+		return this.tastExcuteDao.listtastinfo("select left(min(createtime),10) from test_taskexcute");
+	}
 }

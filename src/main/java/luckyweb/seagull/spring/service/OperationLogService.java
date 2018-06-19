@@ -30,7 +30,7 @@ public interface OperationLogService {
 	 * @return
 	 * @throws Exception
 	 */
-	public int add(HttpServletRequest req,String tablename,int tableid,int id,String operationDescription)throws Exception;
+	public int add(HttpServletRequest req,String tablename,int tableid,int id,int integral,String operationDescription)throws Exception;
 	/**
 	 * 获取操作日志实体
 	 * @param id
@@ -58,4 +58,10 @@ public interface OperationLogService {
 	 * @throws Exception
 	 */
 	public void delete(int id) throws Exception;
+	/**
+	 * 获取操作积分
+	 * @return
+	 * @throws Exception
+	 */
+	public List getSumIntegral() throws Exception;
 }

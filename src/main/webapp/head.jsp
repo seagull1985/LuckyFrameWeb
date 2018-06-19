@@ -56,6 +56,7 @@
 							<li><a href="/testJobs/load.do">调度配置</a></li>
 							<li><a href="/tastExecute/load.do">任务查询</a></li>
 							<li><a href="/autoTestChar/chart.do">任务概况图表</a></li>
+							<li><a href="/autoTestChar/autostar.do">质量之星</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -150,18 +151,17 @@ function logout(){
 	     var url ="/userlogin/userlogout.do";
 	     jQuery.getJSON(url,null,function call(result){
 	  		   if(result.data[0]=="true"){
-				 document.getElementById("logoutbt").style.display = "block"; 
+  				 document.getElementById("logoutbt").style.display = "block"; 
 			     document.getElementById("loginbt").style.display = "none";
 			     document.getElementById("loginmess").style.display = "none";
-			     document.getElementById("loginbt").innerHTML = "注销";
-	  			 return true;
+			     document.getElementById("loginbt").innerHTML = "注销";	
+		    	 var url = '/index.jsp';
+				 window.location.href = url;
 	  		   }else{
 	  			alert("注销失败！");
-	  			return false;
 	  		   }
 	      });
-    	 var url = '/index.jsp';
-		 window.location.href = url;
+		 return true;
 	}
 }	
 

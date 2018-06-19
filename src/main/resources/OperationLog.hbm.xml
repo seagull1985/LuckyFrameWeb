@@ -17,6 +17,9 @@
 		<property name="operation_time" type="java.lang.String">
 			<column name="operation_time" length="30" not-null="true" />
 		</property>
+		<property name="operation_integral" type="java.lang.Integer">
+			<column name="operation_integral" length="2" not-null="false" />
+		</property>
 		<property name="operationer" type="java.lang.String">
 			<column name="operationer" length="20" not-null="true" />
 		</property>

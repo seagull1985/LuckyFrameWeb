@@ -17,21 +17,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
-import luckyweb.seagull.spring.entity.ProjectCase;
 import luckyweb.seagull.spring.entity.ProjectPlan;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.service.OperationLogService;
-import luckyweb.seagull.spring.service.ProjectCaseService;
 import luckyweb.seagull.spring.service.ProjectPlanCaseService;
 import luckyweb.seagull.spring.service.ProjectPlanService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -133,7 +133,7 @@ public class ProjectPlanController {
 
 		}
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(projectplans);
+		JSONArray recordJson = StrLib.listToJson(projectplans);
 		// 得到总记录数
 		int total = projectplanservice.findRows(projectplan);
 		// 需要返回的数据有总记录数和行数据
@@ -171,7 +171,7 @@ public class ProjectPlanController {
 
 					projectplanservice.modify(projectplan);
 
-					operationlogservice.add(req, "PROJECT_PLAN", projectplan.getId(), projectplan.getProjectid(),
+					operationlogservice.add(req, "PROJECT_PLAN", projectplan.getId(), projectplan.getProjectid(),1,
 							"修改测试计划成功!");
 					json.put("status", "success");
 					json.put("ms", "编辑计划成功!");
@@ -231,7 +231,7 @@ public class ProjectPlanController {
 
 					int planid = projectplanservice.add(projectplan);
 
-					operationlogservice.add(req, "PROJECT_PLAN", planid, projectplan.getProjectid(), "添加测试计划成功!");
+					operationlogservice.add(req, "PROJECT_PLAN", planid, projectplan.getProjectid(),3, "添加测试计划成功!");
 
 					json.put("status", "success");
 					json.put("ms", "添加测试计划成功!");
@@ -279,8 +279,8 @@ public class ProjectPlanController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("planids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("planids"));
 
 				String status="fail";
 				String ms="删除计划失败!";
@@ -296,7 +296,7 @@ public class ProjectPlanController {
 					}	
 					projectplancaseservice.delforplanid(id);
 					projectplanservice.delete(projectplan);
-					operationlogservice.add(req, "PROJECT_PLAN", id, projectplan.getProjectid(), "删除测试计划成功!");
+					operationlogservice.add(req, "PROJECT_PLAN", id, projectplan.getProjectid(),0, "删除测试计划成功!");
 					suc++;
 				}
 				
@@ -342,7 +342,7 @@ public class ProjectPlanController {
 		// 取集合
 	    rsp.setContentType("text/xml;charset=utf-8");
 
-		JSONArray jsonArray = JSONArray.fromObject(listplan);
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(listplan));
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray); 
 		

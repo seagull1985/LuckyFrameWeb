@@ -86,11 +86,12 @@ public class OperationLogServiceImpl implements OperationLogService{
 	
 	
 	@Override
-	public int add(HttpServletRequest req,String tablename,int tableid,int id,String operationDescription) throws Exception {
+	public int add(HttpServletRequest req,String tablename,int tableid,int id,int integral,String operationDescription) throws Exception {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		OperationLog opLog = new OperationLog();
 		String operationTime = df.format(new Date()).toString();	
 		opLog.setTableid(tableid);
+		opLog.setOperation_integral(integral);
 		opLog.setOperation_time(operationTime);
 		opLog.setOperationer(req.getSession().getAttribute("username").toString());			
 		opLog.setTablename(tablename);
@@ -105,5 +106,10 @@ public class OperationLogServiceImpl implements OperationLogService{
 	public void delete(int id) throws Exception {
 		String hql="delete from OperationLog where projectid="+id;
 		this.operationlogdao.delete(hql);
+	}
+	
+	@Override
+	public List getSumIntegral() throws Exception{
+		return this.operationlogdao.listinfo("select operationer,SUM(t.operation_integral) as sumi from operation_log t GROUP BY t.operationer ORDER BY sumi");
 	}
 }

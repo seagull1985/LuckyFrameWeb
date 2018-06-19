@@ -17,11 +17,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
-import luckyweb.seagull.spring.entity.ProjectCase;
-import luckyweb.seagull.spring.entity.ProjectCasesteps;
-import luckyweb.seagull.spring.entity.ProjectPlan;
 import luckyweb.seagull.spring.entity.ProjectProtocolTemplate;
 import luckyweb.seagull.spring.entity.ProjectTemplateParams;
 import luckyweb.seagull.spring.entity.SectorProjects;
@@ -32,8 +32,6 @@ import luckyweb.seagull.spring.service.ProjectTemplateParamsService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -137,7 +135,7 @@ public class ProjectProtocolTemplateController {
 
 		}
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(ptlist);
+		JSONArray recordJson = StrLib.listToJson(ptlist);
 		// 得到总记录数
 		int total = ptemplateservice.findRows(ppt);
 		// 需要返回的数据有总记录数和行数据
@@ -199,7 +197,7 @@ public class ProjectProtocolTemplateController {
 
 					int id = ptemplateservice.add(ppt);
 
-					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", id, ppt.getProjectid(), "添加协议模板成功!");
+					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", id, ppt.getProjectid(),5, "添加协议模板成功!");
 
 					String ms="添加协议模板【"+ppt.getName()+"】成功！";
 					if(0!=copyid){
@@ -207,7 +205,7 @@ public class ProjectProtocolTemplateController {
 						for(ProjectTemplateParams param:params){
 							param.setTemplateid(id);
 							int paramid=ptemplateparamsService.add(param);
-						    operationlogservice.add(req, "PROJECT_TEMPLATEPARAMS", paramid, ppt.getProjectid(),
+						    operationlogservice.add(req, "PROJECT_TEMPLATEPARAMS", paramid, ppt.getProjectid(),2,
 									"复制协议模板内容参数成功！");
 						}
 						ms="复制协议模板【"+ppt.getName()+"】成功！";
@@ -254,7 +252,7 @@ public class ProjectProtocolTemplateController {
 
 					ptemplateservice.modify(ppt);
 
-					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", ppt.getId(), ppt.getProjectid(),
+					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", ppt.getId(), ppt.getProjectid(),1,
 							"修改测试协议模板成功!");
 					json.put("status", "success");
 					json.put("ms", "编辑测试协议模板成功!");
@@ -301,8 +299,8 @@ public class ProjectProtocolTemplateController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("templateids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("templateids"));
 
 				String status="fail";
 				String ms="删除协议模板失败!";
@@ -318,7 +316,7 @@ public class ProjectProtocolTemplateController {
 					}	
 					ptemplateparamsService.delete(id);
 					ptemplateservice.deleteforob(ppt);
-					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", id, ppt.getProjectid(), "删除协议模板成功!");
+					operationlogservice.add(req, "PROJECT_PROTOCOLTEMPLATE", id, ppt.getProjectid(),0, "删除协议模板成功!");
 					suc++;
 				}
 				
@@ -371,7 +369,7 @@ public class ProjectProtocolTemplateController {
 			String recordJson = jsonarr.toString();
 			String str = "{\"message\": \"\",\"value\": "+recordJson+",\"code\": 200,\"redirect\": \"\" }";
 					
-			json = JSONObject.fromObject(str);
+			json = JSONObject.parseObject(str);
 			pw.print(json.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -410,7 +408,7 @@ public class ProjectProtocolTemplateController {
 			String recordJson = jsonarr.toString();
 			String str = "{\"message\": \"\",\"value\": "+recordJson+",\"code\": 200,\"redirect\": \"\" }";
 					
-			json = JSONObject.fromObject(str);
+			json = JSONObject.parseObject(str);
 			pw.print(json.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -428,7 +426,7 @@ public class ProjectProtocolTemplateController {
 			String templateid = req.getParameter("templateid");
 
 			ProjectProtocolTemplate ppt = ptemplateservice.load(Integer.valueOf(templateid));
-			String jsonStr = JSONObject.fromObject(ppt).toString();
+			String jsonStr = JSONObject.toJSONString(ppt);
 			pw.print(jsonStr);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

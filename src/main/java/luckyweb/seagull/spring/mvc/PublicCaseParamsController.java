@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.entity.PublicCaseParams;
 import luckyweb.seagull.spring.entity.SectorProjects;
@@ -24,8 +27,6 @@ import luckyweb.seagull.spring.service.PublicCaseParamsService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * 
@@ -118,7 +119,7 @@ public class PublicCaseParamsController {
 			}
 		}
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(pcps);
+		JSONArray recordJson = StrLib.listToJson(pcps);
 		// 得到总记录数
 		int total = pcpservice.findRows(pcp);
 		// 需要返回的数据有总记录数和行数据
@@ -161,9 +162,9 @@ public class PublicCaseParamsController {
 						json.put("ms", "增加公共参数失败,参数名称已经在项目中存在!");
 		            }else{
 						int id=pcpservice.add(pcp);
-						operationlogservice.add(req, "PUBLIC_CASEPARAMS", id, pcp.getProjectid(),"公共参数【"+pcp.getParamsname()+"】添加成功！");
+						operationlogservice.add(req, "PUBLIC_CASEPARAMS", id, pcp.getProjectid(),3,"公共参数【"+pcp.getParamsname()+"】添加成功！");
 						json.put("status", "success");
-						json.put("ms", "添加客户端成功!");
+						json.put("ms", "添加公共参数成功!");
 		            }
 				}
 			}else{
@@ -186,7 +187,7 @@ public class PublicCaseParamsController {
 		        	}
 		        	if(result){
 						pcpservice.modify(pcp);
-						operationlogservice.add(req, "PUBLIC_CASEPARAMS", pcp.getId(), pcp.getProjectid(), "公共参数【"+pcp.getParamsname()+"】编辑成功！");
+						operationlogservice.add(req, "PUBLIC_CASEPARAMS", pcp.getId(), pcp.getProjectid(),1, "公共参数【"+pcp.getParamsname()+"】编辑成功！");
 						json.put("status", "success");
 						json.put("ms", "编辑公共参数成功!");
 		        	}else{
@@ -237,8 +238,8 @@ public class PublicCaseParamsController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("ids"));
 
 				String status="fail";
 				String ms="删除参数失败!";
@@ -253,7 +254,7 @@ public class PublicCaseParamsController {
 						continue;
 					}
 					pcpservice.delete(pcp);
-					operationlogservice.add(req, "PUBLIC_CASEPARAMS", pcp.getId(), pcp.getProjectid(), "删除公共参数【"+pcp.getParamsname()+"】成功！");
+					operationlogservice.add(req, "PUBLIC_CASEPARAMS", pcp.getId(), pcp.getProjectid(),0, "删除公共参数【"+pcp.getParamsname()+"】成功！");
 					suc++;
 				}
 				
@@ -317,7 +318,7 @@ public class PublicCaseParamsController {
 
 			List<PublicCaseParams> pcplist = pcpservice.getParamListByProjectid(projectid);
 			// 转换成json字符串
-			String recordJson = StrLib.listToJson(pcplist);
+			JSONArray recordJson = StrLib.listToJson(pcplist);
 
 			// 需要返回的数据有总记录数和行数据
 			json.put("params", recordJson);

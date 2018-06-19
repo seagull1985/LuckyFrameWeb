@@ -119,11 +119,11 @@ public class CaseDetailServiceImpl implements CaseDetailService {
 	}
 	
 	@Override
-	public int findRows(TestCasedetail caseDetail ) {
+	public int findRows(TestCasedetail caseDetail) {
 		String hql="select count(*) from TestCasedetail "+where(caseDetail);
 		return casedetailDao.findRows(hql,caseDetail);
 	}
-
+	
 	@Override
 	public void delete(int id) throws Exception {
 		String hql="delete from TestCasedetail where taskId=:taskId";

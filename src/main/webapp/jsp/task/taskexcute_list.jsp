@@ -206,6 +206,18 @@
 												field : 'createTime',
 												title : '开始时间',
 												width : '10%',
+												formatter : function(value,
+														row, index) {
+													var now = new Date(value);
+												    var year=now.getFullYear();    
+												    var month=now.getMonth()+1;    
+												    var date=now.getDate();    
+												    var hour=now.getHours();    
+												    var minute=now.getMinutes();    
+												    var second=now.getSeconds();
+												    var time=year+'-'+add0(month)+'-'+add0(date)+' '+add0(hour)+':'+add0(minute)+':'+add0(second);
+												    return time;
+												}
 											},
 											{
 												field : 'finishtime',
@@ -213,7 +225,15 @@
 												width : '10%',
 												formatter : function(value,
 														row, index) {
-													return '<font id="finishtime' + row.id + '">'+value+'</font>';
+													var now = new Date(value);
+												    var year=now.getFullYear();    
+												    var month=now.getMonth()+1;    
+												    var date=now.getDate();    
+												    var hour=now.getHours();    
+												    var minute=now.getMinutes();    
+												    var second=now.getSeconds();    
+												    var time=year+'-'+add0(month)+'-'+add0(date)+' '+add0(hour)+':'+add0(minute)+':'+add0(second);
+													return '<font id="finishtime' + row.id + '">'+time+'</font>';
 												}
 											},
 											{
@@ -400,6 +420,8 @@
 	        	toastr.warning('请选取要删除的任务！'); 
 	        }
 	    }
+	    
+	    function add0(m){return m<10?'0'+m:m }
 	</script>
 </body>
 </html>

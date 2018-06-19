@@ -9,10 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONArray;
+
 import luckyweb.seagull.spring.entity.TestCasedetail;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
-
-import net.sf.json.JSONArray;
 
 /**
  * =================================================================
@@ -57,30 +57,29 @@ public class AutoTestChartController {
 			String[] casenoex = new String[taskinfo.size()];
 			String[] createtime = new String[taskinfo.size()];
 			String[] taskid = new String[taskinfo.size()];
-			int j=0;
+
 			for(int i=0;i<taskinfo.size();i++){
 				if(Integer.valueOf(taskinfo.get(i)[2].toString())==0){
 					continue;
 				}
-				taskid[j] = taskinfo.get(i)[0].toString();
-				jobname[j] = taskinfo.get(i)[1].toString();
-				casetotal[j] = taskinfo.get(i)[2].toString();
-				casesuc[j] = taskinfo.get(i)[3].toString();
-				casefail[j] = taskinfo.get(i)[4].toString();
-				caselock[j] = taskinfo.get(i)[5].toString();
-				casenoex[j] = taskinfo.get(i)[6].toString();
-				createtime[j] = taskinfo.get(i)[7].toString();
-				j++;
+				taskid[i] = taskinfo.get(i)[0].toString();
+				jobname[i] = taskinfo.get(i)[1].toString();
+				casetotal[i] = taskinfo.get(i)[2].toString();
+				casesuc[i] = taskinfo.get(i)[3].toString();
+				casefail[i] = taskinfo.get(i)[4].toString();
+				caselock[i] = taskinfo.get(i)[5].toString();
+				casenoex[i] = taskinfo.get(i)[6].toString();
+				createtime[i] = taskinfo.get(i)[7].toString();
 			}
 			
-			JSONArray  jsontaskid=JSONArray.fromObject(taskid);
-			JSONArray  jsonjobname=JSONArray.fromObject(jobname);
-			JSONArray  jsoncasetotal=JSONArray.fromObject(casetotal);
-			JSONArray  jsoncasesuc=JSONArray.fromObject(casesuc);
-			JSONArray  jsoncasefail=JSONArray.fromObject(casefail);
-			JSONArray  jsoncaselock=JSONArray.fromObject(caselock);
-			JSONArray  jsoncasenoex=JSONArray.fromObject(casenoex);
-			JSONArray  jsoncreatetime=JSONArray.fromObject(createtime);
+			JSONArray  jsontaskid=(JSONArray)JSONArray.toJSON(taskid);
+			JSONArray  jsonjobname=(JSONArray)JSONArray.toJSON(jobname);
+			JSONArray  jsoncasetotal=(JSONArray)JSONArray.toJSON(casetotal);
+			JSONArray  jsoncasesuc=(JSONArray)JSONArray.toJSON(casesuc);
+			JSONArray  jsoncasefail=(JSONArray)JSONArray.toJSON(casefail);
+			JSONArray  jsoncaselock=(JSONArray)JSONArray.toJSON(caselock);
+			JSONArray  jsoncasenoex=(JSONArray)JSONArray.toJSON(casenoex);
+			JSONArray  jsoncreatetime=(JSONArray)JSONArray.toJSON(createtime);
 
 			req.setAttribute("taskid", jsontaskid);
 			req.setAttribute("jobname", jsonjobname);
@@ -102,14 +101,14 @@ public class AutoTestChartController {
 	
 	/**
 	 * 
-	 * Job查询
+	 * 统计自动化操作积分
 	 * @param tj
 	 * @param model
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/testchart.do")
-	public String testchart(HttpServletRequest req,Model model) {
-		return "/jsp/echart/echarts_pie6";
+	@RequestMapping(value = "/autostar.do")
+	public String autoStar() {
+		return "/jsp/echart/echarts_autostar";
 	}
 }

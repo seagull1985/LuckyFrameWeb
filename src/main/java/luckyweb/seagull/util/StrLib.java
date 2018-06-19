@@ -8,11 +8,12 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import net.sf.json.JSONArray;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 /**
  * =================================================================
@@ -201,12 +202,34 @@ public class StrLib {
 
 	}
 	
+	
 	 /**
 	  * 功能描述:通过传入一个列表对象,调用指定方法将列表中的数据生成一个JSON规格指定字符串
 	  * @param list列表对象
 	  * @return java.lang.String
 	  */
-	 public static String listToJson(List<?> list) {
+	 public static JSONArray listToJson(List<?> list) {
+		 StringBuilder jsonarr = new StringBuilder();
+		 jsonarr.append("[");
+		 //fastjson在转化list>string的过程中，如果List中的对象中还有实体对象，存在bug，所以循环转换
+		 for(Object obj:list){
+			 String jsonObject = JSON.toJSONString(obj,SerializerFeature.WriteMapNullValue, 
+					 SerializerFeature.WriteNullListAsEmpty,SerializerFeature.WriteNullStringAsEmpty,SerializerFeature.WriteNullNumberAsZero,
+					 SerializerFeature.WriteNullBooleanAsFalse);
+			 jsonarr.append(jsonObject).append(",");
+		 }
+		 jsonarr.append("]");
+		 JSONArray recordJson = JSONArray.parseArray(jsonarr.toString());
+		 return recordJson;
+	}
+	 
+	 /**
+	  * 功能描述:通过传入一个列表对象,调用指定方法将列表中的数据生成一个JSON规格指定字符串
+	  * @param list列表对象
+	  * @return java.lang.String
+	  * @deprecated
+	  */
+	 public static String listToJsonOld(List<?> list) {
 	  StringBuilder json = new StringBuilder();
 	  json.append("[");
 	  if (list != null && list.size() > 0) {
@@ -224,14 +247,14 @@ public class StrLib {
 	 /**
 	  * @param object 任意对象
 	  * @return java.lang.String
+	  * @deprecated
 	  */
 	 public static String objectToJson(Object object) {
 	  StringBuilder json = new StringBuilder();
 	  if (object == null) {
 		  json.append("\"\"");		  
-	  } else if (object.getClass().isArray()) {
-		  JSONArray jsonarray = JSONArray.fromObject(object);
-	      json.append("\"").append(jsonarray.toString().replace("\"", "&quot;")).append("\"");
+	  } else if (object.getClass().isArray()) {		  
+	      json.append("\"").append(JSON.toJSONString(object).replace("\"", "&quot;")).append("\"");
 	  } else if (object instanceof Timestamp) {
 		//定义格式，不显示毫秒
 		  SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -255,6 +278,7 @@ public class StrLib {
 	  * 功能描述:传入任意一个 javabean 对象生成一个指定规格的字符串
 	  * @param bean bean对象
 	  * @return String
+	  * @deprecated
 	  */
 	 private static String beanToJson(Object bean) {
 	  StringBuilder json = new StringBuilder();

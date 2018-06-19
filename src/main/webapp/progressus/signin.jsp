@@ -195,7 +195,7 @@ jQuery(function loginboolean(){
 
 	function fun() {
 		if (i == 0) {
-			window.location.href = history.back();
+			window.history.back();
 			clearInterval(intervalid);
 		}
 		document.getElementById("mes").innerHTML = i;

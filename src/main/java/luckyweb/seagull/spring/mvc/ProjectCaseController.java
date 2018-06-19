@@ -18,6 +18,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.ProjectCase;
@@ -35,8 +38,6 @@ import luckyweb.seagull.spring.service.ProjectPlanCaseService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -167,7 +168,7 @@ public class ProjectCaseController {
 
 		}
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(projectcases);
+		JSONArray recordJson = StrLib.listToJson(projectcases);
 		// 得到总记录数
 		int total = projectcaseservice.findRows(projectcase);
 		// 需要返回的数据有总记录数和行数据
@@ -205,7 +206,7 @@ public class ProjectCaseController {
 					projectcase.setTime(time);
 
 					projectcaseservice.modify(projectcase);
-					operationlogservice.add(req, "PROJECT_CASE", projectcase.getId(), projectcase.getProjectid(),
+					operationlogservice.add(req, "PROJECT_CASE", projectcase.getId(), projectcase.getProjectid(),1,
 							"编辑用例成功！用例编号：" + projectcase.getSign());
 					json.put("status", "success");
 					json.put("ms", "编辑成功!");
@@ -275,7 +276,7 @@ public class ProjectCaseController {
 					projectcase.setSign(sp.getProjectsign() + "-" + index);
 					projectcase.setProjectindex(index);
 					int caseid = projectcaseservice.add(projectcase);
-					operationlogservice.add(req, "PROJECT_CASE", caseid, projectcase.getProjectid(),
+					operationlogservice.add(req, "PROJECT_CASE", caseid, projectcase.getProjectid(),3,
 							"添加用例成功！用例编号：" + projectcase.getSign());
 					
 					String ms="添加用例【"+projectcase.getSign()+"】成功！";
@@ -284,7 +285,7 @@ public class ProjectCaseController {
 						for(ProjectCasesteps step:steps){
 							step.setCaseid(caseid);
 							int stepid=casestepsservice.add(step);
-						    operationlogservice.add(req, "PROJECT_CASESTEPS", stepid, projectcase.getProjectid(),
+						    operationlogservice.add(req, "PROJECT_CASESTEPS", stepid, projectcase.getProjectid(),1,
 									"复制用例步骤成功！");
 						}
 						ms="复制用例【"+projectcase.getSign()+"】成功！";
@@ -336,8 +337,8 @@ public class ProjectCaseController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("caseids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("caseids"));
 
 				String status="fail";
 				String ms="删除用例失败!";
@@ -362,7 +363,7 @@ public class ProjectCaseController {
 					}
 					casestepsservice.delforcaseid(id);
 					projectcaseservice.delete(id);
-					operationlogservice.add(req, "PROJECT_CASE", pc.getId(), pc.getProjectid(), "删除用例成功！");
+					operationlogservice.add(req, "PROJECT_CASE", pc.getId(), pc.getProjectid(), 0,"删除用例成功！");
 					suc++;
 				}
 				
@@ -402,7 +403,7 @@ public class ProjectCaseController {
 			String sign = req.getParameter("sign");
 
 			ProjectCase pc = projectcaseservice.getCaseBySign(sign);
-			String jsonStr = JSONObject.fromObject(pc).toString();
+			String jsonStr = JSONObject.toJSONString(pc);
 			pw.print(jsonStr);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -445,7 +446,7 @@ public class ProjectCaseController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
 				String ms="保存用例集失败!";
 				String status="fail";
 				int projectid = Integer.valueOf(jsonObject.getString("projectid"));
@@ -463,7 +464,7 @@ public class ProjectCaseController {
 						if(null!=pm&&pm.getProjectid()==projectid&&pm.getPid()==pid&&pm.getModulename().equals(oldName)){
 							pm.setModulename(name);
 							moduleservice.modify(pm);
-							operationlogservice.add(req, "PROJECT_MODULE", id, pm.getProjectid(), "编辑用例集成功！");
+							operationlogservice.add(req, "PROJECT_MODULE", id, pm.getProjectid(),1, "编辑用例集成功！");
 							ms="编辑用例集成功!";
 							status="success";
 						}
@@ -472,7 +473,7 @@ public class ProjectCaseController {
 						projectmodule.setPid(pid);
 						projectmodule.setModulename(name);
 						id = moduleservice.add(projectmodule);
-						operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(), "新增用例集成功！");
+						operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(),1, "新增用例集成功！");
 						ms="新增用例集成功!";
 						status="success";
 					}
@@ -526,7 +527,7 @@ public class ProjectCaseController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
 
 				int id = Integer.valueOf(jsonObject.getString("id"));
 				ProjectModule projectmodule = moduleservice.load(id);
@@ -552,7 +553,7 @@ public class ProjectCaseController {
 
 					if (casecount == 0) {
 						moduleservice.delete(projectmodule);
-						operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(), "删除用例集成功！");
+						operationlogservice.add(req, "PROJECT_MODULE", id, projectmodule.getProjectid(),0, "删除用例集成功！");
 
 						json.put("status", "success");
 						json.put("ms", "删除用例集成功！");
@@ -601,7 +602,7 @@ public class ProjectCaseController {
 				modulejson.setName(projectmodule.getModulename());
 				boolean isParent = moduleservice.getModuleIsParent(projectmodule.getId());
 				modulejson.setisParent(isParent);
-				jsonarr.add(JSONObject.fromObject(modulejson));
+				jsonarr.add(JSONObject.toJSON(modulejson));
 			}
 		} else {
 			List<SectorProjects> prolist = QueueListener.qa_projlist;
@@ -617,7 +618,7 @@ public class ProjectCaseController {
 						modulejson.setisParent(false);
 					}
 
-					jsonarr.add(JSONObject.fromObject(modulejson));
+					jsonarr.add(JSONObject.toJSON(modulejson));
 				}
 			}
 		}

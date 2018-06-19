@@ -18,6 +18,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.spring.entity.FlowCheck;
@@ -29,8 +33,6 @@ import luckyweb.seagull.spring.service.FlowInfoService;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.PlanFlowCheckService;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * =================================================================
@@ -109,7 +111,7 @@ public class PlanFlowCheckController {
 			pfclist.get(i).setCheckphase(fi.getPhasename());
 		}
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(pfclist);
+		JSONArray recordJson = StrLib.listToJson(pfclist);
 		// 得到总记录数
 		int total = planflowcheckservice.findRows(pfcheck);
 		// 需要返回的数据有总记录数和行数据
@@ -228,7 +230,7 @@ public class PlanFlowCheckController {
 				int id = planflowcheckservice.add(planflowcheck);
 				String checkentry = flowinfoService.load(Integer.valueOf(planflowcheck.getCheckentryid())).getCheckentry();
 				operationlogservice.add(req, "QA_PLANFLOWCHECK", id, 
-						planflowcheck.getProjectid(),"流程检查计划添加成功！计划日期："+planflowcheck.getPlandate()+" 检查内容："+checkentry);
+						planflowcheck.getProjectid(),2,"流程检查计划添加成功！计划日期："+planflowcheck.getPlandate()+" 检查内容："+checkentry);
 				
 				model.addAttribute("message", "添加成功");
 				@SuppressWarnings("unchecked")
@@ -338,7 +340,7 @@ public class PlanFlowCheckController {
 				planflowcheckservice.modify(planflowcheck);
 				String checkentry = flowinfoService.load(Integer.valueOf(planflowcheck.getCheckentryid())).getCheckentry();
 				operationlogservice.add(req, "QA_PLANFLOWCHECK", id, 
-						planflowcheck.getProjectid(),"流程检查计划修改成功！计划日期："+planflowcheck.getPlandate()+" 检查内容："+checkentry);
+						planflowcheck.getProjectid(),1,"流程检查计划修改成功！计划日期："+planflowcheck.getPlandate()+" 检查内容："+checkentry);
 				
 				model.addAttribute("message", "修改成功");
 				model.addAttribute("url", "/planflowCheck/load.do");
@@ -412,8 +414,8 @@ public class PlanFlowCheckController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				JSONObject jsonObject = JSONObject.fromObject(sb.toString());
-				JSONArray jsonarr = JSONArray.fromObject(jsonObject.getString("ids"));
+				JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+				JSONArray jsonarr = JSONArray.parseArray(jsonObject.getString("ids"));
 				String status="fail";
 				String ms="删除检查计划失败!";
 				int suc=0;
@@ -429,7 +431,7 @@ public class PlanFlowCheckController {
 					planflowcheckservice.delete(id);
 					String checkentry = flowinfoService.load(Integer.valueOf(pfc.getCheckentryid())).getCheckentry();
 					operationlogservice.add(req, "QA_PLANFLOWCHECK", id, 
-							pfc.getSectorProjects().getProjectid(),"流程检查计划删除成功！计划日期："+pfc.getPlandate()+" 检查内容："+checkentry);
+							pfc.getSectorProjects().getProjectid(),0,"流程检查计划删除成功！计划日期："+pfc.getPlandate()+" 检查内容："+checkentry);
 					suc++;
 				}
 				if(suc>0){
@@ -567,7 +569,7 @@ public class PlanFlowCheckController {
 			planflowcheckservice.modify(pfc);
 			String checkentry = flowinfoService.load(Integer.valueOf(flowcheck.getCheckentry())).getCheckentry();
 			operationlogservice.add(req, "QA_FLOWCHECK", addid, 
-					flowcheck.getProjectid(),"计划转检查结果添加成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
+					flowcheck.getProjectid(),1,"计划转检查结果添加成功！检查结果："+flowcheck.getCheckresult()+" 检查内容："+checkentry);
 			
 			model.addAttribute("message", "转检查结果成功");
 			model.addAttribute("url", "/planflowCheck/load.do");
@@ -640,7 +642,7 @@ public class PlanFlowCheckController {
 		}
 		// 取集合
 	    rsp.setContentType("text/xml;charset=utf-8");
-		JSONArray jsonArray = JSONArray.fromObject(list);
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(list));
 		JSONObject jsobjcet = new JSONObject();
 		jsobjcet.put("data", jsonArray); 
 		

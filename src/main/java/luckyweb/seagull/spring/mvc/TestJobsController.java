@@ -28,6 +28,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
 import luckyweb.seagull.quartz.QuartzJob;
@@ -50,7 +53,6 @@ import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.DateUtil;
 import luckyweb.seagull.util.StrLib;
-import net.sf.json.JSONObject;
 import rmi.service.RunService;
 
 /**
@@ -182,7 +184,7 @@ public class TestJobsController
 			}
 		}
 		// 转换成json字符串
-		String recordJson = StrLib.listToJson(jobs);
+		JSONArray recordJson = StrLib.listToJson(jobs);
 		// 得到总记录数
 		int total = testJobsService.findRows(tj);
 		// 需要返回的数据有总记录数和行数据
@@ -420,7 +422,7 @@ public class TestJobsController
 					QueueListener.list.add(tj);
 					
 					operationlogservice.add(req, "TESTJOBS", id, 
-							sectorprojectsService.getid(tj.getPlanproj()),"自动化用例计划任务添加成功！计划名称："+tj.getTaskName());
+							sectorprojectsService.getid(tj.getPlanproj()),8,"自动化用例计划任务添加成功！计划名称："+tj.getTaskName());
 		
 					model.addAttribute("message", "添加成功");
 					model.addAttribute("url", "/testJobs/load.do");
@@ -828,7 +830,7 @@ public class TestJobsController
 						QueueListener.list.remove(tj);
 						
 						operationlogservice.add(req, "TESTJOBS", id, 
-								tj.getProjectid(),"自动化用例计划任务删除成功！计划名称："+tj.getTaskName());
+								tj.getProjectid(),0,"自动化用例计划任务删除成功！计划名称："+tj.getTaskName());
 						
 						json.put("status", "success");
 						json.put("ms", "删除调度任务成功!");
@@ -873,7 +875,7 @@ public class TestJobsController
 			QuartzManager.addJob(id + "*JOB", QuartzJob.class, startTime);
 			
 			operationlogservice.add(req, "TESTJOBS", Integer.valueOf(id), 
-					sectorprojectsService.getid(tb.getPlanproj()),"自动化用例计划任务被启动成功！计划名称："+tb.getTaskName());
+					sectorprojectsService.getid(tb.getPlanproj()),2,"自动化用例计划任务被启动成功！计划名称："+tb.getTaskName());
 
 		}
 		catch (Exception e)
@@ -912,7 +914,7 @@ public class TestJobsController
 			QuartzManager.removeJob(id+"*JOB");
 			
 			operationlogservice.add(req, "TESTJOBS", Integer.valueOf(id), 
-					sectorprojectsService.getid(tb.getPlanproj()),"自动化用例计划任务被关闭成功！计划名称："+tb.getTaskName());
+					sectorprojectsService.getid(tb.getPlanproj()),1,"自动化用例计划任务被关闭成功！计划名称："+tb.getTaskName());
 		}
 		catch (Exception e)
 		{
@@ -962,7 +964,7 @@ public class TestJobsController
 				String message = qj.toRunTask(tj.getPlanproj(), id,tj.getTaskName(),tj.getClientip(),tj.getClientpath());				
 				
 				operationlogservice.add(req, "TESTJOBS", Integer.valueOf(id), 
-						sectorprojectsService.getid(tj.getPlanproj()),"自动化用例计划任务被执行！计划名称："+tj.getTaskName()+" 结果："+message);
+						sectorprojectsService.getid(tj.getPlanproj()),2,"自动化用例计划任务被执行！计划名称："+tj.getTaskName()+" 结果："+message);
 				pw.write(message);
 			}
 			catch (Exception e)
@@ -1124,7 +1126,7 @@ public class TestJobsController
 				targetFile.delete();
 			}
 			operationlogservice.add(request, "TESTJOBS", 0, 
-					99,"项目jar包被上传，包名："+file.getOriginalFilename());
+					99,5,"项目jar包被上传，包名："+file.getOriginalFilename());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1175,18 +1177,18 @@ public class TestJobsController
 			{
 				QuartzJob qj = new QuartzJob();
 				String message = qj.toRunTask(tj.getPlanproj(), jobid,tj.getTaskName(),tj.getClientip(),tj.getClientpath());
-				pw.write(JSONObject.fromObject("{result:\""+message+"\"}").toString());
+				pw.write(JSONObject.parseObject("{result:\""+message+"\"}").toString());
 			}
 			catch (Exception e)
 			{
 				String message = "当前项目在服务器不存在！";
-				pw.write(JSONObject.fromObject("{result:"+message+"}").toString());
+				pw.write(JSONObject.parseObject("{result:"+message+"}").toString());
 			}
 
 		}
 		catch (Exception e)
 		{
-			pw.write(JSONObject.fromObject("{result:"+e.getMessage()+"}").toString());
+			pw.write(JSONObject.parseObject("{result:"+e.getMessage()+"}").toString());
 		}
 
 	}
