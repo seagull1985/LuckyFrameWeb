@@ -161,7 +161,6 @@ public class ProjectTemplateParamsController {
 			}
 			String jsonstr = sb.toString().substring(1, sb.toString().length() - 1);
 			jsonstr = jsonstr.replace("\\\"", "\"");
-			jsonstr = jsonstr.replace("&quot;", "\"");
 			jsonstr = jsonstr.replace("undefined", "0");
 
 			// 参数1为要转换的JSONArray数据，参数2为要转换的目标数据，即List盛装的数据

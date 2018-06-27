@@ -228,7 +228,7 @@
         }
     });
 
-    $(function () {
+    $(document).ready(function () {
         $('#casesteps').bootstrapValidator({
             message: '当前填写信息无效！',
             //live: 'submitted',
@@ -278,6 +278,24 @@
                             min: 0,
                             max: 50,
                             message: '【步骤动作】长度必须小于50个字符'
+                        },
+                        callback: {
+                            message: '类型是HTTP，请选择协议模板',
+                            callback:function(value,validator,$field){
+                            	var num=$field.attr("id").substring(6);
+                            	var steps;
+                            	if(casesteps.steptype.size==0){
+                            		steps=casesteps.steptype.value
+                            	}else{
+                            		steps=casesteps.steptype[num-1].value
+                            	}
+                            	
+                             	if(steps=="2" && value==""){
+                            		return false;
+                            	}else{                        		
+                            		return true;
+                            	} 
+                            }
                         }
                     }
                 },
@@ -312,16 +330,17 @@
             $form.find('.alert').html('步骤创建成功！');
         });
     });
-
+    
     String.prototype.replaceAll = function (s1, s2) {
         return this.replace(new RegExp(s1, "gm"), s2);
     }
-
+    
     // 提交表单
     function check_form() {
         var casesteps = $('#casesteps');
         casesteps.data('bootstrapValidator').validate();
-        if (! casesteps.data('bootstrapValidator').isValid()) {
+        if (!casesteps.data('bootstrapValidator').isValid()) {
+        	$('#save').attr('disabled', false);
             return;
         }
 
