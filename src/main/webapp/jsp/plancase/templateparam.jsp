@@ -214,7 +214,7 @@
 	<script type="text/javascript">
 		$(document).ready(
 				function() {
-					$('#paramtable').bootstrapValidator({
+					$('#templateparams').bootstrapValidator({
 						message : '当前填写信息无效！',
 						//live: 'submitted',
 						feedbackIcons : {
@@ -264,6 +264,12 @@
 
 		// 提交表单
 		function check_form() {
+	        var casesteps = $('#templateparams');
+	        casesteps.data('bootstrapValidator').validate();
+	        if (!casesteps.data('bootstrapValidator').isValid()) {
+	            return;
+	        }
+	        
 			$("#submit").attr("disabled",true);
 			var oTable = document.getElementById("paramtbody");
 			var json = "";

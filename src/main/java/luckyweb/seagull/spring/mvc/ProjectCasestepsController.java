@@ -218,11 +218,11 @@ public class ProjectCasestepsController {
 				step.setExpectedresult(step.getExpectedresult().replace("&quot;", "\""));
 				step.setRemark(step.getRemark().replace("&quot;", "\""));
 				casestepsservice.add(step);
-
-				projectcase.setOperationer(usercode);
-				projectcase.setTime(time);
-				projectcaseservice.modify(projectcase);
 			}
+			projectcase.setOperationer(usercode);
+			projectcase.setTime(time);
+			projectcaseservice.modify(projectcase);
+			
 			json.put("status", "success");
 			json.put("ms", "编辑步骤成功!");
 		}

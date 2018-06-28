@@ -77,10 +77,10 @@
 											</div>
 										</div>
 										<div class="form-group">
-											<label for="projectsign" class="col-sm-3 control-label">项目标识</label>
+											<label for="projectsign" class="col-sm-3 control-label">项目唯一标识</label>
 											<div class="col-sm-9">
 												<input type="text" class="form-control" name="projectsign"
-													id="projectsign" placeholder="项目标识">
+													id="projectsign" placeholder="不可重复，项目中用例编号前缀，英文或拼音简称">
 											</div>
 										</div>
 										<div class="form-group">
@@ -198,19 +198,19 @@
 						}
 					}, {
 						field : 'projectsign',
-						title : '项目标识',
+						title : '项目唯一标识',
 						width : '10%',
 						editable : {
 							type : 'text',
-							title : '项目标识',
-							emptytext : "无项目标识",
+							title : '项目唯一标识',
+							emptytext : "无项目唯一标识",
 							validate : function(value) {
 								if (!$.trim(value))
-									return '项目标识不能为空';
+									return '项目唯一标识不能为空';
 								if (value.length > 20)
-									return '项目标识不能超过20个字符';
+									return '项目唯一标识不能超过20个字符';
 								if (value.length < 2)
-									return '项目标识不能小于2个字符';
+									return '项目唯一标识不能小于2个字符';
 							}
 						}
 					}, {
