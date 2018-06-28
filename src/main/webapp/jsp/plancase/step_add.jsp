@@ -210,24 +210,6 @@
 </div>
 <script src="/progressus/assets/js/bootstrap-suggest.min.js"></script>
 <script type="text/javascript">
-    $(function () {
-        if ('${steps}'.size == 0) {
-            document.getElementById("steptbody").rows[0].cells[0].innerHTML = 1;
-            document.getElementById("steptbody").rows[0].cells[0].value = 1;
-        } else {
-            var oTable = document.getElementById("steptbody");
-            for (var i = 0; i < oTable.rows.length; i++) {
-                initSuggest((i + 1));
-                oTable.rows[i].cells[0].innerHTML = (i + 1);
-                oTable.rows[i].cells[0].value = (i + 1);
-            }
-        }
-
-        if ('${casetype}' != 0) {
-            $("#showdebugb").attr("disabled", "true");
-        }
-    });
-
     $(document).ready(function () {
         $('#casesteps').bootstrapValidator({
             message: '当前填写信息无效！',
@@ -245,6 +227,32 @@
                             min: 0,
                             max: 200,
                             message: '【包 | 定位路径】长度必须小于200个字符'
+                        },
+                        callback: {
+                            message: '类型是接口或HTTP，路径必填',
+                            callback:function(value,validator,$field){
+                            	var num=$field.attr("id").substring(4);
+                            	var steps;
+                            	if(casesteps.steptype.size==0){
+                            		steps=casesteps.steptype.value
+                            	}else{
+                            		steps=casesteps.steptype[num-1].value
+                            	}
+
+                             	if(steps=="0" && value==""){
+                            		return {
+                                        valid: false,
+                                        message: '类型是接口，必须填写包路径'
+                                    };
+                            	}else if(steps=="2" && value==""){
+                            		return {
+                                        valid: false,
+                                        message: '类型是HTTP，必须填写请求URL'
+                                    };
+                            	}else{                        		
+                            		return true;
+                            	} 
+                            }
                         }
                     }
                 },
@@ -275,7 +283,7 @@
                     message: '【步骤动作】无效！',
                     validators: {
                         stringLength: {
-                            min: 0,
+                            min: 2,
                             max: 50,
                             message: '【步骤动作】长度必须小于50个字符'
                         },
@@ -289,9 +297,12 @@
                             	}else{
                             		steps=casesteps.steptype[num-1].value
                             	}
-                            	
+
                              	if(steps=="2" && value==""){
-                            		return false;
+                             		return {
+                                        valid: false,
+                                        message: 'HTTP必须选择协议模板'
+                                    };
                             	}else{                        		
                             		return true;
                             	} 
@@ -306,6 +317,32 @@
                             min: 0,
                             max: 2000,
                             message: '【预期结果】长度必须小于2000个字符'
+                        },
+                        callback: {
+                            message: '必填(匹配返回值或赋值操作)',
+                            callback:function(value,validator,$field){
+                            	var num=$field.attr("id").substring(14);
+                            	var steps;
+                            	if(casesteps.steptype.size==0){
+                            		steps=casesteps.steptype.value
+                            	}else{
+                            		steps=casesteps.steptype[num-1].value
+                            	}
+                            	
+                             	if(steps=="0" && value==""){
+                            		return {
+                                        valid: false,
+                                        message: '接口必填(匹配返回值或赋值操作)'
+                                    };
+                            	}else if(steps=="2" && value==""){
+                            		return {
+                                        valid: false,
+                                        message: 'HTTP必填(匹配返回值或赋值操作)'
+                                    };
+                            	}else{                        		
+                            		return true;
+                            	} 
+                            }
                         }
                     }
                 },
@@ -331,6 +368,26 @@
         });
     });
     
+    $(function () {
+        if ('${steps}'.size == 0) {
+            document.getElementById("steptbody").rows[0].cells[0].innerHTML = 1;
+            document.getElementById("steptbody").rows[0].cells[0].value = 1;
+        } else {
+            var oTable = document.getElementById("steptbody");
+            for (var i = 0; i < oTable.rows.length; i++) {
+                initSuggest((i + 1));
+                oTable.rows[i].cells[0].innerHTML = (i + 1);
+                oTable.rows[i].cells[0].value = (i + 1);
+            }
+        }
+
+        if ('${casetype}' != 0) {
+            $("#showdebugb").attr("disabled", "true");
+        }
+
+        $('#casesteps').data('bootstrapValidator').validate();
+    });
+    
     String.prototype.replaceAll = function (s1, s2) {
         return this.replace(new RegExp(s1, "gm"), s2);
     }
@@ -340,8 +397,7 @@
         var casesteps = $('#casesteps');
         casesteps.data('bootstrapValidator').validate();
         if (!casesteps.data('bootstrapValidator').isValid()) {
-        	$('#save').attr('disabled', false);
-            return;
+            return true;
         }
 
         var oTable = document.getElementById("steptbody");
@@ -581,11 +637,14 @@
         casesteps.bootstrapValidator('addField', 'action');
         casesteps.bootstrapValidator('addField', 'expectedresult');
         casesteps.bootstrapValidator('addField', 'remark');
+        casesteps.data('bootstrapValidator').validate();
     }
 
     function getObIndex(ob) {
         var id = $(ob).attr("id").replaceAll("steptype", "");
         initSuggest(id);
+        $('#casesteps').data('bootstrapValidator').resetForm();
+        addfield();
     }
 
     function initSuggestAction(index, steptypetext) {
@@ -606,7 +665,7 @@
         }).on('onDataRequestSuccess', function (e, result) {
 
         }).on('onSetSelectValue', function (e, keyword, data) {
-            // $('#casesteps').data('bootstrapValidator').updateStatus(actionindex, 'NOT_VALIDATED', null).validateField(actionindex);
+            $('#casesteps').data('bootstrapValidator').updateStatus(actionindex, 'NOT_VALIDATED', null).validateField(actionindex);
         }).on('onUnsetSelectValue', function () {
 
         });
