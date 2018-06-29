@@ -525,6 +525,8 @@
             oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "steptype" + index);
             oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "remark" + index);
         }
+        $('#casesteps').data('bootstrapValidator').resetForm();
+        $('#casesteps').data('bootstrapValidator').validate();
     }
 
     function upsteps(obj) {
