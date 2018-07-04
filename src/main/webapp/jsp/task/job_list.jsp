@@ -307,7 +307,7 @@
 															+ row.id
 															+ '\')">执行</a> ';
 													var h;
-													if (row.showRun == 'true') {
+													if (row.showRun == true) {
 														if (row.state == 0)
 															h = '<a href="#" mce_href="#" onclick="permissionboolean(\'tast_run\',\''
 																	+ row.id

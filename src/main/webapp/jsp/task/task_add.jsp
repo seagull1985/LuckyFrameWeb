@@ -65,11 +65,11 @@
 			cellPadding=1 border=1 bordercolor="#CCCCCC">
 
 			<tr>
-				<td height="30" align="left">计划名称</td>
+				<td height="30" align="left">调度名称</td>
 				<td height="30" colspan="3"><sf:input path="taskName" id="taskName"
 						cssClass="easyui-validatebox" required="true"
 						data-options="validType:'minLength[0,50]'"
-						missingMessage="任务名称不能为空" invalidMessage="任务名称不能为空" />&nbsp;<sf:errors
+						missingMessage="调度名称不能为空" invalidMessage="调度名称不能为空" />&nbsp;<sf:errors
 						path="taskName" cssClass="error_msg" /></td>
 			</tr>
 			<tr>
