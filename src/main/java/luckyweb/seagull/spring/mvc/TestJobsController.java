@@ -767,13 +767,11 @@ public class TestJobsController
 		ArrayList<String> pathlist=new ArrayList<String>();
 		TestClient tc=tcservice.getClient(jobload.getClientip());
 
-		if(null!=tc){
-			String clientpath = tc.getClientpath();
-			String[] temp = clientpath.split(";", -1);
-			for (String pathtemp : temp) {
-				if (!StrLib.isEmpty(pathtemp)) {
-					pathlist.add(pathtemp);
-				}
+		String clientpath = tc.getClientpath();
+		String[] temp = clientpath.split(";", -1);
+		for (String pathtemp : temp) {
+			if (!StrLib.isEmpty(pathtemp)) {
+				pathlist.add(pathtemp);
 			}
 		}
 
