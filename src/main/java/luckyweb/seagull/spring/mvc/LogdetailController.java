@@ -284,12 +284,7 @@ public class LogdetailController
 			logdata[0]="0";
 		}else{
 			double perrl =(double)casecount/45;
-			if(days!=0){
-				perrl = perrl/days;
-			}else{
-				perrl=0;
-			}
-			
+			perrl = perrl/days;
 			BigDecimal bperrl =new BigDecimal(perrl);
 			perrl=bperrl.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
 			logdata[0] = String.valueOf(perrl);
