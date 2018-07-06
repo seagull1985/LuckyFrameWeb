@@ -225,14 +225,17 @@
 												width : '10%',
 												formatter : function(value,
 														row, index) {
-													var now = new Date(value);
-												    var year=now.getFullYear();    
-												    var month=now.getMonth()+1;    
-												    var date=now.getDate();    
-												    var hour=now.getHours();    
-												    var minute=now.getMinutes();    
-												    var second=now.getSeconds();    
-												    var time=year+'-'+add0(month)+'-'+add0(date)+' '+add0(hour)+':'+add0(minute)+':'+add0(second);
+													var time='等待任务结束...';
+													if(value != undefined){
+														var now = new Date(value);
+													    var year=now.getFullYear();    
+													    var month=now.getMonth()+1;    
+													    var date=now.getDate();    
+													    var hour=now.getHours();    
+													    var minute=now.getMinutes();    
+													    var second=now.getSeconds();    
+													    var time=year+'-'+add0(month)+'-'+add0(date)+' '+add0(hour)+':'+add0(minute)+':'+add0(second);
+													}									
 													return '<font id="finishtime' + row.id + '">'+time+'</font>';
 												}
 											},
