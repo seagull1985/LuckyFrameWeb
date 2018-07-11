@@ -141,7 +141,7 @@
         			                          "margin": -4,
         			                          "textStyle": {
         			                            "color": "#fff",
-        			                            "fontSize": 16.25
+        			                            "fontSize": 12
         			                          }
         			                        }
         			                      },

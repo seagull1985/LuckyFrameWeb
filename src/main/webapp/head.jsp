@@ -50,9 +50,9 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-weight:bold;">UTP<b class="caret"></b></a>
 						<ul class="dropdown-menu" style="background-color:rgba(88,87,86,0.6);">
-							<li><a href="/projectPlan/load.do">测试计划</a></li>
+						    <li><a href="/projectprotocolTemplate/load.do">协议模板</a></li>							
 							<li><a href="/projectCase/load.do">用例管理</a></li>
-							<li><a href="/projectprotocolTemplate/load.do">协议模板</a></li>
+							<li><a href="/projectPlan/load.do">测试计划</a></li>
 							<li><a href="/testJobs/load.do">调度配置</a></li>
 							<li><a href="/tastExecute/load.do">任务查询</a></li>
 							<li><a href="/autoTestChar/chart.do">任务概况图表</a></li>
