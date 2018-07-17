@@ -294,156 +294,161 @@
 		};
 		
 	    // 提交表单
-	    function check_form()
-	    {
-	    	  $('#form_data').data('bootstrapValidator').validate();  
-	    	  if(!$('#form_data').data('bootstrapValidator').isValid()){  
-	    		 return ;  
-	    	  } 
-	    	
-	        var form_data = $('#form_data').serialize();
-	        $.param(form_data); 
-	        // 异步提交数据到action页面
-	        $.ajax(
-	                {
-	                    url: "add.do",
-	                    data:form_data,
-	                    type: "post",
-	                    dataType : "json",
-	                    beforeSend:function()
-	                    {
-	                        $("#tip").html("<span style='color:blue'>正在处理...</span>");
-	                        return true;
-	                    },
-	                    success:function(data, status)
-	                    {
-	                        if(data.status == "success")
-	                        {
-	                            $("#tip").html("<span style='color:blueviolet'>"+data.ms+"</span>");
-	                            // document.location.href='system_notice.php'
-	                            toastr.success(data.ms);
-	                        }else{
-	                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
-	                            toastr.warning(data.ms); 
-	                        }
-	                    },
-	                    error:function()
-	                    {
-	                    	toastr.error('请求出错!');
-	                    },
-	                    complete:function()
-	                    {
-	                    }
-	                });
-
-	        return false;
-	    }
-
-	    btn_add.onclick=function(){
-	    	var status = document.getElementById("loginstatus").value;
-			if(status=="false"){
-				if(window.confirm("你未登录哦，要先去登录吗？")){
-					var url = '/progressus/signin.jsp';
-					window.location.href=url;
-					return true; 
-				}else{
-					return false; 
-				} 	
+	    
+		function check_form() {
+			$('#form_data').data('bootstrapValidator').validate();
+			var flag = $('#form_data').data("bootstrapValidator").isValid();
+			var t;
+			if(!flag){
+				t=setTimeout("check_form()", 500);
 			}
-			if($('#search_project').val()!=99){
+			clearTimeout(t);
+			var form_data = $('#form_data').serialize();
+			$.param(form_data);
+			// 异步提交数据到action页面
+			$.ajax({
+						url : "add.do",
+						data : form_data,
+						type : "post",
+						dataType : "json",
+						beforeSend : function() {
+							$("#tip").html(
+									"<span style='color:blue'>正在处理...</span>");
+							return true;
+						},
+						success : function(data, status) {
+							if (data.status == "success") {
+								$("#tip").html(
+										"<span style='color:blueviolet'>"
+												+ data.ms + "</span>");
+								// document.location.href='system_notice.php'
+								toastr.success(data.ms);
+							} else {
+								$("#tip")
+										.html(
+												"<span style='color:red'>失败，请重试</span>");
+								toastr.warning(data.ms);
+							}
+						},
+						error : function() {
+							toastr.error('请求出错!');
+						},
+						complete : function() {
+						}
+					});
+		}
+
+		btn_add.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
+					var url = '/progressus/signin.jsp';
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
+			}
+			if ($('#search_project').val() != 99) {
 				$('#projectid').val($('#search_project').val());
 			}
 
-	    	$("#addModal").modal('show');
-	    }
-	    
-	    $(function () { $('#addModal').on('hide.bs.modal', function () {
-	        // 关闭时清空edit状态为add
-	    	location.reload();
-	    })
-	    });
-	    
-	    btn_update.onclick=function(){
-	    	var status = document.getElementById("loginstatus").value;
-			if(status=="false"){
-				if(window.confirm("你未登录哦，要先去登录吗？")){
+			$("#addModal").modal('show');
+		}
+
+		$(function() {
+			$('#addModal').on('hide.bs.modal', function() {
+				// 关闭时清空edit状态为add
+				location.reload();
+			})
+		});
+
+		btn_update.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
 					var url = '/progressus/signin.jsp';
-					window.location.href=url;
-					return true; 
-				}else{
-					return false; 
-				} 	
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
 			}
-			
-            var row = $.map($('#tb_params').bootstrapTable('getSelections'), function (row) {
-                return row;
-                 });
-            
-            if(row.length == 1 ){
-            	$("#id").val(row[0].id);
-            	$("#projectid").val(row[0].projectid);
-            	$("#paramsname").val(row[0].paramsname);
-            	$("#paramsvalue").val(row[0].paramsvalue);
-            	$("#remark").val(row[0].remark);
-            	
-            	$("#addModal").modal('show');
-            }else{
-            	toastr.warning('要编辑公共参数有且只能选择一条记录哦！'); 
-            }
-	    }
-	    
-	    btn_delete.onclick=function(){
-	    	var status = document.getElementById("loginstatus").value;
-			if(status=="false"){
-				if(window.confirm("你未登录哦，要先去登录吗？")){
+
+			var row = $.map($('#tb_params').bootstrapTable('getSelections'),
+					function(row) {
+						return row;
+					});
+
+			if (row.length == 1) {
+				$("#id").val(row[0].id);
+				$("#projectid").val(row[0].projectid);
+				$("#paramsname").val(row[0].paramsname);
+				$("#paramsvalue").val(row[0].paramsvalue);
+				$("#remark").val(row[0].remark);
+
+				$("#addModal").modal('show');
+			} else {
+				toastr.warning('要编辑公共参数有且只能选择一条记录哦！');
+			}
+		}
+
+		btn_delete.onclick = function() {
+			var status = document.getElementById("loginstatus").value;
+			if (status == "false") {
+				if (window.confirm("你未登录哦，要先去登录吗？")) {
 					var url = '/progressus/signin.jsp';
-					window.location.href=url;
-					return true; 
-				}else{
-					return false; 
-				} 	
+					window.location.href = url;
+					return true;
+				} else {
+					return false;
+				}
 			}
-			
-	        var selectIndex = $('input[name="btSelectItem"]:checked ').val();
-	        deleteItem($('#tb_params'), selectIndex, true);
-	    }
-	    
-	    function deleteItem($table, selectIndex, reLoad){
-            var ids = $.map($table.bootstrapTable('getSelections'), function (row) {
-                      return row.id;
-                       }); 
-	        if(ids.length != 0 ){
-	        	if(confirm("真的要删除参数吗?")){
-		                $.ajax({
-		                   type: "POST",
-		                   cache:false,
-		                   async : true,
-		                   dataType : "json",
-		                   url:  "delete.do",
-		                   contentType: "application/json", //必须有
-		                   data: JSON.stringify({"ids":ids}),
-		                   success: function(data, status){
-		                           if (data.status == "success"){
-		                               $table.bootstrapTable('hideRow', {index:selectIndex});
-		                               toastr.success(data.ms);
-		                              if(reLoad){
-		                                  $table.bootstrapTable('refresh');
-		                              }
-		                           }else{
-		                        	   $table.bootstrapTable('refresh');
-		                        	   toastr.warning(data.ms); 
-		                           }
-		                   },error:function()
-		                    {
-		                	   toastr.error('删除出错!');
-		                    }
-		                });
-	            }    
-	        }else{
-	            toastr.warning('请选取要删除的数据行！'); 
-	        }
-	    }
-	   
+
+			var selectIndex = $('input[name="btSelectItem"]:checked ').val();
+			deleteItem($('#tb_params'), selectIndex, true);
+		}
+
+		function deleteItem($table, selectIndex, reLoad) {
+			var ids = $.map($table.bootstrapTable('getSelections'), function(
+					row) {
+				return row.id;
+			});
+			if (ids.length != 0) {
+				if (confirm("真的要删除参数吗?")) {
+					$.ajax({
+						type : "POST",
+						cache : false,
+						async : true,
+						dataType : "json",
+						url : "delete.do",
+						contentType : "application/json", //必须有
+						data : JSON.stringify({
+							"ids" : ids
+						}),
+						success : function(data, status) {
+							if (data.status == "success") {
+								$table.bootstrapTable('hideRow', {
+									index : selectIndex
+								});
+								toastr.success(data.ms);
+								if (reLoad) {
+									$table.bootstrapTable('refresh');
+								}
+							} else {
+								$table.bootstrapTable('refresh');
+								toastr.warning(data.ms);
+							}
+						},
+						error : function() {
+							toastr.error('删除出错!');
+						}
+					});
+				}
+			} else {
+				toastr.warning('请选取要删除的数据行！');
+			}
+		}
 	</script>
 </body>
 </html>
