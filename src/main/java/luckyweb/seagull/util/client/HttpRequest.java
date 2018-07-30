@@ -1,10 +1,8 @@
 package luckyweb.seagull.util.client;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,30 +13,21 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.annotation.Resource;
-import javax.xml.bind.DatatypeConverter;
-
 import org.apache.http.HttpEntity;
-import org.apache.http.client.HttpClient;
+import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONObject;
-
-import luckyweb.seagull.spring.entity.TestTaskexcute;
-import luckyweb.seagull.spring.service.TestTastExcuteService;
 
 public class HttpRequest {
 
@@ -101,7 +90,7 @@ public class HttpRequest {
 	 * @throws KeyManagementException
 	 * @Description:使用HttpClient以JSON格式发送get请求
 	 */
-	public static String httpClientGet(String urlParam, Map<String, Object> params) throws NoSuchAlgorithmException, KeyManagementException,HttpHostConnectException {
+	public static String httpClientGet(String urlParam, Map<String, Object> params) throws NoSuchAlgorithmException, KeyManagementException,NoHttpResponseException {
 		StringBuffer resultBuffer = null;
 		CloseableHttpClient httpclient=HttpClients.createDefault();
 		BufferedReader br = null;
@@ -235,32 +224,7 @@ public class HttpRequest {
     
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-		RunTaskEntity tt = new RunTaskEntity();
-		tt.setTaskid("10965");
-		tt.setProjectname("果果在明人我");
-		tt.setLoadpath("/test");
-		String aa=JSONObject.toJSONString(tt);
-		System.out.println(aa);
-		System.out.println(httpClientPost("http://localhost:16363/runtask",aa));
-		
-/*		String path = System.getProperty("user.dir")+"\\";
-		File targetFile = new File(path+"aopalliance-1.0.jar");
-		System.out.println(httpClientUploadFile("http://localhost:16363/uploadjar", "\\log11", targetFile));*/
-		
-/*		Map<String, Object> params = new HashMap<String, Object>(0);
-		params.put("imgName", "0131-044346.png");
-		byte[] bfis = getFile("http://localhost:16363/getlogimg", params);
-		String path = System.getProperty("user.dir")+"\\";
-		String pathName = path + "test.png";
-		File file = new File(pathName);
-		file.createNewFile();
-        BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file));
-        os.write(bfis);
-        os.flush();
-        os.close();*/
-		
-/*		Map<String, Object> params = new HashMap<String, Object>(0);
-		System.out.println(httpClientGet("http://localhost:16363/getclientstatus", params));*/
+
 	}
 
 }

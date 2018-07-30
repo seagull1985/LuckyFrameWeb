@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.annotation.Resource;
-
-import org.apache.http.conn.HttpHostConnectException;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -104,7 +101,7 @@ public class QuartzJob implements Job {
 									log.error("【IP:"+tc.getClientip()+"】客户端异常，修改客户端状态！");
 								}
 							}
-							}catch (HttpHostConnectException e) {
+							}catch (RuntimeException e) {
 								log.error(e);
 								log.error("【IP:"+tc.getClientip()+"】检查客户端异常(RemoteException)！");
 								if(tc.getStatus()!=1){
