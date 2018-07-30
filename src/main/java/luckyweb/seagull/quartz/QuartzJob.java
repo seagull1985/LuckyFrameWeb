@@ -1,12 +1,13 @@
 package luckyweb.seagull.quartz;
 
 import java.io.IOException;
-import java.rmi.Naming;
-import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -14,6 +15,8 @@ import org.hibernate.Transaction;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+
+import com.alibaba.fastjson.JSONObject;
 
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.comm.QueueListener;
@@ -25,10 +28,10 @@ import luckyweb.seagull.spring.service.TestTastExcuteService;
 import luckyweb.seagull.util.DateUtil;
 import luckyweb.seagull.util.HibernateSessionFactoryUtil;
 import luckyweb.seagull.util.StrLib;
-import rmi.model.RunBatchCaseEntity;
-import rmi.model.RunCaseEntity;
-import rmi.model.RunTaskEntity;
-import rmi.service.RunService;
+import luckyweb.seagull.util.client.HttpRequest;
+import luckyweb.seagull.util.client.RunBatchCaseEntity;
+import luckyweb.seagull.util.client.RunCaseEntity;
+import luckyweb.seagull.util.client.RunTaskEntity;
 
 /**
  * =================================================================
@@ -82,9 +85,8 @@ public class QuartzJob implements Job {
 						if(null!=tc){
 							String clientip=tc.getClientip();
 							try{
-							 //调用远程对象，注意RMI路径与接口必须与服务器配置一致
-							RunService service=(RunService)Naming.lookup("rmi://"+clientip+":6633/RunService");
-							String result=service.getClientStatus();
+							Map<String, Object> params = new HashMap<String, Object>(0);
+							String result=HttpRequest.httpClientGet("http://"+clientip+":"+PublicConst.CLIENTPORT+"/getclientstatus", params);
 							if("success".equals(result)){
 								if(tc.getStatus()!=0){
 									tc.setStatus(0);
@@ -102,7 +104,7 @@ public class QuartzJob implements Job {
 									log.error("【IP:"+tc.getClientip()+"】客户端异常，修改客户端状态！");
 								}
 							}
-							}catch (RemoteException e) {
+							}catch (HttpHostConnectException e) {
 								log.error(e);
 								log.error("【IP:"+tc.getClientip()+"】检查客户端异常(RemoteException)！");
 								if(tc.getStatus()!=1){
@@ -138,16 +140,15 @@ public class QuartzJob implements Job {
 		projname = projname.replaceAll(" ","\" \""); 
 		String result="启动失败！";
 		try{
-			 //调用远程对象，注意RMI路径与接口必须与服务器配置一致
-			RunService service=(RunService)Naming.lookup("rmi://"+clientip+":6633/RunService"); 
-
     		RunTaskEntity tasken = new RunTaskEntity();
     		tasken.setProjectname(projname);
-    		tasken.setTaskid(String.valueOf(task.getId()));
+    		tasken.setTaskid(String.valueOf(task.getId()));    		
     		if(StrLib.isEmpty(loadpath)){
     			loadpath="/TestDriven";
     		}
-    		result=service.runtask(tasken,loadpath);
+    		tasken.setLoadpath(loadpath);
+    		String taskjson=JSONObject.toJSONString(tasken);
+			result=HttpRequest.httpClientPost("http://"+clientip+":"+PublicConst.CLIENTPORT+"/runtask", taskjson);
     		System.out.println(result);
     		return result;
 		}catch (Exception e) {
@@ -162,8 +163,6 @@ public class QuartzJob implements Job {
 	public String toRunCase(String projname,int tastId,String  caseName,String casVersion,String clientip,String loadpath) {
 		String result="启动失败！";
 		try{
-    		//调用远程对象，注意RMI路径与接口必须与服务器配置一致
-    		RunService service=(RunService)Naming.lookup("rmi://"+clientip+":6633/RunService");
     		RunCaseEntity onecase = new RunCaseEntity();
     		onecase.setProjectname(projname);
     		onecase.setTaskid(String.valueOf(tastId));
@@ -172,7 +171,9 @@ public class QuartzJob implements Job {
     		if(StrLib.isEmpty(loadpath)){
     			loadpath="/TestDriven";
     		}
-    		result=service.runcase(onecase,loadpath);
+    		onecase.setLoadpath(loadpath);
+    		String casejson=JSONObject.toJSONString(onecase);
+			result=HttpRequest.httpClientPost("http://"+clientip+":"+PublicConst.CLIENTPORT+"/runcase", casejson);
     		System.out.println(result);
     		return result;
 		} catch (Exception e) {
@@ -186,8 +187,6 @@ public class QuartzJob implements Job {
 	public String toRunCaseBatch(String projname,int taskid,String  caseInfo,String clientip,String loadpath) {
 		String result="启动失败！";
 		try{
-    		//调用远程对象，注意RMI路径与接口必须与服务器配置一致
-    		RunService service=(RunService)Naming.lookup("rmi://"+clientip+":6633/RunService");
     		RunBatchCaseEntity batchcase = new RunBatchCaseEntity();
     		batchcase.setProjectname(projname);
     		batchcase.setTaskid(String.valueOf(taskid));
@@ -195,7 +194,9 @@ public class QuartzJob implements Job {
     		if(StrLib.isEmpty(loadpath)){
     			loadpath="/TestDriven";
     		}
-    		result=service.runbatchcase(batchcase,loadpath);
+    		batchcase.setLoadpath(loadpath);
+    		String batchcasejson=JSONObject.toJSONString(batchcase);
+			result=HttpRequest.httpClientPost("http://"+clientip+":"+PublicConst.CLIENTPORT+"/runbatchcase", batchcasejson);
     		System.out.println(result);
     		return result;
 		} catch (Exception e) {

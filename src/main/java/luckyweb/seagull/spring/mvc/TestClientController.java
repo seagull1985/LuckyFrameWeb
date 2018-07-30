@@ -102,11 +102,13 @@ public class TestClientController {
 			for(String proid:projectids){
 				if(!StrLib.isEmpty(proid)&&!"0".equals(proid)){
 					SectorProjects sp = sectorprojectsService.loadob(Integer.valueOf(proid));
-					String projectname=sp.getProjectname();
-					if(sp.getProjecttype()==1){
-						sbnames.append(projectname+"(TestLink),");
-					}else{
-						sbnames.append(projectname+",");
+					if(null!=sp){
+						String projectname=sp.getProjectname();
+						if(sp.getProjecttype()==1){
+							sbnames.append(projectname+"(TestLink),");
+						}else{
+							sbnames.append(projectname+",");
+						}
 					}
 				}
 			}

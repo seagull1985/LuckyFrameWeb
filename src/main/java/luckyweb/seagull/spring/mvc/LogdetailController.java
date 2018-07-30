@@ -10,10 +10,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.rmi.Naming;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +40,7 @@ import luckyweb.seagull.spring.service.TestJobsService;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
-import rmi.service.RunService;
+import luckyweb.seagull.util.client.HttpRequest;
 
 /**
  * =================================================================
@@ -108,9 +109,9 @@ public class LogdetailController
 	
 	String newname = new String(fname.getBytes("ISO-8859-1"), "UTF-8");
 	
-	 //调用远程对象，注意RMI路径与接口必须与服务器配置一致
-	RunService service=(RunService)Naming.lookup("rmi://"+tte.getTestJob().getClientip()+":6633/RunService"); 
-	byte[] bfis=service.getlogimg(newname);
+	Map<String, Object> params = new HashMap<String, Object>(0);
+	params.put("imgName", newname);
+	byte[] bfis=HttpRequest.getFile("http://"+tte.getTestJob().getClientip()+":"+PublicConst.CLIENTPORT+"/getlogimg", params);
 	
 	String path = System.getProperty("user.dir")+"\\";
 	String pathName = path + newname;

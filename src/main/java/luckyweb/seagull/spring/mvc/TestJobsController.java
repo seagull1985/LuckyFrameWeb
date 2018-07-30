@@ -1,17 +1,16 @@
 package luckyweb.seagull.spring.mvc;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.rmi.Naming;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +52,7 @@ import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.DateUtil;
 import luckyweb.seagull.util.StrLib;
-import rmi.service.RunService;
+import luckyweb.seagull.util.client.HttpRequest;
 
 /**
  * =================================================================
@@ -1010,10 +1009,10 @@ public class TestJobsController
 			storeName = storeName + "." + startDate;
 		}
 		String result="获取日志远程链接失败！";
-		try{
-    		//调用远程对象，注意RMI路径与接口必须与服务器配置一致
-    		RunService service=(RunService)Naming.lookup("rmi://"+clientip+":6633/RunService");
-    		result=service.getlogdetail(storeName);
+		try{    		
+    		Map<String, Object> params = new HashMap<String, Object>(0);
+    		params.put("filename", storeName);
+			result=HttpRequest.httpClientGet("http://"+clientip+":"+PublicConst.CLIENTPORT+"/getlogdetail", params);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return result;
@@ -1087,7 +1086,6 @@ public class TestJobsController
 		// 文件目录
 		String path = System.getProperty("user.dir")+"\\";
 		String pathName = path + file.getOriginalFilename();
-		System.out.println(pathName);
 		File targetFile = new File(pathName);
 		if (targetFile.exists()){
 			targetFile.delete();
@@ -1112,17 +1110,11 @@ public class TestJobsController
 		byte[] b = null;
 		String result="获取日志远程链接失败！";
 		try {
-			b = new byte[(int) targetFile.length()];
-			BufferedInputStream is = new BufferedInputStream(new FileInputStream(targetFile));
-			is.read(b);
 			try{
-	    		//调用远程对象，注意RMI路径与接口必须与服务器配置一致
-	    		RunService service=(RunService)Naming.lookup("rmi://"+clientip+":6633/RunService");
-	    		result=service.uploadjar(b, file.getOriginalFilename(),clientpath);
+	    		result=HttpRequest.httpClientUploadFile("http://"+clientip+":"+PublicConst.CLIENTPORT+"/uploadjar", clientpath, targetFile);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			is.close();
 			//删除服务器上的文件
 			if (targetFile.exists()){
 				targetFile.delete();

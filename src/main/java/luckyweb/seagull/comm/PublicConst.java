@@ -275,4 +275,9 @@ public class PublicConst {
 	 * 用户角色管理权限码 修改用户角色
 	 */
 	public static final String AUTHUSERROLEMOD="role_3";
+	
+	/**
+	 *默认客户端端口号
+	 */
+	public static final String CLIENTPORT="6633";
 }

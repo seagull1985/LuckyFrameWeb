@@ -3,7 +3,6 @@ package luckyweb.seagull.spring.mvc;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,7 +38,8 @@ import luckyweb.seagull.spring.service.TempCasestepDebugService;
 import luckyweb.seagull.spring.service.TestClientService;
 import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.StrLib;
-import rmi.service.RunService;
+import luckyweb.seagull.util.client.HttpRequest;
+import luckyweb.seagull.util.client.WebDebugCaseEntity;
 
 /**
  * =================================================================
@@ -266,7 +266,6 @@ public class ProjectCasestepsController {
 			rsp.setContentType("text/html;charset=utf-8");
 			req.setCharacterEncoding("utf-8");
 			PrintWriter pw = rsp.getWriter();
-			StringBuilder sb = new StringBuilder();
 			JSONObject json = new JSONObject();
 			if (!UserLoginController.permissionboolean(req, PublicConst.AUTHCASESTEPS)) {
 				json.put("status", "fail");
@@ -331,10 +330,16 @@ public class ProjectCasestepsController {
 				String usercode = request.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
 				
 				tempdebugservice.delete(casesign, usercode);
-
-				// 调用远程对象，注意RMI路径与接口必须与服务器配置一致
-				RunService service = (RunService) Naming.lookup("rmi://" + clientip + ":6633/RunService");
-				String result = service.webdebugcase(casesign, usercode,clientpath);
+				
+				WebDebugCaseEntity debugcase = new WebDebugCaseEntity();
+				debugcase.setSign(casesign);
+				debugcase.setExecutor(usercode);
+	    		if(StrLib.isEmpty(clientpath)){
+	    			clientpath="/TestDriven";
+	    		}
+				debugcase.setLoadpath(clientpath);
+				String debugcasejson=JSONObject.toJSONString(debugcase);
+				String result=HttpRequest.httpClientPost("http://"+clientip+":"+PublicConst.CLIENTPORT+"/webdebugcase", debugcasejson);
 				
 				status="success";
 				ms=result;

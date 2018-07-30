@@ -1,4 +1,4 @@
-package rmi.model;
+package luckyweb.seagull.util.client;
 
 import java.io.Serializable;
 
@@ -20,7 +20,14 @@ public class RunCaseEntity implements Serializable {
     private String taskid;
     private String testCaseExternalId;
     private String version;
+    private String loadpath;
     
+	public String getLoadpath() {
+		return loadpath;
+	}
+	public void setLoadpath(String loadpath) {
+		this.loadpath = loadpath;
+	}
 	public String getProjectname() {
 		return projectname;
 	}
