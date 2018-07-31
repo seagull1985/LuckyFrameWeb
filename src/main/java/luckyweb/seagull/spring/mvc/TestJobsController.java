@@ -1013,6 +1013,7 @@ public class TestJobsController
     		Map<String, Object> params = new HashMap<String, Object>(0);
     		params.put("filename", storeName);
 			result=HttpRequest.httpClientGet("http://"+clientip+":"+PublicConst.CLIENTPORT+"/getlogdetail", params);
+			result=result.replace("##n##", "\n");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return result;
