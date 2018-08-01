@@ -67,7 +67,7 @@ import luckyweb.seagull.util.client.HttpRequest;
 @RequestMapping("/testJobs")
 public class TestJobsController
 {
-	private static final Logger	log	     = Logger.getLogger(TestJobsController.class);
+	private static final Logger	log	= Logger.getLogger(TestJobsController.class);
 	
 	@Resource(name = "testJobsService")
 	private TestJobsService	 testJobsService;
@@ -1085,7 +1085,7 @@ public class TestJobsController
 			return "/jsp/task/file_upload";
 		}
 		// 文件目录
-		String path = System.getProperty("user.dir")+"\\";
+		String path = System.getProperty("user.dir")+File.separator;
 		String pathName = path + file.getOriginalFilename();
 		File targetFile = new File(pathName);
 		if (targetFile.exists()){
@@ -1108,7 +1108,6 @@ public class TestJobsController
 			return "error";
 		}
 
-		byte[] b = null;
 		String result="获取日志远程链接失败！";
 		try {
 			try{
