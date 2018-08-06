@@ -225,15 +225,9 @@ public class ProjectPlanCaseController {
 
 	/**
 	 * 保存计划用例
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/savePlanCase.do")
 	public void savePlanCase(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -426,15 +420,9 @@ public class ProjectPlanCaseController {
 
 	/**
 	 * 使用递归查询指定测试ID中的所有子测试集
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
-	 * @param req
-	 * @param rsp
+	 * @param projectid
+	 * @param pid
 	 * @return
-	 * @throws Exception
-	 * @Description:
 	 */
     private List<Integer> getchildmoduList(int projectid,int pid){
     	List<ProjectModule> modules = moduleservice.getModuleListByProjectid(projectid, pid);
