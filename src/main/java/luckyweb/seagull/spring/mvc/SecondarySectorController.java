@@ -44,10 +44,10 @@ public class SecondarySectorController {
 	
 	@Resource(name = "sectorprojectsService")
 	private SectorProjectsService sectorprojectsservice;
+	
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载部门管理页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -57,6 +57,14 @@ public class SecondarySectorController {
 		return "/jsp/base/secondarysector";
 	}
 	
+	/**
+	 * 获取部门列表数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -89,6 +97,12 @@ public class SecondarySectorController {
 		pw.print(json.toString());
 	}
 	
+	/**
+	 * 更新部门信息
+	 * @param req
+	 * @param rsp
+	 * @param sectors
+	 */
 	@RequestMapping(value = "/update.do")
 	public void update(HttpServletRequest req, HttpServletResponse rsp, SecondarySector sectors) {
 		// 更新实体
@@ -118,15 +132,10 @@ public class SecondarySectorController {
 	
 	/**
 	 * 添加部门
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
+	 * @param sectors
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/add.do")
 	public void add(SecondarySector sectors, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -155,16 +164,10 @@ public class SecondarySectorController {
 	}
 	
 	/**
-	 * 删除项目
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
+	 * 删除部门
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/delete.do")
 	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {

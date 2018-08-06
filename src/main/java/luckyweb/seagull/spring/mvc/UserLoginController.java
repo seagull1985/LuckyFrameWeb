@@ -46,8 +46,9 @@ public class UserLoginController {
 	
 	/**
 	 * 登录校验用户名密码
-	 * @throws Exception 
-	 * @Description:
+	 * @param req
+	 * @param rsp
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/userlogin.do")
 	public void userlogin(HttpServletRequest req, HttpServletResponse rsp) throws Exception{
@@ -99,8 +100,9 @@ public class UserLoginController {
 	
 	/**
 	 * 注销用户
-	 * @throws IOException 
-	 * @Description:
+	 * @param req
+	 * @param rsp
+	 * @throws IOException
 	 */
 	@RequestMapping(value = "/userlogout.do")
 	public void userlogout(HttpServletRequest req, HttpServletResponse rsp) throws IOException{	    
@@ -123,10 +125,10 @@ public class UserLoginController {
 
 	/**
 	 * 判断是否已经登录
-	 * @throws IOException 
-	 * @throws InterruptedException 
-	 * @throws Exception
-	 * @Description:
+	 * @param req
+	 * @param rsp
+	 * @throws IOException
+	 * @throws InterruptedException
 	 */
 	@RequestMapping(value = "/loginboolean.do")
 	public void loginboolean(HttpServletRequest req, HttpServletResponse rsp) throws IOException, InterruptedException{
@@ -153,10 +155,11 @@ public class UserLoginController {
 	
 	/**
 	 * 判断用户操作权限范围，后台判断
-	 * @throws IOException 
-	 * @throws InterruptedException 
-	 * @throws Exception
-	 * @Description:
+	 * @param req
+	 * @param opr
+	 * @return
+	 * @throws IOException
+	 * @throws InterruptedException
 	 */
 	public static boolean permissionboolean(HttpServletRequest req,String opr) throws IOException, InterruptedException{
 		boolean result;
@@ -178,10 +181,9 @@ public class UserLoginController {
 	
 	/**
 	 * 判断用户项目权限范围，后台判断
-	 * @throws IOException 
-	 * @throws InterruptedException 
-	 * @throws Exception
-	 * @Description:
+	 * @param req
+	 * @param projectids
+	 * @return
 	 */
 	public static boolean oppidboolean(HttpServletRequest req, int projectids) {
 		boolean result = false;
@@ -203,14 +205,10 @@ public class UserLoginController {
 	
 	/**
 	 * 角色权限查询
-	 * @param tj
-	 * @param br
-	 * @param model
-	 * @param req
-	 * @param rsp
-	 * @return auth
+	 * @param rolearr
+	 * @param listauth
+	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	public static String getroleauth(UserRole[] rolearr,List<UserAuthority> listauth) throws Exception{
 		List<UserAuthority> newlistauth = new ArrayList<UserAuthority>();
@@ -247,10 +245,10 @@ public class UserLoginController {
 	
 	/**
 	 * 判断用户权限范围，前台判断
-	 * @throws IOException 
-	 * @throws InterruptedException 
-	 * @throws Exception
-	 * @Description:
+	 * @param req
+	 * @param rsp
+	 * @throws IOException
+	 * @throws InterruptedException
 	 */
 	@RequestMapping(value = "/permissionboolean.do")
 	public void permissionBooleanJson(HttpServletRequest req, HttpServletResponse rsp) throws IOException, InterruptedException{
@@ -274,11 +272,6 @@ public class UserLoginController {
 		jsobjcet.put("data", jsonArray); 
 		
 		rsp.getWriter().write(jsobjcet.toString());
-	}
-
-	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

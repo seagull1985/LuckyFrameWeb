@@ -78,16 +78,9 @@ public class SectorProjectsController {
 	@Resource(name = "testclientService")
 	private TestClientService tcservice;
 	
-	@RequestMapping(value = "/sectorprojects.do")
-	public String qualityshow(TestCasedetail caseDetail, HttpServletRequest req,HttpServletResponse rsp,
-			Model model) throws Exception {
-		return "/jsp/base/sectorprojects";
-	}
-	
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载项目管理页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -99,6 +92,14 @@ public class SectorProjectsController {
 		return "/jsp/base/sectorprojects";
 	}
 	
+	/**
+	 * 获取项目管理列表数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -147,6 +148,12 @@ public class SectorProjectsController {
 		pw.print(json.toString());
 	}
 	
+	/**
+	 * 更新项目管理信息
+	 * @param req
+	 * @param rsp
+	 * @param sectorprojects
+	 */
 	@RequestMapping(value = "/update.do")
 	public void updateproject(HttpServletRequest req, HttpServletResponse rsp, SectorProjects sectorprojects) {
 		// 更新实体
@@ -195,15 +202,10 @@ public class SectorProjectsController {
 	
 	/**
 	 * 添加项目
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
+	 * @param sectorprojects
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/projectadd.do")
 	public void add(SectorProjects sectorprojects, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -242,15 +244,9 @@ public class SectorProjectsController {
 	
 	/**
 	 * 删除项目
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/delete.do")
 	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {

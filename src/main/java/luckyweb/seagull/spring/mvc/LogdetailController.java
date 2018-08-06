@@ -72,6 +72,14 @@ public class LogdetailController {
 	@Resource(name = "projectCasestepsService")
 	private ProjectCasestepsService casestepsservice;
 
+	/**
+	 * 获取日志记录
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
@@ -95,6 +103,12 @@ public class LogdetailController {
 		pw.print(recordJson);
 	}
 
+	/**
+	 * 展示日志中的图片
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/showImage.do")
 	public void showImage(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String fname = request.getParameter("filename");
@@ -169,15 +183,9 @@ public class LogdetailController {
 
 	/**
 	 * 更新用例的预期结果
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/updateStepResult.do")
 	public void updateStepResult(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -253,6 +261,12 @@ public class LogdetailController {
 
 	}
 
+	/**
+	 * 获取任务相关数据
+	 * @param req
+	 * @param rsp
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/getindexdata.do")
 	public void getIndexData(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
 		String[] taskdata = new String[2];
@@ -320,6 +334,12 @@ public class LogdetailController {
 		rsp.getWriter().write(jsobjcet.toString());
 	}
 
+	/**
+	 * 获取报表
+	 * @param req
+	 * @param rsp
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/getindexreport.do")
 	public void getIndexReport(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
 		List<Object[]> taskreport = tastExcuteService.listindexreport(30);

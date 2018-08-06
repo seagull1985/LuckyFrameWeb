@@ -74,10 +74,10 @@ public class ProjectCaseController {
 	private UserInfoService userinfoservice;
 
 	private List<Integer> listmoduleid=new ArrayList<Integer>();
+	
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载测试用例页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -106,6 +106,14 @@ public class ProjectCaseController {
 		return "/jsp/plancase/projectcase";
 	}
 
+	/**
+	 * 加载用例记录
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
@@ -178,6 +186,12 @@ public class ProjectCaseController {
 		pw.print(json.toString());
 	}
 
+	/**
+	 * 修改用例
+	 * @param req
+	 * @param rsp
+	 * @param projectcase
+	 */
 	@RequestMapping(value = "/update.do")
 	public void updatecase(HttpServletRequest req, HttpServletResponse rsp, ProjectCase projectcase) {
 		// 更新实体
@@ -222,15 +236,10 @@ public class ProjectCaseController {
 
 	/**
 	 * 添加用例
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
+	 * @param projectcase
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/caseadd.do")
 	public void add(ProjectCase projectcase, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -306,15 +315,9 @@ public class ProjectCaseController {
 	
 	/**
 	 * 删除用例
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/delete.do")
 	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -393,6 +396,11 @@ public class ProjectCaseController {
 
 	}
 
+	/**
+	 * 通过用例编号获取用例对象
+	 * @param req
+	 * @param rsp
+	 */
 	@RequestMapping(value = "/cgetcasebysign.do")
 	public void cgetcasebysign(HttpServletRequest req, HttpServletResponse rsp) {
 		// 更新实体
@@ -413,15 +421,9 @@ public class ProjectCaseController {
 
 	/**
 	 * 添加用例集
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/moduleadd.do")
 	public void addModule(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -496,15 +498,9 @@ public class ProjectCaseController {
 
 	/**
 	 * 删除用例集
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/moduledel.do")
 	public void delModule(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -574,15 +570,9 @@ public class ProjectCaseController {
 
 	/**
 	 * 查询测试集
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/getmodulelist.do")
 	public void getmodulelist(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -629,15 +619,9 @@ public class ProjectCaseController {
 
 	/**
 	 * 查询项目中的所有测试集
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/getmodulealllist.do")
 	public void getmodulealllist(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -657,6 +641,12 @@ public class ProjectCaseController {
 		rsp.getWriter().write(jsonstr);
 	}
 
+	/**
+	 * 客户端远程增加用例
+	 * @param req
+	 * @param rsp
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/cpostcase.do")
 	public void cpostcase(HttpServletRequest req, HttpServletResponse rsp) throws IOException {
 		// 更新实体
@@ -704,15 +694,9 @@ public class ProjectCaseController {
 
 	/**
 	 * 使用递归查询指定测试ID中的所有子测试集
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
-	 * @param req
-	 * @param rsp
+	 * @param projectid
+	 * @param pid
 	 * @return
-	 * @throws Exception
-	 * @Description:
 	 */
     private List<Integer> getchildmoduList(int projectid,int pid){
     	List<ProjectModule> modules = moduleservice.getModuleListByProjectid(projectid, pid);
@@ -723,9 +707,5 @@ public class ProjectCaseController {
         }  
      return listmoduleid;  
     }  
-	
-	public static void main(String[] args) throws Exception {
-
-	}
 
 }

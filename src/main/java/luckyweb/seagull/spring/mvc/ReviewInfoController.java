@@ -56,9 +56,8 @@ public class ReviewInfoController {
 	private OperationLogService operationlogservice;
 
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载评审信息页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -80,6 +79,15 @@ public class ReviewInfoController {
 		return "/jsp/review/reviewinfo";
 	}
 
+	/**
+	 * 获取评审信息列表数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws NumberFormatException
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
@@ -113,14 +121,13 @@ public class ReviewInfoController {
 
 	/**
 	 * 添加评审信息
-	 * @param tj
+	 * @param reviewinfo
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/add.do")
 	public String add(@Valid @ModelAttribute("reviewinfo") ReviewInfo reviewinfo, BindingResult br, Model model,
@@ -251,10 +258,8 @@ public class ReviewInfoController {
 	
 	/**
 	 * 删除评审记录
-	 * 
-	 * @param id
-	 * @param model
-	 * @return
+	 * @param req
+	 * @param rsp
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/delete.do")
@@ -332,14 +337,13 @@ public class ReviewInfoController {
 	
 	/**
 	 * 修改评审信息
-	 * @param tj
+	 * @param reviewinfo
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/update.do")
 	public String update(@Valid @ModelAttribute("reviewinfo") ReviewInfo reviewinfo, BindingResult br, Model model,
@@ -421,8 +425,5 @@ public class ReviewInfoController {
 
 	}
 	
-	public static void main(String[] args) throws Exception {
-
-	}
 
 }

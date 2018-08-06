@@ -43,9 +43,8 @@ public class OperationLogController {
 	private SectorProjectsService sectorprojectsService;
 	
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载操作日志界面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -74,6 +73,14 @@ public class OperationLogController {
 		return "/jsp/base/operationlog";
 	}
 	
+	/**
+	 * 获取操作日志记录
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
@@ -124,6 +131,12 @@ public class OperationLogController {
 		pw.print(json.toString());
 	}
 	
+	/**
+	 * 质量之星数据获取
+	 * @param req
+	 * @param rsp
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/getautostar.do")
 	public void getAutoStar(HttpServletRequest req, HttpServletResponse rsp) throws Exception{
 		List<Object[]> oplist = operationlogservice.getSumIntegral();
@@ -173,11 +186,6 @@ public class OperationLogController {
 		rsp.setContentType("application/json");
 		rsp.setCharacterEncoding("utf-8");
 		rsp.getWriter().write(jsobjcet.toString());
-	}
-	
-	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
-
 	}
 
 }

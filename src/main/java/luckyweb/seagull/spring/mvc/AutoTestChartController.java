@@ -36,12 +36,10 @@ public class AutoTestChartController {
 	}
 
 	/**
-	 * 
 	 * Job查询
-	 * @param tj
+	 * @param req
 	 * @param model
 	 * @return
-	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked" })
 	@RequestMapping(value = "/chart.do")
@@ -100,12 +98,8 @@ public class AutoTestChartController {
 	}
 	
 	/**
-	 * 
 	 * 统计自动化操作积分
-	 * @param tj
-	 * @param model
 	 * @return
-	 * @throws Exception
 	 */
 	@RequestMapping(value = "/autostar.do")
 	public String autoStar() {

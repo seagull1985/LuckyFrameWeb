@@ -68,9 +68,8 @@ public class UserInfoController {
 	private OperationLogService operationlogservice;
 	
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载用户信息页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -80,6 +79,14 @@ public class UserInfoController {
 		return "/jsp/user/user";
 	}
 
+	/**
+	 * 获取用户信息列表数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@SuppressWarnings({ "unchecked" })
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
@@ -142,14 +149,13 @@ public class UserInfoController {
 
 	/**
 	 * 用户添加
-	 * @param tj
+	 * @param userinfo
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/add.do")
 	public String add(@Valid @ModelAttribute("userinfo") UserInfo userinfo, BindingResult br, Model model,
@@ -265,16 +271,10 @@ public class UserInfoController {
 	}
 
 	/**
-	 * 删除调度
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
+	 * 删除用户
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/delete.do")
 	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -314,10 +314,11 @@ public class UserInfoController {
 	}
 	
 	/**
-	 * 
 	 * 根据id更新用户资料
-	 * @param id
+	 * @param userinfo
+	 * @param br
 	 * @param model
+	 * @param req
 	 * @return
 	 * @throws Exception
 	 */
@@ -426,10 +427,11 @@ public class UserInfoController {
 	}
 	
 	/**
-	 * 
 	 * 用户修改密码
-	 * @param id
+	 * @param userinfo
+	 * @param br
 	 * @param model
+	 * @param req
 	 * @return
 	 * @throws Exception
 	 */
@@ -509,10 +511,11 @@ public class UserInfoController {
 	}
 	
 	/**
-	 * 
 	 * 用户修改默认项目
-	 * @param id
+	 * @param userinfo
+	 * @param br
 	 * @param model
+	 * @param req
 	 * @return
 	 * @throws Exception
 	 */
@@ -561,14 +564,13 @@ public class UserInfoController {
 	
 	/**
 	 * 修改角色权限
-	 * @param tj
+	 * @param userrole
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/role.do")
 	public String update(@Valid @ModelAttribute("userrole") UserRole userrole, BindingResult br, Model model,
@@ -669,15 +671,14 @@ public class UserInfoController {
 	}
 	
 	/**
-	 * 角色权限
-	 * @param tj
+	 * 角色权限添加
+	 * @param userrole
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/roleadd.do")
 	public String add(@Valid @ModelAttribute("userrole") UserRole userrole, BindingResult br, Model model,
@@ -774,9 +775,8 @@ public class UserInfoController {
 	
 	/**
 	 * 删除角色
-	 * 
-	 * @param id
 	 * @param model
+	 * @param req
 	 * @return
 	 * @throws Exception
 	 */
@@ -815,14 +815,9 @@ public class UserInfoController {
 	
 	/**
 	 * 角色权限查询
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return id
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/getauth.do")
 	public void getcheckinfo(HttpServletRequest req, HttpServletResponse rsp) throws Exception{
@@ -870,9 +865,8 @@ public class UserInfoController {
 	
 	/**
 	 * 获取登录用户基本信息
-	 * 
-	 * @param id
 	 * @param model
+	 * @param req
 	 * @return
 	 * @throws Exception
 	 */
@@ -926,9 +920,6 @@ public class UserInfoController {
 			return "error";
 		}
 
-	}
-	
-	public static void main(String[] args) throws Exception {
 	}
 	
 }

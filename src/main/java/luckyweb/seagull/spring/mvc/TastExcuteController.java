@@ -65,9 +65,8 @@ public class TastExcuteController {
 	private SectorProjectsService sectorprojectsService;
 
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载测试任务执行页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -94,6 +93,14 @@ public class TastExcuteController {
 		return "/jsp/task/taskexcute_list";
 	}
 
+	/**
+	 * 获取测试任务执行列表数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
@@ -148,15 +155,9 @@ public class TastExcuteController {
 
 	/**
 	 * 根据任务Id删除任务
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/delete.do")
 	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -188,17 +189,17 @@ public class TastExcuteController {
 					int id = Integer.valueOf(jsonarr.get(i).toString());
 					TestTaskexcute task = tastExcuteService.get(id);
 
-					if(!UserLoginController.oppidboolean(req, task.getTestJob().getProjectid())){
-						status = "fail";
-						ms = "您有任务没有项目权限进行删除，请确认！";
-						break;
-					}	
-					
 					if (task == null) {
 						status = "fail";
 						ms = "有任务不存在或已经删除，请确认！";
 						break;
 					}
+					
+					if(!UserLoginController.oppidboolean(req, task.getTestJob().getProjectid())){
+						status = "fail";
+						ms = "您有任务没有项目权限进行删除，请确认！";
+						break;
+					}	
 
 					//30分钟前
 					Date date = new Date(System.currentTimeMillis()-1000*60*30);
@@ -238,9 +239,9 @@ public class TastExcuteController {
 
 	/**
 	 * 获取进度条数据
-	 * 
+	 * @param req
+	 * @param rsp
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/progressdata.do")
 	public void progressdata(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -283,8 +284,13 @@ public class TastExcuteController {
 		rsp.getWriter().write(jsobjcet.toString());
 	}
 
+	/**
+	 * 根据任务ID获取任务对象
+	 * @param req
+	 * @param rsp
+	 */
 	@RequestMapping(value = "/cgettaskbyid.do")
-	public void cgetCaseByPlan(HttpServletRequest req, HttpServletResponse rsp) {
+	public void cgetTaskById(HttpServletRequest req, HttpServletResponse rsp) {
 		// 更新实体
 		try {
 			rsp.setContentType("text/html;charset=GBK");

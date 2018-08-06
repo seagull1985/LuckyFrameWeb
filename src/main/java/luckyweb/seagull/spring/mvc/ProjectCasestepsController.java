@@ -77,15 +77,13 @@ public class ProjectCasestepsController {
 
 	/**
 	 * 添加步骤
-	 * 
-	 * @param tj
+	 * @param casesteps
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/stepadd.do")
 	public String add(@Valid @ModelAttribute("casesteps") ProjectCasesteps casesteps, BindingResult br, Model model,
@@ -160,14 +158,11 @@ public class ProjectCasestepsController {
 	}
 
 	/**
-	 * 
-	 * 
-	 * @param tj
-	 * @param model
-	 * @return
+	 * 编辑步骤
+	 * @param request
+	 * @param response
 	 * @throws Exception
 	 */
-
 	@RequestMapping(value = "/editsteps.do")
 	private void editsteps(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		response.setContentType("application/json");
@@ -230,14 +225,11 @@ public class ProjectCasestepsController {
 	}
 
 	/**
-	 * 
-	 * 
-	 * @param tj
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * 获取步骤
+	 * @param request
+	 * @param response
+	 * @throws IOException
 	 */
-
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setCharacterEncoding("utf-8");
@@ -259,6 +251,12 @@ public class ProjectCasestepsController {
 		pw.print(recordJson);
 	}
 
+	/**
+	 * 更新步骤
+	 * @param req
+	 * @param rsp
+	 * @param casesteps
+	 */
 	@RequestMapping(value = "/update.do")
 	public void updatestep(HttpServletRequest req, HttpServletResponse rsp, ProjectCasesteps casesteps) {
 		// 更新实体
@@ -306,14 +304,11 @@ public class ProjectCasestepsController {
 	}
 
 	/**
-	 * 
-	 * 
-	 * @param tj
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * 用例调试
+	 * @param request
+	 * @param response
+	 * @throws IOException
 	 */
-
 	@RequestMapping(value = "/debugcase.do")
 	private void debugCase(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setCharacterEncoding("utf-8");
@@ -363,14 +358,11 @@ public class ProjectCasestepsController {
 	}
 	
 	/**
-	 * 
-	 * 
-	 * @param tj
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * 刷新调试日志接口
+	 * @param request
+	 * @param response
+	 * @throws IOException
 	 */
-
 	@RequestMapping(value = "/refreshlog.do")
 	private void refreshDebugLog(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setCharacterEncoding("utf-8");
@@ -420,6 +412,11 @@ public class ProjectCasestepsController {
 	}
 	
 
+	/**
+	 * 通过用例ID获取步骤
+	 * @param req
+	 * @param rsp
+	 */
 	@RequestMapping(value = "/cgetStepsByCase.do")
 	public void cgetStepsByCase(HttpServletRequest req, HttpServletResponse rsp) {
 		// 更新实体
@@ -444,6 +441,12 @@ public class ProjectCasestepsController {
 		}
 	}
 
+	/**
+	 * 客户端POST新增用例步骤
+	 * @param req
+	 * @param rsp
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/cpoststep.do")
 	public void cpoststep(HttpServletRequest req, HttpServletResponse rsp) throws IOException {
 		// 更新实体
@@ -497,6 +500,11 @@ public class ProjectCasestepsController {
 		}
 	}
 
+	/**
+	 * 客户端更新步骤中的预期结果
+	 * @param req
+	 * @param rsp
+	 */
 	@RequestMapping(value = "/cUpdateStepExpectedResults.do")
 	public void cUpdateStepExpectedResults(HttpServletRequest req, HttpServletResponse rsp) {
 		try {
@@ -540,6 +548,11 @@ public class ProjectCasestepsController {
 		}
 	}
 
+	/**
+	 * 客户端POST增加调试日志
+	 * @param req
+	 * @param rsp
+	 */
 	@RequestMapping(value = "/cPostDebugLog.do")
 	public void cPostDebugLog(HttpServletRequest req, HttpServletResponse rsp) {
 		// 更新实体
@@ -570,10 +583,6 @@ public class ProjectCasestepsController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	public static void main(String[] args) throws Exception {
-
 	}
 
 }

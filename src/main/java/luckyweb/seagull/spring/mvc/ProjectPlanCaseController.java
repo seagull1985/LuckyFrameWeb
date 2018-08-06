@@ -73,10 +73,8 @@ public class ProjectPlanCaseController {
 	private List<Integer> listmoduleid=new ArrayList<Integer>();
 
 	/**
-	 * 
 	 * 获取计划用例列表
-	 * 
-	 * @param tj
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -112,6 +110,14 @@ public class ProjectPlanCaseController {
 		return "/jsp/plancase/projectplancase";
 	}
 
+	/**
+	 * 获取计划用例列表
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getCaseList.do")
 	private void getCaseList(Integer limit, Integer offset, HttpServletRequest request, HttpServletResponse response)
@@ -311,6 +317,12 @@ public class ProjectPlanCaseController {
 
 	}
 
+	/**
+	 * 更新用例计划
+	 * @param req
+	 * @param rsp
+	 * @param projectcase
+	 */
 	@RequestMapping(value = "/update.do")
 	public void updatecase(HttpServletRequest req, HttpServletResponse rsp, ProjectCase projectcase) {
 		// 更新实体
@@ -353,6 +365,11 @@ public class ProjectPlanCaseController {
 		}
 	}
 
+	/**
+	 * 通过计划ID获取用例
+	 * @param req
+	 * @param rsp
+	 */
 	@RequestMapping(value = "/cgetcasebyplanid.do")
 	public void cgetCaseByPlanid(HttpServletRequest req, HttpServletResponse rsp) {
 		// 更新实体
@@ -385,6 +402,11 @@ public class ProjectPlanCaseController {
 		}
 	}
 
+	/**
+	 * 通过计划名称获取用例
+	 * @param req
+	 * @param rsp
+	 */
 	@RequestMapping(value = "/cgetcasebyplanname.do")
 	public void cgetCaseByPlanname(HttpServletRequest req, HttpServletResponse rsp) {
 		// 更新实体

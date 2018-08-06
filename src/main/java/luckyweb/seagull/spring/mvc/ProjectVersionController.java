@@ -75,16 +75,9 @@ public class ProjectVersionController {
 		return operationlogservice;
 	}
 	
-	@RequestMapping(value = "/projectversion.do")
-	public String qualityshow(TestCasedetail caseDetail, HttpServletRequest req,HttpServletResponse rsp,
-			Model model) throws Exception {
-		return "/jsp/projectversion/projectversion";
-	}
-	
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载项目版本页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -108,6 +101,14 @@ public class ProjectVersionController {
 		return "/jsp/projectversion/projectversion";
 	}
 
+	/**
+	 * 获取版本列表数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
@@ -159,14 +160,13 @@ public class ProjectVersionController {
 	
 	/**
 	 * 版本添加
-	 * @param tj
+	 * @param projectversion
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/add.do")
 	public String add(@Valid @ModelAttribute("projectversion") ProjectVersion projectversion, BindingResult br, Model model,
@@ -391,10 +391,11 @@ public class ProjectVersionController {
 	}
 
 	/**
-	 * 
 	 * 根据versionid更新版本信息
-	 * @param id
+	 * @param projectversion
+	 * @param br
 	 * @param model
+	 * @param req
 	 * @return
 	 * @throws Exception
 	 */
@@ -622,15 +623,14 @@ public class ProjectVersionController {
 	}
 	
 	/**
-	 * 计划添加
-	 * @param tj
+	 * 添加计划版本
+	 * @param projectversion
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/addplan.do")
 	public String addplan(@Valid @ModelAttribute("projectversion") ProjectVersion projectversion, BindingResult br, Model model,
@@ -842,15 +842,9 @@ public class ProjectVersionController {
 	
 	/**
 	 * 删除版本记录
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/delete.do")
 	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -897,8 +891,7 @@ public class ProjectVersionController {
 	
 	/**
 	 * 版本详情
-	 * 
-	 * @param id
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -915,13 +908,11 @@ public class ProjectVersionController {
 	}
 
 	/**
-	 * 
 	 * 质量报表
-	 * @param model
 	 * @param req
+	 * @param model
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/showreport.do")
 	public String showReport(HttpServletRequest req,Model model) throws Exception
@@ -1005,13 +996,11 @@ public class ProjectVersionController {
 	
 	
 	/**
-	 * 
 	 * HTML5  柱状图
-	 * @param model
 	 * @param req
+	 * @param model
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/barchart_html5.do")
@@ -1111,13 +1100,11 @@ public class ProjectVersionController {
 	}
 	
 	/**
-	 * 
 	 * HTML5  折线图
-	 * @param model
 	 * @param req
+	 * @param model
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/linechart_html5.do")
@@ -1231,13 +1218,11 @@ public class ProjectVersionController {
 	}
 	
 	/**
-	 * 
 	 * HTML5  柱状图
-	 * @param model
 	 * @param req
+	 * @param model
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/onepro_barcharthtml5.do")
@@ -1423,8 +1408,6 @@ public class ProjectVersionController {
 
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println(Double.valueOf(100.00-(3*5)-(12*2)
-				-(24*0.3)));
 		
 	}
 

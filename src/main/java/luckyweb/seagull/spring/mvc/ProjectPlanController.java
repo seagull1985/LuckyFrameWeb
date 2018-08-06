@@ -62,9 +62,8 @@ public class ProjectPlanController {
 	private UserInfoService userinfoservice;
 
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载测试计划页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -93,6 +92,14 @@ public class ProjectPlanController {
 		return "/jsp/plancase/projectplan";
 	}
 
+	/**
+	 * 获取测试计划列表数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
@@ -143,6 +150,12 @@ public class ProjectPlanController {
 		pw.print(json.toString());
 	}
 
+	/**
+	 * 修改测试计划
+	 * @param req
+	 * @param rsp
+	 * @param projectplan
+	 */
 	@RequestMapping(value = "/update.do")
 	public void updateplan(HttpServletRequest req, HttpServletResponse rsp, ProjectPlan projectplan) {
 		// 更新实体
@@ -187,15 +200,10 @@ public class ProjectPlanController {
 
 	/**
 	 * 添加计划
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
+	 * @param projectplan
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/planadd.do")
 	public void add(ProjectPlan projectplan, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -248,15 +256,9 @@ public class ProjectPlanController {
 
 	/**
 	 * 删除计划
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/delete.do")
 	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -322,14 +324,9 @@ public class ProjectPlanController {
 
 	/**
 	 * 联动查询测试计划
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/getplanlist.do")
 	public void getplanlist(HttpServletRequest req, HttpServletResponse rsp) throws Exception{	    
@@ -347,10 +344,6 @@ public class ProjectPlanController {
 		jsobjcet.put("data", jsonArray); 
 		
 		rsp.getWriter().write(jsobjcet.toString());
-	}
-	
-	public static void main(String[] args) throws Exception {
-
 	}
 
 }

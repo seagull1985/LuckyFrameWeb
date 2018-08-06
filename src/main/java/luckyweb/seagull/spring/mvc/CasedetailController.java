@@ -60,9 +60,8 @@ public class CasedetailController
 	private SectorProjectsService sectorprojectsService;
 	
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 查询用例明细
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -104,6 +103,14 @@ public class CasedetailController
 		return "/jsp/task/casedetail_list";
 	}
 
+	/**
+	 * 获取用例记录
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
@@ -160,15 +167,9 @@ public class CasedetailController
 
 	/**
 	 * 根据caseId执行用例
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/runCase.do")
 	public void runCase(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -260,6 +261,14 @@ public class CasedetailController
 
 	}
 	
+	/**
+	 * 获取执行任务列表
+	 * @param caseDetail
+	 * @param req
+	 * @param rsp
+	 * @param model
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/getTastNameList.do")
 	public void getTastNameList(TestCasedetail caseDetail, HttpServletRequest req, HttpServletResponse rsp,
 	        Model model) throws Exception
@@ -281,11 +290,6 @@ public class CasedetailController
 		{
 			e.printStackTrace();
 		}
-	}
-
-	public static void main(String[] args) throws UnsupportedEncodingException
-	{
-
 	}
 
 }

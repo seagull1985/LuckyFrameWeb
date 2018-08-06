@@ -76,9 +76,8 @@ public class FlowCheckController {
 	private UserInfoService userinfoservice;
 	
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载流程计划
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -101,6 +100,15 @@ public class FlowCheckController {
 		return "/jsp/flowcheck/flowcheck";
 	}
 
+	/**
+	 * 获取流程列表
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws NumberFormatException
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
@@ -171,9 +179,8 @@ public class FlowCheckController {
 	}
 
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载流程信息页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -205,6 +212,15 @@ public class FlowCheckController {
 		return "/jsp/flowcheck/flowcheckinfo";
 	}
 
+	/**
+	 * 获取流程信息列表
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws NumberFormatException
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/listinfo.do")
 	private void ajaxGetSellRecordinfo(Integer limit, Integer offset, HttpServletRequest request,
@@ -269,15 +285,10 @@ public class FlowCheckController {
 	
 	/**
 	 * 检查明细添加
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
+	 * @param flowcheck
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/adddetail.do")
 	public void adddetail(FlowCheck flowcheck, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -332,15 +343,11 @@ public class FlowCheckController {
 	
 	/**
 	 * 补充剩余明细添加
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
+	 * @param model
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/supplementdetail.do", method = RequestMethod.GET)
 	public String supplementdetail(HttpServletRequest req, HttpServletResponse rsp, Model model) throws Exception {
@@ -392,14 +399,13 @@ public class FlowCheckController {
 	
 	/**
 	 * 检查信息添加
-	 * @param tj
+	 * @param flowcheck
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/add.do")
 	public String add(@Valid @ModelAttribute("flowcheck") FlowCheck flowcheck, BindingResult br, Model model,
@@ -524,14 +530,13 @@ public class FlowCheckController {
 	
 	/**
 	 * 版本修改
-	 * @param tj
+	 * @param flowcheck
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/update.do")
 	public String update(@Valid @ModelAttribute("flowcheck") FlowCheck flowcheck, BindingResult br, Model model,
@@ -689,10 +694,8 @@ public class FlowCheckController {
 	
 	/**
 	 * 删除计划检查记录
-	 * 
-	 * @param id
-	 * @param model
-	 * @return
+	 * @param req
+	 * @param rsp
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/delete.do")
@@ -761,14 +764,9 @@ public class FlowCheckController {
 	
 	/**
 	 * 修改版本号
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/updateversion.do")
 	public void updateversion(HttpServletRequest req, HttpServletResponse rsp) throws Exception{
@@ -826,14 +824,9 @@ public class FlowCheckController {
 	
 	/**
 	 * 三级联动查询
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/getcheckinfo.do")
 	public void getcheckinfo(HttpServletRequest req, HttpServletResponse rsp) throws Exception{	    
@@ -859,13 +852,11 @@ public class FlowCheckController {
 
 	
 	/**
-	 * 
 	 * HTML5  柱状图
-	 * @param model
 	 * @param req
+	 * @param model
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	  @SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/barchart_html5.do")
@@ -979,14 +970,11 @@ public class FlowCheckController {
 	  
 	
 	/**
-	 * 
 	 * HTML5 柱状图
-	 * 
-	 * @param model
 	 * @param req
+	 * @param model
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/report_count.do")
@@ -1044,11 +1032,6 @@ public class FlowCheckController {
 			return "error";
 		}
 		return "/jsp/flowcheck/flowcheck_report";
-	}
-
-	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
-
 	}
 
 }

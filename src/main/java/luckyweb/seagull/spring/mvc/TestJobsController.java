@@ -97,9 +97,8 @@ public class TestJobsController
 	private TestClientService tcservice;
 	
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载任务调度页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -147,6 +146,14 @@ public class TestJobsController
 		return "/jsp/task/job_list";
 	}
 
+	/**
+	 * 获取任务调度列表数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@SuppressWarnings({ "unchecked" })
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
@@ -194,7 +201,7 @@ public class TestJobsController
 	}
 	
 	/**
-	 * 新增Job
+	 * 新增调度
 	 * @param tj
 	 * @param br
 	 * @param model
@@ -202,7 +209,6 @@ public class TestJobsController
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/add.do")
 	public String add(@Valid @ModelAttribute("taskjob") TestJobs tj, BindingResult br, Model model,
@@ -458,9 +464,8 @@ public class TestJobsController
 	}
 
 	/**
-	 * Job详情
-	 * 
-	 * @param id
+	 * 调度详情
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -478,10 +483,11 @@ public class TestJobsController
 	
 
 	/**
-	 * 
 	 * 根据Id更新Job信息
-	 * @param id
+	 * @param tj
+	 * @param br
 	 * @param model
+	 * @param req
 	 * @return
 	 * @throws Exception
 	 */
@@ -789,15 +795,9 @@ public class TestJobsController
 
 	/**
 	 * 删除调度
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/delete.do")
 	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -852,11 +852,12 @@ public class TestJobsController
 	}
 	
 	/**
-	 *启动
-	 * 
-	 * @param id
+	 * 启动调度任务监听线程
 	 * @param model
+	 * @param req
+	 * @param rsp
 	 * @return
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/run.do")
 	public String run(Model model, HttpServletRequest req, HttpServletResponse rsp)
@@ -890,14 +891,12 @@ public class TestJobsController
 	}
 
 	/**
-	 * 关闭JOb
-	 * @param id
+	 * 关闭调度任务监听
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/remove.do")
 	public String removeSchudle(Model model, HttpServletRequest req, HttpServletResponse rsp)
@@ -927,11 +926,11 @@ public class TestJobsController
 	}
 
 	/**
-	 * 立即启动
-	 * 
-	 * @param tj
-	 * @return
-	 * @throws SQLException
+	 * 立即启动调度任务执行
+	 * @param model
+	 * @param req
+	 * @param rsp
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/startNow.do")
 	public void startNow(Model model, HttpServletRequest req, HttpServletResponse rsp)
@@ -984,8 +983,8 @@ public class TestJobsController
 	}
 
 	/**
-	 * 页面日志展示
-	 * 
+	 * 获取客户端日志
+	 * @param model
 	 * @param request
 	 * @param response
 	 * @return
@@ -1024,9 +1023,9 @@ public class TestJobsController
 	}
 
 	/**
-	 * 上传
-	 * 
-	 * @param request
+	 * 跳转上传页面
+	 * @param model
+	 * @param req
 	 * @param response
 	 * @return
 	 * @throws Exception
@@ -1056,8 +1055,9 @@ public class TestJobsController
 	}
 
 	/**
-	 * 上传
-	 * 
+	 * 上传附件到客户端
+	 * @param file
+	 * @param model
 	 * @param request
 	 * @param response
 	 * @return
@@ -1137,11 +1137,10 @@ public class TestJobsController
 	}
 	
 	/**
-	 * 提供任务调度接口
-	 * 
-	 * @param tj
-	 * @return
-	 * @throws SQLException
+	 * 提供远程调度任务接口
+	 * @param req
+	 * @param rsp
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/runJobForInterface.do")
 	public void runJobForInterface(HttpServletRequest req, HttpServletResponse rsp)throws Exception{
