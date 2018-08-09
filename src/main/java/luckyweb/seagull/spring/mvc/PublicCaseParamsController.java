@@ -55,10 +55,10 @@ public class PublicCaseParamsController {
 	private static String accesscode_paramadd="pcp_1";
 	private static String accesscode_paramdel="pcp_2";
 	private static String accesscode_paramupdate="pcp_3";
+	
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载公共参数页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -83,6 +83,14 @@ public class PublicCaseParamsController {
 		return "/jsp/plancase/public_caseparams";
 	}
 
+	/**
+	 * 加载公共参数列表数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@SuppressWarnings({ "unchecked" })
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
@@ -130,16 +138,11 @@ public class PublicCaseParamsController {
 	}
 	
 	/**
-	 * 添加客户端
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
+	 * 添加公共参数
+	 * @param pcp
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/add.do")
 	public void add(PublicCaseParams pcp, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -206,16 +209,10 @@ public class PublicCaseParamsController {
 	}
 	
 	/**
-	 * 删除参数
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
+	 * 删除公共参数
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/delete.do")
 	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -279,9 +276,14 @@ public class PublicCaseParamsController {
 	}
 	
 	/**  
-     * 返回String类型的结果  
-     * 检查用户名的合法性,如果用户已经存在，返回false，否则返回true(返回json数据，格式为{"valid",true})  
-     */  
+	 * 返回String类型的结果  
+     * 检查用户名的合法性,如果用户已经存在，返回false，否则返回true(返回json数据，格式为{"valid",true})   
+	 * @param paramsname
+	 * @param projectid
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
     @RequestMapping(value = "/checkParamsNameExists", produces = "application/json;charset=UTF-8")  
     public @ResponseBody  
     String checkParamsNameExists(@RequestParam String paramsname,@RequestParam String projectid,@RequestParam String id) throws Exception {
@@ -306,6 +308,11 @@ public class PublicCaseParamsController {
         return "{\"valid\":"+result+"}";
     } 
     
+    /**
+     * 通过项目ID获取公共参数列表
+     * @param req
+     * @param rsp
+     */
 	@RequestMapping(value = "/cgetParamsByProjectid.do")
 	public void cgetParamsByProjectid(HttpServletRequest req, HttpServletResponse rsp) {
 		// 更新实体

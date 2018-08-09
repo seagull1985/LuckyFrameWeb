@@ -60,10 +60,10 @@ public class ProjectProtocolTemplateController {
 	
 	@Resource(name = "operationlogService")
 	private OperationLogService operationlogservice;
+	
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载协议模板页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -95,6 +95,14 @@ public class ProjectProtocolTemplateController {
 		return "/jsp/plancase/ptctemplate";
 	}
 	
+	/**
+	 * 获取协议模板列表数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
@@ -147,15 +155,10 @@ public class ProjectProtocolTemplateController {
 	
 	/**
 	 * 添加模板
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
+	 * @param ppt
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/add.do")
 	public void add(ProjectProtocolTemplate ppt, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -223,7 +226,12 @@ public class ProjectProtocolTemplateController {
 
 	}
 	
-	
+	/**
+	 * 更新协议模板
+	 * @param req
+	 * @param rsp
+	 * @param ppt
+	 */
 	@RequestMapping(value = "/update.do")
 	public void update(HttpServletRequest req, HttpServletResponse rsp, ProjectProtocolTemplate ppt) {
 		// 更新实体
@@ -268,15 +276,9 @@ public class ProjectProtocolTemplateController {
 	
 	/**
 	 * 删除模板
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/delete.do")
 	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -340,6 +342,11 @@ public class ProjectProtocolTemplateController {
 
 	}
 	
+	/**
+	 * 获取协议模板列表
+	 * @param req
+	 * @param rsp
+	 */
 	@RequestMapping(value = "/cgetPTemplateList.do")
 	public void cgetPTemplateList(HttpServletRequest req, HttpServletResponse rsp) {
 		// 更新实体
@@ -377,6 +384,11 @@ public class ProjectProtocolTemplateController {
 		}
 	}
 	
+	/**
+	 * 获取步骤下接列表参数
+	 * @param req
+	 * @param rsp
+	 */
 	@RequestMapping(value = "/cgetStepParamList.do")
 	public void cgetStepParamList(HttpServletRequest req, HttpServletResponse rsp) {
 		// 更新实体
@@ -384,7 +396,6 @@ public class ProjectProtocolTemplateController {
 			rsp.setCharacterEncoding("utf-8");			
 			PrintWriter pw = rsp.getWriter();
 			JSONObject json = new JSONObject();
-			ProjectProtocolTemplate ppt=new ProjectProtocolTemplate();
 			String steptype = req.getParameter("steptype");
 			String parentid = req.getParameter("parentid");
 			String fieldname = req.getParameter("fieldname");
@@ -416,6 +427,11 @@ public class ProjectProtocolTemplateController {
 		}
 	}
 	
+	/**
+	 * 根据模板ID获取协议模板
+	 * @param req
+	 * @param rsp
+	 */
 	@RequestMapping(value = "/cgetPTemplateById.do")
 	public void cgetPTemplateById(HttpServletRequest req, HttpServletResponse rsp) {
 		// 更新实体

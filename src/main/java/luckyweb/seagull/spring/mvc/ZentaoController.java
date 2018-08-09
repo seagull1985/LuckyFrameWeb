@@ -40,10 +40,11 @@ public class ZentaoController {
 	private ZtTaskService zttaskService;
 
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载禅道列表页面
+	 * @param req
+	 * @param zt
 	 * @param model
+	 * @param flag
 	 * @return
 	 * @throws Exception
 	 */
@@ -108,13 +109,12 @@ public class ZentaoController {
 	}
 	
 	/**
-	 * 
 	 * 禅道数据同步
-	 * @param model
 	 * @param req
+	 * @param model
+	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/synchronization_zt.do")
 	public String synchronizationZt(HttpServletRequest req, Model model, HttpServletResponse rsp) throws Exception {
@@ -165,13 +165,11 @@ public class ZentaoController {
 	}
 	
 	/**
-	 * 
 	 * 禅道报表
-	 * @param model
 	 * @param req
+	 * @param model
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/showreport.do")
 	public String showReport(HttpServletRequest req,Model model) throws Exception{
@@ -261,10 +259,6 @@ public class ZentaoController {
 			return "error";
 		}
 		return "/jsp/projectversion/zentaoreport";
-	}
-	
-	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
 	}
 
 }

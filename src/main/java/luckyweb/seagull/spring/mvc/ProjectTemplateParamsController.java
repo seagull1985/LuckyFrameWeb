@@ -60,16 +60,12 @@ public class ProjectTemplateParamsController {
 	private UserInfoService userinfoservice;
 
 	/**
-	 * 添加步骤
-	 * 
-	 * @param tj
-	 * @param br
+	 * 加载模板参数页面
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/templateParams.do")
 	public String templateParams(Model model,HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -131,14 +127,11 @@ public class ProjectTemplateParamsController {
 	}
 	
 	/**
-	 * 
-	 * 
-	 * @param tj
-	 * @param model
-	 * @return
+	 * 编辑模板参数
+	 * @param request
+	 * @param response
 	 * @throws Exception
 	 */
-
 	@RequestMapping(value = "/editparam.do")
 	private void editparam(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		response.setContentType("text/html;charset=utf-8");
@@ -218,6 +211,11 @@ public class ProjectTemplateParamsController {
 		pw.print(json.toString());
 	}
 	
+	/**
+	 * 根据模板ID获取模板参数
+	 * @param req
+	 * @param rsp
+	 */
 	@RequestMapping(value = "/cgetParamsByTemplate.do")
 	public void cgetParamsByTemplate(HttpServletRequest req, HttpServletResponse rsp) {
 		// 更新实体
@@ -241,8 +239,4 @@ public class ProjectTemplateParamsController {
 		}
 	}
 	
-	public static void main(String[] args) throws Exception {
-
-	}
-
 }

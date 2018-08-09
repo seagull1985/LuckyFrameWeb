@@ -67,10 +67,8 @@ public class PlanFlowCheckController {
 	private FlowCheckService flowcheckservice;
 	
 	/**
-	 * 
-	 * 
-	 * @param tj
-	 * @param model
+	 * 加载流程计划页面
+	 * @param req
 	 * @return
 	 * @throws Exception
 	 */
@@ -79,6 +77,15 @@ public class PlanFlowCheckController {
 		return "/jsp/flowcheck/planflowcheck";
 	}
 
+	/**
+	 * 加载流程计划数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws NumberFormatException
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
@@ -123,14 +130,13 @@ public class PlanFlowCheckController {
 	
 	/**
 	 * 检查计划添加
-	 * @param tj
+	 * @param planflowcheck
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/add.do")
 	public String add(@Valid @ModelAttribute("planflowcheck") PlanFlowCheck planflowcheck, BindingResult br, Model model,
@@ -261,14 +267,13 @@ public class PlanFlowCheckController {
 	
 	/**
 	 * 检查计划修改
-	 * @param tj
+	 * @param planflowcheck
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/update.do")
 	public String update(@Valid @ModelAttribute("planflowcheck") PlanFlowCheck planflowcheck, BindingResult br, Model model,
@@ -387,10 +392,8 @@ public class PlanFlowCheckController {
 	
 	/**
 	 * 删除计划检查记录
-	 * 
-	 * @param id
-	 * @param model
-	 * @return
+	 * @param req
+	 * @param rsp
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/delete.do")
@@ -457,14 +460,13 @@ public class PlanFlowCheckController {
 	
 	/**
 	 * 检查计划转检查记录
-	 * @param tj
+	 * @param flowcheck
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/tocheck.do")
 	public String tocheck(@Valid @ModelAttribute("flowcheck") FlowCheck flowcheck,BindingResult br, Model model,HttpServletRequest req, HttpServletResponse rsp) throws Exception
@@ -614,14 +616,9 @@ public class PlanFlowCheckController {
 	
 	/**
 	 * 第几次检查查询
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/getcheckid.do")
 	public void getcheckinfo(HttpServletRequest req, HttpServletResponse rsp) throws Exception{	    
@@ -648,9 +645,5 @@ public class PlanFlowCheckController {
 		
 		rsp.getWriter().write(jsobjcet.toString());
 	}
-	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
 
-	
-   }
 }

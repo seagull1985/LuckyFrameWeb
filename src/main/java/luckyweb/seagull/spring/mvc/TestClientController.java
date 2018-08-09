@@ -52,9 +52,8 @@ public class TestClientController {
 	private OperationLogService operationlogservice;
 	
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载客户端管理页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -75,6 +74,14 @@ public class TestClientController {
 		return "/jsp/base/testclient";
 	}
 
+	/**
+	 * 获取客户端管理列表数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@SuppressWarnings({ "unchecked" })
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
@@ -102,11 +109,13 @@ public class TestClientController {
 			for(String proid:projectids){
 				if(!StrLib.isEmpty(proid)&&!"0".equals(proid)){
 					SectorProjects sp = sectorprojectsService.loadob(Integer.valueOf(proid));
-					String projectname=sp.getProjectname();
-					if(sp.getProjecttype()==1){
-						sbnames.append(projectname+"(TestLink),");
-					}else{
-						sbnames.append(projectname+",");
+					if(null!=sp){
+						String projectname=sp.getProjectname();
+						if(sp.getProjecttype()==1){
+							sbnames.append(projectname+"(TestLink),");
+						}else{
+							sbnames.append(projectname+",");
+						}
 					}
 				}
 			}
@@ -125,15 +134,10 @@ public class TestClientController {
 	
 	/**
 	 * 添加客户端
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
+	 * @param tc
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/add.do")
 	public void add(TestClient tc, HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -223,16 +227,10 @@ public class TestClientController {
 	}
 	
 	/**
-	 * 删除参数
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
+	 * 删除客户端
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/delete.do")
 	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -286,14 +284,9 @@ public class TestClientController {
 	
 	/**
 	 * 联动查询客户端列表
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/getclientlist.do")
 	public void getclientlist(HttpServletRequest req, HttpServletResponse rsp) throws Exception{	    
@@ -313,14 +306,9 @@ public class TestClientController {
 	
 	/**
 	 * 联动查询客户端驱动路径列表
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/getclientpathlist.do")
 	public void getclientpathlist(HttpServletRequest req, HttpServletResponse rsp) throws Exception{	    
@@ -344,9 +332,6 @@ public class TestClientController {
 		jsobjcet.put("data", jsonArray);
 		
 		rsp.getWriter().write(jsobjcet.toString());
-	}
-	
-	public static void main(String[] args) throws Exception {
 	}
 	
 }

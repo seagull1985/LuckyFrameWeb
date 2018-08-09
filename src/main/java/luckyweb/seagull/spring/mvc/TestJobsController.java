@@ -1,17 +1,16 @@
 package luckyweb.seagull.spring.mvc;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.rmi.Naming;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +52,7 @@ import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.DateUtil;
 import luckyweb.seagull.util.StrLib;
-import rmi.service.RunService;
+import luckyweb.seagull.util.client.HttpRequest;
 
 /**
  * =================================================================
@@ -68,7 +67,7 @@ import rmi.service.RunService;
 @RequestMapping("/testJobs")
 public class TestJobsController
 {
-	private static final Logger	log	     = Logger.getLogger(TestJobsController.class);
+	private static final Logger	log	= Logger.getLogger(TestJobsController.class);
 	
 	@Resource(name = "testJobsService")
 	private TestJobsService	 testJobsService;
@@ -98,9 +97,8 @@ public class TestJobsController
 	private TestClientService tcservice;
 	
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载任务调度页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -148,6 +146,14 @@ public class TestJobsController
 		return "/jsp/task/job_list";
 	}
 
+	/**
+	 * 获取任务调度列表数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@SuppressWarnings({ "unchecked" })
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
@@ -195,7 +201,7 @@ public class TestJobsController
 	}
 	
 	/**
-	 * 新增Job
+	 * 新增调度
 	 * @param tj
 	 * @param br
 	 * @param model
@@ -203,7 +209,6 @@ public class TestJobsController
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/add.do")
 	public String add(@Valid @ModelAttribute("taskjob") TestJobs tj, BindingResult br, Model model,
@@ -459,9 +464,8 @@ public class TestJobsController
 	}
 
 	/**
-	 * Job详情
-	 * 
-	 * @param id
+	 * 调度详情
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -479,10 +483,11 @@ public class TestJobsController
 	
 
 	/**
-	 * 
 	 * 根据Id更新Job信息
-	 * @param id
+	 * @param tj
+	 * @param br
 	 * @param model
+	 * @param req
 	 * @return
 	 * @throws Exception
 	 */
@@ -790,15 +795,9 @@ public class TestJobsController
 
 	/**
 	 * 删除调度
-	 * 
-	 * @param tj
-	 * @param br
-	 * @param model
 	 * @param req
 	 * @param rsp
-	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/delete.do")
 	public void delete(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
@@ -853,11 +852,12 @@ public class TestJobsController
 	}
 	
 	/**
-	 *启动
-	 * 
-	 * @param id
+	 * 启动调度任务监听线程
 	 * @param model
+	 * @param req
+	 * @param rsp
 	 * @return
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/run.do")
 	public String run(Model model, HttpServletRequest req, HttpServletResponse rsp)
@@ -891,14 +891,12 @@ public class TestJobsController
 	}
 
 	/**
-	 * 关闭JOb
-	 * @param id
+	 * 关闭调度任务监听
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/remove.do")
 	public String removeSchudle(Model model, HttpServletRequest req, HttpServletResponse rsp)
@@ -928,11 +926,11 @@ public class TestJobsController
 	}
 
 	/**
-	 * 立即启动
-	 * 
-	 * @param tj
-	 * @return
-	 * @throws SQLException
+	 * 立即启动调度任务执行
+	 * @param model
+	 * @param req
+	 * @param rsp
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/startNow.do")
 	public void startNow(Model model, HttpServletRequest req, HttpServletResponse rsp)
@@ -985,8 +983,8 @@ public class TestJobsController
 	}
 
 	/**
-	 * 页面日志展示
-	 * 
+	 * 获取客户端日志
+	 * @param model
 	 * @param request
 	 * @param response
 	 * @return
@@ -1010,10 +1008,11 @@ public class TestJobsController
 			storeName = storeName + "." + startDate;
 		}
 		String result="获取日志远程链接失败！";
-		try{
-    		//调用远程对象，注意RMI路径与接口必须与服务器配置一致
-    		RunService service=(RunService)Naming.lookup("rmi://"+clientip+":6633/RunService");
-    		result=service.getlogdetail(storeName);
+		try{    		
+    		Map<String, Object> params = new HashMap<String, Object>(0);
+    		params.put("filename", storeName);
+			result=HttpRequest.httpClientGet("http://"+clientip+":"+PublicConst.CLIENTPORT+"/getlogdetail", params);
+			result=result.replace("##n##", "\n");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return result;
@@ -1024,9 +1023,9 @@ public class TestJobsController
 	}
 
 	/**
-	 * 上传
-	 * 
-	 * @param request
+	 * 跳转上传页面
+	 * @param model
+	 * @param req
 	 * @param response
 	 * @return
 	 * @throws Exception
@@ -1056,8 +1055,9 @@ public class TestJobsController
 	}
 
 	/**
-	 * 上传
-	 * 
+	 * 上传附件到客户端
+	 * @param file
+	 * @param model
 	 * @param request
 	 * @param response
 	 * @return
@@ -1085,9 +1085,8 @@ public class TestJobsController
 			return "/jsp/task/file_upload";
 		}
 		// 文件目录
-		String path = System.getProperty("user.dir")+"\\";
+		String path = System.getProperty("user.dir")+File.separator;
 		String pathName = path + file.getOriginalFilename();
-		System.out.println(pathName);
 		File targetFile = new File(pathName);
 		if (targetFile.exists()){
 			targetFile.delete();
@@ -1109,20 +1108,13 @@ public class TestJobsController
 			return "error";
 		}
 
-		byte[] b = null;
 		String result="获取日志远程链接失败！";
 		try {
-			b = new byte[(int) targetFile.length()];
-			BufferedInputStream is = new BufferedInputStream(new FileInputStream(targetFile));
-			is.read(b);
 			try{
-	    		//调用远程对象，注意RMI路径与接口必须与服务器配置一致
-	    		RunService service=(RunService)Naming.lookup("rmi://"+clientip+":6633/RunService");
-	    		result=service.uploadjar(b, file.getOriginalFilename(),clientpath);
+	    		result=HttpRequest.httpClientUploadFile("http://"+clientip+":"+PublicConst.CLIENTPORT+"/uploadjar", clientpath, targetFile);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			is.close();
 			//删除服务器上的文件
 			if (targetFile.exists()){
 				targetFile.delete();
@@ -1145,11 +1137,10 @@ public class TestJobsController
 	}
 	
 	/**
-	 * 提供任务调度接口
-	 * 
-	 * @param tj
-	 * @return
-	 * @throws SQLException
+	 * 提供远程调度任务接口
+	 * @param req
+	 * @param rsp
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/runJobForInterface.do")
 	public void runJobForInterface(HttpServletRequest req, HttpServletResponse rsp)throws Exception{

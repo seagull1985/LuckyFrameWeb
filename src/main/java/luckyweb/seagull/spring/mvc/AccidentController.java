@@ -62,8 +62,7 @@ public class AccidentController {
 
 	/**
 	 * 
-	 * 
-	 * @param tj
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -141,14 +140,13 @@ public class AccidentController {
 	
 	/**
 	 * 添加生产事故信息
-	 * @param tj
+	 * @param accident
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/add.do")
 	public String add(@Valid @ModelAttribute("accident") Accident accident,BindingResult br, Model model,
@@ -254,10 +252,11 @@ public class AccidentController {
 	}
 	
 	/**
-	 * 
 	 * 根据id更新记录
-	 * @param id
+	 * @param accident
+	 * @param br
 	 * @param model
+	 * @param req
 	 * @return
 	 * @throws Exception
 	 */
@@ -350,10 +349,8 @@ public class AccidentController {
 	
 	/**
 	 * 删除事故记录
-	 * 
-	 * @param id
-	 * @param model
-	 * @return
+	 * @param req
+	 * @param rsp
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/delete.do")
@@ -420,9 +417,8 @@ public class AccidentController {
 	
 	/**
 	 * 事故详情
-	 * 
-	 * @param id
 	 * @param model
+	 * @param req
 	 * @return
 	 * @throws Exception
 	 */
@@ -443,13 +439,11 @@ public class AccidentController {
 	}
 	
 	/**
-	 * 
 	 * HTML5  饼图
-	 * @param model
 	 * @param req
+	 * @param model
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/piechart_html5.do")
 	public String pieGroupCausaltype(HttpServletRequest req,Model model) throws Exception
@@ -564,9 +558,9 @@ public class AccidentController {
 	}
 
 	/**
-	 * 上传
-	 * 
-	 * @param request
+	 * 事故附件上传页面
+	 * @param model
+	 * @param req
 	 * @param response
 	 * @return
 	 * @throws Exception
@@ -596,8 +590,9 @@ public class AccidentController {
 	}
 
 	/**
-	 * 上传
-	 * 
+	 *  上传附件
+	 * @param file
+	 * @param model
 	 * @param request
 	 * @param response
 	 * @return

@@ -55,9 +55,8 @@ public class ReviewController {
 	private OperationLogService operationlogservice;
 
 	/**
-	 * 
-	 * 
-	 * @param tj
+	 * 加载评审页面
+	 * @param req
 	 * @param model
 	 * @return
 	 * @throws Exception
@@ -80,6 +79,15 @@ public class ReviewController {
 		return "/jsp/review/review";
 	}
 
+	/**
+	 * 获取评审列表数据
+	 * @param limit
+	 * @param offset
+	 * @param request
+	 * @param response
+	 * @throws NumberFormatException
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/list.do")
 	private void ajaxGetSellRecord(Integer limit, Integer offset, HttpServletRequest request,
@@ -133,10 +141,8 @@ public class ReviewController {
 	
 	/**
 	 * 删除评审记录
-	 * 
-	 * @param id
-	 * @param model
-	 * @return
+	 * @param req
+	 * @param rsp
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/delete.do")
@@ -204,14 +210,13 @@ public class ReviewController {
 	
 	/**
 	 * 修改评审信息
-	 * @param tj
+	 * @param review
 	 * @param br
 	 * @param model
 	 * @param req
 	 * @param rsp
 	 * @return
 	 * @throws Exception
-	 * @Description:
 	 */
 	@RequestMapping(value = "/update.do")
 	public String update(@Valid @ModelAttribute("review") Review review, BindingResult br, Model model,
@@ -281,11 +286,6 @@ public class ReviewController {
 			model.addAttribute("url", "/review/load.do");
 			return "error";
 		}
-
-	}
-	
-	
-	public static void main(String[] args) throws Exception {
 
 	}
 
