@@ -57,7 +57,8 @@
 								    <label class="col-sm-12" style="font-weight:normal">如果您是form表单方式或是URL方式提交参数，直接按参数分隔，普通类型选择String，文件类型选择File对象即可。</label>
 								    <label class="col-sm-12" style="font-weight:normal"></label>
 								    <label class="col-sm-12" style="font-weight:normal"></label>
-								    <label class="col-sm-12" style="font-weight:normal">如果您是RESTful API方式，以Json格式请求，请参照如下格式：</label>
+								    <label class="col-sm-12" style="font-weight:normal">如果请求是RESTful API方式，以Json格式请求，既可以使用表单方式，也可以使用纯文本的方式</label>
+								    <label class="col-sm-12" style="font-weight:normal">如果您选择使用表单方式请求Json，请参照如下格式：</label>
 									<label class="col-sm-12" style="font-weight:normal"><b>Json格式示例：</b>{"params0":"v0","params1":{"test1":"pv1","test2":50221},"params2":[{"test1":"pv1","test2":1212},{"test1":"pv2","test2":1414}]}</label>
 								    <label class="col-sm-12" style="font-weight:normal"></label>
 								    <label class="col-sm-12" style="font-weight:normal"></label>
@@ -105,7 +106,14 @@
 						</table>
 
                         <h3 class="thin text-center">协议模板参数</h3>
-                        <p style="text-align: left"><a href="javascript:void(0);" onclick="sample()">参数示例</a></p>
+                        <ul class="nav nav-tabs" role="tablist" id="myTab">
+                          <li role="presentation"><a href="#formsub" role="tab" data-toggle="tab" style="color:#00BFFF"><b>表单(兼容JSON)</b></a></li>
+                          <li role="presentation"><a href="#textsub" role="tab" data-toggle="tab" style="color:#00BFFF"><b>纯文本</b></a></li>
+                        </ul>
+                        
+                        <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="formsub">
+                        <p style="margin:10px 0 5px;text-align: center"><a href="javascript:void(0);" onclick="sample()">参数填写示例</a></p>
 						<form id="templateparams" onsubmit="return check_form()">
 							<div class="form-group">
 								<table class="table table-striped" id="paramtable">
@@ -194,13 +202,28 @@
 									</tbody>
 								</table>
 							</div>
-							</br>
+							<br></br>
 							<div class="row">
 								<div class="col-lg-4 text-center" style="width: 100%">
 									<button class="btn btn-action" id="submit" type="submit">保 存</button>
 								</div>
 							</div>
 						</form>
+						</div>
+                         <div role="tabpanel" class="tab-pane" id="textsub">
+                         <p style="margin:20px 0 10px;text-align: left">说明：JSON格式请求既可以使用表单方式也可以使用此类纯文本方式</p>
+                         <input id="textid" type="hidden" value="${templateparam.id }" />
+                         <input id="textname" type="hidden" value="_forTextJson" />
+                         <input id="texttype" type="hidden" value="99" />
+                         <textarea class="form-control" rows="5" name="textarea" id="textarea">${templateparam.param }</textarea>
+                         <br></br>
+                         <div class="row">
+					       <div class="col-lg-4 text-center" style="width: 100%">
+						   <button class="btn btn-action" id="submittext" type="submit" onclick="submittext()">保 存</button>
+						   </div>
+						 </div>
+                         </div>
+                       </div>
 					</div>
 				</div>
 
@@ -257,6 +280,14 @@
 								$form.find('.alert').html('参数创建成功！');
 							});
 				});
+		
+		$(function () {
+			if('${paramtype}'=='text'){
+				$('#myTab a[href="#textsub"]').tab('show');
+			}else{
+				$('#myTab a[href="#formsub"]').tab('show');
+			}
+		});
 		
 		String.prototype.replaceAll = function(s1,s2) { 
 		    return this.replace(new RegExp(s1,"gm"),s2); 
@@ -351,6 +382,40 @@
 		
 		function sample(){
 			$("#sample_params").modal('show');
+		}
+		
+		// 提交文本域内容
+		function submittext() {
+			var json = "";
+			json = json + "{\"id\":" + $("#textid").val()+ ",";
+			json = json + "\"paramname\":\"" + $("#textname").val().replaceAll("\"", "&quot;") + "\",";
+			json = json + "\"param\":\"" + $("#textarea").val().replaceAll("\"", "&quot;")	+ "\",";
+			json = json + "\"paramtype\":\"" + $("#texttype").val().replaceAll("\"", "&quot;")	+ "\",";
+			json = json + "\"templateid\":\"" + '${ptemplate.id}' + "\"}";
+			json = "[" + json + "]";
+			
+ 			$("#submittext").attr("disabled",true);
+			// 异步提交数据到action页面
+			$.ajax({
+				type : "POST",
+				cache : false,
+				async : true,
+				dataType : "json",
+				url : "editparam.do",
+				contentType : "application/json", //必须有
+				data : JSON.stringify(json),
+				success : function(data, status) {
+ 				if (data.status == "success") {
+ 					$("#submittext").attr("disabled",false);
+ 					toastr.success(data.ms);
+					}else{
+						toastr.info(data.ms);
+					}
+				},
+				error : function() {
+					toastr.error(data);
+				}
+			});
 		}
 	</script>
 </body>

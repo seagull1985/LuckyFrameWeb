@@ -266,7 +266,6 @@
 			$.ajax({
 				type:"GET",
 				url:url,
-				async: false,
 				cache:false,
 				dataType:"json",
 				success:function (result){

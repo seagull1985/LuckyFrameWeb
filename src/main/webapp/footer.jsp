@@ -51,7 +51,7 @@ function gouserInfo(){
 						<div class="widget-body">
 							<p class="text-right">
 							    <!--此处版权信息不属于开源修改范围，严禁篡改，一旦发现保留诉讼权利 -->
-								Copyright &copy; 2017, LuckyFrame.Designed by <a href="javascript:window.open('http://www.luckyframe.cn')">LuckyFrame V2.6</a>
+								Copyright &copy; 2017, LuckyFrame.Designed by <a href="javascript:window.open('http://www.luckyframe.cn')">LuckyFrame V2.7</a>
 							</p>
 						</div>
 					</div>

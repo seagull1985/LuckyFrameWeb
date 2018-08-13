@@ -31,7 +31,6 @@ public class StrLib {
 	
 	private static StringTokenizer sto;
 	private static StringBuffer buf;
-	private SimpleDateFormat format;
 	
 	public String format(String str) {
 		return (str == null ? "" : str);
