@@ -1108,7 +1108,7 @@ public class TestJobsController
 			return "error";
 		}
 
-		String result="获取日志远程链接失败！";
+		String result="获取远程链接失败！";
 		try {
 			try{
 	    		result=HttpRequest.httpClientUploadFile("http://"+clientip+":"+PublicConst.CLIENTPORT+"/uploadjar", clientpath, targetFile);

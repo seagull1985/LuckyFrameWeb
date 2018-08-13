@@ -99,22 +99,39 @@ public class ProjectTemplateParamsController {
 			}
 			String retVal = "/jsp/plancase/templateparam";
 			List<ProjectTemplateParams> paramslist = ptemplateparamsService.getParamsList(Integer.valueOf(templateid));
-			
-			if (paramslist.size() == 0) {
-				ProjectTemplateParams ptp = new ProjectTemplateParams();
+			ProjectTemplateParams ptp = new ProjectTemplateParams();
+			String paramtype="form";
+			if (0==paramslist.size()) {			
 				ptp.setParam("");
 				ptp.setParamname("");
 				ptp.setTemplateid(Integer.valueOf(templateid));
 				paramslist.add(ptp);
+			}else if(1==paramslist.size()&&99==paramslist.get(0).getParamtype()){
+				ptp.setParam("");
+				ptp.setParamname("");
+				ptp.setTemplateid(Integer.valueOf(templateid));
+				paramslist.add(ptp);
+				ptp=paramslist.get(0);
+				ptp.setParam(ptp.getParam().replace("\"", "&quot;"));
+				paramslist.remove(0);
+				paramtype="text";
 			}else{
 				for(int i=0;i<paramslist.size();i++){
-					ProjectTemplateParams ptp = paramslist.get(i);
-					ptp.setParam(ptp.getParam().replace("\"", "&quot;"));
+					ProjectTemplateParams ptpfor = paramslist.get(i);
+					ptpfor.setParam(ptpfor.getParam().replace("\"", "&quot;"));
+					ptpfor.setParamname(ptpfor.getParamname().replace("\"", "&quot;"));
+					paramslist.set(i, ptpfor);
 				}
+				
+				ptp.setParam("");
+				ptp.setParamname("");
+				ptp.setTemplateid(Integer.valueOf(templateid));
 			}
 
 			model.addAttribute("ptemplate", ppt);
 			model.addAttribute("templateparams", paramslist);
+			model.addAttribute("templateparam", ptp);
+			model.addAttribute("paramtype", paramtype);
 			return retVal;
 
 		} catch (Exception e) {
