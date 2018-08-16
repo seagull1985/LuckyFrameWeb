@@ -155,7 +155,7 @@ public class PublicCaseParamsController {
 				if (!UserLoginController.permissionboolean(req, accesscode_paramadd)) {
 					json.put("status", "fail");
 					json.put("ms", "增加公共参数失败,权限不足,请联系管理员!");
-				}else if(!UserLoginController.oppidboolean(req, pcp.getProjectid())){
+				}else if(pcp.getProjectid()!=99&&!UserLoginController.oppidboolean(req, pcp.getProjectid())){
 					json.put("status", "fail");
 					json.put("ms", "增加公共参数失败,项目权限不足,请联系管理员!");
 				}else {
@@ -174,7 +174,7 @@ public class PublicCaseParamsController {
 				if (!UserLoginController.permissionboolean(req, accesscode_paramupdate)) {
 					json.put("status", "fail");
 					json.put("ms", "编辑公共参数失败,权限不足,请联系管理员!");
-				}else if(!UserLoginController.oppidboolean(req, pcp.getProjectid())){
+				}else if(pcp.getProjectid()!=99&&!UserLoginController.oppidboolean(req, pcp.getProjectid())){
 					json.put("status", "fail");
 					json.put("ms", "编辑公共参数失败,项目权限不足,请联系管理员!");
 				} else {

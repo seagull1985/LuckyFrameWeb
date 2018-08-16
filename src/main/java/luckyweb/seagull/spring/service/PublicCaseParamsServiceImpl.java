@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.PublicCaseParamsDao;
 import luckyweb.seagull.spring.entity.PublicCaseParams;
-import luckyweb.seagull.spring.entity.TestClient;
 
 
 /**
@@ -109,7 +108,7 @@ public class PublicCaseParamsServiceImpl implements PublicCaseParamsService{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PublicCaseParams> getParamListByProjectid(String projectid) throws Exception {
-		String hql="from PublicCaseParams where projectid='"+projectid+"' order by id asc";
+		String hql="from PublicCaseParams where projectid='99' or projectid='"+projectid+"' order by id asc";
 		List<PublicCaseParams> lpcp=pcpdao.listsql(hql);
 		return lpcp;
 	}

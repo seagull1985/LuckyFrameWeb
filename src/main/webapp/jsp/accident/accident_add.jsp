@@ -141,7 +141,7 @@
 				<td height="30" align="left">异常情况描述</td>
 			  <td height="30" colspan="3"><sf:textarea cols="100" rows="5" path="accdescription"
 						id="accdescription"
-						cssClass="easyui-validatebox" required="true"  data-options="validType:'minLength[0,248]'"  missingMessage="事故描述不能为空" invalidMessage="事故描述非法输入" />&nbsp;
+						cssClass="easyui-validatebox" required="true"  data-options="validType:'minLength[500]'"  missingMessage="事故描述不能为空" invalidMessage="事故描述非法输入" />&nbsp;
 						<sf:errors path="accdescription" cssClass="error_msg" />
 						</td>
 			</tr>
@@ -157,21 +157,21 @@
 			<tr>
 				<td height="30" align="left">受影响范围</td>
 			  <td height="30" colspan="3"><sf:textarea cols="100" rows="5" path="consequenceanalysis"  id="consequenceanalysis"
-						cssClass="easyui-validatebox"  data-options="validType:'minLength[0,148]'"  invalidMessage="受影响范围内容非法"  
+						cssClass="easyui-validatebox"  data-options="validType:'minLength[0,300]'"  invalidMessage="受影响范围内容非法"  
 						 />&nbsp;<sf:errors path="consequenceanalysis"
 						cssClass="error_msg" /></td>
 			</tr>
 			<tr>
 				<td height="30" align="left">事故原因分析</td>
 			  <td height="30" colspan="3"><sf:textarea cols="100" rows="5" path="causalanalysis"
-						id="causalanalysis"  cssClass="easyui-validatebox"  data-options="validType:'minLength[0,248]'" invalidMessage="原因分析内容非法"  
+						id="causalanalysis"  cssClass="easyui-validatebox"  data-options="validType:'minLength[0,500]'" invalidMessage="原因分析内容非法"  
 						 />&nbsp;<sf:errors path="causalanalysis" cssClass="error_msg" /></td>
 						 
 			</tr>
 			<tr>
 				<td height="30" align="left">纠正处理过程<br/>(需点名责任人)</td>
 			  <td height="30" colspan="3"><sf:textarea cols="100" rows="5" path="correctiveaction"  id="correctiveaction"
-				cssClass="easyui-validatebox"  data-options="validType:'minLength[0,148]'"  invalidMessage="纠正措施内容非法"  
+				cssClass="easyui-validatebox"  data-options="validType:'minLength[0,300]'"  invalidMessage="纠正措施内容非法"  
 						 />&nbsp;<sf:errors path="correctiveaction"
 						cssClass="error_msg" /></td>
 			</tr>
@@ -212,7 +212,7 @@
 			<tr>
 				<td height="30" align="left">整改措施方案：<br/>(需点名责任人)</td>
 			  <td height="30" colspan="4"><sf:textarea cols="100" rows="5" path="preventiveaction"	id="preventiveaction"						
-				cssClass="easyui-validatebox"  data-options="validType:'minLength[0,148]'"   invalidMessage="预防措施内容非法"  />&nbsp;<sf:errors path="preventiveaction"
+				cssClass="easyui-validatebox"  data-options="validType:'minLength[0,300]'"   invalidMessage="预防措施内容非法"  />&nbsp;<sf:errors path="preventiveaction"
 						cssClass="error_msg" /></td>
 			</tr>
 
