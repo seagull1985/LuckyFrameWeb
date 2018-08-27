@@ -265,8 +265,8 @@
 							title : '消息头域',
 							emptytext : "消息头域为空",
 							validate : function(value) {
-								if (value.length > 500)
-									return '消息头域不能超过500个字符';
+								if (value.length > 1500)
+									return '消息头域不能超过1500个字符';
 							}
 						}
 					}, {
@@ -371,8 +371,8 @@
 								validators : {
 									stringLength : {
 										min : 0,
-										max : 500,
-										message : '请求头域长度必须小于500个字符'
+										max : 1500,
+										message : '请求头域长度必须小于1500个字符'
 									}
 								}
 							},
