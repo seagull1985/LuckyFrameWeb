@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -130,6 +132,7 @@ public class ProjectPlanCaseController {
 		String planidstr = request.getParameter("planid");
 		String moduleid = request.getParameter("moduleid");
 		String onlypcase = request.getParameter("onlypcase");
+		String expriority = request.getParameter("expriority");
 		
 		List<ProjectModule> modulelist = moduleservice.getModuleList();
 		List<ProjectCase> projectcases=new ArrayList<ProjectCase>();
@@ -219,6 +222,30 @@ public class ProjectPlanCaseController {
 
 		
 		viewToSaveCase = projectcases;
+		//是否按执行优先级排序
+		if("1".equals(expriority)){
+			Collections.sort(projectcases, new Comparator<ProjectCase>() {			  
+	            @Override  
+	            public int compare(ProjectCase p1, ProjectCase p2) {  
+	                int i = p1.getPriority() - p2.getPriority();  
+	                if(i == 0){  
+	                    return p1.getId() - p2.getId();  
+	                }  
+	                return i;  
+	            }
+	        });  
+		}else if("2".equals(expriority)){
+			Collections.sort(projectcases, new Comparator<ProjectCase>() {			  
+	            @Override  
+	            public int compare(ProjectCase p1, ProjectCase p2) {  
+	                int i = p2.getPriority() - p1.getPriority();  
+	                if(i == 0){  
+	                    return p2.getId() - p1.getId();  
+	                }  
+	                return i;  
+	            }
+	        });  
+		}
 		// 转换成json字符串
 		JSONArray recordJson = StrLib.listToJson(projectcases);
 

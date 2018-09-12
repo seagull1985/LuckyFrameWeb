@@ -37,8 +37,7 @@
 					<div class="panel-heading">查询条件</div>
 					<div class="panel-body">
 						<div class="form-group" style="margin-top: 15px">
-							<label class="control-label col-sm-1" style="width: 6%"
-								for="txt_search_module">用例集:</label>
+							<label class="control-label col-sm-1" style="width: 5%"	for="txt_search_module">用例集:</label>
 							<div class="col-sm-3">
 								<input type="text" class="form-control" id="module_tree"
 									placeholder="点击选择用例集" onclick="showMenu()" />
@@ -53,8 +52,19 @@
 						</div>
 						
 						<div class="form-group" style="margin-top: 15px">
-							<label class="control-label col-sm-1"
-								for="txt_search_project" style="width: 15%"><input id="onlypcase" name="onlypcase" type="checkbox" onchange="searchpcase()"/>&nbsp;&nbsp;显示计划中全部用例</label>
+							<label class="control-label col-sm-1" style="text-align: right;width: 10%" for="txt_search_project">仅显示已选中用例：</label>
+							<input class="form-control" style="width: 25px; height: 25px; float: left; cursor: pointer;" id="onlypcase" name="onlypcase" type="checkbox" onchange="reset_tpctable()"/>
+						</div>
+						
+						<div class="form-group" style="margin-top: 15px">
+							<label class="control-label col-sm-1" for="orderby_expriority" style="width: 10%;">&nbsp;&nbsp;&nbsp;&nbsp;按执行优先级显示：</label>
+							<div class="input-group col-sm-1">
+							<select class="form-control" id="expriority" name="expriority" onchange="reset_tpctable()">
+							   <option value="0">默认排序</option>
+							   <option value="1">执行优先级正序</option>
+							   <option value="2">执行优先级反序</option>
+							</select>
+							</div>
 						</div>
 						
 					</div>
@@ -229,12 +239,15 @@
 					$("#module_tree").attr("readOnly",false);
 				 }
 				
+				var expriority=$('#expriority').val();
+				
 				var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
 					limit : params.limit, //页面大小
 					offset : params.offset, //页码偏移量
 					search : params.search, //搜索参数
 					moduleid : $('#search_module').val(), //模块ID
 					onlypcase : onlypcase, //是否只显示被选中用例
+					expriority : expriority, //是否按执行优先级显示
 				};
 				return temp;
 			};
@@ -242,7 +255,7 @@
 			return oTableInit;
 		};
 	    
-		var searchpcase = function() {
+		var reset_tpctable = function() {
 			//1.初始化Table
 			var oTable = new TableInit();
 			$('#tb_projectplancase').bootstrapTable('destroy');
