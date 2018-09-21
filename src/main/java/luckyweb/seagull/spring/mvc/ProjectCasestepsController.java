@@ -379,6 +379,8 @@ public class ProjectCasestepsController {
 				List<TempCasestepDebug> tcdlist=tempdebugservice.getList(casesign, usercode);
 				StringBuilder stringBuilder = new StringBuilder();
 				for(TempCasestepDebug tcd:tcdlist){
+					tcd.setDetail(tcd.getDetail().replace("<", "&lt;"));
+					tcd.setDetail(tcd.getDetail().replace(">", "&gt;"));
 					stringBuilder.append(tcd.getLoglevel()+": "+tcd.getDetail()+"</br>");
 				}
 				ms=stringBuilder.toString();

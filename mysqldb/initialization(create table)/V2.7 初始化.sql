@@ -729,6 +729,8 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (93, 4, 0, 'operation','runcase','调用指定接口用例');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (94, 1, 0, 'operation','closewindow','关闭当前浏览器窗口');
+insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
+values (95, 4, 0, 'operation','exAdbShell','执行安卓adb命令');
 /*插入角色默认定义*/
 insert into USER_ROLE (id, role, permission)
 values (2, '测试工程师', 'acc_1,acc_2,acc_3,');
