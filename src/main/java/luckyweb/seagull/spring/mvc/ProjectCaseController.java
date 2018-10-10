@@ -579,7 +579,11 @@ public class ProjectCaseController {
 		rsp.setContentType("text/html;charset=utf-8");
 		req.setCharacterEncoding("utf-8");
 		int id = 0;
-		int projectid = Integer.valueOf(req.getParameter("projectid"));
+		String projectidstr=req.getParameter("projectid");
+		if(null==projectidstr||"".equals(projectidstr)){
+			projectidstr="99";
+		}
+		int projectid = Integer.valueOf(projectidstr);
 		String idstr = req.getParameter("id");
 		JSONArray jsonarr = new JSONArray();
 		if (!StrLib.isEmpty(idstr)) {

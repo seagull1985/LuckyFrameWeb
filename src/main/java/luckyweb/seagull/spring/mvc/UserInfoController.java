@@ -289,20 +289,22 @@ public class UserInfoController {
 			} else {
 				int id = Integer.valueOf(req.getParameter("userid"));
 				UserInfo userinfo = userinfoservice.load(id);
-				try
-				{
-					userinfoservice.delete(id);
-					
-					operationlogservice.add(req, "USERINFO", id, 
-							99,0,"用户信息删除成功！用户名："+userinfo.getUsercode());
-					
-					json.put("status", "success");
-					json.put("ms", "删除用户成功!");
-				}
-				catch (Exception e)
-				{
+				if("admin".equals(userinfo.getUsercode())){
 					json.put("status", "fail");
-					json.put("ms", "删除用户过程中失败!");
+					json.put("ms", "默认管理员admin不能删除!");
+				}else{
+					try
+					{
+						userinfoservice.delete(id);				
+						operationlogservice.add(req, "USERINFO", id, 
+								99,0,"用户信息删除成功！用户名："+userinfo.getUsercode());
+						
+						json.put("status", "success");
+						json.put("ms", "删除用户成功!");
+					}catch (Exception e){
+						json.put("status", "fail");
+						json.put("ms", "删除用户过程中失败!");
+					}
 				}
 			}
 			pw.print(json.toString());

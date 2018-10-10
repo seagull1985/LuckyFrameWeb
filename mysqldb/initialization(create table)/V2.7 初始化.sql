@@ -727,6 +727,10 @@ insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalu
 values (92, 1, 0, 'operation','scrollintoview','将目标对象滚动到可视');
 insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
 values (93, 4, 0, 'operation','runcase','调用指定接口用例');
+insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
+values (94, 1, 0, 'operation','closewindow','关闭当前浏览器窗口');
+insert into PROJECT_CASESTEPSPARAMS (id, steptype, parentid, fieldname,paramvalue,description)
+values (95, 4, 0, 'operation','exAdbShell','执行安卓adb命令');
 /*插入角色默认定义*/
 insert into USER_ROLE (id, role, permission)
 values (2, '测试工程师', 'acc_1,acc_2,acc_3,');
@@ -744,8 +748,8 @@ values (99, '系统管理员', '总部');
 insert into QA_SECTORPROJECTS (projectid, projectname, projectmanager, sectorid, projecttype)
 values (99, '全部项目/未知项目', '系统管理员', 99, 0);
 /*插入默认管理员*/
-insert into USERINFO (id, usercode, password, username, role, sectorid)
-values (1, 'admin', 'uJ45aIeS9N80kaSFDjvk%2FA%3D%3D', '系统管理员', '1', 99);
+insert into USERINFO (id, usercode, password, username, role, sectorid,projectid)
+values (1, 'admin', 'uJ45aIeS9N80kaSFDjvk%2FA%3D%3D', '系统管理员', '1', 99,99);
 /*插入流程检查定义数据*/
 insert into QA_FLOWINFO (id, phaseid, phasename, phasenodeid, phasenodename, checkentryid, checkentry, remark)
 values (36, 5, '总结阶段', 2, '计划变更', 1, '如与计划不合，是否提交计划变更邮件', null);
