@@ -1,15 +1,12 @@
 package luckyweb.seagull.spring.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.AccidentDao;
 import luckyweb.seagull.spring.entity.Accident;
-import luckyweb.seagull.spring.entity.ProjectVersion;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * =================================================================
@@ -117,10 +114,10 @@ public class AccidentServiceImpl implements AccidentService{
 			where = where.substring(0, where.length() - 5);
 		}
 		if(count.equals(type)){
-		 sql="select causaltype,count(causaltype) from QA_ACCIDENT  "+where+" group by causaltype";
+		 sql="select causaltype,count(causaltype) from qa_accident  "+where+" group by causaltype";
 		}
 		if(sumimpact.equals(type)){
-		 sql="select causaltype,sum(impact_time) from QA_ACCIDENT  "+where+" group by causaltype";
+		 sql="select causaltype,sum(impact_time) from qa_accident  "+where+" group by causaltype";
 		}
 		
 		List list= accidentdao.listavgpro(sql);
@@ -129,7 +126,7 @@ public class AccidentServiceImpl implements AccidentService{
 
 	@Override
 	public int findRows(Accident accident) {
-		String hql="select count(*) from Accident "+where(accident);
+		String hql="select count(*) from qa_accident "+where(accident);
 		return accidentdao.findRows(accident, hql);
 	}
 

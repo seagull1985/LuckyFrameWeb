@@ -1,15 +1,12 @@
 package luckyweb.seagull.spring.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.FlowCheckDao;
 import luckyweb.seagull.spring.entity.FlowCheck;
-import luckyweb.seagull.spring.entity.FlowInfo;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * =================================================================
@@ -60,27 +57,27 @@ public class FlowCheckServiceImpl implements FlowCheckService{
 	@Override
 	public int getid(int projectid,int checkid,String entry) throws Exception {
 		// TODO Auto-generated method stub
-		int id = Integer.valueOf(this.flowcheckdao.get("select id from QA_FLOWCHECK t where checkid = "+checkid+" and projectid = "+projectid+" and checkentry = "+entry)); 
+		int id = Integer.valueOf(this.flowcheckdao.get("select id from qa_flowcheck t where checkid = "+checkid+" and projectid = "+projectid+" and checkentry = "+entry));
 		return   id;   	
 	}
 	
 	@Override
 	public String getversionnum(int projectid,int checkid) throws Exception {
 		// TODO Auto-generated method stub
-		return this.flowcheckdao.get("select versionnum from QA_FLOWCHECK t where checkid = "+checkid+" and projectid = "+projectid);   	
+		return this.flowcheckdao.get("select versionnum from qa_flowcheck t where checkid = "+checkid+" and projectid = "+projectid);
 	}
 	
 	@Override
 	public int getcheckid(int projectid) throws Exception {
 		// TODO Auto-generated method stub
-		int id = Integer.valueOf(this.flowcheckdao.get("select IFNULL(max(checkid),0) from QA_FLOWCHECK where projectid = "+projectid));
+		int id = Integer.valueOf(this.flowcheckdao.get("select IFNULL(max(checkid),0) from qa_flowcheck where projectid = "+projectid));
 		return id;
 	}
 	
 	@Override
 	public boolean determinerecord(int projectid,int checkid,String checkentry) throws Exception {
 		// TODO Auto-generated method stub
-		int count = Integer.valueOf(this.flowcheckdao.get("select count(*) from QA_FLOWCHECK "
+		int count = Integer.valueOf(this.flowcheckdao.get("select count(*) from qa_flowcheck "
 				+ "where projectid = "+projectid+" and checkid = "+checkid+" and checkentry = "+checkentry+""));
 		if(count==0){
 			return true;
@@ -144,7 +141,7 @@ public class FlowCheckServiceImpl implements FlowCheckService{
 	public List reportList(Object value, int offset, int pageSize) {
 		String	hql="select projectid,sum(case when checkresult in ('未通过','通过') then sum else 0 end) as sum,"
 				+ "sum(case checkresult when '通过' then sum else 0 end) as pass,sum(case checkresult when '未通过' then sum else 0 end) as fail,projectid as name,projectid as per "
-				+ "from (select projectid,checkresult,COUNT(*) sum from QA_FLOWCHECK t "+where((FlowCheck)value)+" group by projectid,checkresult) as aa "
+				+ "from (select projectid,checkresult,COUNT(*) sum from qa_flowcheck t "+where((FlowCheck)value)+" group by projectid,checkresult) as aa "
 				+" group by projectid";
 		List list= flowcheckdao.findByPage(hql, value, offset, pageSize);
 		return list;
@@ -154,21 +151,21 @@ public class FlowCheckServiceImpl implements FlowCheckService{
 	public int findRowsReport(FlowCheck flowcheck) {
 		String sql="select projectid,sum(case when checkresult in ('未通过','通过') then sum else 0 end) as sum,"
 				+ "sum(case checkresult when '通过' then sum else 0 end) as pass,sum(case checkresult when '未通过' then sum else 0 end) as fail,projectid as name,projectid as per "
-				+ "from (select projectid,checkresult,COUNT(*) sum from QA_FLOWCHECK t "+where(flowcheck)+" group by projectid,checkresult)  as aa "
+				+ "from (select projectid,checkresult,COUNT(*) sum from qa_flowcheck t "+where(flowcheck)+" group by projectid,checkresult)  as aa "
 				+" group by projectid";
 		return flowcheckdao.findRows(flowcheck,sql);
 	}
 
 	@Override
 	public int findRows(FlowCheck flowcheck) {
-		String sql="select projectid,checkid,versionnum from QA_FLOWCHECK "+where(flowcheck)+" group by projectid,checkid,versionnum";
+		String sql="select projectid,checkid,versionnum from qa_flowcheck "+where(flowcheck)+" group by projectid,checkid,versionnum";
 		return flowcheckdao.findRows(flowcheck,sql);
 	}
 	
 	@Override
 	public int findRowsTable(FlowCheck flowcheck)
 	{
-		String hql = "select count(*) from FlowCheck " + where(flowcheck);
+		String hql = "select count(*) from qa_flowcheck " + where(flowcheck);
 		return flowcheckdao.findRowsTable(flowcheck, hql);
 	}
 
@@ -181,7 +178,7 @@ public class FlowCheckServiceImpl implements FlowCheckService{
 	@Override
 	public List listcheckinfo(int projectid,int checkid) throws Exception {
 		// TODO Auto-generated method stub
-		return this.flowcheckdao.listcheckinfo("select id,phasename,phasenodename,checkentry from QA_FLOWINFO where id not in(select checkentry from QA_FLOWCHECK  "
+		return this.flowcheckdao.listcheckinfo("select id,phasename,phasenodename,checkentry from qa_flowinfo where id not in(select checkentry from QA_FLOWCHECK  "
 				+ "where projectid = "+projectid+" and checkid = "+checkid+") "
 				+ "order by phaseid,phasenodeid,checkentryid");	
 	}
@@ -190,7 +187,7 @@ public class FlowCheckServiceImpl implements FlowCheckService{
 	public List listdateper(String startdate,String enddate) throws Exception {
 		// TODO Auto-generated method stub
 		return this.flowcheckdao.listcheckinfo("select projectid,sum(case checkresult when '通过' then sum else 0 end) as pass,sum(case checkresult when '未通过' then sum else 0 end) as fail "
-				+ "from (select projectid,checkresult,COUNT(*) sum from QA_FLOWCHECK  "
+				+ "from (select projectid,checkresult,COUNT(*) sum from qa_flowcheck  "
 				+ "where checkdate >= '"+startdate+"' and checkdate <= '"+enddate+"' group by projectid,checkresult)  as aa "
 						+ "group by projectid");	
 	}

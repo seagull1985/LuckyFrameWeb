@@ -1,15 +1,13 @@
 package luckyweb.seagull.spring.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.SectorProjectsDao;
 import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.util.StrLib;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * =================================================================
@@ -132,7 +130,7 @@ public class SectorProjectsServiceImpl implements SectorProjectsService{
 	@Override
 	public int projectrowfordmtp(int sectorid) {
 		int row=0;
-		row=sectorprojectsdao.projectrow("SELECT projectid from QA_SECTORPROJECTS where sectorid="+sectorid);
+		row=sectorprojectsdao.projectrow("SELECT projectid from qa_sectorprojects where sectorid="+sectorid);
 		return row;
 	}
 	

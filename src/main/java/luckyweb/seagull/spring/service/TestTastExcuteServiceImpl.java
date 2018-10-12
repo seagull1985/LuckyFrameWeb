@@ -1,16 +1,14 @@
 package luckyweb.seagull.spring.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.TestTastExcuteDao;
 import luckyweb.seagull.spring.entity.TestTaskexcute;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * =================================================================
@@ -128,7 +126,7 @@ public class TestTastExcuteServiceImpl implements TestTastExcuteService {
 
 	@Override
 	public List findTastList(String param,String param2, String param3) {
-		String sql="select id,taskid from TEST_TASKEXCUTE ";
+		String sql="select id,taskid from test_taskexcute ";
 		if(!StrLib.isEmpty(param)){
 			if(!StrLib.isEmpty(param3)){
 				sql+=" where  date_format(createTime,'%Y-%m-%d')>='"+param+"' and  date_format(createTime,'%Y-%m-%d')<='"+param3+"'";
@@ -137,7 +135,7 @@ public class TestTastExcuteServiceImpl implements TestTastExcuteService {
 			}
 		}
 		if(!StrLib.isEmpty(param2)){
-			sql+=" and  jobid in (select id from TEST_JOBS t where t.projectid = '"+param2+"')";
+			sql+=" and  jobid in (select id from test_jobs t where t.projectid = '"+param2+"')";
 		}
 		sql+=" order by id desc";
 		return tastExcuteDao.findTastList(sql);
@@ -156,7 +154,7 @@ public class TestTastExcuteServiceImpl implements TestTastExcuteService {
 	
 	@Override
 	public List getidlist(int jobid) throws Exception{
-		return this.tastExcuteDao.listtastinfo("select id from TEST_TASKEXCUTE where jobid="+jobid);
+		return this.tastExcuteDao.listtastinfo("select id from test_taskexcute where jobid="+jobid);
 	}
 	
 	@Override
@@ -164,7 +162,7 @@ public class TestTastExcuteServiceImpl implements TestTastExcuteService {
 	public List listtastinfo() throws Exception{
 		return this.tastExcuteDao.listtastinfo("select t.id,b.name,t.casetotal_count,t.casesucc_count,t.casefail_count,t.caselock_count,t.casenoexec_count,date_format(t.createtime,'%Y-%m-%d %T') "
 				+ "from TEST_TASKEXCUTE t left join test_jobs b on t.jobid = b.id where t.id in "
-				+ "(select max(t.id) from TEST_TASKEXCUTE t  where t.taskstatus != '0' and t.taskstatus != '3' and t.taskstatus != '1' group by t.jobid) order by t.createtime desc");
+				+ "(select max(t.id) from test_taskexcute t  where t.taskstatus != '0' and t.taskstatus != '3' and t.taskstatus != '1' group by t.jobid) order by t.createtime desc");
 	}
 
 	@Override

@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping package="luckyweb.seagull.spring.entity">
-	<class name="ProjectVersion" table="QA_PROJECTVERSION"
+	<class name="ProjectVersion" table="qa_projectversion"
 		schema="luckyframedb">
 		<id name="versionid" type="java.lang.Integer">
 			<column name="versionid" precision="22" scale="0" />

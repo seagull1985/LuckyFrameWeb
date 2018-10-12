@@ -119,7 +119,7 @@ public class SectorProjectsDaoImpl extends HibernateDaoSupport implements Sector
 	public Object findproject(int projectid) throws Exception {
 		// TODO Auto-generated method stub
 		Session session = this.getSession(true);
-		List list = session.createSQLQuery("select * from QA_SECTORPROJECTS where projectid="+projectid).list();
+		List list = session.createSQLQuery("select * from qa_sectorprojects where projectid="+projectid).list();
 		session.close();
 		return list.get(0);
 	}
@@ -130,7 +130,7 @@ public class SectorProjectsDaoImpl extends HibernateDaoSupport implements Sector
 		int projectid = 0;
 		Session session = this.getSession(true);
 		@SuppressWarnings("unchecked")
-		List<Object> list = session.createSQLQuery("select projectid from QA_SECTORPROJECTS where projectname like '%"+projectname+"%'").list();
+		List<Object> list = session.createSQLQuery("select projectid from qa_sectorprojects where projectname like '%"+projectname+"%'").list();
 		if(list.size()!=0&&list.get(0)!=null){
 			projectid = Integer.valueOf(list.get(0).toString());
 		}else{

@@ -1,17 +1,13 @@
 package luckyweb.seagull.spring.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.ProjectVersionDao;
-import luckyweb.seagull.spring.dao.SectorProjectsDao;
 import luckyweb.seagull.spring.entity.ProjectVersion;
-import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.util.StrLib;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * =================================================================
@@ -121,7 +117,7 @@ public class ProjectVersionServiceImpl implements ProjectsVersionService{
 
 	@Override
 	public int findRows(ProjectVersion projectversion) {
-		String hql="select count(*) from ProjectVersion "+where(projectversion);
+		String hql="select count(*) from project_version "+where(projectversion);
 		return projectversiondao.findRows(projectversion, hql);
 	}
 
@@ -158,7 +154,7 @@ public class ProjectVersionServiceImpl implements ProjectsVersionService{
 	
 	@Override
 	public int findRowsreport(String startdate,String enddate) {
-		String hql="select projectid from QA_PROJECTVERSION t where t.versiontype = 1 and t.actually_launchdate >= '"+startdate+"' and t.actually_launchdate<='"+enddate+"' group by t.projectid";
+		String hql="select projectid from qa_projectversion t where t.versiontype = 1 and t.actually_launchdate >= '"+startdate+"' and t.actually_launchdate<='"+enddate+"' group by t.projectid";
 		return projectversiondao.findRowsreport(hql);
 	}
 

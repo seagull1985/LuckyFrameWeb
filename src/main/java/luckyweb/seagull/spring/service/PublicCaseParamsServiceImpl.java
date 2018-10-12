@@ -1,14 +1,12 @@
 package luckyweb.seagull.spring.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.PublicCaseParamsDao;
 import luckyweb.seagull.spring.entity.PublicCaseParams;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -90,7 +88,7 @@ public class PublicCaseParamsServiceImpl implements PublicCaseParamsService{
 
 	@Override
 	public int findRows(PublicCaseParams pcp) {
-		String hql="select count(*) from PublicCaseParams "+where(pcp);
+		String hql="select count(*) from public_caseparams "+where(pcp);
 		return pcpdao.findRows(pcp, hql);
 	}
 	

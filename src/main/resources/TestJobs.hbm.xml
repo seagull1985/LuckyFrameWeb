@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 2015-4-21 15:24:37 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping package="luckyweb.seagull.spring.entity">
-	<class name="TestJobs" table="TEST_JOBS" schema="luckyframedb" lazy="false">
+	<class name="TestJobs" table="test_jobs" schema="luckyframedb" lazy="false">
 		<id name="id" type="java.lang.Integer">
 			<column name="ID" />
 			<generator class="identity"/>

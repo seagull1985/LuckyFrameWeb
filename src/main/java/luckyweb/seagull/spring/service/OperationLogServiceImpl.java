@@ -1,18 +1,16 @@
 package luckyweb.seagull.spring.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.OperationLogDao;
 import luckyweb.seagull.spring.entity.OperationLog;
 import luckyweb.seagull.spring.entity.SectorProjects;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -80,7 +78,7 @@ public class OperationLogServiceImpl implements OperationLogService{
 	
 	@Override
 	public int findRows(OperationLog oplog) {
-		String hql="select count(*) from OperationLog "+where(oplog);
+		String hql="select count(*) from operation_log "+where(oplog);
 		return operationlogdao.findRows(oplog, hql);
 	}
 	

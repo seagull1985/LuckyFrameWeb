@@ -1,16 +1,13 @@
 package luckyweb.seagull.spring.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.SecondarySectorDao;
 import luckyweb.seagull.spring.entity.SecondarySector;
-import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.util.StrLib;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * =================================================================
@@ -105,7 +102,7 @@ public class SecondarySectorServiceImpl implements SecondarySectorService{
 
 	@Override
 	public int findRows(SecondarySector sector) {
-		String hql="select count(*) from SecondarySector "+where(sector);
+		String hql="select count(*) from qa_secondarysector "+where(sector);
 		return secondarysectordao.findRows(sector,hql);
 	}
 

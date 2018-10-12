@@ -1,14 +1,12 @@
 package luckyweb.seagull.spring.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.ProjectPlanCaseDao;
 import luckyweb.seagull.spring.entity.ProjectPlanCase;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * =================================================================
@@ -89,7 +87,7 @@ public class ProjectPlanCaseServiceImpl implements ProjectPlanCaseService{
 
 	@Override
 	public int findRows(ProjectPlanCase projectplancase) {
-		String hql="select count(*) from ProjectPlanCase "+where(projectplancase);
+		String hql="select count(*) from project_plancase "+where(projectplancase);
 		return projectplancaseDao.findRows(projectplancase, hql);
 	}
 

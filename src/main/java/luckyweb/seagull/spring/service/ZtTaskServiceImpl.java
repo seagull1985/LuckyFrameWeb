@@ -1,14 +1,12 @@
 package luckyweb.seagull.spring.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.ZtTaskDao;
 import luckyweb.seagull.spring.entity.ZtTask;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -50,7 +48,7 @@ public class ZtTaskServiceImpl implements ZtTaskService{
 
 	@Override
 	public void delete(int versionid) throws Exception {
-		String sql="delete from QA_ZTTASK where versionid="+versionid;
+		String sql="delete from qa_zttask where versionid="+versionid;
 		this.zttaskdao.delete(sql);
 	}
 	
