@@ -58,7 +58,7 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 				//获取所有项目
 				QueueListener.projlist = queryproj.list();
 				
-				Query query = session.createQuery("from TestJobs where (tasktype ='D') or  (tasktype ='O' and runtime>sysdate()) ");
+				Query query = session.createQuery("from TestJobs where (tasktype ='D' and state = 1) or  (tasktype ='O' and runtime>sysdate() and state = 1)");
 				QueueListener.list = query.list();
 				
 				QueueListener.qa_projlist = session.createQuery("from SectorProjects where projecttype=0 order by projectid asc").list();
