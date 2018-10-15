@@ -78,7 +78,7 @@ public class OperationLogServiceImpl implements OperationLogService{
 	
 	@Override
 	public int findRows(OperationLog oplog) {
-		String hql="select count(*) from operation_log "+where(oplog);
+		String hql="select count(*) from OperationLog "+where(oplog);
 		return operationlogdao.findRows(oplog, hql);
 	}
 	

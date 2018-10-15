@@ -102,7 +102,7 @@ public class SecondarySectorServiceImpl implements SecondarySectorService{
 
 	@Override
 	public int findRows(SecondarySector sector) {
-		String hql="select count(*) from qa_secondarysector "+where(sector);
+		String hql="select count(*) from SecondarySector "+where(sector);
 		return secondarysectordao.findRows(sector,hql);
 	}
 

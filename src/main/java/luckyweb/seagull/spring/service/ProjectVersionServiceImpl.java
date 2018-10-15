@@ -117,7 +117,7 @@ public class ProjectVersionServiceImpl implements ProjectsVersionService{
 
 	@Override
 	public int findRows(ProjectVersion projectversion) {
-		String hql="select count(*) from project_version "+where(projectversion);
+		String hql="select count(*) from ProjectVersion "+where(projectversion);
 		return projectversiondao.findRows(projectversion, hql);
 	}
 

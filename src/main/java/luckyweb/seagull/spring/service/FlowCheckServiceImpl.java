@@ -165,7 +165,7 @@ public class FlowCheckServiceImpl implements FlowCheckService{
 	@Override
 	public int findRowsTable(FlowCheck flowcheck)
 	{
-		String hql = "select count(*) from qa_flowcheck " + where(flowcheck);
+		String hql = "select count(*) from FlowCheck " + where(flowcheck);
 		return flowcheckdao.findRowsTable(flowcheck, hql);
 	}
 

@@ -79,7 +79,7 @@ public class ReviewInfoServiceImpl implements ReviewInfoService{
 
 	@Override
 	public int findRows(ReviewInfo reviewinfo) {
-		String hql="select count(*) from qa_reviewinfo "+where(reviewinfo);
+		String hql="select count(*) from ReviewInfo "+where(reviewinfo);
 		return reviewinfodao.findRows(reviewinfo, hql);
 	}
 
