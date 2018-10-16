@@ -153,7 +153,7 @@ public class TestJobsServiceImpl implements TestJobsService
 	@Override
 	public List<TestJobs> findJobsList()
 	{
-		return testJobsDao.findJobsList("select id,name,planproj from Test_Jobs  order by id asc ");
+		return testJobsDao.findJobsList("select id,name,planproj from test_jobs  order by id asc ");
 	}
 
 	@Override

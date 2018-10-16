@@ -161,7 +161,7 @@ public class TestTastExcuteServiceImpl implements TestTastExcuteService {
 	@SuppressWarnings("rawtypes")
 	public List listtastinfo() throws Exception{
 		return this.tastExcuteDao.listtastinfo("select t.id,b.name,t.casetotal_count,t.casesucc_count,t.casefail_count,t.caselock_count,t.casenoexec_count,date_format(t.createtime,'%Y-%m-%d %T') "
-				+ "from TEST_TASKEXCUTE t left join test_jobs b on t.jobid = b.id where t.id in "
+				+ "from test_taskexcute t left join test_jobs b on t.jobid = b.id where t.id in "
 				+ "(select max(t.id) from test_taskexcute t  where t.taskstatus != '0' and t.taskstatus != '3' and t.taskstatus != '1' group by t.jobid) order by t.createtime desc");
 	}
 

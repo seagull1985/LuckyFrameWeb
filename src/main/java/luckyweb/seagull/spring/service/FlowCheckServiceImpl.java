@@ -124,7 +124,7 @@ public class FlowCheckServiceImpl implements FlowCheckService{
 		String	hql="select projectid,checkid,min(checkdate),sum(case when checkresult in ('未通过','通过') then sum else 0 end) as sum,"
 				+ "sum(case checkresult when '通过' then sum else 0 end) as pass,sum(case checkresult when '未通过' then sum else 0 end) as fail,versionnum,projectid as name,projectid as per,"
 				+ "sum(case checkresult when '未检查' then sum else 0 end) as uncheck"
-				+ " from (select projectid,versionnum,checkid,checkdate ,checkresult,COUNT(*) sum from QA_FLOWCHECK t "+where((FlowCheck)value)+" group by projectid,versionnum,checkid,checkresult,checkdate) as aa"
+				+ " from (select projectid,versionnum,checkid,checkdate ,checkresult,COUNT(*) sum from qa_flowcheck t "+where((FlowCheck)value)+" group by projectid,versionnum,checkid,checkresult,checkdate) as aa"
 				+" group by projectid,checkid,versionnum order by max(checkdate) desc";
 		List list= flowcheckdao.findByPage(hql, value, offset, pageSize);
 		return list;
@@ -178,7 +178,7 @@ public class FlowCheckServiceImpl implements FlowCheckService{
 	@Override
 	public List listcheckinfo(int projectid,int checkid) throws Exception {
 		// TODO Auto-generated method stub
-		return this.flowcheckdao.listcheckinfo("select id,phasename,phasenodename,checkentry from qa_flowinfo where id not in(select checkentry from QA_FLOWCHECK  "
+		return this.flowcheckdao.listcheckinfo("select id,phasename,phasenodename,checkentry from qa_flowinfo where id not in(select checkentry from qa_flowcheck  "
 				+ "where projectid = "+projectid+" and checkid = "+checkid+") "
 				+ "order by phaseid,phasenodeid,checkentryid");	
 	}
