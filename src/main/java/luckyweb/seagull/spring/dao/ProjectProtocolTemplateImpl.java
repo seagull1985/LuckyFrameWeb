@@ -13,9 +13,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import luckyweb.seagull.comm.PublicConst;
-import luckyweb.seagull.spring.entity.ProjectPlan;
 import luckyweb.seagull.spring.entity.ProjectProtocolTemplate;
-import luckyweb.seagull.spring.entity.ProjectTemplateParams;
 import luckyweb.seagull.util.StrLib;
 
 /**

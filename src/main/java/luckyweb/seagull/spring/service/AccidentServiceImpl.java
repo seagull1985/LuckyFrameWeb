@@ -126,7 +126,7 @@ public class AccidentServiceImpl implements AccidentService{
 
 	@Override
 	public int findRows(Accident accident) {
-		String hql="select count(*) from qa_accident "+where(accident);
+		String hql="select count(*) from Accident "+where(accident);
 		return accidentdao.findRows(accident, hql);
 	}
 

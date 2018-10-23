@@ -77,7 +77,7 @@ public class ProjectProtocolTemplateImpl implements ProjectProtocolTemplateServi
 	
 	@Override
 	public int findRows(ProjectProtocolTemplate ppt) {
-		String hql="select count(*) from project_protocoltemplate "+where(ppt);
+		String hql="select count(*) from ProjectProtocolTemplate "+where(ppt);
 		return projectprotocoltemplatedao.findRows(ppt, hql);
 	}
 	

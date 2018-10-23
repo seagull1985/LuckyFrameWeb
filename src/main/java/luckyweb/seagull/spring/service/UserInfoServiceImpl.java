@@ -81,13 +81,14 @@ public class UserInfoServiceImpl implements UserInfoService{
 	@Override
 	public List findByPage(Object value, int offset, int pageSize) {
 		String	hql=" from UserInfo  "+where((UserInfo)value)+orderBy;
+		@SuppressWarnings("rawtypes")
 		List list= userinfodao.findByPage(hql, value, offset, pageSize);
 		return list;
 	}
 
 	@Override
 	public int findRows(UserInfo userinfo) {
-		String hql="select count(*) from userinfo "+where(userinfo);
+		String hql="select count(*) from UserInfo "+where(userinfo);
 		return userinfodao.findRows(userinfo, hql);
 	}
 	
@@ -100,7 +101,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 	@Override
 	public UserInfo getUseinfo(String usercode) {
 		String sql = "select id from userinfo where usercode='" + usercode + "'";
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("rawtypes")
 		List list;
 		try {
 			list = userinfodao.listsql(sql);

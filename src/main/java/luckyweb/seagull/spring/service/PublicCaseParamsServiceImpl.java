@@ -88,7 +88,7 @@ public class PublicCaseParamsServiceImpl implements PublicCaseParamsService{
 
 	@Override
 	public int findRows(PublicCaseParams pcp) {
-		String hql="select count(*) from public_caseparams "+where(pcp);
+		String hql="select count(*) from PublicCaseParams "+where(pcp);
 		return pcpdao.findRows(pcp, hql);
 	}
 	

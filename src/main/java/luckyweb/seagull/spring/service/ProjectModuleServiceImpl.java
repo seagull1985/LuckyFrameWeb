@@ -80,7 +80,7 @@ public class ProjectModuleServiceImpl implements ProjectModuleService{
 
 	@Override
 	public int findRows(ProjectModule projectmodule) {
-		String hql="select count(*) from project_module "+where(projectmodule);
+		String hql="select count(*) from ProjectModule "+where(projectmodule);
 		return projectmoduleDao.findRows(projectmodule, hql);
 	}
 	

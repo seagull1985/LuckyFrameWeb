@@ -12,10 +12,6 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import luckyweb.seagull.spring.entity.ProjectCase;
-import luckyweb.seagull.spring.entity.ProjectCasesteps;
-import luckyweb.seagull.spring.entity.ProjectPlanCase;
-import luckyweb.seagull.spring.entity.ProjectProtocolTemplate;
 import luckyweb.seagull.spring.entity.ProjectTemplateParams;
 
 /**

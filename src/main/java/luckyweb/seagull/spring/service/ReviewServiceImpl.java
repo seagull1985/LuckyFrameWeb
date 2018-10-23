@@ -97,7 +97,7 @@ public class ReviewServiceImpl implements ReviewService{
 
 	@Override
 	public int findRows(Review review) {
-		String hql="select count(*) from review "+where(review);
+		String hql="select count(*) from Review "+where(review);
 		return reviewdao.findRows(review, hql);
 	}
 

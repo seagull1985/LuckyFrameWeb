@@ -90,7 +90,7 @@ public class ProjectCaseServiceImpl implements ProjectCaseService{
 
 	@Override
 	public int findRows(ProjectCase projectcase) {
-		String hql="select count(*) from project_case "+where(projectcase);
+		String hql="select count(*) from ProjectCase "+where(projectcase);
 		return projectcaseDao.findRows(projectcase, hql);
 	}
 	
