@@ -38,7 +38,6 @@ public class OperationLogServiceImpl implements OperationLogService{
 	
 	@Override
 	public OperationLog load(int id) throws Exception {
-		// TODO Auto-generated method stub		
 		return this.operationlogdao.load(id);
 	}
 	
