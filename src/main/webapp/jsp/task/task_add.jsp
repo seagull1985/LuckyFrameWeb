@@ -180,6 +180,14 @@
 						value="0" onclick="isShow2('0')" />不发送 <sf:radiobutton
 						path="isSendMail" value="1" onclick="isShow2('1')" />发送</td>
 			</tr>
+            <tr id="tr_send_condition" style="display: none">
+                <td width="140" height="30" align="left">发送条件</td>
+                <td height="30" colspan="3">
+                    <sf:radiobutton path="sendCondition" value="0" />全发
+                    <sf:radiobutton path="sendCondition" value="1" />成功发
+                    <sf:radiobutton path="sendCondition" value="-1" />失败发
+                </td>
+            </tr>
 			<tr id="tr_send" style="display: none;">
 				<td height="30" align="left">收件人</td>
 				<td height="30" colspan="3"><sf:textarea cols="50" rows="5"
@@ -395,9 +403,14 @@
 		if(isSend=='1'){
 			document.getElementById('tr_send').style.display='block';
 			document.getElementById('tr_send').style.display = 'table-row'
+
+            document.getElementById('tr_send_condition').style.display='block';
+            document.getElementById('tr_send_condition').style.display = 'table-row'
 		}else{
 			document.getElementById('tr_send').style.display='none';
 			document.getElementById('emailer').value="";
+
+            document.getElementById('tr_send_condition').style.display='none';
 		}
 		type=isSend;
 	}
