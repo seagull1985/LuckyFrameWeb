@@ -83,6 +83,7 @@
 									<th>参数</th>
 									<th>步骤动作</th>
 									<th>预期结果</th>
+									<th>失败后操作</th>
 									<th>类型</th>
 									<th>备注</th>
 									<th>操作</th>
@@ -97,8 +98,16 @@
 										<td width="18%">
 											<div class="form-group"><sf:input type="text" class="form-control" path="path" id="path${i.count}" value="${t.path}"/></div>
 										</td>
-										<td width="13%">
-											<div class="form-group">
+										<td width="7%">
+											<div class="form-group"
+
+
+
+
+
+
+
+                                            >
 												<div class="input-group" style="width:100%;">
 													<sf:input type="text" class="form-control" path="operation" id="operation${i.count}" value="${t.operation}"/>
 													<div class="input-group-btn">
@@ -123,6 +132,15 @@
 										<td width="13%">
 											<div class="form-group"><sf:input type="text" class="form-control" path="expectedresult" id="expectedresult${i.count}" value="${t.expectedresult}"/></div>
 										</td>
+                                        <td width="8%">
+                                            <div class="form-group">
+                                                <sf:select type="text" class="form-control" align-items="left" path="failcontinue" id="failcontinue${i.count}" onChange="getObIndex(this)">                           
+                                                    <option value="0" <c:if test="${t.failcontinue==0 }"> selected="selected"</c:if>>终止
+                                                    </option>
+                                                    <option value="1" <c:if test="${t.failcontinue==1 }"> selected="selected"</c:if>>继续</option>
+                                                </sf:select>
+                                            </div>
+                                        </td>
 										<td width="8%">
 											<div class="form-group">
 												<sf:select type="text" class="form-control" align-items="left" path="steptype" id="steptype${i.count}" onChange="getObIndex(this)">                           

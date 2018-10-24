@@ -32,3 +32,8 @@ rename table PUBLIC_CASEPARAMS to public_caseparams;
 /* 初始化‘addcookie’数据 */
 insert into project_casestepsparams (id, steptype, parentid, fieldname, paramvalue, description)
 values (96, 1, 0, 'operation', 'addcookie', '添加浏览器cookie');
+
+
+ALTER TABLE `luckyframedb`.`test_jobs` ADD COLUMN `sendcondition` int(4) NULL DEFAULT 0 COMMENT '发送邮件通知时的具体逻辑, 0-全部，1-成功，-1-失败';
+
+ALTER TABLE `luckyframedb`.`project_casesteps` ADD COLUMN `failcontinue` int(2) NULL DEFAULT 0 COMMENT '失败了是否继续，0：不继续，1：继续';

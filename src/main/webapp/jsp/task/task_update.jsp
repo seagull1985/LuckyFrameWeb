@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=utf-8" language="java"
-	import="java.sql.*" errorPage=""%>
+         errorPage=""%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -225,6 +225,14 @@
 								value="0" onclick="isShow2('0')" />不发送 <sf:radiobutton
 								path="isSendMail" value="1" onclick="isShow2('1')" />发送</td>
 					</tr>
+                    <tr id="tr_send_condition" style="display: none">
+                        <td width="140" height="30" align="left">发送条件</td>
+                        <td height="30" colspan="3">
+                            <sf:radiobutton path="sendCondition" value="0" />全发
+                            <sf:radiobutton path="sendCondition" value="1" />成功发
+                            <sf:radiobutton path="sendCondition" value="-1" />失败发
+                        </td>
+                    </tr>
 					<tr id="tr_send" style="display: none">
 						<td width="140" height="30" align="left">收件人(英文分号（;）隔开)</td>
 						<td height="30" colspan="3"><sf:textarea cols="50" rows="5"
@@ -334,8 +342,12 @@
 		if(isSend=='1'){
 			document.getElementById('tr_send').style.display='block';
 			document.getElementById('tr_send').style.display = 'table-row'
+
+            document.getElementById('tr_send_condition').style.display='block';
+            document.getElementById('tr_send_condition').style.display = 'table-row'
 		}else{
 			document.getElementById('tr_send').style.display='none';
+			document.getElementById('tr_send_condition').style.display='none';
 		}
 		type=isSend;
 	}

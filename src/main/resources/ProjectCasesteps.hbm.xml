@@ -45,5 +45,8 @@
 		<property name="remark" type="java.lang.String">
 			<column name="remark" length="200" not-null="false" />
 		</property>
+        <property name="failcontinue" type="java.lang.Integer">
+            <column name="failcontinue" length="2" not-null="false" />
+        </property>
 	</class>
 </hibernate-mapping>
