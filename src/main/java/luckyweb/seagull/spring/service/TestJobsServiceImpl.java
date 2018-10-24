@@ -1,17 +1,16 @@
 package luckyweb.seagull.spring.service;
 
-import java.text.SimpleDateFormat;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.TestJobsDao;
 import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * =================================================================
@@ -161,8 +160,13 @@ public class TestJobsServiceImpl implements TestJobsService
 	{
 		return testJobsDao.findJobsList("SELECT clientpath FROM test_jobs where projectid="+projectid+" GROUP BY clientpath ");
 	}
-	
-	/**
+
+    @Override
+    public List<TestJobs> getTestJobByPlanId(int planId) {
+        return testJobsDao.loadByPlanId(planId);
+    }
+
+    /**
 	 * 状态
 	 * 
 	 * @param status
