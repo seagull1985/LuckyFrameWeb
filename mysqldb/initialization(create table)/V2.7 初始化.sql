@@ -217,6 +217,7 @@ create table TEST_JOBS
   projecttype  int(4) default "0" COMMENT '项目类型 系统内项目 0 testlink 1',
   projectid    int(8) COMMENT '系统内项目ID',
   planid       int(8) COMMENT '系统内项目关联测试计划ID',
+  sendcondition int(4) default 0 COMMENT '发送邮件通知时的具体逻辑, 0-全部，1-成功，-1-失败',
   primary key (id)
 )default character set utf8;
 create table TEST_CASEDETAIL
@@ -328,6 +329,7 @@ create table PROJECT_CASESTEPS
   time                  VARCHAR(30)  COMMENT '最后更新时间',
   operationer           VARCHAR(20)  COMMENT '最后更新人员',
   remark                VARCHAR(200) COMMENT '备注',
+  failcontinue          int(2) DEFAULT 0 COMMENT '失败了是否继续，0：不继续，1：继续',
   primary key (ID)
 )default character set utf8;
 

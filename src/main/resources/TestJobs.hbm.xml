@@ -104,5 +104,8 @@
 		<property name="planid" type="java.lang.Integer">
 			<column name="planid" length="8" />
 		</property>
+        <property name="sendCondition" type="java.lang.Integer">
+            <column name="sendcondition" length="4" />
+        </property>
 	</class>
 </hibernate-mapping>

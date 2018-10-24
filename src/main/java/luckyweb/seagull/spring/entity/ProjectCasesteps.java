@@ -30,6 +30,8 @@ public class ProjectCasesteps implements java.io.Serializable{
     private String time;
     private String operationer;
     private String remark;
+    // 失败了是否继续
+    private Integer failcontinue;
 	public int getId() {
 		return id;
 	}
@@ -109,5 +111,12 @@ public class ProjectCasesteps implements java.io.Serializable{
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	
+
+    public Integer getFailcontinue() {
+        return failcontinue;
+    }
+
+    public void setFailcontinue(Integer failcontinue) {
+        this.failcontinue = failcontinue;
+    }
 }
