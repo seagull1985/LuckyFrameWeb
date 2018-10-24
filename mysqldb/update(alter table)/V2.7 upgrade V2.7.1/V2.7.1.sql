@@ -32,3 +32,5 @@ rename table PUBLIC_CASEPARAMS to public_caseparams;
 /* 初始化‘addcookie’数据 */
 insert into project_casestepsparams (id, steptype, parentid, fieldname, paramvalue, description)
 values (96, 1, 0, 'operation', 'addcookie', '添加浏览器cookie');
+/* 修改Web UI中的一些描述*/
+update project_casestepsparams set description='调用指定接口|Web UI用例' where id=46

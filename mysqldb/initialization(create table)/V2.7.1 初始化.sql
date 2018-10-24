@@ -632,7 +632,7 @@ values (44, 1, 0, 'operation','mousekey(shift)','模拟键盘Shift键');
 insert into project_casestepsparams (id, steptype, parentid, fieldname,paramvalue,description)
 values (45, 1, 0, 'operation','mousekey(enter)','模拟键盘Enter键');
 insert into project_casestepsparams (id, steptype, parentid, fieldname,paramvalue,description)
-values (46, 1, 0, 'operation','runcase','调用指定接口用例');
+values (46, 1, 0, 'operation','runcase','调用指定接口|Web UI用例');
 insert into project_casestepsparams (id, steptype, parentid, fieldname,paramvalue,description)
 values (47, 2, 0, 'operation','HttpClientPostJSON','使用HttpClient发送JSON格式post请求');
 insert into project_casestepsparams (id, steptype, parentid, fieldname,paramvalue,description)
