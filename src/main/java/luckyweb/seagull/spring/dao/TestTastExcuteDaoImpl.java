@@ -13,7 +13,6 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import luckyweb.seagull.spring.entity.Accident;
 import luckyweb.seagull.spring.entity.TestTaskexcute;
 import luckyweb.seagull.util.StrLib;
 

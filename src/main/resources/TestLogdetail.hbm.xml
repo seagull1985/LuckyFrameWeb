@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 2015-4-21 15:55:06 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping package="luckyweb.seagull.spring.entity">
-	<class name="TestLogdetail" table="TEST_LOGDETAIL" schema="luckyframedb">
+	<class name="TestLogdetail" table="test_logdetail" schema="luckyframedb">
 		<id name="logid" type="java.lang.Integer">
 			<column name="LOGID" precision="22" scale="0" />
 			<generator class="identity"/>

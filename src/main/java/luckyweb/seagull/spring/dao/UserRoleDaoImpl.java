@@ -9,7 +9,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.entity.UserRole;
 
 /**

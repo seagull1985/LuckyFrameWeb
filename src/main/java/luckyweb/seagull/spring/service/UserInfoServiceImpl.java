@@ -1,14 +1,12 @@
 package luckyweb.seagull.spring.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.UserInfoDao;
 import luckyweb.seagull.spring.entity.UserInfo;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -57,7 +55,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 	
 	@Override
 	public int getid(String usercode,String password) throws Exception {
-		return this.userinfodao.get("select id from USERINFO where usercode='"+usercode+"' and password='"+password+"'");
+		return this.userinfodao.get("select id from userinfo where usercode='"+usercode+"' and password='"+password+"'");
 	}
 
 	private String where(UserInfo userinfo) {
@@ -83,6 +81,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 	@Override
 	public List findByPage(Object value, int offset, int pageSize) {
 		String	hql=" from UserInfo  "+where((UserInfo)value)+orderBy;
+		@SuppressWarnings("rawtypes")
 		List list= userinfodao.findByPage(hql, value, offset, pageSize);
 		return list;
 	}
@@ -95,14 +94,14 @@ public class UserInfoServiceImpl implements UserInfoService{
 	
 	@Override
 	public int findUsecode(String usercode) {
-		String sql="select * from UserInfo where usercode='"+usercode+"'";
+		String sql="select * from userinfo where usercode='"+usercode+"'";
 		return userinfodao.sqlfindRows(sql);
 	}
 	
 	@Override
 	public UserInfo getUseinfo(String usercode) {
-		String sql = "select id from UserInfo where usercode='" + usercode + "'";
-		@SuppressWarnings("unchecked")
+		String sql = "select id from userinfo where usercode='" + usercode + "'";
+		@SuppressWarnings("rawtypes")
 		List list;
 		try {
 			list = userinfodao.listsql(sql);

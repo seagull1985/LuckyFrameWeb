@@ -1,17 +1,13 @@
 package luckyweb.seagull.spring.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.ProjectVersionDao;
-import luckyweb.seagull.spring.dao.SectorProjectsDao;
 import luckyweb.seagull.spring.entity.ProjectVersion;
-import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.util.StrLib;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * =================================================================
@@ -142,7 +138,7 @@ public class ProjectVersionServiceImpl implements ProjectsVersionService{
 		}
 		return this.projectversiondao.listavgpro("select t.projectid,count(projectid),"
 				+ "ROUND(avg(cast(t.per_dev as DECIMAL)),2),ROUND(avg(cast(t.per_test as DECIMAL)),2),ROUND(avg(cast(t.protime_deviation as DECIMAL)),2),ROUND(avg(cast(t.code_di as DECIMAL)),2),ROUND(avg(cast(t.actually_demand as DECIMAL)/cast(t.plan_demand as DECIMAL)),4)*100 "
-				+ "from QA_PROJECTVERSION t where t.versiontype = 1 and t.actually_launchdate >= '"+startdate+"' and t.actually_launchdate<='"+enddate+"' group by t.projectid  order by t.projectid ");	
+				+ "from qa_projectversion t where t.versiontype = 1 and t.actually_launchdate >= '"+startdate+"' and t.actually_launchdate<='"+enddate+"' group by t.projectid  order by t.projectid ");	
 	}
 	
 	@Override
@@ -152,13 +148,13 @@ public class ProjectVersionServiceImpl implements ProjectsVersionService{
 				+ "COUNT(CASE WHEN cast(t.prodelay_days as SIGNED)>0 THEN 1 ELSE NULL  END) 延迟版本,"
 				+ "COUNT(CASE WHEN cast(t.prodelay_days as SIGNED)<=0 THEN 1 ELSE NULL  END) 未延迟版本,"
 				+ "sum(t.changetestingreturn),sum(t.bug_zm),sum(t.bug_yz),sum(t.bug_yb),sum(t.bug_ts),sum(t.human_costdev),sum(t.human_costtest),0 as perdemand,0 as perdelay "
-				+ "from QA_PROJECTVERSION t where t.versiontype = 1 and t.actually_launchdate >= '"+startdate+"' and t.actually_launchdate<='"+enddate+"' group by t.projectid  order by t.projectid";
+				+ "from qa_projectversion t where t.versiontype = 1 and t.actually_launchdate >= '"+startdate+"' and t.actually_launchdate<='"+enddate+"' group by t.projectid  order by t.projectid";
 		return this.projectversiondao.findByPagereport(hql, offset, pageSize);
 	}
 	
 	@Override
 	public int findRowsreport(String startdate,String enddate) {
-		String hql="select projectid from QA_PROJECTVERSION t where t.versiontype = 1 and t.actually_launchdate >= '"+startdate+"' and t.actually_launchdate<='"+enddate+"' group by t.projectid";
+		String hql="select projectid from qa_projectversion t where t.versiontype = 1 and t.actually_launchdate >= '"+startdate+"' and t.actually_launchdate<='"+enddate+"' group by t.projectid";
 		return projectversiondao.findRowsreport(hql);
 	}
 

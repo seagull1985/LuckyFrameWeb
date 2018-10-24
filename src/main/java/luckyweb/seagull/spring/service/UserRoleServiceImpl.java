@@ -57,7 +57,7 @@ public class UserRoleServiceImpl implements UserRoleService{
 
 	@Override
 	public List<Object[]> getalldata() throws Exception {
-		return this.userroledao.get("select id,role,permission from USER_ROLE");
+		return this.userroledao.get("select id,role,permission from user_role");
 	}
 	
 	@Override

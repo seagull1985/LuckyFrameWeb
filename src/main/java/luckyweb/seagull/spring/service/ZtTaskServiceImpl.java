@@ -1,14 +1,12 @@
 package luckyweb.seagull.spring.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.ZtTaskDao;
 import luckyweb.seagull.spring.entity.ZtTask;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -50,7 +48,7 @@ public class ZtTaskServiceImpl implements ZtTaskService{
 
 	@Override
 	public void delete(int versionid) throws Exception {
-		String sql="delete from QA_ZTTASK where versionid="+versionid;
+		String sql="delete from qa_zttask where versionid="+versionid;
 		this.zttaskdao.delete(sql);
 	}
 	
@@ -101,11 +99,11 @@ public class ZtTaskServiceImpl implements ZtTaskService{
 		String hql="";
 		if(type==1){
 			hql = "select finishedname,sum(t.estimate),sum(t.consumed),COUNT (CASE WHEN t.delaystatus=1 THEN 1 ELSE NULL  END) 未延迟任务,"
-					+ "COUNT (CASE WHEN t.delaystatus=2 THEN 1 ELSE NULL  END) 延迟任务,finishedname as pertask,finishedname as pertime  from QA_ZTTASK t where t.assigneddate>= '"+startdate+" 00:00:00.0' "
+					+ "COUNT (CASE WHEN t.delaystatus=2 THEN 1 ELSE NULL  END) 延迟任务,finishedname as pertask,finishedname as pertime  from qa_zttask t where t.assigneddate>= '"+startdate+" 00:00:00.0' "
 					+ "and t.assigneddate<='"+enddate+" 24:59:59.59' group by t.finishedname";
 		}else{
 			hql = "select versionname,sum(t.estimate),sum(t.consumed),COUNT (CASE WHEN t.delaystatus=1 THEN 1 ELSE NULL  END) 未延迟任务,"
-					+ "COUNT (CASE WHEN t.delaystatus=2 THEN 1 ELSE NULL  END) 延迟任务,versionname as pertask,versionname as pertime  from QA_ZTTASK t where t.assigneddate>= '"+startdate+" 00:00:00.0' "
+					+ "COUNT (CASE WHEN t.delaystatus=2 THEN 1 ELSE NULL  END) 延迟任务,versionname as pertask,versionname as pertime  from qa_zttask t where t.assigneddate>= '"+startdate+" 00:00:00.0' "
 					+ "and t.assigneddate<='"+enddate+" 24:59:59.59' group by t.versionname";
 		}		
 		return this.zttaskdao.findByPagereport(hql, offset, pageSize);
@@ -115,10 +113,10 @@ public class ZtTaskServiceImpl implements ZtTaskService{
 	public int findRowsreport(String startdate,String enddate,int type) {
 		String hql="";
 		if(type==1){
-			hql = "select finishedname from QA_ZTTASK t where t.assigneddate>= '"+startdate+" 00:00:00.0' "
+			hql = "select finishedname from qa_zttask t where t.assigneddate>= '"+startdate+" 00:00:00.0' "
 					+ "and t.assigneddate<='"+enddate+" 24:59:59.59' group by t.finishedname";
 		}else{
-			hql = "select versionname from QA_ZTTASK t where t.assigneddate>= '"+startdate+" 00:00:00.0' "
+			hql = "select versionname from qa_zttask t where t.assigneddate>= '"+startdate+" 00:00:00.0' "
 					+ "and t.assigneddate<='"+enddate+" 24:59:59.59' group by t.versionname";
 		}
 		return this.zttaskdao.findRowsreport(hql);

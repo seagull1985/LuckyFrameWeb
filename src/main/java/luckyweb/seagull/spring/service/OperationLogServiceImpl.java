@@ -1,18 +1,16 @@
 package luckyweb.seagull.spring.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.stereotype.Service;
-
 import luckyweb.seagull.comm.PublicConst;
 import luckyweb.seagull.spring.dao.OperationLogDao;
 import luckyweb.seagull.spring.entity.OperationLog;
 import luckyweb.seagull.spring.entity.SectorProjects;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 
 /**

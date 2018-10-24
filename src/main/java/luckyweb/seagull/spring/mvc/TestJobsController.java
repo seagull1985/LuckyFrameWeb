@@ -1,22 +1,18 @@
 package luckyweb.seagull.spring.mvc;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import luckyweb.seagull.comm.PublicConst;
+import luckyweb.seagull.comm.QueueListener;
+import luckyweb.seagull.quartz.QuartzJob;
+import luckyweb.seagull.quartz.QuartzManager;
+import luckyweb.seagull.quartz.QuratzJobDataMgr;
+import luckyweb.seagull.spring.entity.*;
+import luckyweb.seagull.spring.service.*;
+import luckyweb.seagull.util.DateLib;
+import luckyweb.seagull.util.DateUtil;
+import luckyweb.seagull.util.StrLib;
+import luckyweb.seagull.util.client.HttpRequest;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,32 +23,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
-import luckyweb.seagull.comm.PublicConst;
-import luckyweb.seagull.comm.QueueListener;
-import luckyweb.seagull.quartz.QuartzJob;
-import luckyweb.seagull.quartz.QuartzManager;
-import luckyweb.seagull.quartz.QuratzJobDataMgr;
-import luckyweb.seagull.spring.entity.ProjectPlan;
-import luckyweb.seagull.spring.entity.SectorProjects;
-import luckyweb.seagull.spring.entity.TestClient;
-import luckyweb.seagull.spring.entity.TestJobs;
-import luckyweb.seagull.spring.entity.UserInfo;
-import luckyweb.seagull.spring.service.CaseDetailService;
-import luckyweb.seagull.spring.service.LogDetailService;
-import luckyweb.seagull.spring.service.OperationLogService;
-import luckyweb.seagull.spring.service.ProjectPlanService;
-import luckyweb.seagull.spring.service.SectorProjectsService;
-import luckyweb.seagull.spring.service.TestClientService;
-import luckyweb.seagull.spring.service.TestJobsService;
-import luckyweb.seagull.spring.service.TestTastExcuteService;
-import luckyweb.seagull.spring.service.UserInfoService;
-import luckyweb.seagull.util.DateLib;
-import luckyweb.seagull.util.DateUtil;
-import luckyweb.seagull.util.StrLib;
-import luckyweb.seagull.util.client.HttpRequest;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * =================================================================
@@ -963,13 +947,15 @@ public class TestJobsController
 				QuartzJob qj = new QuartzJob();
 				String message = qj.toRunTask(tj.getPlanproj(), id,tj.getTaskName(),tj.getClientip(),tj.getClientpath());				
 				
-				operationlogservice.add(req, "TESTJOBS", Integer.valueOf(id), 
+				operationlogservice.add(req, "test_jobs", Integer.valueOf(id),
 						sectorprojectsService.getid(tj.getPlanproj()),2,"自动化用例计划任务被执行！计划名称："+tj.getTaskName()+" 结果："+message);
 				pw.write(message);
 			}
 			catch (Exception e)
 			{
 				String message = "当前项目在服务器不存在！";
+                log.error("", e);
+                e.printStackTrace();
 				pw.write(message);
 			}
 
