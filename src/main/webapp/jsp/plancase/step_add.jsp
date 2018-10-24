@@ -134,7 +134,7 @@
 										</td>
                                         <td width="8%">
                                             <div class="form-group">
-                                                <sf:select type="text" class="form-control" align-items="left" path="failcontinue" id="failcontinue${i.count}" onChange="getObIndex(this)">                           
+                                                <sf:select type="text" class="form-control" align-items="left" path="failcontinue" id="failcontinue${i.count}">                           
                                                     <option value="0" <c:if test="${t.failcontinue==0 }"> selected="selected"</c:if>>终止
                                                     </option>
                                                     <option value="1" <c:if test="${t.failcontinue==1 }"> selected="selected"</c:if>>继续</option>
@@ -498,8 +498,9 @@
                 aob.children[1].setAttribute("id", "action" + index);
             }
             oTable.rows[i].cells[5].children[0].children[0].setAttribute("id", "expectedresult" + index);
-            oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "steptype" + index);
-            oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "remark" + index);
+            oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "failcontinue" + index);
+            oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "steptype" + index);
+            oTable.rows[i].cells[8].children[0].children[0].setAttribute("id", "remark" + index);
         }
         initSuggest(begin + 1);
         clearCells(begin + 1);
@@ -540,8 +541,9 @@
                 aob.children[1].setAttribute("id", "action" + index);
             }
             oTable.rows[i].cells[5].children[0].children[0].setAttribute("id", "expectedresult" + index);
-            oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "steptype" + index);
-            oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "remark" + index);
+            oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "failcontinue" + index);
+            oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "steptype" + index);
+            oTable.rows[i].cells[8].children[0].children[0].setAttribute("id", "remark" + index);
         }
         $('#casesteps').data('bootstrapValidator').resetForm();
         $('#casesteps').data('bootstrapValidator').validate();
@@ -576,8 +578,9 @@
                     aob.children[1].setAttribute("id", "action" + index);
                 }
                 oTable.rows[i].cells[5].children[0].children[0].setAttribute("id", "expectedresult" + index);
-                oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "steptype" + index);
-                oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "remark" + index);
+                oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "failcontinue" + index);
+                oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "steptype" + index);
+                oTable.rows[i].cells[8].children[0].children[0].setAttribute("id", "remark" + index);
             }
         }
     }
@@ -611,8 +614,9 @@
                     aob.children[1].setAttribute("id", "action" + index);
                 }
                 oTable.rows[i].cells[5].children[0].children[0].setAttribute("id", "expectedresult" + index);
-                oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "steptype" + index);
-                oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "remark" + index);
+                oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "failcontinue" + index);
+                oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "steptype" + index);
+                oTable.rows[i].cells[8].children[0].children[0].setAttribute("id", "remark" + index);
             }
         }
     }
