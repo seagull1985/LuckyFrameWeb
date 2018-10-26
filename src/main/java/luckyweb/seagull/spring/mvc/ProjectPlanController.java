@@ -1,5 +1,24 @@
 package luckyweb.seagull.spring.mvc;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import luckyweb.seagull.comm.PublicConst;
+import luckyweb.seagull.comm.QueueListener;
+import luckyweb.seagull.spring.entity.ProjectPlan;
+import luckyweb.seagull.spring.entity.SectorProjects;
+import luckyweb.seagull.spring.entity.TestJobs;
+import luckyweb.seagull.spring.entity.UserInfo;
+import luckyweb.seagull.spring.service.*;
+import luckyweb.seagull.util.StrLib;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,30 +27,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
-import luckyweb.seagull.comm.PublicConst;
-import luckyweb.seagull.comm.QueueListener;
-import luckyweb.seagull.spring.entity.ProjectPlan;
-import luckyweb.seagull.spring.entity.SectorProjects;
-import luckyweb.seagull.spring.entity.UserInfo;
-import luckyweb.seagull.spring.service.OperationLogService;
-import luckyweb.seagull.spring.service.ProjectPlanCaseService;
-import luckyweb.seagull.spring.service.ProjectPlanService;
-import luckyweb.seagull.spring.service.SectorProjectsService;
-import luckyweb.seagull.spring.service.UserInfoService;
-import luckyweb.seagull.util.StrLib;
 
 /**
  * =================================================================
@@ -60,6 +55,9 @@ public class ProjectPlanController {
 
 	@Resource(name = "userinfoService")
 	private UserInfoService userinfoservice;
+
+    @Resource(name = "testJobsService")
+    private TestJobsService testJobsService;
 
 	/**
 	 * 加载测试计划页面
@@ -183,10 +181,25 @@ public class ProjectPlanController {
 					projectplan.setTime(time);
 
 					projectplanservice.modify(projectplan);
+                    int projectplanId = projectplan.getId();
 
-					operationlogservice.add(req, "PROJECT_PLAN", projectplan.getId(), projectplan.getProjectid(),1,
+                    operationlogservice.add(req, "PROJECT_PLAN", projectplanId, projectplan.getProjectid(),1,
 							"修改测试计划成功!");
-					json.put("status", "success");
+                    try {
+                        // 判断该测试计划是否有任务调度，有的话，同步修改名称
+                        List<TestJobs> testJobs = this.testJobsService.getTestJobByPlanId(projectplanId);
+                        if (CollectionUtils.isNotEmpty(testJobs)) {
+                            for (TestJobs job : testJobs) {
+                                job.setTestlinkname(projectplan.getName());
+                                this.testJobsService.modify(job);
+                                operationlogservice.add(req, "test_jobs", job.getId(), projectplan.getProjectid(), 1, "修改测试计划成功,同时修改任务调度信息成功!");
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    json.put("status", "success");
 					json.put("ms", "编辑计划成功!");
 				}
 

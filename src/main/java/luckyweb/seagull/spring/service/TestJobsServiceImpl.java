@@ -161,8 +161,13 @@ public class TestJobsServiceImpl implements TestJobsService
 	{
 		return testJobsDao.findJobsList("SELECT clientpath FROM test_jobs where projectid="+projectid+" GROUP BY clientpath ");
 	}
-	
-	/**
+
+    @Override
+    public List<TestJobs> getTestJobByPlanId(int planId) {
+        return testJobsDao.loadByPlanId(planId);
+    }
+
+    /**
 	 * 状态
 	 * 
 	 * @param status

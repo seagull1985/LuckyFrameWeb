@@ -1,10 +1,11 @@
 package luckyweb.seagull.spring.dao;
 
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.annotation.Resource;
-
+import luckyweb.seagull.comm.PublicConst;
+import luckyweb.seagull.comm.QueueListener;
+import luckyweb.seagull.quartz.QuratzJobDataMgr;
+import luckyweb.seagull.spring.entity.TestClient;
+import luckyweb.seagull.spring.entity.TestJobs;
+import luckyweb.seagull.util.StrLib;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -15,12 +16,9 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import luckyweb.seagull.comm.PublicConst;
-import luckyweb.seagull.comm.QueueListener;
-import luckyweb.seagull.quartz.QuratzJobDataMgr;
-import luckyweb.seagull.spring.entity.TestClient;
-import luckyweb.seagull.spring.entity.TestJobs;
-import luckyweb.seagull.util.StrLib;
+import javax.annotation.Resource;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * =================================================================
@@ -245,6 +243,22 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 		}
 		return list;
 	}
+
+    @Override
+    public List<TestJobs> loadByPlanId(Integer planId) {
+        Session session = this.getSession(true);
+        List<TestJobs> list = null;
+        try {
+            String hql = " from TestJobs where planid=?";
+            list = (List<TestJobs>) session
+                    .createQuery(hql).setInteger(0, planId).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return list;
+    }
 
 	
 	@Override
