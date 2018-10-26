@@ -811,6 +811,7 @@
 	        		$("#moduleid").val(row[0].moduleid);        		
 	        		$("#name").val("COPY "+row[0].name);
 	        		$("input[id='casetype'][value='"+row[0].casetype+"']").attr("checked",true);
+	        		$("input[id='failcontinue'][value='"+row[0].failcontinue+"']").attr("checked",true);
 	        		$("#remark").val(row[0].remark);
 	        		$("#id").val(row[0].id);
 	        		$("#addModal").modal('show');

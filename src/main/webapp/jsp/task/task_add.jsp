@@ -183,9 +183,9 @@
             <tr id="tr_send_condition" style="display: none">
                 <td width="140" height="30" align="left">发送条件</td>
                 <td height="30" colspan="3">
-                    <sf:radiobutton path="sendCondition" value="0" />全发
-                    <sf:radiobutton path="sendCondition" value="1" />成功发
-                    <sf:radiobutton path="sendCondition" value="-1" />失败发
+                    <sf:radiobutton path="sendCondition" value="0" />默认
+                    <sf:radiobutton path="sendCondition" value="1" />用例全部执行成功
+                    <sf:radiobutton path="sendCondition" value="2" />用例执行部分或全部失败
                 </td>
             </tr>
 			<tr id="tr_send" style="display: none;">
