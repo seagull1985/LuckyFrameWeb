@@ -264,8 +264,8 @@
 								validators : {
 									stringLength : {
 										min : 0,
-										max : 2000,
-										message : '【参数默认值】长度必须在0~2000个字符区间'
+										max : 5000,
+										message : '【参数默认值】长度必须在0~5000个字符区间'
 									}
 								}
 							},

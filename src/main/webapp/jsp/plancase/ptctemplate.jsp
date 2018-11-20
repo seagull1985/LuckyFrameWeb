@@ -390,8 +390,8 @@ td{
 								validators : {
 									stringLength : {
 										min : 0,
-										max : 1500,
-										message : '请求头域长度必须小于1500个字符'
+										max : 3000,
+										message : '请求头域长度必须小于3000个字符'
 									}
 								}
 							},

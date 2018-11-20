@@ -15,7 +15,7 @@
 			<column name="paramname" length="50" not-null="true" />
 		</property>
 		<property name="param" type="java.lang.String">
-			<column name="param" length="2000" not-null="false" />
+			<column name="param" length="5000" not-null="false" />
 		</property>
 		<property name="paramtype" type="java.lang.Integer">
 			<column name="paramtype" length="4" not-null="true" />

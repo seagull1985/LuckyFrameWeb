@@ -38,3 +38,7 @@ update project_casestepsparams set description='调用指定接口|Web UI用例'
 ALTER TABLE test_jobs ADD COLUMN sendcondition int(4) NULL DEFAULT 0 COMMENT '发送邮件通知时的具体逻辑, 0-全部，1-成功，2-失败';
 /* 控制用例步骤失败后是否继续*/
 ALTER TABLE project_case ADD COLUMN failcontinue int(2) NULL DEFAULT 0 COMMENT '失败了是否继续，0：不继续，1：继续';
+/*增加协议模板中头域字段的长度*/
+alter table project_protocoltemplate modify column headmsg varchar(3000);
+/*增加模板参数中参数字段的长度*/
+alter table project_templateparams modify column param varchar(5000);

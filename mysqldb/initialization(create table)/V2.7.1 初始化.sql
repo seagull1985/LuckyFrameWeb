@@ -370,7 +370,7 @@ create table project_protocoltemplate
   id                    int(8) not null AUTO_INCREMENT,
   projectid             int(8) not null COMMENT '项目ID',
   name                  VARCHAR(50) not null COMMENT '模板名称',
-  headmsg               VARCHAR(1500) COMMENT '消息头',
+  headmsg               VARCHAR(3000) COMMENT '消息头',
   protocoltype          VARCHAR(20) not null COMMENT '协议类型',
   cerpath               VARCHAR(300) COMMENT '客户端中的证书路径',
   contentencoding       VARCHAR(20) not null COMMENT '编码格式',
@@ -386,7 +386,7 @@ create table project_templateparams
   id                    int(9) not null AUTO_INCREMENT,
   templateid            int(8) not null COMMENT '模块ID',
   paramname             VARCHAR(50) not null COMMENT '参数名',
-  param                 VARCHAR(2000) COMMENT '参数默认值',
+  param                 VARCHAR(5000) COMMENT '参数默认值',
   paramtype             int(4) not null COMMENT '0 String 1 JSON对象 2 JSONARR对象 3 文件类型',
   primary key (ID)
 )default character set utf8;
