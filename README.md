@@ -31,6 +31,7 @@
 
 > 感谢你们的认可与支持    [【捐赠记录】](https://git.oschina.net/seagull1985/LuckyFrameWeb/wikis/pages?title=捐赠列表&parent=捐赠)
 
+> 如果你喜欢这个项目，那就点击一下右上方的【Star】以及【Fork】，支持一下我们吧！
 
 # 介绍
 
