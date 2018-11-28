@@ -360,13 +360,21 @@ public class ProjectCaseController {
 					ms="删除用例成功!";
 					if(proprefail>0&&planfail==0){
 						status="warning";
-						ms="删除用例"+suc+"条成功！"+proprefail+"条因为无项目权限删除失败！";
+						ms="删除用例"+suc+"条成功！"+proprefail+"条因为当前用户无项目权限删除失败！";
 					}else if(proprefail==0&&planfail>0){
 						status="warning";
-						ms="删除用例"+suc+"条成功！"+planfail+"条因为在测试计划中无法删除！";
+						ms="删除用例"+suc+"条成功！"+planfail+"条用例因为存在测试计划中无法删除！";
 					}else if(proprefail>0&&planfail>0){
 						status="warning";
-						ms="删除用例"+suc+"条成功！"+planfail+"条因为在测试计划中无法删除！"+proprefail+"条因为无项目权限删除失败！";
+						ms="删除用例"+suc+"条成功！"+planfail+"条用例因为已经在测试计划中无法删除！"+proprefail+"条用例因为当前用户无项目权限删除失败！";
+					}
+				}else{
+					if(proprefail>0&&planfail==0){
+						ms=proprefail+"条用例因为当前用户无项目权限删除失败！";
+					}else if(proprefail==0&&planfail>0){
+						ms=planfail+"条用例因为存在测试计划中无法删除！";
+					}else if(proprefail>0&&planfail>0){
+						ms=planfail+"条用例因为已经在测试计划中无法删除！"+proprefail+"条用例因为当前用户无项目权限删除失败！";
 					}
 				}
 
