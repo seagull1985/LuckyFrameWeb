@@ -52,28 +52,13 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 		
 		if (isRun == false) {
 			try {
+				QuratzJobDataMgr mgr = new QuratzJobDataMgr();
 				Query queryproj = session.createQuery("from SectorProjects where projecttype=1 order by projectid asc");
 				//获取所有项目
 				QueueListener.projlist = queryproj.list();
-				
-				Query query = session.createQuery("from TestJobs where (tasktype ='D' and state = 1) or  (tasktype ='O' and runtime>sysdate() and state = 1)");
-				QueueListener.list = query.list();
-				
 				QueueListener.qa_projlist = session.createQuery("from SectorProjects where projecttype=0 order by projectid asc").list();
 				
 				QueueListener.listen_Clientlist=session.createQuery("from TestClient order by id asc").list();
-				//将测试调度任务加入到定时任务中
-				QuratzJobDataMgr mgr = new QuratzJobDataMgr();
-				for (TestJobs tb : QueueListener.list) {
-					try{
-						mgr.addJobRunTime(tb, tb.getId());
-						log.info("启动定时任务【"+tb.getTaskName()+"】,任务ID【"+tb.getId()+"】...");
-					}catch(Exception e){
-						log.error("启动 测试调度定时任务失败：" + e.getMessage());
-						System.out.println("任务ID号"+tb.getId()+"启动失败，请检查测试调度任务配置情况，尤其是Cron表达式是否正确！！！！");
-						continue;
-					}					
-				}
 				//将客户端心跳加入到定时任务中
 				for (TestClient tc : QueueListener.listen_Clientlist) {
 					try{
@@ -85,6 +70,21 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
 						continue;
 					}					
 				}
+				
+				Query query = session.createQuery("from TestJobs where (tasktype ='D' and state = 1) or (tasktype ='O' and runtime>sysdate() and state = 1)");
+				QueueListener.list = query.list();				
+				//将测试调度任务加入到定时任务中
+				for (TestJobs tb : QueueListener.list) {
+					try{
+						mgr.addJobRunTime(tb, tb.getId());
+						log.info("启动定时任务【"+tb.getTaskName()+"】,任务ID【"+tb.getId()+"】...");
+					}catch(Exception e){
+						log.error("启动 测试调度定时任务失败：" + e.getMessage());
+						System.out.println("任务ID号"+tb.getId()+"启动失败，请检查测试调度任务配置情况，尤其是Cron表达式是否正确！！！！");
+						continue;
+					}					
+				}
+
 				if (QueueListener.list.size() != 0) {
 				//设置任务的状态为启动
 					session.beginTransaction();

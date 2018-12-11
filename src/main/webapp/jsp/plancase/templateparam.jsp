@@ -90,18 +90,18 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<h3 class="thin text-center">协议模板基本信息</h3>
-						<table class="table table-striped" id="templatetable">
+						<table class="table table-striped" id="templatetable" style="font-weight:bold;table-layout:fixed;">
 							<tr>
-							    <td width="20%" style="font-weight:bold;">项目名称：${ptemplate.projectname}</td>
-								<td width="20%" style="font-weight:bold;">模板名称：${ptemplate.name}</td>
-								<td width="50%" style="font-weight:bold;">请求头域：${ptemplate.headmsg}</td>
-								<td width="10%" style="font-weight:bold;">协议类型：${ptemplate.protocoltype}</td>
+							    <td width="20%" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">项目名称：${ptemplate.projectname}</td>
+								<td width="20%" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">模板名称：${ptemplate.name}</td>
+								<td width="50%" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">请求头域：${ptemplate.headmsg}</td>
+								<td width="10%" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">协议类型：${ptemplate.protocoltype}</td>
 							</tr>
 							<tr>
-							    <td style="font-weight:bold;">编码格式：${ptemplate.contentencoding}</td>
-							    <td style="font-weight:bold;">备注：${ptemplate.remark}</td>
-							    <td style="font-weight:bold;">证书路径：${ptemplate.cerpath}</td>
-								<td style="font-weight:bold;">超时时间：${ptemplate.connecttimeout}</td>								
+							    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">编码格式：${ptemplate.contentencoding}</td>
+							    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">备注：${ptemplate.remark}</td>
+							    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">证书路径：${ptemplate.cerpath}</td>
+								<td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">超时时间：${ptemplate.connecttimeout}</td>								
 							</tr>
 						</table>
 
@@ -215,7 +215,7 @@
                          <input id="textid" type="hidden" value="${templateparam.id }" />
                          <input id="textname" type="hidden" value="_forTextJson" />
                          <input id="texttype" type="hidden" value="99" />
-                         <textarea class="form-control" rows="5" name="textarea" id="textarea">${templateparam.param }</textarea>
+                         <textarea class="form-control" rows="15" name="textarea" id="textarea">${templateparam.param }</textarea>
                          <br></br>
                          <div class="row">
 					       <div class="col-lg-4 text-center" style="width: 100%">
