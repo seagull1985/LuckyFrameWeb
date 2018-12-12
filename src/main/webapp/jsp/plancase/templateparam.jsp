@@ -253,9 +253,9 @@
 										message : '【参数名】不能为空'
 									},
 									stringLength : {
-										min : 2,
+										min : 1,
 										max : 50,
-										message : '【参数名】长度必须在2~50个字符区间'
+										message : '【参数名】长度必须在1~50个字符区间'
 									}
 								}
 							},
