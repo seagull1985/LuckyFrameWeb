@@ -68,8 +68,8 @@
 ![测试任务执行](https://git.oschina.net/uploads/images/2017/0913/193935_3b381747_1215415.png "测试任务执行")
 ![用例日志查询](https://git.oschina.net/uploads/images/2017/0913/194004_6414aa59_1215415.png "用例日志查询")
 
-# 更新日志
-> [【查看版本Releases日志】](https://git.oschina.net/seagull1985/LuckyFrameWeb/wikis/pages?title=更新日志&parent=项目信息)
+# 版本更新
+> [【直达官网查看版本更新文章】](http://www.luckyframe.cn/dynamic.html)
 
 # 大家安静下，我再说一句
 此项目是LuckyFrame的Web端项目，此外还有一个LuckyFrame的项目做为客户端，如果您只需要先看看界面，那么单独下载这个项目就够了，如果您需要搭建整套环境，那还要把LuckyFrame项目下载下来。
