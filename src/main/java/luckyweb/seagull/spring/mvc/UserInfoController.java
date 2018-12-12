@@ -233,7 +233,15 @@ public class UserInfoController {
 					model.addAttribute("message", message);
 					return retVal;
 				}
-				
+				//增加用户角色不能为空的验证
+				if(StrLib.isEmpty(userinfo.getRole())){
+					message = "用户角色不能为空，请重新输入！";
+					model.addAttribute("userrole", userroleservice.listall());
+				    model.addAttribute("secondarysector", secondarysectorService.listall());
+				    model.addAttribute("projects", QueueListener.qa_projlist);
+					model.addAttribute("message", message);
+					return retVal;
+				}
 				Endecrypt endecrypt = new Endecrypt();
 				String cryptpwd = endecrypt.get3DESEncrypt(temp[0]);
 				userinfo.setPassword(cryptpwd);
