@@ -26,5 +26,8 @@
 	    <property name="projectid" type="java.lang.Integer">
 			<column name="projectid" length="4" not-null="false" />
 		</property>
+			    <property name="status" type="java.lang.String">
+			<column name="status" length="2" not-null="false" />
+		</property>
 	</class>
 </hibernate-mapping>

@@ -242,6 +242,7 @@ public class UserInfoController {
 				SecondarySector ss = secondarysectorService.load(userinfo.getSectorid());
 				userinfo.setSectorid(ss.getSectorid());
 				userinfo.setSecondarySector(ss);
+				userinfo.setStatus("0");//新增用户状态初始化为正常
 				
 				int userid = userinfoservice.add(userinfo);
 				
