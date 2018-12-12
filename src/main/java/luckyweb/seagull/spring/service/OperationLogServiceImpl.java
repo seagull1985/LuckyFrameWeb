@@ -106,7 +106,10 @@ public class OperationLogServiceImpl implements OperationLogService{
 	}
 	
 	@Override
+	/**
+	 * 质量之星统计时，只统计用户状态为正常
+	 */
 	public List getSumIntegral() throws Exception{
-		return this.operationlogdao.listinfo("select operationer,SUM(t.operation_integral) as sumi from operation_log t GROUP BY t.operationer ORDER BY sumi");
+		return this.operationlogdao.listinfo("select operationer,SUM(t.operation_integral) as sumi from operation_log  t,userinfo u where t.operationer = u.username and u.status='0' GROUP BY t.operationer ORDER BY sumi");
 	}
 }

@@ -95,6 +95,18 @@
 									<label>用户名 <span class="text-danger">*</span></label>
 									<sf:input type="text" class="form-control" path="usercode" id="usercode"/>
 								</div>
+<div class="top-margin">
+								<label>状态 <span class="text-danger">*</span></label>
+								<sf:select type="text" class="form-control"
+									path="status"
+									id="status">
+									<sf:option value="0">正常</sf:option>
+									<sf:option value="1">注销</sf:option>
+									<c:forEach var="p" items="${status}">
+										<sf:option value="${p.status}">${p.status}</sf:option>
+									</c:forEach>
+								</sf:select>
+							</div>
 								<div class="top-margin">
 								<label>所属部门 <span class="text-danger">*</span></label>
 								<sf:select type="text" class="form-control"

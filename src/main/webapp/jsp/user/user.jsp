@@ -105,12 +105,22 @@
 											{
 												field : 'username',
 												title : '姓名',
-												width : '10%',
+												width : '8%',
 											},
 											{
 												field : 'usercode',
 												title : '用户名',
-												width : '10%',
+												width : '6%',
+											},
+											{
+												field : 'status',
+												title : '状态',
+												width : '6%',
+												formatter : function(value,
+														row, index) {
+													if(value==0){return "正常"}
+													else{ return "注销"}
+												}
 											},
 											{
 												field : 'role',

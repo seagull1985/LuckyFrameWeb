@@ -268,6 +268,7 @@ create table userinfo
   role     VARCHAR(100) COMMENT '角色',
   sectorid int(8) default 0 not null COMMENT '所属部门',
   projectid int(4) default 0 not null COMMENT '默认选择项目',
+  status     VARCHAR(2) default 0 not null COMMENT '状态：（0：正常，1：注销）',
   primary key (id)
 )default character set utf8;
 create table user_authority
@@ -752,8 +753,8 @@ values (99, '系统管理员', '总部');
 insert into qa_sectorprojects (projectid, projectname, projectmanager, sectorid, projecttype)
 values (99, '全部项目/未知项目', '系统管理员', 99, 0);
 /*插入默认管理员*/
-insert into userinfo (id, usercode, password, username, role, sectorid,projectid)
-values (1, 'admin', 'uJ45aIeS9N80kaSFDjvk%2FA%3D%3D', '系统管理员', '1', 99,99);
+insert into userinfo (id, usercode, password, username, role, sectorid,projectid,status)
+values (1, 'admin', 'uJ45aIeS9N80kaSFDjvk%2FA%3D%3D', '系统管理员', '1', 99,99,'0');
 /*插入流程检查定义数据*/
 insert into qa_flowinfo (id, phaseid, phasename, phasenodeid, phasenodename, checkentryid, checkentry, remark)
 values (36, 5, '总结阶段', 2, '计划变更', 1, '如与计划不合，是否提交计划变更邮件', null);
