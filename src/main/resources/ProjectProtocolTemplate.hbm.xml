@@ -29,6 +29,12 @@
 		<property name="connecttimeout" type="java.lang.Integer">
 			<column name="connecttimeout" length="8" not-null="true" />
 		</property>
+		<property name="responsehead" type="java.lang.Integer">
+			<column name="responsehead" length="2" not-null="true" />
+		</property>
+		<property name="responsecode" type="java.lang.Integer">
+			<column name="responsecode" length="2" not-null="true" />
+		</property>
 		<property name="time" type="java.lang.String">
 			<column name="time" length="30" not-null="false" />
 		</property>

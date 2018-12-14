@@ -95,7 +95,7 @@
 									<label>用户名 <span class="text-danger">*</span></label>
 									<sf:input type="text" class="form-control" path="usercode" id="usercode"/>
 								</div>
-<div class="top-margin">
+                            <div class="top-margin">
 								<label>状态 <span class="text-danger">*</span></label>
 								<sf:select type="text" class="form-control"
 									path="status"

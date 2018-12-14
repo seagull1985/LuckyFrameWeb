@@ -94,7 +94,7 @@
 							<tr>
 							    <td width="20%" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">项目名称：${ptemplate.projectname}</td>
 								<td width="20%" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">模板名称：${ptemplate.name}</td>
-								<td width="50%" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">请求头域：${ptemplate.headmsg}</td>
+								<td width="50%" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">响应内容：${responsemsg}</td>
 								<td width="10%" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">协议类型：${ptemplate.protocoltype}</td>
 							</tr>
 							<tr>
@@ -102,6 +102,9 @@
 							    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">备注：${ptemplate.remark}</td>
 							    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">证书路径：${ptemplate.cerpath}</td>
 								<td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">超时时间：${ptemplate.connecttimeout}</td>								
+							</tr>
+							<tr>
+							<td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" colspan="4">请求头域：${ptemplate.headmsg}</td>
 							</tr>
 						</table>
 

@@ -163,6 +163,18 @@ td{
 										</div>
 										
 										<div class="form-group">
+											<label for="name" class="col-sm-3 control-label">响应内容</label>
+											<div class="col-sm-9">
+											<input type="checkbox" class="form-control" style="width: 25px; height: 25px; float: left; cursor: pointer;" checked="true" disabled="disabled">
+											<label style="float: left; margin-top: 8px;">&nbsp;&nbsp;BODY&nbsp;&nbsp;&nbsp;&nbsp; </label>
+											<input type="checkbox" class="form-control" style="width: 25px; height: 25px; float: left; cursor: pointer;" value="0" name="responsehead" id="responsehead" onchange="changeval(this)">
+											<label style="float: left; margin-top: 8px;">&nbsp;&nbsp;HEAD&nbsp;&nbsp;&nbsp;&nbsp; </label> 
+											<input type="checkbox" class="form-control" style="width: 25px; height: 25px; float: left; cursor: pointer;" value="0" name="responsecode" id="responsecode" onchange="changeval(this)">
+											<label style="float: left; margin-top: 8px;">&nbsp;&nbsp;ResponseCode&nbsp;&nbsp;&nbsp;&nbsp; </label> 
+											</div>
+										</div>
+										
+										<div class="form-group">
 											<label for="remark" class="col-sm-3 control-label">备注</label>
 											<div class="col-sm-9">
 												<textarea class="form-control" name="remark" id="remark" placeholder="备注"></textarea>
@@ -484,6 +496,14 @@ td{
 	        		$("#headmsg").val(row[0].headmsg);
 	        		$("#contentencoding").val(row[0].contentencoding);
 	        		$("#connecttimeout").val(row[0].connecttimeout);
+	        		$("#responsehead").val(row[0].responsehead);
+	        		if(row[0].responsehead==1){
+	        			$("#responsehead").prop("checked","checked");
+	        		}
+	        		$("#responsecode").val(row[0].responsecode);
+	        		if(row[0].responsecode==1){
+	        			$("#responsecode").prop("checked","checked");
+	        		}
 	        		$("#remark").val(row[0].remark);
 	        		$("#id").val(row[0].id);
 	        		$("#addModal").modal('show');
@@ -622,6 +642,15 @@ td{
 	            }    
 	        }else{
 	            toastr.warning('请选取要删除的协议模板！');
+	        }
+	    }
+	    
+	    function changeval(obj){
+	    	if (obj == null) return;
+	        if(obj.checked == true){
+	        	obj.value = 1;
+	        }else{
+	        	obj.value = 0;
 	        }
 	    }
 	</script>

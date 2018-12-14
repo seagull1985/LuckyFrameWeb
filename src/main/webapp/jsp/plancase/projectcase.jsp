@@ -141,36 +141,31 @@
 												<input type="radio" class="form-control"
 													style="width: 25px; height: 25px; float: left; cursor: pointer;"
 													name="casetype" id="casetype" value="0" checked="checked" />
-												<label
-													style="float: left; margin-top: 8px; cursor: pointer;"
-													for="casetype">
+												<label style="float: left; margin-top: 8px;">
 													&nbsp;&nbsp;接口自动化&nbsp;&nbsp;&nbsp;&nbsp; </label> <input
 													type="radio" class="form-control"
 													style="width: 25px; height: 25px; float: left; cursor: pointer;"
 													name="casetype" id="casetype" value="1" /> <label
-													style="float: left; margin-top: 8px; cursor: pointer;"
-													for="casetype">&nbsp;&nbsp;Web自动化&nbsp;&nbsp;&nbsp;&nbsp;</label><input
+													style="float: left; margin-top: 8px;">&nbsp;&nbsp;Web自动化&nbsp;&nbsp;&nbsp;&nbsp;</label><input
 													type="radio" class="form-control"
 													style="width: 25px; height: 25px; float: left; cursor: pointer;"
 													name="casetype" id="casetype" value="4" /> <label
-													style="float: left; margin-top: 8px; cursor: pointer;"
-													for="casetype">&nbsp;&nbsp;移动端自动化</label>
+													style="float: left; margin-top: 8px;">&nbsp;&nbsp;移动端自动化</label>
 											</div>
 										</div>
 										<div class="form-group">
 											<label for="casetype" class="col-sm-3 control-label">步骤失败</label>
 											<div class="col-sm-9">
-											<label style="float: left; margin-top: 8px; cursor: pointer;">本条用例后续步骤&nbsp;&nbsp;&nbsp;&nbsp;</label>
+											<label style="float: left; margin-top: 8px;">本条用例后续步骤&nbsp;&nbsp;&nbsp;&nbsp;</label>
 												<input type="radio" class="form-control"
 													style="width: 25px; height: 25px; float: left; cursor: pointer;"
 													name="failcontinue" id="failcontinue" value="0" checked="checked" />
-												<label style="float: left; margin-top: 8px; cursor: pointer;" for="failcontinue">
+												<label style="float: left; margin-top: 8px;">
 													&nbsp;&nbsp;中断执行&nbsp;&nbsp;&nbsp;&nbsp; </label> <input
 													type="radio" class="form-control"
 													style="width: 25px; height: 25px; float: left; cursor: pointer;"
 													name="failcontinue" id="failcontinue" value="1" /> <label
-													style="float: left; margin-top: 8px; cursor: pointer;"
-													for="failcontinue">&nbsp;&nbsp;继续执行&nbsp;&nbsp;&nbsp;&nbsp;</label>
+													style="float: left; margin-top: 8px;">&nbsp;&nbsp;继续执行&nbsp;&nbsp;&nbsp;&nbsp;</label>
 											</div>
 										</div>
 										<div class="form-group">

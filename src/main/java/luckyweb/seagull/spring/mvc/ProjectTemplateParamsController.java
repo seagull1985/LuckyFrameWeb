@@ -81,6 +81,7 @@ public class ProjectTemplateParamsController {
 
 			String templateid = req.getParameter("templateid");
 			ProjectProtocolTemplate ppt = null;
+			String responsemsg="BODY";
 			if (!StrLib.isEmpty(templateid) && !PublicConst.STATUSSTR0.equals(templateid)) {
 				ppt = ptemplateservice.load(Integer.valueOf(templateid));
 				if(!UserLoginController.oppidboolean(req, ppt.getProjectid())){
@@ -88,6 +89,12 @@ public class ProjectTemplateParamsController {
 					model.addAttribute("url", "/projectprotocolTemplate/load.do");
 					model.addAttribute("message", "当前用户无权限编辑项目【"+sp.getProjectname()+"】的协议模板，请联系管理员！");
 					return "error";
+				}
+				if(ppt.getResponsehead()==1){
+					responsemsg=responsemsg+"、HEAD";
+				}
+				if(ppt.getResponsecode()==1){
+					responsemsg=responsemsg+"、ResponseCode";
 				}
 				List<SectorProjects> prolist = QueueListener.qa_projlist;
 				for (SectorProjects project : prolist) {
@@ -129,6 +136,7 @@ public class ProjectTemplateParamsController {
 			}
 
 			model.addAttribute("ptemplate", ppt);
+			model.addAttribute("responsemsg", responsemsg);
 			model.addAttribute("templateparams", paramslist);
 			model.addAttribute("templateparam", ptp);
 			model.addAttribute("paramtype", paramtype);

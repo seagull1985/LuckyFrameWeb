@@ -376,6 +376,8 @@ create table project_protocoltemplate
   cerpath               VARCHAR(300) COMMENT '客户端中的证书路径',
   contentencoding       VARCHAR(20) not null COMMENT '编码格式',
   connecttimeout        int(8) not null COMMENT '超时时间',
+  responsehead          int(2) not null COMMENT '请求响应返回值是否带头域信息 0不带 1带',
+  responsecode          int(2) not null COMMENT '请求响应返回值是否带状态码 0不带 1带',
   time                  VARCHAR(30) COMMENT '最后更新时间',
   operationer           VARCHAR(20) COMMENT '最后更新人员',
   remark                VARCHAR(200) COMMENT '备注',
