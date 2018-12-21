@@ -106,6 +106,13 @@ public interface TestJobsService {
 	 */
 	public List getpathList(int projectid);
 
+	/**
+	 * 获取调度名称
+	 * @param projectid
+	 * @return
+	 */
+	public List getJobsList(int projectid);
+	
     /**
      * 获取路径
      * @param planId

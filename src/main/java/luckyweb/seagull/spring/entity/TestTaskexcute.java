@@ -26,6 +26,7 @@ public class TestTaskexcute implements java.io.Serializable {
 	private int casesuccCount = 0;
 	private int casefailCount = 0;
 	private int caselockCount = 0;
+	private int projectid = 0;
 	/**
 	 * 未执行用例数
 	 */
@@ -54,6 +55,14 @@ public class TestTaskexcute implements java.io.Serializable {
 		this.taskName = taskName;
 	}
 
+	public int getProjectid() {
+		return projectid;
+	}
+
+	public void setProjectid(int projectid) {
+		this.projectid = projectid;
+	}
+	
 	public int getCasenoexecCount() {
 		return casenoexecCount;
 	}
@@ -141,7 +150,7 @@ public class TestTaskexcute implements java.io.Serializable {
 	}
 
 	public TestTaskexcute(int id, String taskId, int casetotalCount,
-			int casesuccCount, int casefailCount, int caselockCount,
+			int casesuccCount, int casefailCount, int caselockCount,int projectid,
 			TestJobs testJob, Timestamp createTime) {
 		super();
 		this.id = id;
@@ -152,6 +161,7 @@ public class TestTaskexcute implements java.io.Serializable {
 		this.caselockCount = caselockCount;
 		this.testJob = testJob;
 		this.createTime = createTime;
+		this.projectid = projectid;
 	}
 
 	private Timestamp createTime;

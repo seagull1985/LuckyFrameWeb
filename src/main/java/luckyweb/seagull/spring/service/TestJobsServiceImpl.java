@@ -135,11 +135,14 @@ public class TestJobsServiceImpl implements TestJobsService
 	public List findByPage(Object value, int offset, int pageSize)
 	{
 		String hql = " from TestJobs " + where((TestJobs) value) + orderBy;
+
+
 		List list = testJobsDao.findByPage(hql, value, offset, pageSize);
 		for (TestJobs jobs : (List<TestJobs>) list)
 		{
 			jobs.setState_str(setStatus(jobs.getState()));
 		}
+
 		return list;
 	}
 
@@ -154,6 +157,12 @@ public class TestJobsServiceImpl implements TestJobsService
 	public List<TestJobs> findJobsList()
 	{
 		return testJobsDao.findJobsList("select id,name,planproj from test_jobs  order by id asc ");
+	}
+	
+	@Override
+	public List<TestJobs> getJobsList(int projectid)
+	{
+		return testJobsDao.findJobsList("select name from test_jobs where projectid="+projectid+" order by id asc ");
 	}
 
 	@Override

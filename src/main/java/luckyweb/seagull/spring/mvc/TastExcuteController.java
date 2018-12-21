@@ -20,6 +20,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import luckyweb.seagull.comm.PublicConst;
+import luckyweb.seagull.comm.QueueListener;
+import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.TestCasedetail;
 import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.spring.entity.TestTaskexcute;
@@ -83,7 +85,8 @@ public class TastExcuteController {
 			}
 			model.addAttribute("jobs", jobs);
 			model.addAttribute("jobid", jobid);
-
+			List<SectorProjects> projectid = QueueListener.qa_projlist;
+			model.addAttribute("projectid", projectid);
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
@@ -108,7 +111,8 @@ public class TastExcuteController {
 		response.setCharacterEncoding("utf-8");
 		PrintWriter pw = response.getWriter();
 		String search = request.getParameter("search");
-		String jobid = request.getParameter("jobid");
+		String jobid = request.getParameter("jobid");		
+		String projectid = request.getParameter("projectid");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
 		String status = request.getParameter("status");
@@ -122,6 +126,10 @@ public class TastExcuteController {
 		// 得到客户端传递的查询参数
 		if (!StrLib.isEmpty(search)) {
 			task.setTaskId(search);
+		}
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(projectid)) {
+			task.setProjectid(Integer.valueOf(projectid));
 		}
 		// 得到客户端传递的查询参数
 		if (!StrLib.isEmpty(jobid)) {
