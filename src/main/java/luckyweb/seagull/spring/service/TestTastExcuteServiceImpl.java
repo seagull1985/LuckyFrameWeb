@@ -67,7 +67,8 @@ public class TestTastExcuteServiceImpl implements TestTastExcuteService {
 		if (!StrLib.isEmpty(tast.getTaskId())) {
 			where += " taskId like :taskId  and ";
 		}
-		if (tast.getProjectid()>0) {
+		if (tast.getProjectid()!=99) {
+			System.out.println("tast.getProjectid()="+tast.getProjectid());
 			where += " projectid="+tast.getProjectid()+"  and ";
 		}		
 		if (!StrLib.isEmpty(tast.getTaskStatus())) {
