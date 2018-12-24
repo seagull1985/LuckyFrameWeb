@@ -41,5 +41,8 @@
 		<property name="finishtime" type="java.sql.Timestamp">
 			<column name="FINISHTIME"  />
 		</property>
+		<property name="projectid" type="java.lang.Integer">
+			<column name="PROJECTID" length="10" not-null="true" />
+		</property>
 	</class>
 </hibernate-mapping>

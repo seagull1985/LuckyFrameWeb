@@ -30,73 +30,91 @@
 			<header class="page-header">
 			<h1 class="page-title" style="text-align: center;">任务执行列表</h1>
 			</header>
-			
+
 			<div class="panel-body" style="padding-bottom: 0px;">
 				<div class="panel panel-default">
 					<div class="panel-heading">查询条件</div>
 					<div class="panel-body">
-						<div class="form-group" style="margin-top: 15px">
-							
-							<div class="col-md-12">
-							<label class="control-label" for="txt_search_job" style="float: left;">调度名称:</label>
-							<div class="select-group  col-md-3">
-								<select class="form-control" id="search_job"
-									onchange="searchjob()">
-									<option value="0">全部调度</option>
-									<c:forEach var="job" items="${jobs }">
-										<option value="${job[0]}">【${job[2]}】—${job[1]}</option>
-									</c:forEach>
-								</select>
+						<div class="panel-body">
+							<div class="form-group" style="margin-top: 15px">
+
+								<div class="col-md-12">
+									<label class="control-label" for="txt_search_job"
+										style="float: left;">项目名称:</label>
+									<div class="select-group  col-md-2">
+										<sf:select class="form-control" path="projectid"
+											id="search_project" onChange="getJob()">
+											<c:forEach var="p" items="${projectlist}">
+												<sf:option value="${p.projectid}">${p.projectname}</sf:option>
+											</c:forEach>
+										</sf:select>
+									</div>
+									<label class="control-label" for="txt_search_job"
+										style="float: left;">调度名称:</label>
+									<div class="select-group  col-md-2">
+										<sf:select class="form-control" path="jobid" id="jobid"
+											onChange="searchjob()">
+											<sf:option value="0">全部调度</sf:option>
+											<c:forEach var="t" items="${jobs}">
+												<sf:option value="${t.id}">${t.taskName}</sf:option>
+											</c:forEach>
+										</sf:select>
+									</div>
+
+									<label class="control-label" for="txt_search_job"
+										style="float: left;">日期段:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+									<div class="input-group date form_date col-md-3"
+										id="datepicker" style="float: left;">
+										<input type="text" class="form-control" name="start"
+											id="qBeginTime" readonly /> <span class="input-group-addon"><span
+											class="glyphicon glyphicon-calendar"></span></span> <span
+											class="input-group-addon">至</span> <input type="text"
+											class="form-control" name="end" id="qEndTime" readonly /> <span
+											class="input-group-addon"><span
+											class="glyphicon glyphicon-calendar"></span></span>
+									</div>
+
+									<label class="control-label" for="txt_search_job"
+										style="float: left;">&nbsp;&nbsp;&nbsp;&nbsp;任务状态:</label>
+									<div class="select-group col-md-2" style="float: left;">
+										<select class="form-control" id="search_status"
+											onchange="searchjob()">
+											<option value="">全部</option>
+											<option value="0">未执行</option>
+											<option value="1">执行中</option>
+											<option value="2">执行成功</option>
+											<option value="3">调起失败|超时</option>
+										</select>
+									</div>
 								</div>
-								
-						     <label class="control-label" for="txt_search_job" style="float: left;">日期段:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                <div class="input-group date form_date col-md-3" id="datepicker" style="float: left;">  
-                                  <input type="text" class="form-control" name="start" id="qBeginTime" readonly/>
-                                  <span class="input-group-addon" ><span class="glyphicon glyphicon-calendar"></span></span>
-                                  <span class="input-group-addon">至</span>  
-                                  <input type="text" class="form-control" name="end" id="qEndTime" readonly/>
-                                  <span class="input-group-addon" ><span class="glyphicon glyphicon-calendar"></span></span>
-                                </div>
-                                
-                            <label class="control-label" for="txt_search_job" style="float: left;">&nbsp;&nbsp;&nbsp;&nbsp;任务状态:</label>
-							<div class="select-group col-md-2" style="float: left;">
-								<select class="form-control" id="search_status"	onchange="searchstatus()">
-                                  <option value="">全部</option>
-                                  <option value="0">未执行</option>
-                                  <option value="1">执行中</option>
-                                  <option value="2">执行成功</option>
-                                  <option value="3">调起失败|超时</option>
-								</select>
-								</div>
+
+
 							</div>
-							
-							
 						</div>
 					</div>
-				</div>
 
-				<div id="toolbar" class="btn-group">
-					<button id="btn_del" type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除任务
-					</button>
-				</div>
-				<table id="tb_testexcute"></table>
-				
-			<div id="delModal" class="modal fade" data-keyboard="false"
-                data-backdrop="static" data-role="dialog"
-                      aria-labelledby="myModalLabel" aria-hidden="true">
-            <div id="loading" class="loading">删除中,请稍候...</div>
-        </div>
+					<div id="toolbar" class="btn-group">
+						<button id="btn_del" type="button" class="btn btn-default">
+							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除任务
+						</button>
+					</div>
+					<table id="tb_testexcute"></table>
 
-			</div>
+					<div id="delModal" class="modal fade" data-keyboard="false"
+						data-backdrop="static" data-role="dialog"
+						aria-labelledby="myModalLabel" aria-hidden="true">
+						<div id="loading" class="loading">删除中,请稍候...</div>
+					</div>
+
+				</div>
 			</article>
 		</div>
 	</div>
 
 	<script type="text/javascript">
 		$(function() {
-			$('#search_job').val('${jobid }');
-			
+			$('#search_project').val('${projectid }');
+			$('#jobid').val('${jobid }');
 			$('#qBeginTime').datetimepicker({
 				format: 'yyyy-mm-dd',
 		        language:  'zh-CN',
@@ -186,6 +204,11 @@
 												visible : false
 											},
 											{
+												field : 'testJob.planproj',
+												title : '项目名称',
+												width : '13%',
+											},
+											{
 												field : 'taskId',
 												title : '任务名称',
 												width : '25%',
@@ -196,11 +219,6 @@
 															+ '">'
 															+ value + '</a> ';
 												}
-											},
-											{
-												field : 'testJob.planproj',
-												title : '项目名称',
-												width : '13%',
 											},
 											{
 												field : 'createTime',
@@ -308,13 +326,15 @@
 											} ],
 								});
 			};
+			
 			//得到查询的参数
 			oTableInit.queryParams = function(params) {
 				var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
 					limit : params.limit, //页面大小
 					offset : params.offset, //页码偏移量
-					search : params.search, //搜索参数
-					jobid : $('#search_job').val(), //项目ID
+					search : params.search, //参数
+					jobid : $('#jobid').val(), //调度ID
+					projectid : $('#search_project').val(), //项目ID
 					startDate: $('#qBeginTime').val(), //查询日期段
 					endDate: $('#qEndTime').val(), //查询日期段
 					status: $('#search_status').val(), //查询状态
@@ -324,15 +344,40 @@
 
 			return oTableInit;
 		};
-
-		var searchjob = function() {
-			//1.初始化Table
-			var oTable = new TableInit();
-			$('#tb_testexcute').bootstrapTable('destroy');
-			oTable.Init();
-		};
 		
-		var searchstatus = function() {
+	    //按上级ID取子列表
+		 function getJob(){
+//		    clearSel(); //清空节点	    
+		    if(jQuery("#search_project").val() == "") return;
+		    var projectid = jQuery("#search_project").val();
+		    var url ="/testJobs/getTestJoblist.do?projectid="+projectid;
+		    jQuery.getJSON(url,null,function call(result){
+		    	 clearSel();
+		    	 setJob(result); 
+			     $('#jobid').val('0');
+			     searchjob();
+		      });
+		    }
+	  
+	    
+		  //设置子列表
+		 function setJob(result){	    
+	  	   var options = "";
+		   options +=  "<option value='0' > 全部调度 </option>";
+		   jQuery.each(result.data, function(i, node){
+			  options +=  "<option value='"+node.id+"'>"+node.taskName+"</option>";
+		      }); 
+		      jQuery("#jobid").html(options);
+		    }
+		  
+		 // 清空下拉列表
+	     function clearSel(){  
+		  while(jQuery("#jobid").length>1){
+			  $("#jobid option[index='1']").remove();
+		    }
+		   }
+		 
+		var searchjob = function() {
 			//1.初始化Table
 			var oTable = new TableInit();
 			$('#tb_testexcute').bootstrapTable('destroy');

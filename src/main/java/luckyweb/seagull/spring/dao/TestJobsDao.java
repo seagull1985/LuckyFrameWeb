@@ -92,7 +92,12 @@ public interface TestJobsDao {
      * @return
      */
     public List<TestJobs> loadByPlanId(Integer planId);
-
+    /**
+     * 获取调度任务列表
+     * @param planId
+     * @return
+     */
+    public List<TestJobs> loadByProjectId(Integer projectId);
 	/**
 	 * 获取调度任务实体
 	 * @param id

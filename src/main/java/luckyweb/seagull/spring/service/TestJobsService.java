@@ -95,17 +95,19 @@ public interface TestJobsService {
 	public int findRows(TestJobs jobs ) ;
 
 	/**
-	 * 获取任务调度列表
-	 * @return
-	 */
-	public List<TestJobs> findJobsList();
-	/**
 	 * 获取路径
 	 * @param projectid
 	 * @return
 	 */
 	public List getpathList(int projectid);
 
+	/**
+	 * 获取调度名称
+	 * @param projectid
+	 * @return
+	 */
+	public List getJobsList(int projectid);
+	
     /**
      * 获取路径
      * @param planId

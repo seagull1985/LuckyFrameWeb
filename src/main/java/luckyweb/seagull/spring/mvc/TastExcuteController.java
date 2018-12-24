@@ -20,15 +20,18 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import luckyweb.seagull.comm.PublicConst;
+import luckyweb.seagull.spring.entity.SectorProjects;
 import luckyweb.seagull.spring.entity.TestCasedetail;
 import luckyweb.seagull.spring.entity.TestJobs;
 import luckyweb.seagull.spring.entity.TestTaskexcute;
+import luckyweb.seagull.spring.entity.UserInfo;
 import luckyweb.seagull.spring.service.CaseDetailService;
 import luckyweb.seagull.spring.service.LogDetailService;
 import luckyweb.seagull.spring.service.OperationLogService;
 import luckyweb.seagull.spring.service.SectorProjectsService;
 import luckyweb.seagull.spring.service.TestJobsService;
 import luckyweb.seagull.spring.service.TestTastExcuteService;
+import luckyweb.seagull.spring.service.UserInfoService;
 import luckyweb.seagull.util.DateLib;
 import luckyweb.seagull.util.StrLib;
 
@@ -64,6 +67,8 @@ public class TastExcuteController {
 	@Resource(name = "sectorprojectsService")
 	private SectorProjectsService sectorprojectsService;
 
+	@Resource(name = "userinfoService")
+	private UserInfoService userinfoservice;
 	/**
 	 * 加载测试任务执行页面
 	 * @param req
@@ -71,19 +76,36 @@ public class TastExcuteController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/load.do")
 	public String load(HttpServletRequest req, Model model) throws Exception {
-
 		try {
-			// 调度列表
-			List<TestJobs> jobs = testJobsService.findJobsList();
-			String jobid = req.getParameter("jobid");
-			if (StrLib.isEmpty(jobid)) {
-				jobid = "0";
+			int projectid = 99;
+			if (null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE)
+					&& null != req.getSession().getAttribute(PublicConst.SESSIONKEYUSERNAME)) {
+				String usercode = req.getSession().getAttribute(PublicConst.SESSIONKEYUSERCODE).toString();
+				UserInfo userinfo = userinfoservice.getUseinfo(usercode);
+				projectid = userinfo.getProjectid();
 			}
-			model.addAttribute("jobs", jobs);
+			
+			String jobid = req.getParameter("jobid");
+			if(StrLib.isEmpty(jobid)) {
+				jobid = "0";
+			}else{
+				projectid=testJobsService.get(Integer.valueOf(jobid)).getProjectid();
+			}
 			model.addAttribute("jobid", jobid);
-
+			// 调度列表
+			List<TestJobs> jobs = testJobsService.getJobsList(projectid);
+			model.addAttribute("jobs", jobs);
+			List<SectorProjects> prolist=sectorprojectsService.getAllProject();
+			for(int i=0;i<prolist.size();i++){
+				if(prolist.get(i).getProjecttype()==1){
+					prolist.get(i).setProjectname(prolist.get(i).getProjectname()+"(TestLink项目)");
+				}
+			}
+			model.addAttribute("projectlist", prolist);
+			model.addAttribute("projectid", projectid);
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", e.getMessage());
@@ -108,7 +130,8 @@ public class TastExcuteController {
 		response.setCharacterEncoding("utf-8");
 		PrintWriter pw = response.getWriter();
 		String search = request.getParameter("search");
-		String jobid = request.getParameter("jobid");
+		String jobid = request.getParameter("jobid");		
+		String projectid = request.getParameter("projectid");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
 		String status = request.getParameter("status");
@@ -122,6 +145,10 @@ public class TastExcuteController {
 		// 得到客户端传递的查询参数
 		if (!StrLib.isEmpty(search)) {
 			task.setTaskId(search);
+		}
+		// 得到客户端传递的查询参数
+		if (!StrLib.isEmpty(projectid)) {
+			task.setProjectid(Integer.valueOf(projectid));
 		}
 		// 得到客户端传递的查询参数
 		if (!StrLib.isEmpty(jobid)) {

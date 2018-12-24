@@ -68,7 +68,7 @@ public class QuartzJob implements Job {
 					}
 				}
 				if(null!=job){
-					toRunTask(job.getPlanproj(), job.getId(),job.getTaskName(),job.getClientip(),job.getClientpath());	
+					toRunTask(job.getPlanproj(), job.getProjectid(),job.getId(),job.getTaskName(),job.getClientip(),job.getClientpath());
 					System.out.println("调用程序结束。。。");
 				}else{
 					System.out.println("没有定时任务需要启动。。。");
@@ -124,15 +124,15 @@ public class QuartzJob implements Job {
 		}
 	}
 
-	public String toRunTask(String projname,int jobId,String jobname,String clientip,String loadpath){
+	public String toRunTask(String projname,int projectid,int jobId,String jobname,String clientip,String loadpath){
 		Session s = null;
 		Transaction tx = null;
-		//System.out.println(tastId);
 		String tastName = "";
 		String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date().getTime());
 		tastName ="【"+jobname+ "】_"+time;
 		
-		TestTaskexcute task=add(tastName, jobId, s, tx);
+		TestTaskexcute task=add(tastName, projectid,jobId, s, tx);
+
 		//防止计划名称或是项目名称带了空格符号,在run.exec中会执行出错
 		projname = projname.replaceAll(" ","\" \""); 
 		String result="启动失败！";
@@ -210,11 +210,12 @@ public class QuartzJob implements Job {
 	 * @param s
 	 * @param tx
 	 */
-	private TestTaskexcute add(String tastName,int jobId,Session s,Transaction tx){
+	private TestTaskexcute add(String tastName,int projectid,int jobId,Session s,Transaction tx){
 		TestTaskexcute tast = new TestTaskexcute();
 		try {
 			tast.getTestJob().setId(jobId);
 			tast.setTaskId(tastName);
+			tast.setProjectid(projectid);
 			tast.setCaseIsExec("0");
 			tast.setTaskStatus("0");
 			tast.setCreateTime(DateUtil.now());

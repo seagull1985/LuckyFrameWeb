@@ -260,6 +260,26 @@ public class TestJobsDaoImpl extends HibernateDaoSupport implements TestJobsDao 
         return list;
     }
 
+    @SuppressWarnings("unchecked")
+	@Override
+    public List<TestJobs> loadByProjectId(Integer projectid) {
+        Session session = this.getSession(true);
+        List<TestJobs> list = null;
+        try {
+            if(projectid!=0&&projectid!=99){
+                String hql = " from TestJobs where projectid=?";
+                list = (List<TestJobs>) session
+                        .createQuery(hql).setInteger(0, projectid).list();
+            }else{
+            	list = this.getHibernateTemplate().find(" from TestJobs");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return list;
+    }
 	
 	@Override
 	/**

@@ -257,7 +257,8 @@ create table test_taskexcute
   taskstatus       VARCHAR(2) default '' COMMENT '状态 0未执行 1执行中 2 成功 4失败 ',
   casenoexec_count int default 0 COMMENT '未执行用例',
   caseisexec       VARCHAR(2) COMMENT '任务是否被成功吊起 0 成功吊起  3  吊起失败',
-    primary key (id)
+  projectid        int(10)   not null COMMENT '项目ID',
+  primary key (id)
 )default character set utf8;
 create table userinfo
 (
