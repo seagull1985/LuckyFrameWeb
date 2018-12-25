@@ -26,6 +26,10 @@ td{
    -moz-text-overflow: ellipsis;
    -webkit-text-overflow: ellipsis;
 }
+.modal-body{
+max-height:400px;
+overflow-y:auto;
+}
 </style>
 </head>
 
@@ -96,7 +100,7 @@ td{
 										aria-hidden="true">&times;</button>
 									<h4 class="modal-title" id="myModalLabel">协议模板基本信息</h4>
 								</div>
-								<div class="modal-body">
+								<div id="modalbody" class="modal-body">
 									<form class="form-horizontal" role="form">
 									<input name="id" id="id" value="0" type="hidden"/>
 										<div class="form-group">
@@ -205,10 +209,17 @@ td{
 			$('#search_project').val('${projectid }');
 			if(${projectid }!=99){
 				$('#projectid').val('${projectid }');
-			} 
+			}
+
 			//1.初始化Table
 			var oTable = new TableInit();
 			oTable.Init();
+			
+			//网页内容高度
+			var pageHeight=window.screen.height;
+			var modalHeight = pageHeight*0.5+"px";
+			console.log(modalHeight);
+		    $("#modalbody").css("max-height",modalHeight);
 		});
 
 		var TableInit = function() {
