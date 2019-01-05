@@ -30,6 +30,7 @@ public class ProjectCasesteps implements java.io.Serializable{
     private String time;
     private String operationer;
     private String remark;
+
 	public int getId() {
 		return id;
 	}
@@ -109,5 +110,4 @@ public class ProjectCasesteps implements java.io.Serializable{
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	
 }

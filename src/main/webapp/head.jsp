@@ -37,7 +37,7 @@
     toastr.options.positionClass = 'toast-bottom-center';  
  </script> 
 
-	<div class="navbar navbar-inverse navbar-fixed-top headroom" style="background-color:rgba(128,138,135,0.6);font-size:18px;font-family:Microsoft YaHei;">
+	<div class="navbar navbar-inverse navbar-fixed-top headroom" style="background-color:rgba(128,138,135,0.4);font-size:18px;font-family:Microsoft YaHei;">
 		<div class="container" style="width:100%;">
 			<div class="navbar-header" style="margin-left:3%">
 				<!-- Button for smallest screens -->

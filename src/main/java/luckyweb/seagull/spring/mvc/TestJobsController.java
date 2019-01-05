@@ -1,5 +1,6 @@
 package luckyweb.seagull.spring.mvc;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import luckyweb.seagull.comm.PublicConst;
@@ -945,7 +946,7 @@ public class TestJobsController
 			try
 			{
 				QuartzJob qj = new QuartzJob();
-				String message = qj.toRunTask(tj.getPlanproj(), id,tj.getTaskName(),tj.getClientip(),tj.getClientpath());				
+				String message = qj.toRunTask(tj.getPlanproj(),tj.getProjectid(), id,tj.getTaskName(),tj.getClientip(),tj.getClientpath());				
 				
 				operationlogservice.add(req, "test_jobs", Integer.valueOf(id),
 						sectorprojectsService.getid(tj.getPlanproj()),2,"自动化用例计划任务被执行！计划名称："+tj.getTaskName()+" 结果："+message);
@@ -1155,7 +1156,7 @@ public class TestJobsController
 			try
 			{
 				QuartzJob qj = new QuartzJob();
-				String message = qj.toRunTask(tj.getPlanproj(), jobid,tj.getTaskName(),tj.getClientip(),tj.getClientpath());
+				String message = qj.toRunTask(tj.getPlanproj(),tj.getProjectid(), jobid,tj.getTaskName(),tj.getClientip(),tj.getClientpath());
 				pw.write(JSONObject.parseObject("{result:\""+message+"\"}").toString());
 			}
 			catch (Exception e)
@@ -1170,5 +1171,27 @@ public class TestJobsController
 			pw.write(JSONObject.parseObject("{result:"+e.getMessage()+"}").toString());
 		}
 
+	}
+	/**
+	 * 联动查询调度任务
+	 * @param req
+	 * @param rsp
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/getTestJoblist.do")
+	public void getTestJoblist(HttpServletRequest req, HttpServletResponse rsp) throws Exception{	    
+		int	projectid = Integer.valueOf(req.getParameter("projectid"));		
+		TestJobs testjobs=new TestJobs();
+		testjobs.setProjectid(projectid);
+		List<TestJobs> listjobs = testJobsService.getJobsList(projectid);
+		
+		// 取集合
+	    rsp.setContentType("text/xml;charset=utf-8");
+
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(listjobs));
+		JSONObject jsobjcet = new JSONObject();
+		jsobjcet.put("data", jsonArray); 		
+		rsp.getWriter().write(jsobjcet.toString());
+		
 	}
 }

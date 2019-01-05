@@ -26,6 +26,10 @@ td{
    -moz-text-overflow: ellipsis;
    -webkit-text-overflow: ellipsis;
 }
+.modal-body{
+max-height:400px;
+overflow-y:auto;
+}
 </style>
 </head>
 
@@ -96,7 +100,7 @@ td{
 										aria-hidden="true">&times;</button>
 									<h4 class="modal-title" id="myModalLabel">协议模板基本信息</h4>
 								</div>
-								<div class="modal-body">
+								<div id="modalbody" class="modal-body">
 									<form class="form-horizontal" role="form">
 									<input name="id" id="id" value="0" type="hidden"/>
 										<div class="form-group">
@@ -163,6 +167,18 @@ td{
 										</div>
 										
 										<div class="form-group">
+											<label for="name" class="col-sm-3 control-label">响应内容</label>
+											<div class="col-sm-9">
+											<input type="checkbox" class="form-control" style="width: 25px; height: 25px; float: left; cursor: pointer;" checked="true" disabled="disabled">
+											<label style="float: left; margin-top: 8px;">&nbsp;&nbsp;BODY&nbsp;&nbsp;&nbsp;&nbsp; </label>
+											<input type="checkbox" class="form-control" style="width: 25px; height: 25px; float: left; cursor: pointer;" value="0" name="responsehead" id="responsehead" onchange="changeval(this)">
+											<label style="float: left; margin-top: 8px;">&nbsp;&nbsp;HEAD&nbsp;&nbsp;&nbsp;&nbsp; </label> 
+											<input type="checkbox" class="form-control" style="width: 25px; height: 25px; float: left; cursor: pointer;" value="0" name="responsecode" id="responsecode" onchange="changeval(this)">
+											<label style="float: left; margin-top: 8px;">&nbsp;&nbsp;ResponseCode&nbsp;&nbsp;&nbsp;&nbsp; </label> 
+											</div>
+										</div>
+										
+										<div class="form-group">
 											<label for="remark" class="col-sm-3 control-label">备注</label>
 											<div class="col-sm-9">
 												<textarea class="form-control" name="remark" id="remark" placeholder="备注"></textarea>
@@ -193,10 +209,17 @@ td{
 			$('#search_project').val('${projectid }');
 			if(${projectid }!=99){
 				$('#projectid').val('${projectid }');
-			} 
+			}
+
 			//1.初始化Table
 			var oTable = new TableInit();
 			oTable.Init();
+			
+			//网页内容高度
+			var pageHeight=window.screen.height;
+			var modalHeight = pageHeight*0.5+"px";
+			console.log(modalHeight);
+		    $("#modalbody").css("max-height",modalHeight);
 		});
 
 		var TableInit = function() {
@@ -390,8 +413,8 @@ td{
 								validators : {
 									stringLength : {
 										min : 0,
-										max : 1500,
-										message : '请求头域长度必须小于1500个字符'
+										max : 3000,
+										message : '请求头域长度必须小于3000个字符'
 									}
 								}
 							},
@@ -484,6 +507,14 @@ td{
 	        		$("#headmsg").val(row[0].headmsg);
 	        		$("#contentencoding").val(row[0].contentencoding);
 	        		$("#connecttimeout").val(row[0].connecttimeout);
+	        		$("#responsehead").val(row[0].responsehead);
+	        		if(row[0].responsehead==1){
+	        			$("#responsehead").prop("checked","checked");
+	        		}
+	        		$("#responsecode").val(row[0].responsecode);
+	        		if(row[0].responsecode==1){
+	        			$("#responsecode").prop("checked","checked");
+	        		}
 	        		$("#remark").val(row[0].remark);
 	        		$("#id").val(row[0].id);
 	        		$("#addModal").modal('show');
@@ -622,6 +653,15 @@ td{
 	            }    
 	        }else{
 	            toastr.warning('请选取要删除的协议模板！');
+	        }
+	    }
+	    
+	    function changeval(obj){
+	    	if (obj == null) return;
+	        if(obj.checked == true){
+	        	obj.value = 1;
+	        }else{
+	        	obj.value = 0;
 	        }
 	    }
 	</script>

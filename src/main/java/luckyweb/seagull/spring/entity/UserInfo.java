@@ -27,6 +27,7 @@ public class UserInfo implements java.io.Serializable{
 	private SecondarySector secondarySector;
 	private int projectid;
 	private String projectname;
+	private String status;
 
 	public String getProjectname() {
 		return projectname;
@@ -88,7 +89,12 @@ public class UserInfo implements java.io.Serializable{
 	public void setSecondarySector(SecondarySector secondarySector) {
 		this.secondarySector = secondarySector;
 	}
-
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 
 }

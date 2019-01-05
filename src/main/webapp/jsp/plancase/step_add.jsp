@@ -138,10 +138,11 @@
 											<div class="form-group"><sf:input type="text" class="form-control" path="remark" id="remark${i.count}" value="${t.remark}"/></div>
 										</td>
 										<td width="8%" style="vertical-align: middle;">
-											<a class="fa fa-plus-circle fa-5" style="font-size: 20px; cursor: pointer;" onclick="addsteps(this)"></a>
+											<a class="fa fa-plus-circle fa-5" style="font-size: 20px; cursor: pointer;" onclick="addsteps(this,0)"></a>
+											<a class="fa fa-chevron-circle-down fa-5" style="font-size: 20px; cursor: pointer;" onclick="addsteps(this,1)"></a>
 											<a class="fa fa-minus-circle fa-5" style="font-size: 20px; cursor: pointer;" onclick="delsteps(this)"></a>
-											<a class="fa fa-arrow-up fa-5" style="font-size: 20px; cursor: pointer;" onclick="upsteps(this)"></a>
-											<a class="fa fa-arrow-down fa-5" style="font-size: 20px; cursor: pointer;" onclick="downsteps(this)"></a>
+											<a class="fa fa-arrow-circle-up fa-5" style="font-size: 20px; cursor: pointer;" onclick="upsteps(this)"></a>
+											<a class="fa fa-arrow-circle-down fa-5" style="font-size: 20px; cursor: pointer;" onclick="downsteps(this)"></a>
 										</td>
 										<sf:input path="id" id="id${i.count}" type="hidden" value="${t.id}"/>
 									</tr>
@@ -446,8 +447,8 @@
         return true;
     }
 
-    function addsteps(obj) {
-        if (obj === null)
+    function addsteps(obj,iscopy) {
+        if (obj == null)
             return;
         var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
         var parentTR = parentTD.parentNode;
@@ -484,7 +485,9 @@
             oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "remark" + index);
         }
         initSuggest(begin + 1);
-        clearCells(begin + 1);
+        if(iscopy==0){
+        	clearCells(begin + 1);
+        }        
         addfield();
     }
 

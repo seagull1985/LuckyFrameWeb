@@ -1,9 +1,8 @@
 package luckyweb.seagull.spring.entity;
 
-import java.sql.Timestamp;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.sql.Timestamp;
 
 /**
  * =================================================================
@@ -105,6 +104,8 @@ public class TestJobs implements java.io.Serializable {
 	private String endTimestr;
 	private Timestamp createTime;
 	private String noEndDate;
+	// 发送条件
+	private Integer sendCondition;
 
 	public String getClientpath() {
 		return clientpath;
@@ -397,4 +398,11 @@ public class TestJobs implements java.io.Serializable {
 		this.showRun = showRun;
 	}
 
+    public Integer getSendCondition() {
+        return sendCondition;
+    }
+
+    public void setSendCondition(Integer sendCondition) {
+        this.sendCondition = sendCondition;
+    }
 }

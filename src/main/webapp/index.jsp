@@ -53,10 +53,10 @@
 	<!-- /.navbar -->
 
 	<!-- Header -->
-	<header id="head">
+	<header id="head" style="padding-top:200px">
 	<div class="container">
 		<div class="row">
-			<h1 class="lead" style="font-size:84px;font-family:STXingkai;">简单    专业    高效</h1>
+			<h1 class="lead" style="font-size:84px;font-family:STXingkai;">简单      专业      高效</h1>
 			<p class="tagline"></p>
 			<p>
 				<!-- <a class="btn btn-default btn-lg" role="button">MORE INFO</a> -->

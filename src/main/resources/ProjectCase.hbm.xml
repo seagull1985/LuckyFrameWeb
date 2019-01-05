@@ -36,5 +36,8 @@
 		<property name="operationer" type="java.lang.String">
 			<column name="operationer" length="20" not-null="false" />
 		</property>
+		<property name="failcontinue" type="java.lang.Integer">
+            <column name="failcontinue" length="2" not-null="false" />
+        </property>
 	</class>
 </hibernate-mapping>

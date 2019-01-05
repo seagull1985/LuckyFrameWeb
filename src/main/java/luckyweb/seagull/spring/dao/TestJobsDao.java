@@ -1,11 +1,9 @@
 package luckyweb.seagull.spring.dao;
 
-import java.util.List;
-
-import org.springframework.transaction.annotation.Propagation;
+import luckyweb.seagull.spring.entity.TestJobs;
 import org.springframework.transaction.annotation.Transactional;
 
-import luckyweb.seagull.spring.entity.TestJobs;
+import java.util.List;
 
 /**
  * =================================================================
@@ -88,6 +86,18 @@ public interface TestJobsDao {
 	public List<TestJobs> load(String name, String cmdType, String planPath)
 			throws Exception;
 
+    /**
+     * 获取调度任务列表
+     * @param planId
+     * @return
+     */
+    public List<TestJobs> loadByPlanId(Integer planId);
+    /**
+     * 获取调度任务列表
+     * @param planId
+     * @return
+     */
+    public List<TestJobs> loadByProjectId(Integer projectId);
 	/**
 	 * 获取调度任务实体
 	 * @param id

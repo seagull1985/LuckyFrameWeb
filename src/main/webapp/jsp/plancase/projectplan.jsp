@@ -91,7 +91,7 @@
 											<label for="name" class="col-sm-3 control-label">计划名称</label>
 											<div class="col-sm-9">
 												<input type="text" class="form-control" name="name"
-													id="name" placeholder="用例名称">
+													id="name" placeholder="计划名称">
 											</div>
 										</div>
 

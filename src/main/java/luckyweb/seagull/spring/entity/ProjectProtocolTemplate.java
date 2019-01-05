@@ -24,6 +24,8 @@ public class ProjectProtocolTemplate implements java.io.Serializable{
 	private String cerpath;
 	private String contentencoding;
 	private int connecttimeout;
+	private int responsehead;
+	private int responsecode;
 	private String time;
 	private String operationer;
 	private String remark;
@@ -90,6 +92,18 @@ public class ProjectProtocolTemplate implements java.io.Serializable{
 	}
 	public void setConnecttimeout(int connecttimeout) {
 		this.connecttimeout = connecttimeout;
+	}
+	public int getResponsehead() {
+		return responsehead;
+	}
+	public void setResponsehead(int responsehead) {
+		this.responsehead = responsehead;
+	}
+	public int getResponsecode() {
+		return responsecode;
+	}
+	public void setResponsecode(int responsecode) {
+		this.responsecode = responsecode;
 	}
 	public String getTime() {
 		return time;

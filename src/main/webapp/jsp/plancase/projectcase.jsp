@@ -141,23 +141,33 @@
 												<input type="radio" class="form-control"
 													style="width: 25px; height: 25px; float: left; cursor: pointer;"
 													name="casetype" id="casetype" value="0" checked="checked" />
-												<label
-													style="float: left; margin-top: 8px; cursor: pointer;"
-													for="casetype">
+												<label style="float: left; margin-top: 8px;">
 													&nbsp;&nbsp;接口自动化&nbsp;&nbsp;&nbsp;&nbsp; </label> <input
 													type="radio" class="form-control"
 													style="width: 25px; height: 25px; float: left; cursor: pointer;"
 													name="casetype" id="casetype" value="1" /> <label
-													style="float: left; margin-top: 8px; cursor: pointer;"
-													for="casetype">&nbsp;&nbsp;Web自动化&nbsp;&nbsp;&nbsp;&nbsp;</label><input
+													style="float: left; margin-top: 8px;">&nbsp;&nbsp;Web自动化&nbsp;&nbsp;&nbsp;&nbsp;</label><input
 													type="radio" class="form-control"
 													style="width: 25px; height: 25px; float: left; cursor: pointer;"
 													name="casetype" id="casetype" value="4" /> <label
-													style="float: left; margin-top: 8px; cursor: pointer;"
-													for="casetype">&nbsp;&nbsp;移动端自动化</label>
+													style="float: left; margin-top: 8px;">&nbsp;&nbsp;移动端自动化</label>
 											</div>
 										</div>
-
+										<div class="form-group">
+											<label for="casetype" class="col-sm-3 control-label">步骤失败</label>
+											<div class="col-sm-9">
+											<label style="float: left; margin-top: 8px;">本条用例后续步骤&nbsp;&nbsp;&nbsp;&nbsp;</label>
+												<input type="radio" class="form-control"
+													style="width: 25px; height: 25px; float: left; cursor: pointer;"
+													name="failcontinue" id="failcontinue" value="0" checked="checked" />
+												<label style="float: left; margin-top: 8px;">
+													&nbsp;&nbsp;中断执行&nbsp;&nbsp;&nbsp;&nbsp; </label> <input
+													type="radio" class="form-control"
+													style="width: 25px; height: 25px; float: left; cursor: pointer;"
+													name="failcontinue" id="failcontinue" value="1" /> <label
+													style="float: left; margin-top: 8px;">&nbsp;&nbsp;继续执行&nbsp;&nbsp;&nbsp;&nbsp;</label>
+											</div>
+										</div>
 										<div class="form-group">
 											<label for="remark" class="col-sm-3 control-label">备注</label>
 											<div class="col-sm-9">
@@ -270,7 +280,7 @@
 					}, {
 						field : 'casetype',
 						title : '用例类型',
-						width : '10%',
+						width : '8%',
 						editable : {
 							type : 'select',
 							title : '用例类型',
@@ -284,6 +294,21 @@
 								value : "4",
 								text : "移动端自动化"
 							} ]
+						}
+					}, {
+						field : 'failcontinue',
+						title : '失败处理',
+						width : '5%',
+						editable : {
+							type : 'select',
+							title : '失败处理',
+							source : [ {
+								value : "0",
+								text : "中断执行"
+							}, {
+								value : "1",
+								text : "继续执行"
+							}, ]
 						}
 					}, {
 						field : 'time',
@@ -300,7 +325,7 @@
 					}, {
 						field : 'remark',
 						title : '备注',
-						width : '20%',
+						width : '17%',
 						editable : {
 							type : 'textarea',
 							title : '备注',
@@ -781,6 +806,7 @@
 	        		$("#moduleid").val(row[0].moduleid);        		
 	        		$("#name").val("COPY "+row[0].name);
 	        		$("input[id='casetype'][value='"+row[0].casetype+"']").attr("checked",true);
+	        		$("input[id='failcontinue'][value='"+row[0].failcontinue+"']").attr("checked",true);
 	        		$("#remark").val(row[0].remark);
 	        		$("#id").val(row[0].id);
 	        		$("#addModal").modal('show');

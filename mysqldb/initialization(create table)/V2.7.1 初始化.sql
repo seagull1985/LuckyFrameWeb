@@ -217,6 +217,7 @@ create table test_jobs
   projecttype  int(4) default "0" COMMENT '项目类型 系统内项目 0 testlink 1',
   projectid    int(8) COMMENT '系统内项目ID',
   planid       int(8) COMMENT '系统内项目关联测试计划ID',
+  sendcondition int(4) default 0 COMMENT '发送邮件通知时的具体逻辑, 0-全部，1-成功，-1-失败',
   primary key (id)
 )default character set utf8;
 create table test_casedetail
@@ -310,6 +311,7 @@ create table project_case
   operationer           VARCHAR(20) COMMENT '最后更新人员',
   casetype              int(2) not null COMMENT '0 接口 1 UI',
   remark                VARCHAR(200) COMMENT '备注',
+  failcontinue          int(2) DEFAULT 0 COMMENT '失败了是否继续，0：不继续，1：继续',
   primary key (ID)
 )default character set utf8;
 
@@ -368,7 +370,7 @@ create table project_protocoltemplate
   id                    int(8) not null AUTO_INCREMENT,
   projectid             int(8) not null COMMENT '项目ID',
   name                  VARCHAR(50) not null COMMENT '模板名称',
-  headmsg               VARCHAR(1500) COMMENT '消息头',
+  headmsg               VARCHAR(3000) COMMENT '消息头',
   protocoltype          VARCHAR(20) not null COMMENT '协议类型',
   cerpath               VARCHAR(300) COMMENT '客户端中的证书路径',
   contentencoding       VARCHAR(20) not null COMMENT '编码格式',
@@ -384,7 +386,7 @@ create table project_templateparams
   id                    int(9) not null AUTO_INCREMENT,
   templateid            int(8) not null COMMENT '模块ID',
   paramname             VARCHAR(50) not null COMMENT '参数名',
-  param                 VARCHAR(2000) COMMENT '参数默认值',
+  param                 VARCHAR(5000) COMMENT '参数默认值',
   paramtype             int(4) not null COMMENT '0 String 1 JSON对象 2 JSONARR对象 3 文件类型',
   primary key (ID)
 )default character set utf8;
@@ -632,7 +634,7 @@ values (44, 1, 0, 'operation','mousekey(shift)','模拟键盘Shift键');
 insert into project_casestepsparams (id, steptype, parentid, fieldname,paramvalue,description)
 values (45, 1, 0, 'operation','mousekey(enter)','模拟键盘Enter键');
 insert into project_casestepsparams (id, steptype, parentid, fieldname,paramvalue,description)
-values (46, 1, 0, 'operation','runcase','调用指定接口用例');
+values (46, 1, 0, 'operation','runcase','调用指定接口|Web UI用例');
 insert into project_casestepsparams (id, steptype, parentid, fieldname,paramvalue,description)
 values (47, 2, 0, 'operation','HttpClientPostJSON','使用HttpClient发送JSON格式post请求');
 insert into project_casestepsparams (id, steptype, parentid, fieldname,paramvalue,description)

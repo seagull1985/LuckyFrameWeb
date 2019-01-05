@@ -67,6 +67,9 @@ public class TestTastExcuteServiceImpl implements TestTastExcuteService {
 		if (!StrLib.isEmpty(tast.getTaskId())) {
 			where += " taskId like :taskId  and ";
 		}
+		if (tast.getProjectid()!=99) {
+			where += " projectid="+tast.getProjectid()+"  and ";
+		}		
 		if (!StrLib.isEmpty(tast.getTaskStatus())) {
 			where += " taskStatus =:taskStatus and ";
 		}

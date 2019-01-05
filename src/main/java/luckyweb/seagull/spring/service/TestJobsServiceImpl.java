@@ -130,16 +130,19 @@ public class TestJobsServiceImpl implements TestJobsService
 
 	private static String	orderBy	= " order by id desc ";
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List findByPage(Object value, int offset, int pageSize)
 	{
 		String hql = " from TestJobs " + where((TestJobs) value) + orderBy;
+
+
 		List list = testJobsDao.findByPage(hql, value, offset, pageSize);
 		for (TestJobs jobs : (List<TestJobs>) list)
 		{
 			jobs.setState_str(setStatus(jobs.getState()));
 		}
+
 		return list;
 	}
 
@@ -149,20 +152,26 @@ public class TestJobsServiceImpl implements TestJobsService
 		String hql = "select count(*) from TestJobs " + where(jobs);
 		return testJobsDao.findRows(jobs, hql);
 	}
-
+	
 	@Override
-	public List<TestJobs> findJobsList()
+	public List<TestJobs> getJobsList(int projectid)
 	{
-		return testJobsDao.findJobsList("select id,name,planproj from test_jobs  order by id asc ");
+		return testJobsDao.loadByProjectId(projectid);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List getpathList(int projectid)
 	{
 		return testJobsDao.findJobsList("SELECT clientpath FROM test_jobs where projectid="+projectid+" GROUP BY clientpath ");
 	}
-	
-	/**
+
+	@Override
+    public List<TestJobs> getTestJobByPlanId(int planId) {
+        return testJobsDao.loadByPlanId(planId);
+    }
+
+    /**
 	 * 状态
 	 * 
 	 * @param status

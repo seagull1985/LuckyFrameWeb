@@ -32,7 +32,8 @@ public class ProjectCase implements java.io.Serializable{
     private String operationer;
     private int priority;
     private int checktype;
-    
+    // 失败了是否继续
+    private Integer failcontinue;
     
 	public Integer[] getModuleidarr() {
 		return moduleidarr;
@@ -124,6 +125,10 @@ public class ProjectCase implements java.io.Serializable{
 	public void setOperationer(String operationer) {
 		this.operationer = operationer;
 	}
-	
-    
+    public Integer getFailcontinue() {
+        return failcontinue;
+    }
+    public void setFailcontinue(Integer failcontinue) {
+        this.failcontinue = failcontinue;
+    }
 }

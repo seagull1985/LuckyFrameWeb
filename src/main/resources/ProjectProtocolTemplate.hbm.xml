@@ -15,7 +15,7 @@
 			<column name="name" length="50" not-null="true" />
 		</property>
 		<property name="headmsg" type="java.lang.String">
-			<column name="headmsg" length="1500" not-null="false" />
+			<column name="headmsg" length="3000" not-null="false" />
 		</property>
 		<property name="protocoltype" type="java.lang.String">
 			<column name="protocoltype" length="20" not-null="true" />
@@ -28,6 +28,12 @@
 		</property>
 		<property name="connecttimeout" type="java.lang.Integer">
 			<column name="connecttimeout" length="8" not-null="true" />
+		</property>
+		<property name="responsehead" type="java.lang.Integer">
+			<column name="responsehead" length="2" not-null="true" />
+		</property>
+		<property name="responsecode" type="java.lang.Integer">
+			<column name="responsecode" length="2" not-null="true" />
 		</property>
 		<property name="time" type="java.lang.String">
 			<column name="time" length="30" not-null="false" />
