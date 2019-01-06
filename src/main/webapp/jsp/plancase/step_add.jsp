@@ -84,7 +84,7 @@
 									<th>步骤动作</th>
 									<th>预期结果</th>
 									<th>类型</th>
-									<th>备注</th>
+									<th>扩展字段</th>
 									<th>操作</th>
 								</tr>
 								</thead>
@@ -95,10 +95,10 @@
 											<sf:label class="form-control" path="stepnum" id="stepnum${i.count}" value="${t.stepnum}"/>
 										</td>
 										<td width="18%">
-											<div class="form-group"><sf:input type="text" class="form-control" path="path" id="path${i.count}" value="${t.path}"/></div>
+											<div class="form-group" style="margin-bottom:0px"><sf:input type="text" class="form-control" path="path" id="path${i.count}" value="${t.path}"/></div>
 										</td>
 										<td width="13%">
-											<div class="form-group">
+											<div class="form-group" style="margin-bottom:0px">
 												<div class="input-group" style="width:100%;">
 													<sf:input type="text" class="form-control" path="operation" id="operation${i.count}" value="${t.operation}"/>
 													<div class="input-group-btn">
@@ -108,23 +108,24 @@
 											</div>
 										</td>
 										<td width="17%">
-											<div class="form-group"><sf:input type="text" class="form-control" path="parameters" id="parameters${i.count}" value="${t.parameters}"/></div>
+											<div class="form-group" style="margin-bottom:0px"><sf:input type="text" class="form-control" path="parameters" id="parameters${i.count}" value="${t.parameters}"/></div>
 										</td>
 										<td width="10%">
-											<div class="form-group">
-												<div class="input-group" style="width:100%;">
+											<div class="form-group" style="margin-bottom:0px">
+											<sf:input type="text" class="form-control" path="action" id="action${i.count}" value="${t.action}"/>
+<%-- 												<div class="input-group" style="width:100%;">
 													<sf:input type="text" class="form-control" path="action" id="action${i.count}" value="${t.action}"/>
 													<div class="input-group-btn">
 														<ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
 													</div>
-												</div>
+												</div> --%>
 											</div>
 										</td>
 										<td width="13%">
-											<div class="form-group"><sf:input type="text" class="form-control" path="expectedresult" id="expectedresult${i.count}" value="${t.expectedresult}"/></div>
+											<div class="form-group" style="margin-bottom:0px"><sf:input type="text" class="form-control" path="expectedresult" id="expectedresult${i.count}" value="${t.expectedresult}"/></div>
 										</td>
 										<td width="8%">
-											<div class="form-group">
+											<div class="form-group" style="margin-bottom:0px">
 												<sf:select type="text" class="form-control" align-items="left" path="steptype" id="steptype${i.count}" onChange="getObIndex(this)">                           
 													<option value="0" <c:if test="${t.steptype==0 }"> selected="selected"</c:if>>接口</option>
 													<option value="1" <c:if test="${t.steptype==1 }"> selected="selected"</c:if>>Web UI</option>
@@ -135,7 +136,14 @@
 											</div>
 										</td>
 										<td width="10%">
-											<div class="form-group"><sf:input type="text" class="form-control" path="remark" id="remark${i.count}" value="${t.remark}"/></div>
+											<div class="form-group" style="margin-bottom:0px">
+											<div class="input-group" style="width:100%;">
+													<sf:input type="text" class="form-control" path="extend" id="extend${i.count}" value="${t.extend}"/>
+													<div class="input-group-btn">
+														<ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+													</div>
+												</div>
+											</div>
 										</td>
 										<td width="8%" style="vertical-align: middle;">
 											<a class="fa fa-plus-circle fa-5" style="font-size: 20px; cursor: pointer;" onclick="addsteps(this,0)"></a>
@@ -284,10 +292,10 @@
                     message: '【步骤动作】无效！',
                     validators: {
                         stringLength: {
-                            min: 2,
+                            min: 0,
                             max: 50,
                             message: '【步骤动作】长度必须小于50个字符'
-                        },
+                        }/* ,
                         callback: {
                             message: '类型是HTTP，请选择协议模板',
                             callback:function(value,validator,$field){
@@ -308,7 +316,7 @@
                             		return true;
                             	} 
                             }
-                        }
+                        } */
                     }
                 },
                 expectedresult: {
@@ -347,13 +355,34 @@
                         }
                     }
                 },
-                remark: {
-                    message: '【备注】无效！',
+                extend: {
+                    message: '【扩展字段】无效！',
                     validators: {
                         stringLength: {
                             min: 0,
                             max: 200,
-                            message: '【备注】长度必须小于200个字符'
+                            message: '【扩展字段】长度必须小于200个字符'
+                        },
+                        callback: {
+                            message: '类型是HTTP，请选择协议模板',
+                            callback:function(value,validator,$field){
+                            	var num=$field.attr("id").substring(6);
+                            	var steps;
+                            	if(casesteps.steptype.size==0){
+                            		steps=casesteps.steptype.value
+                            	}else{
+                            		steps=casesteps.steptype[num-1].value
+                            	}
+
+                             	if(steps=="2" && value==""){
+                             		return {
+                                        valid: false,
+                                        message: 'HTTP必须选择协议模板'
+                                    };
+                            	}else{                        		
+                            		return true;
+                            	} 
+                            }
                         }
                     }
                 }
@@ -415,7 +444,7 @@
             json = json + "\"id\":" + $("#id" + index).val() + ",";
             json = json + "\"caseid\":\"" + '${caseid}' + "\",";
             json = json + "\"projectid\":\"" + '${projectid}' + "\",";
-            json = json + "\"remark\":\"" + $("#remark" + index).val().replaceAll("\"", "&quot;") + "\"}";
+            json = json + "\"extend\":\"" + $("#extend" + index).val().replaceAll("\"", "&quot;") + "\"}";
             if (i !== oTable.rows.length - 1) {
                 json = json + ",";
             }
@@ -474,15 +503,15 @@
                 opob.children[1].setAttribute("id", "operation" + index);
             }
             oTable.rows[i].cells[3].children[0].children[0].setAttribute("id", "parameters" + index);
-            var aob = oTable.rows[i].cells[4].children[0].children[0];
-            if (aob.children[0].tagName.toLocaleLowerCase() === 'input') {
-                aob.children[0].setAttribute("id", "action" + index);
-            } else {
-                aob.children[1].setAttribute("id", "action" + index);
-            }
+            oTable.rows[i].cells[4].children[0].children[0].setAttribute("id", "action" + index);
             oTable.rows[i].cells[5].children[0].children[0].setAttribute("id", "expectedresult" + index);
-            oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "steptype" + index);
-            oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "remark" + index);
+            oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "steptype" + index);         
+            var eob = oTable.rows[i].cells[7].children[0].children[0];
+            if (eob.children[0].tagName.toLocaleLowerCase() === 'input') {
+                eob.children[0].setAttribute("id", "extend" + index);
+            } else {
+                eob.children[1].setAttribute("id", "extend" + index);
+            }
         }
         initSuggest(begin + 1);
         if(iscopy==0){
@@ -518,15 +547,16 @@
                 opob.children[1].setAttribute("id", "operation" + index);
             }
             oTable.rows[i].cells[3].children[0].children[0].setAttribute("id", "parameters" + index);
-            var aob = oTable.rows[i].cells[4].children[0].children[0];
-            if (aob.children[0].tagName.toLocaleLowerCase() === 'input') {
-                aob.children[0].setAttribute("id", "action" + index);
-            } else {
-                aob.children[1].setAttribute("id", "action" + index);
-            }
+            oTable.rows[i].cells[4].children[0].children[0].setAttribute("id", "action" + index);
             oTable.rows[i].cells[5].children[0].children[0].setAttribute("id", "expectedresult" + index);
             oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "steptype" + index);
-            oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "remark" + index);
+            
+            var eob = oTable.rows[i].cells[7].children[0].children[0];
+            if (eob.children[0].tagName.toLocaleLowerCase() === 'input') {
+                eob.children[0].setAttribute("id", "extend" + index);
+            } else {
+                eob.children[1].setAttribute("id", "extend" + index);
+            }
         }
         $('#casesteps').data('bootstrapValidator').resetForm();
         $('#casesteps').data('bootstrapValidator').validate();
@@ -554,15 +584,15 @@
                     opob.children[1].setAttribute("id", "operation" + index);
                 }
                 oTable.rows[i].cells[3].children[0].children[0].setAttribute("id", "parameters" + index);
-                var aob = oTable.rows[i].cells[4].children[0].children[0];
-                if (aob.children[0].tagName.toLocaleLowerCase() === 'input') {
-                    aob.children[0].setAttribute("id", "action" + index);
-                } else {
-                    aob.children[1].setAttribute("id", "action" + index);
-                }
+                oTable.rows[i].cells[4].children[0].children[0].setAttribute("id", "action" + index);
                 oTable.rows[i].cells[5].children[0].children[0].setAttribute("id", "expectedresult" + index);
                 oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "steptype" + index);
-                oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "remark" + index);
+                var eob = oTable.rows[i].cells[7].children[0].children[0];
+                if (eob.children[0].tagName.toLocaleLowerCase() === 'input') {
+                    eob.children[0].setAttribute("id", "extend" + index);
+                } else {
+                    eob.children[1].setAttribute("id", "extend" + index);
+                }
             }
         }
     }
@@ -589,15 +619,15 @@
                     opob.children[1].setAttribute("id", "operation" + index);
                 }
                 oTable.rows[i].cells[3].children[0].children[0].setAttribute("id", "parameters" + index);
-                var aob = oTable.rows[i].cells[4].children[0].children[0];
-                if (aob.children[0].tagName.toLocaleLowerCase() === 'input') {
-                    aob.children[0].setAttribute("id", "action" + index);
-                } else {
-                    aob.children[1].setAttribute("id", "action" + index);
-                }
+                oTable.rows[i].cells[4].children[0].children[0].setAttribute("id", "action" + index);
                 oTable.rows[i].cells[5].children[0].children[0].setAttribute("id", "expectedresult" + index);
                 oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "steptype" + index);
-                oTable.rows[i].cells[7].children[0].children[0].setAttribute("id", "remark" + index);
+                var eob = oTable.rows[i].cells[7].children[0].children[0];
+                if (eob.children[0].tagName.toLocaleLowerCase() === 'input') {
+                    eob.children[0].setAttribute("id", "extend" + index);
+                } else {
+                    eob.children[1].setAttribute("id", "extend" + index);
+                }
             }
         }
     }
@@ -615,7 +645,7 @@
         $("#parameters" + index).val('');
         $("#action" + index).val('');
         $("#expectedresult" + index).val('');
-        $("#remark" + index).val('');
+        $("#extend" + index).val('');
     }
 
     function initSuggest(index) {
@@ -626,11 +656,11 @@
             initSuggestOperation(index, steptype);
             initSuggestAction(index, steptypetext);
         } else if (steptype === '1' || steptype === '4') {
-            $("#action" + index).bsSuggest("destroy");
+            $("#extend" + index).bsSuggest("destroy");
             initSuggestOperation(index, steptype);
         } else {
             $("#operation" + index).bsSuggest("destroy");
-            $("#action" + index).bsSuggest("destroy");
+            $("#extend" + index).bsSuggest("destroy");
         }
     }
 
@@ -641,7 +671,7 @@
         casesteps.bootstrapValidator('addField', 'parameters');
         casesteps.bootstrapValidator('addField', 'action');
         casesteps.bootstrapValidator('addField', 'expectedresult');
-        casesteps.bootstrapValidator('addField', 'remark');
+        casesteps.bootstrapValidator('addField', 'extend');
         casesteps.data('bootstrapValidator').validate();
     }
 
@@ -653,9 +683,9 @@
     }
 
     function initSuggestAction(index, steptypetext) {
-        var actionindex = $("#action" + index);
-        actionindex.bsSuggest("destroy");
-        actionindex.bsSuggest({
+        var extendindex = $("#extend" + index);
+        extendindex.bsSuggest("destroy");
+        extendindex.bsSuggest({
             url: "/projectprotocolTemplate/cgetPTemplateList.do?projectid=${projectid}&steptype=" + steptypetext,
             /*effectiveFields: ["userName", "shortAccount"],
             searchFields: [ "shortAccount"],*/
@@ -670,7 +700,7 @@
         }).on('onDataRequestSuccess', function (e, result) {
 
         }).on('onSetSelectValue', function (e, keyword, data) {
-            $('#casesteps').data('bootstrapValidator').updateStatus(actionindex, 'NOT_VALIDATED', null).validateField(actionindex);
+            $('#casesteps').data('bootstrapValidator').updateStatus(extendindex, 'NOT_VALIDATED', null).validateField(extendindex);
         }).on('onUnsetSelectValue', function () {
 
         });
