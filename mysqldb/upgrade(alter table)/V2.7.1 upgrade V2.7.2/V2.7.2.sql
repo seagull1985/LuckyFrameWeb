@@ -13,3 +13,5 @@ ALTER TABLE project_casesteps change remark extend varchar(200) COMMENT '扩展�
 /*把在action中存储的模板信息移到EXTEND字段中进行管理*/
 update project_casesteps set extend=action where action like "【%" and action like "%】%";
 update project_casesteps set action="" where action like "【%" and action like "%】%";
+/*更新用例步骤动作字段等待时间关键字的写法，参数隔断从*更换成# 更新示例：5*Wait >>>> 5#Wait*/
+update project_casesteps set action=REPLACE(action,'*','#') where action like "%*wait" or action like "%*Wait";

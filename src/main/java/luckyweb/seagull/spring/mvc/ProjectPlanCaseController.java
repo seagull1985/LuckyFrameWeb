@@ -414,6 +414,7 @@ public class ProjectPlanCaseController {
 				ProjectCase projectcase=projectcaseservice.load(plancases.get(i).getCaseid());
 				Integer[] moduleidarr={projectcase.getModuleid()};
 				projectcase.setModuleidarr(moduleidarr);
+				projectcase.setPriority(plancases.get(i).getPriority());
 				projectcases.add(i, projectcase);
 			}
 
