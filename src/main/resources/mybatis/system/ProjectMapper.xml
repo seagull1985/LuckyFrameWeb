@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.system.project.mapper.ProjectMapper">
+    
+    <resultMap type="Project" id="ProjectResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="projectSign"    column="project_sign"    />
+        <association property="dept"    column="dept_id" javaType="Dept" resultMap="deptResult" />
+    </resultMap>
+	
+		<resultMap id="deptResult" type="Dept">
+		<id     property="deptId"   column="dept_id"     />
+		<result property="parentId" column="parent_id"   />
+		<result property="deptName" column="dept_name"   />
+		<result property="orderNum" column="order_num"   />
+		<result property="status"   column="dept_status" />
+	</resultMap>
+	
+	<sql id="selectProjectVo">
+        select p.project_id, p.project_name, p.dept_id, p.project_sign,d.dept_id, d.parent_id, d.dept_name, d.order_num, d.status as dept_status
+        from sys_project p left join sys_dept d on p.dept_id = d.dept_id
+    </sql>
+	
+    <select id="selectProjectList" parameterType="Project" resultMap="ProjectResult">
+        <include refid="selectProjectVo"/>
+        <where>  
+            <if test="projectId != null "> and p.project_id = #{projectId}</if>
+             <if test="projectName != null  and projectName != '' "> and p.project_name like concat('%', #{projectName}, '%')</if>
+             <if test="deptId != null "> and p.dept_id = #{deptId}</if>
+             <if test="projectSign != null  and projectSign != '' "> and p.project_sign like concat('%', #{projectSign}, '%')</if>
+         </where>
+    </select>
+    
+    <select id="selectProjectById" parameterType="Integer" resultMap="ProjectResult">
+        <include refid="selectProjectVo"/>
+        where p.project_id = #{projectId}
+    </select>
+        
+    <insert id="insertProject" parameterType="Project" useGeneratedKeys="true" keyProperty="projectId">
+        insert into sys_project
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="projectName != null  and projectName != ''  ">project_name,</if>
+			<if test="deptId != null  ">dept_id,</if>
+			<if test="projectSign != null  and projectSign != ''  ">project_sign,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="projectName != null  and projectName != ''  ">#{projectName},</if>
+			<if test="deptId != null  ">#{deptId},</if>
+			<if test="projectSign != null  and projectSign != ''  ">#{projectSign},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProject" parameterType="Project">
+        update sys_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectName != null  and projectName != ''  ">project_name = #{projectName},</if>
+            <if test="deptId != null  ">dept_id = #{deptId},</if>
+            <if test="projectSign != null  and projectSign != ''  ">project_sign = #{projectSign},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+
+	<delete id="deleteProjectById" parameterType="Integer">
+        delete from sys_project where project_id = #{projectId}
+    </delete>
+	
+    <delete id="deleteProjectByIds" parameterType="String">
+        delete from sys_project where project_id in 
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+    
+</mapper>

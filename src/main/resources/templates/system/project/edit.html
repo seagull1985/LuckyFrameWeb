@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-project-edit" th:object="${project}">
+            <input id="projectId" name="projectId" th:field="*{projectId}"  type="hidden">
+            <input name="deptId"  type="hidden"  th:field="*{deptId}" id="treeId"/>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">项目名称：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="deptName" onclick="selectDeptTree()" readonly="true" id="treeName" th:field="*{dept.deptName}">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">归属部门：</label>
+				<div class="col-sm-8">
+					<input id="deptId" name="deptId" th:field="*{deptId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">项目标识：</label>
+				<div class="col-sm-8">
+					<input id="projectSign" name="projectSign" th:field="*{projectSign}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/project";
+		$("#form-project-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-project-edit').serialize());
+	        }
+	    }
+		
+        /*项目管理-修改-选择部门树*/
+        function selectDeptTree() {
+        	var deptId = $.common.isEmpty($("#treeId").val()) ? "100" : $("#treeId").val();
+            var url = ctx + "system/dept/selectDeptTree/" + deptId;
+		    var options = {
+				title: '选择部门',
+				width: "380",
+				url: url,
+				callBack: doSubmit
+			};
+			$.modal.openOptions(options);
+		}
+		
+		function doSubmit(index, layero){
+			var tree = layero.find("iframe")[0].contentWindow.$._tree;
+			if ($.tree.notAllowParents(tree)) {
+    			var body = layer.getChildFrame('body', index);
+    			$("#treeId").val(body.find('#treeId').val());
+    			$("#treeName").val(body.find('#treeName').val());
+    			layer.close(index);
+			}
+		}
+	</script>
+</body>
+</html>

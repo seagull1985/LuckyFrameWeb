@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.system.roleProject.mapper.RoleProjectMapper">
+    
+    <resultMap type="RoleProject" id="RoleProjectResult">
+        <result property="roleId"    column="role_id"    />
+        <result property="projectId"    column="project_id"    />
+    </resultMap>
+	
+	<sql id="selectRoleProjectVo">
+        select role_id, project_id from sys_role_project
+    </sql>
+	
+    <select id="selectRoleProjectList" parameterType="RoleProject" resultMap="RoleProjectResult">
+        <include refid="selectRoleProjectVo"/>
+        <where>  
+            <if test="roleId != null "> and role_id = #{roleId}</if>
+             <if test="projectId != null "> and project_id = #{projectId}</if>
+         </where>
+    </select>
+    
+    <select id="selectRoleProjectById" parameterType="Integer" resultMap="RoleProjectResult">
+        <include refid="selectRoleProjectVo"/>
+        where role_id = #{roleId}
+    </select>
+        
+    <insert id="insertRoleProject" parameterType="RoleProject">
+        insert into sys_role_project
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleId != null  ">role_id,</if>
+			<if test="projectId != null  ">project_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleId != null  ">#{roleId},</if>
+			<if test="projectId != null  ">#{projectId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateRoleProject" parameterType="RoleProject">
+        update sys_role_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null  ">project_id = #{projectId},</if>
+        </trim>
+        where role_id = #{roleId}
+    </update>
+
+	<delete id="deleteRoleProjectById" parameterType="Integer">
+        delete from sys_role_project where role_id = #{roleId}
+    </delete>
+	
+    <delete id="deleteRoleProjectByIds" parameterType="String">
+        delete from sys_role_project where role_id in 
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+    
+</mapper>
