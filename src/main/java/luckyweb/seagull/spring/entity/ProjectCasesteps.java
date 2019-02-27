@@ -29,7 +29,7 @@ public class ProjectCasesteps implements java.io.Serializable{
     private int steptype;
     private String time;
     private String operationer;
-    private String remark;
+    private String extend;
 
 	public int getId() {
 		return id;
@@ -104,10 +104,11 @@ public class ProjectCasesteps implements java.io.Serializable{
 	public void setOperationer(String operationer) {
 		this.operationer = operationer;
 	}
-	public String getRemark() {
-		return remark;
+	public String getExtend() {
+		return extend;
 	}
-	public void setRemark(String remark) {
-		this.remark = remark;
+	public void setExtend(String extend) {
+		this.extend = extend;
 	}
+
 }

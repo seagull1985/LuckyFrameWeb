@@ -331,7 +331,7 @@ create table project_casesteps
   steptype              int(2) not null COMMENT '0 接口 1 UI',
   time                  VARCHAR(30)  COMMENT '最后更新时间',
   operationer           VARCHAR(20)  COMMENT '最后更新人员',
-  remark                VARCHAR(200) COMMENT '备注',
+  extend                VARCHAR(200) COMMENT '扩展字段，可用于备注、存储HTTP模板等',
   primary key (ID)
 )default character set utf8;
 

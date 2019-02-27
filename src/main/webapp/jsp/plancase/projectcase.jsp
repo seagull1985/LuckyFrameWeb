@@ -515,19 +515,8 @@
 						field : 'operationer',
 						title : '更新人员'
 					}, {
-						field : 'remark',
-						title : '备注',
-						editable : {
-							type : 'text',
-							title : '备注',
-							emptytext : "【备注】为空",
-							validate : function(value) {
-								if (value.length > 200)
-									return '备注不能超过200个字符';
-//								if (value.length < 2)
-//									return '备注不能小于2个字符';
-							}
-						}
+						field : 'extend',
+						title : '扩展字段',
 					}, {
 						field : 'id',
 						title : 'id',

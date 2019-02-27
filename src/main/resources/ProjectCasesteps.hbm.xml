@@ -42,8 +42,8 @@
 		<property name="operationer" type="java.lang.String">
 			<column name="operationer" length="20" not-null="false" />
 		</property>
-		<property name="remark" type="java.lang.String">
-			<column name="remark" length="200" not-null="false" />
+		<property name="extend" type="java.lang.String">
+			<column name="extend" length="200" not-null="false" />
 		</property>
 	</class>
 </hibernate-mapping>

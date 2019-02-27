@@ -22,7 +22,7 @@
    <img alt="code style" src="https://img.shields.io/badge/BUILD-PASSING-green.svg">
   </a>
   <a href="http://git.oschina.net/seagull1985/LuckyFrameWeb/releases">
-   <img src="https://img.shields.io/badge/LuckyFrame-V2.7.1 releases-green.svg" >
+   <img src="https://img.shields.io/badge/LuckyFrame-V2.7.2 releases-green.svg" >
   </a>
 </p>
 

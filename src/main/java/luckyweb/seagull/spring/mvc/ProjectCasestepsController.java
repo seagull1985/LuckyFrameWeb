@@ -125,7 +125,7 @@ public class ProjectCasestepsController {
 				step.setExpectedresult("");
 				step.setProjectid(prcase.getProjectid());
 				step.setSteptype(prcase.getCasetype());
-				step.setRemark("");
+				step.setExtend("");
 				steps.add(step);
 			}
 
@@ -211,7 +211,7 @@ public class ProjectCasestepsController {
 				step.setParameters(step.getParameters().replace("&quot;", "\""));
 				step.setAction(step.getAction().replace("&quot;", "\""));
 				step.setExpectedresult(step.getExpectedresult().replace("&quot;", "\""));
-				step.setRemark(step.getRemark().replace("&quot;", "\""));
+				step.setExtend(step.getExtend().replace("&quot;", "\""));
 				casestepsservice.add(step);
 			}
 			projectcase.setOperationer(usercode);
@@ -485,6 +485,7 @@ public class ProjectCasestepsController {
 			steps.setExpectedresult(expectedresult);
 			steps.setProjectid(Integer.valueOf(projectid));
 			steps.setSteptype(Integer.valueOf(steptype));
+			steps.setExtend("");
 
 			Date currentTime = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
