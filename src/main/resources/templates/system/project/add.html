@@ -31,10 +31,54 @@
 		var prefix = ctx + "system/project"
 		$("#form-project-add").validate({
 			rules:{
-				xxxx:{
+				projectName:{
 					required:true,
+					minlength: 1,
+        			maxlength: 50,
+                    remote: {
+                        url: ctx + "system/project/checkProjectNameUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            name: function () {
+                                return $.common.trim($("#projectName").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                        	return $.validate.unique(data);
+                        }
+                    }
 				},
-			}
+				deptName:{
+					required:true
+				},
+				projectSign:{
+					required:true,
+					minlength: 1,
+        			maxlength: 10,
+                    remote: {
+                        url: ctx + "system/project/checkProjectSignUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            name: function () {
+                                return $.common.trim($("#projectSign").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                        	return $.validate.unique(data);
+                        }
+                    }
+				}
+			},
+	    	messages: {
+	            "projectName": {
+	                remote: "项目名称已经存在"
+	            },
+	    		"projectSign": {
+	                remote: "项目标识已经存在"
+	            }
+	        }
 		});
 		
 		function submitHandler() {

@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-projectCaseModule-add">
+        <input id="treeId" name="parentId" type="hidden" th:value="${projectCaseModule.moduleId}"/>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">父模块：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" onclick="selectModuleTree()" id="treeName" readonly="true" th:value="${projectCaseModule.moduleName}"/>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">模块名字：</label>
+				<div class="col-sm-8">
+					<input id="moduleName" name="moduleName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">显示顺序：</label>
+				<div class="col-sm-8">
+					<input id="orderNum" name="orderNum" class="form-control" type="text" th:value="${maxOrderNum}">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<textarea id="remark" name="remark" class="form-control" ></textarea>
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "testmanagmt/projectCaseModule"
+		$("#form-projectCaseModule-add").validate({
+			rules:{
+				moduleName:{
+					required:true,
+					minlength: 1,
+        			maxlength: 50,
+				},
+				orderNum:{
+					required:true,
+					isInteger:true,
+					min:0,
+        			max:1000,
+				},
+				remark:{
+					maxlength:200,
+				}
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-projectCaseModule-add').serialize());
+	        }
+	    }
+		
+		/*模块管理-新增-选择父模块树*/
+		function selectModuleTree() {
+			var options = {
+				title: '模块选择',
+				width: "380",
+				url: prefix + "/selectProjectCaseModuleTree/" + $("#treeId").val(),
+				callBack: doSubmit
+			};
+			$.modal.openOptions(options);
+		}
+		
+		function doSubmit(index, layero){
+			var body = layer.getChildFrame('body', index);
+   			$("#treeId").val(body.find('#treeId').val());
+   			$("#treeName").val(body.find('#treeName').val());
+   			layer.close(index);
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.system.client.mapper.ClientMapper">
+    
+    <resultMap type="Client" id="ClientResult">
+        <result property="clientId"    column="client_id"    />
+        <result property="clientName"    column="client_name"    />
+        <result property="clientIp"    column="client_ip"    />
+        <result property="status"    column="status"    />
+        <result property="checkinterval"    column="checkinterval"    />
+        <result property="clientPath"    column="client_path"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectClientVo">
+        select client_id, client_name, client_ip, status, checkinterval, client_path, remark from sys_client
+    </sql>
+	
+    <select id="selectClientList" parameterType="Client" resultMap="ClientResult">
+        <include refid="selectClientVo"/>
+        <where>  
+            <if test="clientId != null "> and client_id = #{clientId}</if>
+             <if test="clientName != null  and clientName != '' "> and client_name = #{clientName}</if>
+             <if test="clientIp != null  and clientIp != '' "> and client_ip = #{clientIp}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="checkinterval != null "> and checkinterval = #{checkinterval}</if>
+             <if test="clientPath != null  and clientPath != '' "> and client_path = #{clientPath}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectClientById" parameterType="Integer" resultMap="ClientResult">
+        <include refid="selectClientVo"/>
+        where client_id = #{clientId}
+    </select>
+        
+    <insert id="insertClient" parameterType="Client" useGeneratedKeys="true" keyProperty="clientId">
+        insert into sys_client
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="clientName != null  and clientName != ''  ">client_name,</if>
+			<if test="clientIp != null  and clientIp != ''  ">client_ip,</if>
+			<if test="status != null  ">status,</if>
+			<if test="checkinterval != null  ">checkinterval,</if>
+			<if test="clientPath != null  and clientPath != ''  ">client_path,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="clientName != null  and clientName != ''  ">#{clientName},</if>
+			<if test="clientIp != null  and clientIp != ''  ">#{clientIp},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="checkinterval != null  ">#{checkinterval},</if>
+			<if test="clientPath != null  and clientPath != ''  ">#{clientPath},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateClient" parameterType="Client">
+        update sys_client
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clientName != null  and clientName != ''  ">client_name = #{clientName},</if>
+            <if test="clientIp != null  and clientIp != ''  ">client_ip = #{clientIp},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="checkinterval != null  ">checkinterval = #{checkinterval},</if>
+            <if test="clientPath != null  and clientPath != ''  ">client_path = #{clientPath},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+        </trim>
+        where client_id = #{clientId}
+    </update>
+
+	<delete id="deleteClientById" parameterType="Integer">
+        delete from sys_client where client_id = #{clientId}
+    </delete>
+	
+    <delete id="deleteClientByIds" parameterType="String">
+        delete from sys_client where client_id in 
+        <foreach item="clientId" collection="array" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+    </delete>
+    
+    <select id="checkClientNameUnique" parameterType="String" resultMap="ClientResult">
+		select client_id, client_name from sys_client where client_name=#{client_name}
+	</select>
+	
+	<select id="checkIpUnique" parameterType="String" resultMap="ClientResult">
+		select client_id, client_ip from sys_client where client_ip=#{client_ip}
+	</select>
+</mapper>

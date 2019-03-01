@@ -1,7 +1,8 @@
 package com.luckyframe.project.system.project.service;
 
-import com.luckyframe.project.system.project.domain.Project;
 import java.util.List;
+
+import com.luckyframe.project.system.project.domain.Project;
 
 /**
  * 测试项目管理 服务层
@@ -17,7 +18,15 @@ public interface IProjectService
      * @param projectId 测试项目管理ID
      * @return 测试项目管理信息
      */
-	public Project selectProjectById(Integer projectId);
+	public Project selectProjectById(int projectId);
+	
+	/**
+	 * 查询所有项目管理列表
+	 * @return
+	 * @author Seagull
+	 * @date 2019年2月20日
+	 */
+	public List<Project> selectProjectAll();
 	
 	/**
      * 查询测试项目管理列表
@@ -51,4 +60,39 @@ public interface IProjectService
      */
 	public int deleteProjectByIds(String ids);
 	
+	/**
+	 * 根据客户端ID查询所有项目列表(打标记)
+	 * @param clientId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年2月25日
+	 */
+	public List<Project> selectProjectsByClientId(int clientId);
+	
+	/**
+	 * 根据角色ID查询所有项目列表(打标记)
+	 * @param roleId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年2月25日
+	 */
+	public List<Project> selectProjectsByRoleId(int roleId);
+	
+	/**
+	 * 校验项目名称唯一性
+	 * @param project
+	 * @return
+	 * @author Seagull
+	 * @date 2019年2月27日
+	 */
+	public String checkProjectNameUnique(Project project);
+	
+    /**
+     * 校验项目标识唯一性
+     * @param project
+     * @return
+     * @author Seagull
+     * @date 2019年2月27日
+     */
+    public String checkProjectSignUnique(Project project);
 }

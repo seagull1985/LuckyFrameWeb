@@ -25,6 +25,16 @@ public class Project extends BaseEntity
 	private String projectSign;
 	/** 归属部门实体 */
 	private Dept dept;
+	/** 项目标记 */
+	private boolean flag = false;
+	
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
 
 	public void setProjectId(Integer projectId) 
 	{

@@ -10,13 +10,13 @@
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">项目名称：</label>
 				<div class="col-sm-8">
-					<input class="form-control" type="text" name="deptName" onclick="selectDeptTree()" readonly="true" id="treeName" th:field="*{dept.deptName}">
+					<input id="projectName" name="projectName" th:field="*{projectName}" class="form-control" type="text">
 				</div>
 			</div>
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">归属部门：</label>
 				<div class="col-sm-8">
-					<input id="deptId" name="deptId" th:field="*{deptId}" class="form-control" type="text">
+					<input class="form-control" type="text" name="deptName" onclick="selectDeptTree()" readonly="true" id="treeName" th:field="*{dept.deptName}">
 				</div>
 			</div>
 			<div class="form-group">	
@@ -32,10 +32,60 @@
 		var prefix = ctx + "system/project";
 		$("#form-project-edit").validate({
 			rules:{
-				xxxx:{
+				projectName:{
 					required:true,
+					minlength: 1,
+        			maxlength: 50,
+                    remote: {
+                        url: ctx + "system/project/checkProjectNameUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                        	projectId: function() {
+                                return $("#projectId").val();
+                            },
+                            name: function () {
+                                return $.common.trim($("#projectName").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                        	return $.validate.unique(data);
+                        }
+                    }
 				},
-			}
+				deptName:{
+					required:true
+				},
+				projectSign:{
+					required:true,
+					minlength: 1,
+        			maxlength: 10,
+                    remote: {
+                        url: ctx + "system/project/checkProjectSignUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                        	projectId: function() {
+                                return $("#projectId").val();
+                            },
+                            name: function () {
+                                return $.common.trim($("#projectSign").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                        	return $.validate.unique(data);
+                        }
+                    }
+				}
+			},
+	    	messages: {
+	            "projectName": {
+	                remote: "项目名称已经存在"
+	            },
+	    		"projectSign": {
+	                remote: "项目标识已经存在"
+	            }
+	        }
 		});
 		
 		function submitHandler() {

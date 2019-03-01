@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.luckyframe.project.system.roleProject.mapper.RoleProjectMapper">
+<mapper namespace="com.luckyframe.project.system.role.mapper.RoleProjectMapper">
     
     <resultMap type="RoleProject" id="RoleProjectResult">
         <result property="roleId"    column="role_id"    />
@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </where>
     </select>
     
-    <select id="selectRoleProjectById" parameterType="Integer" resultMap="RoleProjectResult">
+    <select id="selectRoleProjectsById" parameterType="Integer" resultMap="RoleProjectResult">
         <include refid="selectRoleProjectVo"/>
         where role_id = #{roleId}
     </select>
@@ -57,4 +57,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     
+    <insert id="insertBatchRoleProject">
+		insert into sys_role_project(role_id, project_id) values
+		<foreach item="item" index="index" collection="list" separator=",">
+			(#{item.roleId},#{item.projectId})
+		</foreach>
+	</insert>
 </mapper>

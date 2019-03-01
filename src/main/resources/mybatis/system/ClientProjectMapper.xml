@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.system.client.mapper.ClientProjectMapper">
+    
+    <resultMap type="ClientProject" id="ClientProjectResult">
+        <result property="clientId"    column="client_id"    />
+        <result property="projectId"    column="project_id"    />
+    </resultMap>
+	
+	<sql id="selectClientProjectVo">
+        select client_id, project_id from sys_client_project
+    </sql>
+	
+    <select id="selectClientProjectList" parameterType="ClientProject" resultMap="ClientProjectResult">
+        <include refid="selectClientProjectVo"/>
+        <where>  
+            <if test="clientId != null "> and client_id = #{clientId}</if>
+             <if test="projectId != null "> and project_id = #{projectId}</if>
+         </where>
+    </select>
+    
+    <select id="selectClientProjectsById" parameterType="Integer" resultMap="ClientProjectResult">
+        <include refid="selectClientProjectVo"/>
+        where client_id = #{clientId}
+    </select>
+        
+    <insert id="insertClientProject" parameterType="ClientProject">
+        insert into sys_client_project
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="clientId != null  ">client_id,</if>
+			<if test="projectId != null  ">project_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="clientId != null  ">#{clientId},</if>
+			<if test="projectId != null  ">#{projectId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateClientProject" parameterType="ClientProject">
+        update sys_client_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null  ">project_id = #{projectId},</if>
+        </trim>
+        where client_id = #{clientId}
+    </update>
+
+	<delete id="deleteClientProjectById" parameterType="Integer">
+        delete from sys_client_project where client_id = #{clientId}
+    </delete>
+	
+    <delete id="deleteClientProjectByIds" parameterType="String">
+        delete from sys_client_project where client_id in 
+        <foreach item="clientId" collection="array" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+    </delete>
+    
+   <insert id="insertBatchClientProject">
+		insert into sys_client_project(client_id, project_id) values
+		<foreach item="item" index="index" collection="list" separator=",">
+			(#{item.clientId},#{item.projectId})
+		</foreach>
+	</insert>
+	
+	<select id="selectClientProjectCountByProjectId" parameterType="Integer" resultType="Integer">
+		select count(1) from sys_client_project where project_id=#{project_id}
+	</select>
+</mapper>

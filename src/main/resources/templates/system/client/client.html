@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								客户端名称：<input type="text" name="clientName"/>
+							</li>
+
+							<li>
+								客户端IP：<input type="text" name="clientIp"/>
+							</li>
+
+							<li>
+								备注：<input type="text" name="remark"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:client:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:client:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:client:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:client:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:client:remove')}]];
+        var prefix = ctx + "system/client";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "客户端",
+				search: false,
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'clientId', 
+					title : '客户端ID',
+					visible: false
+				},
+				{
+					field : 'clientName', 
+					title : '客户端名称',
+					sortable: true
+				},
+				{
+					field : 'clientIp', 
+					title : '客户端IP',
+					sortable: true
+				},
+				{
+					field : 'status', 
+					title : '客户端超时',
+					sortable: true,
+					formatter : function(value,
+							row, index) {
+						if(value==0){
+							return '<span class="glyphicon glyphicon-ok-sign" style="color: rgb(0, 175, 0);"> 状态正常</span>';
+						}else if(value==1){
+							return '<span class="glyphicon glyphicon-minus-sign" style="color: rgb(199, 0, 0);"> 状态异常</span>';
+						}else{
+							return '<span class="glyphicon glyphicon-question-sign" style="color: rgb(255, 168, 0); font-size: 14px;"> 状态未知</span>';
+						}
+					}
+				},
+				{
+					field : 'checkinterval', 
+					title : '心跳间隔',
+					sortable: true,
+					formatter : function(value,
+							row, index) {
+						return value+'秒';
+					}
+				},
+				{
+					field : 'clientPath', 
+					title : '驱动路径',
+					sortable: true
+				},
+				{
+					field : 'remark', 
+					title : '备注',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.clientId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.clientId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								用例标识：<input type="text" name="caseSign"/>
+							</li>
+
+							<li>
+								用例名称：<input type="text" name="caseName"/>
+							</li>
+
+							<li>
+								项目：<input type="text" name="projectId"/>
+							</li>
+
+							<li>
+								模块：<input type="text" name="moduleId"/>
+							</li>
+
+							<li>
+								用例类型：
+								<select name="caseType" th:with="type=${@dict.getType('testmanagmt_case_type')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="testmanagmt:projectCase:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="testmanagmt:projectCase:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testmanagmt:projectCase:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="testmanagmt:projectCase:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('testmanagmt:projectCase:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('testmanagmt:projectCase:remove')}]];
+        var prefix = ctx + "testmanagmt/projectCase";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "测试用例",
+				search: false,
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'caseId', 
+					title : '测试用例ID',
+					visible: false
+				},
+				{
+					field : 'caseSerialNumber', 
+					title : '用例编号排序',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'caseSign', 
+					title : '用例标识',
+					sortable: true
+				},
+				{
+					field : 'caseName', 
+					title : '用例名称',
+					sortable: true
+				},
+				{
+					field : 'projectId', 
+					title : '关联项目ID',
+					sortable: true
+				},
+				{
+					field : 'moduleId', 
+					title : '关联项目模块ID',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'caseType', 
+					title : '默认类型 0 API接口 1 Web UI 2 HTTP接口 3移动端',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'failcontinue', 
+					title : '前置步骤失败，后续步骤是否继续，0：中断，1：继续',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'createBy', 
+					title : '创建者',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'createTime', 
+					title : '创建时间',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'updateBy', 
+					title : '更新者',
+					sortable: true
+				},
+				{
+					field : 'updateTime', 
+					title : '更新时间',
+					sortable: true
+				},
+				{
+					field : 'remark', 
+					title : '备注',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.caseId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.caseId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

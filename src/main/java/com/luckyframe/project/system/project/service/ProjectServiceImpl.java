@@ -1,12 +1,24 @@
 package com.luckyframe.project.system.project.service;
 
+import java.util.Date;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.luckyframe.project.system.project.mapper.ProjectMapper;
-import com.luckyframe.project.system.project.domain.Project;
-import com.luckyframe.project.system.project.service.IProjectService;
+
+import com.luckyframe.common.constant.ProjectConstants;
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.support.Convert;
+import com.luckyframe.common.utils.StringUtils;
+import com.luckyframe.common.utils.security.ShiroUtils;
+import com.luckyframe.project.system.client.domain.ClientProject;
+import com.luckyframe.project.system.client.mapper.ClientProjectMapper;
+import com.luckyframe.project.system.project.domain.Project;
+import com.luckyframe.project.system.project.mapper.ProjectMapper;
+import com.luckyframe.project.system.role.domain.RoleProject;
+import com.luckyframe.project.system.role.mapper.RoleProjectMapper;
+import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseModule;
+import com.luckyframe.project.testmanagmt.projectCaseModule.mapper.ProjectCaseModuleMapper;
 
 /**
  * 测试项目管理 服务层实现
@@ -19,6 +31,15 @@ public class ProjectServiceImpl implements IProjectService
 {
 	@Autowired
 	private ProjectMapper projectMapper;
+	
+	@Autowired
+	private ProjectCaseModuleMapper projectCaseModuleMapper;
+	
+	@Autowired
+	private ClientProjectMapper clientProjectMapper;
+	
+	@Autowired
+	private RoleProjectMapper roleProjectMapper;
 
 	/**
      * 查询测试项目管理信息
@@ -27,7 +48,7 @@ public class ProjectServiceImpl implements IProjectService
      * @return 测试项目管理信息
      */
     @Override
-	public Project selectProjectById(Integer projectId)
+	public Project selectProjectById(int projectId)
 	{
 	    return projectMapper.selectProjectById(projectId);
 	}
@@ -45,6 +66,17 @@ public class ProjectServiceImpl implements IProjectService
 	}
 	
     /**
+     * 查询所有项目管理列表
+     * 
+     * @return 项目管理列表
+     */
+    @Override
+    public List<Project> selectProjectAll()
+    {
+        return selectProjectList(new Project());
+    }
+    
+    /**
      * 新增测试项目管理
      * 
      * @param project 测试项目管理信息
@@ -53,7 +85,19 @@ public class ProjectServiceImpl implements IProjectService
 	@Override
 	public int insertProject(Project project)
 	{
-	    return projectMapper.insertProject(project);
+		projectMapper.insertProject(project);
+		ProjectCaseModule projectCaseModule=new ProjectCaseModule();
+		projectCaseModule.setModuleName(project.getProjectName());
+		projectCaseModule.setProjectId(project.getProjectId());
+		projectCaseModule.setCreateBy(ShiroUtils.getLoginName());
+		projectCaseModule.setCreateTime(new Date());
+        projectCaseModule.setUpdateBy(ShiroUtils.getLoginName());
+        projectCaseModule.setUpdateTime(new Date());
+		projectCaseModule.setAncestors("0");
+		projectCaseModule.setOrderNum(projectCaseModuleMapper.selectProjectCaseModuleMaxOrderNumByParentId(0)+1);
+		projectCaseModule.setRemark("项目初始化模块");
+	    projectCaseModuleMapper.insertProjectCaseModule(projectCaseModule);
+	    return project.getProjectId();
 	}
 	
 	/**
@@ -75,9 +119,101 @@ public class ProjectServiceImpl implements IProjectService
      * @return 结果
      */
 	@Override
-	public int deleteProjectByIds(String ids)
+	public int deleteProjectByIds(String ids) throws BusinessException
 	{
-		return projectMapper.deleteProjectByIds(Convert.toStrArray(ids));
+		String[] projectIds=Convert.toStrArray(ids);
+		for(String projectidstr:projectIds){
+			int projectId=Integer.valueOf(projectidstr);
+			if(projectCaseModuleMapper.selectProjectCaseModuleCountByProjectId(projectId)>0){
+				throw new BusinessException(String.format("【%1$s】已绑定子用例模块,不能删除", projectMapper.selectProjectById(projectId).getProjectName()));
+			}
+			if(clientProjectMapper.selectClientProjectCountByProjectId(projectId)>0){
+				throw new BusinessException(String.format("【%1$s】已绑定客户端,不能删除", projectMapper.selectProjectById(projectId).getProjectName()));
+			}			
+		}
+		projectCaseModuleMapper.deleteProjectCaseModuleByProjectIds(projectIds);
+		return projectMapper.deleteProjectByIds(projectIds);
 	}
 	
+    /**
+     * 根据客户端ID查询所有项目列表(打标记)
+     * @param userId
+     * @return
+     * @author Seagull
+     * @date 2019年2月25日
+     */
+    @Override
+    public List<Project> selectProjectsByClientId(int clientId)
+    {
+        List<ClientProject> clientProjects = clientProjectMapper.selectClientProjectsById(clientId);
+        List<Project> projects = selectProjectAll();
+        for (Project project : projects)
+        {
+            for (ClientProject cp : clientProjects)
+            {
+                if (cp.getProjectId() == project.getProjectId().longValue())
+                {
+                	project.setFlag(true);
+                    break;
+                }
+            }
+        }
+        return projects;
+    }
+    
+    /**
+     * 根据角色ID查询所有项目列表(打标记)
+     * @param roleId
+     * @return
+     * @author Seagull
+     * @date 2019年2月25日
+     */
+    @Override
+    public List<Project> selectProjectsByRoleId(int roleId)
+    {
+        List<RoleProject> roleProjects = roleProjectMapper.selectRoleProjectsById(roleId);
+        List<Project> projects = selectProjectAll();
+        for (Project project : projects)
+        {
+            for (RoleProject rp : roleProjects)
+            {
+                if (rp.getProjectId() == project.getProjectId().longValue())
+                {
+                	project.setFlag(true);
+                    break;
+                }
+            }
+        }
+        return projects;
+    }
+    
+    /**
+     * 校验项目名称唯一性
+     */
+    @Override
+    public String checkProjectNameUnique(Project project)
+    {
+        Long projectId = StringUtils.isNull(project.getProjectId()) ? -1L : project.getProjectId();
+        Project info = projectMapper.checkProjectNameUnique(project.getProjectName());
+        if (StringUtils.isNotNull(info) && info.getProjectId().longValue() != projectId.longValue())
+        {
+            return ProjectConstants.PROJECT_NAME_NOT_UNIQUE;
+        }
+        return ProjectConstants.PROJECT_NAME_UNIQUE;
+    }
+    
+    /**
+     * 校验项目标识唯一性
+     */
+    @Override
+    public String checkProjectSignUnique(Project project)
+    {
+        Long projectId = StringUtils.isNull(project.getProjectId()) ? -1L : project.getProjectId();
+        Project info = projectMapper.checkProjectSignUnique(project.getProjectSign());
+        if (StringUtils.isNotNull(info) && info.getProjectId().longValue() != projectId.longValue())
+        {
+            return ProjectConstants.PROJECT_SIGN_NOT_UNIQUE;
+        }
+        return ProjectConstants.PROJECT_SIGN_UNIQUE;
+    }
 }

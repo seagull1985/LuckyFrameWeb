@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseMapper">
+    
+    <resultMap type="ProjectCase" id="ProjectCaseResult">
+        <result property="caseId"    column="case_id"    />
+        <result property="caseSerialNumber"    column="case_serial_number"    />
+        <result property="caseSign"    column="case_sign"    />
+        <result property="caseName"    column="case_name"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="moduleId"    column="module_id"    />
+        <result property="caseType"    column="case_type"    />
+        <result property="failcontinue"    column="failcontinue"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectProjectCaseVo">
+        select case_id, case_serial_number, case_sign, case_name, project_id, module_id, case_type, failcontinue, create_by, create_time, update_by, update_time, remark from project_case
+    </sql>
+	
+    <select id="selectProjectCaseList" parameterType="ProjectCase" resultMap="ProjectCaseResult">
+        <include refid="selectProjectCaseVo"/>
+        <where>  
+            <if test="caseId != null "> and case_id = #{caseId}</if>
+             <if test="caseSerialNumber != null "> and case_serial_number = #{caseSerialNumber}</if>
+             <if test="caseSign != null  and caseSign != '' "> and case_sign = #{caseSign}</if>
+             <if test="caseName != null  and caseName != '' "> and case_name = #{caseName}</if>
+             <if test="projectId != null "> and project_id = #{projectId}</if>
+             <if test="moduleId != null "> and module_id = #{moduleId}</if>
+             <if test="caseType != null "> and case_type = #{caseType}</if>
+             <if test="failcontinue != null "> and failcontinue = #{failcontinue}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectProjectCaseById" parameterType="Integer" resultMap="ProjectCaseResult">
+        <include refid="selectProjectCaseVo"/>
+        where case_id = #{caseId}
+    </select>
+    
+    <select id="selectMaxCaseSerialNumberByProjectId" parameterType="Integer" resultType="Integer">
+		select IFNULL(MAX(case_serial_number),0) from project_case where project_id=#{project_id}
+	</select>
+    
+    <select id="checkProjectCaseNameUnique" parameterType="String" resultMap="ProjectCaseResult">
+        <include refid="selectProjectCaseVo"/>
+		where case_name=#{case_name}
+	</select>
+        
+    <insert id="insertProjectCase" parameterType="ProjectCase" useGeneratedKeys="true" keyProperty="caseId">
+        insert into project_case
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="caseSerialNumber != null  ">case_serial_number,</if>
+			<if test="caseSign != null  and caseSign != ''  ">case_sign,</if>
+			<if test="caseName != null  and caseName != ''  ">case_name,</if>
+			<if test="projectId != null  ">project_id,</if>
+			<if test="moduleId != null  ">module_id,</if>
+			<if test="caseType != null  ">case_type,</if>
+			<if test="failcontinue != null  ">failcontinue,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="caseSerialNumber != null  ">#{caseSerialNumber},</if>
+			<if test="caseSign != null  and caseSign != ''  ">#{caseSign},</if>
+			<if test="caseName != null  and caseName != ''  ">#{caseName},</if>
+			<if test="projectId != null  ">#{projectId},</if>
+			<if test="moduleId != null  ">#{moduleId},</if>
+			<if test="caseType != null  ">#{caseType},</if>
+			<if test="failcontinue != null  ">#{failcontinue},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProjectCase" parameterType="ProjectCase">
+        update project_case
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseSerialNumber != null  ">case_serial_number = #{caseSerialNumber},</if>
+            <if test="caseSign != null  and caseSign != ''  ">case_sign = #{caseSign},</if>
+            <if test="caseName != null  and caseName != ''  ">case_name = #{caseName},</if>
+            <if test="projectId != null  ">project_id = #{projectId},</if>
+            <if test="moduleId != null  ">module_id = #{moduleId},</if>
+            <if test="caseType != null  ">case_type = #{caseType},</if>
+            <if test="failcontinue != null  ">failcontinue = #{failcontinue},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+        </trim>
+        where case_id = #{caseId}
+    </update>
+
+	<delete id="deleteProjectCaseById" parameterType="Integer">
+        delete from project_case where case_id = #{caseId}
+    </delete>
+	
+    <delete id="deleteProjectCaseByIds" parameterType="String">
+        delete from project_case where case_id in 
+        <foreach item="caseId" collection="array" open="(" separator="," close=")">
+            #{caseId}
+        </foreach>
+    </delete>
+    
+</mapper>

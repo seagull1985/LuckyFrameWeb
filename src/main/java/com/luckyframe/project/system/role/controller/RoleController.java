@@ -17,6 +17,7 @@ import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
 import com.luckyframe.framework.web.domain.AjaxResult;
 import com.luckyframe.framework.web.page.TableDataInfo;
+import com.luckyframe.project.system.project.service.IProjectService;
 import com.luckyframe.project.system.role.domain.Role;
 import com.luckyframe.project.system.role.service.IRoleService;
 
@@ -33,6 +34,9 @@ public class RoleController extends BaseController
 
     @Autowired
     private IRoleService roleService;
+    
+    @Autowired
+    private IProjectService projectService;
 
     @RequiresPermissions("system:role:view")
     @GetMapping()
@@ -66,8 +70,9 @@ public class RoleController extends BaseController
      * 新增角色
      */
     @GetMapping("/add")
-    public String add()
+    public String add(ModelMap mmap)
     {
+    	mmap.put("projects", projectService.selectProjectAll());
         return prefix + "/add";
     }
 
@@ -91,6 +96,7 @@ public class RoleController extends BaseController
     @GetMapping("/edit/{roleId}")
     public String edit(@PathVariable("roleId") Long roleId, ModelMap mmap)
     {
+    	mmap.put("projects", projectService.selectProjectsByRoleId(roleId.intValue()));
         mmap.put("role", roleService.selectRoleById(roleId));
         return prefix + "/edit";
     }

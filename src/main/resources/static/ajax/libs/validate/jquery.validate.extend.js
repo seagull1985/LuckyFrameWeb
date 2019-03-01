@@ -16,6 +16,10 @@ $(document).ready(function(){
 		var tel = /^(0\d{2,3}-)?\d{7,8}$/g;//区号3,4位,号码7,8位
 		return this.optional(element) || (tel.test(value));
 	},"请填写正确的座机号码");
+    // IP地址验证   
+    jQuery.validator.addMethod("isIp", function(value, element) {    
+      return this.optional(element) || /^(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.)(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.){2}([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))$/.test(value);    
+    }, "请填写正确的IP地址。");
 	//姓名校验
 	jQuery.validator.addMethod("isName",function(value,element){
 		var name=/^[\u4e00-\u9fa5]{2,6}$/;
@@ -27,6 +31,111 @@ $(document).ready(function(){
 		return this.optional(element) || (userName).test(value);
 	},'请输入数字或者字母,不包含特殊字符');
 	
+    // 判断整数value是否等于0 
+    jQuery.validator.addMethod("isIntEqZero", function(value, element) { 
+         value=parseInt(value);      
+         return this.optional(element) || value==0;       
+    }, "输入值必须为0"); 
+      
+    // 判断整数value是否大于0
+    jQuery.validator.addMethod("isIntGtZero", function(value, element) { 
+         value=parseInt(value);      
+         return this.optional(element) || value>0;       
+    }, "输入值必须是整数且大于0"); 
+      
+    // 判断整数value是否大于或等于0
+    jQuery.validator.addMethod("isIntGteZero", function(value, element) { 
+         value=parseInt(value);      
+         return this.optional(element) || value>=0;       
+    }, "输入值必须是整数且大于或等于0");   
+    
+    // 判断整数value是否不等于0 
+    jQuery.validator.addMethod("isIntNEqZero", function(value, element) { 
+         value=parseInt(value);      
+         return this.optional(element) || value!=0;       
+    }, "输入值必须是整数且不等于0");  
+    
+    // 判断整数value是否小于0 
+    jQuery.validator.addMethod("isIntLtZero", function(value, element) { 
+         value=parseInt(value);      
+         return this.optional(element) || value<0;       
+    }, "输入值必须是整数且小于0");  
+    
+    // 判断整数value是否小于或等于0 
+    jQuery.validator.addMethod("isIntLteZero", function(value, element) { 
+         value=parseInt(value);      
+         return this.optional(element) || value<=0;       
+    }, "输入值必须是整数且小于或等于0");  
+    
+    // 判断浮点数value是否等于0 
+    jQuery.validator.addMethod("isFloatEqZero", function(value, element) { 
+         value=parseFloat(value);      
+         return this.optional(element) || value==0;       
+    }, "输入值必须是浮点数且为0"); 
+      
+    // 判断浮点数value是否大于0
+    jQuery.validator.addMethod("isFloatGtZero", function(value, element) { 
+         value=parseFloat(value);      
+         return this.optional(element) || value>0;       
+    }, "输入值必须是浮点数且大于0"); 
+      
+    // 判断浮点数value是否大于或等于0
+    jQuery.validator.addMethod("isFloatGteZero", function(value, element) { 
+         value=parseFloat(value);      
+         return this.optional(element) || value>=0;       
+    }, "输入值必须是浮点数且大于或等于0");   
+    
+    // 判断浮点数value是否不等于0 
+    jQuery.validator.addMethod("isFloatNEqZero", function(value, element) { 
+         value=parseFloat(value);      
+         return this.optional(element) || value!=0;       
+    }, "输入值必须是浮点数且不等于0");  
+    
+    // 判断浮点数value是否小于0 
+    jQuery.validator.addMethod("isFloatLtZero", function(value, element) { 
+         value=parseFloat(value);      
+         return this.optional(element) || value<0;       
+    }, "输入值必须是浮点数且小于0");  
+    
+    // 判断浮点数value是否小于或等于0 
+    jQuery.validator.addMethod("isFloatLteZero", function(value, element) { 
+         value=parseFloat(value);      
+         return this.optional(element) || value<=0;       
+    }, "输入值必须是浮点数且小于或等于0");  
+    
+    // 判断浮点型  
+    jQuery.validator.addMethod("isFloat", function(value, element) {       
+         return this.optional(element) || /^[-\+]?\d+(\.\d+)?$/.test(value);       
+    }, "输入值必须是浮点数只能包含数字、小数点等字符"); 
+     
+    // 匹配integer
+    jQuery.validator.addMethod("isInteger", function(value, element) {       
+         return this.optional(element) || (/^[-\+]?\d+$/.test(value) && parseInt(value)>=0);       
+    }, "输入值只能是整数");  
+     
+    // 判断数值类型，包括整数和浮点数
+    jQuery.validator.addMethod("isNumber", function(value, element) {       
+         return this.optional(element) || /^[-\+]?\d+$/.test(value) || /^[-\+]?\d+(\.\d+)?$/.test(value);       
+    }, "输入值必须是整数或浮点数");  
+    
+    // 只能输入[0-9]数字
+    jQuery.validator.addMethod("isDigits", function(value, element) {       
+         return this.optional(element) || /^\d+$/.test(value);       
+    }, "输入值必须是0-9数字");  
+    
+    // 判断中文字符 
+    jQuery.validator.addMethod("isChinese", function(value, element) {       
+         return this.optional(element) || /^[\u0391-\uFFE5]+$/.test(value);       
+    }, "输入值只能包含中文字符。");   
+ 
+    // 判断英文字符 
+    jQuery.validator.addMethod("isEnglish", function(value, element) {       
+         return this.optional(element) || /^[A-Za-z]+$/.test(value);       
+    }, "输入值只能包含英文字符。"); 
+    // 匹配qq      
+    jQuery.validator.addMethod("isQq", function(value, element) {       
+         return this.optional(element) || /^[1-9]\d{4,12}$/;       
+    }, "输入值必是QQ格式");
 	//校验身份证
 	jQuery.validator.addMethod("isIdentity",function(value,element){
 		var id= /^(\d{15}$|^\d{18}$|^\d{17}(\d|X))$/;

@@ -59,4 +59,22 @@ public interface ProjectMapper
      */
 	public int deleteProjectByIds(String[] projectIds);
 	
+	/**
+	 * 校验项目名称唯一性
+	 * @param project
+	 * @return
+	 * @author Seagull
+	 * @date 2019年2月27日
+	 */
+	public Project checkProjectNameUnique(String projectName);
+	
+    /**
+     * 校验项目标识唯一性
+     * @param project
+     * @return
+     * @author Seagull
+     * @date 2019年2月27日
+     */
+    public Project checkProjectSignUnique(String projectSign);
+	
 }

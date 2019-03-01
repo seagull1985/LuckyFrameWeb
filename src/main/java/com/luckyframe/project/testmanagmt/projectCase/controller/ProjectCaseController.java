@@ -1,0 +1,162 @@
+package com.luckyframe.project.testmanagmt.projectCase.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.luckyframe.common.utils.poi.ExcelUtil;
+import com.luckyframe.framework.aspectj.lang.annotation.Log;
+import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
+import com.luckyframe.framework.web.controller.BaseController;
+import com.luckyframe.framework.web.domain.AjaxResult;
+import com.luckyframe.framework.web.page.TableDataInfo;
+import com.luckyframe.project.system.client.domain.Client;
+import com.luckyframe.project.system.project.domain.Project;
+import com.luckyframe.project.system.project.service.IProjectService;
+import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;
+import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseService;
+import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseModule;
+import com.luckyframe.project.testmanagmt.projectCaseModule.service.IProjectCaseModuleService;
+
+/**
+ * 项目测试用例管理 信息操作处理
+ * 
+ * @author luckyframe
+ * @date 2019-02-26
+ */
+@Controller
+@RequestMapping("/testmanagmt/projectCase")
+public class ProjectCaseController extends BaseController
+{
+    private String prefix = "testmanagmt/projectCase";
+	
+	@Autowired
+	private IProjectCaseService projectCaseService;
+	
+	@Autowired
+	private IProjectService projectService;
+	
+	@Autowired
+	private IProjectCaseModuleService projectCaseModuleService;
+	
+	@RequiresPermissions("testmanagmt:projectCase:view")
+	@GetMapping()
+	public String projectCase(ModelMap mmap)
+	{
+        List<Project> projects=projectService.selectProjectAll();
+        mmap.put("projects", projects);
+	    return prefix + "/projectCase";
+	}
+	
+	/**
+	 * 查询项目测试用例管理列表
+	 */
+	@RequiresPermissions("testmanagmt:projectCase:list")
+	@PostMapping("/list")
+	@ResponseBody
+	public TableDataInfo list(ProjectCase projectCase)
+	{
+		startPage();
+        List<ProjectCase> list = projectCaseService.selectProjectCaseList(projectCase);
+		return getDataTable(list);
+	}
+	
+	
+	/**
+	 * 导出项目测试用例管理列表
+	 */
+	@RequiresPermissions("testmanagmt:projectCase:export")
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(ProjectCase projectCase)
+    {
+    	List<ProjectCase> list = projectCaseService.selectProjectCaseList(projectCase);
+        ExcelUtil<ProjectCase> util = new ExcelUtil<ProjectCase>(ProjectCase.class);
+        return util.exportExcel(list, "projectCase");
+    }
+	
+	/**
+	 * 新增项目测试用例管理
+	 */
+	@GetMapping("/add")
+	public String add(ModelMap mmap)
+	{
+        List<Project> projects=projectService.selectProjectAll();
+        mmap.put("projects", projects);
+        if(projects.size()>0){
+        	ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(projects.get(0).getProjectId());
+        	mmap.put("projectCaseModule", projectCaseModule);
+        }
+	    return prefix + "/add";
+	}
+	
+	/**
+	 * 新增保存项目测试用例管理
+	 */
+	@RequiresPermissions("testmanagmt:projectCase:add")
+	@Log(title = "项目测试用例管理", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public AjaxResult addSave(ProjectCase projectCase)
+	{		
+		return toAjax(projectCaseService.insertProjectCase(projectCase));
+	}
+
+	/**
+	 * 修改项目测试用例管理
+	 */
+	@GetMapping("/edit/{caseId}")
+	public String edit(@PathVariable("caseId") Integer caseId, ModelMap mmap)
+	{
+		ProjectCase projectCase = projectCaseService.selectProjectCaseById(caseId);
+		mmap.put("projectCase", projectCase);
+	    return prefix + "/edit";
+	}
+	
+	/**
+	 * 修改保存项目测试用例管理
+	 */
+	@RequiresPermissions("testmanagmt:projectCase:edit")
+	@Log(title = "项目测试用例管理", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public AjaxResult editSave(ProjectCase projectCase)
+	{		
+		return toAjax(projectCaseService.updateProjectCase(projectCase));
+	}
+	
+	/**
+	 * 删除项目测试用例管理
+	 */
+	@RequiresPermissions("testmanagmt:projectCase:remove")
+	@Log(title = "项目测试用例管理", businessType = BusinessType.DELETE)
+	@PostMapping( "/remove")
+	@ResponseBody
+	public AjaxResult remove(String ids)
+	{		
+		return toAjax(projectCaseService.deleteProjectCaseByIds(ids));
+	}
+
+    /**
+     * 校验测试用例名称唯一性
+     * @param projectCase
+     * @return
+     * @author Seagull
+     * @date 2019年2月28日
+     */
+    @PostMapping("/checkProjectCaseNameUnique")
+    @ResponseBody
+    public String checkProjectCaseNameUnique(ProjectCase projectCase)
+    {
+        return projectCaseService.checkProjectCaseNameUnique(projectCase);
+    }
+}

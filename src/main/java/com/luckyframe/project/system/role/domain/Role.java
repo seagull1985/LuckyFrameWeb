@@ -49,8 +49,20 @@ public class Role extends BaseEntity
 
     /** 部门组（数据权限） */
     private Long[] deptIds;
+    
+    /** 所属项目组 */
+    private Integer[] projectIds;
 
-    public Long getRoleId()
+    
+    public Integer[] getProjectIds() {
+		return projectIds;
+	}
+
+	public void setProjectIds(Integer[] projectIds) {
+		this.projectIds = projectIds;
+	}
+
+	public Long getRoleId()
     {
         return roleId;
     }

@@ -1,6 +1,7 @@
 package com.luckyframe.project.system.project.controller;
 
 import java.util.List;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,14 +11,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.luckyframe.common.exception.BusinessException;
+import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
+import com.luckyframe.framework.web.controller.BaseController;
+import com.luckyframe.framework.web.domain.AjaxResult;
+import com.luckyframe.framework.web.page.TableDataInfo;
 import com.luckyframe.project.system.project.domain.Project;
 import com.luckyframe.project.system.project.service.IProjectService;
-import com.luckyframe.framework.web.controller.BaseController;
-import com.luckyframe.framework.web.page.TableDataInfo;
-import com.luckyframe.framework.web.domain.AjaxResult;
-import com.luckyframe.common.utils.poi.ExcelUtil;
 
 /**
  * 测试项目管理 信息操作处理
@@ -120,8 +123,34 @@ public class ProjectController extends BaseController
 	@PostMapping( "/remove")
 	@ResponseBody
 	public AjaxResult remove(String ids)
-	{		
-		return toAjax(projectService.deleteProjectByIds(ids));
+	{
+        try
+        {
+    		return toAjax(projectService.deleteProjectByIds(ids));
+        }
+        catch (BusinessException e)
+        {
+            return error(e.getMessage());
+        }
 	}
 	
+    /**
+     * 校验项目名称唯一性
+     */
+    @PostMapping("/checkProjectNameUnique")
+    @ResponseBody
+    public String checkProjectNameUnique(Project project)
+    {
+        return projectService.checkProjectNameUnique(project);
+    }
+    
+    /**
+     * 校验项目标识唯一性
+     */
+    @PostMapping("/checkProjectSignUnique")
+    @ResponseBody
+    public String checkProjectSignUnique(Project project)
+    {
+        return projectService.checkProjectSignUnique(project);
+    }
 }

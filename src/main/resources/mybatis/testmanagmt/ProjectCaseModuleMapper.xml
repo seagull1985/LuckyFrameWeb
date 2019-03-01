@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.testmanagmt.projectCaseModule.mapper.ProjectCaseModuleMapper">
+    
+    <resultMap type="ProjectCaseModule" id="ProjectCaseModuleResult">
+        <result property="moduleId"    column="module_id"    />
+        <result property="moduleName"    column="module_name"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="ancestors"    column="ancestors"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+    
+	<sql id="selectProjectCaseModuleVo">
+        select module_id, module_name, project_id, parent_id, ancestors, order_num, create_by, create_time, update_by, update_time, remark from project_case_module
+    </sql>
+	
+    <select id="selectProjectCaseModuleList" parameterType="ProjectCaseModule" resultMap="ProjectCaseModuleResult">
+        <include refid="selectProjectCaseModuleVo"/>
+        <where>  
+            <if test="moduleId != null "> and module_id = #{moduleId}</if>
+             <if test="moduleName != null  and moduleName != '' "> and module_name = #{moduleName}</if>
+             <if test="projectId != null "> and project_id = #{projectId}</if>
+             <if test="parentId != null "> and parent_id = #{parentId}</if>
+             <if test="ancestors != null  and ancestors != '' "> and ancestors = #{ancestors}</if>
+             <if test="orderNum != null "> and order_num = #{orderNum}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectProjectCaseModuleById" parameterType="Integer" resultMap="ProjectCaseModuleResult">
+        <include refid="selectProjectCaseModuleVo"/>
+        where module_id = #{moduleId}
+    </select>
+    
+    <select id="selectProjectCaseModuleByParentId" parameterType="Integer" resultMap="ProjectCaseModuleResult">
+        <include refid="selectProjectCaseModuleVo"/>
+        where parent_id = #{parentId}
+    </select>
+    
+    <select id="selectProjectCaseModuleParentZeroByProjectId" parameterType="Integer" resultMap="ProjectCaseModuleResult">
+        <include refid="selectProjectCaseModuleVo"/>
+        where project_id=#{project_id} and parent_id=0
+	</select>
+        
+    <insert id="insertProjectCaseModule" parameterType="ProjectCaseModule" useGeneratedKeys="true" keyProperty="moduleId">
+        insert into project_case_module
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="moduleName != null  and moduleName != ''  ">module_name,</if>
+			<if test="projectId != null  ">project_id,</if>
+			<if test="parentId != null  ">parent_id,</if>
+			<if test="ancestors != null  and ancestors != ''  ">ancestors,</if>
+			<if test="orderNum != null  ">order_num,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="moduleName != null  and moduleName != ''  ">#{moduleName},</if>
+			<if test="projectId != null  ">#{projectId},</if>
+			<if test="parentId != null  ">#{parentId},</if>
+			<if test="ancestors != null  and ancestors != ''  ">#{ancestors},</if>
+			<if test="orderNum != null  ">#{orderNum},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProjectCaseModule" parameterType="ProjectCaseModule">
+        update project_case_module
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="moduleName != null  and moduleName != ''  ">module_name = #{moduleName},</if>
+            <if test="projectId != null  ">project_id = #{projectId},</if>
+            <if test="parentId != null  ">parent_id = #{parentId},</if>
+            <if test="ancestors != null  and ancestors != ''  ">ancestors = #{ancestors},</if>
+            <if test="orderNum != null  ">order_num = #{orderNum},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+        </trim>
+        where module_id = #{moduleId}
+    </update>
+    
+    <update id="updateModuleChildren" parameterType="java.util.List">
+	    update project_case_module set ancestors =
+	    <foreach collection="modules" item="item" index="index"
+	        separator=" " open="case module_id" close="end">
+	        when #{item.moduleId} then #{item.ancestors}
+	    </foreach>
+	    where module_id in
+	    <foreach collection="modules" item="item" index="index"
+	        separator="," open="(" close=")">
+	        #{item.moduleId}
+	    </foreach>
+	 </update>
+	 
+	<delete id="deleteProjectCaseModuleById" parameterType="Integer">
+        delete from project_case_module where module_id = #{moduleId}
+    </delete>
+    
+    <delete id="deleteProjectCaseModuleByProjectIds" parameterType="String">
+        delete from project_case_module where project_id in 
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+	
+    <delete id="deleteProjectCaseModuleByIds" parameterType="String">
+        delete from project_case_module where module_id in 
+        <foreach item="moduleId" collection="array" open="(" separator="," close=")">
+            #{moduleId}
+        </foreach>
+    </delete>
+    
+    <select id="selectProjectCaseModuleMaxOrderNumByParentId" parameterType="Integer" resultType="Integer">
+		select IFNULL(MAX(order_num),-1) from project_case_module where parent_id=#{parent_id}
+	</select>
+	
+	<select id="selectProjectCaseModuleCountByProjectId" parameterType="Integer" resultType="Integer">
+		select count(1) from project_case_module where project_id=#{project_id} and parent_id!=0
+	</select>
+
+</mapper>

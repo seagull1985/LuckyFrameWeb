@@ -20,7 +20,7 @@ public class LuckyFrameWebApplication
 {
     public static void main(String[] args)
     {
-        // System.setProperty("spring.devtools.restart.enabled", "false");
+        System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(LuckyFrameWebApplication.class, args);
         System.out.println("LuckyFrameWeb启动成功......");
     }

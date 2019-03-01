@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-client-edit" th:object="${client}">
+            <input id="clientId" name="clientId" th:field="*{clientId}"  type="hidden">
+            <input id="status" name="status" value='2' type="hidden"/>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">客户端名称：</label>
+				<div class="col-sm-8">
+					<input id="clientName" name="clientName" th:field="*{clientName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">客户端IP：</label>
+				<div class="col-sm-8">
+					<input id="clientIp" name="clientIp" th:field="*{clientIp}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">心跳间隔(秒)：</label>
+				<div class="col-sm-8">
+					<input id="checkinterval" name="checkinterval" th:field="*{checkinterval}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-11 control-label" style="color:#f7a54a">客户端有多个测试驱动路径时，以 ; 做分隔</label>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">驱动路径：</label>
+				<div class="col-sm-8">
+					<input id="clientPath" name="clientPath" th:field="*{clientPath}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">应用项目：</label>
+				<div class="col-sm-8">
+					<label th:each="project:${projects}" class="check-box">
+						<input name="project" type="checkbox" th:value="${project.projectId}" th:text="${project.projectName}" th:checked="${project.flag}">
+					</label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<textarea id="remark" name="remark" th:field="*{remark}" class="form-control" type="text"></textarea>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/client";
+		$("#form-client-edit").validate({
+			rules:{
+				clientName:{
+        			required:true,
+        			minlength: 2,
+        			maxlength: 20,
+                    remote: {
+                        url: ctx + "system/client/checkClientNameUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                        	clientId: function() {
+                                return $("#clientId").val();
+                            },
+                            name: function () {
+                                return $.common.trim($("#clientName").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                        	return $.validate.unique(data);
+                        }
+                    }
+				},
+				clientIp:{
+        			required:true,
+        			isIp:true,
+                    remote: {
+                        url: ctx + "system/client/checkIpUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                        	clientId: function() {
+                                return $("#clientId").val();
+                            },
+                            name: function () {
+                                return $.common.trim($("#clientIp").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                        	return $.validate.unique(data);
+                        }
+                    }
+				},
+				checkinterval:{
+        			required:true,
+        			isIntGtZero:true,
+        			isInteger:true,
+        			max:60
+				},
+				clientPath:{
+        			required:true,
+        			minlength: 2,
+        			maxlength: 100,
+				},
+				clientPath:{
+        			required:true,
+        			minlength: 2,
+        			maxlength: 100,
+				},
+			},
+        	messages: {
+                "clientName": {
+                    remote: "客户端名称已经存在"
+                },
+        		"clientIp": {
+                    remote: "客户端IP已经存在"
+                }
+            }
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-client-edit').serialize());
+	        }
+	    }
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	        	edit();
+	        }
+	    }
+
+        function edit() {
+        	var clientId = $("input[name='clientId']").val();
+        	var clientName = $("input[name='clientName']").val();
+        	var clientIp = $("input[name='clientIp']").val();
+        	var checkinterval = $("input[name='checkinterval']").val();
+        	var clientPath = $("input[name='clientPath']").val();
+        	var remark = $("input[name='remark']").val();
+        	var status = $("input[name='status']").val();
+        	var projectIds = $.form.selectCheckeds("project");
+        	$.ajax({
+        		cache : true,
+        		type : "POST",
+        		url : ctx + "system/client/edit",
+        		data : {
+        			"clientId":clientId,
+        			"clientName": clientName,
+        			"clientIp": clientIp,
+        			"checkinterval": checkinterval,
+        			"clientPath": clientPath,
+        			"remark": remark,
+        			"status": status,
+        			"projectIds": projectIds
+        		},
+        		async : false,
+        		error : function(request) {
+        			$.modal.alertError("系统错误");
+        		},
+        		success : function(data) {
+        			$.operate.successCallback(data);
+        		}
+        	});
+        }
+	</script>
+</body>
+</html>

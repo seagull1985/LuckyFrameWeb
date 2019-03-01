@@ -5,8 +5,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.luckyframe.common.constant.UserConstants;
 import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.support.Convert;
@@ -16,15 +18,17 @@ import com.luckyframe.framework.aspectj.lang.annotation.DataScope;
 import com.luckyframe.project.system.role.domain.Role;
 import com.luckyframe.project.system.role.domain.RoleDept;
 import com.luckyframe.project.system.role.domain.RoleMenu;
+import com.luckyframe.project.system.role.domain.RoleProject;
 import com.luckyframe.project.system.role.mapper.RoleDeptMapper;
 import com.luckyframe.project.system.role.mapper.RoleMapper;
 import com.luckyframe.project.system.role.mapper.RoleMenuMapper;
+import com.luckyframe.project.system.role.mapper.RoleProjectMapper;
 import com.luckyframe.project.system.user.mapper.UserRoleMapper;
 
 /**
  * 角色 业务层处理
  * 
- * @author ruoyi
+ * @author seagull
  */
 @Service
 public class RoleServiceImpl implements IRoleService
@@ -40,6 +44,9 @@ public class RoleServiceImpl implements IRoleService
 
     @Autowired
     private RoleDeptMapper roleDeptMapper;
+    
+    @Autowired
+    private RoleProjectMapper roleProjectMapper;
 
     /**
      * 根据条件分页查询角色数据
@@ -132,6 +139,10 @@ public class RoleServiceImpl implements IRoleService
     @Override
     public boolean deleteRoleById(Long roleId)
     {
+        //删除角色与项目关联后再插入新的数据
+        roleProjectMapper.deleteRoleProjectById(roleId.intValue());
+        // 删除角色与菜单关联
+        roleMenuMapper.deleteRoleMenuByRoleId(roleId);
         return roleMapper.deleteRoleById(roleId) > 0 ? true : false;
     }
 
@@ -153,6 +164,10 @@ public class RoleServiceImpl implements IRoleService
                 throw new BusinessException(String.format("%1$s已分配,不能删除", role.getRoleName()));
             }
         }
+        //删除角色与项目关联后再插入新的数据
+        roleProjectMapper.deleteRoleProjectByIds(Convert.toStrArray(ids));
+        // 删除角色与菜单关联
+        roleMenuMapper.deleteRoleMenu(roleIds);
         return roleMapper.deleteRoleByIds(roleIds);
     }
 
@@ -168,6 +183,9 @@ public class RoleServiceImpl implements IRoleService
         role.setCreateBy(ShiroUtils.getLoginName());
         // 新增角色信息
         roleMapper.insertRole(role);
+        // 新增角色项目权限信息
+        insertClientProject(role);
+        
         ShiroUtils.clearCachedAuthorizationInfo();
         return insertRoleMenu(role);
     }
@@ -185,6 +203,9 @@ public class RoleServiceImpl implements IRoleService
         // 修改角色信息
         roleMapper.updateRole(role);
         ShiroUtils.clearCachedAuthorizationInfo();
+        //删除角色与项目关联后再插入新的数据
+        roleProjectMapper.deleteRoleProjectById(role.getRoleId().intValue());
+        insertClientProject(role);
         // 删除角色与菜单关联
         roleMenuMapper.deleteRoleMenuByRoleId(role.getRoleId());
         return insertRoleMenu(role);
@@ -256,6 +277,33 @@ public class RoleServiceImpl implements IRoleService
         return rows;
     }
 
+	/**
+	 * 批量增加角色与项目的对应关系
+	 * @param role
+	 * @author Seagull
+	 * @date 2019年2月25日
+	 */
+    private void insertClientProject(Role role)
+    {
+    	Integer[] projects = role.getProjectIds();
+        if (StringUtils.isNotNull(projects))
+        {
+            // 新增客户端与项目的映射表
+            List<RoleProject> roleProjectList = new ArrayList<RoleProject>();
+            for (Integer projectId : projects)
+            {
+            	RoleProject rp = new RoleProject();
+            	rp.setRoleId(role.getRoleId().intValue());
+            	rp.setProjectId(projectId);
+            	roleProjectList.add(rp);
+            }
+            if (roleProjectList.size() > 0)
+            {
+            	roleProjectMapper.insertBatchRoleProject(roleProjectList);
+            }
+        }
+    }
+    
     /**
      * 校验角色名称是否唯一
      * 

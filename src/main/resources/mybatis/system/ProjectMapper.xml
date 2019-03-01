@@ -12,7 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <association property="dept"    column="dept_id" javaType="Dept" resultMap="deptResult" />
     </resultMap>
 	
-		<resultMap id="deptResult" type="Dept">
+	<resultMap id="deptResult" type="Dept">
 		<id     property="deptId"   column="dept_id"     />
 		<result property="parentId" column="parent_id"   />
 		<result property="deptName" column="dept_name"   />
@@ -75,4 +75,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     
+    <select id="checkProjectNameUnique" parameterType="String" resultMap="ProjectResult">
+		select * from sys_project where project_name=#{project_name}
+	</select>
+	
+	<select id="checkProjectSignUnique" parameterType="String" resultMap="ProjectResult">
+		select * from sys_project where project_sign=#{project_sign}
+	</select>
+	
 </mapper>
