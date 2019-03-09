@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.testmanagmt.projectProtocolTemplate.mapper.ProjectTemplateParamsMapper">
+    
+    <resultMap type="ProjectTemplateParams" id="ProjectTemplateParamsResult">
+        <result property="paramsId"    column="params_id"    />
+        <result property="templateId"    column="template_id"    />
+        <result property="paramName"    column="param_name"    />
+        <result property="paramValue"    column="param_value"    />
+        <result property="paramType"    column="param_type"    />
+    </resultMap>
+	
+	<sql id="selectProjectTemplateParamsVo">
+        select params_id, template_id, param_name, param_value, param_type from project_template_params
+    </sql>
+	
+    <select id="selectProjectTemplateParamsList" parameterType="ProjectTemplateParams" resultMap="ProjectTemplateParamsResult">
+        <include refid="selectProjectTemplateParamsVo"/>
+        <where>  
+            <if test="paramsId != null "> and params_id = #{paramsId}</if>
+             <if test="templateId != null "> and template_id = #{templateId}</if>
+             <if test="paramName != null  and paramName != '' "> and param_name = #{paramName}</if>
+             <if test="paramValue != null  and paramValue != '' "> and param_value = #{paramValue}</if>
+             <if test="paramType != null "> and param_type = #{paramType}</if>
+         </where>
+    </select>
+    
+    <select id="selectProjectTemplateParamsById" parameterType="Integer" resultMap="ProjectTemplateParamsResult">
+        <include refid="selectProjectTemplateParamsVo"/>
+        where params_id = #{paramsId}
+    </select>
+        
+    <insert id="insertProjectTemplateParams" parameterType="ProjectTemplateParams" useGeneratedKeys="true" keyProperty="paramsId">
+        insert into project_template_params
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="paramsId != null and paramsId !=0 ">params_id,</if>
+			<if test="templateId != null  ">template_id,</if>
+			<if test="paramName != null  and paramName != ''  ">param_name,</if>
+			<if test="paramValue != null  and paramValue != ''  ">param_value,</if>
+			<if test="paramType != null  ">param_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="paramsId != null and paramsId !=0 ">#{paramsId},</if>
+			<if test="templateId != null  ">#{templateId},</if>
+			<if test="paramName != null  and paramName != ''  ">#{paramName},</if>
+			<if test="paramValue != null  and paramValue != ''  ">#{paramValue},</if>
+			<if test="paramType != null  ">#{paramType},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProjectTemplateParams" parameterType="ProjectTemplateParams">
+        update project_template_params
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="templateId != null  ">template_id = #{templateId},</if>
+            <if test="paramName != null  and paramName != ''  ">param_name = #{paramName},</if>
+            <if test="paramValue != null  and paramValue != ''  ">param_value = #{paramValue},</if>
+            <if test="paramType != null  ">param_type = #{paramType},</if>
+        </trim>
+        where params_id = #{paramsId}
+    </update>
+
+	<delete id="deleteProjectTemplateParamsByTemplateId" parameterType="Integer">
+        delete from project_template_params where template_id = #{templateId}
+    </delete>
+	
+    <delete id="deleteProjectTemplateParamsByIds" parameterType="String">
+        delete from project_template_params where params_id in 
+        <foreach item="paramsId" collection="array" open="(" separator="," close=")">
+            #{paramsId}
+        </foreach>
+    </delete>
+    
+</mapper>

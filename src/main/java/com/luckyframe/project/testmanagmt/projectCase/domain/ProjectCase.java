@@ -4,6 +4,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.luckyframe.framework.web.domain.BaseEntity;
+import com.luckyframe.project.system.project.domain.Project;
+import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseModule;
 
 /**
  * 项目测试用例管理表 project_case
@@ -31,6 +33,26 @@ public class ProjectCase extends BaseEntity
 	private Integer caseType;
 	/** 前置步骤失败，后续步骤是否继续，0：中断，1：继续 */
 	private Integer failcontinue;
+	/** 关联项目实体 */
+	private Project project;
+	/** 关联用例模块实体 */
+	private ProjectCaseModule projectCaseModule;
+
+	public ProjectCaseModule getProjectCaseModule() {
+		return projectCaseModule;
+	}
+
+	public void setProjectCaseModule(ProjectCaseModule projectCaseModule) {
+		this.projectCaseModule = projectCaseModule;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
 
 	public void setCaseId(Integer caseId) 
 	{
@@ -120,6 +142,8 @@ public class ProjectCase extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
+            .append("project", getProject())
+            .append("projectCaseModule", getProjectCaseModule())            
             .toString();
     }
 }

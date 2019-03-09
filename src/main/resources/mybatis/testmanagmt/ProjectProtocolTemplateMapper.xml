@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.testmanagmt.projectProtocolTemplate.mapper.ProjectProtocolTemplateMapper">
+    
+    <resultMap type="ProjectProtocolTemplate" id="ProjectProtocolTemplateResult">
+        <result property="templateId"    column="template_id"    />
+        <result property="templateName"    column="template_name"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="headMsg"    column="head_msg"    />
+        <result property="cerificatePath"    column="cerificate_path"    />
+        <result property="encoding"    column="encoding"    />
+        <result property="timeout"    column="timeout"    />
+        <result property="isResponseHead"    column="is_response_head"    />
+        <result property="isResponseCode"    column="is_response_code"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <association property="project"  column="project_id" javaType="Project" resultMap="ProjectResult" />
+    </resultMap>
+	
+	<resultMap type="Project" id="ProjectResult">
+        <id property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="projectSign"    column="project_sign"    />
+    </resultMap>
+    
+	<sql id="selectProjectProtocolTemplateVo">
+        select ppt.template_id, ppt.template_name, ppt.project_id, ppt.head_msg, ppt.cerificate_path, ppt.encoding, ppt.timeout, 
+        ppt.is_response_head, ppt.is_response_code, ppt.create_by, ppt.create_time, ppt.update_by, ppt.update_time, ppt.remark, 
+        sp.project_name,sp.dept_id,sp.project_sign 
+        from project_protocol_template ppt 
+        left join sys_project sp on ppt.project_id = sp.project_id 
+    </sql>
+	
+    <select id="selectProjectProtocolTemplateList" parameterType="ProjectProtocolTemplate" resultMap="ProjectProtocolTemplateResult">
+        <include refid="selectProjectProtocolTemplateVo"/>
+        <where>  
+            <if test="templateId != null "> and ppt.template_id = #{templateId}</if>
+             <if test="templateName != null  and templateName != '' "> and ppt.template_name like concat('%', #{templateName}, '%')</if>
+             <if test="projectId != null "> and ppt.project_id = #{projectId}</if>
+             <if test="headMsg != null  and headMsg != '' "> and ppt.head_msg = #{headMsg}</if>
+             <if test="cerificatePath != null  and cerificatePath != '' "> and ppt.cerificate_path = #{cerificatePath}</if>
+             <if test="encoding != null  and encoding != '' "> and ppt.encoding = #{encoding}</if>
+             <if test="timeout != null "> and ppt.timeout = #{timeout}</if>
+             <if test="isResponseHead != null "> and ppt.is_response_head = #{isResponseHead}</if>
+             <if test="isResponseCode != null "> and ppt.is_response_code = #{isResponseCode}</if>
+             <if test="createBy != null  and createBy != '' "> ppt.and create_by = #{createBy}</if>
+             <if test="createTime != null "> and ppt.create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and ppt.update_time = #{updateTime}</if>
+             <if test="remark != null  and remark != '' "> and ppt.remark = #{remark}</if>
+         </where>
+         order by ppt.template_id desc
+    </select>
+    
+    <select id="selectProjectProtocolTemplateById" parameterType="Integer" resultMap="ProjectProtocolTemplateResult">
+        <include refid="selectProjectProtocolTemplateVo"/>
+        where ppt.template_id = #{templateId}
+    </select>
+    
+    <select id="checkProjectProtocolTemplateNameUnique" parameterType="ProjectProtocolTemplate" resultMap="ProjectProtocolTemplateResult">
+        <include refid="selectProjectProtocolTemplateVo"/>
+		<where>
+             <if test="templateName != null  and templateName != '' "> and ppt.template_name = #{templateName}</if>
+             <if test="projectId != null "> and ppt.project_id = #{projectId}</if>
+         </where>
+	</select>
+        
+    <insert id="insertProjectProtocolTemplate" parameterType="ProjectProtocolTemplate" useGeneratedKeys="true" keyProperty="templateId">
+        insert into project_protocol_template
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="templateName != null  and templateName != ''  ">template_name,</if>
+			<if test="projectId != null  ">project_id,</if>
+			<if test="headMsg != null  and headMsg != ''  ">head_msg,</if>
+			<if test="cerificatePath != null  and cerificatePath != ''  ">cerificate_path,</if>
+			<if test="encoding != null  and encoding != ''  ">encoding,</if>
+			<if test="timeout != null  ">timeout,</if>
+			<if test="isResponseHead != null  ">is_response_head,</if>
+			<if test="isResponseCode != null  ">is_response_code,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="templateName != null  and templateName != ''  ">#{templateName},</if>
+			<if test="projectId != null  ">#{projectId},</if>
+			<if test="headMsg != null  and headMsg != ''  ">#{headMsg},</if>
+			<if test="cerificatePath != null  and cerificatePath != ''  ">#{cerificatePath},</if>
+			<if test="encoding != null  and encoding != ''  ">#{encoding},</if>
+			<if test="timeout != null  ">#{timeout},</if>
+			<if test="isResponseHead != null  ">#{isResponseHead},</if>
+			<if test="isResponseCode != null  ">#{isResponseCode},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProjectProtocolTemplate" parameterType="ProjectProtocolTemplate">
+        update project_protocol_template
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="templateName != null  and templateName != ''  ">template_name = #{templateName},</if>
+            <if test="projectId != null  ">project_id = #{projectId},</if>
+            <if test="headMsg != null  and headMsg != ''  ">head_msg = #{headMsg},</if>
+            <if test="cerificatePath != null  and cerificatePath != ''  ">cerificate_path = #{cerificatePath},</if>
+            <if test="encoding != null  and encoding != ''  ">encoding = #{encoding},</if>
+            <if test="timeout != null  ">timeout = #{timeout},</if>
+            <if test="isResponseHead != null  ">is_response_head = #{isResponseHead},</if>
+            <if test="isResponseCode != null  ">is_response_code = #{isResponseCode},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+        </trim>
+        where template_id = #{templateId}
+    </update>
+
+	<delete id="deleteProjectProtocolTemplateById" parameterType="Integer">
+        delete from project_protocol_template where template_id = #{templateId}
+    </delete>
+	
+    <delete id="deleteProjectProtocolTemplateByIds" parameterType="String">
+        delete from project_protocol_template where template_id in 
+        <foreach item="templateId" collection="array" open="(" separator="," close=")">
+            #{templateId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-projectProtocolTemplate-edit" th:object="${projectProtocolTemplate}">
+            <input id="templateId" name="templateId" th:field="*{templateId}"  type="hidden">
+            <input id="projectId" name="projectId" th:field="*{projectId}"  type="hidden">
+            <div class="form-group">	
+				<label class="col-sm-3 control-label">项目名称：</label>
+				<div class="col-sm-8">
+				    <strong class="form-control" th:text="*{project.projectName}"></strong>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">模板名称：</label>
+				<div class="col-sm-8">
+					<input id="templateName" name="templateName" th:field="*{templateName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">消息头域：</label>
+				<div class="col-sm-8">
+					<textarea id="headMsg" name="headMsg" th:field="*{headMsg}" class="form-control placeholder" placeholder="示例:Authorization=Base64(admin:123456);Content-Type=application/json    多个头域以;分隔"></textarea>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">证书路径：</label>
+				<div class="col-sm-8">
+					<textarea id="cerificatePath" name="cerificatePath" th:field="*{cerificatePath}" class="form-control placeholder" placeholder="客户端中的证书路径，非必填项，HTTPS双向认证才会用到，HTTPS单向认证此项请保持为空，格式：【https证书路径;密钥】"></textarea>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">编码格式：</label>
+				<div class="col-sm-8">
+					<div class="radio-box">
+					  <input type="radio" th:id="encoding" name="encoding" th:field="*{encoding}" th:value="UTF-8" th:checked="${encoding == 'UTF-8' ? true : false}">
+					  <label>UTF-8编码</label>
+				    </div>
+				    <div class="radio-box">
+				      <input type="radio" th:id="encoding" name="encoding" th:field="*{encoding}" th:value="GBK" th:checked="${encoding == 'GBK' ? true : false}">
+					  <label>GBK编码</label>
+				    </div>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">响应超时(秒)：</label>
+				<div class="col-sm-8">
+					<input id="timeout" name="timeout" th:field="*{timeout}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">头域返回：</label>
+				<div class="col-sm-8">
+					<div class="radio-box">
+					  <input type="radio" th:id="isResponseHead" name="isResponseHead" th:value="0" th:field="*{isResponseHead}" th:checked="${isResponseHead == '0' ? true : false}">
+					  <label>响应不返回</label>
+				    </div>
+				    <div class="radio-box">
+					  <input type="radio" th:id="isResponseHead" name="isResponseHead" th:value="1" th:field="*{isResponseHead}" th:checked="${isResponseHead == '1' ? true : false}">
+					  <label>响应返回</label>
+				    </div>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">状态码返回：</label>
+				<div class="col-sm-8">
+					<div class="radio-box">
+					  <input type="radio" th:id="isResponseCode" name="isResponseCode" th:value="0" th:field="*{isResponseCode}" th:checked="${isResponseCode == '0' ? true : false}">
+					  <label>响应不返回</label>
+				    </div>
+				    <div class="radio-box">
+					  <input type="radio" th:id="isResponseCode" name="isResponseCode" th:value="1" th:field="*{isResponseCode}" th:checked="${isResponseCode == '1' ? true : false}">
+					  <label>响应返回</label>
+				    </div>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<textarea id="remark" name="remark" th:field="*{remark}" class="form-control"></textarea>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "testmanagmt/projectProtocolTemplate";
+		$("#form-projectProtocolTemplate-edit").validate({
+			rules:{
+				templateName:{
+					required:true,
+					minlength: 1,
+        			maxlength: 50,
+                    remote: {
+                        url: prefix + "/checkProjectProtocolTemplateNameUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                        	"templateId": function() {
+                                return $("#templateId").val();
+                            },
+                            name: function () {
+                                return $.common.trim($("#templateName").val());
+                            },
+                            projectId: function () {
+                                return $.common.trim($("#projectId").val());
+                            }		
+                        },
+                        dataFilter: function (data, type) {
+                        	return $.validate.unique(data);
+                        }
+                    }
+				},
+				timeout:{
+					required:true,
+					min: 1,
+        			max: 300
+				}
+			},
+        	messages: {
+                "templateName": {
+                    remote: "协议模板名称已经存在"
+                }
+            }
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-projectProtocolTemplate-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

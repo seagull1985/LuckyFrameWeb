@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								模板名称：<input type="text" name="templateName"/>
+							</li>
+
+							<li>
+								项目：
+								<select id="projectId" name="projectId" th:with="type=${projects}">
+								    <option value="">所有项目</option>
+	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}"></option>
+	                            </select>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="testmanagmt:projectProtocolTemplate:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="testmanagmt:projectProtocolTemplate:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-info btn-edit disabled" onclick="$.operate.customFull()" shiro:hasPermission="testmanagmt:projectProtocolTemplate:edit">
+					<i class="fa fa-folder-open-o"></i> 模板参数
+				</a>
+				<a class="btn btn-info btn-edit disabled" onclick="$.operate.copy()" shiro:hasPermission="testmanagmt:projectProtocolTemplate:add">
+					<i class="fa fa-copy"></i> 复制模板
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testmanagmt:projectProtocolTemplate:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('testmanagmt:projectProtocolTemplate:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('testmanagmt:projectProtocolTemplate:remove')}]];
+        var prefix = ctx + "testmanagmt/projectProtocolTemplate";
+        var paramsPrefix = ctx + "testmanagmt/projectTemplateParams";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                copyUrl: prefix + "/copy/{id}",
+                removeUrl: prefix + "/remove",
+                customUrl: paramsPrefix + "/editParams/{id}",
+                modalName: "协议模板",
+                childrenModalName: "协议模板信息",
+				search: false,
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'templateId', 
+					title : '模板ID',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'project.projectName', 
+					title : '项目名称',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'templateName', 
+					title : '模板名称',
+					width : '20%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'encoding', 
+					title : '编码格式',
+					width : '5%'
+				},
+				{
+					field : 'headMsg', 
+					title : '消息头域',
+					width : '20%',
+					class : 'myTDLengthHidden',
+		        	formatter: function (value, row, index) {
+		    		    if (value == null) {
+		        			return '默认值';
+		        		} else{
+		        			return value;
+		        		}
+		        	}
+				},
+				{
+					field : 'cerificatePath', 
+					title : '客户端中的证书路径',
+					visible: false
+				},
+				{
+					field : 'timeout', 
+					title : '超时时间',
+					width : '5%',
+		        	formatter: function (value, row, index) {
+		        		return value+"秒";
+		        	}
+				},
+				{
+					field : 'isResponseHead', 
+					title : '头域返回',
+					visible: false,
+		        	formatter: function (value, row, index) {
+		    		    if (value == 0) {
+		        			return '响应不返回';
+		        		} else if(value == 1){
+		        			return '响应返回';
+		        		} else{
+		        			return '未知数据';
+		        		}
+		        	}
+				},
+				{
+					field : 'isResponseCode', 
+					title : '状态码返回',
+					visible: false,
+		        	formatter: function (value, row, index) {
+		    		    if (value == 0) {
+		        			return '响应不返回';
+		        		} else if(value == 1){
+		        			return '响应返回';
+		        		} else{
+		        			return '未知数据';
+		        		}
+		        	}
+				},
+				{
+					field : 'createBy', 
+					title : '创建者',
+					visible: false
+				},
+				{
+					field : 'createTime', 
+					title : '创建时间',
+					visible: false
+				},
+				{
+					field : 'updateBy', 
+					title : '更新者',
+					class : 'myTDLengthHidden',
+					width : '5%'
+				},
+				{
+					field : 'updateTime', 
+					title : '更新时间',
+					width : '12%',
+					sortable: true,
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'remark', 
+					title : '备注',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            width : '13%',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.templateId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.templateId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                        /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.customFull(\'' + row.templateId + '\')"><i class="fa fa-folder-open-o"></i>模板参数</a> '); */
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

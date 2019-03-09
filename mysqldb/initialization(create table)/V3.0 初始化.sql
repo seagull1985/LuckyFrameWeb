@@ -361,29 +361,32 @@ create table sys_menu (
 insert into sys_menu values('1', '系统管理', '0', '3', '#', 'M', '0', '', 'fa fa-gear',         'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '系统管理目录');
 insert into sys_menu values('2', '系统监控', '0', '4', '#', 'M', '0', '', 'fa fa-video-camera', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '系统监控目录');
 insert into sys_menu values('3', '系统工具', '0', '5', '#', 'M', '0', '', 'fa fa-bars',         'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '系统工具目录');
-insert into sys_menu values('4', '测试管理', '0', '1', '#', 'M', '0', '', 'fa fa-bars',         'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '测试过程管理');
-insert into sys_menu values('5', '测试执行', '0', '2', '#', 'M', '0', '', 'fa fa-bars',         'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '测试执行管理');
+insert into sys_menu 
+values('4', '测试管理', '0', '1', '#', 'M', '0', '', 'fa fa-th-large',         'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '测试过程管理');
+insert into sys_menu 
+values('5', '测试执行', '0', '2', '#', 'M', '0', '', 'fa fa-rocket',         'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '测试执行管理');
 -- 二级菜单
 insert into sys_menu values('100',  '用户管理', '1', '1', '/system/user',        'C', '0', 'system:user:view',         '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用户管理菜单');
 insert into sys_menu values('101',  '角色管理', '1', '2', '/system/role',        'C', '0', 'system:role:view',         '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '角色管理菜单');
-insert into sys_menu values('102',  '菜单管理', '1', '3', '/system/menu',        'C', '0', 'system:menu:view',         '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '菜单管理菜单');
 insert into sys_menu values('103',  '部门管理', '1', '4', '/system/dept',        'C', '0', 'system:dept:view',         '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '部门管理菜单');
 insert into sys_menu values('104',  '项目管理', '1', '5', '/system/project',     'C', '0', 'system:project:view',      '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '项目管理菜单');
 insert into sys_menu values('105',  '客户端管理', '1', '6', '/system/client',    'C', '0', 'system:client:view',       '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '客户端管理菜单');
 insert into sys_menu values('106',  '岗位管理', '1', '7', '/system/post',        'C', '0', 'system:post:view',         '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '岗位管理菜单');
-insert into sys_menu values('107',  '字典管理', '1', '8', '/system/dict',        'C', '0', 'system:dict:view',         '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '字典管理菜单');
 insert into sys_menu values('108',  '参数设置', '1', '9', '/system/config',      'C', '0', 'system:config:view',       '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '参数设置菜单');
 insert into sys_menu values('109',  '通知公告', '1', '10', '/system/notice',      'C', '0', 'system:notice:view',       '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '通知公告菜单');
 insert into sys_menu values('110',  '日志管理', '1', '11', '#',                   'M', '0', '',                         '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '日志管理菜单');
 insert into sys_menu values('111',  '在线用户', '2', '1', '/monitor/online',     'C', '0', 'monitor:online:view',      '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '在线用户菜单');
 insert into sys_menu values('112',  '定时任务', '2', '2', '/monitor/job',        'C', '0', 'monitor:job:view',         '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '定时任务菜单');
 insert into sys_menu values('113',  '数据监控', '2', '3', '/monitor/data',       'C', '0', 'monitor:data:view',        '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '数据监控菜单');
-insert into sys_menu values('114',  '服务监控', '2', '3', '/monitor/server',     'C', '0', 'monitor:server:view',      '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '服务监控菜单');
+insert into sys_menu values('114',  '服务监控', '2', '4', '/monitor/server',     'C', '0', 'monitor:server:view',      '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '服务监控菜单');
 insert into sys_menu values('115',  '表单构建', '3', '1', '/tool/build',         'C', '0', 'tool:build:view',          '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '表单构建菜单');
 insert into sys_menu values('116',  '代码生成', '3', '2', '/tool/gen',           'C', '0', 'tool:gen:view',            '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '代码生成菜单');
 insert into sys_menu values('117',  '系统接口', '3', '3', '/tool/swagger',       'C', '0', 'tool:swagger:view',        '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '系统接口菜单');
+insert into sys_menu values('107',  '字典管理', '3', '4', '/system/dict',        'C', '0', 'system:dict:view',         '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '字典管理菜单');
+insert into sys_menu values('102',  '菜单管理', '3', '5', '/system/menu',        'C', '0', 'system:menu:view',         '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '菜单管理菜单');
 insert into sys_menu values('118',  '用例管理', '4', '1', '/testmanagmt/projectCase', 'C', '0', 'testmanagmt:projectCase:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2018-03-01', '测试用例管理菜单');
 insert into sys_menu values('119',  '用例模块', '4', '2', '/testmanagmt/projectCaseModule', 'C', '0', 'testmanagmt:projectCaseModule:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2018-03-01', '测试用例模块管理菜单');
+insert into sys_menu values('120',  '协议模板', '4', '3', '/testmanagmt/projectProtocolTemplate', 'C', '0', 'testmanagmt:projectProtocolTemplate:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '协议模板管理菜单');
 -- 三级菜单
 insert into sys_menu values('500',  '操作日志', '110', '1', '/monitor/operlog',    'C', '0', 'monitor:operlog:view',     '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '操作日志菜单');
 insert into sys_menu values('501',  '登录日志', '110', '2', '/monitor/logininfor', 'C', '0', 'monitor:logininfor:view',  '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '登录日志菜单');
@@ -478,7 +481,15 @@ insert into sys_menu values('1070','模块查询','119','1','#','F','0','testman
 insert into sys_menu values('1071','模块新增','119','2','#','F','0','testmanagmt:projectCaseModule:add','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
 insert into sys_menu values('1072','模块修改','119','3','#','F','0','testmanagmt:projectCaseModule:edit','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
 insert into sys_menu values('1073','模块删除','119','4','#','F','0','testmanagmt:projectCaseModule:remove','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
-
+-- 协议模板按钮
+insert into sys_menu 
+values('1074','协议查询','120','1','#','F','0','testmanagmt:projectProtocolTemplate:list','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+insert into sys_menu 
+values('1075','协议新增','120','2','#','F','0','testmanagmt:projectProtocolTemplate:add','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+insert into sys_menu 
+values('1076','协议修改','120','3','#','F','0','testmanagmt:projectProtocolTemplate:edit','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+insert into sys_menu 
+values('1077','协议删除','120','4','#','F','0','testmanagmt:projectProtocolTemplate:remove','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
 
 -- ----------------------------
 -- 16、用户和角色关联表  用户N-1角色
@@ -695,6 +706,7 @@ insert into sys_dict_type values(8,  '操作类型', 'sys_oper_type',       '0',
 insert into sys_dict_type values(9,  '系统状态', 'sys_common_status',   '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '登录状态列表');
 insert into sys_dict_type values(10, '用例类型', 'testmanagmt_case_type', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例步骤类型');
 insert into sys_dict_type values(11, '步骤失败策略', 'testmanagmt_case_stepfailcontinue', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '步骤失败策略');
+insert into sys_dict_type values(12, '模板参数类型', 'testmanagmt_templateparams_type', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型');
 
 -- ----------------------------
 -- 22、字典数据表
@@ -752,6 +764,12 @@ insert into sys_dict_data values(29, 3,  'API驱动', '2',  'testmanagmt_case_ty
 insert into sys_dict_data values(30, 4,  '移动端', '3',  'testmanagmt_case_type',   '',   'info',  'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '移动端');
 insert into sys_dict_data values(31, 1,  '中断', '0',  'testmanagmt_case_stepfailcontinue',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '后续步骤中断');
 insert into sys_dict_data values(32, 2,  '继续', '1',  'testmanagmt_case_stepfailcontinue',   '',   'info',  'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '后续步骤继续');
+insert into sys_dict_data values(33, 1,  'String', '0',  'testmanagmt_templateparams_type',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型 String');
+insert into sys_dict_data values(34, 2,  'JSON对象', '1',  'testmanagmt_templateparams_type',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型 JSON对象');
+insert into sys_dict_data values(35, 3,  'JSONARR对象', '2',  'testmanagmt_templateparams_type',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型 JSONARR对象');
+insert into sys_dict_data values(36, 4,  'File对象', '3',  'testmanagmt_templateparams_type',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型 File对象');
+insert into sys_dict_data values(37, 5,  'Number对象', '4',  'testmanagmt_templateparams_type',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型 Number对象');
+insert into sys_dict_data values(38, 6,  'Boolean对象', '5',  'testmanagmt_templateparams_type',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型 Boolean对象');
 
 -- ----------------------------
 -- 23、参数配置表
@@ -978,3 +996,40 @@ create table project_case_module
 -- ----------------------------
 insert into project_case_module values (1, '接口测试项目', 1, 0, 0, 0, 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '初始化数据');
 insert into project_case_module values (2, 'UI测试项目', 2, 0, 0, 0, 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '初始化数据');
+
+-- ----------------------------
+-- 34、协议模板管理
+-- ----------------------------
+drop table if exists project_protocol_template;
+create table project_protocol_template
+(
+  template_id           int(8)          not null AUTO_INCREMENT comment '模板ID',
+  template_name         varchar(50)     not null                comment '模板名称',
+  project_id            int(8)          not null                comment '项目ID',
+  head_msg              varchar(3000)                           comment '消息头',
+  cerificate_path       varchar(300)                            comment '客户端中的证书路径',
+  encoding              varchar(20)     not null                comment '编码格式',
+  timeout               int(8)          not null                comment '超时时间',
+  is_response_head      int(2)          not null                comment '请求响应返回值是否带头域信息 0不带 1带',
+  is_response_code      int(2)          not null                comment '请求响应返回值是否带状态码 0不带 1带',
+  create_by             varchar(64)     default ''              comment '创建者',
+  create_time 	        datetime                                comment '创建时间',
+  update_by             varchar(64)     default ''              comment '更新者',
+  update_time           datetime                                comment '更新时间',
+  remark                varchar(200)                            comment '备注',
+  primary key (template_id)
+) engine=innodb default charset=utf8 comment = '协议模板管理';
+
+-- ----------------------------
+-- 35、协议模板参数管理
+-- ----------------------------
+drop table if exists project_template_params;
+create table project_template_params
+(
+  params_id             int(9)          not null AUTO_INCREMENT comment '模板参数ID',
+  template_id           int(8)          not null                comment '模板ID',
+  param_name            varchar(50)     not null                comment '参数名',
+  param_value           varchar(5000)                           comment '参数默认值',
+  param_type            int(4)          not null                comment '0 String 1 JSON对象 2 JSONARR对象 3 文件类型',
+  primary key (params_id)
+) engine=innodb default charset=utf8 comment = '模板参数管理';

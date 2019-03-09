@@ -46,7 +46,8 @@
                     search: $.common.visible(options.search),           // 是否显示搜索框功能
                     showSearch: $.common.visible(options.showSearch),   // 是否显示检索信息
                     showRefresh: $.common.visible(options.showRefresh), // 是否显示刷新按钮
-                    showColumns: $.common.visible(options.showColumns), // 是否显示隐藏某列下拉框
+                    //showColumns: $.common.visible(options.showColumns), // 是否显示隐藏某列下拉框
+                    showColumns: false,
                     showToggle: $.common.visible(options.showToggle),   // 是否显示详细视图和列表视图的切换按钮
                     showExport: $.common.visible(options.showExport),   // 是否支持导出文件
                     fixedColumns: _fixedColumns,                        // 是否启用冻结列（左侧）
@@ -621,6 +622,21 @@
             	}
             	$.modal.open("修改" + $.table._option.modalName, url);
             },
+            // 复制信息
+            copy: function(id) {
+            	var url = "/404.html";
+            	if ($.common.isNotEmpty(id)) {
+            	    url = $.table._option.copyUrl.replace("{id}", id);
+            	} else {
+            	    var id = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            	    if (id.length == 0) {
+            			$.modal.alertWarning("请至少选择一条记录");
+            			return;
+            		}
+            	    url = $.table._option.copyUrl.replace("{id}", id);
+            	}
+            	$.modal.open("复制" + $.table._option.modalName, url);
+            },
             // 工具栏表格树修改
             editTree: function() {
             	var row = $('#bootstrap-tree-table').bootstrapTreeTable('getSelections')[0];
@@ -647,12 +663,41 @@
             	}
             	$.modal.openFull("修改" + $.table._option.modalName, url);
             },
+            // 自定义信息全屏
+            customFull: function(id) {
+            	var url = "/404.html";
+            	if ($.common.isNotEmpty(id)) {
+            	    url = $.table._option.customUrl.replace("{id}", id);
+            	} else {
+            	    var row = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            	    url = $.table._option.customUrl.replace("{id}", row);
+            	}
+            	$.modal.openFull($.table._option.childrenModalName, url);
+            },
             // 保存信息
             save: function(url, data) {
             	var config = {
         	        url: url,
         	        type: "post",
         	        dataType: "json",
+        	        data: data,
+        	        beforeSend: function () {
+        	        	$.modal.loading("正在处理中，请稍后...");
+        	        	$.modal.disable();
+        	        },
+        	        success: function(result) {
+        	        	$.operate.successCallback(result);
+        	        }
+        	    };
+        	    $.ajax(config)
+            },
+            // 保存JSON格式数据信息
+            saveJson: function(url, data) {
+            	var config = {
+        	        url: url,
+        	        type: "post",
+        	        dataType: "json",
+        	        contentType:"application/json",
         	        data: data,
         	        beforeSend: function () {
         	        	$.modal.loading("正在处理中，请稍后...");
@@ -717,6 +762,11 @@
             form: function (formId) {
             	var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
                 return $("#" + currentId).validate().form();
+            },
+            // 表单重新加载验证
+            resetForm: function (formId) {
+            	var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+                return $("#" + currentId).validate().resetForm();
             }
         },
         // 树插件封装处理

@@ -18,34 +18,63 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="remark"    column="remark"    />
+        <association property="project"  column="project_id" javaType="Project" resultMap="ProjectResult" />
+        <association property="projectCaseModule"  column="module_id" javaType="ProjectCaseModule" resultMap="ProjectCaseModuleResult" />
+    </resultMap>
+    
+    <resultMap type="Project" id="ProjectResult">
+        <id property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="projectSign"    column="project_sign"    />
     </resultMap>
 	
+	<resultMap type="ProjectCaseModule" id="ProjectCaseModuleResult">
+        <id property="moduleId"    column="module_id"    />
+        <result property="moduleName"    column="module_name"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="ancestors"    column="ancestors"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+    
 	<sql id="selectProjectCaseVo">
-        select case_id, case_serial_number, case_sign, case_name, project_id, module_id, case_type, failcontinue, create_by, create_time, update_by, update_time, remark from project_case
+        select pc.case_id, pc.case_serial_number, pc.case_sign, pc.case_name, pc.project_id, pc.module_id, pc.case_type, pc.failcontinue, pc.create_by, pc.create_time, pc.update_by, pc.update_time, pc.remark,
+        sp.project_name,sp.dept_id,sp.project_sign,
+        pcm.module_name 
+        from project_case pc 
+        left join sys_project sp on pc.project_id = sp.project_id 
+        left join project_case_module pcm on pc.module_id = pcm.module_id 
     </sql>
 	
     <select id="selectProjectCaseList" parameterType="ProjectCase" resultMap="ProjectCaseResult">
         <include refid="selectProjectCaseVo"/>
         <where>  
-            <if test="caseId != null "> and case_id = #{caseId}</if>
-             <if test="caseSerialNumber != null "> and case_serial_number = #{caseSerialNumber}</if>
-             <if test="caseSign != null  and caseSign != '' "> and case_sign = #{caseSign}</if>
-             <if test="caseName != null  and caseName != '' "> and case_name = #{caseName}</if>
-             <if test="projectId != null "> and project_id = #{projectId}</if>
-             <if test="moduleId != null "> and module_id = #{moduleId}</if>
-             <if test="caseType != null "> and case_type = #{caseType}</if>
-             <if test="failcontinue != null "> and failcontinue = #{failcontinue}</if>
+            <if test="caseId != null "> and pc.case_id = #{caseId}</if>
+             <if test="caseSerialNumber != null "> and pc.case_serial_number = #{caseSerialNumber}</if>
+             <if test="caseSign != null  and caseSign != '' "> and pc.case_sign like concat('%', #{caseSign}, '%')</if>
+             <if test="caseName != null  and caseName != '' "> and pc.case_name like concat('%', #{caseName}, '%')</if>
+             <if test="projectId != null "> and pc.project_id = #{projectId}</if>
+             <if test="moduleId != null "> and pc.module_id = #{moduleId}</if>
+             <if test="caseType != null "> and pc.case_type = #{caseType}</if>
+             <if test="failcontinue != null "> and pc.failcontinue = #{failcontinue}</if>
              <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
-             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="createTime != null "> and pc.create_time = #{createTime}</if>
              <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
-             <if test="updateTime != null "> and update_time = #{updateTime}</if>
-             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+             <if test="updateTime != null "> and pc.update_time = #{updateTime}</if>
+             <if test="remark != null  and remark != '' "> and pc.remark = #{remark}</if>
          </where>
+         order by pc.case_id desc
     </select>
     
     <select id="selectProjectCaseById" parameterType="Integer" resultMap="ProjectCaseResult">
         <include refid="selectProjectCaseVo"/>
-        where case_id = #{caseId}
+        where pc.case_id = #{caseId}
     </select>
     
     <select id="selectMaxCaseSerialNumberByProjectId" parameterType="Integer" resultType="Integer">
@@ -54,7 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="checkProjectCaseNameUnique" parameterType="String" resultMap="ProjectCaseResult">
         <include refid="selectProjectCaseVo"/>
-		where case_name=#{case_name}
+		where pc.case_name=#{case_name}
 	</select>
         
     <insert id="insertProjectCase" parameterType="ProjectCase" useGeneratedKeys="true" keyProperty="caseId">
@@ -119,4 +148,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     
+    <select id="selectProjectCaseCountByProjectId" parameterType="Integer" resultType="Integer">
+		select count(1) from project_case where project_id=#{project_id}
+	</select>
+	
+	<select id="selectProjectCaseCountByModuleId" parameterType="Integer" resultType="Integer">
+		select count(1) from project_case where module_id=#{module_id}
+	</select>
 </mapper>

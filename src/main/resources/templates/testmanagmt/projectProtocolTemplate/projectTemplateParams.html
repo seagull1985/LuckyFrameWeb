@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+       <table class="table table-striped">
+			<tr>
+			<td>
+				<strong class="col-sm-1 control-label">项目名称：</strong>
+				<div class="col-sm-3">
+					<label class="control-label" th:text="${ptemplate.project.projectName}"></label>
+				</div>
+				<strong class="col-sm-1 control-label">超时时间：</strong>
+				<div class="col-sm-2">
+				    <label class="control-label" th:text="${ptemplate.timeout}+'秒'"></label>
+				</div>
+				<strong class="col-sm-1 control-label">模板名称：</strong>
+				<div class="col-sm-3">
+					<label class="control-label" th:text="${ptemplate.templateName}"></label>
+				</div>
+				</td>
+			</tr>
+			<tr>
+			<td>
+				<strong class="col-sm-1 control-label">证书路径：</strong>
+				<div class="col-sm-3">
+					<label class="control-label" th:text="${ptemplate.cerificatePath}"></label>
+				</div>
+				<strong class="col-sm-1 control-label">编码格式：</strong>
+				<div class="col-sm-2">
+					<label class="control-label" th:text="${ptemplate.encoding}"></label>
+				</div>
+				<strong class="col-sm-1 control-label">备注：</strong>
+				<div class="col-sm-3">
+					<label class="control-label" th:text="${ptemplate.remark}"></label>
+				</div>
+				</td>
+			</tr>
+			<tr>
+			<td>
+				<strong class="col-sm-1 control-label">消息头域：</strong>
+				<div class="col-sm-3">
+					<label class="control-label" th:text="${ptemplate.headMsg}"></label>
+				</div>
+				</td>
+			</tr>
+			</table>
+
+		<h3 class="thin text-center">协议模板参数</h3>
+		<ul class="nav nav-tabs" role="tablist" id="myTab">
+			<li role="presentation" id="litextsub"><a href="#textsub" role="tab"
+				data-toggle="tab" style="color: #00BFFF"><b>RAW</b></a></li>
+			<li role="presentation" id="liformsub"><a href="#formsub" role="tab"
+				data-toggle="tab" style="color: #00BFFF"><b>FORM</b></a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane" id="formsub">
+			    <form class="form-horizontal m" id="form-projectTemplateParams-edit">				
+					<div class="form-group">					
+						<table class="table table-striped" id="paramtable">
+							<thead>
+								<tr>
+									<th>参数名</th>
+									<th>参数默认值</th>
+									<th>参数类型</th>
+								</tr>
+							</thead>
+							<tbody id="paramTBody">
+								 <tr th:each="paramob,iterStat : ${templateParams}">								 
+										<td width="20%">
+										<div class="col-sm-12">
+										<input th:id="paramsId+${iterStat.count}" name="paramsId" type="hidden" th:value="${paramob.paramsId}"/>
+										<input th:id="templateId+${iterStat.count}" name="templateId" type="hidden" th:value="${paramob.templateId}"/>
+										<input type="text" class="form-control"	name="paramName" th:id="paramName+${iterStat.count}" th:value="${paramob.paramName}"/></div></td>
+										<td width="55%">
+										<div class="col-sm-12">
+										<input type="text" class="form-control" name="paramValue" th:id="paramValue+${iterStat.count}" th:value="${paramob.paramValue}"/></div></td>
+										<td width="15%">
+										<div class="col-sm-12">
+										  <select class="form-control" th:id="paramType+${iterStat.count}" name="paramType" th:with="type=${@dict.getType('testmanagmt_templateparams_type')}">
+						                    <option th:each="dict:${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:selected="${dict.dictValue==paramob.paramType.toString()}"></option>
+					                      </select>
+					                      </div>
+					                     </td>
+
+										<td width="10%" style="vertical-align: middle;"><a
+											class="fa fa-plus-circle fa-5"
+											style="font-size: 20px; cursor: pointer;"
+											onclick="addparam(this)"></a> <a
+											class="fa fa-minus-circle fa-5"
+											style="font-size: 20px; cursor: pointer;"
+											onclick="delparam(this)"></a></td>
+									</tr>
+							</tbody>
+						</table>						
+					</div>
+				</form>				
+			</div>
+			
+			<div role="tabpanel" class="tab-pane" id="textsub" th:object="${jsonParam}">
+				<p style="margin: 20px 0 10px; text-align: left">说明：JSON格式请求既可以使用表单方式也可以使用此类纯文本方式</p>
+				<input id="paramsId" type="hidden" th:field="*{paramsId}" /> 
+				<input id="templateId" type="hidden" th:field="*{templateId}" />
+				<input id="paramName" type="hidden" th:field="*{paramName}" />
+				<input id="paramType" type="hidden" th:field="*{paramType}" />
+				<textarea class="form-control" rows="15" th:field="*{paramValue}" id="paramValue"></textarea>
+			</div>
+		</div>
+	</div>
+	<input id="paramsType" type="hidden" th:value="${paramsType}" />
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "testmanagmt/projectTemplateParams";
+
+		/*解决table中多个name属性一致的问题，使用ID进行验证*/
+ 		$(function () {			 
+			if ($.validator) {
+			    $.validator.prototype.elements = function () {
+			        var validator = this,
+			            rulesCache = {};
+			        return $([]).add(this.currentForm.elements)
+			        .filter(":input")
+			        .not(":submit, :reset, :image, [disabled]")
+			        .not(this.settings.ignore)
+			        .filter(function () {
+			            var elementIdentification = this.id || this.name;
+			            !elementIdentification && validator.settings.debug && window.console && console.error("%o has no id nor name assigned", this);
+			            if (elementIdentification in rulesCache || !validator.objectLength($(this).rules()))
+			                return false;
+			            rulesCache[elementIdentification] = true;
+			            return true;
+			        });
+			    };
+			 
+			}
+			
+			if($("#paramsType").val()=='form'){
+				$('#myTab a[href="#formsub"]').tab('show');				
+			}else{
+				$('#myTab a[href="#textsub"]').tab('show');
+			}
+			
+			});
+		
+		$("#form-projectTemplateParams-edit").validate({
+			/*解决错误提示不在输入框的问题*/
+			errorPlacement: function(error, element) {
+					error.appendTo(element.parent());
+			},
+			rules:{
+				paramName:{
+					required:true,
+					minlength: 1,
+        			maxlength: 50
+				},
+				paramValue:{
+        			maxlength: 5000
+				}
+			}
+		});
+			
+		function submitHandler() {
+			if($('#litextsub').hasClass("active")){
+				var json = "";
+				json = json + "[{\"paramsId\":" + $("#paramsId").val()+",";
+				json = json + "\"templateId\":" + $("#templateId").val()+",";
+				json = json + "\"paramName\":\"" + $("#paramName").val()+"\",";
+				json = json + "\"paramType\":" + $("#paramType").val()+",";
+				json = json + "\"paramValue\":\"" + $("#paramValue").val()+"\"}]";
+				var jsonObject = JSON.parse(json);
+				$.operate.saveJson(prefix + "/editSave", JSON.stringify(jsonObject));
+			}else if($('#liformsub').hasClass("active")){
+		        if ($.validate.form()) {
+		            //点击提交按钮时,表单序列化后组装JSONARR
+    	            var params = $("#form-projectTemplateParams-edit").serializeArray();
+		            var oTable = document.getElementById("paramTBody");
+		            var values = [];
+		            var tparam={};
+		            for (var item in params) {
+	            		tparam[params[item].name] = params[item].value;
+	            		if(params[item].name=="paramType"){
+	            			values.push(tparam);
+	            			tparam={};
+	            		}	            	
+		            }
+		            $.operate.saveJson(prefix + "/editSave", JSON.stringify(values));
+		        }else{
+		        	$.modal.msgError("验证不通过！！！");
+		        }
+			}else{
+				$.modal.msgError("错误的标签对象！");
+			}
+	    }
+
+		function addparam(obj) {
+			if (obj == null)
+				return;
+			var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
+			var parentTR = parentTD.parentNode;
+			var clonedNode = parentTR.cloneNode(true); // 克隆节点
+			var oTable = document.getElementById("paramTBody");
+
+			clonedNode.childNodes[1].childNodes[1].childNodes[1].setAttribute("value", "0"); //修改克隆节点paramsId统一为0
+			parentTR.parentNode.appendChild(clonedNode); // 在父节点插入克隆的节点
+
+			/*更新列表中的ID即可*/
+ 			for (var i = 0; i < oTable.rows.length; i++) {
+				var index = i + 1;
+  				oTable.rows[i].cells[0].childNodes[1].childNodes[1].setAttribute("id","paramsId"+index);
+				oTable.rows[i].cells[0].childNodes[1].childNodes[3].setAttribute("id","templateId"+index);
+				oTable.rows[i].cells[0].childNodes[1].childNodes[5].setAttribute("id","paramName"+index);
+				oTable.rows[i].cells[1].childNodes[1].childNodes[1].setAttribute("id","paramValue"+index);
+				oTable.rows[i].cells[2].childNodes[1].childNodes[1].setAttribute("id","paramType"+index);
+			} 
+			
+			/*测试后暂时无需更新验证，ID不同即可*/
+/* 			$("#paramName"+oTable.rows.length).rules("add", {
+				required:true,
+				minlength: 1,
+    			maxlength: 50
+		    });
+			$("#paramValue"+oTable.rows.length).rules("add", {
+				maxlength: 5000
+		    }); */
+		}
+
+		function delparam(obj) {
+			if (obj == null) return;
+			var oTable = document.getElementById("paramTBody");
+			if (oTable.rows.length < 2){
+				$.modal.msgWarning("唯一的参数不能删除");
+				return;
+				
+			}
+			var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
+			var parentTR = parentTD.parentNode;
+			var parentTBODY = parentTR.parentNode;
+			parentTBODY.removeChild(parentTR);
+			/*更新列表中的ID即可*/
+ 			for (var i = 0; i < oTable.rows.length; i++) {
+				var index = i + 1;
+  				oTable.rows[i].cells[0].childNodes[1].childNodes[1].setAttribute("id","paramsId"+index);
+				oTable.rows[i].cells[0].childNodes[1].childNodes[3].setAttribute("id","templateId"+index);
+				oTable.rows[i].cells[0].childNodes[1].childNodes[5].setAttribute("id","paramName"+index);
+				oTable.rows[i].cells[1].childNodes[1].childNodes[1].setAttribute("id","paramValue"+index);
+				oTable.rows[i].cells[2].childNodes[1].childNodes[1].setAttribute("id","paramType"+index);
+			} 
+		}
+		
+	</script>
+</body>
+</html>

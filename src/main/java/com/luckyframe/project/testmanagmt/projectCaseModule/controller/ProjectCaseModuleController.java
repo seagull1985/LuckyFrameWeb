@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
@@ -45,7 +46,7 @@ public class ProjectCaseModuleController extends BaseController
 	@GetMapping()
 	public String projectCaseModule(ModelMap mmap)
 	{
-        List<Project> projects=projectService.selectProjectAll();
+        List<Project> projects=projectService.selectProjectAll(0);
         mmap.put("projects", projects);
 	    return prefix + "/projectCaseModule";
 	}
@@ -136,7 +137,14 @@ public class ProjectCaseModuleController extends BaseController
         {
             return error(1, "存在下级模块,不允许删除");
         }
-		return toAjax(projectCaseModuleService.deleteProjectCaseModuleById(moduleId));
+        try
+        {
+        	return toAjax(projectCaseModuleService.deleteProjectCaseModuleById(moduleId));
+        }
+        catch (BusinessException e)
+        {
+            return error(e.getMessage());
+        }
 	}
 	
     /**

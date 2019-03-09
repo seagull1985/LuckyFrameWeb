@@ -2,7 +2,6 @@ package com.luckyframe.project.testmanagmt.projectCase.mapper;
 
 import java.util.List;
 
-import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;	
 
 /**
@@ -79,4 +78,21 @@ public interface ProjectCaseMapper
 	 */
 	public int selectMaxCaseSerialNumberByProjectId(Integer projectId);
 	
+    /**
+     * 查询项目下有没有测试用例
+     * @param projectId
+     * @return
+     * @author Seagull
+     * @date 2019年3月4日
+     */
+    public int selectProjectCaseCountByProjectId(Integer projectId);
+    
+    /**
+     * 查询用例模块下有没有测试用例
+     * @param projectId
+     * @return
+     * @author Seagull
+     * @date 2019年3月4日
+     */
+    public int selectProjectCaseCountByModuleId(Integer moduleId);
 }

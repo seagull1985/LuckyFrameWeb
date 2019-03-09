@@ -33,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="deptId != null "> and p.dept_id = #{deptId}</if>
              <if test="projectSign != null  and projectSign != '' "> and p.project_sign like concat('%', #{projectSign}, '%')</if>
          </where>
+         order by p.project_id desc
     </select>
     
     <select id="selectProjectById" parameterType="Integer" resultMap="ProjectResult">

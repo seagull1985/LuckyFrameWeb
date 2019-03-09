@@ -9,10 +9,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.project.system.project.domain.Project;
 import com.luckyframe.project.system.project.mapper.ProjectMapper;
+import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseMapper;
 import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseModule;
 import com.luckyframe.project.testmanagmt.projectCaseModule.mapper.ProjectCaseModuleMapper;
 
@@ -27,6 +29,9 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
 {
 	@Autowired
 	private ProjectCaseModuleMapper projectCaseModuleMapper;
+	
+	@Autowired
+	private ProjectCaseMapper projectCaseMapper;
 	
 	@Autowired
 	private ProjectMapper projectMapper;
@@ -150,8 +155,11 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
      * @return 结果
      */
 	@Override
-	public int deleteProjectCaseModuleById(Integer moduleId)
+	public int deleteProjectCaseModuleById(Integer moduleId) throws BusinessException
 	{
+		if(projectCaseMapper.selectProjectCaseCountByModuleId(moduleId)>0){
+			throw new BusinessException(String.format("【%1$s】已绑定测试用例,不能删除", projectCaseModuleMapper.selectProjectCaseModuleById(moduleId).getModuleName()));
+		}
 		return projectCaseModuleMapper.deleteProjectCaseModuleById(moduleId);
 	}
 	

@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectProjectCaseModuleVo"/>
         <where>  
             <if test="moduleId != null "> and module_id = #{moduleId}</if>
-             <if test="moduleName != null  and moduleName != '' "> and module_name = #{moduleName}</if>
+             <if test="moduleName != null  and moduleName != '' "> and module_name like concat('%', #{moduleName}, '%')</if>
              <if test="projectId != null "> and project_id = #{projectId}</if>
              <if test="parentId != null "> and parent_id = #{parentId}</if>
              <if test="ancestors != null  and ancestors != '' "> and ancestors = #{ancestors}</if>

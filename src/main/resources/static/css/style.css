@@ -3361,6 +3361,15 @@ nav.page-tabs .page-tabs-content {
     border: 1px solid #EBEBEB;
 }
 
+/*当表格中TD内容长度过长时，用...隐藏.td-LengthHidden*/
+.myTDLengthHidden{
+   width:100%;
+   word-break:keep-all!important;/* 不换行 */
+   white-space:nowrap!important;/* 不换行 */
+   overflow:hidden!important;/* 内容超出宽度时隐藏超出部分的内容 */
+   text-overflow:ellipsis!important;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/
+}
+
 .table-bordered>thead>tr>th, .table-bordered>thead>tr>td {
     background-color: #F5F5F6;
     border-bottom-width: 1px;

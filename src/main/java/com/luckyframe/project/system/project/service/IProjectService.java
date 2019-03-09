@@ -22,11 +22,12 @@ public interface IProjectService
 	
 	/**
 	 * 查询所有项目管理列表
+	 * @param projectId 默认先中标记
 	 * @return
 	 * @author Seagull
-	 * @date 2019年2月20日
+	 * @date 2019年3月9日
 	 */
-	public List<Project> selectProjectAll();
+	public List<Project> selectProjectAll(Integer projectId);
 	
 	/**
      * 查询测试项目管理列表

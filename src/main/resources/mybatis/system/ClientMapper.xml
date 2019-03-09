@@ -22,8 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectClientVo"/>
         <where>  
             <if test="clientId != null "> and client_id = #{clientId}</if>
-             <if test="clientName != null  and clientName != '' "> and client_name = #{clientName}</if>
-             <if test="clientIp != null  and clientIp != '' "> and client_ip = #{clientIp}</if>
+             <if test="clientName != null  and clientName != '' "> and client_name like concat('%', #{clientName}, '%')</if>
+             <if test="clientIp != null  and clientIp != '' "> and client_ip like concat('%', #{clientIp}, '%')</if>
              <if test="status != null "> and status = #{status}</if>
              <if test="checkinterval != null "> and checkinterval = #{checkinterval}</if>
              <if test="clientPath != null  and clientPath != '' "> and client_path = #{clientPath}</if>

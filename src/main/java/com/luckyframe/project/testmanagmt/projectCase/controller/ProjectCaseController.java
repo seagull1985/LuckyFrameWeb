@@ -1,7 +1,6 @@
 package com.luckyframe.project.testmanagmt.projectCase.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
 import com.luckyframe.framework.web.domain.AjaxResult;
 import com.luckyframe.framework.web.page.TableDataInfo;
-import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.system.project.domain.Project;
 import com.luckyframe.project.system.project.service.IProjectService;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;
@@ -52,8 +50,12 @@ public class ProjectCaseController extends BaseController
 	@GetMapping()
 	public String projectCase(ModelMap mmap)
 	{
-        List<Project> projects=projectService.selectProjectAll();
+        List<Project> projects=projectService.selectProjectAll(0);
         mmap.put("projects", projects);
+        if(projects.size()>0){
+        	ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(projects.get(0).getProjectId());
+        	mmap.put("projectCaseModule", projectCaseModule);
+        }
 	    return prefix + "/projectCase";
 	}
 	
@@ -90,7 +92,7 @@ public class ProjectCaseController extends BaseController
 	@GetMapping("/add")
 	public String add(ModelMap mmap)
 	{
-        List<Project> projects=projectService.selectProjectAll();
+        List<Project> projects=projectService.selectProjectAll(0);
         mmap.put("projects", projects);
         if(projects.size()>0){
         	ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(projects.get(0).getProjectId());
@@ -119,6 +121,7 @@ public class ProjectCaseController extends BaseController
 	{
 		ProjectCase projectCase = projectCaseService.selectProjectCaseById(caseId);
 		mmap.put("projectCase", projectCase);
+    	mmap.put("projectCaseModule", projectCase.getProjectCaseModule());
 	    return prefix + "/edit";
 	}
 	

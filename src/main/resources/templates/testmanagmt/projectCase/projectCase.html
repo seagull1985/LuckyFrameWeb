@@ -8,22 +8,24 @@
 		<div class="row">
 			<div class="col-sm-12 search-collapse">
 				<form id="formId">
+				<input id="treeId" name="moduleId" type="hidden" th:value="${projectCaseModule.moduleId}"/>
 					<div class="select-list">
 						<ul>
-							<li>
-								用例标识：<input type="text" name="caseSign"/>
-							</li>
-
 							<li>
 								用例名称：<input type="text" name="caseName"/>
 							</li>
 
 							<li>
-								项目：<input type="text" name="projectId"/>
+								项目：
+								<select id="projectId" name="projectId" th:with="type=${projects}" onchange="initializeModuleTree()">
+								    <option value="">所有项目</option>
+	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}"></option>
+	                            </select>
 							</li>
 
 							<li>
-								模块：<input type="text" name="moduleId"/>
+								模块：
+								<input type="text" onclick="selectModuleTree()" id="treeName" readonly="true" value=""/>
 							</li>
 
 							<li>
@@ -53,9 +55,9 @@
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testmanagmt:projectCase:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="testmanagmt:projectCase:export">
+<!--  				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="testmanagmt:projectCase:export">
 						<i class="fa fa-download"></i> 导出
-				 </a>
+				 </a> -->
 			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -67,6 +69,7 @@
         var editFlag = [[${@permission.hasPermi('testmanagmt:projectCase:edit')}]];
         var removeFlag = [[${@permission.hasPermi('testmanagmt:projectCase:remove')}]];
         var prefix = ctx + "testmanagmt/projectCase";
+        var modulePrefix = ctx + "testmanagmt/projectCaseModule"
 
         $(function() {
             var options = {
@@ -84,51 +87,59 @@
 				{
 					field : 'caseId', 
 					title : '测试用例ID',
-					visible: false
-				},
-				{
-					field : 'caseSerialNumber', 
-					title : '用例编号排序',
 					sortable: true,
 					visible: false
 				},
 				{
+					field : 'project.projectName', 
+					title : '项目名称',
+				},
+				{
+					field : 'projectCaseModule.moduleName', 
+					title : '模块名称',
+				},
+				{
 					field : 'caseSign', 
-					title : '用例标识',
+					title : '用例编号',
 					sortable: true
 				},
 				{
 					field : 'caseName', 
 					title : '用例名称',
-					sortable: true
-				},
-				{
-					field : 'projectId', 
-					title : '关联项目ID',
-					sortable: true
-				},
-				{
-					field : 'moduleId', 
-					title : '关联项目模块ID',
-					sortable: true,
-					visible: false
 				},
 				{
 					field : 'caseType', 
-					title : '默认类型 0 API接口 1 Web UI 2 HTTP接口 3移动端',
-					sortable: true,
-					visible: false
+					title : '用例类型',
+		        	formatter: function (value, row, index) {
+		    		    if (row.caseType == 0) {
+		        			return 'HTTP接口';
+		        		} else if(row.caseType == 1){
+		        			return 'Web UI';
+		        		} else if(row.caseType == 2){
+		        			return 'API驱动';
+		        		} else if(row.caseType == 3){
+		        			return '移动端';
+		        		}else{
+		        			return '未知类型';
+		        		}
+		        	}
 				},
 				{
 					field : 'failcontinue', 
-					title : '前置步骤失败，后续步骤是否继续，0：中断，1：继续',
-					sortable: true,
-					visible: false
+					title : '失败处理',
+		        	formatter: function (value, row, index) {
+		    		    if (row.failcontinue == 0) {
+		        			return '后续步骤中断';
+		        		} else if(row.failcontinue == 1){
+		        			return '后续步骤继续';
+		        		} else{
+		        			return '非法数据';
+		        		}
+		        	}
 				},
 				{
 					field : 'createBy', 
 					title : '创建者',
-					sortable: true,
 					visible: false
 				},
 				{
@@ -139,8 +150,7 @@
 				},
 				{
 					field : 'updateBy', 
-					title : '更新者',
-					sortable: true
+					title : '更新者'
 				},
 				{
 					field : 'updateTime', 
@@ -149,8 +159,7 @@
 				},
 				{
 					field : 'remark', 
-					title : '备注',
-					sortable: true
+					title : '备注'
 				},
 		        {
 		            title: '操作',
@@ -165,6 +174,54 @@
             };
             $.table.init(options);
         });
+        
+		/*查询条件选择用例模块*/
+		function selectModuleTree() {
+			var projectId=$("#projectId  option:selected").val();
+			if(projectId==""){
+				console.log("dddd");
+				$.modal.alertError("请先选择项目");
+			}else{
+				var options = {
+						title: '模块选择',
+						width: "380",
+						url: modulePrefix + "/selectProjectCaseModuleTree/" + $("#treeId").val(),
+						callBack: doSubmit
+					};
+					$.modal.openOptions(options);
+			}
+		}
+		
+		function doSubmit(index, layero){
+			var body = layer.getChildFrame('body', index);
+   			$("#treeId").val(body.find('#treeId').val());
+   			$("#treeName").val(body.find('#treeName').val());
+   			layer.close(index);
+		}
+		
+		/*选择项目初始化模块树*/
+		function initializeModuleTree() {
+			var projectId=$("#projectId  option:selected").val();
+			if(projectId==""){
+	   			$("#treeId").val("");
+	   			$("#treeName").val("");
+			}else{
+				$.ajax({
+					cache : true,
+					type : "GET",
+					url : modulePrefix + "/getModuleByProjectId/" + projectId,
+					data : {},
+					async : false,
+					error : function(request) {
+						$.modal.alertError("系统错误");
+					},
+					success : function(data) {
+			   			$("#treeId").val(data.moduleId);
+			   			$("#treeName").val(data.moduleName);
+					}
+				});
+			}
+		}
     </script>
 </body>
 </html>

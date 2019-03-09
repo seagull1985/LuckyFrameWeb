@@ -10,7 +10,6 @@ import com.luckyframe.common.constant.ProjectCaseConstants;
 import com.luckyframe.common.support.Convert;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.security.ShiroUtils;
-import com.luckyframe.project.system.project.domain.Project;
 import com.luckyframe.project.system.project.mapper.ProjectMapper;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;
 import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseMapper;
@@ -86,6 +85,8 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
 	@Override
 	public int updateProjectCase(ProjectCase projectCase)
 	{
+		projectCase.setUpdateBy(ShiroUtils.getLoginName());
+		projectCase.setUpdateTime(new Date());
 	    return projectCaseMapper.updateProjectCase(projectCase);
 	}
 

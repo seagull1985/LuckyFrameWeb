@@ -17,6 +17,7 @@ import com.luckyframe.project.system.project.domain.Project;
 import com.luckyframe.project.system.project.mapper.ProjectMapper;
 import com.luckyframe.project.system.role.domain.RoleProject;
 import com.luckyframe.project.system.role.mapper.RoleProjectMapper;
+import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseMapper;
 import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseModule;
 import com.luckyframe.project.testmanagmt.projectCaseModule.mapper.ProjectCaseModuleMapper;
 
@@ -34,6 +35,9 @@ public class ProjectServiceImpl implements IProjectService
 	
 	@Autowired
 	private ProjectCaseModuleMapper projectCaseModuleMapper;
+	
+	@Autowired
+	private ProjectCaseMapper projectCaseMapper;
 	
 	@Autowired
 	private ClientProjectMapper clientProjectMapper;
@@ -67,13 +71,19 @@ public class ProjectServiceImpl implements IProjectService
 	
     /**
      * 查询所有项目管理列表
-     * 
-     * @return 项目管理列表
      */
     @Override
-    public List<Project> selectProjectAll()
+    public List<Project> selectProjectAll(Integer projectId)
     {
-        return selectProjectList(new Project());
+    	List<Project> projectList= selectProjectList(new Project());
+    	if(projectId!=0){
+    		for(Project p:projectList){
+    			if(p.getProjectId()==projectId){
+    				p.setFlag(true);
+    			}   			
+    		}   		
+    	}
+        return projectList;
     }
     
     /**
@@ -129,7 +139,10 @@ public class ProjectServiceImpl implements IProjectService
 			}
 			if(clientProjectMapper.selectClientProjectCountByProjectId(projectId)>0){
 				throw new BusinessException(String.format("【%1$s】已绑定客户端,不能删除", projectMapper.selectProjectById(projectId).getProjectName()));
-			}			
+			}
+			if(projectCaseMapper.selectProjectCaseCountByProjectId(projectId)>0){
+				throw new BusinessException(String.format("【%1$s】已绑定测试用例,不能删除", projectMapper.selectProjectById(projectId).getProjectName()));
+			}
 		}
 		projectCaseModuleMapper.deleteProjectCaseModuleByProjectIds(projectIds);
 		return projectMapper.deleteProjectByIds(projectIds);
@@ -146,7 +159,7 @@ public class ProjectServiceImpl implements IProjectService
     public List<Project> selectProjectsByClientId(int clientId)
     {
         List<ClientProject> clientProjects = clientProjectMapper.selectClientProjectsById(clientId);
-        List<Project> projects = selectProjectAll();
+        List<Project> projects = selectProjectAll(0);
         for (Project project : projects)
         {
             for (ClientProject cp : clientProjects)
@@ -172,7 +185,7 @@ public class ProjectServiceImpl implements IProjectService
     public List<Project> selectProjectsByRoleId(int roleId)
     {
         List<RoleProject> roleProjects = roleProjectMapper.selectRoleProjectsById(roleId);
-        List<Project> projects = selectProjectAll();
+        List<Project> projects = selectProjectAll(0);
         for (Project project : projects)
         {
             for (RoleProject rp : roleProjects)
