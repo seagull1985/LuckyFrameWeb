@@ -1815,6 +1815,11 @@ table.dataTable thead .sorting:after {
     padding-left: 0;
 }
 
+.lf-td-div {
+    padding-left: 0;
+    padding-right: 0;
+}
+
 .form-control, .single-line {
     background: #FFFFFF none;
     border: 1px solid #e5e6e7;

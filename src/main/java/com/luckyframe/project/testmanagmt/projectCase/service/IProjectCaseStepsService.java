@@ -1,8 +1,8 @@
-package com.luckyframe.project.testmanagmt.projectCaseSteps.service;
+package com.luckyframe.project.testmanagmt.projectCase.service;
 
 import java.util.List;
 
-import com.luckyframe.project.testmanagmt.projectCaseSteps.domain.ProjectCaseSteps;
+import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseSteps;
 
 /**
  * 测试用例步骤管理 服务层
@@ -45,11 +45,12 @@ public interface IProjectCaseStepsService
 	public int updateProjectCaseSteps(ProjectCaseSteps projectCaseSteps);
 		
 	/**
-     * 删除测试用例步骤管理信息
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-	public int deleteProjectCaseStepsByIds(String ids);
+	 * 删除单条用例中的所有步骤
+	 * @param listSteps
+	 * @return
+	 * @author Seagull
+	 * @date 2019年3月13日
+	 */
+	public int deleteProjectCaseStepsByIds(List<ProjectCaseSteps> listSteps);
 	
 }

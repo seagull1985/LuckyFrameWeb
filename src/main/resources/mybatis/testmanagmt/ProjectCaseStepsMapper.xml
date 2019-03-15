@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.luckyframe.project.testmanagmt.projectCaseSteps.mapper.ProjectCaseStepsMapper">
+<mapper namespace="com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseStepsMapper">
     
     <resultMap type="ProjectCaseSteps" id="ProjectCaseStepsResult">
         <result property="stepId"    column="step_id"    />
@@ -55,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertProjectCaseSteps" parameterType="ProjectCaseSteps" useGeneratedKeys="true" keyProperty="stepId">
         insert into project_case_steps
 		<trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="stepId != null and stepId !=0  ">step_id,</if>
 			<if test="caseId != null  ">case_id,</if>
 			<if test="projectId != null  ">project_id,</if>
 			<if test="stepSerialNumber != null  ">step_serial_number,</if>
@@ -71,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="updateTime != null  ">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stepId != null and stepId !=0  ">#{stepId},</if>
 			<if test="caseId != null  ">#{caseId},</if>
 			<if test="projectId != null  ">#{projectId},</if>
 			<if test="stepSerialNumber != null  ">#{stepSerialNumber},</if>
@@ -109,8 +111,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where step_id = #{stepId}
     </update>
 
-	<delete id="deleteProjectCaseStepsById" parameterType="Integer">
-        delete from project_case_steps where step_id = #{stepId}
+	<delete id="deleteProjectCaseStepsByCaseId" parameterType="Integer">
+        delete from project_case_steps where case_id = #{caseId}
     </delete>
 	
     <delete id="deleteProjectCaseStepsByIds" parameterType="String">

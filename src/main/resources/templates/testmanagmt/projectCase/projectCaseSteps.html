@@ -1,0 +1,413 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<h2 class="thin text-center" th:text="【+${projectCase.caseSign}+】步骤编辑"></h2>
+		<h3 class="thin text-center" th:text="${projectCase.caseName}"></h3>
+
+			    <form class="form-horizontal m" id="form-projectCaseSteps-edit">				
+					<div class="form-group">					
+						<table class="table table-striped" id="stepsTable">
+							<thead>
+								<tr>
+									<th>步骤</th>
+									<th>包 | 定位路径</th>
+									<th>方法 | 操作</th>
+									<th>参数</th>
+									<th>步骤动作</th>
+									<th>预期结果</th>
+									<th>类型</th>
+									<th>扩展字段</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody id="stepsTBody">
+								 <tr th:each="stepsOb,iterStat : ${stepsList}">								 
+										<td width="3%">
+										<div class="col-sm-12 lf-td-div">
+										<input th:id="stepId+${iterStat.count}" name="stepId" type="hidden" th:value="${stepsOb.stepId}"/>
+										<input th:id="caseId+${iterStat.count}" name="caseId" type="hidden" th:value="${stepsOb.caseId}"/>
+										<input th:id="projectId+${iterStat.count}" name="projectId" type="hidden" th:value="${stepsOb.projectId}"/>
+										<label th:name="stepSerialNumber" th:id="stepSerialNumber+${iterStat.count}" th:value="${stepsOb.stepSerialNumber}" th:text="${stepsOb.stepSerialNumber}"></label>
+										</div></td>
+										<td width="18%">
+										<div class="col-sm-12 lf-td-div">
+										<input type="text" class="form-control" name="stepPath" th:id="stepPath+${iterStat.count}" th:value="${stepsOb.stepPath}"/></div></td>
+										<td width="13%">
+										  <div class="col-sm-12 lf-td-div">
+										    <input type="text" class="form-control" name="stepOperation" th:id="stepOperation+${iterStat.count}" th:value="${stepsOb.stepOperation}"/>
+											<div class="input-group-btn">
+										      <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+										    </div>
+										  </div>
+										</td>
+										<td width="16%">
+										<div class="col-sm-12 lf-td-div">
+										<input type="text" class="form-control" name="stepParameters" th:id="stepParameters+${iterStat.count}" th:value="${stepsOb.stepParameters}"/></div></td>
+										<td width="10%">
+										<div class="col-sm-12 lf-td-div">
+										<input type="text" class="form-control" name="action" th:id="action+${iterStat.count}" th:value="${stepsOb.action}"/></div></td>
+										<td width="12%">
+										<div class="col-sm-12 lf-td-div">
+										<input type="text" class="form-control" name="expectedResult" th:id="expectedResult+${iterStat.count}" th:value="${stepsOb.expectedResult}"/></div></td>
+										<td width="10%">
+										<div class="col-sm-12 lf-td-div">
+										  <select class="form-control" th:id="stepType+${iterStat.count}" name="stepType" th:with="type=${@dict.getType('testmanagmt_case_type')}" onChange="initSuggest(this)">
+						                    <option th:each="dict:${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:selected="${dict.dictValue==stepsOb.stepType.toString()}"></option>
+					                      </select>
+										</div>
+										</td>
+										<td width="10%">
+										<div class="col-sm-12 lf-td-div">
+										  <input type="text" class="form-control" name="extend" th:id="extend+${iterStat.count}" th:value="${stepsOb.extend}"/>
+										  <div class="input-group-btn">
+										    <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+										  </div>
+										</div>
+										</td>
+																																								
+										<td width="8%" style="vertical-align: middle;">
+											<a class="fa fa-plus-circle fa-5" style="font-size: 20px; cursor: pointer;" onclick="addsteps(this,0)"></a>
+											<a class="fa fa-chevron-circle-down fa-5" style="font-size: 20px; cursor: pointer;" onclick="addsteps(this,1)"></a>
+											<a class="fa fa-minus-circle fa-5" style="font-size: 20px; cursor: pointer;" onclick="delsteps(this)"></a>
+											<a class="fa fa-arrow-circle-up fa-5" style="font-size: 20px; cursor: pointer;" onclick="upsteps(this)"></a>
+											<a class="fa fa-arrow-circle-down fa-5" style="font-size: 20px; cursor: pointer;" onclick="downsteps(this)"></a>
+										</td>
+									</tr>
+							</tbody>
+						</table>						
+					</div>
+				</form>
+				
+				<div class="row">
+					<div class="col-lg-4 text-center" style="width: 100%">
+						<button class="btn btn-info" id="debugButton" onclick="showDebugModal()" type="button" style="padding-left: 36px;padding-right: 36px;">调&nbsp;&nbsp;&nbsp;&nbsp;试</button>
+					</div>
+				</div>
+
+	</div>
+    <div th:include="include::footer"></div>
+    <!-- bootstrap-suggest 下拉搜索框插件 -->
+	<script th:src="@{/ajax/libs/bootstrap-suggest/bootstrap-suggest.min.js}"></script>
+	<script type="text/javascript">
+		var prefix = ctx + "testmanagmt/projectCaseSteps";
+		var templatePrefix = ctx + "testmanagmt/projectProtocolTemplate";
+		var dictPrefix = ctx + "system/dict/data";
+		var debugPrefix = ctx + "testmanagmt/projectCaseDebug"
+
+		/*解决table中多个name属性一致的问题，使用ID进行验证*/
+ 		$(function () {			 
+			if ($.validator) {
+			    $.validator.prototype.elements = function () {
+			        var validator = this,
+			            rulesCache = {};
+			        return $([]).add(this.currentForm.elements)
+			        .filter(":input")
+			        .not(":submit, :reset, :image, [disabled]")
+			        .not(this.settings.ignore)
+			        .filter(function () {
+			            var elementIdentification = this.id || this.name;
+			            !elementIdentification && validator.settings.debug && window.console && console.error("%o has no id nor name assigned", this);
+			            if (elementIdentification in rulesCache || !validator.objectLength($(this).rules()))
+			                return false;
+			            rulesCache[elementIdentification] = true;
+			            return true;
+			        });
+			    };
+			 
+			}
+			
+			/*初始化下拉列表*/
+            var oTable = document.getElementById("stepsTable");
+            for (var i = 1; i < oTable.rows.length; i++) {
+                initSuggest(oTable.rows[i].cells[6].children[0].children[0]);
+            }
+			
+			});
+		
+		$("#form-projectCaseSteps-edit").validate({
+			/*解决错误提示不在输入框的问题*/
+			errorPlacement: function(error, element) {
+					error.appendTo(element.parent());
+			},
+			rules:{
+				stepPath:{
+        			maxlength: 500,
+        			required: function(value){
+        				var num=value.getAttribute("id").substring(8);
+        				var stepType=$("#stepType"+num).val();
+                     	if(stepType=="0" && $("#stepPath"+num).val()==""){
+                     		/*不同的校验规则，不同的错误提示*/
+                     		$.validator.messages.required = "HTTP必填请求URL";
+                    		return true;
+                    	}else if(stepType=="2" && $("#stepPath"+num).val()==""){
+                    		$.validator.messages.required = "API必填包路径";
+                    		return true;
+                    	}else{                        		
+                    		return false;
+                    	} 
+                      }
+				},
+				stepOperation:{
+					required:true,
+					minlength: 2,
+        			maxlength: 100
+				},
+				stepParameters:{
+        			maxlength: 500
+				},
+				action:{
+        			maxlength: 50
+				},
+				expectedResult:{
+        			maxlength: 2000,
+        			required: function(value){
+        				var num=value.getAttribute("id").substring(14);
+        				var stepType=$("#stepType"+num).val();
+                     	if(stepType=="0" && $("#expectedResult"+num).val()==""){
+                     		/*不同的校验规则，不同的错误提示*/
+                     		$.validator.messages.required = "HTTP接口必填";
+                    		return true;
+                    	}else if(stepType=="2" && $("#expectedResult"+num).val()==""){
+                    		$.validator.messages.required = "API接口必填";
+                    		return true;
+                    	}else{                        		
+                    		return false;
+                    	}  
+                      }
+				},
+				extend:{
+        			maxlength: 2000,
+        			required: function(value,element){
+        				var num=value.getAttribute("id").substring(6);
+        				var stepType=$("#stepType"+num).val();
+                     	if(stepType=="0" && $("#extend"+num).val()==""){
+                     		/*不同的校验规则，不同的错误提示*/
+                     		$.validator.messages.required = "HTTP必选模板";
+                    		return true;
+                    	}else{                        		
+                    		return false;
+                    	}  
+                      }
+				},
+			},
+        	messages: {
+                "stepOperation": {
+                	required: "【方法|操作】必填"
+                }
+            }
+		});
+			
+		function submitHandler() {
+			if ($.validate.form()) {				
+ 				//点击提交按钮时,表单序列化后组装JSONARR
+				var params = $("#form-projectCaseSteps-edit").serializeArray();
+				var values = [];
+				var tparam = {};
+				for ( var item in params) {
+					tparam[params[item].name] = params[item].value;
+					if (params[item].name == "extend") {
+						values.push(tparam);
+						tparam = {};
+					}
+				}
+				$.operate.saveJson(prefix + "/editSave", JSON.stringify(values));
+			} else {
+				$.modal.msgError("步骤提交验证不通过！");
+			}
+		}
+
+		function addsteps(obj,iscopy) {
+	        if (obj == null)
+	            return;
+	        var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
+	        var parentTR = parentTD.parentNode;
+	        var parentTB = parentTR.parentNode;
+	        var clonedNode = parentTR.cloneNode(true); // 克隆节点
+	        clonedNode.childNodes[1].childNodes[1].childNodes[1].setAttribute("value", "0"); //修改克隆节点stepId统一为0
+	        var clonedTR;
+	        if (parentTB.lastChild === parentTR) {
+	        	clonedTR=parentTB.appendChild(clonedNode);
+	        } else {
+	        	clonedTR=parentTB.insertBefore(clonedNode, parentTR.nextSibling);
+	        }
+	        
+	        var oTable = document.getElementById("stepsTable");
+	        reorderTable(oTable);
+	        initSuggest(clonedTR.cells[6].children[0].children[0]);
+	        if(iscopy==0){
+	        	clearCells(oTable.rows.length-1);
+	        }
+	    }
+
+	    function clearCells(index) {
+	        $("#stepPath" + index).val('');
+	        $("#stepOperation" + index).val('');
+	        $("#stepParameters" + index).val('');
+	        $("#action" + index).val('');
+	        $("#expectedResult" + index).val('');
+	        $("#extend" + index).val('');
+	    }
+	    
+ 	    function delsteps(obj) {
+	        if (obj === null) return;
+	        var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
+	        var parentTR = parentTD.parentNode;
+	        var parentTB = parentTR.parentNode;
+
+	        var oTable = document.getElementById("stepsTable");
+	        
+	        /*标题占用一行*/
+	        if (oTable.rows.length < 3) {
+	        	$.modal.msgWarning("唯一的步骤不能删除");
+	            return;
+	        }else {
+	            parentTB.removeChild(parentTR);
+	            reorderTable(oTable);
+	        }
+	    }
+
+	    function upsteps(obj) {
+	        if (obj === null) return;
+	        var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
+	        var parentTR = parentTD.parentNode;
+	        var oTable = document.getElementById("stepsTable");
+	        if (oTable.rows.length >= 3) {
+	            swapTr(parentTR, oTable.rows[parentTR.sectionRowIndex]);
+	            reorderTable(oTable);		        
+	        }else{
+	        	$.modal.msgWarning("只有一个步骤，无需上移");
+	        }
+	    }
+
+	    function downsteps(obj) {
+	        if (obj === null) return;
+	        var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
+	        var parentTR = parentTD.parentNode;
+	        var oTable = document.getElementById("stepsTable");
+	        if (oTable.rows.length >= 3) {
+	            swapTr(parentTR, oTable.rows[parentTR.sectionRowIndex+2]);
+	            reorderTable(oTable);		        
+	        }else{
+	        	$.modal.msgWarning("只有一个步骤，无需下移");
+	        }
+	    }
+
+	    /*交换tr1和tr2的位置*/
+	    function swapTr(tr1, tr2) {
+	        var target = (tr1.rowIndex < tr2.rowIndex) ? tr2.nextSibling : tr2;
+	        var tBody = tr1.parentNode;
+	        tBody.replaceChild(tr2, tr1);
+	        tBody.insertBefore(tr1, target);
+	    }
+	    
+	    /*对表格里面的步骤重新排序*/
+	    function reorderTable(oTable) {
+	        /*对步骤进行重新排序*/
+	        for (var i = 1; i < oTable.rows.length; i++) {
+	        	oTable.rows[i].cells[0].children[0].children[0].setAttribute("id", "stepId" + i);
+	        	oTable.rows[i].cells[0].children[0].children[1].setAttribute("id", "caseId" + i);
+	        	oTable.rows[i].cells[0].children[0].children[2].setAttribute("id", "projectId" + i);
+	            oTable.rows[i].cells[0].children[0].children[3].setAttribute("id", "stepSerialNumber" + i);
+	            oTable.rows[i].cells[0].children[0].children[3].setAttribute("value", i);
+	            oTable.rows[i].cells[0].children[0].children[3].innerHTML=i;
+	            oTable.rows[i].cells[1].children[0].children[0].setAttribute("id", "stepPath" + i);
+	            var opob = oTable.rows[i].cells[2].children[0];
+	            if (opob.children[0].tagName.toLocaleLowerCase() === 'input') {
+	                opob.children[0].setAttribute("id", "stepOperation" + i);
+	            } else {
+	                opob.children[1].setAttribute("id", "stepOperation" + i);
+	            }
+	            oTable.rows[i].cells[3].children[0].children[0].setAttribute("id", "stepParameters" + i);
+	            oTable.rows[i].cells[4].children[0].children[0].setAttribute("id", "action" + i);
+	            oTable.rows[i].cells[5].children[0].children[0].setAttribute("id", "expectedResult" + i);
+	            oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "stepType" + i);         
+	            var eob = oTable.rows[i].cells[7].children[0];
+ 	            if (eob.children[0].tagName.toLocaleLowerCase() === 'input') {
+	                eob.children[0].setAttribute("id", "extend" + i);
+	            } else {
+	                eob.children[1].setAttribute("id", "extend" + i);
+	            } 
+	        }
+	    }
+	    
+	    function initSuggest(obj) {
+	    	$.validate.resetForm();
+	    	var index = obj.getAttribute("id").substring(8);
+	    	var stepType=$("#stepType"+index).val();
+	    	
+	        if (stepType === '0') {
+	        	initSuggestOperation(index,0);
+	            initSuggestTemplate(index);
+	        } else if (stepType === '1') {
+	        	$("#extend" + index).bsSuggest("destroy");
+	            initSuggestOperation(index,1);
+	        } else if (stepType === '3') {
+	        	$("#extend" + index).bsSuggest("destroy");
+	            initSuggestOperation(index,3);
+	        } else {
+	            $("#stepOperation" + index).bsSuggest("destroy");
+	            $("#extend" + index).bsSuggest("destroy");
+	        }
+	    }
+	    
+	    function initSuggestTemplate(index) {	        
+	        $("#extend"+index).bsSuggest("destroy");
+	        $("#extend"+index).bsSuggest({
+	            url: templatePrefix+"/getTemplateListByProjectId/"+$("#projectId1").val(),
+	            /*effectiveFields: ["userName", "shortAccount"],
+	            searchFields: [ "shortAccount"],*/
+	            effectiveFieldsAlias: {templateName: "模板名称", updateBy: "更新人员", updateTime: "更新时间"},
+	            ignorecase: true,
+	            showHeader: true,
+	            showBtn: false,     //不显示下拉按钮
+	            delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
+	            idField: "name",
+	            keyField: "name",
+	            clearable: false
+	        }).on('onDataRequestSuccess', function (e, result) {
+	        	console.log('onDataRequestSuccess: ', result); 
+	        }).on('onSetSelectValue', function (e, keyword, data) {
+	        	console.log('onSetSelectValue: ', keyword, data); 
+	            //$('#casesteps').data('bootstrapValidator').updateStatus(extendindex, 'NOT_VALIDATED', null).validateField($("#"+templateId));
+	        }).on('onUnsetSelectValue', function () {
+	        	console.log("onUnsetSelectValue"); 
+	        });
+	    }
+
+	    function initSuggestOperation(index,stepType) {	        
+	        $("#stepOperation"+index).bsSuggest("destroy");
+	        $("#stepOperation"+index).bsSuggest({
+	            url: dictPrefix+"/getDictDataListByStepType/" + stepType,
+	            /*effectiveFields: ["userName", "shortAccount"],
+	            searchFields: [ "shortAccount"],*/
+	            effectiveFieldsAlias: {name: "操作", description: "描述"},
+	            ignorecase: true,
+	            showHeader: true,
+	            showBtn: false,     //不显示下拉按钮
+	            delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
+	            idField: "name",
+	            keyField: "name",
+	            clearable: false
+	        }).on('onDataRequestSuccess', function (e, result) {
+
+	        }).on('onSetSelectValue', function (e, keyword, data) {
+	            /* $('#casesteps').data('bootstrapValidator').updateStatus(operationindex, 'NOT_VALIDATED', null).validateField(operationindex); */
+	        }).on('onUnsetSelectValue', function () {
+
+	        });
+	    }
+	    
+         function showDebugModal() {
+        	var caseId=$("#caseId1").val();
+        	var url = "/404.html";
+        	if ($.common.isNotEmpty(caseId)) {
+        	    url = debugPrefix + "/projectCaseDebug/" + caseId;
+        	}
+        	$.modal.openCaseDebug("用例调试", url, null, null, "调试");
+        }
+	</script>
+</body>
+</html>

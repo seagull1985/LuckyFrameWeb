@@ -13,6 +13,7 @@ import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.project.system.project.mapper.ProjectMapper;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;
 import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseMapper;
+import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseStepsMapper;
 
 /**
  * 项目测试用例管理 服务层实现
@@ -25,6 +26,9 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
 {
 	@Autowired
 	private ProjectCaseMapper projectCaseMapper;
+	
+	@Autowired
+	private ProjectCaseStepsMapper projectCaseStepsMapper;
 	
 	@Autowired
 	private ProjectMapper projectMapper;
@@ -99,7 +103,13 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
 	@Override
 	public int deleteProjectCaseByIds(String ids)
 	{
-		return projectCaseMapper.deleteProjectCaseByIds(Convert.toStrArray(ids));
+		String[] caseIds=Convert.toStrArray(ids);
+		for(String caseIdstr:caseIds){
+			Integer caseId=Integer.valueOf(caseIdstr);
+			projectCaseStepsMapper.deleteProjectCaseStepsByCaseId(caseId);
+		}
+		
+		return projectCaseMapper.deleteProjectCaseByIds(caseIds);
 	}
 	
     /**

@@ -20,6 +20,15 @@ public interface IClientService
 	public Client selectClientById(Integer clientId);
 	
 	/**
+	 * 根据客户端ID获取驱动路径列表
+	 * @param clientId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年3月14日
+	 */
+	public List<String> selectClientDriverListById(Integer clientId);
+	
+	/**
      * 查询客户端管理列表
      * 
      * @param client 客户端管理信息
@@ -68,4 +77,13 @@ public interface IClientService
 	 * @date 2019年2月25日
 	 */
 	public String checkIpUnique(Client client);
+	
+    /**
+     * 根据项目ID查询所有客户端列表(打标记)
+     * @param projectId
+     * @return
+     * @author Seagull
+     * @date 2019年3月14日
+     */
+    public List<Client> selectClientsByProjectId(int projectId);
 }

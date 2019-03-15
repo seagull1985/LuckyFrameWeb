@@ -39,6 +39,7 @@
 		<jsoup.version>1.11.3</jsoup.version>
 		<poi.version>3.17</poi.version>
 		<oshi.version>3.9.1</oshi.version>
+		<httpclient.version>4.5.7</httpclient.version>
 	</properties>
 
 	<dependencies>
@@ -260,6 +261,19 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>${poi.version}</version>
 		</dependency>
+		
+		<!-- httpclient工具 -->
+		<dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        
+        <!-- httpclient工具中上传文件需要MultipartEntityBuilder -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+        </dependency>
+		
 
 	</dependencies>
 

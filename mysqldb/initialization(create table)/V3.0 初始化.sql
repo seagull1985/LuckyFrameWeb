@@ -707,7 +707,12 @@ insert into sys_dict_type values(9,  '系统状态', 'sys_common_status',   '0',
 insert into sys_dict_type values(10, '用例类型', 'testmanagmt_case_type', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例步骤类型');
 insert into sys_dict_type values(11, '步骤失败策略', 'testmanagmt_case_stepfailcontinue', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '步骤失败策略');
 insert into sys_dict_type values(12, '模板参数类型', 'testmanagmt_templateparams_type', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型');
-
+insert into sys_dict_type 
+values(13, '步骤HTTP操作类型', 'testmanagmt_casestep_httpoperation', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '步骤关键字操作字典');
+insert into sys_dict_type 
+values(14, '步骤Web UI操作类型', 'testmanagmt_casestep_uioperation', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '步骤关键字操作字典');
+insert into sys_dict_type 
+values(15, '步骤移动端操作类型', 'testmanagmt_casestep_muioperation', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '步骤关键字操作字典');
 -- ----------------------------
 -- 22、字典数据表
 -- ----------------------------
@@ -770,6 +775,101 @@ insert into sys_dict_data values(35, 3,  'JSONARR对象', '2',  'testmanagmt_tem
 insert into sys_dict_data values(36, 4,  'File对象', '3',  'testmanagmt_templateparams_type',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型 File对象');
 insert into sys_dict_data values(37, 5,  'Number对象', '4',  'testmanagmt_templateparams_type',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型 Number对象');
 insert into sys_dict_data values(38, 6,  'Boolean对象', '5',  'testmanagmt_templateparams_type',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型 Boolean对象');
+insert into sys_dict_data values(39, 1,  'HttpClientPost发送Post请求', 'HttpClientPost',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用HttpClient发送post请求');
+insert into sys_dict_data values(40, 2,  'HttpClientGet发送Get请求', 'HttpClientGet',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用HttpClient发送get请求');
+insert into sys_dict_data values(41, 3,  'HttpClientPostJSON发送JSON格式Post请求', 'HttpClientPostJSON',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用HttpClient发送JSON格式post请求');
+insert into sys_dict_data values(42, 4,  'httpClientPut发送Put请求', 'httpClientPut',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用httpClientPut发送put请求');
+insert into sys_dict_data values(43, 5,  'httpClientPutJson发送JSON格式Put请求', 'httpClientPutJson',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用httpClientPutJson发送put请求');
+insert into sys_dict_data values(44, 6,  'httpClientUploadFile上传文件', 'httpClientUploadFile',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用httpClientUploadFile上传文件');
+insert into sys_dict_data values(45, 7,  'HttpURLPost发送Post请求', 'HttpURLPost',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用HttpURLConnection发送post请求');
+insert into sys_dict_data values(46, 8,  'URLPost发送Post请求', 'URLPost',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用URLConnection发送post');
+insert into sys_dict_data values(47, 9,  'GetAndSaveFile保存下载文件到客户端', 'GetAndSaveFile',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '发送get请求保存下载文件到客户端');
+insert into sys_dict_data values(48, 10,  'HttpURLGet发送Get请求', 'HttpURLGet',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用HttpURLConnection发送get请求');
+insert into sys_dict_data values(49, 11,  'URLGet发送Get请求', 'URLGet',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用URLConnection发送get请求');
+insert into sys_dict_data values(50, 12,  'HttpURLDelete发送Delete请求', 'HttpURLDelete',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用HttpURLDelete发送delete请求');
+insert into sys_dict_data values(52, 1,  'Click点击对象', 'click',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '点击对象');
+insert into sys_dict_data values(53, 2,  'Sendkeys输入', 'sendkeys',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '输入');
+insert into sys_dict_data values(54, 3,  'Clear清除输入框', 'clear',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '清除输入框');
+insert into sys_dict_data values(55, 4,  'Gotoframe跳转iframe框架', 'gotoframe',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '跳转框架（iframe）');
+insert into sys_dict_data values(56, 5,  'Isenabled判断对象是否可用', 'isenabled',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '判断对象是否可用');
+insert into sys_dict_data values(57, 6,  'Isdisplayed判断对象是否可见', 'isdisplayed',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '判断对象是否可见');
+insert into sys_dict_data values(58, 7,  'Exjsob针对对象执行JS脚本', 'exjsob',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '针对对象执行JS脚本');
+insert into sys_dict_data values(59, 8,  'Gettext获取对象文本属性', 'gettext',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取对象文本属性');
+insert into sys_dict_data values(60, 9,  'Gettagname获取对象标签类型', 'gettagname',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取对象标签类型');
+insert into sys_dict_data values(61, 10,  'Getcaptcha获取对象中的验证码(识别率较低)', 'getcaptcha',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取对象中的验证码(识别率较低)');
+insert into sys_dict_data values(62, 11,  'Selectbyvisibletext通过下拉框的文本进行选择', 'selectbyvisibletext',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '通过下拉框的文本进行选择');
+insert into sys_dict_data values(63, 12,  'Selectbyvalue通过下拉框的VALUE属性进行选择', 'selectbyvalue',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '通过下拉框的VALUE属性进行选择');
+insert into sys_dict_data values(64, 13,  'Selectbyindex通过下拉框的index属性进行选择(从0开始)', 'selectbyindex',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '通过下拉框的index属性进行选择(从0开始)');
+insert into sys_dict_data values(65, 14,  'Isselect判断是否已经被选择，同用于单选\复选框', 'isselect',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '判断是否已经被选择，同用于单选\复选框');
+insert into sys_dict_data values(66, 15,  'Open打开URL', 'open',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '打开URL');
+insert into sys_dict_data values(67, 16,  'Exjs执行js脚本', 'exjs',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '执行js脚本');
+insert into sys_dict_data values(68, 17,  'Gotodefaultcontent跳转回到默认iframe', 'gotodefaultcontent',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '跳转回到默认iframe');
+insert into sys_dict_data values(69, 18,  'Gettitle获取窗口标题', 'gettitle',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取窗口标题');
+insert into sys_dict_data values(70, 19,  'Getwindowhandle获取窗口句柄', 'getwindowhandle',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取窗口句柄');
+insert into sys_dict_data values(71, 20,  'Gotowindow跳转窗口句柄', 'gotowindow',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '跳转窗口句柄');
+insert into sys_dict_data values(72, 21,  'Timeout设置全局隐式等待时间(S)', 'timeout',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '设置全局隐式等待时间(S)');
+insert into sys_dict_data values(73, 22,  'Alertaccept弹出框点击OK', 'alertaccept',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '弹出框点击OK');
+insert into sys_dict_data values(74, 23,  'Alertdismiss弹出框点击取消', 'alertdismiss',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '弹出框点击取消');
+insert into sys_dict_data values(75, 24,  'Alertgettext获取弹出框TEXT', 'alertgettext',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取弹出框TEXT');
+insert into sys_dict_data values(76, 25,  'Mouselkclick模拟鼠标左键单击(可带页面对象)', 'mouselkclick',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模拟鼠标左键单击(可带页面对象)');
+insert into sys_dict_data values(77, 26,  'Mouserkclick模拟鼠标右键单击(可带页面对象)', 'mouserkclick',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模拟鼠标右键单击(可带页面对象)');
+insert into sys_dict_data values(78, 27,  'Mousedclick模拟鼠标双击(可带页面对象)', 'mousedclick',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模拟鼠标双击(可带页面对象)');
+insert into sys_dict_data values(79, 28,  'Mouseclickhold模拟鼠标左键单击后不释放(可带页面对象)', 'mouseclickhold',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模拟鼠标左键单击后不释放(可带页面对象)');
+insert into sys_dict_data values(80, 29,  'Mousedrag模拟鼠标拖拽(可带页面对象)', 'mousedrag',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模拟鼠标拖拽(可带页面对象)');
+insert into sys_dict_data values(81, 30,  'Mouseto模拟鼠标移动到指定坐标(可带页面对象)', 'mouseto',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模拟鼠标移动到指定坐标(可带页面对象)');
+insert into sys_dict_data values(82, 31,  'Mouserelease模拟鼠标释放(可带页面对象)', 'mouserelease',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模拟鼠标释放(可带页面对象)');
+insert into sys_dict_data values(83, 32,  'Mousekey(tab)模拟键盘Tab键', 'mousekey(tab)',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模拟键盘Tab键');
+insert into sys_dict_data values(84, 33,  'Mousekey(space)模拟键盘Space键', 'mousekey(space)',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模拟键盘Space键');
+insert into sys_dict_data values(85, 34,  'Mousekey(ctrl)模拟键盘Ctrl键', 'mousekey(ctrl)',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模拟键盘Ctrl键');
+insert into sys_dict_data values(86, 35,  'Mousekey(shift)模拟键盘Shift键', 'mousekey(shift)',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模拟键盘Shift键');
+insert into sys_dict_data values(87, 36,  'Mousekey(enter)模拟键盘Enter键', 'mousekey(enter)',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模拟键盘Enter键');
+insert into sys_dict_data values(88, 37,  'Runcase调用指定接口|Web UI用例', 'runcase',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '调用指定接口|Web UI用例');
+insert into sys_dict_data values(89, 38,  'Getattribute获取对象指定属性', 'getattribute',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取对象指定属性');
+insert into sys_dict_data values(90, 39,  'Getcssvalue获取对象指定CSS属性值', 'getcssvalue',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取对象指定CSS属性值');
+insert into sys_dict_data values(91, 40,  'Gotoparentframe跳转回到上一级iframe', 'gotoparentframe',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '跳转回到上一级iframe');
+insert into sys_dict_data values(92, 41,  'Scrollto滚动到目标对象', 'scrollto',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '滚动到目标对象');
+insert into sys_dict_data values(93, 42,  'Scrollintoview将目标对象滚动到可视', 'scrollintoview',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '将目标对象滚动到可视');
+insert into sys_dict_data values(94, 43,  'Closewindow关闭当前浏览器窗口', 'closewindow',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '关闭当前浏览器窗口');
+insert into sys_dict_data values(95, 44,  'Addcookie添加浏览器cookie', 'addcookie',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '添加浏览器cookie');
+insert into sys_dict_data values(96, 1,  'Selectbyvisibletext通过下拉框的文本进行选择', 'selectbyvisibletext',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '通过下拉框的文本进行选择');
+insert into sys_dict_data values(97, 2,  'Selectbyvalue通过下拉框的VALUE属性进行选择', 'selectbyvalue',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '通过下拉框的VALUE属性进行选择');
+insert into sys_dict_data values(98, 3,  'Selectbyindex通过下拉框的index属性进行选择(从0开始)', 'selectbyindex',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '通过下拉框的index属性进行选择(从0开始)');
+insert into sys_dict_data values(99, 4,  'Isselect判断是否已经被选择，同用于单选\复选框', 'isselect',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '判断是否已经被选择，同用于单选\复选框');
+insert into sys_dict_data values(100, 5,  'Gettext获取对象文本属性', 'gettext',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取对象文本属性');
+insert into sys_dict_data values(101, 6,  'Gettagname获取对象标签类型', 'gettagname',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取对象标签类型');
+insert into sys_dict_data values(102, 7,  'Getattribute获取对象指定属性', 'getattribute',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取对象指定属性');
+insert into sys_dict_data values(103, 8,  'Getcssvalue获取对象指定CSS属性值', 'getcssvalue',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取对象指定CSS属性值');
+insert into sys_dict_data values(104, 9,  'Click点击对象', 'click',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '点击对象');
+insert into sys_dict_data values(105, 10,  'Sendkeys输入', 'sendkeys',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '输入');
+insert into sys_dict_data values(106, 11,  'Clear清除输入框', 'clear',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '清除输入框');
+insert into sys_dict_data values(107, 12,  'Isenabled判断对象是否可用', 'isenabled',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '判断对象是否可用');
+insert into sys_dict_data values(108, 13,  'Isdisplayed判断对象是否可见', 'isdisplayed',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '判断对象是否可见');
+insert into sys_dict_data values(109, 14,  'Exjsob针对对象执行JS脚本', 'exjsob',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '针对对象执行JS脚本');
+insert into sys_dict_data values(110, 15,  'Longpresselement长按指定页面对象(可设置时间)', 'longpresselement',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '长按指定页面对象(可设置时间)');
+insert into sys_dict_data values(111, 16,  'Alertaccept弹出框点击OK', 'alertaccept',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '弹出框点击OK');
+insert into sys_dict_data values(112, 17,  'Alertdismiss弹出框点击取消', 'alertdismiss',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '弹出框点击取消');
+insert into sys_dict_data values(113, 18,  'Alertgettext获取弹出框TEXT', 'alertgettext',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取弹出框TEXT');
+insert into sys_dict_data values(114, 19,  'Getcontexthandles获取指定context的值(参数指定1 第一个)', 'getcontexthandles',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取指定context的值(参数指定1 第一个)');
+insert into sys_dict_data values(115, 20,  'Exjs执行JS脚本', 'exjs',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '执行JS脚本');
+insert into sys_dict_data values(116, 21,  'Androidkeycode安卓模拟手机键盘发送指令，同PressKeyCode', 'androidkeycode',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '安卓模拟手机键盘发送指令，同PressKeyCode');
+insert into sys_dict_data values(117, 22,  'Gotocontext跳转到指定的context', 'gotocontext',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '跳转到指定的context');
+insert into sys_dict_data values(118, 23,  'Getcontext获取当前窗口的context', 'getcontext',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取当前窗口的context');
+insert into sys_dict_data values(119, 24,  'Gettitle获取当前窗口的title', 'gettitle',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取当前窗口的title');
+insert into sys_dict_data values(120, 25,  'Swipeup页面向上滑动(参数 持续时间|滚动次数)', 'swipeup',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '页面向上滑动(参数 持续时间|滚动次数)');
+insert into sys_dict_data values(121, 26,  'Swipedown页面向下滑动(参数 持续时间|滚动次数)', 'swipedown',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '页面向下滑动(参数 持续时间|滚动次数)');
+insert into sys_dict_data values(122, 27,  'Swipleft页面向左滑动(参数 持续时间|滚动次数)', 'swipleft',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '页面向左滑动(参数 持续时间|滚动次数)');
+insert into sys_dict_data values(123, 28,  'Swipright页面向右滑动(参数 持续时间|滚动次数)', 'swipright',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '页面向右滑动(参数 持续时间|滚动次数)');
+insert into sys_dict_data values(124, 29,  'Longpressxy长按指定坐标(参数 X坐标|Y坐标|持续时间(可选))', 'longpressxy',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '长按指定坐标(参数 X坐标|Y坐标|持续时间(可选))');
+insert into sys_dict_data values(125, 30,  'Pressxy点击指定坐标(参数 X坐标|Y坐标)', 'pressxy',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '点击指定坐标(参数 X坐标|Y坐标)');
+insert into sys_dict_data values(126, 31,  'Tapxy轻击指定坐标(参数 X坐标|Y坐标)', 'tapxy',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '轻击指定坐标(参数 X坐标|Y坐标)');
+insert into sys_dict_data values(127, 32,  'JspressxyS方式点击指定坐标(参数 X坐标|Y坐标|持续时间(可选))', 'jspressxy',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', 'JS方式点击指定坐标(参数 X坐标|Y坐标|持续时间(可选))');
+insert into sys_dict_data values(128, 33,  'Moveto拖动坐标(参数 startX,startY|X,Y|X,Y|X,Y...)', 'moveto',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '拖动坐标(参数 startX,startY|X,Y|X,Y|X,Y...)');
+insert into sys_dict_data values(129, 34,  'Screenshot保存当前页面截图', 'screenshot',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '保存当前页面截图');
+insert into sys_dict_data values(130, 35,  'Timeout设置全局页面加载&元素出现最大等待时间(S)', 'timeout',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '设置全局页面加载&元素出现最大等待时间(S)');
+insert into sys_dict_data values(131, 36,  'HideKeyboard隐藏系统手机键盘', 'hideKeyboard',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '隐藏系统手机键盘');
+insert into sys_dict_data values(132, 37,  'Runcase调用指定接口用例', 'runcase',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '调用指定接口用例');
+insert into sys_dict_data values(133, 38,  'ExAdbShell执行安卓adb命令', 'exAdbShell',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '执行安卓adb命令');
+
 
 -- ----------------------------
 -- 23、参数配置表
@@ -908,7 +1008,7 @@ create table sys_client
   client_id       int(8)      not null AUTO_INCREMENT comment '客户端ID',
   client_name     varchar(30) not null                comment '客户端名称',
   client_ip       varchar(30) not null                comment '客户端IP',
-  status          int(2)                              comment '客户端超时 0 正常 1 链接失败 2 状态未知',
+  status          int(2)                              comment '客户端状态 0 正常 1 链接失败 2 状态未知',
   checkinterval   int(6)      not null                comment '检查客户端状态心跳间隔时间 单位:秒',
   client_path     varchar(100)                        comment '客户端测试驱动桩路径 多个;做分隔',
   remark          varchar(100) comment '备注',
@@ -1033,3 +1133,18 @@ create table project_template_params
   param_type            int(4)          not null                comment '0 String 1 JSON对象 2 JSONARR对象 3 文件类型',
   primary key (params_id)
 ) engine=innodb default charset=utf8 comment = '模板参数管理';
+
+-- ----------------------------
+-- 36、用例调试记录
+-- ----------------------------
+drop table if exists project_case_debug;
+create table project_case_debug
+(
+  debug_id              int(8)          not null AUTO_INCREMENT  comment '调试ID',
+  case_id               int(8)          not null                 comment '用例ID',
+  user_id               int(11) 		not null                 comment '用户ID',
+  debug_isend           int(2) 		    not null                 comment '调试结束标识 0 进行中 1结束 2异常',
+  log_level             varchar(10)     not null                 comment '日志级别 info 记录 warning 警告 error 异常',
+  log_detail            varchar(5000)   not null                 comment '日志',
+  primary key (debug_id)
+) engine=innodb default charset=utf8 comment = '用例调试日志记录';

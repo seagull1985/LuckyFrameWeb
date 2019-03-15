@@ -1,0 +1,142 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-projectCase-edit" th:object="${projectCase}">
+            <input id="caseId" name="caseId" th:field="*{caseId}"  type="hidden">
+            <input id="caseSerialNumber" name="caseSerialNumber" th:field="*{caseSerialNumber}"  type="hidden">
+            <input id="caseSign" name="caseSign" th:field="*{caseSign}"  type="hidden">
+            <input id="treeId" name="moduleId" type="hidden" th:value="${projectCaseModule.moduleId}"/>
+            <div class="form-group">	
+				<label class="col-sm-3 control-label">项目名称：</label>
+				<div class="col-sm-8">
+				    <select class="form-control" id="projectId" name="projectId" onchange="initializeModuleTree()">
+						<option th:each="project:${projects}" th:value="${project.projectId}" 
+						  th:text="${project.projectName}" th:selected="${project.flag}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">用例模块：</label>
+				<div class="col-sm-8">
+				    <input class="form-control" type="text" onclick="selectModuleTree()" id="treeName" readonly="true" th:value="${projectCaseModule.moduleName}"/>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">用例名称：</label>
+				<div class="col-sm-8">
+					<input id="caseName" name="caseName" th:field="*{caseName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">用例类型：</label>
+				<div class="col-sm-8">
+					<select class="form-control m-b" th:field="*{caseType}" id="caseType" name="caseType" th:with="type=${@dict.getType('testmanagmt_case_type')}">
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">步骤失败：</label>
+				<div class="col-sm-8">
+				    <label>当前用例后续步骤 &nbsp;&nbsp;</label>
+				    <div class="radio-box" th:each="dict : ${@dict.getType('testmanagmt_case_stepfailcontinue')}">
+					<input type="radio" th:field="*{failcontinue}" th:id="${dict.dictCode}" name="failcontinue" th:value="${dict.dictValue}" th:checked="${dict.isDefault == 'Y' ? true : false}">
+					<label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+				    </div>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<textarea id="remark" name="remark" th:field="*{remark}" class="form-control"></textarea>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "testmanagmt/projectCase";
+		var modulePrefix = ctx + "testmanagmt/projectCaseModule"
+		
+		$("#form-projectCase-edit").validate({
+			rules:{
+				caseName:{
+					required:true,
+					minlength: 1,
+        			maxlength: 200,
+                    remote: {
+                        url: prefix + "/checkProjectCaseNameUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                        	"caseId": function() {
+                                return $("#caseId").val();
+                            },
+                            name: function () {
+                                return $.common.trim($("#caseName").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                        	return $.validate.unique(data);
+                        }
+                    }
+				},
+				remark:{
+					maxlength:200
+				}
+			},
+        	messages: {
+                "caseName": {
+                    remote: "用例名称已经存在"
+                }
+            }
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/copy", $('#form-projectCase-edit').serialize());
+	        }
+	    }
+		
+		/*模块管理-新增-选择父模块树*/
+		function selectModuleTree() {
+			var options = {
+				title: '模块选择',
+				width: "380",
+				url: modulePrefix + "/selectProjectCaseModuleTree/" + $("#treeId").val(),
+				callBack: doSubmit
+			};
+			$.modal.openOptions(options);
+		}
+		
+		function doSubmit(index, layero){
+			var body = layer.getChildFrame('body', index);
+   			$("#treeId").val(body.find('#treeId').val());
+   			$("#treeName").val(body.find('#treeName').val());
+   			layer.close(index);
+		}
+		
+		/*选择项目初始化模块树*/
+		function initializeModuleTree() {
+			var projectId=$("#projectId").val();
+			$.ajax({
+				cache : true,
+				type : "GET",
+				url : modulePrefix + "/getModuleByProjectId/" + projectId,
+				data : {},
+				async : false,
+				error : function(request) {
+					$.modal.alertError("系统错误");
+				},
+				success : function(data) {
+		   			$("#treeId").val(data.moduleId);
+		   			$("#treeName").val(data.moduleName);
+				}
+			});
+		}
+	</script>
+</body>
+</html>

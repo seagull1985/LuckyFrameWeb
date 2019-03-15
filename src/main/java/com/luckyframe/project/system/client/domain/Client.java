@@ -1,5 +1,7 @@
 package com.luckyframe.project.system.client.domain;
 
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.luckyframe.framework.web.domain.BaseEntity;
@@ -20,7 +22,7 @@ public class Client extends BaseEntity
 	private String clientName;
 	/** 客户端IP */
 	private String clientIp;
-	/** 客户端超时 0 正常 1 链接失败 2 状态未知 */
+	/** 客户端状态 0 正常 1 链接失败 2 状态未知 */
 	private Integer status;
 	/** 检查客户端状态心跳间隔时间 单位:秒 */
 	private Integer checkinterval;
@@ -30,6 +32,26 @@ public class Client extends BaseEntity
 	private String remark;
     /** 所属项目组 */
     private Integer[] projectIds;
+	/** 客户端状态 0 正常 1 链接失败 2 状态未知 */
+	private String statusStr;
+	/** 客户端状态 0 正常 1 链接失败 2 状态未知 */
+	private List<String> clientPathList;
+
+	public List<String> getClientPathList() {
+		return clientPathList;
+	}
+
+	public void setClientPathList(List<String> clientPathList) {
+		this.clientPathList = clientPathList;
+	}
+
+	public String getStatusStr() {
+		return statusStr;
+	}
+
+	public void setStatusStr(String statusStr) {
+		this.statusStr = statusStr;
+	}
 
 	public void setClientId(Integer clientId) 
 	{

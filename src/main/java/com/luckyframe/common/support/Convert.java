@@ -368,6 +368,19 @@ public class Convert
     }
 
     /**
+     * 指定符号转换为String数组
+     * @param str
+     * @param setSymbol
+     * @return
+     * @author Seagull
+     * @date 2019年3月14日
+     */
+    public static String[] toStrArrayBySymbol(String str,String setSymbol)
+    {
+        return toStrArray(setSymbol, str);
+    }
+    
+    /**
      * 转换为String数组<br>
      * 
      * @param split 分隔符

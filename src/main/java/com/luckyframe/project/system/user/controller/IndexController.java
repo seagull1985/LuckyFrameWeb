@@ -25,7 +25,7 @@ public class IndexController extends BaseController
     private IMenuService menuService;
 
     @Autowired
-    private LuckyFrameConfig ruoyiConfig;
+    private LuckyFrameConfig lfConfig;
 
     // 系统首页
     @GetMapping("/index")
@@ -37,7 +37,7 @@ public class IndexController extends BaseController
         List<Menu> menus = menuService.selectMenusByUser(user);
         mmap.put("menus", menus);
         mmap.put("user", user);
-        mmap.put("copyrightYear", ruoyiConfig.getCopyrightYear());
+        mmap.put("copyrightYear", lfConfig.getCopyrightYear());
         return "index";
     }
 
@@ -45,7 +45,7 @@ public class IndexController extends BaseController
     @GetMapping("/system/main")
     public String main(ModelMap mmap)
     {
-        mmap.put("version", ruoyiConfig.getVersion());
+        mmap.put("version", lfConfig.getVersion());
         return "main";
     }
 }

@@ -1,13 +1,15 @@
-package com.luckyframe.project.testmanagmt.projectCaseSteps.service;
+package com.luckyframe.project.testmanagmt.projectCase.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.luckyframe.common.support.Convert;
-import com.luckyframe.project.testmanagmt.projectCaseSteps.domain.ProjectCaseSteps;
-import com.luckyframe.project.testmanagmt.projectCaseSteps.mapper.ProjectCaseStepsMapper;
+import com.luckyframe.common.utils.security.ShiroUtils;
+import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;
+import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseSteps;
+import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseStepsMapper;
 
 /**
  * 测试用例步骤管理 服务层实现
@@ -21,6 +23,9 @@ public class ProjectCaseStepsServiceImpl implements IProjectCaseStepsService
 	@Autowired
 	private ProjectCaseStepsMapper projectCaseStepsMapper;
 
+	@Autowired
+	private IProjectCaseService projectCaseService;
+	
 	/**
      * 查询测试用例步骤管理信息
      * 
@@ -54,6 +59,14 @@ public class ProjectCaseStepsServiceImpl implements IProjectCaseStepsService
 	@Override
 	public int insertProjectCaseSteps(ProjectCaseSteps projectCaseSteps)
 	{
+		ProjectCase projectCase=projectCaseService.selectProjectCaseById(projectCaseSteps.getCaseId());
+		projectCaseService.updateProjectCase(projectCase);
+		
+		projectCaseSteps.setCreateBy(ShiroUtils.getLoginName());
+		projectCaseSteps.setCreateTime(new Date());
+		projectCaseSteps.setUpdateBy(ShiroUtils.getLoginName());
+		projectCaseSteps.setUpdateTime(new Date());
+		
 	    return projectCaseStepsMapper.insertProjectCaseSteps(projectCaseSteps);
 	}
 	
@@ -76,9 +89,15 @@ public class ProjectCaseStepsServiceImpl implements IProjectCaseStepsService
      * @return 结果
      */
 	@Override
-	public int deleteProjectCaseStepsByIds(String ids)
+	public int deleteProjectCaseStepsByIds(List<ProjectCaseSteps> listSteps)
 	{
-		return projectCaseStepsMapper.deleteProjectCaseStepsByIds(Convert.toStrArray(ids));
+		int caseId=0;
+		if(null!=listSteps&&listSteps.size()>0){
+			if(null!=listSteps.get(0).getCaseId()){
+				caseId=listSteps.get(0).getCaseId();
+			}
+		}
+		return projectCaseStepsMapper.deleteProjectCaseStepsByCaseId(caseId);
 	}
 	
 }

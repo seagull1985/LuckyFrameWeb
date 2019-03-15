@@ -16,8 +16,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectClientProjectList" parameterType="ClientProject" resultMap="ClientProjectResult">
         <include refid="selectClientProjectVo"/>
         <where>  
-            <if test="clientId != null "> and client_id = #{clientId}</if>
-             <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="clientId != null and clientId != 0"> and client_id = #{clientId}</if>
+             <if test="projectId != null and projectId != 0"> and project_id = #{projectId}</if>
          </where>
     </select>
     

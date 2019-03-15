@@ -52,6 +52,12 @@
 				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="testmanagmt:projectCase:edit">
 					<i class="fa fa-edit"></i> 修改
 				</a>
+				<a class="btn btn-info btn-edit disabled" onclick="$.operate.copy()" shiro:hasPermission="testmanagmt:projectCase:add">
+					<i class="fa fa-copy"></i> 复制用例
+				</a>
+				<a class="btn btn-info btn-edit disabled" onclick="$.operate.customFull()" shiro:hasPermission="testmanagmt:projectCase:edit">
+					<i class="fa fa-edit"></i> 用例步骤
+				</a>
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testmanagmt:projectCase:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
@@ -70,15 +76,19 @@
         var removeFlag = [[${@permission.hasPermi('testmanagmt:projectCase:remove')}]];
         var prefix = ctx + "testmanagmt/projectCase";
         var modulePrefix = ctx + "testmanagmt/projectCaseModule"
+        var stepsPrefix = ctx + "testmanagmt/projectCaseSteps";
 
         $(function() {
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
+                copyUrl: prefix + "/copy/{id}",
                 removeUrl: prefix + "/remove",
+                customUrl: stepsPrefix + "/edit/{id}",
 				exportUrl: prefix + "/export",
                 modalName: "测试用例",
+                childrenModalName: "用例步骤编辑",
 				search: false,
 		        showExport: true,
                 columns: [{
@@ -93,23 +103,33 @@
 				{
 					field : 'project.projectName', 
 					title : '项目名称',
+					width : '10%',
+					class : 'myTDLengthHidden'
 				},
 				{
 					field : 'projectCaseModule.moduleName', 
 					title : '模块名称',
+					width : '10%',
+					class : 'myTDLengthHidden'
 				},
 				{
 					field : 'caseSign', 
 					title : '用例编号',
-					sortable: true
+					sortable: true,
+					width : '6%',
+					class : 'myTDLengthHidden'
 				},
 				{
 					field : 'caseName', 
 					title : '用例名称',
+					width : '30%',
+					class : 'myTDLengthHidden'
 				},
 				{
 					field : 'caseType', 
 					title : '用例类型',
+					width : '8%',
+					class : 'myTDLengthHidden',
 		        	formatter: function (value, row, index) {
 		    		    if (row.caseType == 0) {
 		        			return 'HTTP接口';
@@ -127,6 +147,8 @@
 				{
 					field : 'failcontinue', 
 					title : '失败处理',
+					width : '5%',
+					class : 'myTDLengthHidden',
 		        	formatter: function (value, row, index) {
 		    		    if (row.failcontinue == 0) {
 		        			return '后续步骤中断';
@@ -145,32 +167,27 @@
 				{
 					field : 'createTime', 
 					title : '创建时间',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'updateBy', 
-					title : '更新者'
+					title : '更新者',
+					width : '5%',
+					class : 'myTDLengthHidden'
 				},
 				{
 					field : 'updateTime', 
 					title : '更新时间',
-					sortable: true
+					sortable: true,
+					width : '10%',
+					class : 'myTDLengthHidden'
 				},
 				{
 					field : 'remark', 
-					title : '备注'
-				},
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.caseId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.caseId + '\')"><i class="fa fa-remove"></i>删除</a>');
-						return actions.join('');
-		            }
-		        }]
+					title : '备注',
+					width : '16%',
+					class : 'myTDLengthHidden'
+				}]
             };
             $.table.init(options);
         });

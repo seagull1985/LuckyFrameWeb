@@ -2,6 +2,7 @@ package com.luckyframe.project.system.client.mapper;
 
 import java.util.List;
 
+import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.system.client.domain.ClientProject;	
 
 /**
@@ -77,5 +78,14 @@ public interface ClientProjectMapper
      * @date 2019年2月28日
      */
     public int selectClientProjectCountByProjectId(Integer projectId);
+    
+    /**
+     * 根据projectId查询客户端列表
+     * @param projectId
+     * @return
+     * @author Seagull
+     * @date 2019年3月14日
+     */
+    public List<Client> selectClientsByProjectId(int projectId);
 	
 }

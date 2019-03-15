@@ -1,6 +1,4 @@
-package com.luckyframe.project.testmanagmt.projectCaseSteps.domain;
-
-import java.util.Date;
+package com.luckyframe.project.testmanagmt.projectCase.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -39,14 +37,6 @@ public class ProjectCaseSteps extends BaseEntity
 	private Integer stepType;
 	/** 扩展字段，可用于备注、存储HTTP模板等 */
 	private String extend;
-	/** 创建者 */
-	private String createBy;
-	/** 创建时间 */
-	private Date createTime;
-	/** 更新者 */
-	private String updateBy;
-	/** 更新时间 */
-	private Date updateTime;
 
 	public void setStepId(Integer stepId) 
 	{
@@ -146,42 +136,6 @@ public class ProjectCaseSteps extends BaseEntity
 	public String getExtend() 
 	{
 		return extend;
-	}
-	public void setCreateBy(String createBy) 
-	{
-		this.createBy = createBy;
-	}
-
-	public String getCreateBy() 
-	{
-		return createBy;
-	}
-	public void setCreateTime(Date createTime) 
-	{
-		this.createTime = createTime;
-	}
-
-	public Date getCreateTime() 
-	{
-		return createTime;
-	}
-	public void setUpdateBy(String updateBy) 
-	{
-		this.updateBy = updateBy;
-	}
-
-	public String getUpdateBy() 
-	{
-		return updateBy;
-	}
-	public void setUpdateTime(Date updateTime) 
-	{
-		this.updateTime = updateTime;
-	}
-
-	public Date getUpdateTime() 
-	{
-		return updateTime;
 	}
 
     public String toString() {

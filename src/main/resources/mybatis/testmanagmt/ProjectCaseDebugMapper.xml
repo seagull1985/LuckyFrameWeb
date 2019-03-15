@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseDebugMapper">
+    
+    <resultMap type="ProjectCaseDebug" id="ProjectCaseDebugResult">
+        <result property="debugId"    column="debug_id"    />
+        <result property="caseId"    column="case_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="debugIsend"    column="debug_isend"    />
+        <result property="logLevel"    column="log_level"    />
+        <result property="logDetail"    column="log_detail"    />
+    </resultMap>
+	
+	<sql id="selectProjectCaseDebugVo">
+        select debug_id, case_id, user_id, debug_isend, log_level, log_detail from project_case_debug
+    </sql>
+	
+    <select id="selectProjectCaseDebugList" parameterType="ProjectCaseDebug" resultMap="ProjectCaseDebugResult">
+        <include refid="selectProjectCaseDebugVo"/>
+        <where>  
+            <if test="debugId != null and debugId != 0 "> and debug_id = #{debugId}</if>
+             <if test="caseId != null and debugId != 0 "> and case_id = #{caseId}</if>
+             <if test="userId != null and debugId != 0 "> and user_id = #{userId}</if>
+             <if test="debugIsend != null "> and debug_isend = #{debugIsend}</if>
+             <if test="logLevel != null  and logLevel != '' "> and log_level = #{logLevel}</if>
+             <if test="logDetail != null  and logDetail != '' "> and log_detail = #{logDetail}</if>
+         </where>
+    </select>
+    
+    <select id="selectProjectCaseDebugById" parameterType="Integer" resultMap="ProjectCaseDebugResult">
+        <include refid="selectProjectCaseDebugVo"/>
+        where debug_id = #{debugId}
+    </select>
+        
+    <insert id="insertProjectCaseDebug" parameterType="ProjectCaseDebug" useGeneratedKeys="true" keyProperty="debugId">
+        insert into project_case_debug
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="caseId != null  ">case_id,</if>
+			<if test="userId != null  ">user_id,</if>
+			<if test="debugIsend != null  ">debug_isend,</if>
+			<if test="logLevel != null  and logLevel != ''  ">log_level,</if>
+			<if test="logDetail != null  and logDetail != ''  ">log_detail,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="caseId != null  ">#{caseId},</if>
+			<if test="userId != null  ">#{userId},</if>
+			<if test="debugIsend != null  ">#{debugIsend},</if>
+			<if test="logLevel != null  and logLevel != ''  ">#{logLevel},</if>
+			<if test="logDetail != null  and logDetail != ''  ">#{logDetail},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProjectCaseDebug" parameterType="ProjectCaseDebug">
+        update project_case_debug
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseId != null  ">case_id = #{caseId},</if>
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="debugIsend != null  ">debug_isend = #{debugIsend},</if>
+            <if test="logLevel != null  and logLevel != ''  ">log_level = #{logLevel},</if>
+            <if test="logDetail != null  and logDetail != ''  ">log_detail = #{logDetail},</if>
+        </trim>
+        where debug_id = #{debugId}
+    </update>
+
+	<delete id="deleteProjectCaseDebugById" parameterType="ProjectCaseDebug">
+        delete from project_case_debug 
+        <where>  
+             <if test="debugId != null and debugId != 0 "> and debug_id = #{debugId}</if>
+             <if test="caseId != null and debugId != 0 "> and case_id = #{caseId}</if>
+             <if test="userId != null and debugId != 0 "> and user_id = #{userId}</if>
+         </where>
+    </delete>
+	
+    <delete id="deleteProjectCaseDebugByIds" parameterType="String">
+        delete from project_case_debug where debug_id in 
+        <foreach item="debugId" collection="array" open="(" separator="," close=")">
+            #{debugId}
+        </foreach>
+    </delete>
+    
+</mapper>

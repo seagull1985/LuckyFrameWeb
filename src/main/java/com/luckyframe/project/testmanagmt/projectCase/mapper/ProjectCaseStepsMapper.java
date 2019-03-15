@@ -1,8 +1,8 @@
-package com.luckyframe.project.testmanagmt.projectCaseSteps.mapper;
+package com.luckyframe.project.testmanagmt.projectCase.mapper;
 
 import java.util.List;
 
-import com.luckyframe.project.testmanagmt.projectCaseSteps.domain.ProjectCaseSteps;	
+import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseSteps;	
 
 /**
  * 测试用例步骤管理 数据层
@@ -45,12 +45,13 @@ public interface ProjectCaseStepsMapper
 	public int updateProjectCaseSteps(ProjectCaseSteps projectCaseSteps);
 	
 	/**
-     * 删除测试用例步骤管理
-     * 
-     * @param stepId 测试用例步骤管理ID
-     * @return 结果
-     */
-	public int deleteProjectCaseStepsById(Integer stepId);
+	 * 根据用例ID删除所有步骤
+	 * @param caseId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年3月13日
+	 */
+	public int deleteProjectCaseStepsByCaseId(Integer caseId);
 	
 	/**
      * 批量删除测试用例步骤管理

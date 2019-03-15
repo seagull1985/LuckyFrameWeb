@@ -70,15 +70,15 @@
 							<tbody id="paramTBody">
 								 <tr th:each="paramob,iterStat : ${templateParams}">								 
 										<td width="20%">
-										<div class="col-sm-12">
+										<div class="col-sm-12 lf-td-div">
 										<input th:id="paramsId+${iterStat.count}" name="paramsId" type="hidden" th:value="${paramob.paramsId}"/>
 										<input th:id="templateId+${iterStat.count}" name="templateId" type="hidden" th:value="${paramob.templateId}"/>
 										<input type="text" class="form-control"	name="paramName" th:id="paramName+${iterStat.count}" th:value="${paramob.paramName}"/></div></td>
 										<td width="55%">
-										<div class="col-sm-12">
+										<div class="col-sm-12 lf-td-div">
 										<input type="text" class="form-control" name="paramValue" th:id="paramValue+${iterStat.count}" th:value="${paramob.paramValue}"/></div></td>
 										<td width="15%">
-										<div class="col-sm-12">
+										<div class="col-sm-12 lf-td-div">
 										  <select class="form-control" th:id="paramType+${iterStat.count}" name="paramType" th:with="type=${@dict.getType('testmanagmt_templateparams_type')}">
 						                    <option th:each="dict:${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:selected="${dict.dictValue==paramob.paramType.toString()}"></option>
 					                      </select>
@@ -175,7 +175,6 @@
 		        if ($.validate.form()) {
 		            //点击提交按钮时,表单序列化后组装JSONARR
     	            var params = $("#form-projectTemplateParams-edit").serializeArray();
-		            var oTable = document.getElementById("paramTBody");
 		            var values = [];
 		            var tparam={};
 		            for (var item in params) {

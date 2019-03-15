@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @date 2019年2月12日
  */
 @Component
-@ConfigurationProperties(prefix = "ruoyi")
+@ConfigurationProperties(prefix = "luckyframe")
 public class LuckyFrameConfig
 {
     /** 项目名称 */

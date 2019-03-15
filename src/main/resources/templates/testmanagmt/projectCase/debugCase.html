@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-debugCase" th:object="${projectCaseDebug}">
+            <input id="caseId" th:field="*{caseId}"  type="hidden">
+            <input id="userId" th:field="*{userId}"  type="hidden">
+            <div class="form-group">	
+				<label class="col-sm-3 control-label">客户端：</label>
+				<div class="col-sm-8">
+				    <select class="form-control" id="clientId" th:field="*{clientId}" onChange="getDriverPath()">
+						<option th:each="client:${clients}" th:value="${client.clientId}" 
+						  th:text="【+${client.clientName}+】+${client.clientIp}+${client.statusStr}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">驱动目录：</label>
+				<div class="col-sm-8">
+				    <select class="form-control" id="driverPath" th:field="*{driverPath}">
+						<option th:each="driverPath:${driverPathList}" th:value="${driverPath}" th:text="${driverPath}"></option>
+					</select>
+				</div>
+			</div>
+		</form>
+		<div id="logView" style="background-color:#F5F5F5;height:300px;overflow-y:scroll;text-align:left;"></div>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "testmanagmt/projectCaseDebug";
+		var clientPrefix = ctx + "system/client";
+		 		
+		function submitHandler() {
+			var data=$('#form-debugCase').serializeArray();
+        	var config = {
+        	        url: prefix + "/debugCaseRun",
+        	        type: "post",
+        	        dataType: "json",
+        	        data: data,
+        	        beforeSend: function () {
+        	        	$.modal.loading("正在处理中，请稍后...");
+        	        	$.modal.disable();
+        	        },
+        	        success: function(data) {
+        	        	$.modal.closeLoading();
+        	        	$.modal.enable();
+                        if (data.status == "info") {
+                        	$.modal.msgSuccess(data.ms);
+                            refreshlog();
+                        } else if (data.status == "warning") {
+                        	$.modal.msgWarning(data.ms);
+                        } else if (data.status == "error") {
+                        	$.modal.msgError(data.ms);
+                        }
+        	        }
+        	    };
+        	    $.ajax(config)
+	    }
+		
+	    /*更新调试日志*/
+	    function refreshlog() {
+			var data=$('#form-debugCase').serializeArray();
+ 			var config = {
+			        url: prefix + "/refreshDebugLog",
+			        type: "post",
+			        dataType: "json",
+			        data: data,
+			        success: function(data) {
+		                if (data.status == "0") {
+		                    document.getElementById('logView').innerHTML = data.ms;
+		                    document.getElementById('logView').scrollTop = document.getElementById('logView').scrollHeight;
+		                } else if (data.status == "1") {
+		                    document.getElementById('logView').innerHTML = data.ms;
+		                    document.getElementById('logView').scrollTop = document.getElementById('logView').scrollHeight;
+		                    $.modal.msgSuccess("调试程序运行完成！");
+		                    clearTimeout(t);
+		                } else if (data.status == "2") {
+		                	$.modal.msgError(data.ms);
+		                } else{
+		                	$.modal.msgError(data.ms);
+		                }
+			        }
+			    };
+			 $.ajax(config);
+			 var t = setTimeout("refreshlog()", 1500);
+	    }
+
+	    //按上级ID取子列表
+	    function getDriverPath() {
+	        if ($("#clientId").val() == "") return;
+	        var clientId = $("#clientId").val();
+	        var url = clientPrefix+"/getDriverPathList/" + clientId;
+	        jQuery.getJSON(url, null, function call(result) {
+	            clearSel();
+	            setClientpath(result);
+	        });
+	    }
+
+	    //设置子列表
+	    function setClientpath(result) {
+	        var options = "";
+	        jQuery.each(result, function (i, node) {
+	            options += "<option value='" + node + "'>" + node + "</option>";
+	        });
+	        $("#driverPath").html(options);
+	    }
+
+	    // 清空下拉列表
+	    function clearSel() {
+	        while ($("#driverPath").length > 1) {
+	            $("#driverPath option[index='1']").remove();
+	        }
+	    }
+	</script>
+</body>
+</html>

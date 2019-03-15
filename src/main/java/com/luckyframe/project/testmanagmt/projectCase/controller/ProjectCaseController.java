@@ -21,7 +21,9 @@ import com.luckyframe.framework.web.page.TableDataInfo;
 import com.luckyframe.project.system.project.domain.Project;
 import com.luckyframe.project.system.project.service.IProjectService;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;
+import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseSteps;
 import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseService;
+import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseStepsService;
 import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseModule;
 import com.luckyframe.project.testmanagmt.projectCaseModule.service.IProjectCaseModuleService;
 
@@ -39,6 +41,9 @@ public class ProjectCaseController extends BaseController
 	
 	@Autowired
 	private IProjectCaseService projectCaseService;
+	
+	@Autowired
+	private IProjectCaseStepsService projectCaseStepsService;
 	
 	@Autowired
 	private IProjectService projectService;
@@ -135,6 +140,56 @@ public class ProjectCaseController extends BaseController
 	public AjaxResult editSave(ProjectCase projectCase)
 	{		
 		return toAjax(projectCaseService.updateProjectCase(projectCase));
+	}
+	
+	/**
+	 * 复制用例
+	 * @param caseId
+	 * @param mmap
+	 * @return
+	 * @author Seagull
+	 * @date 2019年3月13日
+	 */
+	@GetMapping("/copy/{caseId}")
+	public String copy(@PathVariable("caseId") Integer caseId, ModelMap mmap)
+	{
+		ProjectCase projectCase = projectCaseService.selectProjectCaseById(caseId);
+		projectCase.setCaseName("Copy【"+projectCase.getCaseName()+"】");
+        List<Project> projects=projectService.selectProjectAll(projectCase.getProjectId());
+        mmap.put("projects", projects);
+        if(projects.size()>0){
+        	ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(projects.get(0).getProjectId());
+        	mmap.put("projectCaseModule", projectCaseModule);
+        }
+		mmap.put("projectCase", projectCase);
+		mmap.put("projectCaseModule", projectCase.getProjectCaseModule());
+	    return prefix + "/copy";
+	}
+	
+	/**
+	 * 复制协议模板
+	 * @param projectProtocolTemplate
+	 * @return
+	 * @author Seagull
+	 * @date 2019年3月9日
+	 */
+	@RequiresPermissions("testmanagmt:projectCase:add")
+	@Log(title = "项目测试用例管理", businessType = BusinessType.INSERT)
+	@PostMapping("/copy")
+	@ResponseBody
+	public AjaxResult copySave(ProjectCase projectCase)
+	{
+		ProjectCaseSteps projectCaseSteps = new ProjectCaseSteps();
+		projectCaseSteps.setCaseId(projectCase.getCaseId());
+		List<ProjectCaseSteps> listSteps = projectCaseStepsService.selectProjectCaseStepsList(projectCaseSteps);
+		projectCase.setCaseId(0);
+		int num=projectCaseService.insertProjectCase(projectCase);
+		for(ProjectCaseSteps step:listSteps){
+			step.setStepId(0);
+			step.setCaseId(projectCase.getCaseId());
+			projectCaseStepsService.insertProjectCaseSteps(step);
+		}
+		return toAjax(num+listSteps.size());
 	}
 	
 	/**

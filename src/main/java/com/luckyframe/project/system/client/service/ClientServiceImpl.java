@@ -1,6 +1,7 @@
 package com.luckyframe.project.system.client.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,22 @@ public class ClientServiceImpl implements IClientService
 	    return clientMapper.selectClientById(clientId);
 	}
 	
+	/**
+	 * 根据客户端ID获取驱动路径列表
+	 * @param clientId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年3月14日
+	 */
+    @Override
+	public List<String> selectClientDriverListById(Integer clientId)
+	{
+    	Client client = clientMapper.selectClientById(clientId);
+    	String[] clientPath=Convert.toStrArrayBySymbol(client.getClientPath(), ";");
+    	List<String> clientPathList = Arrays.asList(clientPath);
+	    return clientPathList;
+	}
+    
 	/**
      * 查询客户端管理列表
      * 
@@ -153,5 +170,42 @@ public class ClientServiceImpl implements IClientService
             return ClientConstants.CLIENT_IP_NOT_UNIQUE;
         }
         return ClientConstants.CLIENT_IP_UNIQUE;
+    }
+    
+    /**
+     * 根据项目ID查询所有客户端列表(打标记)
+     * @param projectId
+     * @return
+     * @author Seagull
+     * @date 2019年3月14日
+     */
+    @Override
+    public List<Client> selectClientsByProjectId(int projectId)
+    {
+    	ClientProject clientProject = new ClientProject();
+    	clientProject.setProjectId(projectId);;
+        List<ClientProject> clientProjects = clientProjectMapper.selectClientProjectList(clientProject);
+        List<Client> clients = clientMapper.selectClientList(new Client());
+        List<Client> returnClientProjects = new ArrayList<Client>();
+        for (ClientProject cp : clientProjects)
+        {
+            for (Client client : clients)
+            {
+                if (cp.getClientId() == client.getClientId())
+                {
+                	int status=client.getStatus();
+                	if(status==0){
+                		client.setStatusStr(" 状态正常");
+                	}else if(status==1){
+                		client.setStatusStr(" 状态异常");
+                	}else{
+                		client.setStatusStr(" 状态未知");
+                	}
+                	returnClientProjects.add(client);
+                    break;
+                }
+            }
+        }
+        return returnClientProjects;
     }
 }
