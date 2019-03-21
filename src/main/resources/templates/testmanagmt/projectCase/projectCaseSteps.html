@@ -213,7 +213,7 @@
 						tparam = {};
 					}
 				}
-				$.operate.saveJson(prefix + "/editSave", JSON.stringify(values));
+				$.operate.saveJsonUnBack(prefix + "/editSave", JSON.stringify(values));
 			} else {
 				$.modal.msgError("步骤提交验证不通过！");
 			}
@@ -406,7 +406,7 @@
         	if ($.common.isNotEmpty(caseId)) {
         	    url = debugPrefix + "/projectCaseDebug/" + caseId;
         	}
-        	$.modal.openCaseDebug("用例调试", url, null, null, "调试");
+        	$.modal.open("用例调试", url, null, null, "调试");
         }
 	</script>
 </body>

@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-projectPlan-edit" th:object="${projectPlan}">
+            <input id="planId" name="planId" th:field="*{planId}"  type="hidden">
+            <input id="projectId" name="projectId" th:field="*{projectId}"  type="hidden">
+            <input id="planCaseCount" name="planCaseCount" th:field="*{planCaseCount}"  type="hidden">
+            <div class="form-group">	
+				<label class="col-sm-3 control-label">项目名称：</label>
+				<div class="col-sm-8">
+				    <strong class="form-control" th:text="*{project.projectName}"></strong>
+				</div>
+		    </div>			
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">计划名称：</label>
+				<div class="col-sm-8">
+					<input id="planName" name="planName" th:field="*{planName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<textarea id="remark" name="remark" th:field="*{remark}" class="form-control" rows="8"></textarea>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "testmanagmt/projectPlan";
+
+		$("#form-projectPlan-add").validate({
+			rules:{
+				planName:{
+					required:true,
+        			maxlength: 50,
+                    remote: {
+                        url: prefix + "/checkProjectPlanNameUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            name: function () {
+                                return $.common.trim($("#planName").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                        	return $.validate.unique(data);
+                        }
+                    }
+				},
+				remark:{
+					maxlength:200
+				}
+			},
+        	messages: {
+                "planName": {
+                    remote: "测试计划名称已经存在"
+                }
+            }
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-projectPlan-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

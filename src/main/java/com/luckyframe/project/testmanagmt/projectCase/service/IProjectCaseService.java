@@ -29,6 +29,16 @@ public interface IProjectCaseService
 	public List<ProjectCase> selectProjectCaseList(ProjectCase projectCase);
 	
 	/**
+	 * 根据项目ID查询用例集合
+	 * @param projectId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年3月18日
+	 */
+	public List<ProjectCase> selectProjectCaseListByProjectId(Integer projectId);
+	
+	
+	/**
      * 新增项目测试用例管理
      * 
      * @param projectCase 项目测试用例管理信息

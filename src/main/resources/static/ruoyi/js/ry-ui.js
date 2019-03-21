@@ -24,6 +24,7 @@
                 _fixedNumber = $.common.isEmpty(options.fixedNumber) ? 0 : options.fixedNumber;
                 _rightFixedColumns = $.common.isEmpty(options.rightFixedColumns) ? false : options.rightFixedColumns;
                 _rightFixedNumber = $.common.isEmpty(options.rightFixedNumber) ? 0 : options.rightFixedNumber;
+                _onEditableSave = $.common.isEmpty(options.onEditableSave) ? "" : options.onEditableSave;
                 $('#bootstrap-table').bootstrapTable({
                     url: options.url,                                   // 请求后台的URL（*）
                     contentType: "application/x-www-form-urlencoded",   // 编码类型
@@ -58,8 +59,9 @@
                     columns: options.columns,                           // 显示列信息（*）
                     responseHandler: $.table.responseHandler,           // 在加载服务器发送来的数据之前处理函数
                     onLoadSuccess: $.table.onLoadSuccess,               // 当所有数据被加载时触发处理函数
+                    onEditableSave: _onEditableSave,                    // 行内编辑启用
                 });
-            },
+            },           
             // 查询条件
             queryParams: function(params) {
             	return {
@@ -392,47 +394,7 @@
         	    });
             },
             // 弹出层指定宽度
-            open: function (title, url, width, height) {
-            	//如果是移动端，就使用自适应大小弹窗
-            	if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
-            	    width = 'auto';
-            	    height = 'auto';
-            	}
-            	if ($.common.isEmpty(title)) {
-                    title = false;
-                };
-                if ($.common.isEmpty(url)) {
-                    url = "/404.html";
-                };
-                if ($.common.isEmpty(width)) {
-                	width = 800;
-                };
-                if ($.common.isEmpty(height)) {
-                	height = ($(window).height() - 50);
-                };
-            	layer.open({
-            		type: 2,
-            		area: [width + 'px', height + 'px'],
-            		fix: false,
-            		//不固定
-            		maxmin: true,
-            		shade: 0.3,
-            		title: title,
-            		content: url,
-            		btn: ['确定', '关闭'],
-            	    // 弹层外区域关闭
-            		shadeClose: true,
-            		yes: function(index, layero) {
-            	        var iframeWin = layero.find('iframe')[0];
-            	        iframeWin.contentWindow.submitHandler();
-            	    },
-            	    cancel: function(index) {
-            	        return true;
-            	    }
-            	});
-            },
-            // 弹出层指定宽度
-            openCaseDebug: function (title, url, width, height, dtName) {
+            open: function (title, url, width, height, dtName) {
             	//如果是移动端，就使用自适应大小弹窗
             	if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
             	    width = 'auto';
@@ -498,7 +460,7 @@
                 });
             },
             // 弹出层全屏
-            openFull: function (title, url, width, height) {
+            openFull: function (title, url, width, height, btName) {
             	//如果是移动端，就使用自适应大小弹窗
             	if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
             	    width = 'auto';
@@ -516,6 +478,9 @@
                 if ($.common.isEmpty(height)) {
                 	height = ($(window).height() - 50);
                 };
+            	if ($.common.isEmpty(btName)) {
+            		btName = '确定';
+                };
                 var index = layer.open({
             		type: 2,
             		area: [width + 'px', height + 'px'],
@@ -525,7 +490,7 @@
             		shade: 0.3,
             		title: title,
             		content: url,
-            		btn: ['确定', '关闭'],
+            		btn: [btName, '关闭'],
             		// 弹层外区域关闭
             		shadeClose: true,
             		yes: function(index, layero) {
@@ -748,6 +713,31 @@
         	        },
         	        success: function(result) {
         	        	$.operate.successCallback(result);
+        	        }
+        	    };
+        	    $.ajax(config)
+            },
+            // 保存JSON格式数据信息
+            saveJsonUnBack: function(url, data) {
+            	var config = {
+        	        url: url,
+        	        type: "post",
+        	        dataType: "json",
+        	        contentType:"application/json",
+        	        data: data,
+        	        beforeSend: function () {
+        	        	$.modal.loading("正在处理中，请稍后...");
+        	        	$.modal.disable();
+        	        },
+        	        success: function(result) {
+                    	if (result.code == web_status.SUCCESS) {
+                        	$.modal.msgSuccess(result.msg);
+                    		$.table.refresh();
+                        } else {
+                        	$.modal.alertError(result.msg);
+                        }
+                        $.modal.enable();
+                        $.modal.closeLoading();
         	        }
         	    };
         	    $.ajax(config)

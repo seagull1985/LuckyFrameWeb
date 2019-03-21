@@ -63,9 +63,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="moduleId != null "> and pc.module_id = #{moduleId}</if>
              <if test="caseType != null "> and pc.case_type = #{caseType}</if>
              <if test="failcontinue != null "> and pc.failcontinue = #{failcontinue}</if>
-             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createBy != null  and createBy != '' "> and pc.create_by = #{createBy}</if>
              <if test="createTime != null "> and pc.create_time = #{createTime}</if>
-             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateBy != null  and updateBy != '' "> and pc.update_by = #{updateBy}</if>
              <if test="updateTime != null "> and pc.update_time = #{updateTime}</if>
              <if test="remark != null  and remark != '' "> and pc.remark = #{remark}</if>
          </where>

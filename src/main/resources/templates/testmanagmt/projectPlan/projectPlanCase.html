@@ -8,19 +8,13 @@
 		<div class="row">
 			<div class="col-sm-12 search-collapse">
 				<form id="formId">
+				<input id="treeId" name="moduleId" type="hidden" th:value="${projectCaseModule.moduleId}"/>
+				<input id="projectId" name="projectId" type="hidden" th:value="${projectCaseModule.projectId}"/>
+				<input id="planId" name="planId" type="hidden" th:value="${planId}"/>
 					<div class="select-list">
-					<input id="treeId" name="moduleId" type="hidden" th:value="${projectCaseModule.moduleId}"/>
 						<ul>
 							<li>
 								用例名称：<input type="text" name="caseName"/>
-							</li>
-
-							<li>
-								项目：
-								<select id="projectId" name="projectId" th:with="type=${projects}" onchange="initializeModuleTree()">
-								    <option value="">所有项目</option>
-	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}"></option>
-	                            </select>
 							</li>
 
 							<li>
@@ -45,54 +39,70 @@
 				</form>
 			</div>
 			
-	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="testmanagmt:projectCase:add">
-					<i class="fa fa-plus"></i> 添加
-				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="testmanagmt:projectCase:edit">
-					<i class="fa fa-edit"></i> 修改
-				</a>
-				<a class="btn btn-info btn-edit disabled" onclick="$.operate.copy()" shiro:hasPermission="testmanagmt:projectCase:add">
-					<i class="fa fa-copy"></i> 复制用例
-				</a>
-				<a class="btn btn-info btn-edit disabled" onclick="$.operate.customFull()" shiro:hasPermission="testmanagmt:projectCase:edit">
-					<i class="fa fa-edit"></i> 用例步骤
-				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testmanagmt:projectCase:remove">
-					<i class="fa fa-remove"></i> 删除
-				</a>
-<!--  				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="testmanagmt:projectCase:export">
-						<i class="fa fa-download"></i> 导出
-				 </a> -->
-			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
 			</div>
 		</div>
 	</div>
     <div th:include="include :: footer"></div>
+    <!-- bootstrap-table 表格行内编辑插件 -->
+    <script th:src="@{/ajax/libs/bootstrap-table/extensions/editable/bootstrap-table-editable.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/editable/bootstrap-editable.js}"></script>
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('testmanagmt:projectCase:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('testmanagmt:projectCase:remove')}]];
-        var prefix = ctx + "testmanagmt/projectCase";
-        var modulePrefix = ctx + "testmanagmt/projectCaseModule"
-        var stepsPrefix = ctx + "testmanagmt/projectCaseSteps";
+        var editFlag = [[${@permission.hasPermi('testmanagmt:projectPlan:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('testmanagmt:projectPlan:remove')}]];
+        var prefix = ctx + "testmanagmt/projectPlanCase";
+        var modulePrefix = ctx + "testmanagmt/projectCaseModule";
 
         $(function() {
+/* 			var projectId=$("#projectId").val();
+			if(projectId==""){
+	   			$("#treeId").val("");
+	   			$("#treeName").val("");
+			}else{
+				$.ajax({
+					cache : true,
+					type : "GET",
+					url : modulePrefix + "/getModuleByProjectId/" + projectId,
+					data : {},
+					async : true,
+					error : function(request) {
+						$.modal.alertError("系统错误");
+					},
+					success : function(data) {
+			   			$("#treeId").val(data.moduleId);
+			   			$("#treeName").val(data.moduleName);
+					}
+				});
+			} */
+			
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
-                copyUrl: prefix + "/copy/{id}",
-                removeUrl: prefix + "/remove",
-                customUrl: stepsPrefix + "/edit/{id}",
 				exportUrl: prefix + "/export",
                 modalName: "测试用例",
-                childrenModalName: "用例步骤编辑",
 				search: false,
+				queryParams: function(params) {
+	            	return {
+	        			// 传递参数查询参数
+	                    pageSize:       params.limit,
+	                    pageNum:        params.offset / params.limit + 1,
+	                    searchValue:    params.search,
+	                    orderByColumn:  params.sort,
+	                    isAsc:          params.order,
+	                    planId:         $('#planId').val()
+	        		};
+				},
 		        showExport: true,
                 columns: [{
-		            checkbox: true
+                	field : 'flag',
+					checkbox : true,
+					formatter: function (value, row, index) {
+					        return {
+					            checked : row.flag//设置选中
+					        };
+					}
 		        },
 				{
 					field : 'caseId', 
@@ -101,11 +111,30 @@
 					visible: false
 				},
 				{
-					field : 'project.projectName', 
-					title : '项目名称',
-					width : '10%',
-					class : 'myTDLengthHidden'
+					field : 'planCaseId', 
+					title : '测试计划用例ID',
+					visible: false
 				},
+				{
+					field : 'planId', 
+					title : '测试计划ID',
+					visible: false
+				},
+				{
+					field : 'priority',
+					title : '执行优先级',
+					width : '8%',
+					editable : {
+						type : 'text',
+						title : '执行优先级',
+						emptytext : "0",
+						validate : function(value) {
+							if (isNaN(value)) return '优先级必须是数字';
+	                        if (!(/(^[1-9]\d*$)/.test(value))) return '优先级必须是正整数';
+							if (value.length > 8) return '优先级不能超过8个字符';
+						}
+					}
+				}, 
 				{
 					field : 'projectCaseModule.moduleName', 
 					title : '模块名称',
@@ -179,7 +208,7 @@
 					field : 'updateTime', 
 					title : '更新时间',
 					sortable: true,
-					width : '10%',
+					width : '12%',
 					class : 'myTDLengthHidden'
 				},
 				{
@@ -187,21 +216,38 @@
 					title : '备注',
 					width : '12%',
 					class : 'myTDLengthHidden'
-				}]
+				}],
+				onEditableSave: function (field, row, oldValue, $el) {
+					$.operate.saveJsonUnBack(prefix + "/edit", JSON.stringify(row));	
+	            }
             };
             $.table.init(options);
         });
-        
+	    
+	    function submitHandler(){
+	    	var rows = $.map($('#bootstrap-table').bootstrapTable('getData'), function (row) {
+    	        return row;
+    	    });
+    		$.modal.confirm("确认保存您选择的用例到计划中吗?", function() {
+				$.operate.saveJsonUnBack(prefix + "/savePlanCase", JSON.stringify(rows));
+    		});
+        	
+	    }
+	    
 		/*查询条件选择用例模块*/
 		function selectModuleTree() {
-			var projectId=$("#projectId  option:selected").val();
+			var projectId=$("#projectId").val();
+			var moduleId=$("#treeId").val();
 			if(projectId==""){
-				$.modal.alertError("请先选择项目");
+				$.modal.alertError("未检查到计划项目");
 			}else{
+				if(moduleId==""){
+					moduleId=projectId;
+				}
 				var options = {
 						title: '模块选择',
 						width: "380",
-						url: modulePrefix + "/selectProjectCaseModuleTree/" + $("#treeId").val(),
+						url: modulePrefix + "/selectProjectCaseModuleTree/" + moduleId,
 						callBack: doSubmit
 					};
 					$.modal.openOptions(options);
@@ -213,30 +259,6 @@
    			$("#treeId").val(body.find('#treeId').val());
    			$("#treeName").val(body.find('#treeName').val());
    			layer.close(index);
-		}
-		
-		/*选择项目初始化模块树*/
-		function initializeModuleTree() {
-			var projectId=$("#projectId  option:selected").val();
-			if(projectId==""){
-	   			$("#treeId").val("");
-	   			$("#treeName").val("");
-			}else{
-				$.ajax({
-					cache : true,
-					type : "GET",
-					url : modulePrefix + "/getModuleByProjectId/" + projectId,
-					data : {},
-					async : false,
-					error : function(request) {
-						$.modal.alertError("系统错误");
-					},
-					success : function(data) {
-			   			$("#treeId").val(data.moduleId);
-			   			$("#treeName").val(data.moduleName);
-					}
-				});
-			}
 		}
 		
 		function resetForm(){

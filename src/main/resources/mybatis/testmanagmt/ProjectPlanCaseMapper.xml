@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.testmanagmt.projectPlan.mapper.ProjectPlanCaseMapper">
+    
+    <resultMap type="ProjectPlanCase" id="ProjectPlanCaseResult">
+        <result property="planCaseId"    column="plan_case_id"    />
+        <result property="caseId"    column="case_id"    />
+        <result property="planId"    column="plan_id"    />
+        <result property="priority"    column="priority"    />
+    </resultMap>
+	
+	<sql id="selectProjectPlanCaseVo">
+        select plan_case_id, case_id, plan_id, priority from project_plan_case
+    </sql>
+	
+    <select id="selectProjectPlanCaseList" parameterType="ProjectPlanCase" resultMap="ProjectPlanCaseResult">
+        <include refid="selectProjectPlanCaseVo"/>
+        <where>  
+            <if test="planCaseId != null "> and plan_case_id = #{planCaseId}</if>
+             <if test="caseId != null "> and case_id = #{caseId}</if>
+             <if test="planId != null "> and plan_id = #{planId}</if>
+             <if test="priority != null "> and priority = #{priority}</if>
+         </where>
+    </select>
+    
+    <select id="selectProjectPlanCaseById" parameterType="Integer" resultMap="ProjectPlanCaseResult">
+        <include refid="selectProjectPlanCaseVo"/>
+        where plan_case_id = #{planCaseId}
+    </select>
+        
+    <insert id="insertProjectPlanCase" parameterType="ProjectPlanCase" useGeneratedKeys="true" keyProperty="planCaseId">
+        insert into project_plan_case
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="planCaseId != null and planCaseId !=0 ">plan_case_id,</if>
+			<if test="caseId != null  ">case_id,</if>
+			<if test="planId != null  ">plan_id,</if>
+			<if test="priority != null  ">priority,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="planCaseId != null and planCaseId !=0 ">#{planCaseId},</if>
+			<if test="caseId != null  ">#{caseId},</if>
+			<if test="planId != null  ">#{planId},</if>
+			<if test="priority != null  ">#{priority},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProjectPlanCase" parameterType="ProjectPlanCase">
+        update project_plan_case
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseId != null  ">case_id = #{caseId},</if>
+            <if test="planId != null  ">plan_id = #{planId},</if>
+            <if test="priority != null  ">priority = #{priority},</if>
+        </trim>
+        where plan_case_id = #{planCaseId}
+    </update>
+
+	<delete id="deleteProjectPlanCaseById" parameterType="Integer">
+        delete from project_plan_case where plan_case_id = #{planCaseId}
+    </delete>
+	
+    <delete id="deleteProjectPlanCaseByIds" parameterType="String">
+        delete from project_plan_case where plan_case_id in 
+        <foreach item="planCaseId" collection="array" open="(" separator="," close=")">
+            #{planCaseId}
+        </foreach>
+    </delete>
+    
+</mapper>

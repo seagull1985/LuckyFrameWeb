@@ -37,6 +37,46 @@ public class ProjectCase extends BaseEntity
 	private Project project;
 	/** 关联用例模块实体 */
 	private ProjectCaseModule projectCaseModule;
+	/** 用例选中标记 */
+	private boolean flag = false;
+	/** 用例优先级 */
+    private int priority;
+	/** 关联计划ID标识 */
+	private Integer planId;
+	/** 关联计划用例ID标识 */
+	private Integer planCaseId;
+
+	public Integer getPlanCaseId() {
+		return planCaseId;
+	}
+
+	public void setPlanCaseId(Integer planCaseId) {
+		this.planCaseId = planCaseId;
+	}
+
+	public Integer getPlanId() {
+		return planId;
+	}
+
+	public void setPlanId(Integer planId) {
+		this.planId = planId;
+	}
+
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
 
 	public ProjectCaseModule getProjectCaseModule() {
 		return projectCaseModule;

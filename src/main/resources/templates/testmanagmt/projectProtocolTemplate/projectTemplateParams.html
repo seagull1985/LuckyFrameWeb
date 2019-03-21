@@ -170,7 +170,7 @@
 				json = json + "\"paramType\":" + $("#paramType").val()+",";
 				json = json + "\"paramValue\":\"" + $("#paramValue").val()+"\"}]";
 				var jsonObject = JSON.parse(json);
-				$.operate.saveJson(prefix + "/editSave", JSON.stringify(jsonObject));
+				$.operate.saveJsonUnBack(prefix + "/editSave", JSON.stringify(jsonObject));
 			}else if($('#liformsub').hasClass("active")){
 		        if ($.validate.form()) {
 		            //点击提交按钮时,表单序列化后组装JSONARR
@@ -184,7 +184,7 @@
 	            			tparam={};
 	            		}	            	
 		            }
-		            $.operate.saveJson(prefix + "/editSave", JSON.stringify(values));
+		            $.operate.saveJsonUnBack(prefix + "/editSave", JSON.stringify(values));
 		        }else{
 		        	$.modal.msgError("验证不通过！！！");
 		        }

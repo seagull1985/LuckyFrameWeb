@@ -57,6 +57,21 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
 	    return projectCaseMapper.selectProjectCaseList(projectCase);
 	}
 	
+	/**
+	 * 根据项目ID查询用例集合
+	 * @param projectId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年3月18日
+	 */
+	@Override
+	public List<ProjectCase> selectProjectCaseListByProjectId(Integer projectId)
+	{
+		ProjectCase projectCase = new ProjectCase();
+		projectCase.setProjectId(projectId);
+	    return projectCaseMapper.selectProjectCaseList(projectCase);
+	}
+	
     /**
      * 新增项目测试用例管理
      * 
