@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								项目：
+								<select id="projectId" name="projectId" th:with="type=${projects}">
+								    <option value="">所有项目</option>
+	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}"></option>
+	                            </select>
+							</li>
+							
+							<li>
+								参数名称：<input type="text" name="paramsName"/>
+							</li>
+
+							<li>
+								参数值：<input type="text" name="paramsValue"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="testmanagmt:projectCaseParams:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="testmanagmt:projectCaseParams:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testmanagmt:projectCaseParams:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('testmanagmt:projectCaseParams:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('testmanagmt:projectCaseParams:remove')}]];
+        var prefix = ctx + "testmanagmt/projectCaseParams";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "用例公共参数",
+				search: false,
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'paramsId', 
+					title : '用例参数ID',
+					visible: false
+				},
+				{
+					field : 'project.projectName', 
+					title : '项目名称',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'paramsName', 
+					title : '参数名称',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'paramsValue', 
+					title : '参数值',
+					width : '40%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'createBy', 
+					title : '创建者',
+					visible: false
+				},
+				{
+					field : 'createTime', 
+					title : '创建时间',
+					visible: false
+				},
+				{
+					field : 'updateBy', 
+					title : '更新者',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'updateTime', 
+					title : '更新时间',
+					sortable: true,
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'remark', 
+					title : '备注',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+					width : '10%',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.paramsId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.paramsId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -388,6 +388,7 @@ insert into sys_menu values('118',  '用例管理', '4', '1', '/testmanagmt/proj
 insert into sys_menu values('119',  '用例模块', '4', '2', '/testmanagmt/projectCaseModule', 'C', '0', 'testmanagmt:projectCaseModule:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2018-03-01', '测试用例模块管理菜单');
 insert into sys_menu values('120',  '协议模板', '4', '3', '/testmanagmt/projectProtocolTemplate', 'C', '0', 'testmanagmt:projectProtocolTemplate:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '协议模板管理菜单');
 insert into sys_menu values('121',  '测试计划', '4', '4', '/testmanagmt/projectPlan', 'C', '0', 'testmanagmt:projectPlan:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '测试计划菜单');
+insert into sys_menu values('122',  '公共参数', '4', '5', '/testmanagmt/projectCaseParams', 'C', '0', 'testmanagmt:projectCaseParams:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例公共参数菜单');
 -- 三级菜单
 insert into sys_menu values('500',  '操作日志', '110', '1', '/monitor/operlog',    'C', '0', 'monitor:operlog:view',     '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '操作日志菜单');
 insert into sys_menu values('501',  '登录日志', '110', '2', '/monitor/logininfor', 'C', '0', 'monitor:logininfor:view',  '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '登录日志菜单');
@@ -500,6 +501,15 @@ insert into sys_menu
 values('1080','计划修改','121','3','#','F','0','testmanagmt:projectPlan:edit','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
 insert into sys_menu 
 values('1081','计划删除','121','4','#','F','0','testmanagmt:projectPlan:remove','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+-- 公共参数按钮
+insert into sys_menu 
+values('1082','参数查询','122','1','#','F','0','testmanagmt:projectCaseParams:list','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+insert into sys_menu 
+values('1083','参数新增','122','2','#','F','0','testmanagmt:projectCaseParams:add','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+insert into sys_menu 
+values('1084','参数修改','122','3','#','F','0','testmanagmt:projectCaseParams:edit','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+insert into sys_menu 
+values('1085','参数删除','122','4','#','F','0','testmanagmt:projectCaseParams:remove','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
 
 -- ----------------------------
 -- 16、用户和角色关联表  用户N-1角色
@@ -1194,3 +1204,21 @@ create table project_plan_case
   index (case_id),
   index (plan_id) 
 ) engine=innodb default charset=utf8 comment = '测试计划用例';
+
+-- ----------------------------
+-- 39、用例公共参数
+-- ----------------------------
+drop table if exists project_case_params;
+create table project_case_params
+(
+  params_id             int(8)          not null AUTO_INCREMENT  comment '用例参数ID',
+  params_name           varchar(50)     not null                 comment '参数名称',
+  params_value          varchar(500)    not null                 comment '参数值',
+  project_id            int(8)          not null                 comment '项目ID',
+  create_by             varchar(64)     default ''               comment '创建者',
+  create_time 	        datetime                                 comment '创建时间',
+  update_by             varchar(64)     default ''               comment '更新者',
+  update_time           datetime                                 comment '更新时间',
+  remark                varchar(200)                             comment '备注',
+  primary key (params_id)
+) engine=innodb default charset=utf8 comment = '用例公共参数';
