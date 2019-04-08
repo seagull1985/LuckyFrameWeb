@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.luckyframe.framework.web.domain.BaseEntity;
 
 /**
@@ -18,6 +19,8 @@ public class Client extends BaseEntity
 	
 	/** 客户端ID */
 	private Integer clientId;
+	/** 心跳任务ID */
+	private Integer jobId;
 	/** 客户端名称 */
 	private String clientName;
 	/** 客户端IP */
@@ -36,6 +39,14 @@ public class Client extends BaseEntity
 	private String statusStr;
 	/** 客户端状态 0 正常 1 链接失败 2 状态未知 */
 	private List<String> clientPathList;
+
+	public Integer getJobId() {
+		return jobId;
+	}
+
+	public void setJobId(Integer jobId) {
+		this.jobId = jobId;
+	}
 
 	public List<String> getClientPathList() {
 		return clientPathList;

@@ -86,10 +86,20 @@
 	</div>
     <div th:include="include::footer"></div>
     <script type="text/javascript">
-		var prefix = ctx + "testmanagmt/projectProtocolTemplate"
+		var prefix = ctx + "testmanagmt/projectProtocolTemplate";
+		
+		$.validator.setDefaults({
+			ignore:":hidden:not(select)",
+			submitHandler : function() {
+				save();
+			}
+		});
 		
 		$("#form-projectProtocolTemplate-add").validate({
 			rules:{
+				projectId:{
+					required:true,
+				},
 				templateName:{
 					required:true,
 					minlength: 1,

@@ -33,7 +33,7 @@
 			</div>
 			
 			<div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="monitor:job:add">
+<!-- 				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="monitor:job:add">
 	                <i class="fa fa-plus"></i> 新增
 	            </a>
 	            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:job:edit">
@@ -44,7 +44,7 @@
 		        </a>
 		         <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="monitor:job:export">
 		            <i class="fa fa-download"></i> 导出
-		        </a>
+		        </a> -->
 		        <a class="btn btn-info" onclick="javascript:jobLog()" shiro:hasPermission="monitor:job:list">
 		            <i class="fa fa-list"></i> 日志
 		        </a>
@@ -107,19 +107,23 @@
 		            title: '执行表达式'
 		        },
 		        {
-		        	visible: statusFlag == 'hidden' ? false : true,
+		        	field: 'status',
 		        	title: '任务状态',
 		        	align: 'center',
 		        	formatter: function (value, row, index) {
-		        		return statusTools(row);
+		        		if(value==0){
+		        			return '运行中';
+		        		}else{
+		        			return '暂停';
+		        		}
 		        	}
 		        },
 		        {
-		            field: 'createTime',
-		            title: '创建时间',
+		            field: 'updateTime',
+		            title: '更新时间',
 		            sortable: true
 		        },
-		        {
+/* 		        {
 		            title: '操作',
 		            align: 'center',
 		            formatter: function(value, row, index) {
@@ -128,7 +132,7 @@
 		                actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="#" onclick="$.operate.detail(\'' + row.jobId + '\')"><i class="fa fa-search"></i>详细</a> ');
 		                return actions.join('');
 		            }
-		        }]
+		        } */]
 		    };
 		    $.table.init(options);
 		});

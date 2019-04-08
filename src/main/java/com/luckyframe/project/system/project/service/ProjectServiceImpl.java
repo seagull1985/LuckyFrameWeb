@@ -17,6 +17,7 @@ import com.luckyframe.project.system.project.domain.Project;
 import com.luckyframe.project.system.project.mapper.ProjectMapper;
 import com.luckyframe.project.system.role.domain.RoleProject;
 import com.luckyframe.project.system.role.mapper.RoleProjectMapper;
+import com.luckyframe.project.testexecution.taskScheduling.mapper.TaskSchedulingMapper;
 import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseMapper;
 import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseModule;
 import com.luckyframe.project.testmanagmt.projectCaseModule.mapper.ProjectCaseModuleMapper;
@@ -44,6 +45,9 @@ public class ProjectServiceImpl implements IProjectService
 	
 	@Autowired
 	private RoleProjectMapper roleProjectMapper;
+	
+	@Autowired
+	private TaskSchedulingMapper taskSchedulingMapper;
 
 	/**
      * 查询测试项目管理信息
@@ -132,8 +136,8 @@ public class ProjectServiceImpl implements IProjectService
 	public int deleteProjectByIds(String ids) throws BusinessException
 	{
 		String[] projectIds=Convert.toStrArray(ids);
-		for(String projectidstr:projectIds){
-			int projectId=Integer.valueOf(projectidstr);
+		for(String projectIdStr:projectIds){
+			int projectId=Integer.valueOf(projectIdStr);
 			if(projectCaseModuleMapper.selectProjectCaseModuleCountByProjectId(projectId)>0){
 				throw new BusinessException(String.format("【%1$s】已绑定子用例模块,不能删除", projectMapper.selectProjectById(projectId).getProjectName()));
 			}
@@ -142,6 +146,9 @@ public class ProjectServiceImpl implements IProjectService
 			}
 			if(projectCaseMapper.selectProjectCaseCountByProjectId(projectId)>0){
 				throw new BusinessException(String.format("【%1$s】已绑定测试用例,不能删除", projectMapper.selectProjectById(projectId).getProjectName()));
+			}
+			if(taskSchedulingMapper.selectTaskSchedulingCountByProjectId(projectId)>0){
+				throw new BusinessException(String.format("【%1$s】已绑定调度,不能删除", projectMapper.selectProjectById(projectId).getProjectName()));
 			}
 		}
 		projectCaseModuleMapper.deleteProjectCaseModuleByProjectIds(projectIds);

@@ -29,6 +29,15 @@ public interface IProjectPlanService
 	public List<ProjectPlan> selectProjectPlanList(ProjectPlan projectPlan);
 	
 	/**
+	 * 根据项目ID查询测试计划列表
+	 * @param projectId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年3月23日
+	 */
+	public List<ProjectPlan> selectProjectPlanListByProjectId(Integer projectId);
+	
+	/**
      * 新增测试计划
      * 
      * @param projectPlan 测试计划信息

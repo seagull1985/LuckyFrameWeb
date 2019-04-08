@@ -1,6 +1,7 @@
 package com.luckyframe.project.monitor.job.mapper;
 
 import java.util.List;
+
 import com.luckyframe.project.monitor.job.domain.Job;
 
 /**
@@ -32,6 +33,15 @@ public interface JobMapper
      * @return 角色对象信息
      */
     public Job selectJobById(Long jobId);
+    
+    /**
+     * 通过调度参数查询调度任务信息
+     * @param methodParams
+     * @return
+     * @author Seagull
+     * @date 2019年3月29日
+     */
+    public Job selectJobByMethodParams(String methodParams);
 
     /**
      * 通过调度ID删除调度任务信息

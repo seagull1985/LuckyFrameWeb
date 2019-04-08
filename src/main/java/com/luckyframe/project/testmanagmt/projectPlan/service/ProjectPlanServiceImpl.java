@@ -49,6 +49,21 @@ public class ProjectPlanServiceImpl implements IProjectPlanService
 	    return projectPlanMapper.selectProjectPlanList(projectPlan);
 	}
 	
+	/**
+	 * 根据项目ID查询测试计划列表
+	 * @param projectId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年3月23日
+	 */
+	@Override
+	public List<ProjectPlan> selectProjectPlanListByProjectId(Integer projectId)
+	{
+		ProjectPlan projectPlan = new ProjectPlan();
+		projectPlan.setProjectId(projectId);
+	    return projectPlanMapper.selectProjectPlanList(projectPlan);
+	}
+	
     /**
      * 新增测试计划
      * 

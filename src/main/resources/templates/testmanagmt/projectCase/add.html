@@ -57,8 +57,18 @@
 		var prefix = ctx + "testmanagmt/projectCase";
 		var modulePrefix = ctx + "testmanagmt/projectCaseModule";
 		
+		$.validator.setDefaults({
+			ignore:":hidden:not(select)",
+			submitHandler : function() {
+				save();
+			}
+		});
+		
 		$("#form-projectCase-add").validate({
 			rules:{
+				projectId:{
+					required:true,
+				},
 				caseName:{
 					required:true,
 					minlength: 1,

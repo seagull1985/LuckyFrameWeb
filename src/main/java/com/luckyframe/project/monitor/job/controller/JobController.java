@@ -152,7 +152,7 @@ public class JobController extends BaseController
     @ResponseBody
     public AjaxResult editSave(Job job)
     {
-        return toAjax(jobService.updateJobCron(job));
+        return toAjax(jobService.updateJob(job));
     }
     
     /**

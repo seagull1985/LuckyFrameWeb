@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="Client" id="ClientResult">
         <result property="clientId"    column="client_id"    />
+        <result property="jobId"    column="job_id"    />
         <result property="clientName"    column="client_name"    />
         <result property="clientIp"    column="client_ip"    />
         <result property="status"    column="status"    />
@@ -15,13 +16,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectClientVo">
-        select client_id, client_name, client_ip, status, checkinterval, client_path, remark from sys_client
+        select client_id, job_id, client_name, client_ip, status, checkinterval, client_path, remark from sys_client
     </sql>
 	
     <select id="selectClientList" parameterType="Client" resultMap="ClientResult">
         <include refid="selectClientVo"/>
         <where>  
-            <if test="clientId != null "> and client_id = #{clientId}</if>
+             <if test="clientId != null "> and client_id = #{clientId}</if>
+             <if test="jobId != null "> and job_id = #{jobId}</if>
              <if test="clientName != null  and clientName != '' "> and client_name like concat('%', #{clientName}, '%')</if>
              <if test="clientIp != null  and clientIp != '' "> and client_ip like concat('%', #{clientIp}, '%')</if>
              <if test="status != null "> and status = #{status}</if>
@@ -39,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertClient" parameterType="Client" useGeneratedKeys="true" keyProperty="clientId">
         insert into sys_client
 		<trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="jobId != null ">job_id,</if>
 			<if test="clientName != null  and clientName != ''  ">client_name,</if>
 			<if test="clientIp != null  and clientIp != ''  ">client_ip,</if>
 			<if test="status != null  ">status,</if>
@@ -47,6 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="remark != null  and remark != ''  ">remark,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="jobId != null  ">#{jobId},</if>
 			<if test="clientName != null  and clientName != ''  ">#{clientName},</if>
 			<if test="clientIp != null  and clientIp != ''  ">#{clientIp},</if>
 			<if test="status != null  ">#{status},</if>
@@ -59,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateClient" parameterType="Client">
         update sys_client
         <trim prefix="SET" suffixOverrides=",">
+            <if test="jobId != null  ">job_id = #{jobId},</if>
             <if test="clientName != null  and clientName != ''  ">client_name = #{clientName},</if>
             <if test="clientIp != null  and clientIp != ''  ">client_ip = #{clientIp},</if>
             <if test="status != null  ">status = #{status},</if>
@@ -81,10 +86,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
     
     <select id="checkClientNameUnique" parameterType="String" resultMap="ClientResult">
-		select client_id, client_name from sys_client where client_name=#{client_name}
+		select client_id, job_id, client_name from sys_client where client_name=#{client_name}
 	</select>
 	
 	<select id="checkIpUnique" parameterType="String" resultMap="ClientResult">
-		select client_id, client_ip from sys_client where client_ip=#{client_ip}
+		select client_id, job_id, client_ip from sys_client where client_ip=#{client_ip}
 	</select>
 </mapper>

@@ -45,7 +45,7 @@ public class Job extends BaseEntity implements Serializable
 
     /** cron计划策略 */
     @Excel(name = "计划策略 ")
-    private String misfirePolicy = ScheduleConstants.MISFIRE_DEFAULT;
+    private String misfirePolicy = ScheduleConstants.MISFIRE_DO_NOTHING;
 
     /** 任务状态（0正常 1暂停） */
     @Excel(name = "任务状态", readConverterExp = "0=正常,1=暂停")

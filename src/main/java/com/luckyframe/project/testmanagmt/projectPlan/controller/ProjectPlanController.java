@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
@@ -149,4 +151,19 @@ public class ProjectPlanController extends BaseController
         return projectPlanService.checkProjectPlanNameUnique(projectPlan);
     }
     
+	/**
+	 * 通过项目ID获取项目计划列表
+	 * @param projectId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年3月26日
+	 */
+    @GetMapping("/getProjectPlanListByProjectId/{projectId}")
+	@ResponseBody
+	public String getProjectPlanListByProjectId(@PathVariable("projectId") Integer projectId)
+	{
+    	List<ProjectPlan> planList = projectPlanService.selectProjectPlanListByProjectId(projectId);
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(planList));
+		return jsonArray.toJSONString();
+	}
 }

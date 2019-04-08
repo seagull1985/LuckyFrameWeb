@@ -11,15 +11,15 @@
 					<div class="select-list">
 						<ul>
 							<li>
-								测试计划名称：<input type="text" name="planName"/>
-							</li>
-
-							<li>
 								项目：
 								<select id="projectId" name="projectId" th:with="type=${projects}">
 								    <option value="">所有项目</option>
 	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}"></option>
 	                            </select>
+							</li>
+							
+							<li>
+								测试计划名称：<input type="text" name="planName"/>
 							</li>
 
 							<li>

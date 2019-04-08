@@ -89,10 +89,10 @@
 
 	    //按上级ID取子列表
 	    function getDriverPath() {
-	        if ($("#clientId").val() == "") return;
+	        if ($.common.isEmpty($("#clientId").val())) return;
 	        var clientId = $("#clientId").val();
 	        var url = clientPrefix+"/getDriverPathList/" + clientId;
-	        jQuery.getJSON(url, null, function call(result) {
+	        $.getJSON(url, null, function call(result) {
 	            clearSel();
 	            setClientpath(result);
 	        });
@@ -101,7 +101,7 @@
 	    //设置子列表
 	    function setClientpath(result) {
 	        var options = "";
-	        jQuery.each(result, function (i, node) {
+	        $.each(result, function (i, node) {
 	            options += "<option value='" + node + "'>" + node + "</option>";
 	        });
 	        $("#driverPath").html(options);

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.testexecution.taskExecute.mapper.TaskExecuteMapper">
+    
+    <resultMap type="TaskExecute" id="TaskExecuteResult">
+        <result property="taskId"    column="task_id"    />
+        <result property="schedulingId"    column="scheduling_id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="taskName"    column="task_name"    />
+        <result property="taskStatus"    column="task_status"    />
+        <result property="caseTotalCount"    column="case_total_count"    />
+        <result property="caseSuccCount"    column="case_succ_count"    />
+        <result property="caseFailCount"    column="case_fail_count"    />
+        <result property="caseLockCount"    column="case_lock_count"    />
+        <result property="caseNoexecCount"    column="case_noexec_count"    />
+        <result property="finishTime"    column="finish_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <association property="project"  column="project_id" javaType="Project" resultMap="ProjectResult" />
+    </resultMap>
+	
+	<resultMap type="Project" id="ProjectResult">
+        <id property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="projectSign"    column="project_sign"    />
+    </resultMap>
+    
+	<sql id="selectTaskExecuteVo">
+        select te.task_id, te.scheduling_id, te.project_id, te.task_name, te.task_status, te.case_total_count, te.case_succ_count, te.case_fail_count, te.case_lock_count, te.case_noexec_count, te.finish_time, te.create_by, te.create_time, te.update_by, te.update_time, 
+        sp.project_name,sp.dept_id,sp.project_sign 
+        from task_execute te 
+        left join sys_project sp on te.project_id = sp.project_id 
+    </sql>
+	
+    <select id="selectTaskExecuteList" parameterType="TaskExecute" resultMap="TaskExecuteResult">
+        <include refid="selectTaskExecuteVo"/>
+        <where>  
+            <if test="taskId != null "> and te.task_id = #{taskId}</if>
+             <if test="schedulingId != null "> and te.scheduling_id = #{schedulingId}</if>
+             <if test="projectId != null "> and te.project_id = #{projectId}</if>
+             <if test="taskName != null  and taskName != '' "> and te.task_name like concat('%', #{taskName}, '%')</if>
+             <if test="taskStatus != null "> and te.task_status = #{taskStatus}</if>
+             <if test="caseTotalCount != null "> and te.case_total_count = #{caseTotalCount}</if>
+             <if test="caseSuccCount != null "> and te.case_succ_count = #{caseSuccCount}</if>
+             <if test="caseFailCount != null "> and te.case_fail_count = #{caseFailCount}</if>
+             <if test="caseLockCount != null "> and te.case_lock_count = #{caseLockCount}</if>
+             <if test="caseNoexecCount != null "> and te.case_noexec_count = #{caseNoexecCount}</if>
+             <if test="finishTime != null "> and te.finish_time = #{finishTime}</if>
+		     <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+			    and date_format(te.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+		     </if>
+		     <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+			    and date_format(te.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+		     </if>
+         </where>
+    </select>
+    
+    <select id="selectTaskExecuteById" parameterType="Integer" resultMap="TaskExecuteResult">
+        <include refid="selectTaskExecuteVo"/>
+        where te.task_id = #{taskId}
+    </select>
+        
+    <insert id="insertTaskExecute" parameterType="TaskExecute" useGeneratedKeys="true" keyProperty="taskId">
+        insert into task_execute
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="schedulingId != null  ">scheduling_id,</if>
+			<if test="projectId != null  ">project_id,</if>
+			<if test="taskName != null  and taskName != ''  ">task_name,</if>
+			<if test="taskStatus != null  ">task_status,</if>
+			<if test="caseTotalCount != null  ">case_total_count,</if>
+			<if test="caseSuccCount != null  ">case_succ_count,</if>
+			<if test="caseFailCount != null  ">case_fail_count,</if>
+			<if test="caseLockCount != null  ">case_lock_count,</if>
+			<if test="caseNoexecCount != null  ">case_noexec_count,</if>
+			<if test="finishTime != null  ">finish_time,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="schedulingId != null  ">#{schedulingId},</if>
+			<if test="projectId != null  ">#{projectId},</if>
+			<if test="taskName != null  and taskName != ''  ">#{taskName},</if>
+			<if test="taskStatus != null  ">#{taskStatus},</if>
+			<if test="caseTotalCount != null  ">#{caseTotalCount},</if>
+			<if test="caseSuccCount != null  ">#{caseSuccCount},</if>
+			<if test="caseFailCount != null  ">#{caseFailCount},</if>
+			<if test="caseLockCount != null  ">#{caseLockCount},</if>
+			<if test="caseNoexecCount != null  ">#{caseNoexecCount},</if>
+			<if test="finishTime != null  ">#{finishTime},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateTaskExecute" parameterType="TaskExecute">
+        update task_execute
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="schedulingId != null  ">scheduling_id = #{schedulingId},</if>
+            <if test="projectId != null  ">project_id = #{projectId},</if>
+            <if test="taskName != null  and taskName != ''  ">task_name = #{taskName},</if>
+            <if test="taskStatus != null  ">task_status = #{taskStatus},</if>
+            <if test="caseTotalCount != null  ">case_total_count = #{caseTotalCount},</if>
+            <if test="caseSuccCount != null  ">case_succ_count = #{caseSuccCount},</if>
+            <if test="caseFailCount != null  ">case_fail_count = #{caseFailCount},</if>
+            <if test="caseLockCount != null  ">case_lock_count = #{caseLockCount},</if>
+            <if test="caseNoexecCount != null  ">case_noexec_count = #{caseNoexecCount},</if>
+            <if test="finishTime != null  ">finish_time = #{finishTime},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where task_id = #{taskId}
+    </update>
+
+	<delete id="deleteTaskExecuteById" parameterType="Integer">
+        delete from task_execute where task_id = #{taskId}
+    </delete>
+	
+    <delete id="deleteTaskExecuteByIds" parameterType="String">
+        delete from task_execute where task_id in 
+        <foreach item="taskId" collection="array" open="(" separator="," close=")">
+            #{taskId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -103,7 +103,7 @@ public class ScheduleUtils
     /**
      * 更新定时任务
      */
-    public static void updateScheduleJob(Scheduler scheduler, Job job)
+    public static void updateScheduleJob(Scheduler scheduler, Job job, CronTrigger trigger)
     {
         try
         {
@@ -111,9 +111,7 @@ public class ScheduleUtils
 
             // 表达式调度构建器
             CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
-            cronScheduleBuilder = handleCronScheduleMisfirePolicy(job, cronScheduleBuilder);
-
-            CronTrigger trigger = getCronTrigger(scheduler, job.getJobId());
+            cronScheduleBuilder = handleCronScheduleMisfirePolicy(job, cronScheduleBuilder);            
 
             // 按新的cronExpression表达式重新构建trigger
             trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(cronScheduleBuilder).build();

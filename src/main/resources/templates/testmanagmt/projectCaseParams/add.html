@@ -35,9 +35,20 @@
 	</div>
     <div th:include="include::footer"></div>
     <script type="text/javascript">
-		var prefix = ctx + "testmanagmt/projectCaseParams"
+		var prefix = ctx + "testmanagmt/projectCaseParams";
+		
+		$.validator.setDefaults({
+			ignore:":hidden:not(select)",
+			submitHandler : function() {
+				save();
+			}
+		});
+		
 		$("#form-projectCaseParams-add").validate({
 			rules:{
+				projectId:{
+					required:true,
+				},
 				paramsName:{
 					required:true,
         			maxlength: 50,

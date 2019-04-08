@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-taskExecute-edit" th:object="${taskExecute}">
+            <input id="taskId" name="taskId" th:field="*{taskId}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">调度ID：</label>
+				<div class="col-sm-8">
+					<input id="schedulingId" name="schedulingId" th:field="*{schedulingId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">项目ID：</label>
+				<div class="col-sm-8">
+					<input id="projectId" name="projectId" th:field="*{projectId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">任务名称：</label>
+				<div class="col-sm-8">
+					<input id="taskName" name="taskName" th:field="*{taskName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">状态 0未执行 1执行中 2 成功 4失败 5 唤起客户端失败：</label>
+				<div class="col-sm-8">
+					<input id="taskStatus" name="taskStatus" th:field="*{taskStatus}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">总用例数：</label>
+				<div class="col-sm-8">
+					<input id="caseTotalCount" name="caseTotalCount" th:field="*{caseTotalCount}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">成功数：</label>
+				<div class="col-sm-8">
+					<input id="caseSuccCount" name="caseSuccCount" th:field="*{caseSuccCount}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">失败数：</label>
+				<div class="col-sm-8">
+					<input id="caseFailCount" name="caseFailCount" th:field="*{caseFailCount}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">锁定数：</label>
+				<div class="col-sm-8">
+					<input id="caseLockCount" name="caseLockCount" th:field="*{caseLockCount}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">未执行用例：</label>
+				<div class="col-sm-8">
+					<input id="caseNoexecCount" name="caseNoexecCount" th:field="*{caseNoexecCount}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">任务结束时间：</label>
+				<div class="col-sm-8">
+					<input id="finishTime" name="finishTime" th:field="*{finishTime}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创建者：</label>
+				<div class="col-sm-8">
+					<input id="createBy" name="createBy" th:field="*{createBy}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创建时间：</label>
+				<div class="col-sm-8">
+					<input id="createTime" name="createTime" th:field="*{createTime}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">更新者：</label>
+				<div class="col-sm-8">
+					<input id="updateBy" name="updateBy" th:field="*{updateBy}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">更新时间：</label>
+				<div class="col-sm-8">
+					<input id="updateTime" name="updateTime" th:field="*{updateTime}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "testexecution/taskExecute";
+		$("#form-taskExecute-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-taskExecute-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

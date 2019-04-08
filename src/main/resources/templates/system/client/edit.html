@@ -6,6 +6,7 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-client-edit" th:object="${client}">
             <input id="clientId" name="clientId" th:field="*{clientId}"  type="hidden">
+            <input id="jobId" name="jobId" th:field="*{jobId}"  type="hidden">
             <input id="status" name="status" value='2' type="hidden"/>
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">客户端名称：</label>
@@ -45,7 +46,7 @@
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">备注：</label>
 				<div class="col-sm-8">
-					<textarea id="remark" name="remark" th:field="*{remark}" class="form-control" type="text"></textarea>
+					<textarea id="remark" name="remark" th:field="*{remark}" class="form-control"></textarea>
 				</div>
 			</div>
 		</form>
@@ -131,6 +132,7 @@
 
         function edit() {
         	var clientId = $("input[name='clientId']").val();
+        	var jobId = $("input[name='jobId']").val();
         	var clientName = $("input[name='clientName']").val();
         	var clientIp = $("input[name='clientIp']").val();
         	var checkinterval = $("input[name='checkinterval']").val();
@@ -144,6 +146,7 @@
         		url : ctx + "system/client/edit",
         		data : {
         			"clientId":clientId,
+        			"jobId":jobId,
         			"clientName": clientName,
         			"clientIp": clientIp,
         			"checkinterval": checkinterval,

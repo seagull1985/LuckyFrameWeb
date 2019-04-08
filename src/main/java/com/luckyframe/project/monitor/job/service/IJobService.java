@@ -25,6 +25,14 @@ public interface IJobService
      * @return 调度任务对象信息
      */
     public Job selectJobById(Long jobId);
+    
+    /**
+     * 通过调度任务方法参数查询调度信息
+     * 
+     * @param jobId 调度任务ID
+     * @return 调度任务对象信息
+     */
+    public Job selectJobByMethodParams(String methodParams);
 
     /**
      * 暂停任务
@@ -33,6 +41,13 @@ public interface IJobService
      * @return 结果
      */
     public int pauseJob(Job job);
+    
+    /**
+     * 停止单次任务
+     * 
+     * @param job 调度信息
+     */
+    public int pauseOnceJob(Job job);
 
     /**
      * 恢复任务
@@ -88,7 +103,7 @@ public interface IJobService
      * @param job 调度信息
      * @return 结果
      */
-    public int updateJobCron(Job job);
+    public int updateJob(Job job);
     
     /**
      * 校验cron表达式是否有效
@@ -97,4 +112,5 @@ public interface IJobService
      * @return 结果
      */
     public boolean checkCronExpressionIsValid(String cronExpression);
+    
 }

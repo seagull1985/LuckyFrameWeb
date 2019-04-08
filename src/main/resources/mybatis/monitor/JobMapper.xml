@@ -49,6 +49,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where job_id = #{jobId}
 	</select>
 	
+	<select id="selectJobByMethodParams" parameterType="String" resultMap="JobResult">
+		<include refid="selectJobVo"/>
+		where method_params = #{methodParams}
+	</select>
+	
 	<delete id="deleteJobById" parameterType="Long">
  		delete from sys_job where job_id = #{jobId}
  	</delete>
@@ -89,7 +94,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null and status != ''">status,</if>
  			<if test="remark != null and remark != ''">remark,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
- 			create_time
+ 			<if test="updateBy != null and updateBy != ''">update_by,</if>
+ 			create_time,update_time
  		)values(
  			<if test="jobId != null and jobId != 0">#{jobId},</if>
  			<if test="jobName != null and jobName != ''">#{jobName},</if>
@@ -101,7 +107,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null and status != ''">#{status},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
- 			sysdate()
+ 			<if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+ 			sysdate(),sysdate()
  		)
 	</insert>
 

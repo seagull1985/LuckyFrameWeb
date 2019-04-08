@@ -15,12 +15,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.luckyframe.common.constant.JobConstants;
+import com.luckyframe.common.constant.ScheduleConstants;
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
 import com.luckyframe.framework.web.domain.AjaxResult;
 import com.luckyframe.framework.web.page.TableDataInfo;
+import com.luckyframe.project.monitor.job.domain.Job;
+import com.luckyframe.project.monitor.job.service.IJobService;
 import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.system.client.service.IClientService;
 import com.luckyframe.project.system.project.service.IProjectService;
@@ -42,6 +47,9 @@ public class ClientController extends BaseController
 	
     @Autowired
     private IProjectService projectService;
+    
+    @Autowired
+    private IJobService jobService;
 	
 	@RequiresPermissions("system:client:view")
 	@GetMapping()
@@ -96,7 +104,25 @@ public class ClientController extends BaseController
 	@Transactional(rollbackFor = Exception.class)
 	@ResponseBody
 	public AjaxResult addSave(Client client)
-	{		
+	{
+		int result = 0;
+		Job job=new Job();
+    	job.setJobName(JobConstants.JOB_JOBNAME_FOR_CLIENTHEART);
+    	job.setJobGroup(JobConstants.JOB_GROUPNAME_FOR_CLIENTHEART);
+    	job.setMethodName(JobConstants.JOB_METHODNAME_FOR_CLIENTHEART);
+    	job.setMethodParams(client.getClientIp());
+    	job.setCronExpression("0/"+client.getCheckinterval().toString()+" * * * * ? ");
+    	job.setMisfirePolicy(ScheduleConstants.MISFIRE_DO_NOTHING);
+    	job.setStatus(JobConstants.JOB_STATUS_FOR_CLIENTHEART);
+    	job.setRemark("");
+    	/*在公共调度表中插入数据*/
+    	result = jobService.insertJobCron(job);
+    	if(result<1){
+    		return AjaxResult.error();
+    	}
+    	/*在调度预约表中插入数据*/
+    	client.setJobId(job.getJobId().intValue());
+    	
 		return toAjax(clientService.insertClient(client));
 	}
 
@@ -120,7 +146,17 @@ public class ClientController extends BaseController
 	@PostMapping("/edit")
 	@ResponseBody
 	public AjaxResult editSave(Client client)
-	{		
+	{
+		int result = 0;
+		Job job=jobService.selectJobById(client.getJobId().longValue());
+    	job.setMethodParams(client.getClientIp());
+    	job.setCronExpression("0/"+client.getCheckinterval().toString()+" * * * * ? ");
+    	/*在公共调度表中插入数据*/
+    	result = jobService.updateJob(job);
+    	if(result<1){
+    		return AjaxResult.error();
+    	}
+    	
 		return toAjax(clientService.updateClient(client));
 	}
 	
@@ -132,8 +168,15 @@ public class ClientController extends BaseController
 	@PostMapping( "/remove")
 	@ResponseBody
 	public AjaxResult remove(String ids)
-	{		
-		return toAjax(clientService.deleteClientByIds(ids));
+	{
+        try
+        {
+        	return toAjax(clientService.deleteClientByIds(ids));
+        }
+        catch (BusinessException e)
+        {
+            return error(e.getMessage());
+        }		
 	}
 	
     /**
@@ -169,6 +212,22 @@ public class ClientController extends BaseController
 	{
 		List<String> driverPathList = clientService.selectClientDriverListById(clientId);
 		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(driverPathList));
+		return jsonArray.toJSONString();
+	}
+    
+	/**
+	 * 通过项目ID获取客户端列表
+	 * @param projectId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年3月26日
+	 */
+    @GetMapping("/getClientListByProjectId/{projectId}")
+	@ResponseBody
+	public String getClientListByProjectId(@PathVariable("projectId") Integer projectId)
+	{
+    	List<Client> clientList = clientService.selectClientsByProjectId(projectId);
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(clientList));
 		return jsonArray.toJSONString();
 	}
 }

@@ -1,0 +1,245 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								项目：
+								<select id="projectId" name="projectId" th:with="type=${projects}" onchange="setSchedulingList()">
+								    <option value="">所有项目</option>
+	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}"></option>
+	                            </select>
+							</li>
+							
+							<li>
+								调度任务：
+								<select id="schedulingId" name="schedulingId" th:with="type=${schedulings}">
+								    <option value="">所有调度</option>
+	                                <option th:each="schedulings : ${type}" th:text="${schedulings.schedulingName}" th:value="${schedulings.schedulingId}"></option>
+	                            </select>
+							</li>
+
+							<li>
+								任务名称：<input type="text" name="taskName"/>
+							</li>
+
+							<li>
+								状态：<select name="taskStatus" th:with="type=${@dict.getType('task_execute_status')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+							</li>
+
+							<li class="select-time">
+								<label>时间： </label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+								<span>-</span>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+							</li>
+							
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testexecution:taskExecute:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var removeFlag = [[${@permission.hasPermi('testexecution:taskExecute:remove')}]];
+        var prefix = ctx + "testexecution/taskExecute";
+        var schedulingPrefix = ctx + "testexecution/taskScheduling";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "测试任务执行",
+				search: false,
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'taskId', 
+					title : '任务ID',
+					visible: false
+				},
+				{
+					field : 'schedulingId', 
+					title : '调度ID',
+					visible: false
+				},
+				{
+					field : 'project.projectName', 
+					title : '项目名称',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'taskName', 
+					title : '任务名称',
+					width : '25%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'updateTime', 
+					title : '开始时间',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'finishTime', 
+					title : '结束时间',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'taskStatus', 
+					title : '任务状态',
+					width : '15%',
+					class : 'myTDLengthHidden',
+					formatter : function(value,
+							row, index) {
+						if(value==1||value==0){
+					 	 	var hdiv = '<div class="progress progress-striped active progress-bar-warning" style="margin-bottom:0px">'+
+							'<div id="progress'+row.taskId+'" class="progress-bar progress-bar-success" aria-valuemax="100"'+ 
+							'aria-valuemin="0" aria-valuenow="0" style="width:0%;text-align:center">0%</div></div>';
+							refreshProgress(row.id);
+						    return hdiv;					
+						}else if(value==2){
+							return "执行完成";
+						}else if(value==3){
+							return "执行失败";
+						}else if(value==4){
+							return "唤起客户端失败";
+						}else{
+							return "异常状态";
+						}						
+					}
+				},
+				{
+					field : 'caseTotalCount', 
+					title : '总用例数',
+					width : '5%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'caseSuccCount', 
+					title : '成功数',
+					width : '5%',
+					class : 'myTDLengthHidden',
+					formatter : function(value,
+							row, index) {
+						return '<a style="color:#00bf5f">'	+ value + '</a> ';
+					}
+				},
+				{
+					field : 'caseFailCount', 
+					title : '失败数',
+					width : '5%',
+					class : 'myTDLengthHidden',
+					formatter : function(value,
+							row, index) {
+						return '<a style="color:#ff0000">'	+ value + '</a> ';
+					}
+				},
+				{
+					field : 'caseLockCount', 
+					title : '锁定数',
+					width : '5%',
+					class : 'myTDLengthHidden',
+					formatter : function(value,
+							row, index) {
+						return '<a style="color:#FF7F00">'	+ value + '</a> ';
+					}
+				},
+				{
+					field : 'caseNoexecCount', 
+					title : '未执行用例',
+					width : '5%',
+					class : 'myTDLengthHidden',
+					formatter : function(value,
+							row, index) {
+						return '<a style="color:#6A5ACD">'	+ value + '</a> ';
+					}
+				}]
+            };
+            $.table.init(options);
+        });
+        
+        /*设置调度*/
+        function setSchedulingList(){
+          var projectId = $("#projectId").val();
+          if($.common.isEmpty(projectId)) return;
+          var url =schedulingPrefix + "/getSchedulingListByProjectId/"+projectId;
+          var options = "";
+          $.getJSON(url, null, function call(result) {
+        	   /*清空原有调度列表*/
+        	   while($("#schedulingId").length>1){
+        		  $("#schedulingId option[index='1']").remove();
+        	    }
+        	   /*设置新的调度列表*/
+        	    options +=  "<option value=''>所有调度</option>";
+               $.each(result, function(i, node){
+        		  options +=  "<option value='"+node.schedulingId+"'>"+node.schedulingName+"</option>";
+        	    }); 
+        	    $("#schedulingId").html(options);
+          });
+         }
+
+		 /*刷新进度条*/
+		 function refreshProgress(id){
+		   var url ="/tastExecute/progressdata.do?id="+id;
+		   $.ajax({
+		   	type:"GET",
+		   	url:url,
+		   	cache:false,
+		   	dataType:"json",
+		   	success:function (result){
+		       	if(result.data[1]!=null&&result.data[1]<=100&&result.data[1]>0){
+		       		document.getElementById("casetotal"+id).innerText = result.data[7];
+		       		$('#progress'+id).css('width', result.data[1]+'%');
+		       		document.getElementById("progress"+id).innerText  = result.data[1]+'%';
+		       		$('#progress'+id).attr("aria-valuenow",result.data[1]);
+		       	}
+		       	if(result.data[1]==100){
+		       		document.getElementById("finishtime"+id).innerText = result.data[2];
+		       		document.getElementById("casesucc"+id).innerText = result.data[3];
+		       		document.getElementById("casefail"+id).innerText = result.data[4];
+		       		document.getElementById("caselock"+id).innerText = result.data[5];
+		       		document.getElementById("casenoexec"+id).innerText = result.data[6];
+		       		
+		       		if(result.data[2]!=null){
+		       			clearTimeout(t);
+		       		}	 		    		
+		  		}
+		   	}
+		   	});
+		       var t=setTimeout("refreshProgress("+id+")", 3000);
+		 }
+    </script>
+</body>
+</html>

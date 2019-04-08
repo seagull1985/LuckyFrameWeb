@@ -389,6 +389,8 @@ insert into sys_menu values('119',  '用例模块', '4', '2', '/testmanagmt/proj
 insert into sys_menu values('120',  '协议模板', '4', '3', '/testmanagmt/projectProtocolTemplate', 'C', '0', 'testmanagmt:projectProtocolTemplate:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '协议模板管理菜单');
 insert into sys_menu values('121',  '测试计划', '4', '4', '/testmanagmt/projectPlan', 'C', '0', 'testmanagmt:projectPlan:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '测试计划菜单');
 insert into sys_menu values('122',  '公共参数', '4', '5', '/testmanagmt/projectCaseParams', 'C', '0', 'testmanagmt:projectCaseParams:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例公共参数菜单');
+insert into sys_menu values('123',  '任务调度', '5', '1', '/testexecution/taskScheduling', 'C', '0', 'testexecution:taskScheduling:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '测试任务调度菜单');
+insert into sys_menu values('124',  '任务执行', '5', '2', '/testexecution/taskExecute', 'C', '0', 'testexecution:taskExecute:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '测试任务执行菜单');
 -- 三级菜单
 insert into sys_menu values('500',  '操作日志', '110', '1', '/monitor/operlog',    'C', '0', 'monitor:operlog:view',     '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '操作日志菜单');
 insert into sys_menu values('501',  '登录日志', '110', '2', '/monitor/logininfor', 'C', '0', 'monitor:logininfor:view',  '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '登录日志菜单');
@@ -510,6 +512,22 @@ insert into sys_menu
 values('1084','参数修改','122','3','#','F','0','testmanagmt:projectCaseParams:edit','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
 insert into sys_menu 
 values('1085','参数删除','122','4','#','F','0','testmanagmt:projectCaseParams:remove','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+-- 调度任务按钮
+insert into sys_menu 
+values('1086','调度查询','123','1','#','F','0','testexecution:taskScheduling:list','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+insert into sys_menu 
+values('1087','调度新增','123','2','#','F','0','testexecution:taskScheduling:add','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+insert into sys_menu 
+values('1088','调度修改','123','3','#','F','0','testexecution:taskScheduling:edit','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+insert into sys_menu 
+values('1089','调度删除','123','4','#','F','0','testexecution:taskScheduling:remove','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+insert into sys_menu 
+values('1090','调度执行','123','5','#','F','0','testexecution:taskScheduling:execution','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+-- 任务执行按钮
+insert into sys_menu 
+values('1091','执行查询','124','1','#','F','0','testexecution:taskExecute:list','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+insert into sys_menu 
+values('1092','执行删除','124','1','#','F','0','testexecution:taskExecute:remove','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
 
 -- ----------------------------
 -- 16、用户和角色关联表  用户N-1角色
@@ -795,6 +813,11 @@ insert into sys_dict_data values(35, 3,  'JSONARR对象', '2',  'testmanagmt_tem
 insert into sys_dict_data values(36, 4,  'File对象', '3',  'testmanagmt_templateparams_type',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型 File对象');
 insert into sys_dict_data values(37, 5,  'Number对象', '4',  'testmanagmt_templateparams_type',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型 Number对象');
 insert into sys_dict_data values(38, 6,  'Boolean对象', '5',  'testmanagmt_templateparams_type',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '模板参数类型 Boolean对象');
+insert into sys_dict_data values(39, 1,  '未执行', '0',  'task_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '任务执行状态');
+insert into sys_dict_data values(40, 2,  '执行中', '1',  'task_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '任务执行状态');
+insert into sys_dict_data values(41, 3,  '执行完成', '2',  'task_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '任务执行状态');
+insert into sys_dict_data values(42, 4,  '执行失败', '3',  'task_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '任务执行状态');
+insert into sys_dict_data values(43, 5,  '唤起客户端失败', '4',  'task_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '任务执行状态');
 /*HTTP请求方法*/
 insert into sys_dict_data values(1000, 1,  'HttpClientPost发送Post请求', 'HttpClientPost',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用HttpClient发送post请求');
 insert into sys_dict_data values(1001, 2,  'HttpClientGet发送Get请求', 'HttpClientGet',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用HttpClient发送get请求');
@@ -959,13 +982,13 @@ create table sys_user_online (
 -- ----------------------------
 drop table if exists sys_job;
 create table sys_job (
-  job_id 		      int(11) 	    not null auto_increment    comment '任务ID',
-  job_name            varchar(64)   default ''                 comment '任务名称',
-  job_group           varchar(64)   default ''                 comment '任务组名',
-  method_name         varchar(500)  default ''                 comment '任务方法',
+  job_id 		      int(11) 	    not null auto_increment    comment '调度任务ID',
+  job_name            varchar(64)   default ''                 comment '调度任务名称',
+  job_group           varchar(64)   default ''                 comment '调度任务组名',
+  method_name         varchar(500)  default ''                 comment '调度任务方法',
   method_params       varchar(50)   default null               comment '方法参数',
   cron_expression     varchar(255)  default ''                 comment 'cron执行表达式',
-  misfire_policy      varchar(20)   default '3'                comment '计划执行错误策略（1立即执行 2执行一次 3放弃执行）',
+  misfire_policy      varchar(20)   default '3'                comment '计划执行策略（1立即执行 2执行一次 3放弃执行）',
   status              char(1)       default '0'                comment '状态（0正常 1暂停）',
   create_by           varchar(64)   default ''                 comment '创建者',
   create_time         datetime                                 comment '创建时间',
@@ -1029,6 +1052,7 @@ drop table if exists sys_client;
 create table sys_client
 (
   client_id       int(8)      not null AUTO_INCREMENT comment '客户端ID',
+  job_id 		  int(11) 	  not null                comment '心跳任务ID',
   client_name     varchar(30) not null                comment '客户端名称',
   client_ip       varchar(30) not null                comment '客户端IP',
   status          int(2)                              comment '客户端状态 0 正常 1 链接失败 2 状态未知',
@@ -1222,3 +1246,51 @@ create table project_case_params
   remark                varchar(200)                             comment '备注',
   primary key (params_id)
 ) engine=innodb default charset=utf8 comment = '用例公共参数';
+
+-- ----------------------------
+-- 40、测试任务调度
+-- ----------------------------
+drop table if exists task_scheduling;
+create table task_scheduling
+(
+  scheduling_id         int(10)         not null AUTO_INCREMENT  comment '调度ID',
+  scheduling_name       varchar(50)     not null                 comment '调度名称',
+  job_id 		        int(11) 	    not null                 comment '调度任务ID',
+  project_id            int(8)          not null                 comment '项目ID',
+  plan_id               int(9)          not null                 comment '测试计划ID', 
+  client_id             int(8)          not null                 comment '客户端ID',
+  email_send_condition  int(2)          default 0                comment '发送邮件通知时的具体逻辑, -1-不通知 0-全部，1-成功，2-失败',
+  email_address         varchar(300)                             comment '邮件通知地址',
+  building_link         varchar(200)                             comment 'jenkins构建链接',
+  remote_shell          varchar(200)                             comment '远程执行Shell脚本',
+  ex_thread_count       int(8)          not null                 comment '客户端执行线程数',
+  task_type             int(2)          not null default 0       comment '任务类型 0 接口 1 Web UI 2 移动',
+  browser_type          int(2)                                   comment 'UI自动化浏览器类型 0 IE 1 火狐 2 谷歌 3 Edge',
+  task_timeout          int(8)          not null default 60      comment '任务超时时间(分钟)',
+  client_driver_path    varchar(100)                             comment '客户端测试驱动桩路径',
+  primary key (scheduling_id)
+) engine=innodb default charset=utf8 comment = '测试任务调度';
+
+-- ----------------------------
+-- 41、测试任务执行
+-- ----------------------------
+drop table if exists task_execute;
+create table task_execute
+(
+  task_id               int(10)         not null AUTO_INCREMENT  comment '任务ID',
+  scheduling_id         int(10)         not null                 comment '调度ID',
+  project_id            int(8)          not null                 comment '项目ID',
+  task_name             varchar(150)    not null                 comment '任务名称',
+  task_status           int(2)          default 0                comment '状态 0未执行 1执行中 2执行完成 3执行失败 4唤起客户端失败',
+  case_total_count      int(8)                                   comment '总用例数',
+  case_succ_count       int(8)                                   comment '成功数',
+  case_fail_count       int(8)                                   comment '失败数',
+  case_lock_count       int(8)                                   comment '锁定数',
+  case_noexec_count     int(8)          default 0                comment '未执行用例',
+  finish_time           datetime                                 comment '任务结束时间',
+  create_by             varchar(64)     default ''               comment '创建者',
+  create_time 	        datetime                                 comment '创建时间',
+  update_by             varchar(64)     default ''               comment '更新者',
+  update_time           datetime                                 comment '更新时间',
+  primary key (task_id)
+) engine=innodb default charset=utf8 comment = '测试任务执行';

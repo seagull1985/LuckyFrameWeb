@@ -1,0 +1,200 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								项目：
+								<select id="projectId" name="projectId" th:with="type=${projects}">
+								    <option value="">所有项目</option>
+	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}"></option>
+	                            </select>
+							</li>
+							
+							<li>
+								调度名称：<input type="text" name="schedulingName"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="testexecution:taskScheduling:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="testexecution:taskScheduling:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testexecution:taskScheduling:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('testexecution:taskScheduling:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('testexecution:taskScheduling:remove')}]];
+        var prefix = ctx + "testexecution/taskScheduling";
+        var jobPrefix = ctx + "monitor/job";
+        var statusFlag = [[${@permission.hasPermi('testexecution:taskScheduling:edit')}]];
+        var detailFlag = [[${@permission.hasPermi('testexecution:taskScheduling:view')}]];
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "测试任务调度",
+				search: false,
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'schedulingId', 
+					title : '调度ID',
+					visible: false,
+					sortable: true
+				},
+				{
+					field : 'jobId', 
+					title : '调度任务ID',
+					visible: false
+				},
+				{
+					field : 'schedulingName', 
+					title : '调度名称',
+					width : '15%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'project.projectName', 
+					title : '项目名称',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'projectPlan.planName', 
+					title : '计划名称',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'job.misfirePolicy', 
+					title : '调度策略',
+					width : '10%',
+					class : 'myTDLengthHidden',
+					formatter: function(value, row, index) {
+						if(value=='3'){
+							return '默认执行';
+						}else if(value=='2'){
+							return '执行一次';
+						}else if(value=='1'){
+							return '启动执行';
+						}else if(value=='0'){
+							return '暂停执行';
+						}else{
+							return '异常数据';
+						}
+					}
+				},
+				{
+					field : 'job.cronExpression', 
+					title : 'Cron表达式',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'client.clientIp', 
+					title : '客户端IP',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'exThreadCount', 
+					title : '线程数',
+					width : '5%',
+					class : 'myTDLengthHidden'
+				},
+				{
+		        	visible: statusFlag == 'hidden' ? false : true,
+				    title: '任务状态',
+				    align: 'center',
+				    width : '10%',
+				    formatter: function (value, row, index) {
+				    	return statusTools(row);
+				    }
+				},
+				{
+					field : 'job.updateTime', 
+					title : '更新时间',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+					width : '10%',
+					class : 'myTDLengthHidden',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-primary btn-xs ' + statusFlag + '" href="#" onclick="run(\'' + row.jobId + '\')"><i class="fa fa-play-circle-o"></i> 执行</a> ');
+		                /* actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="#" onclick="$.operate.detail(\'' + row.schedulingId + '\')"><i class="fa fa-search"></i>详细</a> '); */
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+        
+		/* 调度任务状态显示 */
+		function statusTools(row) {
+		    if (row.job.status == '1') {
+    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="start(\'' + row.jobId + '\',\''+ row.job.misfirePolicy+ '\')"></i> ';
+    		} else {
+    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="stop(\'' + row.jobId + '\',\''+ row.job.misfirePolicy+ '\')"></i> ';
+    		}
+		}
+		
+		/* 立即执行一次 */
+		function run(jobId) {
+			$.modal.confirm("确认要立即执行任务吗？", function() {
+				$.operate.post(jobPrefix + "/run", { "jobId": jobId});
+		    })
+		}
+
+		/* 调度任务-停用 */
+		function stop(jobId,misfirePolicy) {
+			$.modal.confirm("确认要停用任务吗？", function() {
+				$.operate.post(jobPrefix + "/changeStatus", { "jobId": jobId, "status": 1, "misfirePolicy":misfirePolicy });
+		    })
+		}
+
+		/* 调度任务-启用 */
+		function start(jobId,misfirePolicy) {
+			$.modal.confirm("确认要启用任务吗？", function() {
+				$.operate.post(jobPrefix + "/changeStatus", { "jobId": jobId, "status": 0, "misfirePolicy":misfirePolicy });
+		    })
+		}
+    </script>
+</body>
+</html>

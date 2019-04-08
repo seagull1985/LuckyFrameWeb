@@ -8,12 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luckyframe.common.constant.ClientConstants;
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.support.Convert;
 import com.luckyframe.common.utils.StringUtils;
+import com.luckyframe.project.monitor.job.domain.Job;
+import com.luckyframe.project.monitor.job.service.IJobService;
 import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.system.client.domain.ClientProject;
 import com.luckyframe.project.system.client.mapper.ClientMapper;
 import com.luckyframe.project.system.client.mapper.ClientProjectMapper;
+import com.luckyframe.project.testexecution.taskScheduling.mapper.TaskSchedulingMapper;
 
 /**
  * 客户端管理 服务层实现
@@ -29,6 +33,12 @@ public class ClientServiceImpl implements IClientService
 	
 	@Autowired
 	private ClientProjectMapper clientProjectMapper;
+	
+	@Autowired
+	private TaskSchedulingMapper taskSchedulingMapper;
+	
+    @Autowired
+    private IJobService jobService;
 
 	/**
      * 查询客户端管理信息
@@ -110,9 +120,25 @@ public class ClientServiceImpl implements IClientService
 	@Override
 	public int deleteClientByIds(String ids)
 	{
+		String[] clientIds=Convert.toStrArray(ids);
+		for(String clientIdStr:clientIds){
+			int clientId=Integer.valueOf(clientIdStr);
+			if(taskSchedulingMapper.selectTaskSchedulingCountByClientId(clientId)>0){
+				throw new BusinessException(String.format("【%1$s】已绑定任务调度,不能删除", clientMapper.selectClientById(clientId).getClientName()));
+			}
+		}
+		
+		for(String clientIdStr:clientIds){
+			int clientId=Integer.valueOf(clientIdStr);
+			Client client = clientMapper.selectClientById(clientId);
+			Job job = new Job();
+			job.setJobId(client.getJobId().longValue());
+			jobService.deleteJob(job);
+		}
+
 		//先删除客户端与项目关联关系
-		clientProjectMapper.deleteClientProjectByIds(Convert.toStrArray(ids));
-		return clientMapper.deleteClientByIds(Convert.toStrArray(ids));
+		clientProjectMapper.deleteClientProjectByIds(clientIds);
+		return clientMapper.deleteClientByIds(clientIds);
 	}
 	
 	/**

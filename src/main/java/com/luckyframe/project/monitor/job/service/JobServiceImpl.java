@@ -1,11 +1,15 @@
 package com.luckyframe.project.monitor.job.service;
 
+import java.util.Date;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
+
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.luckyframe.common.constant.ScheduleConstants;
 import com.luckyframe.common.support.Convert;
 import com.luckyframe.common.utils.security.ShiroUtils;
@@ -45,7 +49,7 @@ public class JobServiceImpl implements IJobService
             }
             else
             {
-                ScheduleUtils.updateScheduleJob(scheduler, job);
+                ScheduleUtils.updateScheduleJob(scheduler, job, cronTrigger);
             }
         }
     }
@@ -73,6 +77,18 @@ public class JobServiceImpl implements IJobService
     {
         return jobMapper.selectJobById(jobId);
     }
+    
+    /**
+     * 通过调度任务方法参数查询调度信息
+     * 
+     * @param jobId 调度任务ID
+     * @return 调度任务对象信息
+     */
+    @Override
+    public Job selectJobByMethodParams(String methodParams)
+    {
+        return jobMapper.selectJobByMethodParams(methodParams);
+    }
 
     /**
      * 暂停任务
@@ -84,6 +100,24 @@ public class JobServiceImpl implements IJobService
     {
         job.setStatus(ScheduleConstants.Status.PAUSE.getValue());
         job.setUpdateBy(ShiroUtils.getLoginName());
+        job.setUpdateTime(new Date());
+        int rows = jobMapper.updateJob(job);
+        if (rows > 0)
+        {
+            ScheduleUtils.pauseJob(scheduler, job.getJobId());
+        }
+        return rows;
+    }
+    
+    /**
+     * 停止单次任务
+     * 
+     * @param job 调度信息
+     */
+    @Override
+    public int pauseOnceJob(Job job)
+    {
+        job.setStatus(ScheduleConstants.Status.PAUSE.getValue());
         int rows = jobMapper.updateJob(job);
         if (rows > 0)
         {
@@ -102,6 +136,7 @@ public class JobServiceImpl implements IJobService
     {
         job.setStatus(ScheduleConstants.Status.NORMAL.getValue());
         job.setUpdateBy(ShiroUtils.getLoginName());
+        job.setUpdateTime(new Date());
         int rows = jobMapper.updateJob(job);
         if (rows > 0)
         {
@@ -184,7 +219,10 @@ public class JobServiceImpl implements IJobService
     public int insertJobCron(Job job)
     {
         job.setCreateBy(ShiroUtils.getLoginName());
-        job.setStatus(ScheduleConstants.Status.PAUSE.getValue());
+        job.setCreateTime(new Date());
+        job.setUpdateBy(ShiroUtils.getLoginName());
+        job.setUpdateTime(new Date());
+        //job.setStatus(ScheduleConstants.Status.PAUSE.getValue());
         int rows = jobMapper.insertJob(job);
         if (rows > 0)
         {
@@ -199,13 +237,15 @@ public class JobServiceImpl implements IJobService
      * @param job 调度信息
      */
     @Override
-    public int updateJobCron(Job job)
+    public int updateJob(Job job)
     {
         job.setUpdateBy(ShiroUtils.getLoginName());
+        job.setUpdateTime(new Date());
         int rows = jobMapper.updateJob(job);
         if (rows > 0)
         {
-            ScheduleUtils.updateScheduleJob(scheduler, job);
+        	CronTrigger trigger = ScheduleUtils.getCronTrigger(scheduler, job.getJobId());
+            ScheduleUtils.updateScheduleJob(scheduler, job, trigger);
         }
         return rows;
     }
@@ -221,4 +261,5 @@ public class JobServiceImpl implements IJobService
     {
         return CronUtils.isValid(cronExpression);
     }
+    
 }
