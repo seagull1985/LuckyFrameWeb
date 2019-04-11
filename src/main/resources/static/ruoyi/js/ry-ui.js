@@ -25,6 +25,8 @@
                 _rightFixedColumns = $.common.isEmpty(options.rightFixedColumns) ? false : options.rightFixedColumns;
                 _rightFixedNumber = $.common.isEmpty(options.rightFixedNumber) ? 0 : options.rightFixedNumber;
                 _onEditableSave = $.common.isEmpty(options.onEditableSave) ? "" : options.onEditableSave;
+                _detailView = $.common.isEmpty(options.detailView) ? false : options.detailView;
+                _onExpandRow = $.common.isEmpty(options.onExpandRow) ? false : options.onExpandRow;
                 $('#bootstrap-table').bootstrapTable({
                     url: options.url,                                   // 请求后台的URL（*）
                     contentType: "application/x-www-form-urlencoded",   // 编码类型
@@ -60,6 +62,8 @@
                     responseHandler: $.table.responseHandler,           // 在加载服务器发送来的数据之前处理函数
                     onLoadSuccess: $.table.onLoadSuccess,               // 当所有数据被加载时触发处理函数
                     onEditableSave: _onEditableSave,                    // 行内编辑启用
+                    detailView: _detailView,                            //是否显示父子表
+                    onExpandRow: _onExpandRow,                          //加载子列表
                 });
             },           
             // 查询条件
@@ -1015,7 +1019,16 @@
             endWith: function(value, end) {
                 var reg = new RegExp(end + "$");
                 return reg.test(value)
-            }
+            },
+   		    /*格式化时间戳*/
+            formatTime: function(time) {
+   			    if(null!=time){
+   				  var date = new Date(time + 8 * 3600 * 1000); // 增加8小时
+   				  return date.toJSON().substr(0, 19).replace('T', ' ');
+   			    }else{
+   				  return "";
+   			    }
+   		    }
         }
     });
 })(jQuery);

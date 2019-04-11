@@ -2,6 +2,8 @@ package com.luckyframe.project.testexecution.taskExecute.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
@@ -48,12 +51,21 @@ public class TaskExecuteController extends BaseController
 	
 	@RequiresPermissions("testexecution:taskExecute:view")
 	@GetMapping()
-	public String taskExecute(ModelMap mmap)
+	public String taskExecute(HttpServletRequest req, ModelMap mmap)
 	{
+		String schedulingIdStr = req.getParameter("schedulingId");
         List<Project> projects=projectService.selectProjectAll(0);
         mmap.put("projects", projects);
         List<TaskScheduling> schedulings = taskSchedulingService.selectTaskSchedulingList(new TaskScheduling());
         mmap.put("schedulings", schedulings);
+        if(StringUtils.isNotEmpty(schedulingIdStr)){
+        	Integer schedulingId = Integer.valueOf(schedulingIdStr);
+        	if(StringUtils.isNotEmpty(schedulingId)){
+            	TaskScheduling taskScheduling = taskSchedulingService.selectTaskSchedulingById(schedulingId);
+            	mmap.put("defaultProjectId", taskScheduling.getProjectId());
+            	mmap.put("defaultSchedulingId", schedulingId);
+        	}
+        }
 	    return prefix + "/taskExecute";
 	}
 	

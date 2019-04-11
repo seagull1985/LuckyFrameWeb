@@ -49,6 +49,16 @@ public class TaskExecute extends BaseEntity
 	private Date updateTime;
 	/** 关联项目实体 */
 	private Project project;
+	/** 任务执行百分比 */
+	private Integer taskProgress;
+
+	public Integer getTaskProgress() {
+		return taskProgress;
+	}
+
+	public void setTaskProgress(Integer taskProgress) {
+		this.taskProgress = taskProgress;
+	}
 
 	public Project getProject() {
 		return project;

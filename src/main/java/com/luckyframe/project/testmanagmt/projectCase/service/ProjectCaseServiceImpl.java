@@ -53,7 +53,7 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
      */
 	@Override
 	public List<ProjectCase> selectProjectCaseList(ProjectCase projectCase)
-	{
+	{		
 	    return projectCaseMapper.selectProjectCaseList(projectCase);
 	}
 	
@@ -70,6 +70,19 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
 		ProjectCase projectCase = new ProjectCase();
 		projectCase.setProjectId(projectId);
 	    return projectCaseMapper.selectProjectCaseList(projectCase);
+	}
+	
+	/**
+	 * 根据计划ID查询用例列表
+	 * @param projectCase
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月10日
+	 */
+	@Override
+	public List<ProjectCase> selectProjectCaseListForPlan(ProjectCase projectCase)
+	{
+	    return projectCaseMapper.selectProjectCaseListForPlan(projectCase);
 	}
 	
     /**

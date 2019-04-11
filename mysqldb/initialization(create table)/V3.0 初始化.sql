@@ -391,6 +391,7 @@ insert into sys_menu values('121',  '测试计划', '4', '4', '/testmanagmt/proj
 insert into sys_menu values('122',  '公共参数', '4', '5', '/testmanagmt/projectCaseParams', 'C', '0', 'testmanagmt:projectCaseParams:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例公共参数菜单');
 insert into sys_menu values('123',  '任务调度', '5', '1', '/testexecution/taskScheduling', 'C', '0', 'testexecution:taskScheduling:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '测试任务调度菜单');
 insert into sys_menu values('124',  '任务执行', '5', '2', '/testexecution/taskExecute', 'C', '0', 'testexecution:taskExecute:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '测试任务执行菜单');
+insert into sys_menu values('125',  '用例明细', '5', '3', '/testexecution/taskCaseExecute', 'C', '0', 'testexecution:taskCaseExecute:view', '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例明细菜单');
 -- 三级菜单
 insert into sys_menu values('500',  '操作日志', '110', '1', '/monitor/operlog',    'C', '0', 'monitor:operlog:view',     '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '操作日志菜单');
 insert into sys_menu values('501',  '登录日志', '110', '2', '/monitor/logininfor', 'C', '0', 'monitor:logininfor:view',  '#', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '登录日志菜单');
@@ -527,7 +528,14 @@ values('1090','调度执行','123','5','#','F','0','testexecution:taskScheduling
 insert into sys_menu 
 values('1091','执行查询','124','1','#','F','0','testexecution:taskExecute:list','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
 insert into sys_menu 
-values('1092','执行删除','124','1','#','F','0','testexecution:taskExecute:remove','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+values('1092','执行删除','124','2','#','F','0','testexecution:taskExecute:remove','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+-- 用例明细按钮
+insert into sys_menu 
+values('1093','用例明细查询','125','1','#','F','0','testexecution:taskCaseExecute:list','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+insert into sys_menu 
+values('1094','用例明细删除','125','2','#','F','0','testexecution:taskCaseExecute:remove','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+insert into sys_menu 
+values('1095','用例明细执行','125','3','#','F','0','testexecution:taskCaseExecute:execution','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
 
 -- ----------------------------
 -- 16、用户和角色关联表  用户N-1角色
@@ -818,6 +826,11 @@ insert into sys_dict_data values(40, 2,  '执行中', '1',  'task_execute_status
 insert into sys_dict_data values(41, 3,  '执行完成', '2',  'task_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '任务执行状态');
 insert into sys_dict_data values(42, 4,  '执行失败', '3',  'task_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '任务执行状态');
 insert into sys_dict_data values(43, 5,  '唤起客户端失败', '4',  'task_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '任务执行状态');
+insert into sys_dict_data values(44, 1,  '通过', '0',  'case_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例执行状态');
+insert into sys_dict_data values(45, 2,  '失败', '1',  'case_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例执行状态');
+insert into sys_dict_data values(46, 3,  '锁定', '2',  'case_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例执行状态');
+insert into sys_dict_data values(47, 4,  '执行中', '3',  'case_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例执行状态');
+insert into sys_dict_data values(48, 5,  '未执行', '4',  'case_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例执行状态');
 /*HTTP请求方法*/
 insert into sys_dict_data values(1000, 1,  'HttpClientPost发送Post请求', 'HttpClientPost',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用HttpClient发送post请求');
 insert into sys_dict_data values(1001, 2,  'HttpClientGet发送Get请求', 'HttpClientGet',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用HttpClient发送get请求');
@@ -1253,7 +1266,7 @@ create table project_case_params
 drop table if exists task_scheduling;
 create table task_scheduling
 (
-  scheduling_id         int(10)         not null AUTO_INCREMENT  comment '调度ID',
+  scheduling_id         int(8)         not null AUTO_INCREMENT  comment '调度ID',
   scheduling_name       varchar(50)     not null                 comment '调度名称',
   job_id 		        int(11) 	    not null                 comment '调度任务ID',
   project_id            int(8)          not null                 comment '项目ID',
@@ -1277,20 +1290,58 @@ create table task_scheduling
 drop table if exists task_execute;
 create table task_execute
 (
-  task_id               int(10)         not null AUTO_INCREMENT  comment '任务ID',
-  scheduling_id         int(10)         not null                 comment '调度ID',
-  project_id            int(8)          not null                 comment '项目ID',
-  task_name             varchar(150)    not null                 comment '任务名称',
-  task_status           int(2)          default 0                comment '状态 0未执行 1执行中 2执行完成 3执行失败 4唤起客户端失败',
-  case_total_count      int(8)                                   comment '总用例数',
-  case_succ_count       int(8)                                   comment '成功数',
-  case_fail_count       int(8)                                   comment '失败数',
-  case_lock_count       int(8)                                   comment '锁定数',
-  case_noexec_count     int(8)          default 0                comment '未执行用例',
-  finish_time           datetime                                 comment '任务结束时间',
-  create_by             varchar(64)     default ''               comment '创建者',
-  create_time 	        datetime                                 comment '创建时间',
-  update_by             varchar(64)     default ''               comment '更新者',
-  update_time           datetime                                 comment '更新时间',
+  task_id               int(8)         not null AUTO_INCREMENT  comment '任务ID',
+  scheduling_id         int(8)         not null                 comment '调度ID',
+  project_id            int(8)         not null                 comment '项目ID',
+  task_name             varchar(150)   not null                 comment '任务名称',
+  task_status           int(2)         default 0                comment '状态 0未执行 1执行中 2执行完成 3执行失败 4唤起客户端失败',
+  case_total_count      int(8)                                  comment '总用例数',
+  case_succ_count       int(8)                                  comment '成功数',
+  case_fail_count       int(8)                                  comment '失败数',
+  case_lock_count       int(8)                                  comment '锁定数',
+  case_noexec_count     int(8)         default 0                comment '未执行用例',
+  finish_time           datetime                                comment '任务结束时间',
+  create_by             varchar(64)    default ''               comment '创建者',
+  create_time 	        datetime                                comment '创建时间',
+  update_by             varchar(64)    default ''               comment '更新者',
+  update_time           datetime                                comment '更新时间',
   primary key (task_id)
 ) engine=innodb default charset=utf8 comment = '测试任务执行';
+
+-- ----------------------------
+-- 42、用例执行情况
+-- ----------------------------
+drop table if exists task_case_execute;
+create table task_case_execute
+(
+  task_case_id          int(8)         not null AUTO_INCREMENT  comment '用例执行ID',
+  task_id               int(8)         not null                 comment '任务ID',
+  project_id            int(8)         not null                 comment '项目ID',
+  case_id               int(8)         not null                 comment '用例ID',
+  case_sign             varchar(20)    not null                 comment '用例标识',
+  case_name             varchar(200)   not null                 comment '用例名称',
+  case_status           int(2)         not null default 4       comment '用例执行状态 0通过 1失败 2锁定 3执行中 4未执行',
+  finish_time           datetime                                comment '用例结束时间',
+  create_by             varchar(64)    default ''               comment '创建者',
+  create_time 	        datetime                                comment '创建时间',
+  update_by             varchar(64)    default ''               comment '更新者',
+  update_time           datetime                                comment '更新时间',
+  primary key (task_case_id)
+) engine=innodb default charset=utf8 comment = '任务用例执行记录';
+
+-- ----------------------------
+-- 43、用例日志明细
+-- ----------------------------
+drop table if exists task_case_log;
+create table task_case_log
+(
+  log_id                int(8)         not null AUTO_INCREMENT  comment '日志ID',
+  task_case_id          int(8)         not null                 comment '用例执行ID',
+  task_id               int(8)         not null                 comment '任务ID',
+  log_detail            varchar(5000)  not null                 comment '日志明细',
+  log_grade             varchar(20)                             comment '日志级别',
+  log_step              varchar(20)                             comment '日志用例步骤',
+  imgname               varchar(50)                             comment 'UI自动化自动截图地址',
+  create_time 	        datetime                                comment '创建时间',
+  primary key (log_id)
+) engine=innodb default charset=utf8 comment = '用例日志明细';

@@ -72,6 +72,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          order by pc.case_id desc
     </select>
     
+    <select id="selectProjectCaseListForPlan" parameterType="ProjectCase" resultMap="ProjectCaseResult">
+        select pc.case_id, pc.case_serial_number, pc.case_sign, pc.case_name, pc.project_id, pc.module_id, pc.case_type, pc.failcontinue, pc.create_by, pc.create_time, pc.update_by, pc.update_time, pc.remark,
+        pcm.module_name,
+        ppc.plan_case_id, ppc.plan_id, ppc.priority  
+        from project_case pc 
+        left join project_case_module pcm on pc.module_id = pcm.module_id 
+        left join project_plan_case ppc on pc.case_id = ppc.case_id
+        <where>  
+            <if test="caseId != null "> and pc.case_id = #{caseId}</if>
+            <if test="caseSerialNumber != null "> and pc.case_serial_number = #{caseSerialNumber}</if>
+            <if test="caseSign != null  and caseSign != '' "> and pc.case_sign like concat('%', #{caseSign}, '%')</if>
+            <if test="caseName != null  and caseName != '' "> and pc.case_name like concat('%', #{caseName}, '%')</if>
+            <if test="projectId != null "> and pc.project_id = #{projectId}</if>
+            <if test="moduleId != null "> and pc.module_id = #{moduleId}</if>
+            <if test="caseType != null "> and pc.case_type = #{caseType}</if>
+            <if test="failcontinue != null "> and pc.failcontinue = #{failcontinue}</if>
+            <if test="createBy != null  and createBy != '' "> and pc.create_by = #{createBy}</if>
+            <if test="createTime != null "> and pc.create_time = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != '' "> and pc.update_by = #{updateBy}</if>
+            <if test="updateTime != null "> and pc.update_time = #{updateTime}</if>
+            <if test="remark != null  and remark != '' "> and pc.remark = #{remark}</if>
+            <if test="planId != null and flag == false"> and (ppc.plan_id = #{planId} or ppc.plan_id is null)</if>
+            <if test="planId != null and flag == true"> and ppc.plan_id = #{planId}</if>
+         </where>
+         order by pc.case_id desc
+    </select>
+    
     <select id="selectProjectCaseById" parameterType="Integer" resultMap="ProjectCaseResult">
         <include refid="selectProjectCaseVo"/>
         where pc.case_id = #{caseId}

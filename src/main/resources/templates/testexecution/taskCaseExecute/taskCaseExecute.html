@@ -1,0 +1,281 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+						   <li>
+								项目：
+								<select id="projectId" name="projectId" th:with="type=${projects}" onchange="setSchedulingList()">
+								    <option value="">所有项目</option>
+	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == defaultProjectId}"></option>
+	                            </select>
+							</li>
+							
+							<li>
+								任务名称：
+								<select id="taskId" name="taskId" th:with="type=${taskExecutes}">
+								    <option value="">所有任务</option>
+	                                <option th:each="taskExecutes : ${type}" th:text="${taskExecutes.taskName}" th:value="${taskExecutes.taskId}" th:selected="${taskExecutes.taskId == defaultTaskId}"></option>
+	                            </select>
+							</li>
+
+							<li>
+								用例标识：<input type="text" name="caseSign"/>
+							</li>
+
+							<li>
+								用例名称：<input type="text" name="caseName"/>
+							</li>
+							
+							<li>
+								用例状态：<select name="caseStatus" th:with="type=${@dict.getType('case_execute_status')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+							</li>
+
+							<li class="select-time">
+								<label>时间： </label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+								<span>-</span>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="testexecution:taskCaseExecute:execution">
+					<i class="fa fa-forward"></i> 执行全部非成功用例
+				</a>
+				<a class="btn btn-info btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testexecution:taskCaseExecute:execution">
+					<i class="fa fa-play"></i> 执行所选用例
+				</a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('testexecution:taskCaseExecute:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('testexecution:taskCaseExecute:remove')}]];
+        var prefix = ctx + "testexecution/taskCaseExecute";
+        var logPrefix = ctx + "testexecution/taskCaseLog";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "任务用例执行记录",
+				search: false,
+				queryParams: function(params) {
+	            	return {
+	        			// 传递参数查询参数
+	                    pageSize:       params.limit,
+	                    pageNum:        params.offset / params.limit + 1,
+	                    searchValue:    params.search,
+	                    orderByColumn:  params.sort,
+	                    isAsc:          params.order,
+	                    taskId:         $('#taskId').val(),
+	                    projectId:      $('#projectId').val()
+	        		};
+				},
+		        showExport: true,
+		        detailView : true, //是否显示父子表
+                columns: [{
+		            checkbox: true,
+					formatter : function(value,
+							row, index) {
+						if(row.caseStatus==0){
+			                return {  
+			                    disabled : "disabled",//设置是否可用
+			                }; 
+						}
+
+					}
+		        },
+				{
+					field : 'taskCaseId', 
+					title : '用例执行ID',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'taskId', 
+					title : '任务ID',
+					visible: false
+				},
+				{
+					field : 'projectId', 
+					title : '项目ID',
+					visible: false
+				},
+				{
+					field : 'caseSign', 
+					title : '用例标识',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'caseName', 
+					title : '用例名称',
+					width : '50%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'updateTime', 
+					title : '开始时间',
+					width : '15%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'finishTime', 
+					title : '结束时间',
+					width : '15%',
+					class : 'myTDLengthHidden',
+					formatter : function(value,
+							row, index) {
+						if(value==null){
+							return "";
+						}else{
+							return value;
+						}
+					}
+				},
+				{
+					field : 'caseStatus', 
+					title : '用例状态',
+					width : '10%',
+					sortable: true,
+					class : 'myTDLengthHidden',
+					formatter : function(value,
+							row, index) {
+						if(value==0){
+							return '<font style="color:#00bf5f">通过</font>';
+						}else if(value==1){
+							return '<font style="color:#ff0000">失败</font>';
+						}else if(value==2){
+							return '<font style="color:#FF7F00">锁定</font>';
+						}else if(value==3){
+							return '<font style="color:#0066FF">执行中</font>';
+						}else{
+							return '<font style="color:#9966FF">未执行</font>';
+						}
+					}
+				}],
+				//注册加载子表的事件。注意下这里的三个参数！
+				onExpandRow : function(index, row, $detail) {
+					InitSubTable(index, row, $detail);
+				}
+            };
+            
+          //初始化子表格(无线循环)
+		  InitSubTable = function(index, row, $detail) {
+				var cur_table = $detail.html('<table></table>').find('table');
+				$(cur_table).bootstrapTable({
+					url : logPrefix + "/list",
+					method : 'get',
+					queryParams : {
+	                    taskCaseId:   row.taskCaseId
+					},
+					clickToSelect : false,
+					detailView : false,//父子表
+					uniqueId : "logId",
+					columns : [{
+						field : 'logId',
+						title : '序号',
+						width : '3%',
+						formatter : function(value, row, index) {  
+							return '<p align="center">'+(index+1)+'</p>';  
+				         } 
+					},  
+					{
+						field : 'logStep',
+						title : '步骤编号',
+						width : '4%',
+						formatter : function(value,
+								row, index) {
+							if(value!="ending"){
+								return "步骤_"+value;
+							}else{
+								return '<font style="color:#00bf5f">'+value+'</font>';
+							}
+							
+						}
+					}, {
+						field : 'logDetail',
+						title : '日志明细',
+						width : '75%',
+						cellStyle : function (value, row, index, field) {
+							if(row.logGrade!="info"){
+								  return {
+									    css: {"color": "#ff0000"}
+									  };
+							 }else{
+								  return {
+									    css: {"color": "#00bf5f"}
+									  };
+							 }
+							}
+					}, {
+						field : 'createTime',
+						title : '日志时间',
+						width : '10%',
+						formatter : function(value,
+								row, index) {
+							return $.common.formatTime(value);
+						}
+					}, {
+						field : 'logGrade',
+						title : '日志级别',
+						width : '8%',
+						formatter : function(value,
+								row, index) {
+							if(row.imgname==null){
+								if(value!='info'){
+									if(row.logDetail.indexOf('测试结果：')>0){
+										return '<font style="color:#ff0000">'+value+'</font>&nbsp;&nbsp;&nbsp;&nbsp;'+
+										'<a href="#" onclick="updateStep('+row.logId+')">同步结果</a> ';
+									}else{
+									    return '<font style="color:#ff0000">'+value+'</font>';
+									}
+								}else{
+									return '<font style="color:#00bf5f">'+value+'</font>';
+								}								
+							}else{
+								return '<font style="color:#ff0000">'+value+'</font>&nbsp;&nbsp;&nbsp;&nbsp;'+
+								'<a href="javascript:window.open(\'/logDetail/showImage.do?filename='+ row.imgname+ '.png&logid='+row.logId+'\')">错误截图</a> ';
+							}
+						}
+					}, ],
+					//无线循环取子表，直到子表里面没有记录
+					onExpandRow : function(index, row, $Subdetail) {
+						oInit.InitSubTable(index, row, $Subdetail);
+					},
+
+				});
+          };
+                
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

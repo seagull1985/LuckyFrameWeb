@@ -29,6 +29,15 @@ public interface ProjectCaseMapper
 	public List<ProjectCase> selectProjectCaseList(ProjectCase projectCase);
 	
 	/**
+	 * 查询计划中的用例列表
+	 * @param projectCase
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月10日
+	 */
+	public List<ProjectCase> selectProjectCaseListForPlan(ProjectCase projectCase);
+	
+	/**
      * 新增项目测试用例管理
      * 
      * @param projectCase 项目测试用例管理信息

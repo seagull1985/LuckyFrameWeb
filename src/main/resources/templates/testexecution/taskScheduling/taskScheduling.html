@@ -51,10 +51,11 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('testexecution:taskScheduling:edit')}]];
         var removeFlag = [[${@permission.hasPermi('testexecution:taskScheduling:remove')}]];
-        var prefix = ctx + "testexecution/taskScheduling";
-        var jobPrefix = ctx + "monitor/job";
-        var statusFlag = [[${@permission.hasPermi('testexecution:taskScheduling:edit')}]];
+        var statusFlag = [[${@permission.hasPermi('testexecution:taskScheduling:execution')}]];
         var detailFlag = [[${@permission.hasPermi('testexecution:taskScheduling:view')}]];
+        var prefix = ctx + "testexecution/taskScheduling";
+        var taskPrefix = ctx + "testexecution/taskExecute";
+        var jobPrefix = ctx + "monitor/job";
 
         $(function() {
             var options = {
@@ -84,7 +85,11 @@
 					field : 'schedulingName', 
 					title : '调度名称',
 					width : '15%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+					formatter : function(value,
+							row, index) {
+						return '<a href="#" onclick="taskExcute('+row.schedulingId+')">'+ value + '</a> ';
+					}
 				},
 				{
 					field : 'project.projectName', 
@@ -194,6 +199,12 @@
 			$.modal.confirm("确认要启用任务吗？", function() {
 				$.operate.post(jobPrefix + "/changeStatus", { "jobId": jobId, "status": 0, "misfirePolicy":misfirePolicy });
 		    })
+		}
+		
+		/* 测试任务查询 */
+		function taskExcute(schedulingId) {
+			var url = taskPrefix + '?schedulingId=' + schedulingId;
+			createMenuItem(url, "任务执行");
 		}
     </script>
 </body>

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
@@ -72,6 +73,13 @@ public class ProjectCaseController extends BaseController
 	@ResponseBody
 	public TableDataInfo list(ProjectCase projectCase)
 	{
+		if(StringUtils.isNotEmpty(projectCase.getModuleId())){
+			ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleById(projectCase.getModuleId());
+			if(projectCaseModule.getParentId()==0){
+				projectCase.setModuleId(null);
+			}
+		}
+		
 		startPage();
         List<ProjectCase> list = projectCaseService.selectProjectCaseList(projectCase);
 		return getDataTable(list);

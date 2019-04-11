@@ -10,11 +10,11 @@
 				<form id="formId">
 					<div class="select-list">
 						<ul>
-							<li>
+						   <li>
 								项目：
 								<select id="projectId" name="projectId" th:with="type=${projects}" onchange="setSchedulingList()">
 								    <option value="">所有项目</option>
-	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}"></option>
+	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == defaultProjectId}"></option>
 	                            </select>
 							</li>
 							
@@ -22,7 +22,7 @@
 								调度任务：
 								<select id="schedulingId" name="schedulingId" th:with="type=${schedulings}">
 								    <option value="">所有调度</option>
-	                                <option th:each="schedulings : ${type}" th:text="${schedulings.schedulingName}" th:value="${schedulings.schedulingId}"></option>
+	                                <option th:each="schedulings : ${type}" th:text="${schedulings.schedulingName}" th:value="${schedulings.schedulingId}" th:selected="${schedulings.schedulingId == defaultSchedulingId}"></option>
 	                            </select>
 							</li>
 
@@ -68,6 +68,7 @@
         var removeFlag = [[${@permission.hasPermi('testexecution:taskExecute:remove')}]];
         var prefix = ctx + "testexecution/taskExecute";
         var schedulingPrefix = ctx + "testexecution/taskScheduling";
+        var caseExecutePrefix = ctx + "testexecution/taskCaseExecute";
 
         $(function() {
             var options = {
@@ -78,6 +79,18 @@
 				exportUrl: prefix + "/export",
                 modalName: "测试任务执行",
 				search: false,
+				queryParams: function(params) {
+	            	return {
+	        			// 传递参数查询参数
+	                    pageSize:       params.limit,
+	                    pageNum:        params.offset / params.limit + 1,
+	                    searchValue:    params.search,
+	                    orderByColumn:  params.sort,
+	                    isAsc:          params.order,
+	                    schedulingId:   $('#schedulingId').val(),
+	                    projectId:      $('#projectId').val()
+	        		};
+				},
 		        showExport: true,
                 columns: [{
 		            checkbox: true
@@ -102,7 +115,11 @@
 					field : 'taskName', 
 					title : '任务名称',
 					width : '25%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+					formatter : function(value,
+							row, index) {
+						return '<a href="#" onclick="caseExcuteDetail('+row.taskId+')">'+ value + '</a> ';
+					}
 				},
 				{
 					field : 'updateTime', 
@@ -114,7 +131,14 @@
 					field : 'finishTime', 
 					title : '结束时间',
 					width : '10%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+					formatter : function(value,
+							row, index) {
+						if(value==null){
+							value = '等待任务结束...';
+						}
+						return '<font id="finishtime' + row.taskId + '">'+value+'</font>';
+					}
 				},
 				{
 					field : 'taskStatus', 
@@ -127,8 +151,8 @@
 					 	 	var hdiv = '<div class="progress progress-striped active progress-bar-warning" style="margin-bottom:0px">'+
 							'<div id="progress'+row.taskId+'" class="progress-bar progress-bar-success" aria-valuemax="100"'+ 
 							'aria-valuemin="0" aria-valuenow="0" style="width:0%;text-align:center">0%</div></div>';
-							refreshProgress(row.id);
-						    return hdiv;					
+							refreshProgress(row.taskId);
+						    return  '<font id="progressFont' + row.taskId + '">'+hdiv+'</font>';					
 						}else if(value==2){
 							return "执行完成";
 						}else if(value==3){
@@ -153,7 +177,7 @@
 					class : 'myTDLengthHidden',
 					formatter : function(value,
 							row, index) {
-						return '<a style="color:#00bf5f">'	+ value + '</a> ';
+						return '<a id="casesucc'+row.taskId+'" style="color:#00bf5f">'	+ value + '</a> ';
 					}
 				},
 				{
@@ -163,7 +187,7 @@
 					class : 'myTDLengthHidden',
 					formatter : function(value,
 							row, index) {
-						return '<a style="color:#ff0000">'	+ value + '</a> ';
+						return '<a id="casefail'+row.taskId+'" style="color:#ff0000">'	+ value + '</a> ';
 					}
 				},
 				{
@@ -173,17 +197,17 @@
 					class : 'myTDLengthHidden',
 					formatter : function(value,
 							row, index) {
-						return '<a style="color:#FF7F00">'	+ value + '</a> ';
+						return '<a id="caselock'+row.taskId+'" style="color:#FF7F00">'	+ value + '</a> ';
 					}
 				},
 				{
 					field : 'caseNoexecCount', 
-					title : '未执行用例',
+					title : '未完成',
 					width : '5%',
 					class : 'myTDLengthHidden',
 					formatter : function(value,
 							row, index) {
-						return '<a style="color:#6A5ACD">'	+ value + '</a> ';
+						return '<a id="casenoexec'+row.taskId+'" style="color:#6A5ACD">'	+ value + '</a> ';
 					}
 				}]
             };
@@ -211,34 +235,44 @@
          }
 
 		 /*刷新进度条*/
-		 function refreshProgress(id){
-		   var url ="/tastExecute/progressdata.do?id="+id;
-		   $.ajax({
-		   	type:"GET",
-		   	url:url,
-		   	cache:false,
-		   	dataType:"json",
-		   	success:function (result){
-		       	if(result.data[1]!=null&&result.data[1]<=100&&result.data[1]>0){
-		       		document.getElementById("casetotal"+id).innerText = result.data[7];
-		       		$('#progress'+id).css('width', result.data[1]+'%');
-		       		document.getElementById("progress"+id).innerText  = result.data[1]+'%';
-		       		$('#progress'+id).attr("aria-valuenow",result.data[1]);
-		       	}
-		       	if(result.data[1]==100){
-		       		document.getElementById("finishtime"+id).innerText = result.data[2];
-		       		document.getElementById("casesucc"+id).innerText = result.data[3];
-		       		document.getElementById("casefail"+id).innerText = result.data[4];
-		       		document.getElementById("caselock"+id).innerText = result.data[5];
-		       		document.getElementById("casenoexec"+id).innerText = result.data[6];
-		       		
-		       		if(result.data[2]!=null){
-		       			clearTimeout(t);
-		       		}	 		    		
-		  		}
-		   	}
-		   	});
-		       var t=setTimeout("refreshProgress("+id+")", 3000);
+		 function refreshProgress(taskId){
+		   var url = caseExecutePrefix + "/getProgressBarByTaskId/"+taskId;
+		   $.getJSON(url, null, function call(result) {
+	       		document.getElementById("casesucc"+taskId).innerText = result.caseSuccCount;
+	       		document.getElementById("casefail"+taskId).innerText = result.caseFailCount;
+	       		document.getElementById("caselock"+taskId).innerText = result.caseLockCount;
+	       		document.getElementById("casenoexec"+taskId).innerText = result.caseNoexecCount;
+	       		
+		       	if(result.taskStatus==0||result.taskStatus==1){
+		       		//document.getElementById("casetotal"+taskId).innerText = result.caseTotalCount;
+		       		$('#progress'+taskId).css('width', result.taskProgress+'%');
+		       		document.getElementById("progress"+taskId).innerText  = result.taskProgress+'%';
+		       		$('#progress'+taskId).attr("aria-valuenow",result.taskProgress);
+		       	}else if(result.taskStatus==2){
+		       		document.getElementById("progressFont"+taskId).innerText = "执行完成";
+		       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
+		       		clearTimeout(t);
+				}else if(result.taskStatus==3){
+		       		document.getElementById("progressFont"+taskId).innerText = "执行失败";
+		       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
+		       		clearTimeout(t);
+				}else if(result.taskStatus==4){
+		       		document.getElementById("progressFont"+taskId).innerText = "唤起客户端失败";
+		       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
+		       		clearTimeout(t);
+				}else{
+		       		document.getElementById("progressFont"+taskId).innerText = "异常状态";
+		       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
+		       		clearTimeout(t);
+				}
+		   });
+		   var t=setTimeout("refreshProgress("+taskId+")", 2000);
+		 }
+		 
+		 /* 测试用例执行明细 */
+		 function caseExcuteDetail(taskId) {
+				var url = caseExecutePrefix + '?taskId=' + taskId;
+				createMenuItem(url, "用例明细");
 		 }
     </script>
 </body>

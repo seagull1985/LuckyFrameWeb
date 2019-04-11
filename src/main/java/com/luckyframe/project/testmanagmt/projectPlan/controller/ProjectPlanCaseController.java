@@ -71,9 +71,16 @@ public class ProjectPlanCaseController extends BaseController
 	@ResponseBody
 	public TableDataInfo list(ProjectCase projectCase)
 	{
+		if(StringUtils.isNotEmpty(projectCase.getModuleId())){
+			ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleById(projectCase.getModuleId());
+			if(projectCaseModule.getParentId()==0){
+				projectCase.setModuleId(null);
+			}
+		}
+		
 		startPage();
 		/**获取项目下的用例集合*/
-		List<ProjectCase> projectCaseList = projectCaseService.selectProjectCaseList(projectCase);
+		List<ProjectCase> projectCaseList = projectCaseService.selectProjectCaseListForPlan(projectCase);
 		
 		List<ProjectPlanCase> projectPlanCaseList = projectPlanCaseService.selectProjectPlanCaseListByPlanId(projectCase.getPlanId());
 		/**用例集合优先级以及标识*/
@@ -88,6 +95,7 @@ public class ProjectPlanCaseController extends BaseController
 				}
 			}
 		}
+		
 		return getDataTable(projectCaseList);
 	}
 	

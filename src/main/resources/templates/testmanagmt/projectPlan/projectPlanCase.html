@@ -14,22 +14,27 @@
 					<div class="select-list">
 						<ul>
 							<li>
-								用例名称：<input type="text" name="caseName"/>
+								用例名称：<input type="text" name="caseName" />
 							</li>
 
 							<li>
 								模块：
-								<input type="text" onclick="selectModuleTree()" id="treeName" readonly="true" value=""/>
+								<input type="text" style="width:150px;" onclick="selectModuleTree()" id="treeName" readonly="true" value=""/>
 							</li>
 
 							<li>
 								用例类型：
-								<select name="caseType" th:with="type=${@dict.getType('testmanagmt_case_type')}">
+								<select name="caseType" style="width:150px;" th:with="type=${@dict.getType('testmanagmt_case_type')}">
 									<option value="">所有</option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
 								</select>
 							</li>
 
+							<li>
+							    <label style="vertical-align:middle;height:25px">计划用例：</label>
+								<input type="checkbox" name="flag" style="width:20px;height:20px;cursor: pointer;"/>								
+							</li>
+							
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm" onclick="resetForm()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -91,7 +96,8 @@
 	                    searchValue:    params.search,
 	                    orderByColumn:  params.sort,
 	                    isAsc:          params.order,
-	                    planId:         $('#planId').val()
+	                    planId:         $('#planId').val(),
+	                    projectId:      $('#projectId').val()
 	        		};
 				},
 		        showExport: true,
@@ -124,6 +130,7 @@
 					field : 'priority',
 					title : '执行优先级',
 					width : '8%',
+					sortable: true,
 					editable : {
 						type : 'text',
 						title : '执行优先级',

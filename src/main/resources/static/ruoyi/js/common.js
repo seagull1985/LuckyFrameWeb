@@ -129,15 +129,24 @@ function createMenuItem(dataUrl, menuName) {
     flag = true;
     if (dataUrl == undefined || $.trim(dataUrl).length == 0) return false;
     var topWindow = $(window.parent.document);
+    
+    // 创建选项卡带了参数时，data-id唯一标识截取？前的字符
+    var dataId = "";
+    if(dataUrl.indexOf('?')>=0){
+    	dataId = dataUrl.substring(0,dataUrl.indexOf('?'));
+    }else{
+    	dataId = dataUrl;
+    }   
+    
     // 选项卡菜单已存在
     $('.menuTab', topWindow).each(function() {
-        if ($(this).data('id') == dataUrl) {
+        if ($(this).data('id') == dataId) {
             if (!$(this).hasClass('active')) {
                 $(this).addClass('active').siblings('.menuTab').removeClass('active');
                 $('.page-tabs-content').animate({ marginLeft: ""}, "fast");
                 // 显示tab对应的内容区
                 $('.mainContent .RuoYi_iframe', topWindow).each(function() {
-                    if ($(this).data('id') == dataUrl) {
+                    if ($(this).data('id') == dataId) {
                         $(this).show().siblings('.RuoYi_iframe').hide();
                         return false;
                     }
@@ -147,13 +156,14 @@ function createMenuItem(dataUrl, menuName) {
             return false;
         }
     });
+
     // 选项卡菜单不存在
     if (flag) {
-        var str = '<a href="javascript:;" class="active menuTab" data-id="' + dataUrl + '">' + menuName + ' <i class="fa fa-times-circle"></i></a>';
+        var str = '<a href="javascript:;" class="active menuTab" data-id="' + dataId + '">' + menuName + ' <i class="fa fa-times-circle"></i></a>';
         $('.menuTab', topWindow).removeClass('active');
 
         // 添加选项卡对应的iframe
-        var str1 = '<iframe class="RuoYi_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" seamless></iframe>';
+        var str1 = '<iframe class="RuoYi_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataId + '" seamless></iframe>';
         $('.mainContent', topWindow).find('iframe.RuoYi_iframe').hide().parents('.mainContent').append(str1);
 
         // 添加选项卡

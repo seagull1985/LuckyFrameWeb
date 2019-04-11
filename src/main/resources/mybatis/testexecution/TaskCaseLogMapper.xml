@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.testexecution.taskCaseLog.mapper.TaskCaseLogMapper">
+    
+    <resultMap type="TaskCaseLog" id="TaskCaseLogResult">
+        <result property="logId"    column="log_id"    />
+        <result property="taskCaseId"    column="task_case_id"    />
+        <result property="taskId"    column="task_id"    />
+        <result property="logDetail"    column="log_detail"    />
+        <result property="logGrade"    column="log_grade"    />
+        <result property="logStep"    column="log_step"    />
+        <result property="imgname"    column="imgname"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+	
+	<sql id="selectTaskCaseLogVo">
+        select log_id, task_case_id, task_id, log_detail, log_grade, log_step, imgname, create_time from task_case_log
+    </sql>
+	
+    <select id="selectTaskCaseLogList" parameterType="TaskCaseLog" resultMap="TaskCaseLogResult">
+        <include refid="selectTaskCaseLogVo"/>
+        <where>  
+            <if test="logId != null "> and log_id = #{logId}</if>
+             <if test="taskCaseId != null "> and task_case_id = #{taskCaseId}</if>
+             <if test="taskId != null "> and task_id = #{taskId}</if>
+             <if test="logDetail != null  and logDetail != '' "> and log_detail = #{logDetail}</if>
+             <if test="logGrade != null  and logGrade != '' "> and log_grade = #{logGrade}</if>
+             <if test="logStep != null  and logStep != '' "> and log_step = #{logStep}</if>
+             <if test="imgname != null  and imgname != '' "> and imgname = #{imgname}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+         </where>
+         order by log_id asc
+    </select>
+    
+    <select id="selectTaskCaseLogById" parameterType="Integer" resultMap="TaskCaseLogResult">
+        <include refid="selectTaskCaseLogVo"/>
+        where log_id = #{logId}
+    </select>
+        
+    <insert id="insertTaskCaseLog" parameterType="TaskCaseLog" useGeneratedKeys="true" keyProperty="logId">
+        insert into task_case_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="taskCaseId != null  ">task_case_id,</if>
+			<if test="taskId != null  ">task_id,</if>
+			<if test="logDetail != null  and logDetail != ''  ">log_detail,</if>
+			<if test="logGrade != null  and logGrade != ''  ">log_grade,</if>
+			<if test="logStep != null  and logStep != ''  ">log_step,</if>
+			<if test="imgname != null  and imgname != ''  ">imgname,</if>
+			<if test="createTime != null  ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="taskCaseId != null  ">#{taskCaseId},</if>
+			<if test="taskId != null  ">#{taskId},</if>
+			<if test="logDetail != null  and logDetail != ''  ">#{logDetail},</if>
+			<if test="logGrade != null  and logGrade != ''  ">#{logGrade},</if>
+			<if test="logStep != null  and logStep != ''  ">#{logStep},</if>
+			<if test="imgname != null  and imgname != ''  ">#{imgname},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateTaskCaseLog" parameterType="TaskCaseLog">
+        update task_case_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskCaseId != null  ">task_case_id = #{taskCaseId},</if>
+            <if test="taskId != null  ">task_id = #{taskId},</if>
+            <if test="logDetail != null  and logDetail != ''  ">log_detail = #{logDetail},</if>
+            <if test="logGrade != null  and logGrade != ''  ">log_grade = #{logGrade},</if>
+            <if test="logStep != null  and logStep != ''  ">log_step = #{logStep},</if>
+            <if test="imgname != null  and imgname != ''  ">imgname = #{imgname},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+        </trim>
+        where log_id = #{logId}
+    </update>
+
+	<delete id="deleteTaskCaseLogById" parameterType="Integer">
+        delete from task_case_log where log_id = #{logId}
+    </delete>
+	
+    <delete id="deleteTaskCaseLogByIds" parameterType="String">
+        delete from task_case_log where log_id in 
+        <foreach item="logId" collection="array" open="(" separator="," close=")">
+            #{logId}
+        </foreach>
+    </delete>
+    
+</mapper>
