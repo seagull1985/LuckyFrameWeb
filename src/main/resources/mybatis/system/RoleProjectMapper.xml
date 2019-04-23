@@ -25,6 +25,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectRoleProjectVo"/>
         where role_id = #{roleId}
     </select>
+    
+    <select id="selectProjectPermsByUserId" parameterType="Long" resultType="Integer">
+		select distinct srp.project_id 
+		from sys_role_project srp 
+	    left join sys_user_role ur on srp.role_id = ur.role_id 
+		where ur.user_id = #{userId}
+	</select>
         
     <insert id="insertRoleProject" parameterType="RoleProject">
         insert into sys_role_project

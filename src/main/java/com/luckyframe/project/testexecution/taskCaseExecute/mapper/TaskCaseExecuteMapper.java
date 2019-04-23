@@ -21,12 +21,30 @@ public interface TaskCaseExecuteMapper
 	public TaskCaseExecute selectTaskCaseExecuteById(Integer taskCaseId);
 	
 	/**
+	 * 根据任务ID以及用例ID查询实体
+	 * @param taskCaseExecute
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月22日
+	 */
+	public TaskCaseExecute selectTaskCaseExecuteByTaskIdAndCaseId(TaskCaseExecute taskCaseExecute);
+	
+	/**
      * 查询任务用例执行记录列表
      * 
      * @param taskCaseExecute 任务用例执行记录信息
      * @return 任务用例执行记录集合
      */
 	public List<TaskCaseExecute> selectTaskCaseExecuteList(TaskCaseExecute taskCaseExecute);
+	
+	/**
+	 * 查询任务中所有执行未成功的用例列表
+	 * @param taskId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月23日
+	 */
+	public List<TaskCaseExecute> selectTaskCaseExecuteListForUnSucByTaskId(Integer taskId);
 	
 	/**
      * 新增任务用例执行记录
@@ -53,6 +71,15 @@ public interface TaskCaseExecuteMapper
 	public int deleteTaskCaseExecuteById(Integer taskCaseId);
 	
 	/**
+	 * 根据TaskId删除任务用例执行记录
+	 * @param taskId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月13日
+	 */
+	public int deleteTaskCaseExecuteByTaskId(Integer taskId);
+	
+	/**
      * 批量删除任务用例执行记录
      * 
      * @param taskCaseIds 需要删除的数据ID
@@ -60,4 +87,12 @@ public interface TaskCaseExecuteMapper
      */
 	public int deleteTaskCaseExecuteByIds(String[] taskCaseIds);
 	
+    /**
+     * 查询项目下有没有执行用例明细
+     * @param projectId
+     * @return
+     * @author Seagull
+     * @date 2019年4月12日
+     */
+    public int selectTaskCaseExecuteCountByProjectId(Integer projectId);
 }

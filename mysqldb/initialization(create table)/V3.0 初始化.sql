@@ -239,8 +239,7 @@ create table sys_project (
 -- 初始化-测试项目表数据
 -- ----------------------------
 /*插入默认项目*/
-insert into sys_project values (1, '接口测试项目', 104, 'ITT');
-insert into sys_project values (2, 'UI测试项目', 106, 'UIT');
+insert into sys_project values (1, '测试项目一', 104, 'ITT');
 
 -- ----------------------------
 -- 12、用户信息表
@@ -274,7 +273,6 @@ create table sys_user (
 -- 初始化-用户信息表数据
 -- ----------------------------
 insert into sys_user values(1,  103, 'admin', 'luckyframe', '00', 'admin@luckyframe.cn', '15888888888', '1', '', '29c67a30398638269fe600f73a054934', '111111', '0', '0', '127.0.0.1', '2019-02-13 10-27-32', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '管理员');
-insert into sys_user values(2,  105, 'luckyframe',    'luckyframe', '00', 'admin@luckyframe.cn',  '15666666666', '1', '', '8e6d98b90472783cc73c17047ddccf36', '222222', '0', '0', '127.0.0.1', '2019-02-13 10-27-32', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '测试员');
 
 
 -- ----------------------------
@@ -551,7 +549,6 @@ create table sys_user_role (
 -- 初始化-用户和角色关联表数据
 -- ----------------------------
 insert into sys_user_role values ('1', '1');
-insert into sys_user_role values ('2', '2');
 
 
 -- ----------------------------
@@ -662,7 +659,6 @@ create table sys_role_project (
 -- 初始化-角色和项目关联表数据
 -- ----------------------------
 insert into sys_role_project values ('2', '1');
-insert into sys_role_project values ('2', '2');
 
 -- ----------------------------
 -- 8、角色和部门关联表  角色1-N部门
@@ -696,7 +692,6 @@ create table sys_user_post
 -- 初始化-用户与岗位关联表数据
 -- ----------------------------
 insert into sys_user_post values ('1', '1');
-insert into sys_user_post values ('2', '2');
 
 
 -- ----------------------------
@@ -1011,9 +1006,6 @@ create table sys_job (
   primary key (job_id, job_name, job_group)
 ) engine=innodb auto_increment=100 default charset=utf8 comment = '定时任务调度表';
 
-insert into sys_job values(1, 'ryTask', '系统默认（无参）', 'ryNoParams',  '',   '0/10 * * * * ?', '3', '1', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '');
-insert into sys_job values(2, 'ryTask', '系统默认（有参）', 'ryParams',    'luckyframe', '0/20 * * * * ?', '3', '1', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '');
-
 
 -- ----------------------------
 -- 27、定时任务调度日志表
@@ -1054,8 +1046,8 @@ create table sys_notice (
 -- ----------------------------
 -- 初始化-公告信息表数据
 -- ----------------------------
-insert into sys_notice values('1', '温馨提醒：2018-07-01 若依新版本发布啦', '2', '新版本内容', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '管理员');
-insert into sys_notice values('2', '维护通知：2018-07-01 若依系统凌晨维护', '1', '维护内容',   '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '管理员');
+insert into sys_notice values('1', '温馨提醒：2018-07-01 LuckyFrame新版本发布啦', '2', '新版本内容', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '管理员');
+insert into sys_notice values('2', '维护通知：2018-07-01 LuckyFrame系统凌晨维护', '1', '维护内容',   '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '管理员');
 
 
 -- ----------------------------
@@ -1305,7 +1297,8 @@ create table task_execute
   create_time 	        datetime                                comment '创建时间',
   update_by             varchar(64)    default ''               comment '更新者',
   update_time           datetime                                comment '更新时间',
-  primary key (task_id)
+  primary key (task_id),
+  index (scheduling_id)
 ) engine=innodb default charset=utf8 comment = '测试任务执行';
 
 -- ----------------------------
@@ -1326,7 +1319,9 @@ create table task_case_execute
   create_time 	        datetime                                comment '创建时间',
   update_by             varchar(64)    default ''               comment '更新者',
   update_time           datetime                                comment '更新时间',
-  primary key (task_case_id)
+  primary key (task_case_id),
+  index (task_id),
+  index (case_id)
 ) engine=innodb default charset=utf8 comment = '任务用例执行记录';
 
 -- ----------------------------
@@ -1343,5 +1338,7 @@ create table task_case_log
   log_step              varchar(20)                             comment '日志用例步骤',
   imgname               varchar(50)                             comment 'UI自动化自动截图地址',
   create_time 	        datetime                                comment '创建时间',
-  primary key (log_id)
+  primary key (log_id),
+  index (task_case_id),
+  index (task_id)
 ) engine=innodb default charset=utf8 comment = '用例日志明细';

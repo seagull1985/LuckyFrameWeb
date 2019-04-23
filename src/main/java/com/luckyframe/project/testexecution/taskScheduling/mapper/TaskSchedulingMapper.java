@@ -86,4 +86,13 @@ public interface TaskSchedulingMapper
      * @date 2019年2月28日
      */
     public int selectTaskSchedulingCountByClientId(Integer clientId);
+    
+    /**
+     * 查询测试计划下有没有调度
+     * @param planId
+     * @return
+     * @author Seagull
+     * @date 2019年4月12日
+     */
+    public int selectTaskSchedulingCountByPlanId(Integer planId);
 }

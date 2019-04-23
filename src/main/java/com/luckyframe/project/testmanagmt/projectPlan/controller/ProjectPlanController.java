@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.poi.ExcelUtil;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
@@ -99,6 +101,9 @@ public class ProjectPlanController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(ProjectPlan projectPlan)
 	{		
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectPlan.getProjectId())){
+			return error("没有此项目保存测试计划权限");
+		}
 		return toAjax(projectPlanService.insertProjectPlan(projectPlan));
 	}
 
@@ -122,6 +127,9 @@ public class ProjectPlanController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(ProjectPlan projectPlan)
 	{		
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectPlan.getProjectId())){
+			return error("没有此项目修改测试计划权限");
+		}
 		return toAjax(projectPlanService.updateProjectPlan(projectPlan));
 	}
 	
@@ -134,7 +142,14 @@ public class ProjectPlanController extends BaseController
 	@ResponseBody
 	public AjaxResult remove(String ids)
 	{		
-		return toAjax(projectPlanService.deleteProjectPlanByIds(ids));
+        try
+        {
+    		return toAjax(projectPlanService.deleteProjectPlanByIds(ids));
+        }
+        catch (BusinessException e)
+        {
+            return error(e.getMessage());
+        }
 	}
 	
     /**

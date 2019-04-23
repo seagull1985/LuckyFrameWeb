@@ -1,11 +1,17 @@
 package com.luckyframe.project.testexecution.taskExecute.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.support.Convert;
+import com.luckyframe.common.utils.security.PermissionUtils;
+import com.luckyframe.common.utils.security.ShiroUtils;
+import com.luckyframe.project.testexecution.taskCaseExecute.mapper.TaskCaseExecuteMapper;
+import com.luckyframe.project.testexecution.taskCaseLog.mapper.TaskCaseLogMapper;
 import com.luckyframe.project.testexecution.taskExecute.domain.TaskExecute;
 import com.luckyframe.project.testexecution.taskExecute.mapper.TaskExecuteMapper;
 
@@ -20,6 +26,12 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
 {
 	@Autowired
 	private TaskExecuteMapper taskExecuteMapper;
+	
+	@Autowired
+	private TaskCaseExecuteMapper taskCaseExecuteMapper;
+	
+	@Autowired
+	private TaskCaseLogMapper taskCaseLogMapper;
 
 	/**
      * 查询测试任务执行信息
@@ -54,6 +66,10 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
 	@Override
 	public int insertTaskExecute(TaskExecute taskExecute)
 	{
+		taskExecute.setCreateBy(ShiroUtils.getLoginName());
+		taskExecute.setCreateTime(new Date());
+		taskExecute.setUpdateBy(ShiroUtils.getLoginName());
+		taskExecute.setUpdateTime(new Date());
 	    return taskExecuteMapper.insertTaskExecute(taskExecute);
 	}
 	
@@ -66,6 +82,8 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
 	@Override
 	public int updateTaskExecute(TaskExecute taskExecute)
 	{
+		taskExecute.setUpdateBy(ShiroUtils.getLoginName());
+		taskExecute.setUpdateTime(new Date());
 	    return taskExecuteMapper.updateTaskExecute(taskExecute);
 	}
 
@@ -78,7 +96,31 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
 	@Override
 	public int deleteTaskExecuteByIds(String ids)
 	{
-		return taskExecuteMapper.deleteTaskExecuteByIds(Convert.toStrArray(ids));
+		String[] taskIds=Convert.toStrArray(ids);
+		Integer result=0;
+		for(String taskIdstr:taskIds){
+			Integer taskId=Integer.valueOf(taskIdstr);
+			TaskExecute taskExecute = taskExecuteMapper.selectTaskExecuteById(taskId);
+			
+			if(!PermissionUtils.isProjectPermsPassByProjectId(taskExecute.getProjectId())){	
+				  throw new BusinessException(String.format("执行任务【%1$s】没有项目删除权限", taskExecute.getTaskName()));
+			}
+			
+			//30分钟内的任务不允许删除，防止客户端提交脏数据
+			Date date = new Date(System.currentTimeMillis()-1000*60*30);
+			boolean isTaskDeleteTime = ("0".equals(taskExecute.getTaskStatus()) || "1".equals(taskExecute.getTaskStatus()))
+					&& taskExecute.getUpdateTime().after(date);			
+			if (isTaskDeleteTime) {
+				throw new BusinessException(String.format("执行中的任务【%1$s】必须30分钟后才可以删除", taskExecute.getTaskName()));
+			}
+			
+			taskCaseLogMapper.deleteTaskCaseLogByTaskId(taskId);
+			taskCaseExecuteMapper.deleteTaskCaseExecuteByTaskId(taskId);
+			taskExecuteMapper.deleteTaskExecuteById(taskId);
+			result++;
+		}
+		
+		return result;
 	}
 	
 }

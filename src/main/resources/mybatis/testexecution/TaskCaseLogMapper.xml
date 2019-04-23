@@ -78,6 +78,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteTaskCaseLogById" parameterType="Integer">
         delete from task_case_log where log_id = #{logId}
     </delete>
+    
+    <delete id="deleteTaskCaseLogByTaskId" parameterType="Integer">
+        delete from task_case_log where task_id = #{taskId}
+    </delete>
+    
+    <delete id="deleteTaskCaseLogByTaskCaseId" parameterType="Integer">
+        delete from task_case_log where task_case_id = #{taskCaseId}
+    </delete>
 	
     <delete id="deleteTaskCaseLogByIds" parameterType="String">
         delete from task_case_log where log_id in 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.poi.ExcelUtil;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
@@ -111,7 +112,11 @@ public class ProjectController extends BaseController
 	@PostMapping("/edit")
 	@ResponseBody
 	public AjaxResult editSave(Project project)
-	{		
+	{	
+		if(!PermissionUtils.isProjectPermsPassByProjectId(project.getProjectId())){
+			return error("没有此项目保存权限");
+		}
+		
 		return toAjax(projectService.updateProject(project));
 	}
 	

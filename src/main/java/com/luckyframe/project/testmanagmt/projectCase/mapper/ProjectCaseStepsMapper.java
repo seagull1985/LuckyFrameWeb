@@ -61,4 +61,12 @@ public interface ProjectCaseStepsMapper
      */
 	public int deleteProjectCaseStepsByIds(String[] stepIds);
 	
+    /**
+     * 查询测试计划下有没有调度
+     * @param planId
+     * @return
+     * @author Seagull
+     * @date 2019年4月12日
+     */
+    public int selectProjectCaseStepsCountByTemplateId(Integer extend);
 }

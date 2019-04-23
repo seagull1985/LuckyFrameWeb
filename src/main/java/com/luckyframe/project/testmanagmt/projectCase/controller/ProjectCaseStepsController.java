@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
@@ -79,6 +80,10 @@ public class ProjectCaseStepsController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(@RequestBody List<ProjectCaseSteps> listSteps)
 	{
+		if(!PermissionUtils.isProjectPermsPassByProjectId(listSteps.get(0).getProjectId())){
+			return error("没有此项目编辑用例步骤权限");
+		}
+		
 		int result=0;
 		projectCaseStepsService.deleteProjectCaseStepsByIds(listSteps);
 		int stepSerialNumber=1;

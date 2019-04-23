@@ -19,6 +19,8 @@ public class TaskCaseLog extends BaseEntity
 	
 	/** 用例执行ID */
 	private Integer logId;
+	/** 用例ID */
+	private Integer caseId;
 	/** 用例执行ID */
 	private Integer taskCaseId;
 	/** 任务ID */
@@ -33,6 +35,14 @@ public class TaskCaseLog extends BaseEntity
 	private String imgname;
 	/** 创建时间 */
 	private Date createTime;
+
+	public Integer getCaseId() {
+		return caseId;
+	}
+
+	public void setCaseId(Integer caseId) {
+		this.caseId = caseId;
+	}
 
 	public void setLogId(Integer logId) 
 	{

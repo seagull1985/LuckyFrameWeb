@@ -53,6 +53,24 @@ public interface TaskCaseLogMapper
 	public int deleteTaskCaseLogById(Integer logId);
 	
 	/**
+	 * 根据TaskId删除日志明细
+	 * @param taskId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月13日
+	 */
+	public int deleteTaskCaseLogByTaskId(Integer taskId);
+	
+	/**
+	 * 根据TaskCaseId删除日志明细
+	 * @param taskCaseId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月23日
+	 */
+	public int deleteTaskCaseLogByTaskCaseId(Integer taskCaseId);
+	
+	/**
      * 批量删除用例日志明细
      * 
      * @param logIds 需要删除的数据ID

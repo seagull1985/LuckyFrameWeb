@@ -61,4 +61,13 @@ public interface ITaskCaseLogService
      */
 	public int deleteTaskCaseLogByIds(String ids);
 	
+	/**
+	 * 根据TaskCaseId删除执行日志
+	 * @param taskCaseId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月23日
+	 */
+	public int deleteTaskCaseLogByTaskCaseId(Integer taskCaseId);
+	
 }

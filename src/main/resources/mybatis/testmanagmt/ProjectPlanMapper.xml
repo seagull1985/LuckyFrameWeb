@@ -52,6 +52,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where pp.plan_id = #{planId}
     </select>
     
+    <select id="selectProjectPlanByPlanName" parameterType="String" resultMap="ProjectPlanResult">
+        <include refid="selectProjectPlanVo"/>
+        where pp.plan_name = #{planName}
+    </select>
+    
     <select id="checkProjectPlanNameUnique" parameterType="String" resultMap="ProjectPlanResult">
         <include refid="selectProjectPlanVo"/>
 		where pp.plan_name=#{plan_name}

@@ -104,6 +104,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where pc.case_id = #{caseId}
     </select>
     
+    <select id="selectProjectCaseByCaseSign" parameterType="String" resultMap="ProjectCaseResult">
+        <include refid="selectProjectCaseVo"/>
+        where pc.case_sign = #{caseSign}
+    </select>
+    
     <select id="selectMaxCaseSerialNumberByProjectId" parameterType="Integer" resultType="Integer">
 		select IFNULL(MAX(case_serial_number),0) from project_case where project_id=#{project_id}
 	</select>
@@ -182,4 +187,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectProjectCaseCountByModuleId" parameterType="Integer" resultType="Integer">
 		select count(1) from project_case where module_id=#{module_id}
 	</select>
+	
 </mapper>

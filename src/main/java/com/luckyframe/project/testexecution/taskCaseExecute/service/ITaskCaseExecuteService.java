@@ -21,12 +21,30 @@ public interface ITaskCaseExecuteService
 	public TaskCaseExecute selectTaskCaseExecuteById(Integer taskCaseId);
 	
 	/**
+	 * 根据taskId跟caseId查询用例执行信息
+	 * @param taskCaseExecute
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月22日
+	 */
+	public TaskCaseExecute selectTaskCaseExecuteByTaskIdAndCaseId(TaskCaseExecute taskCaseExecute);
+	
+	/**
      * 查询任务用例执行记录列表
      * 
      * @param taskCaseExecute 任务用例执行记录信息
      * @return 任务用例执行记录集合
      */
 	public List<TaskCaseExecute> selectTaskCaseExecuteList(TaskCaseExecute taskCaseExecute);
+	
+	/**
+	 * 查询执行任务中所有执行未成功的用例
+	 * @param taskId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月23日
+	 */
+	public List<TaskCaseExecute> selectTaskCaseExecuteListForUnSucByTaskId(Integer taskId);
 	
 	/**
 	 * 根据任务ID查询用例执行列表

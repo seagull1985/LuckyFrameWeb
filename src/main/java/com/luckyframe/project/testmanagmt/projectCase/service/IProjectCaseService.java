@@ -21,6 +21,15 @@ public interface IProjectCaseService
 	public ProjectCase selectProjectCaseById(Integer caseId);
 	
 	/**
+	 * 根据用例编号查询实体
+	 * @param caseSign
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月16日
+	 */
+	public ProjectCase selectProjectCaseByCaseSign(String caseSign);
+	
+	/**
      * 查询项目测试用例管理列表
      * 
      * @param projectCase 项目测试用例管理信息

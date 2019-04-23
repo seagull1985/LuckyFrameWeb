@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
@@ -149,7 +150,14 @@ public class TaskExecuteController extends BaseController
 	@ResponseBody
 	public AjaxResult remove(String ids)
 	{		
-		return toAjax(taskExecuteService.deleteTaskExecuteByIds(ids));
+        try
+        {
+    		return toAjax(taskExecuteService.deleteTaskExecuteByIds(ids));
+        }
+        catch (BusinessException e)
+        {
+            return error(e.getMessage());
+        }
 	}
 	
 }

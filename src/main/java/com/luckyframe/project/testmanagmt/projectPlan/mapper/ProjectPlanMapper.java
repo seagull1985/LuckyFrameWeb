@@ -21,6 +21,15 @@ public interface ProjectPlanMapper
 	public ProjectPlan selectProjectPlanById(Integer planId);
 	
 	/**
+	 * 根据计划名称查询测试计划信息
+	 * @param planName
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月16日
+	 */
+	public ProjectPlan selectProjectPlanByPlanName(String planName);
+	
+	/**
      * 查询测试计划列表
      * 
      * @param projectPlan 测试计划信息

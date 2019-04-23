@@ -2,6 +2,7 @@ package com.luckyframe.project.system.user.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -12,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.luckyframe.common.utils.ServletUtils;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.framework.config.LuckyFrameConfig;
@@ -50,7 +52,7 @@ public class LoginController extends BaseController
         Subject subject = SecurityUtils.getSubject();
         try
         {
-            subject.login(token);
+            subject.login(token);            
             return success();
         }
         catch (AuthenticationException e)

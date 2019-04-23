@@ -14,27 +14,30 @@ import java.io.Serializable;
 public class RunTaskEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String projectname;
-    private String taskid;
-    private String loadpath;
+	/*调度任务名称*/
+	private String schedulingName;
+	/*任务执行ID*/
+    private String taskId;
+    /*驱动加载路径*/
+    private String loadPath;
     
-	public String getLoadpath() {
-		return loadpath;
+	public String getSchedulingName() {
+		return schedulingName;
 	}
-	public void setLoadpath(String loadpath) {
-		this.loadpath = loadpath;
+	public void setSchedulingName(String schedulingName) {
+		this.schedulingName = schedulingName;
 	}
-	public String getProjectname() {
-		return projectname;
+	public String getTaskId() {
+		return taskId;
 	}
-	public void setProjectname(String projectname) {
-		this.projectname = projectname;
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
 	}
-	public String getTaskid() {
-		return taskid;
+	public String getLoadPath() {
+		return loadPath;
 	}
-	public void setTaskid(String taskid) {
-		this.taskid = taskid;
+	public void setLoadPath(String loadPath) {
+		this.loadPath = loadPath;
 	}
 
 }

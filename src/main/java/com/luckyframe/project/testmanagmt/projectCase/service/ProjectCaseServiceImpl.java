@@ -7,13 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luckyframe.common.constant.ProjectCaseConstants;
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.support.Convert;
 import com.luckyframe.common.utils.StringUtils;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.project.system.project.mapper.ProjectMapper;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;
 import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseMapper;
 import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseStepsMapper;
+import com.luckyframe.project.testmanagmt.projectPlan.mapper.ProjectPlanCaseMapper;
 
 /**
  * 项目测试用例管理 服务层实现
@@ -32,6 +35,9 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
 	
 	@Autowired
 	private ProjectMapper projectMapper;
+	
+	@Autowired
+	private ProjectPlanCaseMapper projectPlanCaseMapper;
 
 	/**
      * 查询项目测试用例管理信息
@@ -43,6 +49,19 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
 	public ProjectCase selectProjectCaseById(Integer caseId)
 	{
 	    return projectCaseMapper.selectProjectCaseById(caseId);
+	}
+    
+	/**
+	 * 根据用例编号查询实体
+	 * @param caseSign
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月16日
+	 */
+    @Override
+	public ProjectCase selectProjectCaseByCaseSign(String caseSign)
+	{
+	    return projectCaseMapper.selectProjectCaseByCaseSign(caseSign);
 	}
 	
 	/**
@@ -132,12 +151,25 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
 	public int deleteProjectCaseByIds(String ids)
 	{
 		String[] caseIds=Convert.toStrArray(ids);
+		Integer result=0;
 		for(String caseIdstr:caseIds){
 			Integer caseId=Integer.valueOf(caseIdstr);
+			ProjectCase projectCase = projectCaseMapper.selectProjectCaseById(caseId);
+			
+			if(projectPlanCaseMapper.selectProjectPlanCaseCountByCaseId(caseId)>0){
+				throw new BusinessException(String.format("【%1$s】已绑定测试计划,不能删除", projectCase.getCaseSign()));
+			}
+			
+			if(!PermissionUtils.isProjectPermsPassByProjectId(projectCase.getProjectId())){	
+				  throw new BusinessException(String.format("用例【%1$s】没有项目删除权限", projectCase.getCaseSign()));
+			}
+			
 			projectCaseStepsMapper.deleteProjectCaseStepsByCaseId(caseId);
+			projectCaseMapper.deleteProjectCaseById(caseId);
+			result++;
 		}
 		
-		return projectCaseMapper.deleteProjectCaseByIds(caseIds);
+		return result;
 	}
 	
     /**

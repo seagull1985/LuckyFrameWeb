@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.luckyframe.common.support.Convert;
 import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.project.testmanagmt.projectProtocolTemplate.domain.ProjectTemplateParams;
 import com.luckyframe.project.testmanagmt.projectProtocolTemplate.mapper.ProjectTemplateParamsMapper;
@@ -90,27 +89,12 @@ public class ProjectTemplateParamsServiceImpl implements IProjectTemplateParamsS
 	@Override
 	public int deleteProjectTemplateParamsByIds(List<ProjectTemplateParams> templateParams)
 	{
-		int templateId=0;
+		Integer templateId=0;
 		if(null!=templateParams&&templateParams.size()>0){
 			if(null!=templateParams.get(0).getTemplateId()){
 				templateId=templateParams.get(0).getTemplateId();
 			}
 		}
 		return projectTemplateParamsMapper.deleteProjectTemplateParamsByTemplateId(templateId);
-	}
-	
-	/**
-	 * 根据模板ID删除参数
-	 */
-	public int deleteProjectTemplateParamsByTemplateId(String templateIds){
-		String[] templateIdsStr=Convert.toStrArray(templateIds);
-		int i=0;
-		if(null!=templateIdsStr&&templateIdsStr.length>0){
-			for(String templateId:templateIdsStr){
-				i=i+projectTemplateParamsMapper.deleteProjectTemplateParamsByTemplateId(Integer.valueOf(templateId));
-			}
-		}
-
-		return i;
 	}
 }

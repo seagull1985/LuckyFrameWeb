@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.StringUtils;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.project.system.project.domain.Project;
 import com.luckyframe.project.system.project.mapper.ProjectMapper;
@@ -160,6 +161,11 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
 		if(projectCaseMapper.selectProjectCaseCountByModuleId(moduleId)>0){
 			throw new BusinessException(String.format("【%1$s】已绑定测试用例,不能删除", projectCaseModuleMapper.selectProjectCaseModuleById(moduleId).getModuleName()));
 		}
+		
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectCaseModuleMapper.selectProjectCaseModuleById(moduleId).getProjectId())){	
+			  throw new BusinessException("没有删除用例模块的项目权限");
+		}
+		
 		return projectCaseModuleMapper.deleteProjectCaseModuleById(moduleId);
 	}
 	

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.poi.ExcelUtil;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
@@ -97,6 +98,10 @@ public class ProjectCaseModuleController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(ProjectCaseModule projectCaseModule)
 	{
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectCaseModule.getProjectId())){
+			return error("没有此项目保存用例模块权限");
+		}
+		
 		return toAjax(projectCaseModuleService.insertProjectCaseModule(projectCaseModule));
 	}
 
@@ -120,7 +125,11 @@ public class ProjectCaseModuleController extends BaseController
 	@PostMapping("/edit")
 	@ResponseBody
 	public AjaxResult editSave(ProjectCaseModule projectCaseModule)
-	{		
+	{	
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectCaseModule.getProjectId())){
+			return error("没有此项目修改用例模块权限");
+		}
+		
 		return toAjax(projectCaseModuleService.updateProjectCaseModule(projectCaseModule));
 	}
 	

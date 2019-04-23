@@ -28,6 +28,15 @@ public interface RoleProjectMapper
      */
 	public List<RoleProject> selectRoleProjectList(RoleProject roleProject);
 	
+    /**
+     * 根据用户ID查询项目权限
+     * @param userId
+     * @return
+     * @author Seagull
+     * @date 2019年4月11日
+     */
+    public List<Integer> selectProjectPermsByUserId(Long userId);
+	
 	/**
      * 新增角色和项目关联
      * 

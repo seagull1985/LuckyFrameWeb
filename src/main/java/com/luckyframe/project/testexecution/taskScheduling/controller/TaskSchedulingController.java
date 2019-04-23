@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.luckyframe.common.constant.JobConstants;
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.poi.ExcelUtil;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
@@ -126,6 +128,10 @@ public class TaskSchedulingController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(TaskScheduling taskScheduling)
 	{
+		if(!PermissionUtils.isProjectPermsPassByProjectId(taskScheduling.getProjectId())){
+			return error("没有此项目保存任务调度权限");
+		}
+		
 		int result = 0;
 		Job job=new Job();
     	job.setJobName(JobConstants.JOB_JOBNAME_FOR_TASKSCHEDULING);
@@ -189,6 +195,10 @@ public class TaskSchedulingController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(TaskScheduling taskScheduling)
 	{
+		if(!PermissionUtils.isProjectPermsPassByProjectId(taskScheduling.getProjectId())){
+			return error("没有此项目修改任务调度权限");
+		}
+		
 		int result = 0;
 		Job job=new Job();
 		job.setJobId(taskScheduling.getJobId().longValue());
@@ -224,7 +234,14 @@ public class TaskSchedulingController extends BaseController
 	@ResponseBody
 	public AjaxResult remove(String ids)
 	{
-		return toAjax(taskSchedulingService.deleteTaskSchedulingByIds(ids));
+        try
+        {
+        	return toAjax(taskSchedulingService.deleteTaskSchedulingByIds(ids));
+        }
+        catch (BusinessException e)
+        {
+            return error(e.getMessage());
+        }
 	}
 	
     /**

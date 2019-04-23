@@ -60,4 +60,21 @@ public interface TaskExecuteMapper
      */
 	public int deleteTaskExecuteByIds(String[] taskIds);
 	
+    /**
+     * 查询项目下有没有执行任务
+     * @param projectId
+     * @return
+     * @author Seagull
+     * @date 2019年4月12日
+     */
+    public int selectTaskExecuteCountByProjectId(Integer projectId);
+    
+    /**
+     * 查询调度下有没有执行任务
+     * @param schedulingId
+     * @return
+     * @author Seagull
+     * @date 2019年4月13日
+     */
+    public int selectTaskExecuteCountBySchedulingId(Integer schedulingId);
 }

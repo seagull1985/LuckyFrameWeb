@@ -3,6 +3,7 @@ package com.luckyframe.framework.shiro.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
 import com.luckyframe.common.constant.Constants;
 import com.luckyframe.common.constant.ShiroConstants;
 import com.luckyframe.common.constant.UserConstants;
@@ -17,6 +18,7 @@ import com.luckyframe.common.utils.ServletUtils;
 import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.framework.manager.AsyncManager;
 import com.luckyframe.framework.manager.factory.AsyncFactory;
+import com.luckyframe.project.system.role.service.IRoleProjectService;
 import com.luckyframe.project.system.user.domain.User;
 import com.luckyframe.project.system.user.domain.UserStatus;
 import com.luckyframe.project.system.user.service.IUserService;
@@ -33,7 +35,10 @@ public class LoginService
     private PasswordService passwordService;
 
     @Autowired
-    private IUserService userService;
+    private IUserService userService;   
+    
+	@Autowired
+	private IRoleProjectService roleProjectService;
 
     /**
      * 登录
@@ -100,6 +105,9 @@ public class LoginService
         }
 
         passwordService.validate(user, password);
+        
+        /*加入项目权限ID列表*/
+        user.setProjectIdForRoles(roleProjectService.selectProjectPermsByUserId(user.getUserId()));
 
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
         recordLoginInfo(user);

@@ -48,7 +48,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectTaskCaseExecuteVo"/>
         where task_case_id = #{taskCaseId}
     </select>
+    
+    <select id="selectTaskCaseExecuteByTaskIdAndCaseId" parameterType="TaskCaseExecute" resultMap="TaskCaseExecuteResult">
+        <include refid="selectTaskCaseExecuteVo"/>
+        where task_id = #{taskId} and case_id = #{caseId}
+    </select>
         
+    <select id="selectTaskCaseExecuteListForUnSucByTaskId" parameterType="Integer" resultMap="TaskCaseExecuteResult">
+        <include refid="selectTaskCaseExecuteVo"/>
+        where task_id = #{taskId} and case_status!=0
+    </select>
+    
     <insert id="insertTaskCaseExecute" parameterType="TaskCaseExecute" useGeneratedKeys="true" keyProperty="taskCaseId">
         insert into task_case_execute
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -100,6 +110,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteTaskCaseExecuteById" parameterType="Integer">
         delete from task_case_execute where task_case_id = #{taskCaseId}
     </delete>
+    
+    	<delete id="deleteTaskCaseExecuteByTaskId" parameterType="Integer">
+        delete from task_case_execute where task_id = #{taskId}
+    </delete>
 	
     <delete id="deleteTaskCaseExecuteByIds" parameterType="String">
         delete from task_case_execute where task_case_id in 
@@ -108,4 +122,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     
+    <select id="selectTaskCaseExecuteCountByProjectId" parameterType="Integer" resultType="Integer">
+		select count(1) from task_case_execute where project_id=#{project_id}
+	</select>
 </mapper>

@@ -193,4 +193,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select count(1) from task_scheduling where client_id=#{client_id}
 	</select>
 	
+    <select id="selectTaskSchedulingCountByPlanId" parameterType="Integer" resultType="Integer">
+		select count(1) from task_scheduling where plan_id=#{plan_id}
+	</select>
+	
 </mapper>

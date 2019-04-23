@@ -87,8 +87,19 @@ public class User extends BaseEntity
 
     /** 岗位组 */
     private Long[] postIds;
+    
+    /** 项目权限列表 */
+    private List<Integer> projectIdForRoles;
 
-    public Long getUserId()
+	public List<Integer> getProjectIdForRoles() {
+		return projectIdForRoles;
+	}
+
+	public void setProjectIdForRoles(List<Integer> projectIdForRoles) {
+		this.projectIdForRoles = projectIdForRoles;
+	}
+
+	public Long getUserId()
     {
         return userId;
     }

@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.poi.ExcelUtil;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
@@ -97,6 +99,9 @@ public class ProjectCaseParamsController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(ProjectCaseParams projectCaseParams)
 	{		
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectCaseParams.getProjectId())){
+			return error("没有此项目保存用例参数权限");
+		}		
 		return toAjax(projectCaseParamsService.insertProjectCaseParams(projectCaseParams));
 	}
 
@@ -122,6 +127,9 @@ public class ProjectCaseParamsController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(ProjectCaseParams projectCaseParams)
 	{		
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectCaseParams.getProjectId())){
+			return error("没有此项目修改用例参数权限");
+		}
 		return toAjax(projectCaseParamsService.updateProjectCaseParams(projectCaseParams));
 	}
 	
@@ -134,7 +142,13 @@ public class ProjectCaseParamsController extends BaseController
 	@ResponseBody
 	public AjaxResult remove(String ids)
 	{		
-		return toAjax(projectCaseParamsService.deleteProjectCaseParamsByIds(ids));
+        try
+        {
+        	return toAjax(projectCaseParamsService.deleteProjectCaseParamsByIds(ids));
+        }catch (BusinessException e)
+        {
+            return error(e.getMessage());
+        }		
 	}
 	
     /**

@@ -7,10 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luckyframe.common.constant.ProjectPlanConstants;
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.support.Convert;
 import com.luckyframe.common.utils.StringUtils;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.common.utils.security.ShiroUtils;
+import com.luckyframe.project.testexecution.taskScheduling.mapper.TaskSchedulingMapper;
 import com.luckyframe.project.testmanagmt.projectPlan.domain.ProjectPlan;
+import com.luckyframe.project.testmanagmt.projectPlan.mapper.ProjectPlanCaseMapper;
 import com.luckyframe.project.testmanagmt.projectPlan.mapper.ProjectPlanMapper;
 
 /**
@@ -24,6 +28,12 @@ public class ProjectPlanServiceImpl implements IProjectPlanService
 {
 	@Autowired
 	private ProjectPlanMapper projectPlanMapper;
+	
+	@Autowired
+	private ProjectPlanCaseMapper projectPlanCaseMapper;
+	
+	@Autowired
+	private TaskSchedulingMapper taskSchedulingMapper;
 
 	/**
      * 查询测试计划信息
@@ -35,6 +45,18 @@ public class ProjectPlanServiceImpl implements IProjectPlanService
 	public ProjectPlan selectProjectPlanById(Integer planId)
 	{
 	    return projectPlanMapper.selectProjectPlanById(planId);
+	}
+    
+	/**
+     * 根据计划名称查询测试计划信息
+     * 
+     * @param planId 测试计划ID
+     * @return 测试计划信息
+     */
+    @Override
+	public ProjectPlan selectProjectPlanByPlanName(String planName)
+	{
+	    return projectPlanMapper.selectProjectPlanByPlanName(planName);
 	}
 	
 	/**
@@ -105,7 +127,26 @@ public class ProjectPlanServiceImpl implements IProjectPlanService
 	@Override
 	public int deleteProjectPlanByIds(String ids)
 	{
-		return projectPlanMapper.deleteProjectPlanByIds(Convert.toStrArray(ids));
+		String[] planIds=Convert.toStrArray(ids);
+		
+		Integer result=0;
+		for(String planIdStr:planIds){
+			int planId=Integer.valueOf(planIdStr);
+			ProjectPlan ProjectPlan = projectPlanMapper.selectProjectPlanById(planId);
+			
+			if(taskSchedulingMapper.selectTaskSchedulingCountByPlanId(planId)>0){
+				throw new BusinessException(String.format("【%1$s】已绑定调度任务,不能删除", ProjectPlan.getPlanName()));
+			}
+			if(!PermissionUtils.isProjectPermsPassByProjectId(ProjectPlan.getProjectId())){	
+				  throw new BusinessException(String.format("测试计划【%1$s】没有项目删除权限", ProjectPlan.getPlanName()));
+			}
+			
+			projectPlanCaseMapper.deleteProjectPlanCaseByPlanId(planId);
+			projectPlanMapper.deleteProjectPlanById(planId);
+			result++;
+		}
+			
+		return result;
 	}
 	
     /**

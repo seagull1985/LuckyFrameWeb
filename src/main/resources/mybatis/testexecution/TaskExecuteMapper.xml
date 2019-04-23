@@ -134,4 +134,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     
+    <select id="selectTaskExecuteCountByProjectId" parameterType="Integer" resultType="Integer">
+		select count(1) from task_execute where project_id=#{project_id}
+	</select>
+	
+	<select id="selectTaskExecuteCountBySchedulingId" parameterType="Integer" resultType="Integer">
+		select count(1) from task_execute where scheduling_id=#{scheduling_id}
+	</select>
+	
 </mapper>

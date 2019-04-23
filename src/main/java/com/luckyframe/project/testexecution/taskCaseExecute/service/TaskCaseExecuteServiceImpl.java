@@ -34,6 +34,19 @@ public class TaskCaseExecuteServiceImpl implements ITaskCaseExecuteService
 	}
 	
 	/**
+	 * 根据taskId跟caseId查询用例执行信息
+	 * @param taskCaseExecute
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月22日
+	 */
+    @Override
+	public TaskCaseExecute selectTaskCaseExecuteByTaskIdAndCaseId(TaskCaseExecute taskCaseExecute)
+	{
+	    return taskCaseExecuteMapper.selectTaskCaseExecuteByTaskIdAndCaseId(taskCaseExecute);
+	}
+    
+	/**
      * 查询任务用例执行记录列表
      * 
      * @param taskCaseExecute 任务用例执行记录信息
@@ -43,6 +56,19 @@ public class TaskCaseExecuteServiceImpl implements ITaskCaseExecuteService
 	public List<TaskCaseExecute> selectTaskCaseExecuteList(TaskCaseExecute taskCaseExecute)
 	{
 	    return taskCaseExecuteMapper.selectTaskCaseExecuteList(taskCaseExecute);
+	}	
+	
+	/**
+	 * 查询执行任务中所有执行未成功的用例
+	 * @param taskId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月23日
+	 */
+	@Override
+	public List<TaskCaseExecute> selectTaskCaseExecuteListForUnSucByTaskId(Integer taskId)
+	{
+	    return taskCaseExecuteMapper.selectTaskCaseExecuteListForUnSucByTaskId(taskId);
 	}
 	
 	/**
@@ -93,6 +119,7 @@ public class TaskCaseExecuteServiceImpl implements ITaskCaseExecuteService
 	@Override
 	public int deleteTaskCaseExecuteByIds(String ids)
 	{
+		
 		return taskCaseExecuteMapper.deleteTaskCaseExecuteByIds(Convert.toStrArray(ids));
 	}
 	

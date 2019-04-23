@@ -11,12 +11,15 @@ import com.luckyframe.common.constant.ClientConstants;
 import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.support.Convert;
 import com.luckyframe.common.utils.StringUtils;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.project.monitor.job.domain.Job;
 import com.luckyframe.project.monitor.job.service.IJobService;
+import com.luckyframe.project.monitor.job.task.ClientHeart;
 import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.system.client.domain.ClientProject;
 import com.luckyframe.project.system.client.mapper.ClientMapper;
 import com.luckyframe.project.system.client.mapper.ClientProjectMapper;
+import com.luckyframe.project.system.project.mapper.ProjectMapper;
 import com.luckyframe.project.testexecution.taskScheduling.mapper.TaskSchedulingMapper;
 
 /**
@@ -39,6 +42,9 @@ public class ClientServiceImpl implements IClientService
 	
     @Autowired
     private IJobService jobService;
+    
+	@Autowired
+	private ProjectMapper projectMapper;
 
 	/**
      * 查询客户端管理信息
@@ -92,6 +98,7 @@ public class ClientServiceImpl implements IClientService
         int rows = clientMapper.insertClient(client);
         // 新增客户端与项目关联
 		insertClientProject(client);
+		ClientHeart.iniClientListen(client.getClientIp());
 	    return rows;
 	}
 	
@@ -108,7 +115,23 @@ public class ClientServiceImpl implements IClientService
 		clientProjectMapper.deleteClientProjectById(client.getClientId());
         // 新增客户端与项目关联
 		insertClientProject(client);
+		ClientHeart.iniClientListen(client.getClientIp());
 	    return clientMapper.updateClient(client);
+	}
+	
+	/**
+	 * 根据IP修改客户端状态以及备注
+	 * @param clientIp
+	 * @param status
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月13日
+	 */
+	@Override
+	public int updateClientStatusByIp(Client client)
+	{
+		ClientHeart.setClientStatus(client.getClientIp(), client.getStatus());
+	    return clientMapper.updateClientStatusByIp(client);
 	}
 
 	/**
@@ -128,17 +151,30 @@ public class ClientServiceImpl implements IClientService
 			}
 		}
 		
+		Integer result = 0;
 		for(String clientIdStr:clientIds){
 			int clientId=Integer.valueOf(clientIdStr);
 			Client client = clientMapper.selectClientById(clientId);
+			
+			for(Integer projectId:client.getProjectIds()){
+			  if(!PermissionUtils.isProjectPermsPassByProjectId(projectId)){	
+				  throw new BusinessException(String.format("没有项目【%1$s】删除客户端权限", projectMapper.selectProjectById(projectId).getProjectName()));
+			  }		
+		    }
+			
+			//删除心跳任务
 			Job job = new Job();
 			job.setJobId(client.getJobId().longValue());
 			jobService.deleteJob(job);
+			//删除客户端与项目关联关系
+			clientProjectMapper.deleteClientProjectById(clientId);
+			//删除客户端表
+			clientMapper.deleteClientById(clientId);
+			ClientHeart.removeClientListen(client.getClientIp());
+			result++;
 		}
 
-		//先删除客户端与项目关联关系
-		clientProjectMapper.deleteClientProjectByIds(clientIds);
-		return clientMapper.deleteClientByIds(clientIds);
+		return result;
 	}
 	
 	/**

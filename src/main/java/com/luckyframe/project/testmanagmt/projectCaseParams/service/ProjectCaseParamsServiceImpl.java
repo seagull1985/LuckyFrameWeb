@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luckyframe.common.constant.ProjectCaseParamsConstants;
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.support.Convert;
 import com.luckyframe.common.utils.StringUtils;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.project.testmanagmt.projectCaseParams.domain.ProjectCaseParams;
 import com.luckyframe.project.testmanagmt.projectCaseParams.mapper.ProjectCaseParamsMapper;
@@ -90,7 +92,19 @@ public class ProjectCaseParamsServiceImpl implements IProjectCaseParamsService
 	@Override
 	public int deleteProjectCaseParamsByIds(String ids)
 	{
-		return projectCaseParamsMapper.deleteProjectCaseParamsByIds(Convert.toStrArray(ids));
+		String[] paramsIds=Convert.toStrArray(ids);
+
+		for(String paramsIdstr:paramsIds){
+			Integer paramsId=Integer.valueOf(paramsIdstr);
+			ProjectCaseParams projectCaseParams  = projectCaseParamsMapper.selectProjectCaseParamsById(paramsId);
+			
+			if(!PermissionUtils.isProjectPermsPassByProjectId(projectCaseParams.getProjectId())){	
+				  throw new BusinessException(String.format("用例参数【%1$s】没有项目删除权限", projectCaseParams.getParamsName()));
+			}			
+		}
+
+		
+		return projectCaseParamsMapper.deleteProjectCaseParamsByIds(paramsIds);
 	}
 	
     /**

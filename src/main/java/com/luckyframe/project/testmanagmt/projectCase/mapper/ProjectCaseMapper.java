@@ -21,6 +21,14 @@ public interface ProjectCaseMapper
 	public ProjectCase selectProjectCaseById(Integer caseId);
 	
 	/**
+     * 通过用例编号查询项目测试用例管理信息
+     * 
+     * @param caseId 项目测试用例管理ID
+     * @return 项目测试用例管理信息
+     */
+	public ProjectCase selectProjectCaseByCaseSign(String caseSign);
+	
+	/**
      * 查询项目测试用例管理列表
      * 
      * @param projectCase 项目测试用例管理信息

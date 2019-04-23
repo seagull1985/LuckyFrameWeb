@@ -67,4 +67,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     
+    <delete id="deleteProjectPlanCaseByPlanId" parameterType="Integer">
+        delete from project_plan_case where plan_id = #{planId}
+    </delete>
+    
+    <select id="selectProjectPlanCaseCountByCaseId" parameterType="Integer" resultType="Integer">
+		select count(1) from project_plan_case where case_id=#{case_id}
+	</select>
+	
 </mapper>

@@ -10,10 +10,12 @@ import com.luckyframe.common.constant.ProjectProtocolTemplateConstants;
 import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.support.Convert;
 import com.luckyframe.common.utils.StringUtils;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.common.utils.security.ShiroUtils;
-import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseMapper;
+import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseStepsMapper;
 import com.luckyframe.project.testmanagmt.projectProtocolTemplate.domain.ProjectProtocolTemplate;
 import com.luckyframe.project.testmanagmt.projectProtocolTemplate.mapper.ProjectProtocolTemplateMapper;
+import com.luckyframe.project.testmanagmt.projectProtocolTemplate.mapper.ProjectTemplateParamsMapper;
 
 /**
  * 协议模板管理 服务层实现
@@ -26,9 +28,12 @@ public class ProjectProtocolTemplateServiceImpl implements IProjectProtocolTempl
 {
 	@Autowired
 	private ProjectProtocolTemplateMapper projectProtocolTemplateMapper;
+	
+	@Autowired
+	private ProjectTemplateParamsMapper projectTemplateParamsMapper;
 
 	@Autowired
-	private ProjectCaseMapper projectCaseMapper;
+	private ProjectCaseStepsMapper projectCaseStepsMapper;
 	
 	/**
      * 查询协议模板管理信息
@@ -94,10 +99,26 @@ public class ProjectProtocolTemplateServiceImpl implements IProjectProtocolTempl
 	@Override
 	public int deleteProjectProtocolTemplateByIds(String ids) throws BusinessException
 	{
-/*		if(projectCaseMapper.selectProjectCaseCountByModuleId(moduleId)>0){
-			throw new BusinessException(String.format("【%1$s】已绑定测试用例,不能删除", projectCaseModuleMapper.selectProjectCaseModuleById(moduleId).getModuleName()));
-		}*/
-		return projectProtocolTemplateMapper.deleteProjectProtocolTemplateByIds(Convert.toStrArray(ids));
+		String[] templateIds=Convert.toStrArray(ids);
+		Integer result=0;
+		for(String templateIdstr:templateIds){
+			Integer templateId=Integer.valueOf(templateIdstr);
+			ProjectProtocolTemplate projectProtocolTemplate = projectProtocolTemplateMapper.selectProjectProtocolTemplateById(templateId);
+			
+			if(projectCaseStepsMapper.selectProjectCaseStepsCountByTemplateId(templateId)>0){
+				throw new BusinessException(String.format("【%1$s】已绑定测试用例,不能删除", projectProtocolTemplate.getTemplateName()));
+			}
+			
+			if(!PermissionUtils.isProjectPermsPassByProjectId(projectProtocolTemplate.getProjectId())){	
+				  throw new BusinessException(String.format("模板【%1$s】没有项目删除权限", projectProtocolTemplate.getTemplateName()));
+			}
+			
+			projectTemplateParamsMapper.deleteProjectTemplateParamsByTemplateId(templateId);
+			projectProtocolTemplateMapper.deleteProjectProtocolTemplateById(templateId);
+			result++;
+		}
+
+		return result;
 	}
 	
     /**

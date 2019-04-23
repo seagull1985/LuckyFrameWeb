@@ -10,6 +10,7 @@ import com.luckyframe.common.constant.ProjectConstants;
 import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.support.Convert;
 import com.luckyframe.common.utils.StringUtils;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.project.system.client.domain.ClientProject;
 import com.luckyframe.project.system.client.mapper.ClientProjectMapper;
@@ -17,6 +18,8 @@ import com.luckyframe.project.system.project.domain.Project;
 import com.luckyframe.project.system.project.mapper.ProjectMapper;
 import com.luckyframe.project.system.role.domain.RoleProject;
 import com.luckyframe.project.system.role.mapper.RoleProjectMapper;
+import com.luckyframe.project.testexecution.taskCaseExecute.mapper.TaskCaseExecuteMapper;
+import com.luckyframe.project.testexecution.taskExecute.mapper.TaskExecuteMapper;
 import com.luckyframe.project.testexecution.taskScheduling.mapper.TaskSchedulingMapper;
 import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseMapper;
 import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseModule;
@@ -48,6 +51,12 @@ public class ProjectServiceImpl implements IProjectService
 	
 	@Autowired
 	private TaskSchedulingMapper taskSchedulingMapper;
+	
+	@Autowired
+	private TaskExecuteMapper taskExecuteMapper;
+	
+	@Autowired
+	private TaskCaseExecuteMapper taskCaseExecuteMapper;
 
 	/**
      * 查询测试项目管理信息
@@ -150,6 +159,15 @@ public class ProjectServiceImpl implements IProjectService
 			if(taskSchedulingMapper.selectTaskSchedulingCountByProjectId(projectId)>0){
 				throw new BusinessException(String.format("【%1$s】已绑定调度,不能删除", projectMapper.selectProjectById(projectId).getProjectName()));
 			}
+			if(taskExecuteMapper.selectTaskExecuteCountByProjectId(projectId)>0){
+				throw new BusinessException(String.format("【%1$s】已生成执行任务,不能删除", projectMapper.selectProjectById(projectId).getProjectName()));
+			}
+			if(taskCaseExecuteMapper.selectTaskCaseExecuteCountByProjectId(projectId)>0){
+				throw new BusinessException(String.format("【%1$s】已生成执行用例明细,不能删除", projectMapper.selectProjectById(projectId).getProjectName()));
+			}
+			if(!PermissionUtils.isProjectPermsPassByProjectId(projectId)){	
+				  throw new BusinessException(String.format("没有项目【%1$s】删除权限", projectMapper.selectProjectById(projectId).getProjectName()));
+			}		
 		}
 		projectCaseModuleMapper.deleteProjectCaseModuleByProjectIds(projectIds);
 		return projectMapper.deleteProjectByIds(projectIds);

@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.DateUtils;
 import com.luckyframe.common.utils.poi.ExcelUtil;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
@@ -105,6 +107,9 @@ public class ProjectProtocolTemplateController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(ProjectProtocolTemplate projectProtocolTemplate)
 	{		
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectProtocolTemplate.getProjectId())){
+			return error("没有此项目保存协议模板权限");
+		}
 		return toAjax(projectProtocolTemplateService.insertProjectProtocolTemplate(projectProtocolTemplate));
 	}
 	
@@ -128,6 +133,9 @@ public class ProjectProtocolTemplateController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(ProjectProtocolTemplate projectProtocolTemplate)
 	{	
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectProtocolTemplate.getProjectId())){
+			return error("没有此项目修改协议模板权限");
+		}
 		return toAjax(projectProtocolTemplateService.updateProjectProtocolTemplate(projectProtocolTemplate));
 	}
 	
@@ -163,6 +171,9 @@ public class ProjectProtocolTemplateController extends BaseController
 	@ResponseBody
 	public AjaxResult copySave(ProjectProtocolTemplate projectProtocolTemplate)
 	{
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectProtocolTemplate.getProjectId())){
+			return error("没有此项目复制协议模板权限");
+		}
 		ProjectTemplateParams projectTemplateParams = new ProjectTemplateParams();
 		projectTemplateParams.setTemplateId(projectProtocolTemplate.getTemplateId());
 		List<ProjectTemplateParams> templateParams = projectTemplateParamsService.selectProjectTemplateParamsList(projectTemplateParams);
@@ -185,8 +196,14 @@ public class ProjectProtocolTemplateController extends BaseController
 	@ResponseBody
 	public AjaxResult remove(String ids)
 	{
-		projectTemplateParamsService.deleteProjectTemplateParamsByTemplateId(ids);
-		return toAjax(projectProtocolTemplateService.deleteProjectProtocolTemplateByIds(ids));
+        try
+        {
+        	return toAjax(projectProtocolTemplateService.deleteProjectProtocolTemplateByIds(ids));
+        }
+        catch (BusinessException e)
+        {
+            return error(e.getMessage());
+        }		
 	}
 	
 	/**

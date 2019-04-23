@@ -96,4 +96,17 @@ public class TaskCaseLogServiceImpl implements ITaskCaseLogService
 		return taskCaseLogMapper.deleteTaskCaseLogByIds(Convert.toStrArray(ids));
 	}
 	
+	/**
+	 * 根据TaskCaseId删除执行日志
+	 * @param taskCaseId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月23日
+	 */
+	@Override
+	public int deleteTaskCaseLogByTaskCaseId(Integer taskCaseId)
+	{
+		return taskCaseLogMapper.deleteTaskCaseLogByTaskCaseId(taskCaseId);
+	}
+	
 }

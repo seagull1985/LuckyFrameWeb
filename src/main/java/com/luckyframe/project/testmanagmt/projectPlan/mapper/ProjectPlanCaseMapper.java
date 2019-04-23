@@ -60,4 +60,21 @@ public interface ProjectPlanCaseMapper
      */
 	public int deleteProjectPlanCaseByIds(String[] planCaseIds);
 	
+	/**
+	 * 根据planId删除计划中所有用例
+	 * @param planId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月12日
+	 */
+	public int deleteProjectPlanCaseByPlanId(Integer planId);
+	
+    /**
+     * 查询测试计划下有没有测试用例
+     * @param caseId
+     * @return
+     * @author Seagull
+     * @date 2019年4月12日
+     */
+    public int selectProjectPlanCaseCountByCaseId(Integer caseId);
 }

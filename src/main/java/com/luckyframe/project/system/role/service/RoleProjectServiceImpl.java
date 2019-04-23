@@ -1,13 +1,13 @@
 package com.luckyframe.project.system.role.service;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.luckyframe.common.support.Convert;
 import com.luckyframe.project.system.role.domain.RoleProject;
 import com.luckyframe.project.system.role.mapper.RoleProjectMapper;
-import com.luckyframe.project.system.role.service.IRoleProjectService;
-import com.luckyframe.common.support.Convert;
 
 /**
  * 角色和项目关联 服务层实现
@@ -45,6 +45,19 @@ public class RoleProjectServiceImpl implements IRoleProjectService
 	    return roleProjectMapper.selectRoleProjectList(roleProject);
 	}
 	
+	/**
+	 * 查询用户项目权限
+	 * @param userId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月11日
+	 */
+    @Override
+	public List<Integer> selectProjectPermsByUserId(Long userId)
+	{    	
+	    return roleProjectMapper.selectProjectPermsByUserId(userId);
+	}
+    
     /**
      * 新增角色和项目关联
      * 

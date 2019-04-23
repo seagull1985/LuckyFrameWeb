@@ -31,6 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="clientPath != null  and clientPath != '' "> and client_path = #{clientPath}</if>
              <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
          </where>
+         order by client_id desc
     </select>
     
     <select id="selectClientById" parameterType="Integer" resultMap="ClientResult">
@@ -72,6 +73,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
         </trim>
         where client_id = #{clientId}
+    </update>
+    
+    <update id="updateClientStatusByIp" parameterType="Client">
+        update sys_client
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null  ">status = #{status},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+        </trim>
+        where client_ip = #{clientIp}
     </update>
 
 	<delete id="deleteClientById" parameterType="Integer">

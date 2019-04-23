@@ -29,6 +29,15 @@ public interface IRoleProjectService
 	public List<RoleProject> selectRoleProjectList(RoleProject roleProject);
 	
 	/**
+	 * 查询用户项目权限
+	 * @param userId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月11日
+	 */
+	public List<Integer> selectProjectPermsByUserId(Long userId);
+    
+	/**
      * 新增角色和项目关联
      * 
      * @param roleProject 角色和项目关联信息

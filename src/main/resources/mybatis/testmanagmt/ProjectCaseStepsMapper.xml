@@ -120,6 +120,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach item="stepId" collection="array" open="(" separator="," close=")">
             #{stepId}
         </foreach>
-    </delete>
-    
+    </delete>   
+    	
+	<select id="selectProjectCaseStepsCountByTemplateId" parameterType="Integer" resultType="Integer">
+		select count(1) from project_case_steps where step_type=0 and extend like concat('【', #{extend}, '】%')
+	</select>
 </mapper>

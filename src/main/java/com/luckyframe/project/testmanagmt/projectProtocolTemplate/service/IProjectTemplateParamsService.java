@@ -52,13 +52,4 @@ public interface IProjectTemplateParamsService
      */
 	public int deleteProjectTemplateParamsByIds(List<ProjectTemplateParams> templateParams);
 	
-	/**
-	 * 根据模板ID删除参数
-	 * @param templateId
-	 * @return
-	 * @author Seagull
-	 * @date 2019年3月9日
-	 */
-	public int deleteProjectTemplateParamsByTemplateId(String templateIds);
-	
 }

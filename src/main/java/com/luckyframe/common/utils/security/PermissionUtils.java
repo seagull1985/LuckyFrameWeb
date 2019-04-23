@@ -1,6 +1,9 @@
 package com.luckyframe.common.utils.security;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
+
 import com.luckyframe.common.constant.PermissionConstants;
 import com.luckyframe.common.utils.MessageUtils;
 
@@ -43,4 +46,31 @@ public class PermissionUtils
         }
         return msg;
     }
+    
+	/**
+	 * 查询用户项目权限
+	 * @param projectId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月12日
+	 */
+	public static Boolean isProjectPermsPassByProjectId(Integer projectId)
+	{
+		List<Integer> projectIDList = ShiroUtils.getSysUser().getProjectIdForRoles();
+    	
+    	Boolean result = false;  	
+    	/*超级管理员权限*/
+    	if("admin".equals(ShiroUtils.getLoginName())){
+    		return true;
+    	}
+    	
+    	for(Integer pId:projectIDList){
+    		if(projectId==pId){
+    			result = true;
+    			break;
+    		}   		
+    	}
+    	
+	    return result;
+	}
 }

@@ -51,6 +51,16 @@ public interface IClientService
      * @return 结果
      */
 	public int updateClient(Client client);
+	
+	/**
+	 * 根据IP修改客户端状态以及备注
+	 * @param clientIp
+	 * @param status
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月13日
+	 */
+	public int updateClientStatusByIp(Client client);
 		
 	/**
      * 删除客户端管理信息

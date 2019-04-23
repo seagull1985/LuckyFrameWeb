@@ -19,6 +19,7 @@ import com.luckyframe.common.constant.JobConstants;
 import com.luckyframe.common.constant.ScheduleConstants;
 import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.poi.ExcelUtil;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
@@ -29,6 +30,7 @@ import com.luckyframe.project.monitor.job.service.IJobService;
 import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.system.client.service.IClientService;
 import com.luckyframe.project.system.project.service.IProjectService;
+import com.luckyframe.project.system.role.service.IRoleProjectService;
 
 /**
  * 客户端管理 信息操作处理
@@ -105,6 +107,12 @@ public class ClientController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(Client client)
 	{
+		for(Integer projectId:client.getProjectIds()){
+			if(!PermissionUtils.isProjectPermsPassByProjectId(projectId)){				
+				return error("没有项目【"+projectService.selectProjectById(projectId).getProjectName()+"】添加客户端权限");
+			}		
+		}
+		
 		int result = 0;
 		Job job=new Job();
     	job.setJobName(JobConstants.JOB_JOBNAME_FOR_CLIENTHEART);
@@ -147,6 +155,12 @@ public class ClientController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(Client client)
 	{
+		for(Integer projectId:client.getProjectIds()){
+			if(!PermissionUtils.isProjectPermsPassByProjectId(projectId)){				
+				return error("没有项目【"+projectService.selectProjectById(projectId).getProjectName()+"】修改客户端权限");
+			}		
+		}
+		
 		int result = 0;
 		Job job=jobService.selectJobById(client.getJobId().longValue());
     	job.setMethodParams(client.getClientIp());
@@ -168,7 +182,7 @@ public class ClientController extends BaseController
 	@PostMapping( "/remove")
 	@ResponseBody
 	public AjaxResult remove(String ids)
-	{
+	{		
         try
         {
         	return toAjax(clientService.deleteClientByIds(ids));

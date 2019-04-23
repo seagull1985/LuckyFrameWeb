@@ -44,6 +44,15 @@ public interface ClientMapper
 	public int updateClient(Client client);
 	
 	/**
+	 * 根据客户端IP修改状态以及备注
+	 * @param client
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月13日
+	 */
+	public int updateClientStatusByIp(Client client);
+	
+	/**
      * 删除客户端管理
      * 
      * @param clientId 客户端管理ID

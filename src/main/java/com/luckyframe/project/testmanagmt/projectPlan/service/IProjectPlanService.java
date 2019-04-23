@@ -21,6 +21,14 @@ public interface IProjectPlanService
 	public ProjectPlan selectProjectPlanById(Integer planId);
 	
 	/**
+     * 根据计划名称查询测试计划信息
+     * 
+     * @param planId 测试计划ID
+     * @return 测试计划信息
+     */
+	public ProjectPlan selectProjectPlanByPlanName(String planName);
+	
+	/**
      * 查询测试计划列表
      * 
      * @param projectPlan 测试计划信息

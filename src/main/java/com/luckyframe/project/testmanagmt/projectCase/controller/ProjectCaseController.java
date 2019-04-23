@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.poi.ExcelUtil;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
@@ -122,7 +124,11 @@ public class ProjectCaseController extends BaseController
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(ProjectCase projectCase)
-	{		
+	{
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectCase.getProjectId())){
+			return error("没有此项目保存用例权限");
+		}
+		
 		return toAjax(projectCaseService.insertProjectCase(projectCase));
 	}
 
@@ -147,6 +153,10 @@ public class ProjectCaseController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(ProjectCase projectCase)
 	{		
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectCase.getProjectId())){
+			return error("没有此项目修改用例权限");
+		}
+		
 		return toAjax(projectCaseService.updateProjectCase(projectCase));
 	}
 	
@@ -175,7 +185,7 @@ public class ProjectCaseController extends BaseController
 	}
 	
 	/**
-	 * 复制协议模板
+	 * 复制用例
 	 * @param projectProtocolTemplate
 	 * @return
 	 * @author Seagull
@@ -187,6 +197,10 @@ public class ProjectCaseController extends BaseController
 	@ResponseBody
 	public AjaxResult copySave(ProjectCase projectCase)
 	{
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectCase.getProjectId())){
+			return error("没有此项目复制用例权限");
+		}
+		
 		ProjectCaseSteps projectCaseSteps = new ProjectCaseSteps();
 		projectCaseSteps.setCaseId(projectCase.getCaseId());
 		List<ProjectCaseSteps> listSteps = projectCaseStepsService.selectProjectCaseStepsList(projectCaseSteps);
@@ -208,8 +222,15 @@ public class ProjectCaseController extends BaseController
 	@PostMapping( "/remove")
 	@ResponseBody
 	public AjaxResult remove(String ids)
-	{		
-		return toAjax(projectCaseService.deleteProjectCaseByIds(ids));
+	{	
+        try
+        {
+        	return toAjax(projectCaseService.deleteProjectCaseByIds(ids));
+        }
+        catch (BusinessException e)
+        {
+            return error(e.getMessage());
+        }
 	}
 
     /**

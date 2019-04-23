@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.luckyframe.common.utils.StringUtils;
+import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
@@ -117,6 +118,12 @@ public class ProjectPlanCaseController extends BaseController
 			planId=projectCases.get(0).getPlanId();
 		}
 		
+		ProjectPlan projectPlan = projectPlanService.selectProjectPlanById(planId);
+		
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectPlan.getProjectId())){
+			return error("没有此项目保存测试计划用例权限");
+		}
+		
 		for(ProjectCase projectCase:projectCases){
 			if(StringUtils.isNotEmpty(projectCase.getPlanCaseId())&&!projectCase.isFlag()){
 				resultCount = resultCount+projectPlanCaseService.deleteProjectPlanCaseById(projectCase.getPlanCaseId());						
@@ -131,7 +138,6 @@ public class ProjectPlanCaseController extends BaseController
 			}
 		}
 		
-		ProjectPlan projectPlan = projectPlanService.selectProjectPlanById(planId);
 		projectPlanService.updateProjectPlan(projectPlan);
 		
 		return toAjax(resultCount);
@@ -146,6 +152,10 @@ public class ProjectPlanCaseController extends BaseController
 	@ResponseBody
 	public AjaxResult edit(@RequestBody ProjectCase projectCase)
 	{
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectCase.getProjectId())){
+			return error("没有此项目保存计划用例优先级权限");
+		}
+		
 		int resultCount=0;
 		ProjectPlanCase projectPlanCase = new ProjectPlanCase();
 		if(StringUtils.isEmpty(projectCase.getPlanCaseId())){

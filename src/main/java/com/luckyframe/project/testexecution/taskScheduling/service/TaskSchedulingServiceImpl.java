@@ -1,15 +1,20 @@
 package com.luckyframe.project.testexecution.taskScheduling.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luckyframe.common.constant.TaskSchedulingConstants;
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.support.Convert;
 import com.luckyframe.common.utils.StringUtils;
+import com.luckyframe.common.utils.security.PermissionUtils;
+import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.project.monitor.job.domain.Job;
 import com.luckyframe.project.monitor.job.service.IJobService;
+import com.luckyframe.project.testexecution.taskExecute.mapper.TaskExecuteMapper;
 import com.luckyframe.project.testexecution.taskScheduling.domain.TaskScheduling;
 import com.luckyframe.project.testexecution.taskScheduling.mapper.TaskSchedulingMapper;
 
@@ -24,6 +29,9 @@ public class TaskSchedulingServiceImpl implements ITaskSchedulingService
 {
 	@Autowired
 	private TaskSchedulingMapper taskSchedulingMapper;
+	
+	@Autowired
+	private TaskExecuteMapper taskExecuteMapper;
 	
     @Autowired
     private IJobService jobService;
@@ -91,6 +99,11 @@ public class TaskSchedulingServiceImpl implements ITaskSchedulingService
 	@Override
 	public int insertTaskScheduling(TaskScheduling taskScheduling)
 	{
+		taskScheduling.setCreateBy(ShiroUtils.getLoginName());
+		taskScheduling.setCreateTime(new Date());
+		taskScheduling.setUpdateBy(ShiroUtils.getLoginName());
+		taskScheduling.setUpdateTime(new Date());
+		
 	    return taskSchedulingMapper.insertTaskScheduling(taskScheduling);
 	}
 	
@@ -103,6 +116,8 @@ public class TaskSchedulingServiceImpl implements ITaskSchedulingService
 	@Override
 	public int updateTaskScheduling(TaskScheduling taskScheduling)
 	{
+		taskScheduling.setUpdateBy(ShiroUtils.getLoginName());
+		taskScheduling.setUpdateTime(new Date());
 	    return taskSchedulingMapper.updateTaskScheduling(taskScheduling);
 	}
 
@@ -116,11 +131,24 @@ public class TaskSchedulingServiceImpl implements ITaskSchedulingService
 	public int deleteTaskSchedulingByIds(String ids)
 	{
 		String[] tsIds = Convert.toStrArray(ids);
+		Integer result=0;
 		for(String tsId:tsIds){
-			Job job = taskSchedulingMapper.selectTaskSchedulingById(Integer.valueOf(tsId)).getJob();
+			TaskScheduling taskScheduling = taskSchedulingMapper.selectTaskSchedulingById(Integer.valueOf(tsId));
+			
+			if(taskExecuteMapper.selectTaskExecuteCountBySchedulingId(taskScheduling.getSchedulingId())>0){
+				throw new BusinessException(String.format("【%1$s】已有执行记录,请先删除任务记录", taskScheduling.getSchedulingName()));
+			}
+			
+			if(!PermissionUtils.isProjectPermsPassByProjectId(taskScheduling.getProjectId())){	
+				  throw new BusinessException(String.format("调度【%1$s】没有项目删除权限", taskScheduling.getSchedulingName()));
+			}
+			
+			Job job = taskScheduling.getJob();
 			jobService.deleteJob(job);
+			taskSchedulingMapper.deleteTaskSchedulingById(taskScheduling.getSchedulingId());
+			result++;
 		}
-		return taskSchedulingMapper.deleteTaskSchedulingByIds(tsIds);
+		return result;
 	}
 	
     /**
