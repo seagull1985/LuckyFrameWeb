@@ -21,6 +21,15 @@ public interface ProjectCaseStepsMapper
 	public ProjectCaseSteps selectProjectCaseStepsById(Integer stepId);
 	
 	/**
+	 * 通过用例ID以及步骤编号获取步骤实体
+	 * @param projectCaseSteps
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月25日
+	 */
+	public ProjectCaseSteps selectProjectCaseStepsByCaseIdAndStepNum(ProjectCaseSteps projectCaseSteps);
+	
+	/**
      * 查询测试用例步骤管理列表
      * 
      * @param projectCaseSteps 测试用例步骤管理信息

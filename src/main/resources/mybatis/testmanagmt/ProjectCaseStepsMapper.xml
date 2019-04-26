@@ -51,6 +51,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectProjectCaseStepsVo"/>
         where step_id = #{stepId}
     </select>
+    
+    <select id="selectProjectCaseStepsByCaseIdAndStepNum" parameterType="ProjectCaseSteps" resultMap="ProjectCaseStepsResult">
+        <include refid="selectProjectCaseStepsVo"/>
+        where case_id = #{caseId} and step_serial_number = #{stepSerialNumber}
+    </select>
         
     <insert id="insertProjectCaseSteps" parameterType="ProjectCaseSteps" useGeneratedKeys="true" keyProperty="stepId">
         insert into project_case_steps

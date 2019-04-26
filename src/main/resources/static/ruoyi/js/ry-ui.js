@@ -507,6 +507,43 @@
             	});
                 layer.full(index);
             },
+            // 弹出层全屏
+            openViewFull: function (title, url, width, height) {
+            	//如果是移动端，就使用自适应大小弹窗
+            	if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+            	    width = 'auto';
+            	    height = 'auto';
+            	}
+            	if ($.common.isEmpty(title)) {
+                    title = false;
+                };
+                if ($.common.isEmpty(url)) {
+                    url = "/404.html";
+                };
+                if ($.common.isEmpty(width)) {
+                	width = 800;
+                };
+                if ($.common.isEmpty(height)) {
+                	height = ($(window).height() - 50);
+                };
+                var index = layer.open({
+            		type: 2,
+            		area: [width + 'px', height + 'px'],
+            		fix: false,
+            		//不固定
+            		maxmin: true,
+            		shade: 0.3,
+            		title: title,
+            		content: url,
+            		btn: ['关闭'],
+            		// 弹层外区域关闭
+            		shadeClose: true,
+            	    cancel: function(index) {
+            	        return true;
+            	    }
+            	});
+                layer.full(index);
+            },
             // 禁用按钮
             disable: function() {
             	var doc = window.top == window.parent ? window.document : window.parent.document;

@@ -57,4 +57,9 @@ public enum BusinessType
      * 清空数据
      */
     CLEAN,
+    
+    /**
+     * 运行用例
+     */
+    RUNCASE,
 }

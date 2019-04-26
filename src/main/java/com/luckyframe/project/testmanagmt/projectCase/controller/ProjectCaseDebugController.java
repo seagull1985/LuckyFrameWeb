@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.luckyframe.common.constant.ClientConstants;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.client.HttpRequest;
+import com.luckyframe.common.utils.client.WebDebugCaseEntity;
 import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
@@ -90,14 +91,17 @@ public class ProjectCaseDebugController extends BaseController
 		JSONObject json = new JSONObject();
 		try {
 			projectCaseDebugService.deleteProjectCaseDebugById(projectCaseDebug);
-
+			WebDebugCaseEntity webDebugCaseEntity = new WebDebugCaseEntity();
 	    	if(StringUtils.isEmpty(projectCaseDebug.getDriverPath())){
-	    		projectCaseDebug.setDriverPath("/TestDriven");
+	    		webDebugCaseEntity.setLoadpath("/TestDriven");
+	        }else{
+	        	webDebugCaseEntity.setLoadpath(projectCaseDebug.getDriverPath());
 	        }
-			String debugCaseJson=JSONObject.toJSONString(projectCaseDebug);
+	    	webDebugCaseEntity.setCaseId(projectCaseDebug.getCaseId());
+	    	webDebugCaseEntity.setUserId(ShiroUtils.getUserId().intValue());
 			Client client = clientService.selectClientById(projectCaseDebug.getClientId());
 			String url= "http://"+client.getClientIp()+":"+ClientConstants.CLIENT_MONITOR_PORT+"/webdebugcase";
-			String result=HttpRequest.httpClientPost(url, debugCaseJson);
+			String result=HttpRequest.httpClientPost(url, JSONObject.toJSONString(webDebugCaseEntity));
 			
 			if(result.contains("正常")){
 				json.put("status", "info");

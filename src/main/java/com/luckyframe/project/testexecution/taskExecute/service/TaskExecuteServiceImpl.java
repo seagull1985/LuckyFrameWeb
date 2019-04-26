@@ -46,6 +46,18 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
 	}
 	
 	/**
+	 * 查询最后一条执行记录
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月24日
+	 */
+    @Override
+	public TaskExecute selectTaskExecuteLastRecord()
+	{
+	    return taskExecuteMapper.selectTaskExecuteLastRecord();
+	}
+    
+	/**
      * 查询测试任务执行列表
      * 
      * @param taskExecute 测试任务执行信息
@@ -66,9 +78,9 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
 	@Override
 	public int insertTaskExecute(TaskExecute taskExecute)
 	{
-		taskExecute.setCreateBy(ShiroUtils.getLoginName());
+		taskExecute.setCreateBy("自动创建");
 		taskExecute.setCreateTime(new Date());
-		taskExecute.setUpdateBy(ShiroUtils.getLoginName());
+		taskExecute.setUpdateBy("自动创建");
 		taskExecute.setUpdateTime(new Date());
 	    return taskExecuteMapper.insertTaskExecute(taskExecute);
 	}
@@ -82,7 +94,6 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
 	@Override
 	public int updateTaskExecute(TaskExecute taskExecute)
 	{
-		taskExecute.setUpdateBy(ShiroUtils.getLoginName());
 		taskExecute.setUpdateTime(new Date());
 	    return taskExecuteMapper.updateTaskExecute(taskExecute);
 	}

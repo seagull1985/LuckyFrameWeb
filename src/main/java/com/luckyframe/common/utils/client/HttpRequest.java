@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -26,9 +27,11 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpRequest {
-
+    private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
 	/**
 	 * 使用HttpClient以JSON格式发送post请求
 	 * @param urlParam
@@ -36,11 +39,12 @@ public class HttpRequest {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyManagementException
-	 * @throws HttpHostConnectException
 	 * @author Seagull
+	 * @throws IOException 
+	 * @throws UnsupportedEncodingException 
 	 * @date 2019年3月15日
 	 */
-	public static String httpClientPost(String urlParam,String jsonparams) throws NoSuchAlgorithmException, KeyManagementException, HttpHostConnectException{
+	public static String httpClientPost(String urlParam,String jsonparams) throws NoSuchAlgorithmException, KeyManagementException, UnsupportedEncodingException, IOException{
 		StringBuffer resultBuffer = null;
 		CloseableHttpClient httpclient=HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(urlParam);
@@ -64,8 +68,12 @@ public class HttpRequest {
 				resultBuffer.append(temp);
 			}	
 		}
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
+			log.error("网络链接出现异常，请检查...",e);
 			throw new RuntimeException(e);
+		} catch (ConnectException e) {
+			log.error("客户端网络无法链接，请检查...",e);
+			throw new ConnectException();
 		} finally {
 			if (br != null) {
 				try {

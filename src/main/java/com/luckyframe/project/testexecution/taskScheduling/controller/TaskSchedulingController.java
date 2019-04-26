@@ -1,6 +1,13 @@
 package com.luckyframe.project.testexecution.taskScheduling.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,16 +17,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.luckyframe.common.constant.ClientConstants;
 import com.luckyframe.common.constant.JobConstants;
 import com.luckyframe.common.exception.BusinessException;
+import com.luckyframe.common.utils.client.HttpRequest;
+import com.luckyframe.common.utils.file.FileUploadUtils;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
+import com.luckyframe.framework.config.LuckyFrameConfig;
 import com.luckyframe.framework.web.controller.BaseController;
 import com.luckyframe.framework.web.domain.AjaxResult;
 import com.luckyframe.framework.web.page.TableDataInfo;
@@ -287,8 +300,111 @@ public class TaskSchedulingController extends BaseController
 	@ResponseBody
 	public String getSchedulingListByProjectId(@PathVariable("projectId") Integer projectId)
 	{
-    	List<TaskScheduling> planList = taskSchedulingService.selectTaskSchedulingListByProjectId(projectId);
-		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(planList));
+    	List<TaskScheduling> taskSchedulingList = taskSchedulingService.selectTaskSchedulingListByProjectId(projectId);
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(taskSchedulingList));
 		return jsonArray.toJSONString();
+	}   
+    
+	/**
+	 * 查询日志
+	 * @param mmap
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月25日
+	 */
+	@GetMapping("/queryLog")
+	public String queryLog(ModelMap mmap)
+	{
+		Client client = new Client();
+		client.setStatus(0);
+	    Date dt = new Date();   
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		List<Client> clientList = clientService.selectClientList(client);
+        mmap.put("clientList", clientList);  
+        mmap.put("queryDate", sdf.format(dt));
+	    return prefix + "/queryLog";
+	}
+	
+    /**
+     * 获取客户端日志
+     * @param mmap
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     * @author Seagull
+     * @date 2019年4月25日
+     */
+	@RequestMapping(value = "/downloadLog.do")
+	public String downloadLog(ModelMap mmap, HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		response.setContentType("text/html;charset=gbk");
+		request.setCharacterEncoding("gbk");
+		String contentType = "application/octet-stream";
+		response.setContentType(contentType);
+		response.setContentType("multipart/form-data");
+		
+		String storeName = "ERROR.log";
+		String queryDate = request.getParameter("queryDate");
+		String clientIp = request.getParameter("clientIp");
+
+	    Date dt = new Date();   
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");   
+
+		if (!sdf.format(dt).equals(queryDate))
+		{
+			storeName = storeName + "." + queryDate;
+		}
+		String result="获取日志远程链接失败！";
+		try{    		
+    		Map<String, Object> params = new HashMap<String, Object>(0);
+    		params.put("filename", storeName);
+			result=HttpRequest.httpClientGet("http://"+clientIp+":"+ClientConstants.CLIENT_MONITOR_PORT+"/getLogdDetail", params);
+			result=result.replace("##n##", "\n");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return result;
+		}
+		mmap.put("data", result);
+		return prefix + "/showLog";
+	}
+	
+	/**
+	 * 上传驱动页面
+	 * @param mmap
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月26日
+	 */
+	@GetMapping("/showUploadJar")
+	public String showUploadJar(ModelMap mmap)
+	{
+		Client client = new Client();
+		client.setStatus(0);
+		List<Client> clientList = clientService.selectClientList(client);
+    	if(clientList.size()>0){
+            mmap.put("clientList", clientList);
+    		List<String> driverPathList = clientService.selectClientDriverListById(clientList.get(0).getClientId());
+    		mmap.put("driverPathList", driverPathList);
+    	}
+	    return prefix + "/uploadJar";
+	}
+	
+	/**
+	 * 查询日志
+	 */
+	@RequiresPermissions("testexecution:taskScheduling:add")
+	@Log(title = "个人信息", businessType = BusinessType.UPDATE)
+	@PostMapping("/uploadJar")
+	@ResponseBody
+	public AjaxResult uploadJar(@RequestParam("drivenfile") MultipartFile file, @RequestParam("clientIp") String clientIp,@RequestParam("driverPath") String driverPath) {
+		try {
+			if (!file.isEmpty()) {
+				String avatar = FileUploadUtils.upload(LuckyFrameConfig.getAvatarPath(), file);
+			}
+		 } catch (Exception e) {
+			return error(e.getMessage());
+		 }
+		 return toAjax(1);
 	}
 }

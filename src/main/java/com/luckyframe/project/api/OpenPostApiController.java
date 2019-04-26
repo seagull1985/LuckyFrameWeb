@@ -1,10 +1,6 @@
 package com.luckyframe.project.api;
 
-import java.io.PrintWriter;
 import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +18,8 @@ import com.luckyframe.project.testexecution.taskCaseLog.domain.TaskCaseLog;
 import com.luckyframe.project.testexecution.taskCaseLog.service.ITaskCaseLogService;
 import com.luckyframe.project.testexecution.taskExecute.domain.TaskExecute;
 import com.luckyframe.project.testexecution.taskExecute.service.ITaskExecuteService;
-import com.luckyframe.project.testexecution.taskScheduling.service.ITaskSchedulingService;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseDebug;
 import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseDebugService;
-import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseService;
-import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseStepsService;
-import com.luckyframe.project.testmanagmt.projectCaseParams.service.IProjectCaseParamsService;
-import com.luckyframe.project.testmanagmt.projectPlan.service.IProjectPlanService;
 
 /**
  * 通用请求处理
@@ -183,6 +174,7 @@ public class OpenPostApiController
 		int casenoexec = 0;
 		Integer taskId = jsonObject.getInteger("taskId");
 		Integer caseCount = jsonObject.getInteger("caseCount");
+		Integer taskStatus = jsonObject.getInteger("taskStatus");
 		try {
 			TaskExecute taskExecute = taskExecuteService.selectTaskExecuteById(taskId);
 
@@ -205,6 +197,7 @@ public class OpenPostApiController
 			taskExecute.setCaseSuccCount(casesuc);
 			taskExecute.setCaseLockCount(caselock);
 			taskExecute.setCaseNoexecCount(casenoexec);
+			taskExecute.setTaskStatus(taskStatus);
 			taskExecute.setUpdateTime(new Date());
 			taskExecute.setFinishTime(new Date());
 			taskExecuteService.updateTaskExecute(taskExecute);

@@ -67,58 +67,11 @@ public class ClientRun {
 		}catch (Exception e) {
 			//执行失败时,写入任务表记录为执行失败
 			taskExecute.setTaskStatus(0);
-			taskExecuteService.updateTaskExecute(taskExecute);			
-			e.printStackTrace();
+			taskExecuteService.updateTaskExecute(taskExecute);
 			return result;
 		}
 			
 	}
-	
-	
-/*	public String toRunCase(String projname,int tastId,String  caseName,String casVersion,String clientip,String loadpath) {
-		String result="启动失败！";
-		try{
-    		RunCaseEntity onecase = new RunCaseEntity();
-    		onecase.setProjectname(projname);
-    		onecase.setTaskid(String.valueOf(tastId));
-    		onecase.setTestCaseExternalId(caseName);
-    		onecase.setVersion(casVersion);
-    		if(StrLib.isEmpty(loadpath)){
-    			loadpath="/TestDriven";
-    		}
-    		onecase.setLoadpath(loadpath);
-    		String casejson=JSONObject.toJSONString(onecase);
-			result=HttpRequest.httpClientPost("http://"+clientip+":"+PublicConst.CLIENTPORT+"/runcase", casejson);
-    		System.out.println(result);
-    		return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return result;
-		} 
-	}
-	
-	
-	
-	public String toRunCaseBatch(String projname,int taskid,String  caseInfo,String clientip,String loadpath) {
-		String result="启动失败！";
-		try{
-    		RunBatchCaseEntity batchcase = new RunBatchCaseEntity();
-    		batchcase.setProjectname(projname);
-    		batchcase.setTaskid(String.valueOf(taskid));
-    		batchcase.setBatchcase(caseInfo);
-    		if(StrLib.isEmpty(loadpath)){
-    			loadpath="/TestDriven";
-    		}
-    		batchcase.setLoadpath(loadpath);
-    		String batchcasejson=JSONObject.toJSONString(batchcase);
-			result=HttpRequest.httpClientPost("http://"+clientip+":"+PublicConst.CLIENTPORT+"/runbatchcase", batchcasejson);
-    		System.out.println(result);
-    		return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return result;
-		} 
-	}*/
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

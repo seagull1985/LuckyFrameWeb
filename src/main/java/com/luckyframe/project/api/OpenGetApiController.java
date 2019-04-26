@@ -1,9 +1,6 @@
 package com.luckyframe.project.api;
 
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,40 +10,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.luckyframe.common.utils.file.FileUploadUtils;
-import com.luckyframe.common.utils.file.FileUtils;
 import com.luckyframe.framework.config.LuckyFrameConfig;
-import com.luckyframe.framework.config.ServerConfig;
-import com.luckyframe.framework.web.domain.AjaxResult;
 import com.luckyframe.project.testexecution.taskCaseExecute.domain.TaskCaseExecute;
 import com.luckyframe.project.testexecution.taskCaseExecute.service.ITaskCaseExecuteService;
-import com.luckyframe.project.testexecution.taskCaseLog.service.ITaskCaseLogService;
 import com.luckyframe.project.testexecution.taskExecute.domain.TaskExecute;
 import com.luckyframe.project.testexecution.taskExecute.service.ITaskExecuteService;
 import com.luckyframe.project.testexecution.taskScheduling.domain.TaskScheduling;
 import com.luckyframe.project.testexecution.taskScheduling.service.ITaskSchedulingService;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;
-import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseDebug;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseSteps;
-import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseDebugService;
 import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseService;
 import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseStepsService;
 import com.luckyframe.project.testmanagmt.projectCaseParams.domain.ProjectCaseParams;
 import com.luckyframe.project.testmanagmt.projectCaseParams.service.IProjectCaseParamsService;
 import com.luckyframe.project.testmanagmt.projectPlan.domain.ProjectPlan;
-import com.luckyframe.project.testmanagmt.projectPlan.service.IProjectPlanCaseService;
 import com.luckyframe.project.testmanagmt.projectPlan.service.IProjectPlanService;
+import com.luckyframe.project.testmanagmt.projectProtocolTemplate.domain.ProjectProtocolTemplate;
+import com.luckyframe.project.testmanagmt.projectProtocolTemplate.domain.ProjectTemplateParams;
+import com.luckyframe.project.testmanagmt.projectProtocolTemplate.service.IProjectProtocolTemplateService;
+import com.luckyframe.project.testmanagmt.projectProtocolTemplate.service.IProjectTemplateParamsService;
 
 /**
  * 通用请求处理
@@ -75,17 +62,20 @@ public class OpenGetApiController
 	private IProjectCaseParamsService projectCaseParamsService;
 	
 	@Autowired
-	private IProjectCaseDebugService projectCaseDebugService;
-	
-	@Autowired
 	private ITaskSchedulingService taskSchedulingService;
 	
 	@Autowired
 	private ITaskCaseExecuteService taskCaseExecuteService;
 	
 	@Autowired
-	private ITaskCaseLogService taskCaseLogService;
+	private IProjectProtocolTemplateService projectProtocolTemplateService;
 	
+	@Autowired
+	private IProjectTemplateParamsService projectTemplateParamsService;
+	
+    @Autowired
+    private LuckyFrameConfig lfConfig;
+
 	/**
 	 * 通过计划ID获取用例列表
 	 * @param req
@@ -110,6 +100,27 @@ public class OpenGetApiController
 			// 转换成json字符串
 			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectcases));
 			pw.print(array.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 获取服务器版本号
+	 * @param req
+	 * @param rsp
+	 * @author Seagull
+	 * @date 2019年4月24日
+	 */
+	@RequestMapping(value = "/clientGetServerVersion.do")
+	public void clientGetServerVersion(HttpServletRequest req, HttpServletResponse rsp) {
+		// 更新实体
+		try {
+			rsp.setContentType("text/html;charset=GBK");
+			req.setCharacterEncoding("GBK");
+			PrintWriter pw = rsp.getWriter();
+			pw.print(lfConfig.getVersion());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -327,6 +338,58 @@ public class OpenGetApiController
 
 			// 转换成json字符串
 			JSONArray array= JSONArray.parseArray(JSON.toJSONString(caseIdArr));
+			pw.print(array.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 通过模板ID获取实体
+	 * @param req
+	 * @param rsp
+	 * @author Seagull
+	 * @date 2019年4月24日
+	 */
+	@RequestMapping(value = "/clientGetProjectProtocolTemplateByTemplateId.do")
+	public void clientGetProjectProtocolTemplateByTemplateId(HttpServletRequest req, HttpServletResponse rsp) {
+		// 更新实体
+		try {
+			rsp.setContentType("text/html;charset=GBK");
+			req.setCharacterEncoding("GBK");
+			PrintWriter pw = rsp.getWriter();
+			Integer templateId = Integer.valueOf(req.getParameter("templateId"));
+			ProjectProtocolTemplate projectProtocolTemplate = projectProtocolTemplateService.selectProjectProtocolTemplateById(templateId);
+
+			pw.print(JSONObject.toJSONString(projectProtocolTemplate));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 根据模板ID获取参数
+	 * @param req
+	 * @param rsp
+	 * @author Seagull
+	 * @date 2019年4月24日
+	 */
+	@RequestMapping(value = "/clientGetProjectTemplateParamsListByTemplateId.do")
+	public void clientGetProjectTemplateParamsListByTemplateId(HttpServletRequest req, HttpServletResponse rsp) {
+		// 更新实体
+		try {
+			rsp.setContentType("text/html;charset=GBK");
+			req.setCharacterEncoding("GBK");
+			PrintWriter pw = rsp.getWriter();
+			Integer templateId = Integer.valueOf(req.getParameter("templateId"));
+			ProjectTemplateParams projectTemplateParams = new ProjectTemplateParams();
+			projectTemplateParams.setTemplateId(templateId);
+			List<ProjectTemplateParams> projectTemplateParamsList = projectTemplateParamsService.selectProjectTemplateParamsList(projectTemplateParams);
+
+			// 转换成json字符串
+			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectTemplateParamsList));
 			pw.print(array.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

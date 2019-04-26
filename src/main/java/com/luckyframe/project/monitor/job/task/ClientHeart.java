@@ -64,15 +64,16 @@ public class ClientHeart {
 	}
 
 	public void heartTask(String params) {
-		try {
-			if(null==ClientHeart.getClientStatus(params)){
-				ClientHeart.setClientStatus(params, 1);
-			}
-			
+		try {			
 			String result = HttpRequest.httpClientGet(
 					"http://" + params + ":" + ClientConstants.CLIENT_MONITOR_PORT + "/getclientstatus",
 					new HashMap<String, Object>(0));
 			JSONObject jsonObject = JSON.parseObject(result);
+			
+			if(null==ClientHeart.getClientStatus(params)){
+				ClientHeart.setClientStatus(params, 1);
+			}
+			
 			if ("success".equals(jsonObject.get("status"))) {
 				if (ClientHeart.getClientStatus(params) != 0) {
 					Client client = new Client();
@@ -98,7 +99,7 @@ public class ClientHeart {
 				}
 			}
 		} catch (RuntimeException | KeyManagementException | NoSuchAlgorithmException | NoHttpResponseException e) {
-			if (ClientHeart.getClientStatus(params) != 1) {
+			if (null==ClientHeart.getClientStatus(params) || ClientHeart.getClientStatus(params) != 1) {
 				Client client = new Client();
 				client.setClientIp(params);
 				client.setRemark("检测客户端远程异常");

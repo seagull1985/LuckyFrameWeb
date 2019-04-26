@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.poi.ExcelUtil;
@@ -160,4 +162,23 @@ public class TaskExecuteController extends BaseController
         }
 	}
 	
+	/**
+	 * 通过项目ID获取执行任务列表
+	 * @param projectId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月24日
+	 */
+    @GetMapping("/gettaskExecuteListByProjectId/{projectId}")
+	@ResponseBody
+	public String getSchedulingListByProjectId(@PathVariable("projectId") Integer projectId)
+	{
+    	TaskExecute taskExecute= new TaskExecute();
+    	if(projectId!=0){
+        	taskExecute.setProjectId(projectId);
+    	}
+    	List<TaskExecute> taskExecuteList = taskExecuteService.selectTaskExecuteList(taskExecute);
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(taskExecuteList));
+		return jsonArray.toJSONString();
+	}
 }

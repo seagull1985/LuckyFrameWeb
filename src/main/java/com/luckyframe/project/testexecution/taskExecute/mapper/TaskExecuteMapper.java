@@ -21,6 +21,14 @@ public interface TaskExecuteMapper
 	public TaskExecute selectTaskExecuteById(Integer taskId);
 	
 	/**
+	 * 查询最后一条测试任务执行信息
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月24日
+	 */
+	public TaskExecute selectTaskExecuteLastRecord();
+	
+	/**
      * 查询测试任务执行列表
      * 
      * @param taskExecute 测试任务执行信息

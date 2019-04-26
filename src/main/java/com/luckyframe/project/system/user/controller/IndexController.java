@@ -38,6 +38,7 @@ public class IndexController extends BaseController
         mmap.put("menus", menus);
         mmap.put("user", user);
         mmap.put("copyrightYear", lfConfig.getCopyrightYear());
+        mmap.put("version", lfConfig.getVersion());
         return "index";
     }
 

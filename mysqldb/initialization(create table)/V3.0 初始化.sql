@@ -1182,7 +1182,7 @@ create table project_template_params
   template_id           int(8)          not null                comment '模板ID',
   param_name            varchar(50)     not null                comment '参数名',
   param_value           varchar(5000)                           comment '参数默认值',
-  param_type            int(4)          not null                comment '0 String 1 JSON对象 2 JSONARR对象 3 文件类型',
+  param_type            int(4)          not null                comment '0 String 1 JSON对象 2 JSONARR对象 3 文件类型 4数字类型 5 布尔类型',
   primary key (params_id)
 ) engine=innodb default charset=utf8 comment = '模板参数管理';
 
@@ -1287,10 +1287,10 @@ create table task_execute
   project_id            int(8)         not null                 comment '项目ID',
   task_name             varchar(150)   not null                 comment '任务名称',
   task_status           int(2)         default 0                comment '状态 0未执行 1执行中 2执行完成 3执行失败 4唤起客户端失败',
-  case_total_count      int(8)                                  comment '总用例数',
-  case_succ_count       int(8)                                  comment '成功数',
-  case_fail_count       int(8)                                  comment '失败数',
-  case_lock_count       int(8)                                  comment '锁定数',
+  case_total_count      int(8)         default 0                comment '总用例数',
+  case_succ_count       int(8)         default 0                comment '成功数',
+  case_fail_count       int(8)         default 0                comment '失败数',
+  case_lock_count       int(8)         default 0                comment '锁定数',
   case_noexec_count     int(8)         default 0                comment '未执行用例',
   finish_time           datetime                                comment '任务结束时间',
   create_by             varchar(64)    default ''               comment '创建者',

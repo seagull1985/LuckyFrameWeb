@@ -104,7 +104,7 @@ public class JobController extends BaseController
      * 任务调度立即执行一次
      */
     @Log(title = "定时任务", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("monitor:job:changeStatus")
+    @RequiresPermissions("testexecution:taskScheduling:execution")
     @PostMapping("/run")
     @ResponseBody
     public AjaxResult run(Job job)

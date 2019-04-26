@@ -12,8 +12,8 @@
 						<ul>
 						   <li>
 								项目：
-								<select id="projectId" name="projectId" th:with="type=${projects}" onchange="setSchedulingList()">
-								    <option value="">所有项目</option>
+								<select id="projectId" name="projectId" th:with="type=${projects}" onchange="setTaskExecuteList()">
+								    <option value="0">所有项目</option>
 	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == defaultProjectId}"></option>
 	                            </select>
 							</li>
@@ -21,7 +21,6 @@
 							<li>
 								任务名称：
 								<select id="taskId" name="taskId" th:with="type=${taskExecutes}">
-								    <option value="">所有任务</option>
 	                                <option th:each="taskExecutes : ${type}" th:text="${taskExecutes.taskName}" th:value="${taskExecutes.taskId}" th:selected="${taskExecutes.taskId == defaultTaskId}"></option>
 	                            </select>
 							</li>
@@ -58,10 +57,10 @@
 			</div>
 			
 	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="testexecution:taskCaseExecute:execution">
+				<a class="btn btn-success" onclick="run()" shiro:hasPermission="testexecution:taskCaseExecute:execution">
 					<i class="fa fa-forward"></i> 执行全部非成功用例
 				</a>
-				<a class="btn btn-info btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testexecution:taskCaseExecute:execution">
+				<a class="btn btn-info btn-del btn-del disabled" onclick="runSelect()" shiro:hasPermission="testexecution:taskCaseExecute:execution">
 					<i class="fa fa-play"></i> 执行所选用例
 				</a>
 			</div>
@@ -76,6 +75,7 @@
         var removeFlag = [[${@permission.hasPermi('testexecution:taskCaseExecute:remove')}]];
         var prefix = ctx + "testexecution/taskCaseExecute";
         var logPrefix = ctx + "testexecution/taskCaseLog";
+        var taskExecutePrefix = ctx + "testexecution/taskExecute";
 
         $(function() {
             var options = {
@@ -116,6 +116,11 @@
 					field : 'taskCaseId', 
 					title : '用例执行ID',
 					sortable: true,
+					visible: false
+				},
+				{
+					field : 'caseId', 
+					title : '用例ID',
 					visible: false
 				},
 				{
@@ -262,7 +267,7 @@
 								}								
 							}else{
 								return '<font style="color:#ff0000">'+value+'</font>&nbsp;&nbsp;&nbsp;&nbsp;'+
-								'<a href="javascript:window.open(\'/logDetail/showImage.do?filename='+ row.imgname+ '.png&logid='+row.logId+'\')">错误截图</a> ';
+								'<a onclick="showPlanCase('+row.imgname+','+row.logId+')">错误截图</a> ';
 							}
 						}
 					}, ],
@@ -276,6 +281,64 @@
                 
             $.table.init(options);
         });
+        
+		/* 同步测试结果到用例步骤 */
+		function updateStep(logId){
+    		$.modal.confirm("确认要同步测试结果到步骤中吗？", function() {
+    			var url = prefix + "/synchronousTestResults";
+    			var data = {"logId": logId};
+    			$.operate.submit(url, "post", "json", data);
+    		});
+		}
+		
+		/* 运行所有非成功用例 */
+		function run(){
+    		$.modal.confirm("确认要运行所有非成功用例吗？", function() {
+    			var url = prefix + "/runAllFailCase";
+    			var data = {"taskId": $('#taskId').val()};
+    			$.operate.submit(url, "post", "json", data);
+    		});
+		}
+		
+        function runSelect(){
+            var rows = $.map($('#bootstrap-table').bootstrapTable('getSelections'), function (row) {
+    	        return row[$.table._option.columns[2].field];
+    	    });
+     		if (rows.length == 0) {
+    			$.modal.alertWarning("请至少选择一条记录");
+    			return;
+    		}
+    		$.modal.confirm("确认要运行选中的" + rows.length + "条用例吗?", function() {
+    			var url = prefix + "/runSelectCase";
+    			var data = { "taskId": $('#taskId').val(),"ids": rows.join()};
+    			$.operate.submit(url, "post", "json", data);
+    		});
+        }
+        
+        /*设置任务列表*/
+        function setTaskExecuteList(){
+          var projectId = $("#projectId").val();
+          if($.common.isEmpty(projectId)) return;
+          var url =taskExecutePrefix + "/gettaskExecuteListByProjectId/"+projectId;
+          var options = "";
+          $.getJSON(url, null, function call(result) {
+        	   /*清空原有调度列表*/
+        	   while($("#taskId").length>1){
+        		  $("#taskId option[index='1']").remove();
+        	    }
+        	   /*设置新的调度列表*/
+               $.each(result, function(i, node){
+        		  options +=  "<option value='"+node.taskId+"'>"+node.taskName+"</option>";
+        	    }); 
+        	    $("#taskId").html(options);
+          });
+         }
+        
+        /*弹出层展示图片*/
+        function showPlanCase(imgname,logId) {
+        	var url = prefix+"/showImage.do?fileName="+ imgname+ ".png&logId="+logId;
+        	$.modal.openViewFull($.table._option.childrenModalName, url, null, null);
+        }
     </script>
 </body>
 </html>

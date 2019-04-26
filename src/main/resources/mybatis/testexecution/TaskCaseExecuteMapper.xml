@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="taskCaseId != null "> and task_case_id = #{taskCaseId}</if>
              <if test="taskId != null "> and task_id = #{taskId}</if>
-             <if test="projectId != null "> and project_id = #{projectId}</if>
+             <if test="projectId != null and projectId != 0"> and project_id = #{projectId}</if>
              <if test="caseId != null "> and case_id = #{caseId}</if>
              <if test="caseSign != null  and caseSign != '' "> and case_sign like concat('%', #{caseSign}, '%')</if>
              <if test="caseName != null  and caseName != '' "> and case_name like concat('%', #{caseName}, '%')</if>

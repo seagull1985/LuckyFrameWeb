@@ -66,11 +66,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<delete id="deleteProjectCaseDebugById" parameterType="ProjectCaseDebug">
         delete from project_case_debug 
-        <where>  
-             <if test="debugId != null and debugId != 0 "> and debug_id = #{debugId}</if>
-             <if test="caseId != null and debugId != 0 "> and case_id = #{caseId}</if>
-             <if test="userId != null and debugId != 0 "> and user_id = #{userId}</if>
-         </where>
+        <where>
+             <if test="caseId != null and caseId != 0 "> and case_id = #{caseId}</if>
+             <if test="userId != null and userId != 0 "> and user_id = #{userId}</if>
+        </where>
     </delete>
 	
     <delete id="deleteProjectCaseDebugByIds" parameterType="String">

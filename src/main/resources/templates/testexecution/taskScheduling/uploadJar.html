@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-uploadJar" enctype="multipart/form-data">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">选择驱动：</label>
+				<div class="col-sm-8">
+	               <input type="file" class="" name="file" id="file" />
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">客户端IP：</label>
+				<div class="col-sm-8">
+					<select id="clientIp" name="clientIp" class="form-control m-b" th:with="type=${clientList}">
+	                    <option th:each="client : ${type}" th:text="${client.clientIp}" th:value="${client.clientIp}"></option>
+	                </select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">驱动路径：</label>
+				<div class="col-sm-8">
+					<select id="clientDriverPath" name="clientDriverPath" class="form-control m-b" th:with="type=${driverPathList}">
+	                    <option th:each="driverPath : ${type}" th:text="${driverPath}" th:value="${driverPath}"></option>
+	                </select>
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "testexecution/taskScheduling"
+		$("#form-uploadJar").validate({
+			rules:{
+				file:{
+					required:true,
+				},
+				clientIp:{
+					required:true,
+				},
+				clientDriverPath:{
+					required:true,
+				},
+			}
+		});
+		
+ 		function submitHandler() {
+	        if ($.validate.form()) {
+	            var drivenfile = $('#file')[0].files[0];
+	            var formData = new FormData();
+	            formData.append("drivenfile", drivenfile);
+	            formData.append("clientIp", $("#clientIp").val());
+	            formData.append("driverPath", $("#clientDriverPath").val());
+	            $.ajax({
+	                url: prefix + "/uploadJar",
+	                type: 'POST',
+	                cache: false,
+	                data: formData,
+	                processData: false,
+	                contentType: false,
+	                success: function (result) {
+	                	$.modal.msgSuccess("上传成功");
+	                },
+	                error: function (err) {
+	                }
+	            });
+	        }
+	    }
+	</script>
+</body>
+</html>

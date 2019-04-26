@@ -41,6 +41,12 @@
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testexecution:taskScheduling:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
+				<a class="btn btn-info" onclick="showQueryLog()">
+					<i class="fa fa-eye"></i> 查看日志
+				</a>
+				<a class="btn btn-info" onclick="uploadJar()">
+					<i class="fa fa-cloud-upload"></i> 上传驱动包
+				</a>
 			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
@@ -206,6 +212,18 @@
 			var url = taskPrefix + '?schedulingId=' + schedulingId;
 			createMenuItem(url, "任务执行");
 		}
+		
+        /*弹出层查看日志*/
+        function showQueryLog() {
+        	var url = prefix+"/queryLog";
+        	 $.modal.open("查看日志", url,null,null,"查看");
+        }
+        
+        /*弹出层上传Jar*/
+        function uploadJar() {
+        	var url = prefix+"/showUploadJar";
+        	 $.modal.open("上传Jar至客户端", url,null,null,"上传");
+        }
     </script>
 </body>
 </html>
