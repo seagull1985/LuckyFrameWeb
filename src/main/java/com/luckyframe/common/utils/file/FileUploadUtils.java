@@ -37,6 +37,11 @@ public class FileUploadUtils
      * 默认文件类型jpg
      */
     public static final String IMAGE_JPG_EXTENSION = ".jpg";
+    
+    /**
+     * 默认驱动类型jar
+     */
+    public static final String DRIVEN_JAR_EXTENSION = ".jar";
 
     private static int counter = 0;
 
@@ -89,6 +94,36 @@ public class FileUploadUtils
         }
     }
 
+    /**
+     * 驱动上传
+     * @param baseDir
+     * @param file
+     * @return
+     * @throws FileSizeLimitExceededException
+     * @throws IOException
+     * @throws FileNameLengthLimitExceededException
+     * @author Seagull
+     * @date 2019年4月28日
+     */
+    public static final File uploadJar(String baseDir, MultipartFile file)
+            throws FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException
+    {
+
+        int fileNamelength = file.getOriginalFilename().length();
+        if (fileNamelength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH)
+        {
+            throw new FileNameLengthLimitExceededException(FileUploadUtils.DEFAULT_FILE_NAME_LENGTH);
+        }
+
+        assertAllowed(file);
+
+        String fileName = file.getOriginalFilename();
+
+        File desc = getAbsoluteFile(baseDir, baseDir + fileName);
+        file.transferTo(desc);
+        return desc;
+    }
+    
     /**
      * 文件上传
      *

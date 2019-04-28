@@ -22,7 +22,6 @@ import com.luckyframe.framework.web.domain.AjaxResult;
 import com.luckyframe.framework.web.page.TableDataInfo;
 import com.luckyframe.project.system.dict.domain.DictData;
 import com.luckyframe.project.system.dict.service.IDictDataService;
-import com.luckyframe.project.system.dict.service.IDictTypeService;
 
 /**
  * 数据字典信息

@@ -61,7 +61,7 @@ public class OpenPostApiController
 			result = projectCaseDebugService.insertProjectCaseDebug(projectCaseDebug);			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("根据项目ID获取公共参数列表出现异常", e);
 		}
 		if(result>0){
 			return "提交调试日志成功！";
@@ -87,7 +87,7 @@ public class OpenPostApiController
 			result = taskCaseExecuteService.insertTaskCaseExecute(taskCaseExecute);			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("增加用例执行明细出现异常", e);
 		}
 		if(result>0){
 			return "提交用例执行明细成功！";
@@ -116,7 +116,7 @@ public class OpenPostApiController
 			taskCaseExecuteService.updateTaskCaseExecute(tce);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("修改用例执行状态出现异常", e);
 		}
 		if(result>0){
 			return "修改用例执行状态成功！";
@@ -148,7 +148,7 @@ public class OpenPostApiController
 			result = taskCaseLogService.insertTaskCaseLog(taskCaseLog);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("增加用例日志明细出现异常", e);
 		}
 		if(result>0){
 			return "提交用例执行日志成功！";
@@ -204,7 +204,7 @@ public class OpenPostApiController
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("更新任务执行数据出现异常", e);
 		}
 		return "{\"caseCount\":"+caseCount+",\"caseSuc\":"+casesuc+",\"caseFail\":"+casefail+",\"caseLock\":"+caselock+",\"caseNoExec\":"+casenoexec+"}";
 	}
@@ -256,7 +256,7 @@ public class OpenPostApiController
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("更新任务执行数据以及状态出现异常", e);
 		}
 		return "{\"caseCount\":"+caseCount+",\"caseSuc\":"+casesuc+",\"caseFail\":"+casefail+",\"caseLock\":"+caselock+",\"caseNoExec\":"+casenoexec+"}";
 	}
@@ -282,7 +282,7 @@ public class OpenPostApiController
 			result = taskCaseLogService.deleteTaskCaseLogByTaskCaseId(taskCaseExecute.getTaskCaseId());			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("删除用例执行日志出现异常", e);
 		}
 		if(result>0){
 			return "删除用例执行日志成功！";

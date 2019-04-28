@@ -30,7 +30,6 @@ import com.luckyframe.project.monitor.job.service.IJobService;
 import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.system.client.service.IClientService;
 import com.luckyframe.project.system.project.service.IProjectService;
-import com.luckyframe.project.system.role.service.IRoleProjectService;
 
 /**
  * 客户端管理 信息操作处理

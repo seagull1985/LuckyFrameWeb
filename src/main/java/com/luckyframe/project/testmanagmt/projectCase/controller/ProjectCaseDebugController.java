@@ -100,7 +100,7 @@ public class ProjectCaseDebugController extends BaseController
 	    	webDebugCaseEntity.setCaseId(projectCaseDebug.getCaseId());
 	    	webDebugCaseEntity.setUserId(ShiroUtils.getUserId().intValue());
 			Client client = clientService.selectClientById(projectCaseDebug.getClientId());
-			String url= "http://"+client.getClientIp()+":"+ClientConstants.CLIENT_MONITOR_PORT+"/webdebugcase";
+			String url= "http://"+client.getClientIp()+":"+ClientConstants.CLIENT_MONITOR_PORT+"/webDebugCase";
 			String result=HttpRequest.httpClientPost(url, JSONObject.toJSONString(webDebugCaseEntity));
 			
 			if(result.contains("正常")){

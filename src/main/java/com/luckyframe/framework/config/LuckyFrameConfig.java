@@ -1,5 +1,7 @@
 package com.luckyframe.framework.config;
 
+import java.io.File;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -59,12 +61,23 @@ public class LuckyFrameConfig
 
     public static String getProfile()
     {
+    	setProfile();
         return profile;
     }
 
-    public void setProfile(String profile)
+    public static void setProfile()
     {
-    	LuckyFrameConfig.profile = profile;
+		// 文件目录
+		String pathName = System.getProperty("user.dir")+File.separator+"profile";
+		File file = new File(pathName);
+		if (file.exists()) {
+			if (!file.isDirectory()) {
+				file.mkdir();
+			}
+		} else {
+				file.mkdir();
+		}
+    	LuckyFrameConfig.profile = file.getPath()+File.separator;
     }
 
     public static boolean isAddressEnabled()
@@ -79,16 +92,16 @@ public class LuckyFrameConfig
 
     public static String getAvatarPath()
     {
-        return profile + "avatar/";
+        return profile + "avatar"+File.separator;
     }
 
     public static String getDownloadPath()
     {
-        return profile + "download/";
+        return profile + "download"+File.separator;
     }
     
     public static String getUploadPath()
     {
-        return profile + "upload/";
+        return profile + "upload"+File.separator;
     }
 }

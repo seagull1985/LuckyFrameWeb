@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.support.Convert;
 import com.luckyframe.common.utils.security.PermissionUtils;
-import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.project.testexecution.taskCaseExecute.mapper.TaskCaseExecuteMapper;
 import com.luckyframe.project.testexecution.taskCaseLog.mapper.TaskCaseLogMapper;
 import com.luckyframe.project.testexecution.taskExecute.domain.TaskExecute;

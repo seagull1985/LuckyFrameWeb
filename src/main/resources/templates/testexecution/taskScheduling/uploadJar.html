@@ -61,9 +61,11 @@
 	                processData: false,
 	                contentType: false,
 	                success: function (result) {
-	                	$.modal.msgSuccess("上传成功");
-	                },
-	                error: function (err) {
+	                	if (result.code == web_status.SUCCESS) {
+	                    	$.modal.msgSuccess(result.msg);
+	                    } else {
+	                    	$.modal.msgError(result.msg);
+	                    }
 	                }
 	            });
 	        }

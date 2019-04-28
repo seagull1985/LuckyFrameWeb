@@ -1,5 +1,6 @@
 package com.luckyframe.project.testexecution.taskScheduling.controller;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -398,13 +399,33 @@ public class TaskSchedulingController extends BaseController
 	@PostMapping("/uploadJar")
 	@ResponseBody
 	public AjaxResult uploadJar(@RequestParam("drivenfile") MultipartFile file, @RequestParam("clientIp") String clientIp,@RequestParam("driverPath") String driverPath) {
+		String result="获取远程链接失败！";
 		try {
 			if (!file.isEmpty()) {
-				String avatar = FileUploadUtils.upload(LuckyFrameConfig.getAvatarPath(), file);
+				if (!file.getOriginalFilename().endsWith(FileUploadUtils.DRIVEN_JAR_EXTENSION))
+				{
+					return error("驱动文件只能是.jar格式");
+				}
+				
+				File jarFile = FileUploadUtils.uploadJar(LuckyFrameConfig.getUploadPath(), file);
+				
+				try {
+					result = HttpRequest.httpClientUploadFile(
+							"http://" + clientIp + ":" + ClientConstants.CLIENT_MONITOR_PORT + "/uploadJar", driverPath,
+							jarFile);
+				} catch (Exception e) {
+					return error("获取远程链接失败！");
+				}
+				// 删除服务器上的文件
+				if (jarFile.exists()) {
+					jarFile.delete();
+				}
+			}else{
+				return error("文件为空");
 			}
 		 } catch (Exception e) {
 			return error(e.getMessage());
 		 }
-		 return toAjax(1);
+		 return success(result);
 	}
 }

@@ -102,7 +102,7 @@ public class OpenGetApiController
 			pw.print(array.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("通过计划ID获取用例列表出现异常", e);
 		}
 	}
 	
@@ -123,7 +123,7 @@ public class OpenGetApiController
 			pw.print(lfConfig.getVersion());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("获取服务器版本号出现异常", e);
 		}
 	}
 	
@@ -154,7 +154,7 @@ public class OpenGetApiController
 			pw.print(array.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("通过计划名称获取用例列表出现异常", e);
 		}
 	}
 	
@@ -184,7 +184,7 @@ public class OpenGetApiController
 			pw.print(array.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("通过用例ID获取步骤列表出现异常", e);
 		}
 	}
 	
@@ -208,7 +208,7 @@ public class OpenGetApiController
 			pw.print(JSONObject.toJSONString(taskExecute));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("通过taskId获取实体出现异常", e);
 		}
 	}
 	
@@ -232,7 +232,7 @@ public class OpenGetApiController
 			pw.print(JSONObject.toJSONString(projectCase));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("通过用例编号获取实体出现异常", e);
 		}
 	}
 	
@@ -256,7 +256,7 @@ public class OpenGetApiController
 			pw.print(JSONObject.toJSONString(projectCase));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("通过用例编号获取实体出现异常", e);
 		}
 	}
 	
@@ -284,7 +284,7 @@ public class OpenGetApiController
 			pw.print(array.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("根据项目ID获取公共参数列表出现异常", e);
 		}
 	}
 	
@@ -309,7 +309,7 @@ public class OpenGetApiController
 			pw.print(JSONObject.toJSONString(taskScheduling));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("通过执行任务ID获取调度实体出现异常", e);
 		}
 	}
 	
@@ -341,7 +341,7 @@ public class OpenGetApiController
 			pw.print(array.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("通过计划名称获取用例列表出现异常", e);
 		}
 	}
 	
@@ -365,7 +365,7 @@ public class OpenGetApiController
 			pw.print(JSONObject.toJSONString(projectProtocolTemplate));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("通过模板ID获取实体出现异常", e);
 		}
 	}
 	
@@ -393,7 +393,7 @@ public class OpenGetApiController
 			pw.print(array.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("根据模板ID获取参数出现异常", e);
 		}
 	}
 }
