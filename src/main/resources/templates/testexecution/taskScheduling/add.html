@@ -31,7 +31,7 @@
 				<label class="col-sm-3 control-label">客户端：</label>
 				<div class="col-sm-8">
 					<select id="clientId" name="clientId" class="form-control m-b" th:with="type=${clientList}" onchange="setDriverPathList()">
-	                    <option th:each="client : ${type}" th:text="${client.clientName}" th:value="${client.clientId}"></option>
+	                    <option th:each="client : ${type}" th:text="${client.status==0} ? ${client.clientName}+'【'+${client.clientIp}+'】' : ${client.clientName}+'【'+${client.clientIp}+'】>>>状态异常'" th:value="${client.clientId}"></option>
 	                </select>
 				</div>
 			</div>

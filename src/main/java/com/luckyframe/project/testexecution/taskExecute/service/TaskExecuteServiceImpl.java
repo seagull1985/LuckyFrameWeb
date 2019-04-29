@@ -1,6 +1,9 @@
 package com.luckyframe.project.testexecution.taskExecute.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,4 +136,43 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
 		return result;
 	}
 	
+	/**
+	 * 查询最早一条执行任务日期
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月28日
+	 */
+    @Override
+	public Date selectTaskExecuteMinData()
+	{
+	    return taskExecuteMapper.selectTaskExecuteMinData();
+	}
+    
+	/**
+	 * 查询任务总数
+	 */
+    @Override
+	public int selectTaskExecuteCount()
+	{
+	    return taskExecuteMapper.selectTaskExecuteCount();
+	}
+    
+	/**
+	 * 查询30天内任务统计执行数据
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月29日
+	 */
+    @Override
+	public List<TaskExecute> selectTaskExecuteListForThirtyDays()
+	{
+    	Date date = new Date();
+    	Calendar calendar = new GregorianCalendar();
+    	/*30天前*/
+    	calendar.add(Calendar.DATE, -30);
+    	date = calendar.getTime();
+    	    
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return taskExecuteMapper.selectTaskExecuteListForThirtyDays(sdf.format(date));
+	}
 }

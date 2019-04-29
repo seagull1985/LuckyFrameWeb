@@ -87,4 +87,20 @@ public interface IProjectCaseService
      * @date 2019年2月28日
      */
     public String checkProjectCaseNameUnique(ProjectCase projectCase);
+    
+	/**
+	 * 查询总用例数
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月28日
+	 */
+	public int selectProjectCaseCount();
+	
+	/**
+	 * 查询30天内更新的用例数
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月28日
+	 */
+	public int selectProjectCaseCountForThirtyDays();
 }

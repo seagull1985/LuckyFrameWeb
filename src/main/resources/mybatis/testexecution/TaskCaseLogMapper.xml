@@ -88,10 +88,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 	
     <delete id="deleteTaskCaseLogByIds" parameterType="String">
-        delete from task_case_log where log_id in 
+        delete from c where log_id in 
         <foreach item="logId" collection="array" open="(" separator="," close=")">
             #{logId}
         </foreach>
     </delete>
     
+    <select id="selectTaskCaseLogCount" resultType="Integer">
+		select count(1) from task_case_log
+	</select>
 </mapper>

@@ -78,4 +78,11 @@ public interface TaskCaseLogMapper
      */
 	public int deleteTaskCaseLogByIds(String[] logIds);
 	
+    /**
+     * 查询已执行的总日志数
+     * @return
+     * @author Seagull
+     * @date 2019年4月28日
+     */
+    public int selectTaskCaseLogCount();
 }

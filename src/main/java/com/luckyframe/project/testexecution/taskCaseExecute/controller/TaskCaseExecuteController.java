@@ -8,9 +8,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.ConnectException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +30,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.luckyframe.common.constant.ClientConstants;
 import com.luckyframe.common.constant.TaskSchedulingConstants;
+import com.luckyframe.common.utils.DateUtils;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.client.HttpRequest;
 import com.luckyframe.common.utils.client.RunBatchCaseEntity;
@@ -51,6 +55,7 @@ import com.luckyframe.project.testexecution.taskExecute.service.ITaskExecuteServ
 import com.luckyframe.project.testexecution.taskScheduling.domain.TaskScheduling;
 import com.luckyframe.project.testexecution.taskScheduling.service.ITaskSchedulingService;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseSteps;
+import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseService;
 import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseStepsService;
 
 /**
@@ -82,6 +87,9 @@ public class TaskCaseExecuteController extends BaseController
 	
 	@Autowired
 	private ITaskCaseLogService taskCaseLogService;
+	
+	@Autowired
+	private IProjectCaseService projectCaseService;
 	
 	@RequiresPermissions("testexecution:taskCaseExecute:view")
 	@GetMapping()
@@ -384,6 +392,143 @@ public class TaskCaseExecuteController extends BaseController
 			eos.flush();
 			eos.close();
 		}
+	}
+	
+	/**
+	 * 获取任务相关数据
+	 * @param req
+	 * @param rsp
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/getMainData.do")
+	public void getMainData(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		String[] taskdata = new String[2];
+		String[] casedata = new String[2];
+		String[] logdata = new String[2];
+		String[] caseadddata = new String[2];
+
+		Date minDate = taskExecuteService.selectTaskExecuteMinData();
+		String dateInterval = String.valueOf(DateUtils.getDatePoor(new Date(), minDate));
+		taskdata[0] = dateInterval;
+		taskdata[1] = String.valueOf(taskExecuteService.selectTaskExecuteCount());
+
+		int casecount = taskCaseExecuteService.selectTaskCaseExecuteCount();
+		casedata[0] = String.valueOf(casecount);
+		int casesuccount = taskCaseExecuteService.selectTaskCaseExecuteCountForSuccess();
+		if (0 == casecount && 0 == casesuccount) {
+			casedata[1] = "0";
+		} else {
+			double percase = (double) casesuccount / casecount;
+			BigDecimal bcase = new BigDecimal(percase * 100);
+			percase = bcase.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			casedata[1] = String.valueOf(percase);
+		}
+
+		String daysStr=dateInterval.substring(0, dateInterval.indexOf("天"));
+		int days=Integer.valueOf(daysStr);
+		if (0 == casecount) {
+			logdata[0] = "0";
+		} else {
+			double per = (double) casecount / 45;
+			if (days != 0) {
+				per = per / days;
+			} else {
+				per = 0;
+			}
+
+			BigDecimal bperrl = new BigDecimal(per);
+			per = bperrl.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			logdata[0] = String.valueOf(per);
+		}
+		logdata[1] = String.valueOf(taskCaseLogService.selectTaskCaseLogCount());
+
+		int caseaddcount = projectCaseService.selectProjectCaseCount();
+		caseadddata[0] = String.valueOf(caseaddcount);
+		int thirtyDaysCcount = projectCaseService.selectProjectCaseCountForThirtyDays();
+		caseadddata[1] = String.valueOf(thirtyDaysCcount);
+
+		rsp.setContentType("application/json");
+		rsp.setCharacterEncoding("utf-8");
+		JSONArray taskArray = (JSONArray) JSONArray.toJSON(taskdata);
+		JSONArray caseArray = (JSONArray) JSONArray.toJSON(casedata);
+		JSONArray logArray = (JSONArray) JSONArray.toJSON(logdata);
+		JSONArray caseaddArray = (JSONArray) JSONArray.toJSON(caseadddata);
+		JSONObject jsobjcet = new JSONObject();
+		jsobjcet.put("taskdata", taskArray);
+		jsobjcet.put("casedata", caseArray);
+		jsobjcet.put("logdata", logArray);
+		jsobjcet.put("caseadddata", caseaddArray);
+
+		rsp.getWriter().write(jsobjcet.toString());
+	}
+	
+	/**
+	 * 获取报表
+	 * @param req
+	 * @param rsp
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/getMianLineReport.do")
+	public void getIndexReport(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+		List<TaskExecute> taskExecuteList = taskExecuteService.selectTaskExecuteListForThirtyDays();
+
+		String[] casetotal;
+		String[] casesuc;
+		String[] casefail;
+		String[] caselock;
+		String[] casenoex;
+		String[] createdate;
+
+		if (null != taskExecuteList && 0 != taskExecuteList.size()) {
+			casetotal = new String[taskExecuteList.size()];
+			casesuc = new String[taskExecuteList.size()];
+			casefail = new String[taskExecuteList.size()];
+			caselock = new String[taskExecuteList.size()];
+			casenoex = new String[taskExecuteList.size()];
+			createdate = new String[taskExecuteList.size()];
+		} else {
+			casetotal = new String[1];
+			casesuc = new String[1];
+			casefail = new String[1];
+			caselock = new String[1];
+			casenoex = new String[1];
+			createdate = new String[1];
+
+			casetotal[0] = "0";
+			casesuc[0] = "0";
+			casefail[0] = "0";
+			caselock[0] = "0";
+			casenoex[0] = "0";
+			createdate[0] = DateUtils.getDate();
+		}
+
+		for (int i = 0; i < taskExecuteList.size(); i++) {
+			casetotal[i] = taskExecuteList.get(i).getCaseTotalCount().toString();
+			casesuc[i] = taskExecuteList.get(i).getCaseSuccCount().toString();
+			casefail[i] = taskExecuteList.get(i).getCaseFailCount().toString();
+			caselock[i] = taskExecuteList.get(i).getCaseLockCount().toString();
+			casenoex[i] = taskExecuteList.get(i).getCaseNoexecCount().toString();
+			createdate[i] = DateUtils.parseDateToStr("yyyy-MM-dd HH:mm:ss", taskExecuteList.get(i).getUpdateTime());
+		}
+
+		JSONArray jsoncasetotal = (JSONArray) JSONArray.toJSON(casetotal);
+		JSONArray jsoncasesuc = (JSONArray) JSONArray.toJSON(casesuc);
+		JSONArray jsoncasefail = (JSONArray) JSONArray.toJSON(casefail);
+		JSONArray jsoncaselock = (JSONArray) JSONArray.toJSON(caselock);
+		JSONArray jsoncasenoex = (JSONArray) JSONArray.toJSON(casenoex);
+		JSONArray jsoncreatedate = (JSONArray) JSONArray.toJSON(createdate);
+
+		JSONObject jsobjcet = new JSONObject();
+		jsobjcet.put("casetotal", jsoncasetotal);
+		jsobjcet.put("casesuc", jsoncasesuc);
+		jsobjcet.put("casefail", jsoncasefail);
+		jsobjcet.put("caselock", jsoncaselock);
+		jsobjcet.put("casenoex", jsoncasenoex);
+		jsobjcet.put("casedate", jsoncreatedate);
+
+		rsp.setContentType("application/json");
+		rsp.setCharacterEncoding("utf-8");
+		rsp.getWriter().write(jsobjcet.toString());
 	}
 	
 }

@@ -109,4 +109,15 @@ public class TaskCaseLogServiceImpl implements ITaskCaseLogService
 		return taskCaseLogMapper.deleteTaskCaseLogByTaskCaseId(taskCaseId);
 	}
 	
+	/**
+	 * 查询总日志数
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月28日
+	 */
+    @Override
+	public int selectTaskCaseLogCount()
+	{
+	    return taskCaseLogMapper.selectTaskCaseLogCount();
+	}
 }

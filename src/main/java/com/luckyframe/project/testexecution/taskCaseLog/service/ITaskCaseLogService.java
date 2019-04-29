@@ -70,4 +70,11 @@ public interface ITaskCaseLogService
 	 */
 	public int deleteTaskCaseLogByTaskCaseId(Integer taskCaseId);
 	
+	/**
+	 * 查询总日志数
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月28日
+	 */
+	public int selectTaskCaseLogCount();
 }

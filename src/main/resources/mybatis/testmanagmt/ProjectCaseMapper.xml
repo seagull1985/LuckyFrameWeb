@@ -188,4 +188,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select count(1) from project_case where module_id=#{module_id}
 	</select>
 	
+	<select id="selectProjectCaseCount" resultType="Integer">
+		select count(1) from project_case
+	</select>
+	
+	<select id="selectProjectCaseCountForThirtyDays" parameterType="String" resultType="Integer">
+		select count(1) from project_case where date_format(update_time,'%y%m%d') &gt;= date_format(#{updateTime},'%y%m%d')
+	</select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.luckyframe.project.testexecution.taskExecute.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import com.luckyframe.project.testexecution.taskExecute.domain.TaskExecute;	
@@ -85,4 +86,29 @@ public interface TaskExecuteMapper
      * @date 2019年4月13日
      */
     public int selectTaskExecuteCountBySchedulingId(Integer schedulingId);
+    
+    /**
+     * 查询最早的任务执行日期
+     * @return
+     * @author Seagull
+     * @date 2019年4月28日
+     */
+    public Date selectTaskExecuteMinData();
+    
+    /**
+     * 查询所有任务数
+     * @return
+     * @author Seagull
+     * @date 2019年4月28日
+     */
+    public int selectTaskExecuteCount();
+    
+    /**
+     * 查询指定天数内的任务执行统计数据
+     * @param updateTime
+     * @return
+     * @author Seagull
+     * @date 2019年4月29日
+     */
+    public List<TaskExecute> selectTaskExecuteListForThirtyDays(String updateTime);
 }

@@ -1,5 +1,6 @@
 package com.luckyframe.project.testexecution.taskExecute.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.luckyframe.project.testexecution.taskExecute.domain.TaskExecute;
@@ -60,4 +61,27 @@ public interface ITaskExecuteService
      */
 	public int deleteTaskExecuteByIds(String ids);
 	
+	/**
+	 * 查询最早一条执行任务日期
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月28日
+	 */
+	public Date selectTaskExecuteMinData();
+	
+	/**
+	 * 查询任务总数
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月28日
+	 */
+	public int selectTaskExecuteCount();
+	
+	/**
+	 * 查询30天内任务统计执行数据
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月29日
+	 */
+	public List<TaskExecute> selectTaskExecuteListForThirtyDays();
 }

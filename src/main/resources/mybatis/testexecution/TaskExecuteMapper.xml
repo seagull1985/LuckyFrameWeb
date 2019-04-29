@@ -147,4 +147,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select count(1) from task_execute where scheduling_id=#{scheduling_id}
 	</select>
 	
+	<select id="selectTaskExecuteCount" resultType="Integer">
+		select count(1) from task_execute
+	</select>
+	
+	<select id="selectTaskExecuteMinData" resultType="java.util.Date">
+		select min(create_time) from task_execute
+	</select>
+	
+	<select id="selectTaskExecuteListForThirtyDays" parameterType="String" resultMap="TaskExecuteResult">
+        <include refid="selectTaskExecuteVo"/>
+        where date_format(te.update_time,'%y%m%d') &gt;= date_format(#{updateTime},'%y%m%d')
+    </select>
 </mapper>

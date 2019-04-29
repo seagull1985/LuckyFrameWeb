@@ -123,4 +123,27 @@ public class TaskCaseExecuteServiceImpl implements ITaskCaseExecuteService
 		return taskCaseExecuteMapper.deleteTaskCaseExecuteByIds(Convert.toStrArray(ids));
 	}
 	
+	/**
+	 * 查询已执行的总用例数
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月28日
+	 */
+    @Override
+	public int selectTaskCaseExecuteCount()
+	{
+	    return taskCaseExecuteMapper.selectTaskCaseExecuteCount();
+	}
+    
+	/**
+	 * 查询已成功执行的总用例数
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月28日
+	 */
+    @Override
+	public int selectTaskCaseExecuteCountForSuccess()
+	{
+	    return taskCaseExecuteMapper.selectTaskCaseExecuteCountForSuccess();
+	}
 }

@@ -112,4 +112,21 @@ public interface ProjectCaseMapper
      * @date 2019年3月4日
      */
     public int selectProjectCaseCountByModuleId(Integer moduleId);
+    
+    /**
+     * 查询总用例数
+     * @return
+     * @author Seagull
+     * @date 2019年4月28日
+     */
+    public int selectProjectCaseCount();
+    
+    /**
+     * 查询指定天数内更新的用例
+     * @param projectCase
+     * @return
+     * @author Seagull
+     * @date 2019年4月28日
+     */
+    public int selectProjectCaseCountForThirtyDays(String updateTime);
 }

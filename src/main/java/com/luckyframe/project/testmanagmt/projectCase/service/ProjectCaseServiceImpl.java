@@ -1,6 +1,9 @@
 package com.luckyframe.project.testmanagmt.projectCase.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,4 +189,35 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
         }
         return ProjectCaseConstants.PROJECTCASE_NAME_UNIQUE;
     }
+    
+	/**
+	 * 查询总用例数
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月28日
+	 */
+    @Override
+	public int selectProjectCaseCount()
+	{
+	    return projectCaseMapper.selectProjectCaseCount();
+	}
+    
+	/**
+	 * 查询30天内更新的用例数
+	 * @return
+	 * @author Seagull
+	 * @date 2019年4月28日
+	 */
+    @Override
+	public int selectProjectCaseCountForThirtyDays()
+	{
+    	Date date = new Date();
+    	Calendar calendar = new GregorianCalendar();
+    	/*30天前*/
+    	calendar.add(Calendar.DATE, -30);
+    	date = calendar.getTime();
+    	    
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    return projectCaseMapper.selectProjectCaseCountForThirtyDays(sdf.format(date));
+	}
 }
