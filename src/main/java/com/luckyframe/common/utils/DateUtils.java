@@ -136,6 +136,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
      */
     public static String getDatePoor(Date endDate, Date nowDate)
     {
+    	if(null==nowDate){
+    		return 0 + "天" + 0 + "小时" + 0 + "分钟";
+    	}
+    	
         long nd = 1000 * 24 * 60 * 60;
         long nh = 1000 * 60 * 60;
         long nm = 1000 * 60;

@@ -156,7 +156,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectTaskExecuteListForThirtyDays" parameterType="String" resultMap="TaskExecuteResult">
-        <include refid="selectTaskExecuteVo"/>
-        where date_format(te.update_time,'%y%m%d') &gt;= date_format(#{updateTime},'%y%m%d')
+        select sum(case_total_count) as case_total_count,sum(case_succ_count) as case_succ_count,sum(case_fail_count) as case_fail_count,
+        sum(case_lock_count) as case_lock_count,sum(case_noexec_count) as case_noexec_count,date_format(update_time,'%Y%m%d') as update_time 
+        from task_execute 
+        where date_format(update_time,'%y%m%d') &gt;= date_format(#{updateTime},'%y%m%d') 
+        GROUP BY date_format(update_time,'%Y%m%d')
     </select>
 </mapper>

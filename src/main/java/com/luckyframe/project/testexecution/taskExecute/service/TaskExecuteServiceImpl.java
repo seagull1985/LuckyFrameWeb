@@ -115,16 +115,21 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
 			Integer taskId=Integer.valueOf(taskIdstr);
 			TaskExecute taskExecute = taskExecuteMapper.selectTaskExecuteById(taskId);
 			
+			if(null==taskExecute){
+				result=1;
+				continue;
+			}
+			
 			if(!PermissionUtils.isProjectPermsPassByProjectId(taskExecute.getProjectId())){	
 				  throw new BusinessException(String.format("执行任务【%1$s】没有项目删除权限", taskExecute.getTaskName()));
 			}
 			
 			//30分钟内的任务不允许删除，防止客户端提交脏数据
 			Date date = new Date(System.currentTimeMillis()-1000*60*30);
-			boolean isTaskDeleteTime = ("0".equals(taskExecute.getTaskStatus()) || "1".equals(taskExecute.getTaskStatus()))
+			boolean isTaskDeleteTime = (0==taskExecute.getTaskStatus() || 1==taskExecute.getTaskStatus())
 					&& taskExecute.getUpdateTime().after(date);			
 			if (isTaskDeleteTime) {
-				throw new BusinessException(String.format("执行中的任务【%1$s】必须30分钟后才可以删除", taskExecute.getTaskName()));
+				throw new BusinessException(String.format("执行中的任务 %1$s 必须30分钟后才可以删除", taskExecute.getTaskName()));
 			}
 			
 			taskCaseLogMapper.deleteTaskCaseLogByTaskId(taskId);

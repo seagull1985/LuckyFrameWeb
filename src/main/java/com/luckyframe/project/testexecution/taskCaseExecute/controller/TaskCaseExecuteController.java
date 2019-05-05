@@ -508,7 +508,8 @@ public class TaskCaseExecuteController extends BaseController
 			casefail[i] = taskExecuteList.get(i).getCaseFailCount().toString();
 			caselock[i] = taskExecuteList.get(i).getCaseLockCount().toString();
 			casenoex[i] = taskExecuteList.get(i).getCaseNoexecCount().toString();
-			createdate[i] = DateUtils.parseDateToStr("yyyy-MM-dd HH:mm:ss", taskExecuteList.get(i).getUpdateTime());
+			String dateStr = DateUtils.parseDateToStr("yyyy-MM-dd", taskExecuteList.get(i).getUpdateTime());
+			createdate[i] = dateStr.substring(0, dateStr.indexOf("-"));
 		}
 
 		JSONArray jsoncasetotal = (JSONArray) JSONArray.toJSON(casetotal);

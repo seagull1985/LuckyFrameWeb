@@ -92,7 +92,7 @@ public class JobController extends BaseController
      * 任务调度状态修改
      */
     @Log(title = "定时任务", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("monitor:job:changeStatus")
+    @RequiresPermissions("testexecution:taskScheduling:edit")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(Job job)
