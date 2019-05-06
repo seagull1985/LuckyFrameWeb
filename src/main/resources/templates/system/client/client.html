@@ -38,6 +38,9 @@
 				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:client:edit">
 					<i class="fa fa-edit"></i> 修改
 				</a>
+				<a class="btn btn-info btn-edit disabled" onclick="showMonitor()" shiro:hasPermission="system:client:view">
+					<i class="fa fa-edit"></i> 监控资源
+				</a>
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:client:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
@@ -60,6 +63,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
 				exportUrl: prefix + "/export",
+				customUrl: prefix + "/showMonitor/{id}",
                 modalName: "客户端",
 				search: false,
 		        showExport: true,
@@ -81,7 +85,7 @@
 				},
 				{
 					field : 'status', 
-					title : '客户端超时',
+					title : '客户端状态',
 					formatter : function(value,
 							row, index) {
 						if(value==0){
@@ -122,6 +126,23 @@
             };
             $.table.init(options);
         });
+        
+        function showMonitor() {
+        	var row= $.map($('#bootstrap-table').bootstrapTable('getSelections'), function (row) {
+    	        return row;
+    	    });
+        	
+         	if(0!=row[0].status){
+        		$.modal.msgWarning("客户端非正常状态，不能查询");
+        		return true;
+        	}
+
+        	var url = "/404.html";
+        	if ($.common.isNotEmpty(row)) {
+        	    url = $.table._option.customUrl.replace("{id}", row[0].clientId);
+        	}
+        	$.modal.openViewFull("客户端资源监控 "+row[0].clientName+" ["+row[0].clientIp+"]", url, null, null);
+        }
     </script>
 </body>
 </html>

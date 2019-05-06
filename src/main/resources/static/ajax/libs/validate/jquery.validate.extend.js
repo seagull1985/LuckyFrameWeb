@@ -18,7 +18,7 @@ $(document).ready(function(){
 	},"请填写正确的座机号码");
     // IP地址验证   
     jQuery.validator.addMethod("isIp", function(value, element) {    
-      return this.optional(element) || /^(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.)(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.){2}([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))$/.test(value);    
+      return this.optional(element) || /^(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.)(([0-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.){2}([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))$/.test(value);    
     }, "请填写正确的IP地址。");
 	//姓名校验
 	jQuery.validator.addMethod("isName",function(value,element){

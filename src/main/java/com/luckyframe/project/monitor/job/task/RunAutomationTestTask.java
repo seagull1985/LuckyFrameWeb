@@ -77,7 +77,6 @@ public class RunAutomationTestTask
 				log.error("测试任务执行，远程链接客户端出现异常...");
 				taskExecute.setTaskStatus(4);
 				taskExecuteService.updateTaskExecute(taskExecute);
-				throw new ConnectException();
 			} catch (KeyManagementException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

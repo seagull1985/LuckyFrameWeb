@@ -1,5 +1,6 @@
 package com.luckyframe.project.system.client.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -15,9 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.luckyframe.common.constant.ClientConstants;
 import com.luckyframe.common.constant.JobConstants;
 import com.luckyframe.common.constant.ScheduleConstants;
 import com.luckyframe.common.exception.BusinessException;
+import com.luckyframe.common.utils.client.HttpRequest;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
@@ -27,6 +31,7 @@ import com.luckyframe.framework.web.domain.AjaxResult;
 import com.luckyframe.framework.web.page.TableDataInfo;
 import com.luckyframe.project.monitor.job.domain.Job;
 import com.luckyframe.project.monitor.job.service.IJobService;
+import com.luckyframe.project.monitor.server.domain.set.SetServer;
 import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.system.client.service.IClientService;
 import com.luckyframe.project.system.project.service.IProjectService;
@@ -72,6 +77,23 @@ public class ClientController extends BaseController
 		return getDataTable(list);
 	}
 	
+    @RequiresPermissions("system:client:view")
+    @GetMapping("/showMonitor/{clientId}")
+    public String showMonitor(@PathVariable("clientId") Integer clientId, ModelMap mmap) throws Exception
+    {
+    	Client client = clientService.selectClientById(clientId);
+		String result = HttpRequest.httpClientGet(
+				"http://" + client.getClientIp() + ":" + ClientConstants.CLIENT_MONITOR_PORT + "/getClientMonitorData",
+				new HashMap<String, Object>(0));
+		System.out.println(result);
+		JSONObject jSONObject = JSONObject.parseObject(result);
+		System.out.println(jSONObject.toJSONString());
+
+		SetServer server = JSONObject.parseObject(jSONObject.toJSONString(),SetServer.class);
+		System.out.println(JSONObject.toJSONString(server));
+        mmap.put("server", server);
+        return prefix + "/showMonitor";
+    }
 	
 	/**
 	 * 导出客户端管理列表
