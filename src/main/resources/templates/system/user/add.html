@@ -116,7 +116,6 @@
         			maxlength: 20
         		},
         		email:{
-        			required:true,
                     email:true,
                     remote: {
                         url: ctx + "system/user/checkEmailUnique",
@@ -133,7 +132,6 @@
                     }
         		},
         		phonenumber:{
-        			required:true,
         			isPhone:true,
                     remote: {
                         url: ctx + "system/user/checkPhoneUnique",

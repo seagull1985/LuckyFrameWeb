@@ -1146,8 +1146,7 @@ create table project_case_module
 -- ----------------------------
 -- 初始化-用例模块数据
 -- ----------------------------
-insert into project_case_module values (1, '接口测试项目', 1, 0, 0, 0, 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '初始化数据');
-insert into project_case_module values (2, 'UI测试项目', 2, 0, 0, 0, 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '初始化数据');
+insert into project_case_module values (1, '测试项目一', 1, 0, 0, 0, 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '初始化数据');
 
 -- ----------------------------
 -- 34、协议模板管理

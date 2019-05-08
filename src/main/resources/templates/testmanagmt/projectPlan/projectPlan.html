@@ -141,12 +141,15 @@
         });
         
         function showPlanCase() {
-        	var row = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        	var row= $.map($('#bootstrap-table').bootstrapTable('getSelections'), function (row) {
+    	        return row;
+    	    });
+        	
         	var url = "/404.html";
         	if ($.common.isNotEmpty(row)) {
-        	    url = $.table._option.customUrl.replace("{id}", row);
+        	    url = $.table._option.customUrl.replace("{id}", row[0].planId);
         	}
-        	$.modal.openFull($.table._option.childrenModalName, url, null, null, "保存计划用例");
+        	$.modal.openFull($.table._option.childrenModalName+": ["+row[0].planName+"]", url, null, null, "保存计划用例");
         }
     </script>
 </body>

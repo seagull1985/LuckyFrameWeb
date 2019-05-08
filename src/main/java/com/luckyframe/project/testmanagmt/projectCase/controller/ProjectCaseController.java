@@ -77,7 +77,7 @@ public class ProjectCaseController extends BaseController
 	{
 		if(StringUtils.isNotEmpty(projectCase.getModuleId())){
 			ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleById(projectCase.getModuleId());
-			if(projectCaseModule.getParentId()==0){
+			if(projectCaseModule.getParentId().equals(0)){
 				projectCase.setModuleId(null);
 			}
 		}

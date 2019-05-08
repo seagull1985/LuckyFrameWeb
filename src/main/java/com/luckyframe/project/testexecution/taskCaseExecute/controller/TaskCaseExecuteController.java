@@ -110,8 +110,10 @@ public class TaskCaseExecuteController extends BaseController
         	}
         }else{
         	TaskExecute te = taskExecuteService.selectTaskExecuteLastRecord();
-        	taskId = te.getTaskId();
-        	projectId = te.getProjectId();
+        	if(null!=te){
+            	taskId = te.getTaskId();
+            	projectId = te.getProjectId();
+        	}
         }
         
 		taskExecute.setProjectId(projectId);

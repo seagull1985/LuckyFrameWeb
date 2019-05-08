@@ -74,7 +74,7 @@ public class ProjectPlanCaseController extends BaseController
 	{
 		if(StringUtils.isNotEmpty(projectCase.getModuleId())){
 			ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleById(projectCase.getModuleId());
-			if(projectCaseModule.getParentId()==0){
+			if(projectCaseModule.getParentId().equals(0)){
 				projectCase.setModuleId(null);
 			}
 		}
@@ -88,7 +88,7 @@ public class ProjectPlanCaseController extends BaseController
 		for (ProjectCase pc:projectCaseList) {
 			pc.setPlanId(projectCase.getPlanId());
 			for (ProjectPlanCase ppc:projectPlanCaseList) {
-				if (pc.getCaseId() == ppc.getCaseId()) {
+				if (pc.getCaseId().equals(ppc.getCaseId())) {
 					pc.setFlag(true);
 					pc.setPriority(ppc.getPriority());					
 					pc.setPlanCaseId(ppc.getPlanCaseId());

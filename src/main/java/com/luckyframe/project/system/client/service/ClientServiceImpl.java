@@ -155,8 +155,9 @@ public class ClientServiceImpl implements IClientService
 		for(String clientIdStr:clientIds){
 			int clientId=Integer.valueOf(clientIdStr);
 			Client client = clientMapper.selectClientById(clientId);
-			
-			for(Integer projectId:client.getProjectIds()){
+			List<ClientProject> clientProjectList= clientProjectMapper.selectClientProjectsById(clientId);
+			for(ClientProject clientProject:clientProjectList){
+			  Integer projectId = clientProject.getProjectId();
 			  if(!PermissionUtils.isProjectPermsPassByProjectId(projectId)){	
 				  throw new BusinessException(String.format("没有项目【%1$s】删除客户端权限", projectMapper.selectProjectById(projectId).getProjectName()));
 			  }		

@@ -70,7 +70,7 @@ public class ProjectTemplateParamsServiceImpl implements IProjectTemplateParamsS
 		int result=0;
 		projectTemplateParams.setUpdateBy(ShiroUtils.getLoginName());
 		projectTemplateParams.setUpdateTime(new Date());
-		if(projectTemplateParams.getParamsId()==0){
+		if(projectTemplateParams.getParamsId().equals(0)){
 			projectTemplateParams.setCreateBy(ShiroUtils.getLoginName());
 			projectTemplateParams.setCreateTime(new Date());
 			result=projectTemplateParamsMapper.insertProjectTemplateParams(projectTemplateParams);

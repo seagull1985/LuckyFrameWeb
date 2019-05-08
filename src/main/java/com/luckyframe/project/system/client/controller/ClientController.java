@@ -191,7 +191,7 @@ public class ClientController extends BaseController
     	if(result<1){
     		return AjaxResult.error();
     	}
-    	
+    	client.setRemark("修改客户端信息，重新初始化");
 		return toAjax(clientService.updateClient(client));
 	}
 	
