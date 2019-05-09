@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NoHttpResponseException;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -48,6 +49,10 @@ public class HttpRequest {
 		StringBuffer resultBuffer = null;
 		CloseableHttpClient httpclient=HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(urlParam);
+		RequestConfig requestConfig = RequestConfig.custom()  
+		        .setConnectTimeout(3000).setConnectionRequestTimeout(1000)  
+		        .setSocketTimeout(3000).build();  
+		httpPost.setConfig(requestConfig);
 	    httpPost.setHeader("Content-Type", "application/json");
 		// 构建请求参数
 		BufferedReader br = null;
@@ -120,6 +125,10 @@ public class HttpRequest {
 			urlParam = urlParam + "?" + sbParams.substring(0, sbParams.length() - 1);
 		}
 		HttpGet httpGet = new HttpGet(urlParam);
+		RequestConfig requestConfig = RequestConfig.custom()  
+		        .setConnectTimeout(3000).setConnectionRequestTimeout(1000)  
+		        .setSocketTimeout(3000).build(); 
+		httpGet.setConfig(requestConfig);
 		try {
 			CloseableHttpResponse response = httpclient.execute(httpGet);
 			

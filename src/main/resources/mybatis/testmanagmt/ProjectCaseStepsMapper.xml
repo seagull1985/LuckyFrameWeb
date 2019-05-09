@@ -45,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
              <if test="updateTime != null "> and update_time = #{updateTime}</if>
          </where>
+         order by step_serial_number
     </select>
     
     <select id="selectProjectCaseStepsById" parameterType="Integer" resultMap="ProjectCaseStepsResult">
