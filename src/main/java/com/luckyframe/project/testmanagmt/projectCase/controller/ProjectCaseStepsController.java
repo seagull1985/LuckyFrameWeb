@@ -1,6 +1,11 @@
 package com.luckyframe.project.testmanagmt.projectCase.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +13,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
@@ -95,4 +105,49 @@ public class ProjectCaseStepsController extends BaseController
 		return toAjax(result);
 	}
 
+	/**
+	 * 行内子查询步骤
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @author Seagull
+	 * @date 2019年5月9日
+	 */
+	@RequiresPermissions("testmanagmt:projectCase:list")
+	@RequestMapping(value = "/list")
+	public void list(HttpServletRequest request,HttpServletResponse response) throws IOException
+	{
+		response.setCharacterEncoding("utf-8");
+		PrintWriter pw = response.getWriter();
+		String caseIdStr = request.getParameter("caseId");
+		Integer caseId = 0;
+		// 得到客户端传递的查询参数
+		if (StringUtils.isNotEmpty(caseIdStr)) {
+			caseId = Integer.valueOf(caseIdStr);
+		}
+				
+		ProjectCaseSteps projectCaseSteps = new ProjectCaseSteps();
+		projectCaseSteps.setCaseId(caseId);
+		List<ProjectCaseSteps> stepsList=projectCaseStepsService.selectProjectCaseStepsList(projectCaseSteps);
+		
+		// 转换成json字符串
+		JSONArray recordJson= JSONArray.parseArray(JSON.toJSONString(stepsList,SerializerFeature.WriteNullStringAsEmpty));
+		pw.print(recordJson);
+	}
+	
+	/**
+	 * 修改保存项目测试用例管理
+	 */
+	@RequiresPermissions("testmanagmt:projectCase:edit")
+	@Log(title = "测试用例步骤管理", businessType = BusinessType.UPDATE)
+	@PostMapping("/stepEditSave")
+	@ResponseBody
+	public AjaxResult stepEditSave(ProjectCaseSteps projectCaseSteps)
+	{		
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectCaseSteps.getProjectId())){
+			return error("没有此项目修改用例步骤权限");
+		}
+		
+		return toAjax(projectCaseStepsService.updateProjectCaseSteps(projectCaseSteps));
+	}
 }

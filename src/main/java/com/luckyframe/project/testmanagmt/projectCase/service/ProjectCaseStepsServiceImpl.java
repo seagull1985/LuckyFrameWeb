@@ -94,6 +94,10 @@ public class ProjectCaseStepsServiceImpl implements IProjectCaseStepsService
 	{
 		projectCaseSteps.setUpdateBy(ShiroUtils.getLoginName());
 		projectCaseSteps.setUpdateTime(new Date());
+		
+		ProjectCase projectCase=projectCaseService.selectProjectCaseById(projectCaseSteps.getCaseId());
+		projectCaseService.updateProjectCase(projectCase);
+		
 	    return projectCaseStepsMapper.updateProjectCaseSteps(projectCaseSteps);
 	}
 

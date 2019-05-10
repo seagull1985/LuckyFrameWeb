@@ -1,3 +1,2 @@
 /target/
 /src/main/resources/hibernate.cfg.xml
-/src/main/resources/application-druid.yml

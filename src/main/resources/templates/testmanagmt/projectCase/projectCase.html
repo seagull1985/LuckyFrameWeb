@@ -91,6 +91,7 @@
                 childrenModalName: "用例步骤编辑",
 				search: false,
 		        showExport: true,
+		        detailView : true, //是否显示父子表
                 columns: [{
 		            checkbox: true
 		        },
@@ -187,8 +188,216 @@
 					title : '备注',
 					width : '12%',
 					class : 'myTDLengthHidden'
-				}]
+				}],
+				onEditableSave : function(field, row, oldValue, $el) {					
+					$('#tb_projectcase').bootstrapTable("resetView");
+					$.ajax({
+						type : "post",
+						url : prefix + "/add",
+						data : row,
+						dataType : 'JSON',
+						success : function(data, status) {
+							$.modal.msgSuccess("保存用例成功！");
+						},
+						error : function() {
+							$.modal.alertError("系统错误");
+						}
+					});
+				},
+				//注册加载子表的事件。注意下这里的三个参数！
+				onExpandRow : function(index, row, $detail) {
+					InitSubTable(index, row, $detail);
+				}
             };
+            
+			//初始化子表格(无限循环)
+			InitSubTable = function(index, row, $detail) {
+				var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+				$(cur_table).bootstrapTable({
+					url : stepsPrefix+'/list',
+					method : 'get',
+					queryParams : {
+	                    caseId:   row.caseId
+					},
+					clickToSelect : true,
+					detailView : false,//父子表
+					uniqueId : "stepId",
+					columns : [ {
+						checkbox : true,
+						visible : false
+					}, {
+						field : 'stepSerialNumber',
+						title : '步骤编号',
+						width : '5%',
+						class : 'myTDLengthHidden'
+					}, {
+						field : 'stepPath',
+						title : '包路径|定位路径',
+						width : '15%',
+						class : 'myTDLengthHidden',
+						editable : {
+							type : 'text',
+							title : '包路径|定位路径',
+							emptytext : "【包路径|定位路径】为空",
+							validate : function(value) {
+								if (value.length > 200)
+									return '包路径|定位路径不能超过200个字符';
+//								if (value.length < 2)
+//									return '包路径|定位路径不能小于2个字符';
+							}
+						}
+					}, {
+						field : 'stepOperation',
+						title : '方法名|操作',
+						width : '15%',
+						class : 'myTDLengthHidden',
+						editable : {
+							type : 'text',
+							title : '方法名|操作',
+							emptytext : "【方法名|操作】为空",
+							validate : function(value) {
+								if (value.length > 100)
+									return '方法名|操作不能超过100个字符';
+								if (value.length < 2)
+									return '方法名|操作不能小于2个字符';
+							}
+						}
+					}, {
+						field : 'stepParameters',
+						title : '参数',
+						width : '15%',
+						class : 'myTDLengthHidden',
+						editable : {
+							type : 'text',
+							title : '参数',
+							emptytext : "【参数】为空",
+							validate : function(value) {
+								if (value.length > 500)
+									return '参数不能超过500个字符';
+							}
+						}
+					}, {
+						field : 'action',
+						title : '步骤动作',
+						width : '10%',
+						class : 'myTDLengthHidden',
+						editable : {
+							type : 'text',
+							title : '步骤动作',
+							emptytext : "【步骤动作】为空",
+							validate : function(value) {
+								if (value.length > 50)
+									return '步骤动作不能超过50个字符';
+//								if (value.length < 2)
+//									return '步骤动作不能小于2个字符';
+							}
+						}
+					}, {
+						field : 'expectedResult',
+						title : '预期结果',
+						width : '10%',
+						class : 'myTDLengthHidden',
+						formatter : function(value,
+								row, index) {
+								return value+' ';
+						},
+						editable : {
+							type : 'text',
+							title : '预期结果',
+							emptytext : "【预期结果】为空",
+							validate : function(value) {
+								if (value.length > 2000)
+									return '预期结果不能超过2000个字符';
+//								if (value.length < 2)
+//									return '预期结果不能小于2个字符';
+							}
+						}
+					}, {
+						field : 'stepType',
+						title : '步骤类型',
+						width : '5%',
+						class : 'myTDLengthHidden',
+						editable : {
+							type : 'select',
+							title : '步骤类型',
+							source : [ {
+								value : 0,
+								text : "HTTP接口"
+							}, {
+								value : 1,
+								text : "Web UI"
+							}, {
+								value : 2,
+								text : "API驱动"
+							}, {
+								value : 3,
+								text : "移动端"
+							}]
+						}
+					}, {
+						field : 'updateTime',
+						title : '更新时间',
+						width : '10%',
+						class : 'myTDLengthHidden',
+						formatter : function(value,
+								row, index) {
+							return $.common.formatTime(value);
+						}
+					}, {
+						field : 'updateBy',
+						title : '更新人员',
+						width : '5%',
+						class : 'myTDLengthHidden'
+					}, {
+						field : 'extend',
+						title : '扩展字段',
+						width : '10%',
+						class : 'myTDLengthHidden'
+					}, {
+						field : 'stepId',
+						title : 'stepId',
+						visible : false
+					}, {
+						field : 'projectId',
+						title : '项目ID',
+						visible : false
+					}, {
+						field : 'caseId',
+						title : '用例ID',
+						visible : false
+					}, ],
+					//无线循环取子表，直到子表里面没有记录
+					onExpandRow : function(index, row, $Subdetail) {
+						oInit.InitSubTable(index, row, $Subdetail);
+					},
+
+					onEditableSave : function(field, row, oldValue, $el) {						
+ 						if(field=='expectedResult'){
+ 							var str=row.expectedResult.split("");
+							if(str[str.length-1]==' '){
+								row.expectedResult=row.expectedResult.substring(0,row.expectedResult.length-1);
+							}
+						}
+
+						$('#cur_table').bootstrapTable("resetView");
+						$.ajax({
+							type : "post",
+							url : stepsPrefix+'/stepEditSave',
+							data : row,
+							dataType : 'JSON',
+							success : function(data, status) {
+								$.modal.msgSuccess("保存步骤成功！");
+							},
+							error : function() {
+								$.modal.alertError("系统错误");
+							}
+
+						});
+					},
+				});
+
+			};
+			
             $.table.init(options);
         });
         

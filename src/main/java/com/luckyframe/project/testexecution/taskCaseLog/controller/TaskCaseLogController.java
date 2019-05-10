@@ -43,7 +43,7 @@ public class TaskCaseLogController extends BaseController
 	@Autowired
 	private ITaskCaseLogService taskCaseLogService;
 	
-	@RequiresPermissions("testexecution:taskCaseLog:view")
+	@RequiresPermissions("testexecution:taskCaseExecute:view")
 	@GetMapping()
 	public String taskCaseLog()
 	{
@@ -54,7 +54,7 @@ public class TaskCaseLogController extends BaseController
 	 * 查询用例日志明细列表
 	 * @throws IOException 
 	 */
-	@RequiresPermissions("testexecution:taskCaseLog:list")
+	@RequiresPermissions("testexecution:taskCaseExecute:list")
 	@RequestMapping(value = "/list")
 	public void list(HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
@@ -77,7 +77,7 @@ public class TaskCaseLogController extends BaseController
 	/**
 	 * 导出用例日志明细列表
 	 */
-	@RequiresPermissions("testexecution:taskCaseLog:export")
+	@RequiresPermissions("testexecution:taskCaseExecute:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(TaskCaseLog taskCaseLog)
@@ -99,7 +99,7 @@ public class TaskCaseLogController extends BaseController
 	/**
 	 * 新增保存用例日志明细
 	 */
-	@RequiresPermissions("testexecution:taskCaseLog:add")
+	@RequiresPermissions("testexecution:taskCaseExecute:add")
 	@Log(title = "用例日志明细", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -122,7 +122,7 @@ public class TaskCaseLogController extends BaseController
 	/**
 	 * 修改保存用例日志明细
 	 */
-	@RequiresPermissions("testexecution:taskCaseLog:edit")
+	@RequiresPermissions("testexecution:taskCaseExecute:edit")
 	@Log(title = "用例日志明细", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -134,7 +134,7 @@ public class TaskCaseLogController extends BaseController
 	/**
 	 * 删除用例日志明细
 	 */
-	@RequiresPermissions("testexecution:taskCaseLog:remove")
+	@RequiresPermissions("testexecution:taskCaseExecute:remove")
 	@Log(title = "用例日志明细", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody

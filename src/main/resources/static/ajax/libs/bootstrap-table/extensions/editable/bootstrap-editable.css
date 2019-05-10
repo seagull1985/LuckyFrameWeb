@@ -18,6 +18,7 @@
 */
 .editableform .form-control {
     width: auto;
+	height: auto;
 }
 
 .editable-buttons {

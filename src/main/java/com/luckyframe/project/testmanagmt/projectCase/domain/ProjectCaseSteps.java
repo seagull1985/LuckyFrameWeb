@@ -33,7 +33,7 @@ public class ProjectCaseSteps extends BaseEntity
 	private String action;
 	/** 预期结果 */
 	private String expectedResult;
-	/** 0 API接口 1 Web UI 2 HTTP接口 3移动端 */
+	/** 默认类型 0 HTTP接口 1 Web UI 2 API驱动  3移动端 */
 	private Integer stepType;
 	/** 扩展字段，可用于备注、存储HTTP模板等 */
 	private String extend;
