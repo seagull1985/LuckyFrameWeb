@@ -124,41 +124,58 @@
 					field : 'caseName', 
 					title : '用例名称',
 					width : '25%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+					editable : {
+						type : 'text',
+						title : '用例名称',
+						emptytext : "【用例名称】为空",
+						validate : function(value) {
+							if (value.length > 200)
+								return '用例名称不能超过200个字符';
+							if (value.length == 0)
+								return '用例名称不能为空';
+						}
+					}
 				},
 				{
 					field : 'caseType', 
 					title : '用例类型',
 					width : '8%',
 					class : 'myTDLengthHidden',
-		        	formatter: function (value, row, index) {
-		    		    if (row.caseType == 0) {
-		        			return 'HTTP接口';
-		        		} else if(row.caseType == 1){
-		        			return 'Web UI';
-		        		} else if(row.caseType == 2){
-		        			return 'API驱动';
-		        		} else if(row.caseType == 3){
-		        			return '移动端';
-		        		}else{
-		        			return '未知类型';
-		        		}
-		        	}
+					editable : {
+						type : 'select',
+						title : '用例类型',
+						source : [ {
+							value : 0,
+							text : "HTTP接口"
+						}, {
+							value : 1,
+							text : "Web UI"
+						}, {
+							value : 2,
+							text : "API驱动"
+						}, {
+							value : 3,
+							text : "移动端"
+						}]
+					}
 				},
 				{
 					field : 'failcontinue', 
 					title : '失败处理',
 					width : '8%',
 					class : 'myTDLengthHidden',
-		        	formatter: function (value, row, index) {
-		    		    if (row.failcontinue == 0) {
-		        			return '后续步骤中断';
-		        		} else if(row.failcontinue == 1){
-		        			return '后续步骤继续';
-		        		} else{
-		        			return '非法数据';
-		        		}
-		        	}
+					editable : {
+						type : 'select',
+						title : '失败处理',
+						source : [{
+							value : 0,
+							text : "后续步骤中断"
+						}, {
+							value : 1,
+							text : "后续步骤继续"
+						}]
+					}
 				},
 				{
 					field : 'createBy', 
@@ -187,21 +204,39 @@
 					field : 'remark', 
 					title : '备注',
 					width : '12%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+					editable : {
+						type : 'textarea',
+						title : '备注',
+						emptytext : "【备注】为空",
+						validate : function(value) {
+							if (value.length > 200)
+								return '备注不能超过200个字符';
+						}
+					}
 				}],
-				onEditableSave : function(field, row, oldValue, $el) {					
-					$('#tb_projectcase').bootstrapTable("resetView");
-					$.ajax({
+				
+				onEditableSave : function(field, row, oldValue, $el) {	
+					$('#bootstrap-table').bootstrapTable("resetView");
+					/*用例跟模块以及项目表做了表关联，导致提交修改数据会报错，须先删除对象中的关联其他对象*/
+					delete row.projectCaseModule;
+					delete row.project;
+ 					$.ajax({
 						type : "post",
-						url : prefix + "/add",
+						url : prefix + "/edit",
 						data : row,
 						dataType : 'JSON',
-						success : function(data, status) {
-							$.modal.msgSuccess("保存用例成功！");
+						success : function(result) {
+			                if (result.code == 0) {
+			                	$.modal.msgSuccess(result.msg);
+			                } else {
+			                    $.modal.alertError(result.msg);
+			                }
 						},
 						error : function() {
 							$.modal.alertError("系统错误");
 						}
+
 					});
 				},
 				//注册加载子表的事件。注意下这里的三个参数！
@@ -240,10 +275,10 @@
 							title : '包路径|定位路径',
 							emptytext : "【包路径|定位路径】为空",
 							validate : function(value) {
-								if (value.length > 200)
-									return '包路径|定位路径不能超过200个字符';
-//								if (value.length < 2)
-//									return '包路径|定位路径不能小于2个字符';
+								if (value.length > 500)
+									return '包路径|定位路径不能超过500个字符';
+								if (value.length == 0)
+									return '包路径|定位路径不能为空';
 							}
 						}
 					}, {
@@ -288,8 +323,6 @@
 							validate : function(value) {
 								if (value.length > 50)
 									return '步骤动作不能超过50个字符';
-//								if (value.length < 2)
-//									return '步骤动作不能小于2个字符';
 							}
 						}
 					}, {
@@ -308,8 +341,8 @@
 							validate : function(value) {
 								if (value.length > 2000)
 									return '预期结果不能超过2000个字符';
-//								if (value.length < 2)
-//									return '预期结果不能小于2个字符';
+								if (value.length == 0)
+									return '预期结果不能为空';
 							}
 						}
 					}, {
@@ -385,8 +418,12 @@
 							url : stepsPrefix+'/stepEditSave',
 							data : row,
 							dataType : 'JSON',
-							success : function(data, status) {
-								$.modal.msgSuccess("保存步骤成功！");
+							success : function(result) {
+				                if (result.code == 0) {
+				                	$.modal.msgSuccess(result.msg);
+				                } else {
+				                    $.modal.alertError(result.msg);
+				                }
 							},
 							error : function() {
 								$.modal.alertError("系统错误");
