@@ -195,6 +195,7 @@ public class OpenPostApiController
 			
 			taskExecute.setCaseTotalCount(caseCount);
 			taskExecute.setCaseSuccCount(casesuc);
+			taskExecute.setCaseFailCount(casefail);
 			taskExecute.setCaseLockCount(caselock);
 			taskExecute.setCaseNoexecCount(casenoexec);
 			taskExecute.setTaskStatus(taskStatus);
@@ -209,57 +210,6 @@ public class OpenPostApiController
 		return "{\"caseCount\":"+caseCount+",\"caseSuc\":"+casesuc+",\"caseFail\":"+casefail+",\"caseLock\":"+caselock+",\"caseNoExec\":"+casenoexec+"}";
 	}
 	
-	/**
-	 * 更新任务执行数据以及状态
-	 * @param jsonObject
-	 * @return
-	 * @author Seagull
-	 * @date 2019年4月22日
-	 */
-	@PostMapping("/clientUpdateTaskExecuteStatus")
-	@ResponseBody
-	public String clientUpdateTaskExecuteStatus(@RequestBody JSONObject jsonObject) {
-		// 更新实体
-		int casesuc = 0;
-		int casefail = 0;
-		int caselock = 0;
-		int casenoexec = 0;
-		Integer taskId = jsonObject.getInteger("taskId");
-		Integer caseCount = jsonObject.getInteger("caseCount");
-		Integer taskStatus = jsonObject.getInteger("taskStatus");
-		try {
-			TaskExecute taskExecute = taskExecuteService.selectTaskExecuteById(taskId);
-
-			TaskCaseExecute taskCaseExecute = new TaskCaseExecute();
-			taskCaseExecute.setTaskId(taskId);
-			taskCaseExecute.setCaseStatus(0);
-			casesuc = taskCaseExecuteService.selectTaskCaseExecuteList(taskCaseExecute).size();
-			taskCaseExecute.setCaseStatus(1);
-			casefail = taskCaseExecuteService.selectTaskCaseExecuteList(taskCaseExecute).size();
-			taskCaseExecute.setCaseStatus(2);
-			caselock = taskCaseExecuteService.selectTaskCaseExecuteList(taskCaseExecute).size();
-			taskCaseExecute.setCaseStatus(4);
-			casenoexec = taskCaseExecuteService.selectTaskCaseExecuteList(taskCaseExecute).size();
-			
-			if (caseCount == 0) {
-				caseCount = casesuc + casefail + caselock + casenoexec;
-				taskExecute.setUpdateTime(new Date());
-				taskExecute.setFinishTime(new Date());
-			}
-			
-			taskExecute.setCaseTotalCount(caseCount);
-			taskExecute.setCaseSuccCount(casesuc);
-			taskExecute.setCaseLockCount(caselock);
-			taskExecute.setCaseNoexecCount(casenoexec);
-			taskExecute.setTaskStatus(taskStatus);
-			taskExecuteService.updateTaskExecute(taskExecute);
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			log.error("更新任务执行数据以及状态出现异常", e);
-		}
-		return "{\"caseCount\":"+caseCount+",\"caseSuc\":"+casesuc+",\"caseFail\":"+casefail+",\"caseLock\":"+caselock+",\"caseNoExec\":"+casenoexec+"}";
-	}
 	
 	/**
 	 * 删除用例执行日志

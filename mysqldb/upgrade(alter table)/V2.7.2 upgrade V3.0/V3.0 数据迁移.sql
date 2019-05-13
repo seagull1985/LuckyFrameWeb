@@ -54,7 +54,7 @@ insert into project_case_module  (module_id,module_name,project_id,parent_id)  s
 where 1=1 and   NOT EXISTS(select 1 from project_case_module  where module_id = pm.id);
 
 -- -------初始项目表的基础数据到项目模块表
-insert into project_case_module  (module_name,project_id,parent_id,remark)  select projectname,projectid,0,"project_init" from luckyframedb.qa_sectorprojects qs;
+insert into project_case_module  (module_name,project_id,parent_id,remark)  select projectname,projectid,0,"project_init" from luckyframedb.qa_sectorprojects qs where projecttype=0 and projectid!=99;
 
 -- -------创建临时表
 create table project_case_module_tmp as select * from project_case_module t where t.parent_id=0 and t.remark = "project_init";

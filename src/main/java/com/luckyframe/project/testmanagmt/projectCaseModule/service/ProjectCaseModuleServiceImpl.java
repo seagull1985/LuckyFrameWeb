@@ -79,9 +79,15 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
 	public List<ProjectCaseModule> selectProjectCaseModuleList(ProjectCaseModule projectCaseModule)
 	{
 		List<ProjectCaseModule> pcmList=projectCaseModuleMapper.selectProjectCaseModuleList(projectCaseModule);
+		List<Project> projectList = projectMapper.selectProjectList(new Project());
 		for(ProjectCaseModule pcm:pcmList){
-			Project project=projectMapper.selectProjectById(pcm.getProjectId());
-			pcm.setProjectName(project.getProjectName());
+			pcm.setProjectName("未知项目ID:"+pcm.getProjectId());
+			for(Project project:projectList){
+				if(pcm.getProjectId().equals(project.getProjectId())){
+					pcm.setProjectName(project.getProjectName());
+					break;
+				}				
+			}
 		}
 	    return pcmList;
 	}
