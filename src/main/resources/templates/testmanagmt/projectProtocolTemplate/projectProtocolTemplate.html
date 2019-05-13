@@ -91,25 +91,50 @@
 					field : 'templateName', 
 					title : '模板名称',
 					width : '20%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+					editable : {
+						type : 'text',
+						title : '模板名称',
+						emptytext : "【模板名称】为空",
+						validate : function(value) {
+							if (value.length > 50)
+								return '模板名称不能超过50个字符';
+							if (value.length == 0)
+								return '模板名称不能为空';
+						}
+					}
 				},
 				{
 					field : 'encoding', 
 					title : '编码格式',
-					width : '5%'
+					width : '5%',
+					class : 'myTDLengthHidden',
+					editable : {
+						type : 'select',
+						title : '编码格式',
+						source : [ {
+							value : "UTF-8",
+							text : "UTF-8"
+						}, {
+							value : "GBK",
+							text : "GBK"
+						}]
+					}
 				},
 				{
 					field : 'headMsg', 
 					title : '消息头域',
 					width : '20%',
 					class : 'myTDLengthHidden',
-		        	formatter: function (value, row, index) {
-		    		    if (value == null) {
-		        			return '默认值';
-		        		} else{
-		        			return value;
-		        		}
-		        	}
+					editable : {
+						type : 'text',
+						title : '消息头域',
+						emptytext : "【消息头域】为空",
+						validate : function(value) {
+							if (value.length > 3000)
+								return '消息头域不能超过3000个字符';
+						}
+					}
 				},
 				{
 					field : 'cerificatePath', 
@@ -120,9 +145,18 @@
 					field : 'timeout', 
 					title : '超时时间',
 					width : '5%',
-		        	formatter: function (value, row, index) {
-		        		return value+"秒";
-		        	}
+					class : 'myTDLengthHidden',
+					editable : {
+						type : 'text',
+						title : '超时时间',
+						emptytext : "【超时时间】为空",
+						validate: function (value) {
+	                        if (isNaN(value)) return '超时时间必须是数字';
+	                        var time = parseInt(value);
+	                        if (time < 1) return '超时时间必须大于等于1';
+	                        if (time > 300) return '超时时间必须小于300';
+	                    }
+					}
 				},
 				{
 					field : 'isResponseHead', 
@@ -179,7 +213,16 @@
 					field : 'remark', 
 					title : '备注',
 					width : '10%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+					editable : {
+						type : 'textarea',
+						title : '备注',
+						emptytext : "【备注】为空",
+						validate : function(value) {
+							if (value.length > 200)
+								return '备注不能超过200个字符';
+						}
+					}
 				},
 		        {
 		            title: '操作',
@@ -192,7 +235,35 @@
                         /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.customFull(\'' + row.templateId + '\')"><i class="fa fa-folder-open-o"></i>模板参数</a> '); */
 						return actions.join('');
 		            }
-		        }]
+		        }],
+		        //行内编辑
+				onEditableSave : function(field, row, oldValue, $el) {	
+					$('#bootstrap-table').bootstrapTable("resetView");
+					delete row.project;
+					
+					if(field=='timeout'){
+						time = parseInt(row.timeout);
+						row.timeout = time;
+					}
+					
+ 					$.ajax({
+						type : "post",
+						url : prefix + "/edit",
+						data : row,
+						dataType : 'JSON',
+						success : function(result) {
+			                if (result.code == 0) {
+			                	$.modal.msgSuccess(result.msg);
+			                } else {
+			                    $.modal.alertError(result.msg);
+			                }
+						},
+						error : function() {
+							$.modal.alertError("系统错误");
+						}
+
+					});
+				}
             };
             $.table.init(options);
         });

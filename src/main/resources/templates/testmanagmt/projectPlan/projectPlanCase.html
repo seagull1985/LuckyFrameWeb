@@ -50,9 +50,6 @@
 		</div>
 	</div>
     <div th:include="include :: footer"></div>
-    <!-- bootstrap-table 表格行内编辑插件 -->
-    <script th:src="@{/ajax/libs/bootstrap-table/extensions/editable/bootstrap-table-editable.js}"></script>
-	<script th:src="@{/ajax/libs/bootstrap-table/extensions/editable/bootstrap-editable.js}"></script>
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('testmanagmt:projectPlan:edit')}]];
         var removeFlag = [[${@permission.hasPermi('testmanagmt:projectPlan:remove')}]];

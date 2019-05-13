@@ -135,6 +135,8 @@ public class ProjectPlanCaseController extends BaseController
 				projectPlanCase.setCaseId(projectCase.getCaseId());
 				projectPlanCase.setPriority(projectCase.getPriority());
 				resultCount = resultCount+projectPlanCaseService.insertProjectPlanCase(projectPlanCase);
+			}else{
+				resultCount++;
 			}
 		}
 		
