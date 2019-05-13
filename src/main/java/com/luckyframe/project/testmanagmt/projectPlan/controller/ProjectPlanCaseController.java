@@ -140,6 +140,8 @@ public class ProjectPlanCaseController extends BaseController
 			}
 		}
 		
+		Integer planCaseCount=projectPlanCaseService.selectProjectPlanCaseCountByPlanId(planId);
+		projectPlan.setPlanCaseCount(planCaseCount);
 		projectPlanService.updateProjectPlan(projectPlan);
 		
 		return toAjax(resultCount);

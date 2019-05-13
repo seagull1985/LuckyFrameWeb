@@ -120,4 +120,16 @@ public class ProjectPlanCaseServiceImpl implements IProjectPlanCaseService
 		return projectPlanCaseMapper.deleteProjectPlanCaseById(planCaseId);
 	}
 	
+	/**
+	 * 查询指定测试计划下绑定用例总数
+	 * @param planId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年5月13日
+	 */
+	@Override
+	public Integer selectProjectPlanCaseCountByPlanId(Integer planId)
+	{
+	    return projectPlanCaseMapper.selectProjectPlanCaseCountByPlanId(planId);
+	}
 }

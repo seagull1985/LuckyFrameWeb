@@ -75,4 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select count(1) from project_plan_case where case_id=#{case_id}
 	</select>
 	
+	<select id="selectProjectPlanCaseCountByPlanId" parameterType="Integer" resultType="Integer">
+		select count(1) from project_plan_case where plan_id=#{plan_id}
+	</select>
 </mapper>

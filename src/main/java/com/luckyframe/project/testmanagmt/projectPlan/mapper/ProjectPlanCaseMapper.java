@@ -70,11 +70,20 @@ public interface ProjectPlanCaseMapper
 	public int deleteProjectPlanCaseByPlanId(Integer planId);
 	
     /**
-     * 查询测试计划下有没有测试用例
+     * 查询该测试用例有没有绑定测试计划
      * @param caseId
      * @return
      * @author Seagull
      * @date 2019年4月12日
      */
     public int selectProjectPlanCaseCountByCaseId(Integer caseId);
+    
+    /**
+     * 查询测试计划下绑定用例总数
+     * @param caseId
+     * @return
+     * @author Seagull
+     * @date 2019年5月13日
+     */
+    public int selectProjectPlanCaseCountByPlanId(Integer planId);
 }
