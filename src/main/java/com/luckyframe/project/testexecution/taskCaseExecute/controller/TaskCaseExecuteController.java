@@ -213,7 +213,7 @@ public class TaskCaseExecuteController extends BaseController
 		runBatchCaseEntity.setLoadpath(taskScheduling.getClientDriverPath());
 		runBatchCaseEntity.setBatchcase(TaskSchedulingConstants.RUNCASEALLFAIL);
 		try {
-			HttpRequest.httpClientPost(url, JSONObject.toJSONString(runBatchCaseEntity));
+			HttpRequest.httpClientPost(url, JSONObject.toJSONString(runBatchCaseEntity),3000);
 		} catch (ConnectException e) {
 			// TODO Auto-generated catch block
 			return AjaxResult.error("唤起客户端失败，请检查原因");
@@ -260,7 +260,7 @@ public class TaskCaseExecuteController extends BaseController
 		runBatchCaseEntity.setBatchcase(batchCase);
 		
 		try {
-			HttpRequest.httpClientPost(url, JSONObject.toJSONString(runBatchCaseEntity));
+			HttpRequest.httpClientPost(url, JSONObject.toJSONString(runBatchCaseEntity),3000);
 		} catch (ConnectException e) {
 			// TODO Auto-generated catch block
 			return AjaxResult.error("唤起客户端失败，请检查原因");

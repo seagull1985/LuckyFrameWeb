@@ -37,21 +37,22 @@ public class HttpRequest {
 	 * 使用HttpClient以JSON格式发送post请求
 	 * @param urlParam
 	 * @param jsonparams
+	 * @param socketTimeout
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyManagementException
+	 * @throws UnsupportedEncodingException
+	 * @throws IOException
 	 * @author Seagull
-	 * @throws IOException 
-	 * @throws UnsupportedEncodingException 
-	 * @date 2019年3月15日
+	 * @date 2019年5月14日
 	 */
-	public static String httpClientPost(String urlParam,String jsonparams) throws NoSuchAlgorithmException, KeyManagementException, UnsupportedEncodingException, IOException{
+	public static String httpClientPost(String urlParam,String jsonparams,Integer socketTimeout) throws NoSuchAlgorithmException, KeyManagementException, UnsupportedEncodingException, IOException{
 		StringBuffer resultBuffer = null;
 		CloseableHttpClient httpclient=HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(urlParam);
 		RequestConfig requestConfig = RequestConfig.custom()  
-		        .setConnectTimeout(3000).setConnectionRequestTimeout(1000)  
-		        .setSocketTimeout(3000).build();  
+		        .setConnectTimeout(3000).setConnectionRequestTimeout(1500)  
+		        .setSocketTimeout(socketTimeout).build();  
 		httpPost.setConfig(requestConfig);
 	    httpPost.setHeader("Content-Type", "application/json");
 		// 构建请求参数
@@ -96,14 +97,15 @@ public class HttpRequest {
 	 * 使用HttpClient以JSON格式发送get请求
 	 * @param urlParam
 	 * @param params
+	 * @param socketTimeout
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyManagementException
 	 * @throws NoHttpResponseException
 	 * @author Seagull
-	 * @date 2019年3月15日
+	 * @date 2019年5月14日
 	 */
-	public static String httpClientGet(String urlParam, Map<String, Object> params) throws NoSuchAlgorithmException, KeyManagementException,NoHttpResponseException {
+	public static String httpClientGet(String urlParam, Map<String, Object> params,Integer socketTimeout) throws NoSuchAlgorithmException, KeyManagementException,NoHttpResponseException {
 		StringBuffer resultBuffer = null;
 		CloseableHttpClient httpclient=HttpClients.createDefault();
 		BufferedReader br = null;
@@ -126,8 +128,8 @@ public class HttpRequest {
 		}
 		HttpGet httpGet = new HttpGet(urlParam);
 		RequestConfig requestConfig = RequestConfig.custom()  
-		        .setConnectTimeout(3000).setConnectionRequestTimeout(1000)  
-		        .setSocketTimeout(3000).build(); 
+		        .setConnectTimeout(3000).setConnectionRequestTimeout(1500)  
+		        .setSocketTimeout(socketTimeout).build(); 
 		httpGet.setConfig(requestConfig);
 		try {
 			CloseableHttpResponse response = httpclient.execute(httpGet);

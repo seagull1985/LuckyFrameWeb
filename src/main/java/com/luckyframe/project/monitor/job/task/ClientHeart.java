@@ -67,7 +67,7 @@ public class ClientHeart {
 		try {			
 			String result = HttpRequest.httpClientGet(
 					"http://" + params + ":" + ClientConstants.CLIENT_MONITOR_PORT + "/getClientStatus",
-					new HashMap<String, Object>(0));
+					new HashMap<String, Object>(0),3000);
 			JSONObject jsonObject = JSON.parseObject(result);
 			
 			if(null==ClientHeart.getClientStatus(params)){

@@ -821,7 +821,7 @@ insert into sys_dict_data values(40, 2,  '执行中', '1',  'task_execute_status
 insert into sys_dict_data values(41, 3,  '执行完成', '2',  'task_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '任务执行状态');
 insert into sys_dict_data values(42, 4,  '执行失败', '3',  'task_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '任务执行状态');
 insert into sys_dict_data values(43, 5,  '唤起客户端失败', '4',  'task_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '任务执行状态');
-insert into sys_dict_data values(44, 1,  '通过', '0',  'case_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例执行状态');
+insert into sys_dict_data values(44, 1,  '成功', '0',  'case_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例执行状态');
 insert into sys_dict_data values(45, 2,  '失败', '1',  'case_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例执行状态');
 insert into sys_dict_data values(46, 3,  '锁定', '2',  'case_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例执行状态');
 insert into sys_dict_data values(47, 4,  '执行中', '3',  'case_execute_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '用例执行状态');
@@ -1312,7 +1312,7 @@ create table task_case_execute
   case_id               int(8)         not null                 comment '用例ID',
   case_sign             varchar(20)    not null                 comment '用例标识',
   case_name             varchar(200)   not null                 comment '用例名称',
-  case_status           int(2)         not null default 4       comment '用例执行状态 0通过 1失败 2锁定 3执行中 4未执行',
+  case_status           int(2)         not null default 4       comment '用例执行状态 0成功 1失败 2锁定 3执行中 4未执行',
   finish_time           datetime                                comment '用例结束时间',
   create_by             varchar(64)    default ''               comment '创建者',
   create_time 	        datetime                                comment '创建时间',

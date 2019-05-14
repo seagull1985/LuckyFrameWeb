@@ -84,7 +84,7 @@ public class ClientController extends BaseController
     	Client client = clientService.selectClientById(clientId);
 		String result = HttpRequest.httpClientGet(
 				"http://" + client.getClientIp() + ":" + ClientConstants.CLIENT_MONITOR_PORT + "/getClientMonitorData",
-				new HashMap<String, Object>(0));
+				new HashMap<String, Object>(0),15000);
 		System.out.println(result);
 		JSONObject jSONObject = JSONObject.parseObject(result);
 		System.out.println(jSONObject.toJSONString());

@@ -321,8 +321,9 @@ public class TaskSchedulingController extends BaseController
 	    Date dt = new Date();   
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		List<Client> clientList = clientService.selectClientList(client);
+		String defaultDate = sdf.format(dt);
         mmap.put("clientList", clientList);  
-        mmap.put("queryDate", sdf.format(dt));
+        mmap.put("defaultDate", defaultDate);
 	    return prefix + "/queryLog";
 	}
 	
@@ -360,7 +361,7 @@ public class TaskSchedulingController extends BaseController
 		try{    		
     		Map<String, Object> params = new HashMap<String, Object>(0);
     		params.put("filename", storeName);
-			result=HttpRequest.httpClientGet("http://"+clientIp+":"+ClientConstants.CLIENT_MONITOR_PORT+"/getLogdDetail", params);
+			result=HttpRequest.httpClientGet("http://"+clientIp+":"+ClientConstants.CLIENT_MONITOR_PORT+"/getLogdDetail", params,60000);
 			result=result.replace("##n##", "\n");
 		} catch (Exception e) {
 			e.printStackTrace();

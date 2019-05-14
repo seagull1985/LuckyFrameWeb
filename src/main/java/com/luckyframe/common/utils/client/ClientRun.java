@@ -61,7 +61,7 @@ public class ClientRun {
     			runTaskEntity.setLoadPath(taskScheduling.getClientDriverPath());
     		}
 
-			result=HttpRequest.httpClientPost("http://"+taskScheduling.getClient().getClientIp()+":"+ClientConstants.CLIENT_MONITOR_PORT+"/runtask", JSONObject.toJSONString(runTaskEntity));
+			result=HttpRequest.httpClientPost("http://"+taskScheduling.getClient().getClientIp()+":"+ClientConstants.CLIENT_MONITOR_PORT+"/runtask", JSONObject.toJSONString(runTaskEntity),3000);
     		System.out.println(result);
     		return result;
 		}catch (Exception e) {
