@@ -96,6 +96,7 @@ public class TaskCaseExecuteController extends BaseController
 	public String taskCaseExecute(HttpServletRequest req, ModelMap mmap)
 	{
 		String taskIdStr = req.getParameter("taskId");
+		String caseStatusStr = req.getParameter("caseStatus");
 		
         List<Project> projects=projectService.selectProjectAll(0);
         mmap.put("projects", projects);
@@ -119,6 +120,7 @@ public class TaskCaseExecuteController extends BaseController
 		taskExecute.setProjectId(projectId);
     	mmap.put("defaultProjectId", projectId);
     	mmap.put("defaultTaskId", taskId);
+    	mmap.put("defaultCaseStatus", caseStatusStr);
         List<TaskExecute> taskExecutes = taskExecuteService.selectTaskExecuteList(taskExecute);
         mmap.put("taskExecutes", taskExecutes);
         

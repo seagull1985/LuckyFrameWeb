@@ -118,7 +118,7 @@
 					class : 'myTDLengthHidden',
 					formatter : function(value,
 							row, index) {
-						return '<a href="#" onclick="caseExcuteDetail('+row.taskId+')">'+ value + '</a> ';
+						return '<a href="#" onclick="caseExcuteDetail('+row.taskId+',null'+')">'+ value + '</a> ';
 					}
 				},
 				{
@@ -177,7 +177,7 @@
 					class : 'myTDLengthHidden',
 					formatter : function(value,
 							row, index) {
-						return '<a id="casesucc'+row.taskId+'" style="color:#00bf5f">'	+ value + '</a> ';
+						return '<a id="casesucc'+row.taskId+'" style="color:#00bf5f" onclick="caseExcuteDetail('+row.taskId+',0'+')">'	+ value + '</a> ';
 					}
 				},
 				{
@@ -187,7 +187,7 @@
 					class : 'myTDLengthHidden',
 					formatter : function(value,
 							row, index) {
-						return '<a id="casefail'+row.taskId+'" style="color:#ff0000">'	+ value + '</a> ';
+						return '<a id="casefail'+row.taskId+'" style="color:#ff0000" onclick="caseExcuteDetail('+row.taskId+',1'+')">'	+ value + '</a> ';
 					}
 				},
 				{
@@ -197,17 +197,17 @@
 					class : 'myTDLengthHidden',
 					formatter : function(value,
 							row, index) {
-						return '<a id="caselock'+row.taskId+'" style="color:#FF7F00">'	+ value + '</a> ';
+						return '<a id="caselock'+row.taskId+'" style="color:#FF7F00" onclick="caseExcuteDetail('+row.taskId+',2'+')">'	+ value + '</a> ';
 					}
 				},
 				{
 					field : 'caseNoexecCount', 
-					title : '未完成',
+					title : '执行中',
 					width : '5%',
 					class : 'myTDLengthHidden',
 					formatter : function(value,
 							row, index) {
-						return '<a id="casenoexec'+row.taskId+'" style="color:#6A5ACD">'	+ value + '</a> ';
+						return '<a id="casenoexec'+row.taskId+'" style="color:#6A5ACD" onclick="caseExcuteDetail('+row.taskId+',3'+')">'	+ value + '</a> ';
 					}
 				}]
             };
@@ -270,8 +270,8 @@
 		 }
 		 
 		 /* 测试用例执行明细 */
-		 function caseExcuteDetail(taskId) {
-				var url = caseExecutePrefix + '?taskId=' + taskId;
+		 function caseExcuteDetail(taskId,caseStatus) {
+				var url = caseExecutePrefix + '?taskId=' + taskId + '&caseStatus=' + caseStatus;
 				createMenuItem(url, "用例明细");
 		 }
     </script>

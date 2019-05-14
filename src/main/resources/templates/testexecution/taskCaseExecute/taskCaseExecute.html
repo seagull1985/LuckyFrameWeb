@@ -34,9 +34,9 @@
 							</li>
 							
 							<li>
-								用例状态：<select name="caseStatus" th:with="type=${@dict.getType('case_execute_status')}">
+								用例状态：<select name="caseStatus" id="caseStatus" th:with="type=${@dict.getType('case_execute_status')}">
 									<option value="">所有</option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:selected="${dict.dictValue == defaultCaseStatus}"></option>
 								</select>
 							</li>
 
@@ -95,6 +95,7 @@
 	                    orderByColumn:  params.sort,
 	                    isAsc:          params.order,
 	                    taskId:         $('#taskId').val(),
+	                    caseStatus:     $('#caseStatus').val(),
 	                    projectId:      $('#projectId').val()
 	        		};
 				},
@@ -174,7 +175,7 @@
 					formatter : function(value,
 							row, index) {
 						if(value==0){
-							return '<font style="color:#00bf5f">通过</font>';
+							return '<font style="color:#00bf5f">成功</font>';
 						}else if(value==1){
 							return '<font style="color:#ff0000">失败</font>';
 						}else if(value==2){
