@@ -67,6 +67,9 @@ public class User extends BaseEntity
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
+    /** 用户设置的默认项目 */
+    private Integer projectId;
+    
     /** 最后登陆IP */
     @Excel(name = "最后登陆IP", type = Type.EXPORT)
     private String loginIp;
@@ -250,7 +253,15 @@ public class User extends BaseEntity
         this.delFlag = delFlag;
     }
 
-    public String getLoginIp()
+    public Integer getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(Integer projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getLoginIp()
     {
         return loginIp;
     }
@@ -329,6 +340,7 @@ public class User extends BaseEntity
             .append("salt", getSalt())
             .append("status", getStatus())
             .append("delFlag", getDelFlag())
+            .append("projectId", getProjectId())
             .append("loginIp", getLoginIp())
             .append("loginDate", getLoginDate())
             .append("createBy", getCreateBy())

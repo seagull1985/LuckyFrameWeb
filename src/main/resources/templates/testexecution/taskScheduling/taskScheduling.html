@@ -14,7 +14,7 @@
 								项目：
 								<select id="projectId" name="projectId" th:with="type=${projects}">
 								    <option value="">所有项目</option>
-	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}"></option>
+	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == defaultProjectId}"></option>
 	                            </select>
 							</li>
 							
@@ -72,6 +72,17 @@
 				exportUrl: prefix + "/export",
                 modalName: "测试任务调度",
 				search: false,
+				queryParams: function(params) {
+	            	return {
+	        			// 传递参数查询参数
+	                    pageSize:       params.limit,
+	                    pageNum:        params.offset / params.limit + 1,
+	                    searchValue:    params.search,
+	                    orderByColumn:  params.sort,
+	                    isAsc:          params.order,
+	                    projectId:      $('#projectId').val()
+	        		};
+				},
 		        showExport: true,
                 columns: [{
 		            checkbox: true
@@ -100,19 +111,19 @@
 				{
 					field : 'project.projectName', 
 					title : '项目名称',
-					width : '10%',
+					width : '9%',
 					class : 'myTDLengthHidden'
 				},
 				{
 					field : 'projectPlan.planName', 
 					title : '计划名称',
-					width : '10%',
+					width : '15%',
 					class : 'myTDLengthHidden'
 				},
 				{
 					field : 'job.misfirePolicy', 
 					title : '调度策略',
-					width : '10%',
+					width : '8%',
 					class : 'myTDLengthHidden',
 					formatter: function(value, row, index) {
 						if(value=='3'){
@@ -131,7 +142,7 @@
 				{
 					field : 'job.cronExpression', 
 					title : 'Cron表达式',
-					width : '10%',
+					width : '8%',
 					class : 'myTDLengthHidden'
 				},
 				{

@@ -71,6 +71,15 @@
 					
 				</div>
 			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">默认项目：</label>
+				<div class="col-sm-8">
+					<select id="projectId" name="projectId" class="form-control m-b" th:with="type=${projects}">
+					    <option value="">所有项目</option>
+	                    <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}"></option>
+	                </select>
+				</div>
+			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">角色：</label>
 				<div class="col-sm-8">
@@ -176,6 +185,7 @@
         	var email = $("input[name='email']").val();
         	var phonenumber = $("input[name='phonenumber']").val();
         	var sex = $("#sex option:selected").val();
+        	var projectId = $("#projectId option:selected").val();
         	var status = $("input[name='status']").is(':checked') == true ? 0 : 1;
         	var roleIds = $.form.selectCheckeds("role");
         	var postIds = $.form.selectSelects("post");
@@ -192,6 +202,7 @@
         			"email": email,
         			"phonenumber": phonenumber,
         			"sex": sex,
+        			"projectId": projectId,
         			"status": status,
         			"roleIds": roleIds,
         			"postIds": postIds

@@ -30,6 +30,15 @@ public interface ITaskExecuteService
 	public TaskExecute selectTaskExecuteLastRecord();
     
 	/**
+	 * 查询当前项目下最后一条执行记录
+	 * @param projectId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年5月15日
+	 */
+	public TaskExecute selectTaskExecuteLastRecordForProjectId(Integer projectId);
+    
+	/**
      * 查询测试任务执行列表
      * 
      * @param taskExecute 测试任务执行信息

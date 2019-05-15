@@ -19,7 +19,7 @@
 								项目：
 								<select id="projectId" name="projectId" th:with="type=${projects}" onchange="initializeModuleTree()">
 								    <option value="">所有项目</option>
-	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}"></option>
+	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == defaultProjectId}"></option>
 	                            </select>
 							</li>
 
@@ -90,6 +90,17 @@
                 modalName: "测试用例",
                 childrenModalName: "用例步骤编辑",
 				search: false,
+				queryParams: function(params) {
+	            	return {
+	        			// 传递参数查询参数
+	                    pageSize:       params.limit,
+	                    pageNum:        params.offset / params.limit + 1,
+	                    searchValue:    params.search,
+	                    orderByColumn:  params.sort,
+	                    isAsc:          params.order,
+	                    projectId:      $('#projectId').val()
+	        		};
+				},
 		        showExport: true,
 		        detailView : true, //是否显示父子表
                 columns: [{

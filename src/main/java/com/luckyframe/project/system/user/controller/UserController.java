@@ -20,6 +20,7 @@ import com.luckyframe.framework.web.controller.BaseController;
 import com.luckyframe.framework.web.domain.AjaxResult;
 import com.luckyframe.framework.web.page.TableDataInfo;
 import com.luckyframe.project.system.post.service.IPostService;
+import com.luckyframe.project.system.project.service.IProjectService;
 import com.luckyframe.project.system.role.service.IRoleService;
 import com.luckyframe.project.system.user.domain.User;
 import com.luckyframe.project.system.user.service.IUserService;
@@ -43,6 +44,9 @@ public class UserController extends BaseController
 
     @Autowired
     private IPostService postService;
+    
+    @Autowired
+    private IProjectService projectService;
 
     @RequiresPermissions("system:user:view")
     @GetMapping()
@@ -101,6 +105,7 @@ public class UserController extends BaseController
     {
         mmap.put("roles", roleService.selectRoleAll());
         mmap.put("posts", postService.selectPostAll());
+        mmap.put("projects", projectService.selectProjectAll(0));
         return prefix + "/add";
     }
 
@@ -130,6 +135,7 @@ public class UserController extends BaseController
         mmap.put("user", userService.selectUserById(userId));
         mmap.put("roles", roleService.selectRolesByUserId(userId));
         mmap.put("posts", postService.selectPostsByUserId(userId));
+        mmap.put("projects", projectService.selectProjectAll(0));
         return prefix + "/edit";
     }
 

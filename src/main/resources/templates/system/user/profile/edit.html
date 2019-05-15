@@ -49,10 +49,20 @@
 					</div>
 				</div>
 			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">默认项目：</label>
+				<div class="col-sm-8">
+					<select id="projectId" name="projectId" class="form-control m-b" th:with="type=${projects}">
+					    <option value="">所有项目</option>
+	                    <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:field="*{projectId}"></option>
+	                </select>
+				</div>
+			</div>
 			
 		</form>
 	</div>
 	<div th:include="include::footer"></div>
+	<script th:src="@{/ajax/libs/select/select2.js}"></script>
 	<script>
 		$("#form-user-edit").validate({
 			rules:{
@@ -60,7 +70,6 @@
 					required:true,
 				},
 				email:{
-					required:true,
 		            email:true,
 		            remote: {
 		                url: ctx + "system/user/checkEmailUnique",
@@ -80,7 +89,6 @@
 		            }
 				},
 				phonenumber:{
-					required:true,
 					isPhone:true,
 		            remote: {
 		                url: ctx + "system/user/checkPhoneUnique",

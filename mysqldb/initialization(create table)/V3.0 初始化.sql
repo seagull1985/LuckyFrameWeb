@@ -228,7 +228,7 @@ values(107,  102, '0,100,102',  '研发部门',   2, 'luckyframe', '15888888888'
 -- ----------------------------
 drop table if exists sys_project;
 create table sys_project (
-  project_id 		int(4) 		    not null auto_increment    comment '项目ID',
+  project_id 		int(8) 		    not null auto_increment    comment '项目ID',
   project_name 		varchar(50) 	not null 				   comment '项目名称',
   dept_id           int(11)         not null 				   comment '归属部门',
   project_sign      varchar(10)    default 'sign' not null     comment '项目标识',
@@ -259,6 +259,7 @@ create table sys_user (
   salt 				varchar(20) 	default '' 				   comment '盐加密',
   status 			char(1) 		default '0' 			   comment '帐号状态（0正常 1停用）',
   del_flag			char(1) 		default '0' 			   comment '删除标志（0代表存在 2代表删除）',
+  project_id        int(8) 		    default null			   comment '默认项目ID',
   login_ip          varchar(50)     default ''                 comment '最后登陆IP',
   login_date        datetime                                   comment '最后登陆时间',
   create_by         varchar(64)     default ''                 comment '创建者',
@@ -650,8 +651,8 @@ insert into sys_role_menu values ('2', '1057');
 -- ----------------------------
 drop table if exists sys_role_project;
 create table sys_role_project (
-  role_id 	int(11) not null comment '角色ID',
-  project_id 	int(11) not null comment '项目ID',
+  role_id 	    int(11) not null comment '角色ID',
+  project_id 	int(8) not null comment '项目ID',
   primary key(role_id, project_id)
 ) engine=innodb default charset=utf8 comment = '角色和项目关联表';
 
@@ -1073,7 +1074,7 @@ create table sys_client
 drop table if exists sys_client_project;
 create table sys_client_project (
   client_id 	int(8) not null comment '客户端ID',
-  project_id 	int(11) not null comment '项目ID',
+  project_id 	int(8) not null comment '项目ID',
   primary key(client_id, project_id)
 ) engine=innodb default charset=utf8 comment = '客户端与项目关联表';
 

@@ -39,6 +39,7 @@ import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.client.HttpRequest;
 import com.luckyframe.common.utils.client.RunBatchCaseEntity;
 import com.luckyframe.common.utils.poi.ExcelUtil;
+import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
@@ -110,11 +111,19 @@ public class TaskCaseExecuteController extends BaseController
         		projectId = taskExecuteService.selectTaskExecuteById(taskId).getProjectId();
         	}
         }else{
-        	TaskExecute te = taskExecuteService.selectTaskExecuteLastRecord();
-        	if(null!=te){
-            	taskId = te.getTaskId();
-            	projectId = te.getProjectId();
-        	}
+        	if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
+        		TaskExecute te = taskExecuteService.selectTaskExecuteLastRecordForProjectId(ShiroUtils.getProjectId());
+            	if(null!=te){
+                	taskId = te.getTaskId();
+                	projectId = te.getProjectId();
+            	}
+            }else{
+            	TaskExecute te = taskExecuteService.selectTaskExecuteLastRecord();
+            	if(null!=te){
+                	taskId = te.getTaskId();
+                	projectId = te.getProjectId();
+            	}
+            }
         }
         
 		taskExecute.setProjectId(projectId);
@@ -292,7 +301,6 @@ public class TaskCaseExecuteController extends BaseController
     	
     	if (null != taskExecute && null!=taskExecute.getCaseTotalCount()) {
     		List<TaskCaseExecute> taskCaseExecuteList = taskCaseExecuteService.selectTaskCaseExecuteListByTaskId(taskId);
-    		Integer percent = (int)((Double.valueOf(taskCaseExecuteList.size()) / Double.valueOf(taskExecute.getCaseTotalCount())) * 100);
 
     		int caseSuccCount = 0;
     		int caseFailCount = 0;
@@ -310,6 +318,7 @@ public class TaskCaseExecuteController extends BaseController
     			}
     		}
 
+    		Integer percent = (int)((Double.valueOf(taskCaseExecuteList.size()-caseNoexecCount) / Double.valueOf(taskExecute.getCaseTotalCount())) * 100);
     		taskExecute.setCaseSuccCount(caseSuccCount);
     		taskExecute.setCaseFailCount(caseFailCount);
     		taskExecute.setCaseLockCount(caseLockCount);

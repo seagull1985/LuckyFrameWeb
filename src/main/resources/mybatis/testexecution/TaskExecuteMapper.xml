@@ -70,6 +70,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectTaskExecuteVo"/>
         order by task_id desc limit 1
     </select>
+    
+    <select id="selectTaskExecuteLastRecordForProjectId" parameterType="Integer" resultMap="TaskExecuteResult">
+        <include refid="selectTaskExecuteVo"/>
+        where te.project_id = #{projectId} order by task_id desc limit 1
+    </select>
         
     <insert id="insertTaskExecute" parameterType="TaskExecute" useGeneratedKeys="true" keyProperty="taskId">
         insert into task_execute

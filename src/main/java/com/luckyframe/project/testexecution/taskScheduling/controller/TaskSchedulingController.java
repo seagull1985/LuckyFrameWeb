@@ -27,10 +27,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.luckyframe.common.constant.ClientConstants;
 import com.luckyframe.common.constant.JobConstants;
 import com.luckyframe.common.exception.BusinessException;
+import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.client.HttpRequest;
 import com.luckyframe.common.utils.file.FileUploadUtils;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.common.utils.security.PermissionUtils;
+import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.config.LuckyFrameConfig;
@@ -82,6 +84,9 @@ public class TaskSchedulingController extends BaseController
 	{
         List<Project> projects=projectService.selectProjectAll(0);
         mmap.put("projects", projects);
+        if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
+        	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
+        }
 	    return prefix + "/taskScheduling";
 	}
 	

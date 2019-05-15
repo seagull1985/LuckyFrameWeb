@@ -21,6 +21,7 @@ import com.luckyframe.framework.shiro.service.PasswordService;
 import com.luckyframe.framework.web.controller.BaseController;
 import com.luckyframe.framework.web.domain.AjaxResult;
 import com.luckyframe.framework.web.service.DictService;
+import com.luckyframe.project.system.project.service.IProjectService;
 import com.luckyframe.project.system.user.domain.User;
 import com.luckyframe.project.system.user.service.IUserService;
 
@@ -45,6 +46,9 @@ public class ProfileController extends BaseController
 
     @Autowired
     private DictService dict;
+    
+    @Autowired
+    private IProjectService projectService;
 
     /**
      * 个人信息
@@ -53,10 +57,15 @@ public class ProfileController extends BaseController
     public String profile(ModelMap mmap)
     {
         User user = getSysUser();
+        String projectName="默认项目";
         user.setSex(dict.getLabel("sys_user_sex", user.getSex()));
         mmap.put("user", user);
         mmap.put("roleGroup", userService.selectUserRoleGroup(user.getUserId()));
         mmap.put("postGroup", userService.selectUserPostGroup(user.getUserId()));
+        if(StringUtils.isNotEmpty(user.getProjectId())){
+        	projectName = projectService.selectProjectById(user.getProjectId()).getProjectName();
+        }
+        mmap.put("projectName", projectName);
         return prefix + "/profile";
     }
 
@@ -111,6 +120,7 @@ public class ProfileController extends BaseController
     {
         User user = getSysUser();
         mmap.put("user", userService.selectUserById(user.getUserId()));
+        mmap.put("projects", projectService.selectProjectAll(0));
         return prefix + "/edit";
     }
 
@@ -138,6 +148,7 @@ public class ProfileController extends BaseController
         currentUser.setEmail(user.getEmail());
         currentUser.setPhonenumber(user.getPhonenumber());
         currentUser.setSex(user.getSex());
+        currentUser.setProjectId(user.getProjectId());
         if (userService.updateUserInfo(currentUser) > 0)
         {
             setSysUser(userService.selectUserById(currentUser.getUserId()));

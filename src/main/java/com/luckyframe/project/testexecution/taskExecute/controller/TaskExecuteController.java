@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.poi.ExcelUtil;
+import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
@@ -68,6 +69,10 @@ public class TaskExecuteController extends BaseController
             	mmap.put("defaultProjectId", taskScheduling.getProjectId());
             	mmap.put("defaultSchedulingId", schedulingId);
         	}
+        }else{
+        	if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
+            	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
+            }
         }
 	    return prefix + "/taskExecute";
 	}

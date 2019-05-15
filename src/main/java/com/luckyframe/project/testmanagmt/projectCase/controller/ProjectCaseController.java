@@ -16,6 +16,7 @@ import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.common.utils.security.PermissionUtils;
+import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
 import com.luckyframe.framework.aspectj.lang.enums.BusinessType;
 import com.luckyframe.framework.web.controller.BaseController;
@@ -61,9 +62,16 @@ public class ProjectCaseController extends BaseController
         List<Project> projects=projectService.selectProjectAll(0);
         mmap.put("projects", projects);
         if(projects.size()>0){
-        	ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(projects.get(0).getProjectId());
+        	ProjectCaseModule projectCaseModule = new ProjectCaseModule();
+            if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
+            	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
+                projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(ShiroUtils.getProjectId());
+            }else{
+                projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(projects.get(0).getProjectId());
+            }
         	mmap.put("projectCaseModule", projectCaseModule);
         }
+        
 	    return prefix + "/projectCase";
 	}
 	
