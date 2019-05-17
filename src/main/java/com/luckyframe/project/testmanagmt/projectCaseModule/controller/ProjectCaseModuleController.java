@@ -84,7 +84,9 @@ public class ProjectCaseModuleController extends BaseController
 	@GetMapping("/add/{moduleId}")
 	public String add(@PathVariable("moduleId") int moduleId, ModelMap mmap)
 	{
-		mmap.put("projectCaseModule", projectCaseModuleService.selectProjectCaseModuleById(moduleId));
+		ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleById(moduleId);
+		mmap.put("projectCaseModule",projectCaseModule);
+		mmap.put("projectId",projectCaseModule.getProjectId());
 		mmap.put("maxOrderNum", projectCaseModuleService.selectProjectCaseModuleMaxOrderNumByParentId(moduleId));
 	    return prefix + "/add";
 	}

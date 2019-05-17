@@ -5,6 +5,7 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-projectCaseModule-add">
+        <input id="projectId" name="projectId" th:value="${projectId}"  type="hidden">
         <input id="treeId" name="parentId" type="hidden" th:value="${projectCaseModule.moduleId}"/>
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">父模块：</label>
