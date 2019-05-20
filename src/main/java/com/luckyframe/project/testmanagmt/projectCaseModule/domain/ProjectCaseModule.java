@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.luckyframe.framework.web.domain.BaseEntity;
+import com.luckyframe.project.system.project.domain.Project;
 
 /**
  * 测试用例模块管理表 project_case_module
@@ -29,7 +30,17 @@ public class ProjectCaseModule extends BaseEntity
 	private Integer orderNum;
 	/** 所属项目名称 */
 	private String projectName;
+	/** 关联项目实体 */
+	private Project project;
 	
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
 	public void setModuleId(Integer moduleId) 
 	{
 		this.moduleId = moduleId;

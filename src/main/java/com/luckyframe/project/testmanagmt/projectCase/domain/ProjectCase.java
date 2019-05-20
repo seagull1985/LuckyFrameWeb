@@ -4,7 +4,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.luckyframe.framework.aspectj.lang.annotation.Excel;
-import com.luckyframe.framework.aspectj.lang.annotation.Excel.Type;
 import com.luckyframe.framework.web.domain.BaseEntity;
 import com.luckyframe.project.system.project.domain.Project;
 import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseModule;
@@ -31,10 +30,10 @@ public class ProjectCase extends BaseEntity
 	@Excel(name = "用例名称")
 	private String caseName;
 	/** 关联项目ID */
-	@Excel(name = "项目ID", type = Type.IMPORT)
+	@Excel(name = "项目ID")
 	private Integer projectId;
 	/** 关联项目模块ID */
-	@Excel(name = "模块ID", type = Type.IMPORT)
+	@Excel(name = "模块ID")
 	private Integer moduleId;
 	/** 默认类型 0 API接口 1 Web UI 2 HTTP接口 3移动端 */
 	@Excel(name = "用例类型")
