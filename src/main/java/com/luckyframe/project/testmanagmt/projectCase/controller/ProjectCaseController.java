@@ -66,8 +66,6 @@ public class ProjectCaseController extends BaseController
             if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
             	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
                 projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(ShiroUtils.getProjectId());
-            }else{
-                projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(projects.get(0).getProjectId());
             }
         	mmap.put("projectCaseModule", projectCaseModule);
         }
@@ -104,9 +102,16 @@ public class ProjectCaseController extends BaseController
     @ResponseBody
     public AjaxResult export(ProjectCase projectCase)
     {
+		if(StringUtils.isNotEmpty(projectCase.getModuleId())){
+			ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleById(projectCase.getModuleId());
+			if(projectCaseModule.getParentId().equals(0)){
+				projectCase.setModuleId(null);
+			}
+		}
+		
     	List<ProjectCase> list = projectCaseService.selectProjectCaseList(projectCase);
         ExcelUtil<ProjectCase> util = new ExcelUtil<ProjectCase>(ProjectCase.class);
-        return util.exportExcel(list, "projectCase");
+        return util.exportExcel(list, "测试用例");
     }
 	
 	/**

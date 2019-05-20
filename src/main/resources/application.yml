@@ -105,7 +105,7 @@ shiro:
     maxAge: 30
   session:
     # Session超时时间（默认30分钟）
-    expireTime: 30
+    expireTime: 600
     # 同步session到数据库的周期（默认1分钟）
     dbSyncPeriod: 1
     # 相隔多久检查一次session的有效性，默认就是10分钟

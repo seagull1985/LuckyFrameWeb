@@ -65,9 +65,9 @@
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testmanagmt:projectCase:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
-<!--  				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="testmanagmt:projectCase:export">
+  				<a class="btn btn-warning" onclick="$.table.exportExcel('formId')" shiro:hasPermission="testmanagmt:projectCase:export">
 						<i class="fa fa-download"></i> 导出
-				 </a> -->
+				 </a>
 			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
@@ -105,7 +105,7 @@
 	                    projectId:      $('#projectId').val()
 	        		};
 				},
-		        showExport: true,
+		        showExport: false,
 		        detailView : true, //是否显示父子表
                 columns: [{
 		            checkbox: true
@@ -139,7 +139,6 @@
 					field : 'caseName', 
 					title : '用例名称',
 					width : '25%',
-					class : 'myTDLengthHidden',
 					editable : {
 						type : 'text',
 						title : '用例名称',

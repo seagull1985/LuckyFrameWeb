@@ -535,6 +535,8 @@ insert into sys_menu
 values('1094','用例明细删除','125','2','#','F','0','testexecution:taskCaseExecute:remove','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
 insert into sys_menu 
 values('1095','用例明细执行','125','3','#','F','0','testexecution:taskCaseExecute:execution','#','admin','2019-02-13 10-27-32','luckyframe','2019-02-13 10-27-32','');
+-- 用例模块按钮(新增导出功能)
+insert into sys_menu values('1096','用例导出','118','5', '#', 'F','0', 'testmanagmt:projectCase:export','#','admin','2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '');
 
 -- ----------------------------
 -- 16、用户和角色关联表  用户N-1角色
