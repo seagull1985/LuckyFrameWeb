@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="planId != null and flag == false"> and (ppc.plan_id = #{planId} or ppc.plan_id is null)</if>
             <if test="planId != null and flag == true"> and ppc.plan_id = #{planId}</if>
          </where>
-         order by pc.case_id desc
+         order by ppc.priority asc,pc.case_id desc
     </select>
     
     <select id="selectProjectCaseById" parameterType="Integer" resultMap="ProjectCaseResult">
