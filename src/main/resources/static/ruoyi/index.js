@@ -203,6 +203,14 @@ $(function() {
         flag = true;
         if (dataUrl == undefined || $.trim(dataUrl).length == 0) return false;
 
+        // 创建选项卡带了参数时，data-id唯一标识截取？前的字符
+        var dataId = "";
+        if(dataUrl.indexOf('?')>=0){
+        	dataId = dataUrl.substring(0,dataUrl.indexOf('?'));
+        }else{
+        	dataId = dataUrl;
+        }
+        
         // 选项卡菜单已存在
         $('.menuTab').each(function() {
             if ($(this).data('id') == dataUrl) {
@@ -223,11 +231,11 @@ $(function() {
         });
         // 选项卡菜单不存在
         if (flag) {
-            var str = '<a href="javascript:;" class="active menuTab" data-id="' + dataUrl + '">' + menuName + ' <i class="fa fa-times-circle"></i></a>';
+            var str = '<a href="javascript:;" class="active menuTab" data-id="' + dataId + '">' + menuName + ' <i class="fa fa-times-circle"></i></a>';
             $('.menuTab').removeClass('active');
 
             // 添加选项卡对应的iframe
-            var str1 = '<iframe class="RuoYi_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" seamless></iframe>';
+            var str1 = '<iframe class="RuoYi_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataId + '" seamless></iframe>';
             $('.mainContent').find('iframe.RuoYi_iframe').hide().parents('.mainContent').append(str1);
             
             $.modal.loading("数据加载中，请稍后...");

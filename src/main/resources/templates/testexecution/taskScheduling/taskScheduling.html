@@ -101,8 +101,7 @@
 				{
 					field : 'schedulingName', 
 					title : '调度名称',
-					width : '15%',
-					class : 'myTDLengthHidden',
+					width : '20%',
 					formatter : function(value,
 							row, index) {
 						return '<a href="#" onclick="taskExcute('+row.schedulingId+')">'+ value + '</a> ';
@@ -117,8 +116,7 @@
 				{
 					field : 'projectPlan.planName', 
 					title : '计划名称',
-					width : '15%',
-					class : 'myTDLengthHidden'
+					width : '16%'
 				},
 				{
 					field : 'job.misfirePolicy', 
@@ -141,8 +139,8 @@
 				},
 				{
 					field : 'job.cronExpression', 
-					title : 'Cron表达式',
-					width : '8%',
+					title : 'Cron',
+					width : '10%',
 					class : 'myTDLengthHidden'
 				},
 				{
@@ -153,8 +151,8 @@
 				},
 				{
 					field : 'exThreadCount', 
-					title : '线程数',
-					width : '5%',
+					title : '线程',
+					width : '7%',
 					class : 'myTDLengthHidden'
 				},
 				{
@@ -170,7 +168,7 @@
 					field : 'job.updateTime', 
 					title : '更新时间',
 					width : '10%',
-					class : 'myTDLengthHidden'
+					visible: false
 				},
 		        {
 		            title: '操作',

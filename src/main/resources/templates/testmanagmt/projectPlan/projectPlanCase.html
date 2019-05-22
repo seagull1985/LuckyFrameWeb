@@ -58,28 +58,7 @@
         var prefix = ctx + "testmanagmt/projectPlanCase";
         var modulePrefix = ctx + "testmanagmt/projectCaseModule";
 
-        $(function() {
-/* 			var projectId=$("#projectId").val();
-			if(projectId==""){
-	   			$("#treeId").val("");
-	   			$("#treeName").val("");
-			}else{
-				$.ajax({
-					cache : true,
-					type : "GET",
-					url : modulePrefix + "/getModuleByProjectId/" + projectId,
-					data : {},
-					async : true,
-					error : function(request) {
-						$.modal.alertError("系统错误");
-					},
-					success : function(data) {
-			   			$("#treeId").val(data.moduleId);
-			   			$("#treeName").val(data.moduleName);
-					}
-				});
-			} */
-			
+        $(function() {			
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
@@ -128,7 +107,7 @@
 				{
 					field : 'priority',
 					title : '执行优先级',
-					width : '8%',
+					width : '12%',
 					sortable: true,
 					editable : {
 						type : 'text',
@@ -151,13 +130,12 @@
 					field : 'caseSign', 
 					title : '用例编号',
 					sortable: true,
-					width : '6%',
-					class : 'myTDLengthHidden'
+					width : '12%'
 				},
 				{
 					field : 'caseName', 
 					title : '用例名称',
-					width : '25%',
+					width : '26%',
 					class : 'myTDLengthHidden'
 				},
 				{
@@ -182,7 +160,7 @@
 				{
 					field : 'failcontinue', 
 					title : '失败处理',
-					width : '8%',
+					width : '12%',
 					class : 'myTDLengthHidden',
 		        	formatter: function (value, row, index) {
 		    		    if (row.failcontinue == 0) {
@@ -207,20 +185,18 @@
 				{
 					field : 'updateBy', 
 					title : '更新者',
-					width : '6%',
-					class : 'myTDLengthHidden'
+					visible: false
 				},
 				{
 					field : 'updateTime', 
 					title : '更新时间',
 					sortable: true,
-					width : '12%',
-					class : 'myTDLengthHidden'
+					visible: false
 				},
 				{
 					field : 'remark', 
 					title : '备注',
-					width : '12%',
+					width : '15%',
 					class : 'myTDLengthHidden'
 				}],
 				onEditableSave: function (field, row, oldValue, $el) {

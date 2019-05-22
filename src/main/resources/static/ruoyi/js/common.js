@@ -141,7 +141,7 @@ function createMenuItem(dataUrl, menuName) {
     // 选项卡菜单已存在
     $('.menuTab', topWindow).each(function() {
         if ($(this).data('id') == dataId) {
-            if (!$(this).hasClass('active')) {
+/*            if (!$(this).hasClass('active')) {
                 $(this).addClass('active').siblings('.menuTab').removeClass('active');
                 $('.page-tabs-content').animate({ marginLeft: ""}, "fast");
                 // 显示tab对应的内容区
@@ -153,7 +153,9 @@ function createMenuItem(dataUrl, menuName) {
                 });
             }
             flag = false;
-            return false;
+            return false;*/
+        	//选项卡菜单已存在先关闭，再重新打开
+            $(this).remove();
         }
     });
 
