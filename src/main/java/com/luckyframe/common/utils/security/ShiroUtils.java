@@ -1,5 +1,7 @@
 package com.luckyframe.common.utils.security;
 
+import java.util.List;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.session.Session;
@@ -75,6 +77,11 @@ public class ShiroUtils
     public static Integer getProjectId()
     {
         return getSysUser().getProjectId();
+    }
+    
+    public static List<Integer> getProjectIdForRoles()
+    {
+        return getSysUser().getProjectIdForRoles();
     }
     
     public static String getIp()

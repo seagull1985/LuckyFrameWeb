@@ -3,7 +3,10 @@ package com.luckyframe.common.utils.security;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.luckyframe.common.constant.PermissionConstants;
 import com.luckyframe.common.utils.MessageUtils;
 
@@ -14,6 +17,7 @@ import com.luckyframe.common.utils.MessageUtils;
  */
 public class PermissionUtils
 {
+	private static final Logger log = LoggerFactory.getLogger(PermissionUtils.class);
     /**
      * 权限错误消息提醒
      * 
@@ -56,7 +60,7 @@ public class PermissionUtils
 	 */
 	public static Boolean isProjectPermsPassByProjectId(Integer projectId)
 	{
-		List<Integer> projectIDList = ShiroUtils.getSysUser().getProjectIdForRoles();
+		List<Integer> projectIDList = ShiroUtils.getProjectIdForRoles();
     	
     	Boolean result = false;  	
     	/*超级管理员权限*/
@@ -69,6 +73,10 @@ public class PermissionUtils
     			result = true;
     			break;
     		}   		
+    	}
+    	
+    	if(!result){
+    		log.warn("项目访问权限不通过，被访项目ID:{},用户项目权限列表：{}",projectId,JSON.toJSONString(projectIDList));
     	}
     	
 	    return result;
