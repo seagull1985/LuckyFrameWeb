@@ -1,6 +1,7 @@
 package com.luckyframe.project.testmanagmt.projectCase.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -19,6 +20,7 @@ import com.luckyframe.project.system.project.mapper.ProjectMapper;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;
 import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseMapper;
 import com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseStepsMapper;
+import com.luckyframe.project.testmanagmt.projectPlan.domain.ProjectPlanCase;
 import com.luckyframe.project.testmanagmt.projectPlan.mapper.ProjectPlanCaseMapper;
 
 /**
@@ -103,8 +105,36 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
 	 */
 	@Override
 	public List<ProjectCase> selectProjectCaseListForPlan(ProjectCase projectCase)
-	{
-	    return projectCaseMapper.selectProjectCaseListForPlan(projectCase);
+	{	
+		List<ProjectCase> projectCaseList = new ArrayList<ProjectCase>();
+		if(StringUtils.isNotEmpty(projectCase.getPlanId())){
+			List<ProjectPlanCase> projectPlanCaseList = new ArrayList<ProjectPlanCase>();
+			ProjectPlanCase projectPlanCase = new ProjectPlanCase();
+			projectPlanCase.setPlanId(projectCase.getPlanId());
+			/**查询计划内跟所有用例分两个语句*/
+			if(projectCase.isFlag()){
+				projectCaseList = projectCaseMapper.selectProjectCaseListForPlan(projectCase);
+				projectPlanCaseList = projectPlanCaseMapper.selectProjectPlanCaseList(projectPlanCase);
+			}else{
+				projectCaseList = projectCaseMapper.selectProjectCaseList(projectCase);
+				projectPlanCaseList = projectPlanCaseMapper.selectProjectPlanCaseList(projectPlanCase);
+			}
+			
+			/**用例集合加入优先级以及标识*/
+			for(ProjectCase pc:projectCaseList){
+				pc.setPlanId(projectCase.getPlanId());
+				for (ProjectPlanCase ppc:projectPlanCaseList) {
+					if (pc.getCaseId().equals(ppc.getCaseId())) {
+						pc.setFlag(true);
+						pc.setPriority(ppc.getPriority());					
+						pc.setPlanCaseId(ppc.getPlanCaseId());
+						break;
+					}
+				}
+			}
+		}
+		
+	    return projectCaseList;
 	}
 	
     /**

@@ -83,20 +83,6 @@ public class ProjectPlanCaseController extends BaseController
 		/**获取项目下的用例集合*/
 		List<ProjectCase> projectCaseList = projectCaseService.selectProjectCaseListForPlan(projectCase);
 		
-		List<ProjectPlanCase> projectPlanCaseList = projectPlanCaseService.selectProjectPlanCaseListByPlanId(projectCase.getPlanId());
-		/**用例集合优先级以及标识*/
-		for (ProjectCase pc:projectCaseList) {
-			pc.setPlanId(projectCase.getPlanId());
-			for (ProjectPlanCase ppc:projectPlanCaseList) {
-				if (pc.getCaseId().equals(ppc.getCaseId())) {
-					pc.setFlag(true);
-					pc.setPriority(ppc.getPriority());					
-					pc.setPlanCaseId(ppc.getPlanCaseId());
-					break;
-				}
-			}
-		}
-		
 		return getDataTable(projectCaseList);
 	}
 	
