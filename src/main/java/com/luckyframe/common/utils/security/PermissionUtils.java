@@ -62,7 +62,13 @@ public class PermissionUtils
 	{
 		List<Integer> projectIDList = ShiroUtils.getProjectIdForRoles();
     	
-    	Boolean result = false;  	
+    	Boolean result = false;
+    	
+    	if(null==ShiroUtils.getLoginName()){
+    		log.warn("项目访问权限不通过，用户登录名在ShiroUtils中为空...");
+    		return result;
+    	}
+    	
     	/*超级管理员权限*/
     	if("admin".equals(ShiroUtils.getLoginName())){
     		return true;

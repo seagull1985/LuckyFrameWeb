@@ -351,7 +351,7 @@ public class TaskSchedulingController extends BaseController
 		response.setContentType(contentType);
 		response.setContentType("multipart/form-data");
 		
-		String storeName = "ERROR.log";
+		String storeName = "INFO.log";
 		String queryDate = request.getParameter("queryDate");
 		String clientIp = request.getParameter("clientIp");
 
