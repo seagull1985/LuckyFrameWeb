@@ -19,6 +19,23 @@
 	                </select>
 				</div>
 			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">日志级别：</label>
+				<div class="col-sm-8">
+				  <div class="radio-box">
+					<input type="radio" id="logLevel" name="logLevel" th:value="ERROR" th:checked="true">
+					<label style="color:#DC143C" th:text="异常"></label>
+				  </div>
+				  <div class="radio-box">
+				  	<input type="radio" id="logLevel" name="logLevel" th:value="WARN">
+					<label style="color:#FF8C00" th:text="警告"></label>
+				  </div>
+				  <div class="radio-box">
+				  	<input type="radio" id="logLevel" name="logLevel" th:value="INFO">
+					<label style="color:#1E90FF" th:text="全部"></label>
+				  </div>
+				</div>
+			</div>
 		</form>
 	</div>
     <div th:include="include::footer"></div>

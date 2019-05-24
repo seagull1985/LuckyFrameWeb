@@ -100,6 +100,9 @@ public class ProjectProtocolTemplateController extends BaseController
 	{
         List<Project> projects=projectService.selectProjectAll(0);
         mmap.put("projects", projects);
+        if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
+        	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
+        }
 	    return prefix + "/add";
 	}
 	

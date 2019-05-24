@@ -126,9 +126,14 @@ public class TaskSchedulingController extends BaseController
         List<Project> projects=projectService.selectProjectAll(0);
         mmap.put("projects", projects);
         if(projects.size()>0){
-        	List<ProjectPlan> planList = projectPlanService.selectProjectPlanListByProjectId(projects.get(0).getProjectId());
+        	Integer projectId=projects.get(0).getProjectId();
+            if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
+            	projectId = ShiroUtils.getProjectId();
+            	mmap.put("defaultProjectId", projectId);
+            }          
+        	List<ProjectPlan> planList = projectPlanService.selectProjectPlanListByProjectId(projectId);
         	mmap.put("planList", planList);
-        	List<Client> clientList = clientService.selectClientsByProjectId(projects.get(0).getProjectId());
+        	List<Client> clientList = clientService.selectClientsByProjectId(projectId);
         	mmap.put("clientList", clientList);
         	if(clientList.size()>0){
         		List<String> driverPathList = clientService.selectClientDriverListById(clientList.get(0).getClientId());
@@ -351,10 +356,12 @@ public class TaskSchedulingController extends BaseController
 		response.setContentType(contentType);
 		response.setContentType("multipart/form-data");
 		
-		String storeName = "INFO.log";
+		
 		String queryDate = request.getParameter("queryDate");
 		String clientIp = request.getParameter("clientIp");
+		String logLevel = request.getParameter("logLevel");
 
+		String storeName = logLevel+".log";
 	    Date dt = new Date();   
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");   
 

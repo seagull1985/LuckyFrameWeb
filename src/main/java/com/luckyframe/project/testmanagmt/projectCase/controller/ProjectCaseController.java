@@ -123,8 +123,16 @@ public class ProjectCaseController extends BaseController
         List<Project> projects=projectService.selectProjectAll(0);
         mmap.put("projects", projects);
         if(projects.size()>0){
-        	ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(projects.get(0).getProjectId());
-        	mmap.put("projectCaseModule", projectCaseModule);
+            if(projects.size()>0){
+            	ProjectCaseModule projectCaseModule = new ProjectCaseModule();
+                if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
+                	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
+                    projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(ShiroUtils.getProjectId());
+                }else{
+                	projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(projects.get(0).getProjectId());
+                }
+            	mmap.put("projectCaseModule", projectCaseModule);
+            }
         }
 	    return prefix + "/add";
 	}
