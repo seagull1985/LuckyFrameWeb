@@ -110,9 +110,13 @@ public class OpenPostApiController
 		int result = 0;
 		try {
 			TaskCaseExecute taskCaseExecute = JSONObject.parseObject(jsonObject.toJSONString(), TaskCaseExecute.class);
+			Integer caseStatus = taskCaseExecute.getCaseStatus();
 			TaskCaseExecute tce = taskCaseExecuteService.selectTaskCaseExecuteByTaskIdAndCaseId(taskCaseExecute);
-			tce.setCaseStatus(taskCaseExecute.getCaseStatus());
+			tce.setCaseStatus(caseStatus);
 			tce.setUpdateTime(taskCaseExecute.getUpdateTime());
+			if(caseStatus==0||caseStatus==1||caseStatus==2){
+				tce.setFinishTime(taskCaseExecute.getUpdateTime());
+			}
 			taskCaseExecuteService.updateTaskCaseExecute(tce);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -200,7 +204,10 @@ public class OpenPostApiController
 			taskExecute.setCaseNoexecCount(casenoexec);
 			taskExecute.setTaskStatus(taskStatus);
 			taskExecute.setUpdateTime(new Date());
-			taskExecute.setFinishTime(new Date());
+			/*状态完成时,更新结束时间*/
+			if(taskStatus==2){
+				taskExecute.setFinishTime(new Date());	
+			}
 			taskExecuteService.updateTaskExecute(taskExecute);
 			
 		} catch (Exception e) {

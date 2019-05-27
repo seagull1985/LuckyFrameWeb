@@ -17,7 +17,7 @@ import com.luckyframe.common.utils.MessageUtils;
  */
 public class PermissionUtils
 {
-	private static final Logger log = LoggerFactory.getLogger(PermissionUtils.class);
+	 private static final Logger logger = LoggerFactory.getLogger("sys-user");
     /**
      * 权限错误消息提醒
      * 
@@ -65,7 +65,7 @@ public class PermissionUtils
     	Boolean result = false;
     	
     	if(null==ShiroUtils.getLoginName()){
-    		log.warn("项目访问权限不通过，用户登录名在ShiroUtils中为空...");
+    		logger.warn("项目访问权限不通过，用户登录名在ShiroUtils中为空...");
     		return result;
     	}
     	
@@ -82,7 +82,7 @@ public class PermissionUtils
     	}
     	
     	if(!result){
-    		log.warn("项目访问权限不通过，被访项目ID:{},用户项目权限列表：{}",projectId,JSON.toJSONString(projectIDList));
+    		logger.warn("项目访问权限不通过，被访项目ID:{},用户项目权限列表：{}",projectId,JSON.toJSONString(projectIDList));
     	}
     	
 	    return result;
