@@ -236,9 +236,11 @@
 	        
 	        var oTable = document.getElementById("stepsTable");
 	        reorderTable(oTable);
-	        initSuggest(clonedTR.cells[6].children[0].children[0]);
+	        var typeObj = clonedTR.cells[6].children[0].children[0];
+	        initSuggest(typeObj);
 	        if(iscopy==0){
-	        	clearCells(oTable.rows.length-1);
+	        	var index = typeObj.getAttribute("id").substring(8);
+	        	clearCells(index);
 	        }
 	    }
 
@@ -368,12 +370,12 @@
 	            keyField: "name",
 	            clearable: false
 	        }).on('onDataRequestSuccess', function (e, result) {
-	        	console.log('onDataRequestSuccess: ', result); 
+	        	//console.log('onDataRequestSuccess: ', result); 
 	        }).on('onSetSelectValue', function (e, keyword, data) {
-	        	console.log('onSetSelectValue: ', keyword, data); 
+	        	//console.log('onSetSelectValue: ', keyword, data); 
 	            //$('#casesteps').data('bootstrapValidator').updateStatus(extendindex, 'NOT_VALIDATED', null).validateField($("#"+templateId));
 	        }).on('onUnsetSelectValue', function () {
-	        	console.log("onUnsetSelectValue"); 
+	        	//console.log("onUnsetSelectValue"); 
 	        });
 	    }
 

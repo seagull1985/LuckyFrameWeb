@@ -79,10 +79,10 @@ public class RunAutomationTestTask
 				taskExecuteService.updateTaskExecute(taskExecute);
 			} catch (KeyManagementException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("测试任务执行，远程链接客户端出现异常...");
 			} catch (NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("测试任务执行，远程链接客户端出现异常...");
 			}
 		}
     }

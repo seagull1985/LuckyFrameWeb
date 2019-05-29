@@ -14,12 +14,12 @@
 
 USE luckyframe;
 -- ----------------------------
--- 1、导入项目表数据
+-- 1、导入项目表数据 所属部门ID统一修改成104
 -- ----------------------------
 delete from sys_project;
 insert into sys_project  (project_id,project_name,project_sign,dept_id)  select qs.projectid,qs.projectname,qs.projectsign,qs.sectorid from luckyframedb.qa_sectorprojects qs 
 where 1=1 and  projecttype=0 and projectid!=99 and NOT EXISTS(select 1 from sys_project  where project_id = qs.projectid);
-
+update sys_project set dept_id=104;
 -- ----------------------------
 -- 2、导入测试用例数据 ----------------------------
 delete from project_case;

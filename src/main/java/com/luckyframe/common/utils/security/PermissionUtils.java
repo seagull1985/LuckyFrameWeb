@@ -75,7 +75,7 @@ public class PermissionUtils
     	}
     	
     	for(Integer pId:projectIDList){
-    		if(projectId==pId){
+    		if(projectId.equals(pId)){
     			result = true;
     			break;
     		}   		
@@ -87,4 +87,6 @@ public class PermissionUtils
     	
 	    return result;
 	}
+	
+	
 }
