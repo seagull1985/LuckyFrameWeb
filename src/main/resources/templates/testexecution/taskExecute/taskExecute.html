@@ -234,34 +234,36 @@
 
 		 /*刷新进度条*/
 		 function refreshProgress(taskId){
-		   var url = caseExecutePrefix + "/getProgressBarByTaskId/"+taskId;
+		   var url = caseExecutePrefix + "/getProgressBarByTaskId/"+taskId;		   
 		   $.getJSON(url, null, function call(result) {
-	       		document.getElementById("casesucc"+taskId).innerText = result.caseSuccCount;
-	       		document.getElementById("casefail"+taskId).innerText = result.caseFailCount;
-	       		document.getElementById("caselock"+taskId).innerText = result.caseLockCount;
-	       		document.getElementById("casenoexec"+taskId).innerText = result.caseNoexecCount;
-	       		
-		       	if(result.taskStatus==0||result.taskStatus==1){
-		       		//document.getElementById("casetotal"+taskId).innerText = result.caseTotalCount;
-		       		$('#progress'+taskId).css('width', result.taskProgress+'%');
-		       		document.getElementById("progress"+taskId).innerText  = result.taskProgress+'%';
-		       		$('#progress'+taskId).attr("aria-valuenow",result.taskProgress);
-		       	}else if(result.taskStatus==2){
-		       		document.getElementById("progressFont"+taskId).innerText = "执行完成";
-		       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
-		       		clearTimeout(t);
-				}else if(result.taskStatus==3){
-		       		document.getElementById("progressFont"+taskId).innerText = "执行失败";
-		       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
-		       		clearTimeout(t);
-				}else if(result.taskStatus==4){
-		       		document.getElementById("progressFont"+taskId).innerText = "唤起客户端失败";
-		       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
-		       		clearTimeout(t);
-				}else{
-		       		document.getElementById("progressFont"+taskId).innerText = "异常状态";
-		       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
-		       		clearTimeout(t);
+				if(null!=document.getElementById("casesucc"+taskId)){
+		       		document.getElementById("casesucc"+taskId).innerText = result.caseSuccCount;
+		       		document.getElementById("casefail"+taskId).innerText = result.caseFailCount;
+		       		document.getElementById("caselock"+taskId).innerText = result.caseLockCount;
+		       		document.getElementById("casenoexec"+taskId).innerText = result.caseNoexecCount;
+		       		
+			       	if(result.taskStatus==0||result.taskStatus==1){
+			       		//document.getElementById("casetotal"+taskId).innerText = result.caseTotalCount;
+			       		$('#progress'+taskId).css('width', result.taskProgress+'%');
+			       		document.getElementById("progress"+taskId).innerText  = result.taskProgress+'%';
+			       		$('#progress'+taskId).attr("aria-valuenow",result.taskProgress);
+			       	}else if(result.taskStatus==2){
+			       		document.getElementById("progressFont"+taskId).innerText = "执行完成";
+			       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
+			       		clearTimeout(t);
+					}else if(result.taskStatus==3){
+			       		document.getElementById("progressFont"+taskId).innerText = "执行失败";
+			       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
+			       		clearTimeout(t);
+					}else if(result.taskStatus==4){
+			       		document.getElementById("progressFont"+taskId).innerText = "唤起客户端失败";
+			       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
+			       		clearTimeout(t);
+					}else{
+			       		document.getElementById("progressFont"+taskId).innerText = "异常状态";
+			       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
+			       		clearTimeout(t);
+					}
 				}
 		   });
 		   var t=setTimeout("refreshProgress("+taskId+")", 2000);
@@ -272,6 +274,7 @@
 				var url = caseExecutePrefix + '?taskId=' + taskId + '&caseStatus=' + caseStatus;
 				createMenuItem(url, "用例明细");
 		 }
+		 
     </script>
 </body>
 </html>
