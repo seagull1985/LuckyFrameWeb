@@ -194,7 +194,7 @@
             
           //初始化子表格(无限循环)
 		  InitSubTable = function(index, row, $detail) {
-				var cur_table = $detail.html('<table></table>').find('table');
+				var cur_table = $detail.html('<table style="word-break:break-all;word-wrap:break-all;"></table>').find('table');
 				$(cur_table).bootstrapTable({
 					url : logPrefix + "/list",
 					method : 'get',
@@ -207,7 +207,7 @@
 					columns : [{
 						field : 'logId',
 						title : '序号',
-						width : '3%',
+						width : '5%',
 						formatter : function(value, row, index) {  
 							return '<p align="center">'+(index+1)+'</p>';  
 				         } 
@@ -215,7 +215,7 @@
 					{
 						field : 'logStep',
 						title : '步骤编号',
-						width : '4%',
+						width : '8%',
 						formatter : function(value,
 								row, index) {
 							if(value!="ending"){
@@ -228,7 +228,7 @@
 					}, {
 						field : 'logDetail',
 						title : '日志明细',
-						width : '75%',
+						width : '65%',
 						cellStyle : function (value, row, index, field) {
 							if(row.logGrade!="info"){
 								  return {
@@ -243,7 +243,7 @@
 					}, {
 						field : 'createTime',
 						title : '日志时间',
-						width : '10%',
+						width : '12%',
 						formatter : function(value,
 								row, index) {
 							return $.common.formatTime(value);
@@ -251,7 +251,7 @@
 					}, {
 						field : 'logGrade',
 						title : '日志级别',
-						width : '8%',
+						width : '10%',
 						formatter : function(value,
 								row, index) {
 							if(row.imgname==null){
