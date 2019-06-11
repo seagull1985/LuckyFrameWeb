@@ -29,7 +29,7 @@
 # 捐赠 | 感谢
 > [【捐赠支持(微信)】](https://git.oschina.net/uploads/images/2017/0913/175706_f58b543b_1215415.jpeg)  [【捐赠支持(支付宝)】](https://git.oschina.net/uploads/images/2017/0913/175750_e96add72_1215415.jpeg)
 
-> 感谢你们的认可与支持    [【捐赠记录】](https://git.oschina.net/seagull1985/LuckyFrameWeb/wikis/pages?title=捐赠列表&parent=捐赠)
+> 感谢你们的认可与支持    [【关于LuckyFrame】](http://www.luckyframe.cn/page/aboutme.html)
 
 > 如果你喜欢这个项目，那就点击一下右上方的【Star】以及【Fork】，支持一下我们吧！
 
