@@ -482,7 +482,7 @@ public class TaskCaseExecuteController extends BaseController
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/getMianLineReport.do")
-	public void getIndexReport(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+	public void getMianLineReport(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
 		List<TaskExecute> taskExecuteList = taskExecuteService.selectTaskExecuteListForThirtyDays();
 
 		String[] casetotal;
@@ -522,7 +522,7 @@ public class TaskCaseExecuteController extends BaseController
 			caselock[i] = taskExecuteList.get(i).getCaseLockCount().toString();
 			casenoex[i] = taskExecuteList.get(i).getCaseNoexecCount().toString();
 			String dateStr = DateUtils.parseDateToStr("yyyy-MM-dd", taskExecuteList.get(i).getUpdateTime());
-			createdate[i] = dateStr.substring(0, dateStr.indexOf("-"));
+			createdate[i] = dateStr.substring(4, dateStr.indexOf("-"));
 		}
 
 		JSONArray jsoncasetotal = (JSONArray) JSONArray.toJSON(casetotal);
