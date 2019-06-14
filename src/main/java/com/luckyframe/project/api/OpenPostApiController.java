@@ -116,6 +116,9 @@ public class OpenPostApiController
 			TaskCaseExecute tce = taskCaseExecuteService.selectTaskCaseExecuteByTaskIdAndCaseId(taskCaseExecute);
 			tce.setCaseStatus(caseStatus);
 			tce.setUpdateTime(new Date());
+			if(caseStatus==3){
+				tce.setCreateTime(new Date());
+			}
 			if(caseStatus==0||caseStatus==1||caseStatus==2){
 				tce.setFinishTime(new Date());
 			}
