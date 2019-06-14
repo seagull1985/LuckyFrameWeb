@@ -108,7 +108,7 @@
 				{
 					field : 'project.projectName', 
 					title : '项目名称',
-					width : '10%',
+					width : '9%',
 					class : 'myTDLengthHidden'
 				},
 				{
@@ -154,7 +154,7 @@
 						}else if(value==2){
 							return "执行完成";
 						}else if(value==3){
-							return "执行失败";
+							return "任务超时中断";
 						}else if(value==4){
 							return "唤起客户端失败";
 						}else{
@@ -164,15 +164,13 @@
 				},
 				{
 					field : 'caseTotalCount', 
-					title : '总用例数',
+					title : '总共',
 					width : '5%',
-					class : 'myTDLengthHidden'
 				},
 				{
 					field : 'caseSuccCount', 
-					title : '成功数',
+					title : '成功',
 					width : '5%',
-					class : 'myTDLengthHidden',
 					formatter : function(value,
 							row, index) {
 						return '<a id="casesucc'+row.taskId+'" style="color:#00bf5f" onclick="caseExcuteDetail('+row.taskId+',0'+')">'	+ value + '</a> ';
@@ -180,9 +178,8 @@
 				},
 				{
 					field : 'caseFailCount', 
-					title : '失败数',
+					title : '失败',
 					width : '5%',
-					class : 'myTDLengthHidden',
 					formatter : function(value,
 							row, index) {
 						return '<a id="casefail'+row.taskId+'" style="color:#ff0000" onclick="caseExcuteDetail('+row.taskId+',1'+')">'	+ value + '</a> ';
@@ -190,9 +187,8 @@
 				},
 				{
 					field : 'caseLockCount', 
-					title : '锁定数',
+					title : '锁定',
 					width : '5%',
-					class : 'myTDLengthHidden',
 					formatter : function(value,
 							row, index) {
 						return '<a id="caselock'+row.taskId+'" style="color:#FF7F00" onclick="caseExcuteDetail('+row.taskId+',2'+')">'	+ value + '</a> ';
@@ -201,8 +197,7 @@
 				{
 					field : 'caseNoexecCount', 
 					title : '执行中',
-					width : '5%',
-					class : 'myTDLengthHidden',
+					width : '6%',
 					formatter : function(value,
 							row, index) {
 						return '<a id="casenoexec'+row.taskId+'" style="color:#6A5ACD" onclick="caseExcuteDetail('+row.taskId+',3'+')">'	+ value + '</a> ';
@@ -252,7 +247,7 @@
 			       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
 			       		clearTimeout(t);
 					}else if(result.taskStatus==3){
-			       		document.getElementById("progressFont"+taskId).innerText = "执行失败";
+			       		document.getElementById("progressFont"+taskId).innerText = "任务超时中断";
 			       		document.getElementById("finishtime"+taskId).innerText = $.common.formatTime(result.finishTime);
 			       		clearTimeout(t);
 					}else if(result.taskStatus==4){

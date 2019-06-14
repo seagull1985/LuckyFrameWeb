@@ -205,7 +205,7 @@ public class OpenPostApiController
 			taskExecute.setTaskStatus(taskStatus);
 			taskExecute.setUpdateTime(new Date());
 			/*状态完成时,更新结束时间*/
-			if(taskStatus==2){
+			if(taskStatus==2||taskStatus==3){
 				taskExecute.setFinishTime(new Date());	
 			}
 			taskExecuteService.updateTaskExecute(taskExecute);

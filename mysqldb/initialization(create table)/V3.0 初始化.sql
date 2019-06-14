@@ -1288,7 +1288,7 @@ create table task_execute
   scheduling_id         int(8)         not null                 comment '调度ID',
   project_id            int(8)         not null                 comment '项目ID',
   task_name             varchar(150)   not null                 comment '任务名称',
-  task_status           int(2)         default 0                comment '状态 0未执行 1执行中 2执行完成 3执行失败 4唤起客户端失败',
+  task_status           int(2)         default 0                comment '状态 0未执行 1执行中 2执行完成 3任务超时中断 4唤起客户端失败',
   case_total_count      int(8)         default 0                comment '总用例数',
   case_succ_count       int(8)         default 0                comment '成功数',
   case_fail_count       int(8)         default 0                comment '失败数',
