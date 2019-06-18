@@ -275,9 +275,7 @@ public class OpenGetApiController
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
 			Integer projectId = Integer.valueOf(req.getParameter("projectId"));
-			ProjectCaseParams projectCaseParams = new ProjectCaseParams();
-			projectCaseParams.setProjectId(projectId);
-			List<ProjectCaseParams> projectCaseParamsList = projectCaseParamsService.selectProjectCaseParamsList(projectCaseParams);
+			List<ProjectCaseParams> projectCaseParamsList = projectCaseParamsService.selectProjectCaseParamsListByProjectId(projectId);
 
 			// 转换成json字符串
 			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectCaseParamsList));

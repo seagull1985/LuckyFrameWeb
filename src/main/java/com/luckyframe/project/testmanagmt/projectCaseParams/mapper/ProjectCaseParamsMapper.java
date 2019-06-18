@@ -29,6 +29,15 @@ public interface ProjectCaseParamsMapper
 	public List<ProjectCaseParams> selectProjectCaseParamsList(ProjectCaseParams projectCaseParams);
 	
 	/**
+	 * 根据项目ID查询项目下以及所有项目公共的参数
+	 * @param projectId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年6月18日
+	 */
+	public List<ProjectCaseParams> selectProjectCaseParamsListByProjectId(Integer projectId);
+	
+	/**
      * 新增用例公共参数
      * 
      * @param projectCaseParams 用例公共参数信息

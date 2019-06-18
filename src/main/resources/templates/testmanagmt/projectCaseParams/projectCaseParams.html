@@ -90,7 +90,14 @@
 					field : 'project.projectName', 
 					title : '项目名称',
 					width : '10%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+					formatter: function(value, row, index) {
+						if(null!=value){
+							return value;
+						}else{
+							return "所有项目";
+						}
+					}
 				},
 				{
 					field : 'paramsName', 

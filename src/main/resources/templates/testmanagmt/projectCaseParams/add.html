@@ -8,7 +8,8 @@
             <div class="form-group">	
 				<label class="col-sm-3 control-label">项目名称：</label>
 				<div class="col-sm-8">
-					<select id="projectId" name="projectId" class="form-control m-b" th:with="type=${projects}" onchange="initializeModuleTree()">
+					<select id="projectId" name="projectId" class="form-control m-b" th:with="type=${projects}">
+					    <option value="0">所有项目</option>
 	                    <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == defaultProjectId}"></option>
 	                </select>
 				</div>

@@ -51,6 +51,19 @@ public class ProjectCaseParamsServiceImpl implements IProjectCaseParamsService
 	    return projectCaseParamsMapper.selectProjectCaseParamsList(projectCaseParams);
 	}
 	
+	/**
+	 * 根据项目ID查询所有项目中以及当前项目下的公共参数
+	 * @param projectId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年6月18日
+	 */
+	@Override
+	public List<ProjectCaseParams> selectProjectCaseParamsListByProjectId(Integer projectId)
+	{
+	    return projectCaseParamsMapper.selectProjectCaseParamsListByProjectId(projectId);
+	}
+	
     /**
      * 新增用例公共参数
      * 

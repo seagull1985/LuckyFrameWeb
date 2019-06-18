@@ -52,6 +52,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where pcp.params_id = #{paramsId}
     </select>
     
+    <select id="selectProjectCaseParamsListByProjectId" parameterType="Integer" resultMap="ProjectCaseParamsResult">
+        <include refid="selectProjectCaseParamsVo"/>
+        where pcp.project_id = #{projectId} or pcp.project_id = 0
+    </select>
+    
     <select id="checkProjectCaseParamsNameUnique" parameterType="ProjectCaseParams" resultMap="ProjectCaseParamsResult">
         <include refid="selectProjectCaseParamsVo"/>
 		<where>  
