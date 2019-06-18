@@ -66,6 +66,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where te.task_id = #{taskId}
     </select>
     
+    <select id="selectTaskExecuteByTaskName" parameterType="String" resultMap="TaskExecuteResult">
+        <include refid="selectTaskExecuteVo"/>
+        where te.task_name = #{taskName}
+    </select>
+    
     <select id="selectTaskExecuteLastRecord" resultMap="TaskExecuteResult">
         <include refid="selectTaskExecuteVo"/>
         order by task_id desc limit 1

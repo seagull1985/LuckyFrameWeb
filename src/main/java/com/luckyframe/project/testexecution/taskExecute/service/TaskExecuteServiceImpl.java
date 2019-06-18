@@ -60,6 +60,19 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
 	}
     
 	/**
+	 * 根据任务名称查询任务实体
+	 * @param taskName
+	 * @return
+	 * @author Seagull
+	 * @date 2019年6月18日
+	 */
+    @Override
+	public TaskExecute selectTaskExecuteByTaskName(String taskName)
+	{
+	    return taskExecuteMapper.selectTaskExecuteByTaskName(taskName);
+	}
+    
+	/**
 	 * 查询当前项目下最后一条执行记录
 	 * @param projectId
 	 * @return
