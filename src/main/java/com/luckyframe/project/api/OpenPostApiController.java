@@ -1,6 +1,7 @@
 package com.luckyframe.project.api;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +19,10 @@ import com.luckyframe.project.testexecution.taskCaseLog.domain.TaskCaseLog;
 import com.luckyframe.project.testexecution.taskCaseLog.service.ITaskCaseLogService;
 import com.luckyframe.project.testexecution.taskExecute.domain.TaskExecute;
 import com.luckyframe.project.testexecution.taskExecute.service.ITaskExecuteService;
+import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseDebug;
 import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseDebugService;
+import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseService;
 
 /**
  * 通用请求处理
@@ -43,6 +46,9 @@ public class OpenPostApiController
 	
 	@Autowired
 	private ITaskCaseLogService taskCaseLogService;
+	
+	@Autowired
+	private IProjectCaseService projectCaseService;
 	
 	/**
 	 * 根据项目ID获取公共参数列表
@@ -256,4 +262,38 @@ public class OpenPostApiController
 		}	
 	}
 	
+	/**
+	 * 提取测试结果的详细日志
+	 * @param jsonObject
+	 * @return
+	 * @author Seagull
+	 * @date 2019年6月18日
+	 */
+	@PostMapping("/getLogDetailResult")
+	@ResponseBody
+	public String getLogDetailResult(@RequestBody JSONObject jsonObject) {
+		String taskName = jsonObject.getString("taskName");
+		String caseSign = jsonObject.getString("caseSign");
+		String result = "未能提取到相关的测试结果...";
+		try {
+			TaskExecute taskExecute = taskExecuteService.selectTaskExecuteByTaskName(taskName);
+			ProjectCase projectCase = projectCaseService.selectProjectCaseByCaseSign(caseSign);
+			
+			TaskCaseExecute tce=new TaskCaseExecute();
+			tce.setTaskId(taskExecute.getTaskId());
+			tce.setCaseId(projectCase.getCaseId());
+			TaskCaseExecute taskCaseExecute = taskCaseExecuteService.selectTaskCaseExecuteByTaskIdAndCaseId(tce);
+			
+			List<TaskCaseLog> loglist = taskCaseLogService.selectTaskCaseLogListByTaskCaseId(taskCaseExecute.getTaskCaseId());
+			for(TaskCaseLog tcl:loglist){
+				if(tcl.getLogDetail().contains("测试结果：")){
+					result = tcl.getLogDetail();
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			log.error("通过接口提取测试结果日志出现异常！", e);
+		}
+		return result;
+	}
 }

@@ -163,15 +163,14 @@
 			
 		function submitHandler() {
 			if($('#litextsub').hasClass("active")){
-				var json = "";
-				json = json + "[{\"paramsId\":" + $("#paramsId").val()+",";
-				json = json + "\"templateId\":" + $("#templateId").val()+",";
-				json = json + "\"paramName\":\"" + $("#paramName").val()+"\",";
-				json = json + "\"paramType\":" + $("#paramType").val()+",";
-				json = json + "\"paramValue\":\"" + $("#paramValue").val().replace(new RegExp("\"","gm"),"\\\"")+"\"}]";
-				//JSON.parse转json字符串时遇到一些特殊字符需要先转义。
-				var jsonObject = JSON.parse(json.replace(/\n/g,"\\n").replace(/\r/g,"\\r"));   
-
+				var jsonObject=[];
+				var json={};
+				json["paramsId"]=$("#paramsId").val();
+				json["templateId"]=$("#templateId").val();
+				json["paramName"]=$("#paramName").val();
+				json["paramType"]=$("#paramType").val();
+				json["paramValue"]=$("#paramValue").val();
+				jsonObject.push(json);
 				$.operate.saveJsonUnBack(prefix + "/editSave", JSON.stringify(jsonObject));
 			}else if($('#liformsub').hasClass("active")){
 		        if ($.validate.form()) {

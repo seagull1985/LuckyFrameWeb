@@ -28,6 +28,15 @@ public interface ITaskExecuteService
 	 * @date 2019年4月24日
 	 */
 	public TaskExecute selectTaskExecuteLastRecord();
+	
+	/**
+	 * 根据任务名称查询任务实体
+	 * @param taskName
+	 * @return
+	 * @author Seagull
+	 * @date 2019年6月18日
+	 */
+	public TaskExecute selectTaskExecuteByTaskName(String taskName);
     
 	/**
 	 * 查询当前项目下最后一条执行记录

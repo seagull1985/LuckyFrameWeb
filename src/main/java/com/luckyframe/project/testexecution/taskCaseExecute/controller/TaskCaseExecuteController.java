@@ -337,12 +337,11 @@ public class TaskCaseExecuteController extends BaseController
 	 */
 	@RequestMapping(value = "/showImage.do")
 	public void showImage(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String fileName = request.getParameter("fileName");
 		Integer logId = Integer.valueOf(request.getParameter("logId"));
 		TaskCaseLog taskCaseLog = taskCaseLogService.selectTaskCaseLogById(logId);
 		TaskExecute taskExecute = taskExecuteService.selectTaskExecuteById(taskCaseLog.getTaskId());
 		TaskScheduling TaskScheduling = taskSchedulingService.selectTaskSchedulingById(taskExecute.getSchedulingId());
-
+		String fileName = taskCaseLog.getImgname()+".png";
 		String newName = new String(fileName.getBytes("ISO-8859-1"), "UTF-8");
 
 		Map<String, Object> params = new HashMap<String, Object>(0);

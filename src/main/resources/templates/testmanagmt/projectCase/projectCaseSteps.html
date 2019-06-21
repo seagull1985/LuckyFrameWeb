@@ -83,7 +83,7 @@
 				
 				<div class="row">
 					<div class="col-lg-4 text-center" style="width: 100%">
-						<button class="btn btn-info" id="debugButton" onclick="showDebugModal()" type="button" style="padding-left: 36px;padding-right: 36px;">调&nbsp;&nbsp;&nbsp;&nbsp;试</button>
+						<button class="btn btn-info" id="debugButton" onclick="showDebugModal()" type="button" style="padding-left: 36px;padding-right: 36px;" th:if="${projectCase.caseType==0||projectCase.caseType==2}">调&nbsp;&nbsp;&nbsp;&nbsp;试</button>
 					</div>
 				</div>
 

@@ -35,7 +35,7 @@ public class ProjectCase extends BaseEntity
 	/** 关联项目模块ID */
 	@Excel(name = "模块ID")
 	private Integer moduleId;
-	/** 默认类型 0 API接口 1 Web UI 2 HTTP接口 3移动端 */
+	/** 默认类型 0 HTTP接口 1 Web UI 2 API驱动  3移动端 */
 	@Excel(name = "用例类型")
 	private Integer caseType;
 	/** 前置步骤失败，后续步骤是否继续，0：中断，1：继续 */

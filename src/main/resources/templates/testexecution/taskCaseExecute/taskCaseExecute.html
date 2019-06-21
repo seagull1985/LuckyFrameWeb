@@ -267,7 +267,7 @@
 								}								
 							}else{
 								return '<font style="color:#ff0000">'+value+'</font>&nbsp;&nbsp;&nbsp;&nbsp;'+
-								'<a onclick="showPlanCase('+row.imgname+','+row.logId+')">错误截图</a> ';
+								'<a onclick="showPlanCase('+row.logId+')">错误截图</a> ';
 							}
 						}
 					}, ],
@@ -335,8 +335,8 @@
          }
         
         /*弹出层展示图片*/
-        function showPlanCase(imgname,logId) {
-        	var url = prefix+"/showImage.do?fileName="+ imgname+ ".png&logId="+logId;
+        function showPlanCase(logId) {
+        	var url = prefix+"/showImage.do?logId="+logId;
         	$.modal.openViewFull($.table._option.childrenModalName, url, null, null);
         }
     </script>

@@ -39,6 +39,15 @@ public interface TaskExecuteMapper
 	public TaskExecute selectTaskExecuteLastRecordForProjectId(Integer projectId);
 	
 	/**
+	 * 根据任务执行名称查询实体
+	 * @param projectId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年6月18日
+	 */
+	public TaskExecute selectTaskExecuteByTaskName(String taskName);
+	
+	/**
      * 查询测试任务执行列表
      * 
      * @param taskExecute 测试任务执行信息
