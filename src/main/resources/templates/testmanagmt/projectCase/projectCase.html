@@ -346,6 +346,7 @@
 						class : 'myTDLengthHidden',
 						formatter : function(value,
 								row, index) {
+							    value = value.replace(new RegExp("\"","gm"),"&quot;");
 								return value+' ';
 						},
 						editable : {
