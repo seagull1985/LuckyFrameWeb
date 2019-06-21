@@ -60,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="caseSign != null  and caseSign != '' "> and pc.case_sign like concat('%', #{caseSign}, '%')</if>
              <if test="caseName != null  and caseName != '' "> and pc.case_name like concat('%', #{caseName}, '%')</if>
              <if test="projectId != null "> and pc.project_id = #{projectId}</if>
-             <if test="moduleId != null "> and pc.module_id = #{moduleId} or pc.module_id in (select module_id from project_case_module where ancestors like concat('%,', #{moduleId}, ',%') or ancestors like concat('%,', #{moduleId}, ''))</if>
+             <if test="moduleId != null "> and (pc.module_id = #{moduleId} or pc.module_id in (select module_id from project_case_module where ancestors like concat('%,', #{moduleId}, ',%') or ancestors like concat('%,', #{moduleId}, '')))</if>
              <if test="caseType != null "> and pc.case_type = #{caseType}</if>
              <if test="failcontinue != null "> and pc.failcontinue = #{failcontinue}</if>
              <if test="createBy != null  and createBy != '' "> and pc.create_by = #{createBy}</if>
