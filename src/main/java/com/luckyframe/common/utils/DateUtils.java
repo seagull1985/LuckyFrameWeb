@@ -3,6 +3,7 @@ package com.luckyframe.common.utils;
 import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -47,7 +48,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     {
         return dateTimeNow(YYYY_MM_DD);
     }
-
+    
     public static final String getTime()
     {
         return dateTimeNow(YYYY_MM_DD_HH_MM_SS);
@@ -156,4 +157,20 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         // long sec = diff % nd % nh % nm / ns;
         return day + "天" + hour + "小时" + min + "分钟";
     }
+    
+	/**
+	 * 计算N天前(负数)或是N天后(正数)的日期，默认格式为yyyy-MM-dd
+	 * @param Num
+	 * @return
+	 * @author Seagull
+	 * @date 2019年6月24日
+	 */
+	public static String getDateByNum(int Num) {
+		Calendar c = Calendar.getInstance();
+		int date = c.get(Calendar.DATE);
+		date=date+Num;
+		c.set(Calendar.DATE,date);
+		return parseDateToStr(YYYY_MM_DD, new Date(c.getTimeInMillis()));
+	}
+
 }

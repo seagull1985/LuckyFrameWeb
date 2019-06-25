@@ -39,9 +39,9 @@
 
 							<li class="select-time">
 								<label>时间： </label>
-								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]" th:value="${startDateStr}"/>
 								<span>-</span>
-								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]" th:value="${endDateStr}"/>
 							</li>
 							
 							<li>

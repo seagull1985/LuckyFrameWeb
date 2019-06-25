@@ -1,6 +1,8 @@
 package com.luckyframe.project.testexecution.taskExecute.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.luckyframe.common.exception.BusinessException;
+import com.luckyframe.common.utils.DateUtils;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.common.utils.security.ShiroUtils;
@@ -70,6 +73,10 @@ public class TaskExecuteController extends BaseController
             	mmap.put("defaultSchedulingId", schedulingId);
         	}
         }else{
+        	String endDateStr = DateUtils.getDate();
+        	String startDateStr = DateUtils.getDateByNum(-7);
+        	mmap.put("endDateStr", endDateStr);
+        	mmap.put("startDateStr", startDateStr);
         	if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
             	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
             }
@@ -86,6 +93,15 @@ public class TaskExecuteController extends BaseController
 	public TableDataInfo list(TaskExecute taskExecute)
 	{
 		startPage();
+		//如果不带任何查询条件，默认查询7天内记录
+		if(null==taskExecute.getSchedulingId()&&taskExecute.getParams().size()==0){
+			Map<String, Object> params = new HashMap<String, Object>();
+        	String endDateStr = DateUtils.getDate();
+        	String startDateStr = DateUtils.getDateByNum(-7);
+        	params.put("beginTime", startDateStr);
+        	params.put("endTime", endDateStr);
+        	taskExecute.setParams(params);
+		}
         List<TaskExecute> list = taskExecuteService.selectTaskExecuteList(taskExecute);
 		return getDataTable(list);
 	}
