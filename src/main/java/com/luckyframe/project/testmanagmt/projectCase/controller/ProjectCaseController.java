@@ -118,23 +118,22 @@ public class ProjectCaseController extends BaseController
 	 * 新增项目测试用例管理
 	 */
 	@GetMapping("/add")
-	public String add(ModelMap mmap)
-	{
-        List<Project> projects=projectService.selectProjectAll(0);
-        mmap.put("projects", projects);
-        if(projects.size()>0){
-            if(projects.size()>0){
-            	ProjectCaseModule projectCaseModule = new ProjectCaseModule();
-                if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
-                	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
-                    projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(ShiroUtils.getProjectId());
-                }else{
-                	projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(projects.get(0).getProjectId());
-                }
-            	mmap.put("projectCaseModule", projectCaseModule);
-            }
-        }
-	    return prefix + "/add";
+	public String add(ModelMap mmap) {
+		List<Project> projects = projectService.selectProjectAll(0);
+		mmap.put("projects", projects);
+		if (projects.size() > 0) {
+			ProjectCaseModule projectCaseModule = new ProjectCaseModule();
+			if (StringUtils.isNotEmpty(ShiroUtils.getProjectId())) {
+				mmap.put("defaultProjectId", ShiroUtils.getProjectId());
+				projectCaseModule = projectCaseModuleService
+						.selectProjectCaseModuleParentZeroByProjectId(ShiroUtils.getProjectId());
+			} else {
+				projectCaseModule = projectCaseModuleService
+						.selectProjectCaseModuleParentZeroByProjectId(projects.get(0).getProjectId());
+			}
+			mmap.put("projectCaseModule", projectCaseModule);
+		}
+		return prefix + "/add";
 	}
 	
 	/**

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-queryGraph">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">项目：</label>
+				<div class="col-sm-8">
+					<select id="projectId" name="projectId" class="form-control m-b" th:with="type=${projects}">
+	                    <option value="">所有项目</option>
+	                    <option th:each="project : ${type}" th:text="${project.projectName}" th:value="${project.projectId}"></option>
+	                </select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">查询时间：</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control time-input" id="queryStartDate" name="queryStartDate" th:value="${defaultStartDate}" readonly/>
+				</div>
+				<div class="col-sm-1">
+					<label class="control-label">至</label>
+				</div>
+				<div class="col-sm-3">
+					<input type="text" class="form-control time-input" id="queryEndDate" name="queryEndDate" th:value="${defaultEndDate}" readonly/>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">统计纬度：</label>
+				<div class="col-sm-8">
+					<div class="radio-box">
+					  <input type="radio" id="Statistical0" name="Statistical" value="0" th:checked="true">
+					  <label th:text="事故类型"></label>
+					</div>
+					<div class="radio-box">
+					  <input type="radio" id="Statistical1" name="Statistical" value="1">
+					  <label th:text="事故等级"></label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">数据纬度：</label>
+				<div class="col-sm-8">
+					<div class="radio-box">
+					  <input type="radio" id="dataLatitude0" name="dataLatitude" value="0" th:checked="true">
+					  <label th:text="按次"></label>
+					</div>
+					<div class="radio-box">
+					  <input type="radio" id="dataLatitude1" name="dataLatitude" value="1">
+					  <label th:text="影响时间"></label>
+					</div>
+					<div class="radio-box">
+					  <input type="radio" id="dataLatitude2" name="dataLatitude" value="2">
+					  <label th:text="持续时间"></label>
+				    </div>
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "qualitymanagmt/qaAccident";
+		
+		$("#form-queryLog").validate({
+			rules:{
+				projectId:{
+					required:true,
+				},
+				queryStartDate:{
+					required:true,
+				},
+				queryEndDate:{
+					required:true,
+				}
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            var queryGraph=$('#form-queryGraph').serialize();
+ 	        	var url = prefix+"/showGraph?"+queryGraph;
+	        	$.modal.openViewFull("图形分析生产事故", url, null, null);
+	        }
+	    }
+	</script>
+</body>
+</html>

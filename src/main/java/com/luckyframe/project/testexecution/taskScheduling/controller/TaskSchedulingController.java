@@ -405,10 +405,16 @@ public class TaskSchedulingController extends BaseController
 	}
 	
 	/**
-	 * 查询日志
+	 * 上传驱动到客户端
+	 * @param file
+	 * @param clientIp
+	 * @param driverPath
+	 * @return
+	 * @author Seagull
+	 * @date 2019年7月26日
 	 */
 	@RequiresPermissions("testexecution:taskScheduling:add")
-	@Log(title = "个人信息", businessType = BusinessType.UPDATE)
+	@Log(title = "上传驱动到客户端", businessType = BusinessType.UPLOAD)
 	@PostMapping("/uploadJar")
 	@ResponseBody
 	public AjaxResult uploadJar(@RequestParam("drivenfile") MultipartFile file, @RequestParam("clientIp") String clientIp,@RequestParam("driverPath") String driverPath) {
