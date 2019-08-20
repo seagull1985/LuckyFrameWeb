@@ -89,12 +89,14 @@
 					formatter : function(value,
 							row, index) {
 						if(value==0){
-							return '<span class="glyphicon glyphicon-ok-sign" style="color: rgb(0, 175, 0);"> 状态正常</span>';
+							var hdiv ='<span id="statusSpan' + row.clientId + '" class="glyphicon glyphicon-ok-sign" style="color: rgb(0, 175, 0);"> 状态正常</span>';
 						}else if(value==1){
-							return '<span class="glyphicon glyphicon-minus-sign" style="color: rgb(199, 0, 0);"> 状态异常</span>';
+							var hdiv = '<span id="statusSpan' + row.clientId + '" class="glyphicon glyphicon-minus-sign" style="color: rgb(199, 0, 0);"> 状态异常</span>';
 						}else{
-							return '<span class="glyphicon glyphicon-question-sign" style="color: rgb(255, 168, 0); font-size: 14px;"> 状态未知</span>';
+							var hdiv = '<span id="statusSpan' + row.clientId + '" class="glyphicon glyphicon-question-sign" style="color: rgb(255, 168, 0); font-size: 14px;"> 状态未知</span>';
 						}
+						refreshClientStatus(row.clientId);
+						return  '<font id="statusFont' + row.clientId + '">'+hdiv+'</font>';
 					}
 				},
 				{
@@ -143,6 +145,48 @@
         	}
         	$.modal.openViewFull("客户端资源监控 "+row[0].clientName+" ["+row[0].clientIp+"]", url, null, null);
         }
+
+		 /*刷新客户端状态*/
+		 function refreshClientStatus(clientId){
+		   var url = prefix + "/getClientStatusByClientId/"+clientId;
+		   $.getJSON(url, null, function call(result) {
+			       	if(result.status==0){
+			       		/*删除老的span*/
+			       		var oldSpan=document.getElementById("statusSpan"+clientId);
+			       		oldSpan.parentNode.removeChild(oldSpan);
+			       		/*新建一个待更新span*/
+			       		var updateSpan=document.createElement("span");
+			       		updateSpan.innerText = "状态正常"
+			       		updateSpan.setAttribute("class", "glyphicon glyphicon-ok-sign");
+			       		updateSpan.setAttribute("style", "color: rgb(0, 175, 0)");
+			       		updateSpan.setAttribute("id", "statusSpan"+clientId);
+			       		document.getElementById("statusFont"+clientId).appendChild(updateSpan);
+			       	}else if(result.status==1){
+			       		/*删除老的span*/
+			       		var oldSpan=document.getElementById("statusSpan"+clientId);
+			       		oldSpan.parentNode.removeChild(oldSpan);
+			       		/*新建一个待更新span*/
+			       		var updateSpan=document.createElement("span");
+			       		updateSpan.innerText = "状态异常"
+			       		updateSpan.setAttribute("class", "glyphicon glyphicon-minus-sign");
+			       		updateSpan.setAttribute("style", "color: rgb(199, 0, 0);");
+			       		updateSpan.setAttribute("id", "statusSpan"+clientId);
+			       		document.getElementById("statusFont"+clientId).appendChild(updateSpan);
+					}else if(result.status==2){
+			       		/*删除老的span*/
+			       		var oldSpan=document.getElementById("statusSpan"+clientId);
+			       		oldSpan.parentNode.removeChild(oldSpan);
+			       		/*新建一个待更新span*/
+			       		var updateSpan=document.createElement("span");
+			       		updateSpan.innerText = "状态未知"
+			       		updateSpan.setAttribute("class", "glyphicon glyphicon-question-sign");
+			       		updateSpan.setAttribute("style", "color: rgb(255, 168, 0);");
+			       		updateSpan.setAttribute("id", "statusSpan"+clientId);
+			       		document.getElementById("statusFont"+clientId).appendChild(updateSpan);
+					}
+		   });
+		   setTimeout("refreshClientStatus("+clientId+")", 5000);
+		 }
     </script>
 </body>
 </html>
