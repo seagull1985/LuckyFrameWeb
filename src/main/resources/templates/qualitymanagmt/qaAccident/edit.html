@@ -12,8 +12,7 @@
 				<div class="col-sm-8">
 					<select id="projectId" name="projectId" class="form-control m-b" th:with="type=${projects}">
 	                    <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == qaAccident.project.projectId}"></option>
-	                </select>
-					
+	                </select>					
 				</div>
 			</div>
 			<div class="form-group">	
@@ -156,7 +155,6 @@
 			format: 'yyyy-mm-dd',
 		    minView: "month",//设置只显示到月份
 		    autoclose:true,//选中关闭
-		    endDate:new Date(),
 		    forceParse:true
 		});
 		
@@ -164,7 +162,6 @@
 			format: 'yyyy-mm-dd',
 		    minView: "month",//设置只显示到月份
 		    autoclose:true,//选中关闭
-		    endDate:new Date(),
 		    forceParse:true
 		});
 		
@@ -240,9 +237,6 @@
         			maxlength: 30,
 				},
 				preventiveOverDate:{
-					required: function(element) {
-				        return $("#accidentStatus").val() == '跟踪处理完成';
-					},
         			maxlength: 30,
 				},
 				durationTime:{
@@ -283,9 +277,6 @@
 				'preventivePlanDate': {
 					required: "事故跟踪处理完成，此项必填",
 				},
-				'preventiveOverDate': {
-					required: "事故跟踪处理完成，此项必填",
-				}
 			},
 		});
 		

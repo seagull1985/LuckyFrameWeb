@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.qualitymanagmt.qaVersion.mapper.QaVersionMapper">
+    
+    <resultMap type="QaVersion" id="QaVersionResult">
+        <result property="versionId"    column="version_id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="versionNumber"    column="version_number"    />
+        <result property="versionStatus"    column="version_status"    />
+        <result property="leader"    column="leader"    />
+        <result property="developer"    column="developer"    />
+        <result property="tester"    column="tester"    />
+        <result property="planFinishDate"    column="plan_finish_date"    />
+        <result property="actuallyFinishDate"    column="actually_finish_date"    />
+        <result property="launchDate"    column="launch_date"    />
+        <result property="timeLimitVersion"    column="time_limit_version"    />
+        <result property="projectDeviationDays"    column="project_deviation_days"    />
+        <result property="projectDeviationPercent"    column="project_deviation_percent"    />
+        <result property="demandPlanFinish"    column="demand_plan_finish"    />
+        <result property="demandActuallyFinish"    column="demand_actually_finish"    />
+        <result property="demandPercent"    column="demand_percent"    />
+        <result property="testcaseCount"    column="testcase_count"    />
+        <result property="testingReturn"    column="testing_return"    />
+        <result property="devHumanResources"    column="dev_human_resources"    />
+        <result property="testHumanResources"    column="test_human_resources"    />
+        <result property="changeLineCode"    column="change_line_code"    />
+        <result property="bugZm"    column="bug_zm"    />
+        <result property="bugYz"    column="bug_yz"    />
+        <result property="bugYb"    column="bug_yb"    />
+        <result property="bugTs"    column="bug_ts"    />
+        <result property="codeDi"    column="code_di"    />
+        <result property="qualityReview"    column="quality_review"    />
+        <result property="imprint"    column="imprint"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <association property="project"  column="project_id" javaType="Project" resultMap="ProjectResult" />
+    </resultMap>
+	
+    <resultMap type="Project" id="ProjectResult">
+        <id property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="projectSign"    column="project_sign"    />
+    </resultMap>
+    
+	<sql id="selectQaVersionVo">
+        select qav.version_id, qav.project_id, qav.version_number, qav.version_status, qav.leader, qav.developer, qav.tester, qav.plan_finish_date, qav.actually_finish_date, qav.launch_date, 
+        qav.time_limit_version, qav.project_deviation_days, qav.project_deviation_percent, qav.demand_plan_finish, qav.demand_actually_finish, qav.demand_percent, qav.testcase_count, 
+        qav.testing_return, qav.dev_human_resources, qav.test_human_resources, qav.change_line_code, qav.bug_zm, qav.bug_yz, qav.bug_yb, qav.bug_ts, qav.code_di, 
+        qav.quality_review, qav.imprint, qav.remark, qav.create_by, qav.create_time, qav.update_by, qav.update_time, 
+        sp.project_name,sp.dept_id,sp.project_sign  
+        from qa_version qav 
+        left join sys_project sp on qav.project_id = sp.project_id 
+    </sql>
+	
+    <select id="selectQaVersionList" parameterType="QaVersion" resultMap="QaVersionResult">
+        <include refid="selectQaVersionVo"/>
+        <where>  
+            <if test="versionId != null "> and qav.version_id = #{versionId}</if>
+             <if test="projectId != null "> and qav.project_id = #{projectId}</if>
+             <if test="versionNumber != null  and versionNumber != '' "> and qav.version_number like concat('%', #{versionNumber}, '%')</if>
+             <if test="versionStatus != null  and versionStatus != '' "> and qav.version_status = #{versionStatus}</if>
+             <if test="leader != null  and leader != '' "> and qav.leader = #{leader}</if>
+             <if test="developer != null  and developer != '' "> and qav.developer = #{developer}</if>
+             <if test="tester != null  and tester != '' "> and qav.tester = #{tester}</if>
+             <if test="planFinishDate != null  and planFinishDate != '' "> and qav.plan_finish_date = #{planFinishDate}</if>
+             <if test="actuallyFinishDate != null  and actuallyFinishDate != '' "> and qav.actually_finish_date = #{actuallyFinishDate}</if>
+             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+			    and date_format(qav.launch_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+		     </if>
+		     <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+			    and date_format(qav.launch_date,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+		     </if>
+             <if test="timeLimitVersion != null "> and qav.time_limit_version = #{timeLimitVersion}</if>
+             <if test="projectDeviationDays != null "> and qav.project_deviation_days = #{projectDeviationDays}</if>
+             <if test="projectDeviationPercent != null "> and qav.project_deviation_percent = #{projectDeviationPercent}</if>
+             <if test="demandPlanFinish != null "> and qav.demand_plan_finish = #{demandPlanFinish}</if>
+             <if test="demandActuallyFinish != null "> and qav.demand_actually_finish = #{demandActuallyFinish}</if>
+             <if test="demandPercent != null "> and qav.demand_percent = #{demandPercent}</if>
+             <if test="testcaseCount != null "> and qav.testcase_count = #{testcaseCount}</if>
+             <if test="testingReturn != null "> and qav.testing_return = #{testingReturn}</if>
+             <if test="devHumanResources != null "> and qav.dev_human_resources = #{devHumanResources}</if>
+             <if test="testHumanResources != null "> and qav.test_human_resources = #{testHumanResources}</if>
+             <if test="changeLineCode != null "> and qav.change_line_code = #{changeLineCode}</if>
+             <if test="bugZm != null "> and qav.bug_zm = #{bugZm}</if>
+             <if test="bugYz != null "> and qav.bug_yz = #{bugYz}</if>
+             <if test="bugYb != null "> and qav.bug_yb = #{bugYb}</if>
+             <if test="bugTs != null "> and qav.bug_ts = #{bugTs}</if>
+             <if test="codeDi != null "> and qav.code_di = #{codeDi}</if>
+             <if test="qualityReview != null  and qualityReview != '' "> and qav.quality_review = #{qualityReview}</if>
+             <if test="imprint != null  and imprint != '' "> and qav.imprint = #{imprint}</if>
+             <if test="remark != null  and remark != '' "> and qav.remark = #{remark}</if>
+             <if test="createBy != null  and createBy != '' "> and qaa.create_by = #{createBy}</if>
+             <if test="createTime != null "> and qaa.create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and qaa.update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and qaa.update_time = #{updateTime}</if>
+         </where>
+         order by IF(ISNULL(qav.launch_date),0,1) asc,qav.actually_finish_date desc,qav.version_id desc
+    </select>
+    
+    <select id="selectQaVersionById" parameterType="Integer" resultMap="QaVersionResult">
+        <include refid="selectQaVersionVo"/>
+        where qav.version_id = #{versionId}
+    </select>
+        
+    <insert id="insertQaVersion" parameterType="QaVersion" useGeneratedKeys="true" keyProperty="versionId">
+        insert into qa_version
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="projectId != null  ">project_id,</if>
+			<if test="versionNumber != null  and versionNumber != ''  ">version_number,</if>
+			<if test="versionStatus != null  and versionStatus != ''  ">version_status,</if>
+			<if test="leader != null  and leader != ''  ">leader,</if>
+			<if test="developer != null  and developer != ''  ">developer,</if>
+			<if test="tester != null  and tester != ''  ">tester,</if>
+			<if test="planFinishDate != null  and planFinishDate != ''  ">plan_finish_date,</if>
+			<if test="actuallyFinishDate != null  and actuallyFinishDate != ''  ">actually_finish_date,</if>
+			<if test="launchDate != null  and launchDate != ''  ">launch_date,</if>
+			<if test="timeLimitVersion != null  and timeLimitVersion != ''  ">time_limit_version,</if>
+			<if test="projectDeviationDays != null  and projectDeviationDays != ''  ">project_deviation_days,</if>
+			<if test="projectDeviationPercent != null  and projectDeviationPercent != ''  ">project_deviation_percent,</if>
+			<if test="demandPlanFinish != null  ">demand_plan_finish,</if>
+			<if test="demandActuallyFinish != null  ">demand_actually_finish,</if>
+			<if test="demandPercent != null  ">demand_percent,</if>
+			<if test="testcaseCount != null  ">testcase_count,</if>
+			<if test="testingReturn != null  ">testing_return,</if>
+			<if test="devHumanResources != null  ">dev_human_resources,</if>
+			<if test="testHumanResources != null  ">test_human_resources,</if>
+			<if test="changeLineCode != null  ">change_line_code,</if>
+			<if test="bugZm != null  ">bug_zm,</if>
+			<if test="bugYz != null  ">bug_yz,</if>
+			<if test="bugYb != null  ">bug_yb,</if>
+			<if test="bugTs != null  ">bug_ts,</if>
+			<if test="codeDi != null  and codeDi != ''  ">code_di,</if>
+			<if test="qualityReview != null  and qualityReview != ''  ">quality_review,</if>
+			<if test="imprint != null  and imprint != ''  ">imprint,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="projectId != null  ">#{projectId},</if>
+			<if test="versionNumber != null  and versionNumber != ''  ">#{versionNumber},</if>
+			<if test="versionStatus != null  and versionStatus != ''  ">#{versionStatus},</if>
+			<if test="leader != null  and leader != ''  ">#{leader},</if>
+			<if test="developer != null  and developer != ''  ">#{developer},</if>
+			<if test="tester != null  and tester != ''  ">#{tester},</if>
+			<if test="planFinishDate != null  and planFinishDate != ''  ">#{planFinishDate},</if>
+			<if test="actuallyFinishDate != null  and actuallyFinishDate != ''  ">#{actuallyFinishDate},</if>
+			<if test="launchDate != null  and launchDate != ''  ">#{launchDate},</if>
+			<if test="timeLimitVersion != null  and timeLimitVersion != ''  ">#{timeLimitVersion},</if>
+			<if test="projectDeviationDays != null  and projectDeviationDays != ''  ">#{projectDeviationDays},</if>
+			<if test="projectDeviationPercent != null  and projectDeviationPercent != ''  ">#{projectDeviationPercent},</if>
+			<if test="demandPlanFinish != null  ">#{demandPlanFinish},</if>
+			<if test="demandActuallyFinish != null  ">#{demandActuallyFinish},</if>
+			<if test="demandPercent != null  ">#{demandPercent},</if>
+			<if test="testcaseCount != null  ">#{testcaseCount},</if>
+			<if test="testingReturn != null  ">#{testingReturn},</if>
+			<if test="devHumanResources != null  ">#{devHumanResources},</if>
+			<if test="testHumanResources != null  ">#{testHumanResources},</if>
+			<if test="changeLineCode != null  ">#{changeLineCode},</if>
+			<if test="bugZm != null  ">#{bugZm},</if>
+			<if test="bugYz != null  ">#{bugYz},</if>
+			<if test="bugYb != null  ">#{bugYb},</if>
+			<if test="bugTs != null  ">#{bugTs},</if>
+			<if test="codeDi != null  and codeDi != ''  ">#{codeDi},</if>
+			<if test="qualityReview != null  and qualityReview != ''  ">#{qualityReview},</if>
+			<if test="imprint != null  and imprint != ''  ">#{imprint},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateQaVersion" parameterType="QaVersion">
+        update qa_version
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null  ">project_id = #{projectId},</if>
+            <if test="versionNumber != null  and versionNumber != ''  ">version_number = #{versionNumber},</if>
+            <if test="versionStatus != null  and versionStatus != ''  ">version_status = #{versionStatus},</if>
+            <if test="leader != null  and leader != ''  ">leader = #{leader},</if>
+            <if test="developer != null  and developer != ''  ">developer = #{developer},</if>
+            <if test="tester != null  and tester != ''  ">tester = #{tester},</if>
+            <if test="planFinishDate != null  and planFinishDate != ''  ">plan_finish_date = #{planFinishDate},</if>
+            <if test="actuallyFinishDate != null  and actuallyFinishDate != ''  ">actually_finish_date = #{actuallyFinishDate},</if>
+            <if test="launchDate != null  and launchDate != ''  ">launch_date = #{launchDate},</if>
+            <if test="timeLimitVersion != null  and timeLimitVersion != ''  ">time_limit_version = #{timeLimitVersion},</if>
+            <if test="projectDeviationDays != null  and projectDeviationDays != ''  ">project_deviation_days = #{projectDeviationDays},</if>
+            <if test="projectDeviationPercent != null  and projectDeviationPercent != ''  ">project_deviation_percent = #{projectDeviationPercent},</if>
+            <if test="demandPlanFinish != null  ">demand_plan_finish = #{demandPlanFinish},</if>
+            <if test="demandActuallyFinish != null  ">demand_actually_finish = #{demandActuallyFinish},</if>
+            <if test="demandPercent != null  ">demand_percent = #{demandPercent},</if>
+            <if test="testcaseCount != null  ">testcase_count = #{testcaseCount},</if>
+            <if test="testingReturn != null  ">testing_return = #{testingReturn},</if>
+            <if test="devHumanResources != null  ">dev_human_resources = #{devHumanResources},</if>
+            <if test="testHumanResources != null  ">test_human_resources = #{testHumanResources},</if>
+            <if test="changeLineCode != null  ">change_line_code = #{changeLineCode},</if>
+            <if test="bugZm != null  ">bug_zm = #{bugZm},</if>
+            <if test="bugYz != null  ">bug_yz = #{bugYz},</if>
+            <if test="bugYb != null  ">bug_yb = #{bugYb},</if>
+            <if test="bugTs != null  ">bug_ts = #{bugTs},</if>
+            <if test="codeDi != null  and codeDi != ''  ">code_di = #{codeDi},</if>
+            <if test="qualityReview != null  and qualityReview != ''  ">quality_review = #{qualityReview},</if>
+            <if test="imprint != null  and imprint != ''  ">imprint = #{imprint},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where version_id = #{versionId}
+    </update>
+
+	<delete id="deleteQaVersionById" parameterType="Integer">
+        delete from qa_version where version_id = #{versionId}
+    </delete>
+	
+    <delete id="deleteQaVersionByIds" parameterType="String">
+        delete from qa_version where version_id in 
+        <foreach item="versionId" collection="array" open="(" separator="," close=")">
+            #{versionId}
+        </foreach>
+    </delete>
+    
+</mapper>

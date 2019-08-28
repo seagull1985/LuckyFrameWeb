@@ -127,7 +127,7 @@
     <div th:include="include::footer"></div>
     <script th:src="@{/ajax/libs/datapicker/bootstrap-datetimepicker.min.js}"></script>
     <script type="text/javascript">
-		var prefix = ctx + "qualitymanagmt/qaAccident"
+		var prefix = ctx + "qualitymanagmt/qaAccident";
 		
 		$('#accidentTime').datetimepicker({
 			format: 'yyyy-mm-dd hh:ii:ss',
@@ -152,7 +152,6 @@
 		
 		$('#preventivePlanDate').datetimepicker({
 			format: 'yyyy-mm-dd',
-		    endDate:new Date(),
 		    minView: "month",//设置只显示到月份
 		    autoclose:true,//选中关闭
 		    forceParse:true
@@ -160,7 +159,6 @@
 		
 		$('#preventiveOverDate').datetimepicker({
 			format: 'yyyy-mm-dd',
-		    endDate:new Date(),
 		    minView: "month",//设置只显示到月份
 		    autoclose:true,//选中关闭
 		    forceParse:true
@@ -238,9 +236,6 @@
         			maxlength: 30,
 				},
 				preventiveOverDate:{
-					required: function(element) {
-				        return $("#accidentStatus").val() == '跟踪处理完成';
-					},
         			maxlength: 30,
 				},
 				durationTime:{
@@ -281,9 +276,6 @@
 				'preventivePlanDate': {
 					required: "事故跟踪处理完成，此项必填",
 				},
-				'preventiveOverDate': {
-					required: "事故跟踪处理完成，此项必填",
-				}
 			},
 		});
 		

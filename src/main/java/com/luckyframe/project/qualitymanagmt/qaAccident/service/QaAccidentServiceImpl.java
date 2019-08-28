@@ -81,7 +81,7 @@ public class QaAccidentServiceImpl implements IQaAccidentService
 		qaAccident.setCreateBy(ShiroUtils.getLoginName());
 		qaAccident.setCreateTime(new Date());
 		qaAccident.setUpdateBy(ShiroUtils.getLoginName());
-		qaAccident.setUpdateTime(new Date());
+		qaAccident.setUpdateTime(new Date()); 
 	    return qaAccidentMapper.insertQaAccident(qaAccident);
 	}
 	

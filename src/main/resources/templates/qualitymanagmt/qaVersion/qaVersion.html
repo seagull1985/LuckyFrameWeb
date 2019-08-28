@@ -1,0 +1,301 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								项目：
+								<select id="projectId" name="projectId" th:with="type=${projects}">
+								    <option value="">所有项目</option>
+	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == defaultProjectId}"></option>
+	                            </select>
+							</li>
+
+							<li>
+								版本号：<input type="text" name="versionNumber"/>
+							</li>
+
+							<li>
+								版本状态：
+								<select name="versionStatus" th:with="type=${@dict.getType('qa_version_status')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}"></option>
+								</select>
+							</li>
+
+							<li class="select-time">
+								<label>上线日期： </label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+								<span>-</span>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="qualitymanagmt:qaVersion:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="qualitymanagmt:qaVersion:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="qualitymanagmt:qaVersion:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('qualitymanagmt:qaVersion:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('qualitymanagmt:qaVersion:remove')}]];
+        var prefix = ctx + "qualitymanagmt/qaVersion";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                customUrl: prefix + "/showVersionDetail/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "质量管理-版本管理",
+				search: false,
+				queryParams: function(params) {
+	            	return {
+	        			// 传递参数查询参数
+	                    pageSize:       params.limit,
+	                    pageNum:        params.offset / params.limit + 1,
+	                    searchValue:    params.search,
+	                    orderByColumn:  params.sort,
+	                    isAsc:          params.order,
+	                    projectId:      $('#projectId').val()
+	        		};
+				},
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'versionId', 
+					title : '版本ID',
+					visible: false
+				},
+				{
+					field : 'project.projectName', 
+					title : '项目名称',
+					sortable: true
+				},
+				{
+					field : 'versionNumber', 
+					title : '版本号',
+					sortable: true
+				},
+				{
+					field : 'versionStatus', 
+					title : '版本状态',
+					formatter : function(value,
+							row, index) {
+						if(value=='已完成'){
+						    return '<font style="color:#00DB00">已完成</font>';					
+						}else if(value=='待上线'){
+							return '<font style="color:#0066FF">待上线</font>';
+						}else{
+							return '<font style="color:#FFA54F">'+value+'</font>';
+						}						
+					}
+				},
+				{
+					field : 'leader', 
+					title : '负责人',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'developer', 
+					title : '开发人员',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'tester', 
+					title : '测试人员',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'planFinishDate', 
+					title : '计划完成日期',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'actuallyFinishDate', 
+					title : '实际完成日期',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'launchDate', 
+					title : '上线日期',
+					formatter : function(value,
+							row, index) {
+						if(value==null){
+						    return '<font style="color:#FFA54F">未上线</font>';					
+						}else{
+							return value;
+						}						
+					}
+				},
+				{
+					field : 'timeLimitVersion', 
+					title : '版本工期 单位:天',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'projectDeviationDays', 
+					title : '项目偏移时间',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'projectDeviationPercent', 
+					title : '项目偏移',
+					sortable: true
+				},
+				{
+					field : 'demandPlanFinish', 
+					title : '计划完成需求数',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'demandActuallyFinish', 
+					title : '实际完成需求数',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'demandPercent', 
+					title : '需求完成',
+					sortable: true
+				},
+				{
+					field : 'testcaseCount', 
+					title : '测试用例数',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'testingReturn', 
+					title : '转测试打回次数',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'devHumanResources', 
+					title : '开发投入人力 单位:人/天',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'testHumanResources', 
+					title : '测试投入人力 单位:人/天',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'changeLineCode', 
+					title : '代码变动行数',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'bugZm', 
+					title : 'Bug数量 级别:致命',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'bugYz', 
+					title : 'Bug数量 级别:严重',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'bugYb', 
+					title : 'Bug数量 级别:一般',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'bugTs', 
+					title : 'Bug数量 级别:提示',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'codeDi', 
+					title : '代码DI值',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'qualityReview', 
+					title : '质量回溯',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'imprint', 
+					title : '版本说明',
+					sortable: true
+				},
+				{
+					field : 'remark', 
+					title : '备注',
+					sortable: true,
+					visible: false
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="showVersionDetail('+row.versionId+')"><i class="fa fa-file-text"></i> 详情</a> ');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+        
+        /*查看版本详细内容*/
+        function showVersionDetail(versionId) {       	
+        	var url = "/404.html";
+        	if ($.common.isNotEmpty(versionId)) {
+        	    url = $.table._option.customUrl.replace("{id}", versionId);
+        	}
+        	$.modal.openViewFull("版本详细内容", url, null, null);
+        }
+    </script>
+</body>
+</html>

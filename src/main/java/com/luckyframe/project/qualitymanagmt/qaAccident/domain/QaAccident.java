@@ -2,10 +2,9 @@ package com.luckyframe.project.qualitymanagmt.qaAccident.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.luckyframe.framework.web.domain.BaseEntity;
 import com.luckyframe.project.system.project.domain.Project;
-
-import java.util.Date;
 
 /**
  * 生产事故登记表 qa_accident
@@ -57,14 +56,7 @@ public class QaAccident extends BaseEntity
 	private Integer impactTime;
 	/** 事故报告附件路径 */
 	private String accidentFileName;
-	/** 创建者 */
-	private String createBy;
-	/** 创建时间 */
-	private Date createTime;
-	/** 更新者 */
-	private String updateBy;
-	/** 更新时间 */
-	private Date updateTime;	
+	
 	/** 关联项目实体 */
 	private Project project;
 
@@ -255,42 +247,6 @@ public class QaAccident extends BaseEntity
 	public String getAccidentFileName() 
 	{
 		return accidentFileName;
-	}
-	public void setCreateBy(String createBy) 
-	{
-		this.createBy = createBy;
-	}
-
-	public String getCreateBy() 
-	{
-		return createBy;
-	}
-	public void setCreateTime(Date createTime) 
-	{
-		this.createTime = createTime;
-	}
-
-	public Date getCreateTime() 
-	{
-		return createTime;
-	}
-	public void setUpdateBy(String updateBy) 
-	{
-		this.updateBy = updateBy;
-	}
-
-	public String getUpdateBy() 
-	{
-		return updateBy;
-	}
-	public void setUpdateTime(Date updateTime) 
-	{
-		this.updateTime = updateTime;
-	}
-
-	public Date getUpdateTime() 
-	{
-		return updateTime;
 	}
 
     public String toString() {

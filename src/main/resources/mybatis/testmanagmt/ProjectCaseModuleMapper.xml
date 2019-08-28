@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectProjectCaseModuleParentZeroByProjectId" parameterType="Integer" resultMap="ProjectCaseModuleResult">
         <include refid="selectProjectCaseModuleVo"/>
-        where project_id=#{project_id} and parent_id=0 order by order_num
+        where project_id=#{project_id} and parent_id=0
 	</select>
         
     <insert id="insertProjectCaseModule" parameterType="ProjectCaseModule" useGeneratedKeys="true" keyProperty="moduleId">

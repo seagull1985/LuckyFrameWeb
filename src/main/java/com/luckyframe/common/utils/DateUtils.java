@@ -133,6 +133,31 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     }
 
     /**
+     * 计算两个字符串日期间隔的天数
+     * @param startDate
+     * @param endDate
+     * @return
+     * @author Seagull
+     * @date 2019年8月9日
+     */
+    public static int getDatePoorStr(String startDateStr, String endDateStr)
+    {
+    	if(StringUtils.isEmpty(startDateStr) || StringUtils.isEmpty(endDateStr)){
+    		return 0;
+    	}
+    	
+        long nd = 1000 * 24 * 60 * 60;
+
+        Date startDate = parseDate(startDateStr);
+        Date endDate = parseDate(endDateStr);
+        // 获得两个时间的毫秒时间差异
+        long diff = endDate.getTime() - startDate.getTime();
+        // 计算差多少天
+        long day = diff / nd;
+        return (int)day;
+    }
+    
+    /**
      * 计算两个时间差
      */
     public static String getDatePoor(Date endDate, Date nowDate)

@@ -97,6 +97,17 @@
 				exportUrl: prefix + "/export",
                 modalName: "生产事故登记",
 				search: false,
+				queryParams: function(params) {
+	            	return {
+	        			// 传递参数查询参数
+	                    pageSize:       params.limit,
+	                    pageNum:        params.offset / params.limit + 1,
+	                    searchValue:    params.search,
+	                    orderByColumn:  params.sort,
+	                    isAsc:          params.order,
+	                    projectId:      $('#projectId').val()
+	        		};
+				},
 		        showExport: true,
                 columns: [{
 		            checkbox: true
@@ -124,7 +135,7 @@
 						}else if(value=='已发生-初始状态'){
 							return '<font style="color:#FFA54F">已发生-初始状态</font>';
 						}else{
-							return '<font style="color:#95CACA">'+value+'</font>';
+							return '<font style="color:#0066FF">'+value+'</font>';
 						}						
 					}
 				},
@@ -149,7 +160,6 @@
 				{
 					field : 'reportTime', 
 					title : '事故报告时间',
-					sortable: true,
 					visible: false
 				},
 				{
@@ -174,91 +184,76 @@
 				{
 					field : 'accidentAnalysis', 
 					title : '事故分析',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'accidentConsequence', 
 					title : '事故影响后果',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'correctiveAction', 
 					title : '纠正措施',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'resolutioner', 
 					title : '解决处理人',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'preventiveAction', 
 					title : '预防措施',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'preventiver', 
 					title : '预防措施责任人',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'preventivePlanDate', 
 					title : '预防措施计划完成时间',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'preventiveOverDate', 
 					title : '预防措施实际完成时间',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'durationTime', 
 					title : '事故持续时间',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'impactTime', 
 					title : '事故影响时间',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'accidentFileName', 
 					title : '事故报告附件路径',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'createBy', 
 					title : '创建者',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'createTime', 
 					title : '创建时间',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'updateBy', 
 					title : '更新者',
-					sortable: true,
 					visible: false
 				},
 				{
 					field : 'updateTime', 
 					title : '更新时间',
-					sortable: true,
 					visible: false
 				},
 		        {

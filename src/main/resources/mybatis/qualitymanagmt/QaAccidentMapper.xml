@@ -81,12 +81,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="durationTime != null "> and qaa.duration_time = #{durationTime}</if>
              <if test="impactTime != null "> and qaa.impact_time = #{impactTime}</if>
              <if test="accidentFileName != null  and accidentFileName != '' "> and qaa.accident_file_name = #{accidentFileName}</if>
-             <if test="createBy != null  and createBy != '' "> and qaa.create_by = #{createBy}</if>
+             <if test="createBy != null  and createBy != '' "> and qaa.create_by like concat('%', #{createBy}, '%')</if>
              <if test="createTime != null "> and qaa.create_time = #{createTime}</if>
              <if test="updateBy != null  and updateBy != '' "> and qaa.update_by = #{updateBy}</if>
              <if test="updateTime != null "> and qaa.update_time = #{updateTime}</if>
          </where>
-         order by qaa.accident_id desc
+         order by IF(ISNULL(qaa.resolution_time),0,1) asc,qaa.accident_time desc,qaa.accident_id desc
     </select>
     
     <select id="selectQaAccidentById" parameterType="Integer" resultMap="QaAccidentResult">
