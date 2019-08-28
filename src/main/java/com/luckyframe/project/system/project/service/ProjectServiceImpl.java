@@ -132,6 +132,9 @@ public class ProjectServiceImpl implements IProjectService
 	@Override
 	public int updateProject(Project project)
 	{
+		ProjectCaseModule projectCaseModule = projectCaseModuleMapper.selectProjectCaseModuleParentZeroByProjectId(project.getProjectId());
+		projectCaseModule.setModuleName(project.getProjectName());
+		projectCaseModuleMapper.updateProjectCaseModule(projectCaseModule);
 	    return projectMapper.updateProject(project);
 	}
 
