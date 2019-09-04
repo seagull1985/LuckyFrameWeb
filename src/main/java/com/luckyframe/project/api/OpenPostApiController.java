@@ -13,12 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.luckyframe.project.monitor.job.domain.Job;
+import com.luckyframe.project.monitor.job.service.IJobService;
 import com.luckyframe.project.testexecution.taskCaseExecute.domain.TaskCaseExecute;
 import com.luckyframe.project.testexecution.taskCaseExecute.service.ITaskCaseExecuteService;
 import com.luckyframe.project.testexecution.taskCaseLog.domain.TaskCaseLog;
 import com.luckyframe.project.testexecution.taskCaseLog.service.ITaskCaseLogService;
 import com.luckyframe.project.testexecution.taskExecute.domain.TaskExecute;
 import com.luckyframe.project.testexecution.taskExecute.service.ITaskExecuteService;
+import com.luckyframe.project.testexecution.taskScheduling.domain.TaskScheduling;
+import com.luckyframe.project.testexecution.taskScheduling.service.ITaskSchedulingService;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseDebug;
 import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseDebugService;
@@ -49,6 +53,12 @@ public class OpenPostApiController
 	
 	@Autowired
 	private IProjectCaseService projectCaseService;
+	
+	@Autowired
+	private ITaskSchedulingService taskSchedulingService;
+	
+    @Autowired
+    private IJobService jobService;
 	
 	/**
 	 * 根据项目ID获取公共参数列表
@@ -296,4 +306,32 @@ public class OpenPostApiController
 		}
 		return result;
 	}
+	
+	/**
+	 * 对外接口,根据调度任务的名称，触发测试任务
+	 * @param jsonObject
+	 * @return
+	 * @author Seagull
+	 * @date 2019年9月4日
+	 */
+	@PostMapping("/clientDeleteTaskCaseLog")
+	@ResponseBody
+	public String runTaskBySchedulingName(@RequestBody JSONObject jsonObject) {
+		String schedulingName = jsonObject.getString("schedulingName");
+		try {
+			TaskScheduling taskScheduling = taskSchedulingService.selectTaskSchedulingByName(schedulingName);
+			if(null==taskScheduling){
+				return "没有找到任务名【"+schedulingName+"】的调度任务";
+			}else{
+				Job job = new Job();
+				job.setJobId(taskScheduling.getJobId().longValue());
+				jobService.run(job);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			log.error("接口运行调度任务出现异常", e);
+		}
+		return "已触发调度任务【"+schedulingName+"】";
+	}
+	
 }

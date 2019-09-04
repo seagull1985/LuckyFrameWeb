@@ -78,4 +78,13 @@ public interface ITaskSchedulingService
      * @date 2019年3月27日
      */
     public String checkSchedulingNameUnique(TaskScheduling taskScheduling);
+    
+    /**
+     * 根据调度名称查询调度对象
+     * @param schedulingName
+     * @return
+     * @author Seagull
+     * @date 2019年9月4日
+     */
+    public TaskScheduling selectTaskSchedulingByName(String schedulingName);
 }
