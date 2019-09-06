@@ -314,7 +314,7 @@ public class OpenPostApiController
 	 * @author Seagull
 	 * @date 2019年9月4日
 	 */
-	@PostMapping("/clientDeleteTaskCaseLog")
+	@PostMapping("/runTaskBySchedulingName")
 	@ResponseBody
 	public String runTaskBySchedulingName(@RequestBody JSONObject jsonObject) {
 		String schedulingName = jsonObject.getString("schedulingName");
