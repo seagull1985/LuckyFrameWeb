@@ -84,9 +84,16 @@ public class TaskSchedulingController extends BaseController
 	{
         List<Project> projects=projectService.selectProjectAll(0);
         mmap.put("projects", projects);
+        List<Client> clients=clientService.selectClientList(new Client());
+        mmap.put("clients", clients);
         if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
         	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
+        	List<Client> defaultClients=clientService.selectClientsByProjectId(ShiroUtils.getProjectId());
+        	if(defaultClients.size()>0){
+        		mmap.put("defaultClientId", defaultClients.get(0).getClientId());
+        	}
         }
+        
 	    return prefix + "/taskScheduling";
 	}
 	
