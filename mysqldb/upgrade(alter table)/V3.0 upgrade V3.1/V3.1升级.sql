@@ -177,3 +177,8 @@ insert into sys_dict_type
 values(20, '生产事故类型', 'qa_accident_type', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '生产事故类型字典');
 insert into sys_dict_type 
 values(21, '项目版本状态', 'qa_version_status', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '项目版本状态字典');
+
+-- ----------------------------
+-- HTTP请求类型增加一种HttpClientPostXml
+-- ----------------------------
+insert into sys_dict_data values(1012, 13,  'httpClientPostXml发送XMLPost请求', 'HttpClientPostXml',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用HttpClientPostXml发送XMLPost请求');
