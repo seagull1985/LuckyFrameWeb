@@ -6,7 +6,6 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
 		<h2 class="thin text-center" th:text="【+${projectCase.caseSign}+】步骤编辑"></h2>
 		<h3 class="thin text-center" th:text="${projectCase.caseName}"></h3>
-
 			    <form class="form-horizontal m" id="form-projectCaseSteps-edit">				
 					<div class="form-group">					
 						<table class="table table-striped" id="stepsTable">
@@ -33,10 +32,10 @@
 										<label th:name="stepSerialNumber" th:id="stepSerialNumber+${iterStat.count}" th:value="${stepsOb.stepSerialNumber}" th:text="${stepsOb.stepSerialNumber}"></label>
 										</div></td>
 										<td width="18%">
-										<div class="col-sm-12 lf-td-div">
+										<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" th:title="${stepsOb.stepPath}">
 										<input type="text" class="form-control" name="stepPath" th:id="stepPath+${iterStat.count}" th:value="${stepsOb.stepPath}"/></div></td>
 										<td width="13%">
-										  <div class="col-sm-12 lf-td-div">
+										  <div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" th:title="${stepsOb.stepOperation}">
 										    <input type="text" class="form-control" name="stepOperation" th:id="stepOperation+${iterStat.count}" th:value="${stepsOb.stepOperation}"/>
 											<div class="input-group-btn">
 										      <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
@@ -44,13 +43,13 @@
 										  </div>
 										</td>
 										<td width="16%">
-										<div class="col-sm-12 lf-td-div">
+										<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" th:title="${stepsOb.stepParameters}">
 										<input type="text" class="form-control" name="stepParameters" th:id="stepParameters+${iterStat.count}" th:value="${stepsOb.stepParameters}"/></div></td>
-										<td width="10%">
+										<td width="10%" data-toggle="tooltip" th:title="${stepsOb.action}">
 										<div class="col-sm-12 lf-td-div">
 										<input type="text" class="form-control" name="action" th:id="action+${iterStat.count}" th:value="${stepsOb.action}"/></div></td>
 										<td width="12%">
-										<div class="col-sm-12 lf-td-div">
+										<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" th:title="${stepsOb.expectedResult}">
 										<input type="text" class="form-control" name="expectedResult" th:id="expectedResult+${iterStat.count}" th:value="${stepsOb.expectedResult}"/></div></td>
 										<td width="10%">
 										<div class="col-sm-12 lf-td-div">
@@ -60,7 +59,7 @@
 										</div>
 										</td>
 										<td width="10%">
-										<div class="col-sm-12 lf-td-div">
+										<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" th:title="${stepsOb.extend}">
 										  <input type="text" class="form-control" name="extend" th:id="extend+${iterStat.count}" th:value="${stepsOb.extend}"/>
 										  <div class="input-group-btn">
 										    <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
@@ -97,6 +96,8 @@
 		var dictPrefix = ctx + "system/dict/data";
 		var debugPrefix = ctx + "testmanagmt/projectCaseDebug"
 
+		$("[data-toggle='tooltip']").tooltip();
+		
 		/*解决table中多个name属性一致的问题，使用ID进行验证*/
  		$(function () {			 
 			if ($.validator) {
