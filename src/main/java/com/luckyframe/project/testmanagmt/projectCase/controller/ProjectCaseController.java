@@ -229,6 +229,10 @@ public class ProjectCaseController extends BaseController
 		for(ProjectCaseSteps step:listSteps){
 			step.setStepId(0);
 			step.setCaseId(projectCase.getCaseId());
+			if(step.getProjectId()!=projectCase.getProjectId()){
+				step.setProjectId(projectCase.getProjectId());
+				step.setExtend(null);
+			}
 			projectCaseStepsService.insertProjectCaseSteps(step);
 		}
 		return toAjax(num+listSteps.size());
