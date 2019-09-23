@@ -107,7 +107,7 @@
 				{
 					field : 'priority',
 					title : '执行优先级',
-					width : '12%',
+					width : '10%',
 					editable : {
 						type : 'text',
 						title : '执行优先级',
@@ -135,12 +135,15 @@
 					field : 'caseName', 
 					title : '用例名称',
 					width : '26%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+                    formatter: function(value, row, index) {
+                    	return $.table.tooltip(value);
+                    }
 				},
 				{
 					field : 'caseType', 
 					title : '用例类型',
-					width : '8%',
+					width : '10%',
 					class : 'myTDLengthHidden',
 		        	formatter: function (value, row, index) {
 		    		    if (row.caseType == 0) {
@@ -196,7 +199,10 @@
 					field : 'remark', 
 					title : '备注',
 					width : '15%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+                    formatter: function(value, row, index) {
+                    	return $.table.tooltip(value);
+                    }
 				}],
 				onEditableSave: function (field, row, oldValue, $el) {
 					$.operate.saveJsonUnBack(prefix + "/edit", JSON.stringify(row));	

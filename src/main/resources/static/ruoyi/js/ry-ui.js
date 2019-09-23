@@ -101,9 +101,11 @@
 			tooltip: function (value, length) {
 				var _length = $.common.isEmpty(length) ? 20 : length;
 				var _text = "";
-				if (value.length > _length) {
+				if (null==value) {
+					_text = "";
+				} else if(value.length > _length){
 					_text = value.substr(0, _length) + "...";
-				} else {
+				}else {
 					_text = value;
 				}
 				return '<a href="#" class="tooltip-show" data-toggle="tooltip" title="' + value + '">' + _text +'</a>';

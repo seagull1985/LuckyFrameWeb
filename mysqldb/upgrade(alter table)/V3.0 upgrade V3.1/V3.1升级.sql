@@ -182,3 +182,10 @@ values(21, '项目版本状态', 'qa_version_status', '0', 'admin', '2019-02-13 
 -- HTTP请求类型增加一种HttpClientPostXml
 -- ----------------------------
 insert into sys_dict_data values(1012, 13,  'httpClientPostXml发送XMLPost请求', 'HttpClientPostXml',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '使用HttpClientPostXml发送XMLPost请求');
+
+-- ----------------------------
+-- Web UI增加三种页面操作类型
+-- ----------------------------
+insert into sys_dict_data values(2044, 45,  'PageRefresh刷新当前页面', 'pagerefresh',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '刷新当前页面');
+insert into sys_dict_data values(2045, 46,  'PageForward前进当前页面', 'pageforward',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '前进当前页面');
+insert into sys_dict_data values(2046, 47,  'PageBack回退当前页面', 'pageback',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '回退当前页面');
