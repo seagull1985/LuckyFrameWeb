@@ -428,6 +428,7 @@
 						}
 
 						$('#cur_table').bootstrapTable("resetView");
+						console.log(row);
 						$.ajax({
 							type : "post",
 							url : stepsPrefix+'/stepEditSave',

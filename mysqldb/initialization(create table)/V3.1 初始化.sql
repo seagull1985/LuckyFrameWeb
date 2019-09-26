@@ -957,6 +957,7 @@ insert into sys_dict_data values(2043, 44,  'Addcookie添加浏览器cookie', 'a
 insert into sys_dict_data values(2044, 45,  'PageRefresh刷新当前页面', 'pagerefresh',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '刷新当前页面');
 insert into sys_dict_data values(2045, 46,  'PageForward前进当前页面', 'pageforward',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '前进当前页面');
 insert into sys_dict_data values(2046, 47,  'PageBack回退当前页面', 'pageback',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '回退当前页面');
+insert into sys_dict_data values(2047, 48,  'isElementExist判断元素是否存在', 'iselementexist',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '判断元素是否存在');
 /*移动端内置关键字*/
 insert into sys_dict_data values(3000, 1,  'Selectbyvisibletext通过下拉框的文本进行选择', 'selectbyvisibletext',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '通过下拉框的文本进行选择');
 insert into sys_dict_data values(3001, 2,  'Selectbyvalue通过下拉框的VALUE属性进行选择', 'selectbyvalue',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '通过下拉框的VALUE属性进行选择');
