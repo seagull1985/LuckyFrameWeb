@@ -78,7 +78,7 @@
 	                    projectId:      $('#projectId').val()
 	        		};
 				},
-		        showExport: true,
+		        showExport: false,
                 columns: [{
                 	field : 'flag',
 					checkbox : true,
@@ -211,12 +211,23 @@
             $.table.init(options);
         });
 	    
+        /*添加选择的用例到测试计划中*/
 	    function submitHandler(){
 	    	var rows = $.map($('#bootstrap-table').bootstrapTable('getData'), function (row) {
     	        return row;
     	    });
-    		$.modal.confirm("确认保存您选择的用例到计划中吗?", function() {
+	    	
+     		$.modal.confirm("确认保存您选择的用例到计划中吗?", function() {
 				$.operate.saveJsonUnBack(prefix + "/savePlanCase", JSON.stringify(rows));
+    		});
+        	
+	    }
+	    
+	    /*添加项目中所有的用例到测试计划中*/
+	    function submitHandlerAll(){
+	    	var jsonStr={"projectId":$('#projectId').val(),"planId":$('#planId').val()};
+     		$.modal.confirm("确认添加项目所有用例到计划中吗?", function() {
+				$.operate.saveJsonUnBack(prefix + "/savePlanAllCase", JSON.stringify(jsonStr));
     		});
         	
 	    }

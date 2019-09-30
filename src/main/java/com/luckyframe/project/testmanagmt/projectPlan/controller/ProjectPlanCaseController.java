@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
@@ -87,7 +88,11 @@ public class ProjectPlanCaseController extends BaseController
 	}
 	
 	/**
-	 * 保存测试计划用例
+	 * 保存测试计划用例操作
+	 * @param projectCases
+	 * @return
+	 * @author Seagull
+	 * @date 2019年9月30日
 	 */
 	@RequiresPermissions("testmanagmt:projectPlan:edit")
 	@Log(title = "测试计划用例", businessType = BusinessType.UPDATE)
@@ -131,6 +136,55 @@ public class ProjectPlanCaseController extends BaseController
 		projectPlanService.updateProjectPlan(projectPlan);
 		
 		return toAjax(resultCount);
+	}
+	
+	/**
+	 * 保存项目所有用例到测试计划
+	 * @param projectCases
+	 * @return
+	 * @author Seagull
+	 * @date 2019年9月30日
+	 */
+	@RequiresPermissions("testmanagmt:projectPlan:edit")
+	@Log(title = "测试计划所有用例", businessType = BusinessType.UPDATE)
+	@RequestMapping(value = "/savePlanAllCase",method=RequestMethod.POST,consumes="application/json")
+	@ResponseBody
+	public AjaxResult savePlanAllCase(@RequestBody JSONObject jsonObject)
+	{
+		int projectId=jsonObject.getIntValue("projectId");
+		int planId=jsonObject.getIntValue("planId");
+		
+		ProjectPlan projectPlan = projectPlanService.selectProjectPlanById(planId);
+		
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectId)){
+			return error("没有此项目保存测试计划用例权限");
+		}
+		
+		List<ProjectCase> projectCases = projectCaseService.selectProjectCaseListByProjectId(projectId);
+		List<ProjectPlanCase> projectPlanCases = projectPlanCaseService.selectProjectPlanCaseListByPlanId(planId);
+		for(ProjectCase projectCase:projectCases){
+			int flag=0;
+			for(ProjectPlanCase ppc:projectPlanCases){
+				if(projectCase.getCaseId().equals(ppc.getCaseId())){
+					flag=1;
+					break;
+				}
+			}
+			
+			if(flag==0){
+				ProjectPlanCase projectPlanCase = new ProjectPlanCase();
+				projectPlanCase.setPlanId(planId);
+				projectPlanCase.setCaseId(projectCase.getCaseId());
+				projectPlanCase.setPriority(0);
+				projectPlanCaseService.insertProjectPlanCase(projectPlanCase);
+			}
+		}
+		
+		Integer planCaseCount=projectPlanCaseService.selectProjectPlanCaseCountByPlanId(planId);
+		projectPlan.setPlanCaseCount(planCaseCount);
+		projectPlanService.updateProjectPlan(projectPlan);
+		
+		return toAjax(1);
 	}
 	
 	/**
