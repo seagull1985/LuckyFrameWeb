@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.security.PermissionUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
@@ -147,12 +146,13 @@ public class ProjectPlanCaseController extends BaseController
 	 */
 	@RequiresPermissions("testmanagmt:projectPlan:edit")
 	@Log(title = "测试计划所有用例", businessType = BusinessType.UPDATE)
-	@RequestMapping(value = "/savePlanAllCase",method=RequestMethod.POST,consumes="application/json")
+	@PostMapping(value = "/savePlanAllCase")
 	@ResponseBody
-	public AjaxResult savePlanAllCase(@RequestBody JSONObject jsonObject)
+	public AjaxResult savePlanAllCase(ProjectCase projectCaseSearch)
 	{
-		int projectId=jsonObject.getIntValue("projectId");
-		int planId=jsonObject.getIntValue("planId");
+		int projectId=projectCaseSearch.getProjectId();
+		int planId=projectCaseSearch.getPlanId();
+		//ProjectCase projectCaseSearch = JSON.parseObject(jsonObject.getString("projectCase"),ProjectCase.class);
 		
 		ProjectPlan projectPlan = projectPlanService.selectProjectPlanById(planId);
 		
@@ -160,13 +160,14 @@ public class ProjectPlanCaseController extends BaseController
 			return error("没有此项目保存测试计划用例权限");
 		}
 		
-		List<ProjectCase> projectCases = projectCaseService.selectProjectCaseListByProjectId(projectId);
+		List<ProjectCase> projectCases = projectCaseService.selectProjectCaseListForPlan(projectCaseSearch);
 		List<ProjectPlanCase> projectPlanCases = projectPlanCaseService.selectProjectPlanCaseListByPlanId(planId);
 		for(ProjectCase projectCase:projectCases){
 			int flag=0;
 			for(ProjectPlanCase ppc:projectPlanCases){
 				if(projectCase.getCaseId().equals(ppc.getCaseId())){
 					flag=1;
+					projectPlanCases.remove(ppc);
 					break;
 				}
 			}
@@ -179,6 +180,16 @@ public class ProjectPlanCaseController extends BaseController
 				projectPlanCaseService.insertProjectPlanCase(projectPlanCase);
 			}
 		}
+		
+		/*删除查询条件里面没有的*/
+		String[] planCaseIds=new String[projectPlanCases.size()];
+		for(int i=0;i<projectPlanCases.size();i++){
+			planCaseIds[i]=projectPlanCases.get(i).getPlanCaseId().toString();
+		}
+		if(planCaseIds.length!=0){
+			projectPlanCaseService.deleteProjectPlanCaseByIds(planCaseIds);		
+		}
+
 		
 		Integer planCaseCount=projectPlanCaseService.selectProjectPlanCaseCountByPlanId(planId);
 		projectPlan.setPlanCaseCount(planCaseCount);
