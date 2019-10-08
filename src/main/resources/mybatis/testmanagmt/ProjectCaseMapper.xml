@@ -112,9 +112,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select IFNULL(MAX(case_serial_number),0) from project_case where project_id=#{project_id}
 	</select>
     
-    <select id="checkProjectCaseNameUnique" parameterType="String" resultMap="ProjectCaseResult">
+    <select id="checkProjectCaseNameUnique" parameterType="ProjectCase" resultMap="ProjectCaseResult">
         <include refid="selectProjectCaseVo"/>
-		where pc.case_name=#{case_name}
+        <where>
+          <if test="caseName != null  and caseName != '' "> and pc.case_name = #{caseName}</if>
+          <if test="projectId != null and projectId != 0"> and pc.project_id = #{projectId}</if>
+        </where>
 	</select>
         
     <insert id="insertProjectCase" parameterType="ProjectCase" useGeneratedKeys="true" keyProperty="caseId">

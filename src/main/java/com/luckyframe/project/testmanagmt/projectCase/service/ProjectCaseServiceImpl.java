@@ -212,8 +212,8 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
     public String checkProjectCaseNameUnique(ProjectCase projectCase)
     {
         Long caseId = StringUtils.isNull(projectCase.getCaseId()) ? -1L : projectCase.getCaseId();
-        ProjectCase info = projectCaseMapper.checkProjectCaseNameUnique(projectCase.getCaseName());
-        if (StringUtils.isNotNull(info) && info.getCaseId().longValue() != caseId.longValue())
+        List<ProjectCase> info = projectCaseMapper.checkProjectCaseNameUnique(projectCase);
+        if (info.size()>0 && (info.get(0).getCaseId().longValue() != caseId.longValue() || projectCase.getPriority()==99999999))
         {
             return ProjectCaseConstants.PROJECTCASE_NAME_NOT_UNIQUE;
         }

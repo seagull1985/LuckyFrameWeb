@@ -75,8 +75,14 @@
                         	"caseId": function() {
                                 return $("#caseId").val();
                             },
+                        	"projectId": function() {
+                                return $("#projectId").val();
+                            },
                             name: function () {
                                 return $.common.trim($("#caseName").val());
+                            },
+                            priority: function () {
+                                return 99999999;
                             }
                         },
                         dataFilter: function (data, type) {
@@ -121,6 +127,8 @@
 		
 		/*选择项目初始化模块树*/
 		function initializeModuleTree() {
+			$.validate.resetForm();
+			$.validate.form();
 			var projectId=$("#projectId").val();
 			$.ajax({
 				cache : true,
