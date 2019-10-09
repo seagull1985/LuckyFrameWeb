@@ -97,6 +97,7 @@ insert into sys_dict_data values(69, 12,  '网络异常', '12',  'qa_accident_ty
 insert into sys_dict_data values(70, 13,  '服务器硬件异常', '13',  'qa_accident_type',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '生产事故类型');
 insert into sys_dict_data values(71, 14,  '外部原因异常', '14',  'qa_accident_type',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '生产事故类型');
 insert into sys_dict_data values(72, 15,  '未知原因异常', '15',  'qa_accident_type',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '生产事故类型');
+insert into sys_dict_data values(73, 16,  '其他异常', '16',  'qa_accident_type',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '生产事故类型');
 
 -- ----------------------------
 -- 45、质量管理-版本管理
@@ -156,11 +157,11 @@ values('1104','版本管理删除', '127', '4',  '#',  'F', '0', 'qualitymanagmt
 -- ----------------------------
 -- 增加版本管理状态字典
 -- ----------------------------
-insert into sys_dict_data values(73, 1,  '计划中', '1',  'qa_version_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '项目版本当前状态');
-insert into sys_dict_data values(74, 2,  '开发中', '2',  'qa_version_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '项目版本当前状态');
-insert into sys_dict_data values(75, 3,  '测试中', '3',  'qa_version_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '项目版本当前状态');
-insert into sys_dict_data values(76, 4,  '待上线', '4',  'qa_version_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '项目版本当前状态');
-insert into sys_dict_data values(77, 5,  '已完成', '0',  'qa_version_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '项目版本当前状态');
+insert into sys_dict_data values(74, 1,  '计划中', '1',  'qa_version_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '项目版本当前状态');
+insert into sys_dict_data values(75, 2,  '开发中', '2',  'qa_version_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '项目版本当前状态');
+insert into sys_dict_data values(76, 3,  '测试中', '3',  'qa_version_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '项目版本当前状态');
+insert into sys_dict_data values(77, 4,  '待上线', '4',  'qa_version_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '项目版本当前状态');
+insert into sys_dict_data values(78, 5,  '已完成', '0',  'qa_version_status',   '',   'info', 'N', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '项目版本当前状态');
 
 -- ----------------------------
 -- 增加字典类型定义数据
