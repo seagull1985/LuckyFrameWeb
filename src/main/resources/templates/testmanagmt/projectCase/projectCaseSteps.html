@@ -45,8 +45,8 @@
 										<td width="16%">
 										<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" th:title="${stepsOb.stepParameters}">
 										<input type="text" class="form-control" name="stepParameters" th:id="stepParameters+${iterStat.count}" th:value="${stepsOb.stepParameters}"/></div></td>
-										<td width="10%" data-toggle="tooltip" th:title="${stepsOb.action}">
-										<div class="col-sm-12 lf-td-div">
+										<td width="10%" th:title="${stepsOb.action}">
+										<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" th:title="${stepsOb.action}">
 										<input type="text" class="form-control" name="action" th:id="action+${iterStat.count}" th:value="${stepsOb.action}"/></div></td>
 										<td width="12%">
 										<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" th:title="${stepsOb.expectedResult}">
