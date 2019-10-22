@@ -108,7 +108,7 @@
 				}else {
 					_text = value;
 				}
-				return '<a href="#" class="tooltip-show" data-toggle="tooltip" title="' + value + '">' + _text +'</a>';
+				return '<a href="#" class="tooltip-show" data-html="true" data-toggle="tooltip" title="<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>' + value +'</div>">' + _text +'</a>';
 			},
             // 搜索-默认第一个form
             search: function(formId) {
