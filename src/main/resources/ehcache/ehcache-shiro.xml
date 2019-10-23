@@ -18,8 +18,8 @@
     <cache name="loginRecordCache"
            maxEntriesLocalHeap="2000"
            eternal="false"
-           timeToIdleSeconds="600"
-           timeToLiveSeconds="0"
+           timeToIdleSeconds="36000"
+           timeToLiveSeconds="36000"
            overflowToDisk="false"
            statistics="true">
     </cache>
