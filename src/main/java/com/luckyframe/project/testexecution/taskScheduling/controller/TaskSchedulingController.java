@@ -84,9 +84,16 @@ public class TaskSchedulingController extends BaseController
 	{
         List<Project> projects=projectService.selectProjectAll(0);
         mmap.put("projects", projects);
+        List<Client> clients=clientService.selectClientList(new Client());
+        mmap.put("clients", clients);
         if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
         	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
+        	List<Client> defaultClients=clientService.selectClientsByProjectId(ShiroUtils.getProjectId());
+        	if(defaultClients.size()>0){
+        		mmap.put("defaultClientId", defaultClients.get(0).getClientId());
+        	}
         }
+        
 	    return prefix + "/taskScheduling";
 	}
 	
@@ -405,10 +412,16 @@ public class TaskSchedulingController extends BaseController
 	}
 	
 	/**
-	 * 查询日志
+	 * 上传驱动到客户端
+	 * @param file
+	 * @param clientIp
+	 * @param driverPath
+	 * @return
+	 * @author Seagull
+	 * @date 2019年7月26日
 	 */
 	@RequiresPermissions("testexecution:taskScheduling:add")
-	@Log(title = "个人信息", businessType = BusinessType.UPDATE)
+	@Log(title = "上传驱动到客户端", businessType = BusinessType.UPLOAD)
 	@PostMapping("/uploadJar")
 	@ResponseBody
 	public AjaxResult uploadJar(@RequestParam("drivenfile") MultipartFile file, @RequestParam("clientIp") String clientIp,@RequestParam("driverPath") String driverPath) {

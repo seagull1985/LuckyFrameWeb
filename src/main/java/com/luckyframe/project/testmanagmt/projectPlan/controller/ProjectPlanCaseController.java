@@ -87,7 +87,11 @@ public class ProjectPlanCaseController extends BaseController
 	}
 	
 	/**
-	 * 保存测试计划用例
+	 * 保存测试计划用例操作
+	 * @param projectCases
+	 * @return
+	 * @author Seagull
+	 * @date 2019年9月30日
 	 */
 	@RequiresPermissions("testmanagmt:projectPlan:edit")
 	@Log(title = "测试计划用例", businessType = BusinessType.UPDATE)
@@ -131,6 +135,67 @@ public class ProjectPlanCaseController extends BaseController
 		projectPlanService.updateProjectPlan(projectPlan);
 		
 		return toAjax(resultCount);
+	}
+	
+	/**
+	 * 保存项目所有用例到测试计划
+	 * @param projectCases
+	 * @return
+	 * @author Seagull
+	 * @date 2019年9月30日
+	 */
+	@RequiresPermissions("testmanagmt:projectPlan:edit")
+	@Log(title = "测试计划所有用例", businessType = BusinessType.UPDATE)
+	@PostMapping(value = "/savePlanAllCase")
+	@ResponseBody
+	public AjaxResult savePlanAllCase(ProjectCase projectCaseSearch)
+	{
+		int projectId=projectCaseSearch.getProjectId();
+		int planId=projectCaseSearch.getPlanId();
+		//ProjectCase projectCaseSearch = JSON.parseObject(jsonObject.getString("projectCase"),ProjectCase.class);
+		
+		ProjectPlan projectPlan = projectPlanService.selectProjectPlanById(planId);
+		
+		if(!PermissionUtils.isProjectPermsPassByProjectId(projectId)){
+			return error("没有此项目保存测试计划用例权限");
+		}
+		
+		List<ProjectCase> projectCases = projectCaseService.selectProjectCaseListForPlan(projectCaseSearch);
+		List<ProjectPlanCase> projectPlanCases = projectPlanCaseService.selectProjectPlanCaseListByPlanId(planId);
+		for(ProjectCase projectCase:projectCases){
+			int flag=0;
+			for(ProjectPlanCase ppc:projectPlanCases){
+				if(projectCase.getCaseId().equals(ppc.getCaseId())){
+					flag=1;
+					projectPlanCases.remove(ppc);
+					break;
+				}
+			}
+			
+			if(flag==0){
+				ProjectPlanCase projectPlanCase = new ProjectPlanCase();
+				projectPlanCase.setPlanId(planId);
+				projectPlanCase.setCaseId(projectCase.getCaseId());
+				projectPlanCase.setPriority(0);
+				projectPlanCaseService.insertProjectPlanCase(projectPlanCase);
+			}
+		}
+		
+		/*删除查询条件里面没有的*/
+		String[] planCaseIds=new String[projectPlanCases.size()];
+		for(int i=0;i<projectPlanCases.size();i++){
+			planCaseIds[i]=projectPlanCases.get(i).getPlanCaseId().toString();
+		}
+		if(planCaseIds.length!=0){
+			projectPlanCaseService.deleteProjectPlanCaseByIds(planCaseIds);		
+		}
+
+		
+		Integer planCaseCount=projectPlanCaseService.selectProjectPlanCaseCountByPlanId(planId);
+		projectPlan.setPlanCaseCount(planCaseCount);
+		projectPlanService.updateProjectPlan(projectPlan);
+		
+		return toAjax(1);
 	}
 	
 	/**

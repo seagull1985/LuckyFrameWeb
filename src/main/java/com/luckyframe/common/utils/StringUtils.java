@@ -124,7 +124,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils
      */
     public static boolean isEmpty(Integer num)
     {
-        return isNull(num) || num==0;
+        return isNull(num) || num.equals(0);
     }
 
     /**

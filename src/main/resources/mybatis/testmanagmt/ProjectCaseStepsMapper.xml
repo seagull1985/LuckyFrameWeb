@@ -102,13 +102,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="caseId != null  ">case_id = #{caseId},</if>
             <if test="projectId != null  ">project_id = #{projectId},</if>
             <if test="stepSerialNumber != null  ">step_serial_number = #{stepSerialNumber},</if>
-            <if test="stepPath != null  and stepPath != ''  ">step_path = #{stepPath},</if>
-            <if test="stepOperation != null  and stepOperation != ''  ">step_operation = #{stepOperation},</if>
-            <if test="stepParameters != null  and stepParameters != ''  ">step_parameters = #{stepParameters},</if>
-            <if test="action != null  and action != ''  ">action = #{action},</if>
-            <if test="expectedResult != null  and expectedResult != ''  ">expected_result = #{expectedResult},</if>
+            <if test="stepPath != null  ">step_path = #{stepPath},</if>
+            <if test="stepOperation != null  ">step_operation = #{stepOperation},</if>
+            <if test="stepParameters != null  ">step_parameters = #{stepParameters},</if>
+            <if test="action != null  ">action = #{action},</if>
+            <if test="expectedResult != null  ">expected_result = #{expectedResult},</if>
             <if test="stepType != null  ">step_type = #{stepType},</if>
-            <if test="extend != null  and extend != ''  ">extend = #{extend},</if>
+            <if test="extend != null  ">extend = #{extend},</if>
             <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
             <if test="createTime != null  ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>

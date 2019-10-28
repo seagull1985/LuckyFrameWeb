@@ -79,12 +79,12 @@ public interface ProjectCaseMapper
 	
 	/**
 	 * 检查测试用例名称唯一性
-	 * @param caseName
+	 * @param projectCase
 	 * @return
 	 * @author Seagull
-	 * @date 2019年2月28日
+	 * @date 2019年10月8日
 	 */
-	public ProjectCase checkProjectCaseNameUnique(String caseName);
+	public List<ProjectCase> checkProjectCaseNameUnique(ProjectCase projectCase);
 	
 	/**
 	 * 查询测试用例项目序号

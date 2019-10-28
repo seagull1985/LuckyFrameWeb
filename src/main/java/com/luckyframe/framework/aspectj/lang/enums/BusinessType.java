@@ -62,4 +62,8 @@ public enum BusinessType
      * 运行用例
      */
     RUNCASE,
+    /**
+     * 上传文件
+     */
+    UPLOAD,
 }

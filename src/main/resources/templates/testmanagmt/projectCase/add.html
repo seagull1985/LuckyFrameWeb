@@ -65,7 +65,7 @@
 			}
 		});
 		
-		$("#form-projectCase-add").validate({
+		myEditValidate = $("#form-projectCase-add").validate({
 			rules:{
 				projectId:{
 					required:true,
@@ -79,6 +79,9 @@
                         type: "post",
                         dataType: "json",
                         data: {
+                        	"projectId": function() {
+                                return $("#projectId").val();
+                            },
                             name: function () {
                                 return $.common.trim($("#caseName").val());
                             }
@@ -125,6 +128,8 @@
 		
 		/*选择项目初始化模块树*/
 		function initializeModuleTree() {
+			$.validate.resetForm();
+			$.validate.form();
 			var projectId=$("#projectId").val();
 			$.ajax({
 				cache : true,

@@ -202,7 +202,41 @@
         	if ($.common.isNotEmpty(row)) {
         	    url = $.table._option.customUrl.replace("{id}", row[0].planId);
         	}
-        	$.modal.openFull($.table._option.childrenModalName+": ["+row[0].planName+"]", url, null, null, "保存计划用例");
+        	openFull($.table._option.childrenModalName+": ["+row[0].planName+"]", url);
+        }
+        
+        function openFull(title, url, width, height) {
+        	//如果是移动端，就使用自适应大小弹窗
+        	if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+        	    width = 'auto';
+        	    height = 'auto';
+        	}
+            var index = layer.open({
+        		type: 2,
+        		area: [width + 'px', height + 'px'],
+        		fix: false,
+        		//不固定
+        		maxmin: true,
+        		shade: 0.3,
+        		title: title,
+        		content: url,
+        		btn: ["保存选择用例", "保存查询用例", '关闭'],
+        		// 弹层外区域关闭
+        		shadeClose: true,
+        		yes: function(index, layero) {
+        	        var iframeWin = layero.find('iframe')[0];
+        	        iframeWin.contentWindow.submitHandler();
+        	    },
+        		btn2: function(index, layero) {
+        	        var iframeWin = layero.find('iframe')[0];
+        	        iframeWin.contentWindow.submitHandlerAll();
+        	        return false;
+        	    },
+        	    cancel: function(index) {
+        	        return true;
+        	    }
+        	});
+            layer.full(index);
         }
     </script>
 </body>

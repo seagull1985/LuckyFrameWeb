@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.qualitymanagmt.qaAccident.mapper.QaAccidentMapper">
+    
+    <resultMap type="QaAccident" id="QaAccidentResult">
+        <result property="accidentId"    column="accident_id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="accidentStatus"    column="accident_status"    />
+        <result property="accidentTime"    column="accident_time"    />
+        <result property="reportTime"    column="report_time"    />
+        <result property="accidentDescription"    column="accident_description"    />
+        <result property="accidentLevel"    column="accident_level"    />
+        <result property="accidentAnalysis"    column="accident_analysis"    />
+        <result property="accidentType"    column="accident_type"    />
+        <result property="accidentConsequence"    column="accident_consequence"    />
+        <result property="correctiveAction"    column="corrective_action"    />
+        <result property="resolutionTime"    column="resolution_time"    />
+        <result property="resolutioner"    column="resolutioner"    />
+        <result property="preventiveAction"    column="preventive_action"    />
+        <result property="preventiver"    column="preventiver"    />
+        <result property="preventivePlanDate"    column="preventive_plan_date"    />
+        <result property="preventiveOverDate"    column="preventive_over_date"    />
+        <result property="durationTime"    column="duration_time"    />
+        <result property="impactTime"    column="impact_time"    />
+        <result property="accidentFileName"    column="accident_file_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <association property="project"  column="project_id" javaType="Project" resultMap="ProjectResult" />
+    </resultMap>
+	
+	<resultMap type="Project" id="ProjectResult">
+        <id property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="projectSign"    column="project_sign"    />
+    </resultMap>
+    
+    <resultMap type="Map" id="BaseResultMap">
+		<result column="selectName" property="selectName"/>
+		<result column="selectValue" property="selectValue"/>
+	</resultMap>
+
+	<sql id="selectQaAccidentVo">
+        select qaa.accident_id, qaa.project_id, qaa.accident_status, qaa.accident_time, qaa.report_time, qaa.accident_description, qaa.accident_level, qaa.accident_analysis, 
+        qaa.accident_type, qaa.accident_consequence, qaa.corrective_action, qaa.resolution_time, qaa.resolutioner, qaa.preventive_action, qaa.preventiver, qaa.preventive_plan_date, 
+        qaa.preventive_over_date, qaa.duration_time, qaa.impact_time, qaa.accident_file_name, qaa.create_by, qaa.create_time, qaa.update_by, qaa.update_time,
+        sp.project_name,sp.dept_id,sp.project_sign  
+        from qa_accident qaa 
+        left join sys_project sp on qaa.project_id = sp.project_id 
+    </sql>
+	
+    <select id="selectQaAccidentList" parameterType="QaAccident" resultMap="QaAccidentResult">
+        <include refid="selectQaAccidentVo"/>
+        <where>  
+            <if test="accidentId != null "> and qaa.accident_id = #{accidentId}</if>
+             <if test="projectId != null "> and qaa.project_id = #{projectId}</if>
+             <if test="accidentStatus != null  and accidentStatus != '' "> and qaa.accident_status = #{accidentStatus}</if>
+             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+			    and date_format(qaa.accident_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+		     </if>
+		     <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+			    and date_format(qaa.accident_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+		     </if>
+             <if test="reportTime != null  and reportTime != '' "> and qaa.report_time = #{reportTime}</if>
+             <if test="accidentDescription != null  and accidentDescription != '' "> and qaa.accident_description = #{accidentDescription}</if>
+             <if test="accidentLevel != null  and accidentLevel != '' "> and qaa.accident_level = #{accidentLevel}</if>
+             <if test="accidentAnalysis != null  and accidentAnalysis != '' "> and qaa.accident_analysis = #{accidentAnalysis}</if>
+             <if test="accidentType != null  and accidentType != '' "> and qaa.accident_type = #{accidentType}</if>
+             <if test="accidentConsequence != null  and accidentConsequence != '' "> and qaa.accident_consequence = #{accidentConsequence}</if>
+             <if test="correctiveAction != null  and correctiveAction != '' "> and qaa.corrective_action = #{correctiveAction}</if>
+             <if test="resolutionTime != null  and resolutionTime != '' "> and qaa.resolution_time = #{resolutionTime}</if>
+             <if test="resolutioner != null  and resolutioner != '' "> and qaa.resolutioner = #{resolutioner}</if>
+             <if test="preventiveAction != null  and preventiveAction != '' "> and qaa.preventive_action = #{preventiveAction}</if>
+             <if test="preventiver != null  and preventiver != '' "> and qaa.preventiver = #{preventiver}</if>
+             <if test="preventivePlanDate != null  and preventivePlanDate != '' "> and qaa.preventive_plan_date = #{preventivePlanDate}</if>
+             <if test="preventiveOverDate != null  and preventiveOverDate != '' "> and qaa.preventive_over_date = #{preventiveOverDate}</if>
+             <if test="durationTime != null "> and qaa.duration_time = #{durationTime}</if>
+             <if test="impactTime != null "> and qaa.impact_time = #{impactTime}</if>
+             <if test="accidentFileName != null  and accidentFileName != '' "> and qaa.accident_file_name = #{accidentFileName}</if>
+             <if test="createBy != null  and createBy != '' "> and qaa.create_by like concat('%', #{createBy}, '%')</if>
+             <if test="createTime != null "> and qaa.create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and qaa.update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and qaa.update_time = #{updateTime}</if>
+         </where>
+         order by IF(ISNULL(qaa.resolution_time),0,1) asc,qaa.accident_time desc,qaa.accident_id desc
+    </select>
+    
+    <select id="selectQaAccidentById" parameterType="Integer" resultMap="QaAccidentResult">
+        <include refid="selectQaAccidentVo"/>
+        where qaa.accident_id = #{accidentId}
+    </select>
+        
+            
+    <select id="selectGroupByAccidentType" parameterType="QaAccident" resultMap="BaseResultMap" >
+   		select accident_type as selectName
+   		<trim prefix="," suffix=" " suffixOverrides=",">
+   		  <if test="accidentType != null  and accidentType != ''  ">COUNT(accident_type) as selectValue,</if>
+   		  <if test="durationTime != null  ">SUM(duration_time) as selectValue,</if>
+   		  <if test="impactTime != null  ">SUM(impact_time) as selectValue,</if>
+   		</trim>
+   		 from qa_accident 
+   		<where>  
+   		  <if test="projectId != null "> and project_id = #{projectId}</if>
+		  <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+			and date_format(accident_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+		  </if>
+		  <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+			 and date_format(accident_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+		  </if>
+        </where>
+   		GROUP BY accident_type
+    </select>
+    
+    <select id="selectGroupByAccidentLevel" parameterType="QaAccident" resultMap="BaseResultMap" >
+   		select accident_level as selectName
+   		<trim prefix="," suffix=" " suffixOverrides=",">
+   		  <if test="accidentType != null  and accidentType != ''  ">COUNT(accident_level) as selectValue,</if>
+   		  <if test="durationTime != null  ">SUM(duration_time) as selectValue,</if>
+   		  <if test="impactTime != null  ">SUM(impact_time) as selectValue,</if>
+   		</trim>
+   		 from qa_accident 
+   		<where>  
+   		  <if test="projectId != null "> and project_id = #{projectId}</if>
+		  <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+			and date_format(accident_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+		  </if>
+		  <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+			 and date_format(accident_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+		  </if>
+        </where>
+   		GROUP BY accident_level
+    </select>
+    
+    <insert id="insertQaAccident" parameterType="QaAccident" useGeneratedKeys="true" keyProperty="accidentId">
+        insert into qa_accident
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="projectId != null  ">project_id,</if>
+			<if test="accidentStatus != null  and accidentStatus != ''  ">accident_status,</if>
+			<if test="accidentTime != null  and accidentTime != ''  ">accident_time,</if>
+			<if test="reportTime != null  and reportTime != ''  ">report_time,</if>
+			<if test="accidentDescription != null  and accidentDescription != ''  ">accident_description,</if>
+			<if test="accidentLevel != null  and accidentLevel != ''  ">accident_level,</if>
+			<if test="accidentAnalysis != null  and accidentAnalysis != ''  ">accident_analysis,</if>
+			<if test="accidentType != null  and accidentType != ''  ">accident_type,</if>
+			<if test="accidentConsequence != null  and accidentConsequence != ''  ">accident_consequence,</if>
+			<if test="correctiveAction != null  and correctiveAction != ''  ">corrective_action,</if>
+			<if test="resolutionTime != null  and resolutionTime != ''  ">resolution_time,</if>
+			<if test="resolutioner != null  and resolutioner != ''  ">resolutioner,</if>
+			<if test="preventiveAction != null  and preventiveAction != ''  ">preventive_action,</if>
+			<if test="preventiver != null  and preventiver != ''  ">preventiver,</if>
+			<if test="preventivePlanDate != null  and preventivePlanDate != ''  ">preventive_plan_date,</if>
+			<if test="preventiveOverDate != null  and preventiveOverDate != ''  ">preventive_over_date,</if>
+			<if test="durationTime != null  ">duration_time,</if>
+			<if test="impactTime != null  ">impact_time,</if>
+			<if test="accidentFileName != null  and accidentFileName != ''  ">accident_file_name,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="projectId != null  ">#{projectId},</if>
+			<if test="accidentStatus != null  and accidentStatus != ''  ">#{accidentStatus},</if>
+			<if test="accidentTime != null  and accidentTime != ''  ">#{accidentTime},</if>
+			<if test="reportTime != null  and reportTime != ''  ">#{reportTime},</if>
+			<if test="accidentDescription != null  and accidentDescription != ''  ">#{accidentDescription},</if>
+			<if test="accidentLevel != null  and accidentLevel != ''  ">#{accidentLevel},</if>
+			<if test="accidentAnalysis != null  and accidentAnalysis != ''  ">#{accidentAnalysis},</if>
+			<if test="accidentType != null  and accidentType != ''  ">#{accidentType},</if>
+			<if test="accidentConsequence != null  and accidentConsequence != ''  ">#{accidentConsequence},</if>
+			<if test="correctiveAction != null  and correctiveAction != ''  ">#{correctiveAction},</if>
+			<if test="resolutionTime != null  and resolutionTime != ''  ">#{resolutionTime},</if>
+			<if test="resolutioner != null  and resolutioner != ''  ">#{resolutioner},</if>
+			<if test="preventiveAction != null  and preventiveAction != ''  ">#{preventiveAction},</if>
+			<if test="preventiver != null  and preventiver != ''  ">#{preventiver},</if>
+			<if test="preventivePlanDate != null  and preventivePlanDate != ''  ">#{preventivePlanDate},</if>
+			<if test="preventiveOverDate != null  and preventiveOverDate != ''  ">#{preventiveOverDate},</if>
+			<if test="durationTime != null  ">#{durationTime},</if>
+			<if test="impactTime != null  ">#{impactTime},</if>
+			<if test="accidentFileName != null  and accidentFileName != ''  ">#{accidentFileName},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateQaAccident" parameterType="QaAccident">
+        update qa_accident
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null  ">project_id = #{projectId},</if>
+            <if test="accidentStatus != null  and accidentStatus != ''  ">accident_status = #{accidentStatus},</if>
+            <if test="accidentTime != null  and accidentTime != ''  ">accident_time = #{accidentTime},</if>
+            <if test="reportTime != null  and reportTime != ''  ">report_time = #{reportTime},</if>
+            <if test="accidentDescription != null  and accidentDescription != ''  ">accident_description = #{accidentDescription},</if>
+            <if test="accidentLevel != null  and accidentLevel != ''  ">accident_level = #{accidentLevel},</if>
+            <if test="accidentAnalysis != null  and accidentAnalysis != ''  ">accident_analysis = #{accidentAnalysis},</if>
+            <if test="accidentType != null  and accidentType != ''  ">accident_type = #{accidentType},</if>
+            <if test="accidentConsequence != null  and accidentConsequence != ''  ">accident_consequence = #{accidentConsequence},</if>
+            <if test="correctiveAction != null  and correctiveAction != ''  ">corrective_action = #{correctiveAction},</if>
+            <if test="resolutionTime != null  and resolutionTime != ''  ">resolution_time = #{resolutionTime},</if>
+            <if test="resolutioner != null  and resolutioner != ''  ">resolutioner = #{resolutioner},</if>
+            <if test="preventiveAction != null  and preventiveAction != ''  ">preventive_action = #{preventiveAction},</if>
+            <if test="preventiver != null  and preventiver != ''  ">preventiver = #{preventiver},</if>
+            <if test="preventivePlanDate != null  and preventivePlanDate != ''  ">preventive_plan_date = #{preventivePlanDate},</if>
+            <if test="preventiveOverDate != null  and preventiveOverDate != ''  ">preventive_over_date = #{preventiveOverDate},</if>
+            <if test="durationTime != null  ">duration_time = #{durationTime},</if>
+            <if test="impactTime != null  ">impact_time = #{impactTime},</if>
+            <if test="accidentFileName != null  and accidentFileName != ''  ">accident_file_name = #{accidentFileName},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where accident_id = #{accidentId}
+    </update>
+
+	<delete id="deleteQaAccidentById" parameterType="Integer">
+        delete from qa_accident where accident_id = #{accidentId}
+    </delete>
+	
+    <delete id="deleteQaAccidentByIds" parameterType="String">
+        delete from qa_accident where accident_id in 
+        <foreach item="accidentId" collection="array" open="(" separator="," close=")">
+            #{accidentId}
+        </foreach>
+    </delete>
+</mapper>

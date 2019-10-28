@@ -9,7 +9,7 @@
             <div class="form-group">	
 				<label class="col-sm-3 control-label">项目名称：</label>
 				<div class="col-sm-8">
-					<select id="projectId" name="projectId" th:field="*{projectId}" class="form-control m-b" th:with="type=${projects}">
+					<select id="projectId" name="projectId" th:field="*{projectId}" class="form-control m-b" th:with="type=${projects}" onchange="resetValidateForm()">
 	                    <option value="0">所有项目</option>
 	                    <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == projectCaseParams.projectId}"></option>
 	                </select>
@@ -85,6 +85,12 @@
                 }
             }
 		});
+		
+		/*重新初始化表单验证*/
+		function resetValidateForm() {
+			$.validate.resetForm();
+			$.validate.form();
+		}
 		
 		function submitHandler() {
 	        if ($.validate.form()) {

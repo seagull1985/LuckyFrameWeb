@@ -78,7 +78,7 @@
 	                    projectId:      $('#projectId').val()
 	        		};
 				},
-		        showExport: true,
+		        showExport: false,
                 columns: [{
                 	field : 'flag',
 					checkbox : true,
@@ -107,8 +107,7 @@
 				{
 					field : 'priority',
 					title : '执行优先级',
-					width : '12%',
-					sortable: true,
+					width : '10%',
 					editable : {
 						type : 'text',
 						title : '执行优先级',
@@ -136,12 +135,15 @@
 					field : 'caseName', 
 					title : '用例名称',
 					width : '26%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+                    formatter: function(value, row, index) {
+                    	return $.table.tooltip(value);
+                    }
 				},
 				{
 					field : 'caseType', 
 					title : '用例类型',
-					width : '8%',
+					width : '10%',
 					class : 'myTDLengthHidden',
 		        	formatter: function (value, row, index) {
 		    		    if (row.caseType == 0) {
@@ -197,7 +199,10 @@
 					field : 'remark', 
 					title : '备注',
 					width : '15%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+                    formatter: function(value, row, index) {
+                    	return $.table.tooltip(value);
+                    }
 				}],
 				onEditableSave: function (field, row, oldValue, $el) {
 					$.operate.saveJsonUnBack(prefix + "/edit", JSON.stringify(row));	
@@ -206,12 +211,42 @@
             $.table.init(options);
         });
 	    
+        /*添加选择的用例到测试计划中*/
 	    function submitHandler(){
 	    	var rows = $.map($('#bootstrap-table').bootstrapTable('getData'), function (row) {
     	        return row;
     	    });
-    		$.modal.confirm("确认保存您选择的用例到计划中吗?", function() {
+	    	
+     		$.modal.confirm("确认保存您选择的用例到计划中吗?", function() {
 				$.operate.saveJsonUnBack(prefix + "/savePlanCase", JSON.stringify(rows));
+    		});
+        	
+	    }
+	    
+	    /*添加项目中所有的用例到测试计划中*/
+	    function submitHandlerAll(){
+     		$.modal.confirm("确认保存查询用例集合到计划中吗?", function() {
+            	var config = {
+            	        url: prefix + "/savePlanAllCase",
+            	        type: "post",
+            	        dataType: "json",
+            	        data: $('#formId').serialize(),
+            	        beforeSend: function () {
+            	        	$.modal.loading("正在处理中，请稍后...");
+            	        	$.modal.disable();
+            	        },
+            	        success: function(result) {
+                        	if (result.code == web_status.SUCCESS) {
+                            	$.modal.msgSuccess(result.msg);
+                        		$.table.refresh();
+                            } else {
+                            	$.modal.alertError(result.msg);
+                            }
+                            $.modal.enable();
+                            $.modal.closeLoading();
+            	        }
+            	    };
+            	  $.ajax(config);
     		});
         	
 	    }

@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<link th:href="@{/ajax/libs/datapicker/bootstrap-datetimepicker.min.css}" rel="stylesheet"/>
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-qaAccident-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">项目名称：</label>
+				<div class="col-sm-8">
+					<select id="projectId" name="projectId" class="form-control m-b" th:with="type=${projects}">
+	                    <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == defaultProjectId}"></option>
+	                </select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">事故等级：</label>
+				<div class="col-sm-8">
+					<select class="form-control m-b" id="accidentLevel" name="accidentLevel" th:with="type=${@dict.getType('qa_accident_level')}">
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">事故状态：</label>
+				<div class="col-sm-8">
+					<select class="form-control m-b" id="accidentStatus" name="accidentStatus" th:with="type=${@dict.getType('qa_accident_status')}">
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">事故发生时间：</label>
+				<div class="col-sm-8">
+					<input id="accidentTime" name="accidentTime" class="form-control" type="text" readonly>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">事故类型：</label>
+				<div class="col-sm-8">
+					<select class="form-control m-b" id="accidentType" name="accidentType" th:with="type=${@dict.getType('qa_accident_type')}">
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}"></option>
+				    </select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">事故报告时间：</label>
+				<div class="col-sm-8">
+					<input id="reportTime" name="reportTime" class="form-control" type="text" readonly>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">事故描述：</label>
+				<div class="col-sm-8">
+					<textarea id="accidentDescription" name="accidentDescription" class="form-control" ></textarea>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">事故分析：</label>
+				<div class="col-sm-8">
+					<textarea id="accidentAnalysis" name="accidentAnalysis" class="form-control" ></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">事故影响：</label>
+				<div class="col-sm-8">
+					<textarea id="accidentConsequence" name="accidentConsequence" class="form-control" ></textarea>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">纠正措施：</label>
+				<div class="col-sm-8">
+					<textarea id="correctiveAction" name="correctiveAction" class="form-control" ></textarea>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">解决时间：</label>
+				<div class="col-sm-8">
+					<input id="resolutionTime" name="resolutionTime" class="form-control" type="text" readonly>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">解决处理人：</label>
+				<div class="col-sm-8">
+					<input id="resolutioner" name="resolutioner" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">预防措施：</label>
+				<div class="col-sm-8">
+					<textarea id="preventiveAction" name="preventiveAction" class="form-control"></textarea>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">预防措施责任人：</label>
+				<div class="col-sm-8">
+					<input id="preventiver" name="preventiver" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">预防措施计划完成时间：</label>
+				<div class="col-sm-8">
+					<input id="preventivePlanDate" name="preventivePlanDate" class="form-control" type="text" readonly>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">预防措施实际完成时间：</label>
+				<div class="col-sm-8">
+					<input id="preventiveOverDate" name="preventiveOverDate" class="form-control" type="text" readonly>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">事故持续时间(分钟)：</label>
+				<div class="col-sm-8">
+					<input id="durationTime" name="durationTime" class="form-control" type="text" value="0">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">事故影响时间(分钟)：</label>
+				<div class="col-sm-8">
+					<input id="impactTime" name="impactTime" class="form-control" type="text" value="0">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script th:src="@{/ajax/libs/datapicker/bootstrap-datetimepicker.min.js}"></script>
+    <script type="text/javascript">
+		var prefix = ctx + "qualitymanagmt/qaAccident";
+		
+		$('#accidentTime').datetimepicker({
+			format: 'yyyy-mm-dd hh:ii:ss',
+		    endDate:new Date(),
+		    autoclose:true,//选中关闭
+		    forceParse:true
+		});
+		
+		$('#reportTime').datetimepicker({
+			format: 'yyyy-mm-dd hh:ii:ss',
+		    endDate:new Date(),
+		    autoclose:true,//选中关闭
+		    forceParse:true
+		});
+		
+		$('#resolutionTime').datetimepicker({
+			format: 'yyyy-mm-dd hh:ii:ss',
+		    endDate:new Date(),
+		    autoclose:true,//选中关闭
+		    forceParse:true
+		});
+		
+		$('#preventivePlanDate').datetimepicker({
+			format: 'yyyy-mm-dd',
+		    minView: "month",//设置只显示到月份
+		    autoclose:true,//选中关闭
+		    forceParse:true
+		});
+		
+		$('#preventiveOverDate').datetimepicker({
+			format: 'yyyy-mm-dd',
+		    minView: "month",//设置只显示到月份
+		    autoclose:true,//选中关闭
+		    forceParse:true
+		});
+		
+		$("#form-qaAccident-add").validate({
+			rules:{
+				projectId:{
+					required:true,
+				},
+				accidentLevel:{
+					required:true,
+				},
+				accidentStatus:{
+					required:true,
+				},
+				accidentTime:{
+					required:true,
+        			maxlength: 30,
+				},
+				reportTime:{
+					required:true,
+        			maxlength: 30,
+				},
+				accidentDescription:{
+					required:true,
+        			maxlength: 500,
+				},
+				accidentAnalysis:{
+					required: function(element) {
+				        return $("#accidentStatus").val() == '跟踪处理完成';
+					},
+        			maxlength: 500,
+				},
+				accidentConsequence:{
+					required: function(element) {
+				        return $("#accidentStatus").val() == '跟踪处理完成';
+					},
+        			maxlength: 300,
+				},
+				correctiveAction:{
+					required: function(element) {
+				        return $("#accidentStatus").val() == '跟踪处理完成';
+					},
+        			maxlength: 300,
+				},
+				resolutionTime:{
+					required: function(element) {
+				        return $("#accidentStatus").val() == '跟踪处理完成';
+					},
+        			maxlength: 30,
+				},
+				resolutioner:{
+					required: function(element) {
+				        return $("#accidentStatus").val() == '跟踪处理完成';
+					},
+        			maxlength: 20,
+				},
+				preventiveAction:{
+					required: function(element) {
+				        return $("#accidentStatus").val() == '跟踪处理完成';
+					},
+        			maxlength: 300,
+				},
+				preventiver:{
+					required: function(element) {
+				        return $("#accidentStatus").val() == '跟踪处理完成';
+					},
+        			maxlength: 20,
+				},
+				preventivePlanDate:{
+					required: function(element) {
+				        return $("#accidentStatus").val() == '跟踪处理完成';
+					},
+        			maxlength: 30,
+				},
+				preventiveOverDate:{
+        			maxlength: 30,
+				},
+				durationTime:{
+					required: function(element) {
+				        return $("#accidentStatus").val() == '跟踪处理完成';
+					},
+					isIntGteZero: true,
+				},
+				impactTime:{
+					required: function(element) {
+				        return $("#accidentStatus").val() == '跟踪处理完成';
+					},
+					isIntGteZero: true,
+				},
+			},
+			messages: {
+				'accidentAnalysis': {
+					required: "事故跟踪处理完成，此项必填",
+				},
+				'accidentConsequence': {
+					required: "事故跟踪处理完成，此项必填",
+				},
+				'correctiveAction': {
+					required: "事故跟踪处理完成，此项必填",
+				},
+				'resolutionTime': {
+					required: "事故跟踪处理完成，此项必填",
+				},
+				'resolutioner': {
+					required: "事故跟踪处理完成，此项必填",
+				},
+				'preventiveAction': {
+					required: "事故跟踪处理完成，此项必填",
+				},
+				'preventiver': {
+					required: "事故跟踪处理完成，此项必填",
+				},
+				'preventivePlanDate': {
+					required: "事故跟踪处理完成，此项必填",
+				},
+			},
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-qaAccident-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

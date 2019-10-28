@@ -79,7 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_client
         <trim prefix="SET" suffixOverrides=",">
             <if test="status != null  ">status = #{status},</if>
-            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            <if test="remark != null  ">remark = #{remark},</if>
         </trim>
         where client_ip = #{clientIp}
     </update>

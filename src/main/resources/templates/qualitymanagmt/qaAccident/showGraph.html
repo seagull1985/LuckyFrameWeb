@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="height:600px"></div>
+	
+    <div th:include="include::footer"></div>   
+    <script th:src="@{/js/echarts.min.js}"></script>
+    <script type="text/javascript">
+       var prefix = ctx + "qualitymanagmt/qaAccident";
+       var ajaxPrefix = prefix+'/getGraphData'+'?projectId='+'[[${projectId}]]'+'&queryStartDate='+'[[${queryStartDate}]]'+'&queryEndDate='+'[[${queryEndDate}]]'
+    		   +'&Statistical='+'[[${Statistical}]]'+'&dataLatitude='+'[[${dataLatitude}]]';
+
+       // 基于准备好的dom，初始化echarts实例
+       var myChart = echarts.init(document.getElementById('main'));
+
+       var effect = ['Loadding','不要催我，慢跑中','正在加载中','数据都去哪儿了'];
+       var random = Math.floor(Math.random()*effect.length);
+       myChart.showLoading({
+           text : effect[random],
+           effect : effect[random],
+           textStyle : {
+               fontSize : 20
+           }
+       });
+       
+       $.get(ajaxPrefix).done(function (result) {
+    		myChart.hideLoading();
+    		//把string字符串转换为json数组 
+    		var jsonData = JSON.parse(result); 
+    		myChart.setOption({
+    		    title : {
+    		        text: '[[${projectName}]]',
+    		        subtext: '[[${queryStartDate}]]'+' 至 '+'[[${queryEndDate}]]',
+    		        x:'center'
+    		    },
+    		    tooltip : {
+    		        trigger: 'item',
+    		        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    		    },
+    		    legend: {
+    		        orient: 'vertical',
+    		        left: 'left',
+    		        data: jsonData.legendData
+    		    },
+    		    series : [
+    		        {
+    		            name: '访问来源',
+    		            type: 'pie',
+    		            radius : '55%',
+    		            center: ['50%', '45%'],
+    		            data:jsonData.seriesData,
+    		            itemStyle: {
+    		                emphasis: {
+    		                    shadowBlur: 10,
+    		                    shadowOffsetX: 0,
+    		                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+    		                }
+    		            }
+    		        }
+    		    ]
+    		});
+    	});
+    </script>
+</body>
+</html>

@@ -265,4 +265,19 @@ public class ClientController extends BaseController
 		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(clientList));
 		return jsonArray.toJSONString();
 	}
+    
+	/**
+	 * 根据客户端ID获取状态
+	 * @param clientId
+	 * @return
+	 * @author Seagull
+	 * @date 2019年8月16日
+	 */
+    @GetMapping("/getClientStatusByClientId/{clientId}")
+	@ResponseBody
+	public String getClientStatusByClientId(@PathVariable("clientId") Integer clientId)
+	{
+    	Client client = clientService.selectClientById(clientId);
+		return JSONObject.toJSONString(client);
+	}
 }

@@ -6,7 +6,6 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
 		<h2 class="thin text-center" th:text="【+${projectCase.caseSign}+】步骤编辑"></h2>
 		<h3 class="thin text-center" th:text="${projectCase.caseName}"></h3>
-
 			    <form class="form-horizontal m" id="form-projectCaseSteps-edit">				
 					<div class="form-group">					
 						<table class="table table-striped" id="stepsTable">
@@ -33,10 +32,10 @@
 										<label th:name="stepSerialNumber" th:id="stepSerialNumber+${iterStat.count}" th:value="${stepsOb.stepSerialNumber}" th:text="${stepsOb.stepSerialNumber}"></label>
 										</div></td>
 										<td width="18%">
-										<div class="col-sm-12 lf-td-div">
+										<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepPath}+'</div>'">
 										<input type="text" class="form-control" name="stepPath" th:id="stepPath+${iterStat.count}" th:value="${stepsOb.stepPath}"/></div></td>
 										<td width="13%">
-										  <div class="col-sm-12 lf-td-div">
+										  <div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepOperation}+'</div>'">
 										    <input type="text" class="form-control" name="stepOperation" th:id="stepOperation+${iterStat.count}" th:value="${stepsOb.stepOperation}"/>
 											<div class="input-group-btn">
 										      <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
@@ -44,13 +43,13 @@
 										  </div>
 										</td>
 										<td width="16%">
-										<div class="col-sm-12 lf-td-div">
+										<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepParameters}+'</div>'">
 										<input type="text" class="form-control" name="stepParameters" th:id="stepParameters+${iterStat.count}" th:value="${stepsOb.stepParameters}"/></div></td>
-										<td width="10%">
-										<div class="col-sm-12 lf-td-div">
+										<td width="10%" th:title="${stepsOb.action}">
+										<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.action}+'</div>'">
 										<input type="text" class="form-control" name="action" th:id="action+${iterStat.count}" th:value="${stepsOb.action}"/></div></td>
 										<td width="12%">
-										<div class="col-sm-12 lf-td-div">
+										<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.expectedResult}+'</div>'">
 										<input type="text" class="form-control" name="expectedResult" th:id="expectedResult+${iterStat.count}" th:value="${stepsOb.expectedResult}"/></div></td>
 										<td width="10%">
 										<div class="col-sm-12 lf-td-div">
@@ -60,7 +59,7 @@
 										</div>
 										</td>
 										<td width="10%">
-										<div class="col-sm-12 lf-td-div">
+										<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.extend}+'</div>'">
 										  <input type="text" class="form-control" name="extend" th:id="extend+${iterStat.count}" th:value="${stepsOb.extend}"/>
 										  <div class="input-group-btn">
 										    <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
@@ -97,6 +96,8 @@
 		var dictPrefix = ctx + "system/dict/data";
 		var debugPrefix = ctx + "testmanagmt/projectCaseDebug"
 
+		$("[data-toggle='tooltip']").tooltip();
+		
 		/*解决table中多个name属性一致的问题，使用ID进行验证*/
  		$(function () {			 
 			if ($.validator) {
@@ -213,12 +214,38 @@
 						tparam = {};
 					}
 				}
-				$.operate.saveJsonUnBack(prefix + "/editSave", JSON.stringify(values));
+				var url=prefix + "/editSave";
+				var localUrl=prefix+ "/edit/" + $('#caseId1').val();
+            	$.ajax({
+        	        url: url,
+        	        type: "post",
+        	        dataType: "json",
+        	        contentType:"application/json",
+        	        data: JSON.stringify(values),
+        	        beforeSend: function () {
+        	        	$.modal.loading("正在处理中，请稍后...");
+        	        	$.modal.disable();
+        	        },
+        	        success: function(result) {
+                    	if (result.code == web_status.SUCCESS) {
+                            $.modal.msgSuccess("保存用例成功");
+                            setTimeout(function(){                            	
+                            	location.replace(localUrl);
+                            	},800);
+                        } else {
+                        	$.modal.alertError(result.msg);
+                        }
+                        $.modal.enable();
+                        $.modal.closeLoading();
+                        
+        	        }
+        	    });
+				//$.operate.saveJsonUnBack(prefix + "/editSave", JSON.stringify(values));
 			} else {
 				$.modal.msgError("步骤提交验证不通过！");
 			}
 		}
-
+		
 		function addsteps(obj,iscopy) {
 	        if (obj == null)
 	            return;

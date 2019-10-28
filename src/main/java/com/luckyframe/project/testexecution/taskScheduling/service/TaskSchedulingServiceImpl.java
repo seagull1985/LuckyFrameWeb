@@ -169,4 +169,17 @@ public class TaskSchedulingServiceImpl implements ITaskSchedulingService
         }
         return TaskSchedulingConstants.TASKSCHEDULING_NAME_UNIQUE;
     }
+    
+    /**
+     * 根据调度名称查询调度对象
+     * @param schedulingName
+     * @return
+     * @author Seagull
+     * @date 2019年9月4日
+     */
+    @Override
+    public TaskScheduling selectTaskSchedulingByName(String schedulingName)
+    {
+        return taskSchedulingMapper.checkSchedulingNameUnique(schedulingName);
+    }
 }

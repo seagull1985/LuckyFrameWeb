@@ -139,6 +139,7 @@
 					field : 'caseName', 
 					title : '用例名称',
 					width : '25%',
+					class : 'myTDLengthHidden',
 					editable : {
 						type : 'text',
 						title : '用例名称',
@@ -428,6 +429,7 @@
 						}
 
 						$('#cur_table').bootstrapTable("resetView");
+						console.log(row);
 						$.ajax({
 							type : "post",
 							url : stepsPrefix+'/stepEditSave',
@@ -501,7 +503,7 @@
 		}
 		
 		function resetForm(){
-			$("#treeId").val("");
+			initializeModuleTree();
 			$.form.reset();
 		}
     </script>

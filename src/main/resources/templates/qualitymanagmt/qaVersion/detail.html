@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-qaAccident-edit" th:object="${qaVersion}">
+            <input id="versionId" name="versionId" th:field="*{versionId}"  type="hidden">
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">项目名称：</Strong>
+				<div class="col-sm-10">
+				    <label class="form-control" style="border:0px" th:text="*{project.projectName}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">版本号：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{versionNumber}"></label>
+				</div>
+				<Strong class="col-sm-2 control-label">版本状态：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{versionStatus}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">负责人：</Strong>
+				<div class="col-sm-10">
+				    <label class="form-control" style="border:0px" th:text="*{leader}"></label>
+				</div>
+			</div>
+			<div class="form-group">
+				<Strong class="col-sm-2 control-label">开发人员：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{developer}"></label>
+				</div>	
+				<Strong class="col-sm-2 control-label">测试人员：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{tester}"></label>
+				</div>
+			</div>
+		    <div class="form-group">	
+				<Strong class="col-sm-2 control-label">计划完成日期：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{planFinishDate}"></label>
+				</div>
+				<Strong class="col-sm-2 control-label">实际完成日期：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{actuallyFinishDate}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">上线日期：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{launchDate}"></label>
+				</div>
+				<Strong class="col-sm-2 control-label">版本工期：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{timeLimitVersion}+天"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">项目偏移时间：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{projectDeviationDays}+天"></label>
+				</div>
+				<Strong class="col-sm-2 control-label">项目偏移率：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{projectDeviationPercent}+'%'"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">计划完成需求数：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{demandPlanFinish}+个"></label>
+				</div>
+				<Strong class="col-sm-2 control-label">实际完成需求数：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{demandActuallyFinish}+个"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">需求完成率：</Strong>
+				<div class="col-sm-10">
+				    <label class="form-control" style="border:0px" th:text="*{demandPercent}+'%'"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">测试用例数：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{testcaseCount}"></label>
+				</div>
+				<Strong class="col-sm-2 control-label">转测试打回次数：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{testingReturn}+次"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">开发投入人力：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{devHumanResources}+'人/天'"></label>
+				</div>
+				<Strong class="col-sm-2 control-label">测试投入人力：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{testHumanResources}+'人/天'"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">代码变动行数：</Strong>
+				<div class="col-sm-10">
+				    <label class="form-control" style="border:0px" th:text="*{changeLineCode}+行"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">Bug数量 级别:致命：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{bugZm}"></label>
+				</div>
+				<Strong class="col-sm-2 control-label">Bug数量 级别:严重：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{bugYz}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">Bug数量 级别:一般：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{bugYb}"></label>
+				</div>
+				<Strong class="col-sm-2 control-label">Bug数量 级别:提示：</Strong>
+				<div class="col-sm-4">
+				    <label class="form-control" style="border:0px" th:text="*{bugTs}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">代码DI值：</Strong>
+				<div class="col-sm-10">
+				    <label class="form-control" style="border:0px" th:text="*{codeDi}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">质量回溯：</Strong>
+				<div class="col-sm-10">
+					<textarea id="qualityReview" name="qualityReview" th:field="*{qualityReview}" class="form-control" rows="5" readonly="readonly"></textarea>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">版本说明：</Strong>
+				<div class="col-sm-10">
+					<textarea id="imprint" name="imprint" th:field="*{imprint}" class="form-control" rows="5" readonly="readonly"></textarea>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-2 control-label">备注：</Strong>
+				<div class="col-sm-10">
+					<textarea id="remark" name="remark" th:field="*{remark}" class="form-control" rows="5" readonly="readonly"></textarea>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "qualitymanagmt/qaVersion";
+	</script>
+</body>
+</html>

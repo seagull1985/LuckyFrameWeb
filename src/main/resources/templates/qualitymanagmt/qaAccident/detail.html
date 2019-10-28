@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-qaAccident-edit" th:object="${qaAccident}">
+            <input id="accidentId" name="accidentId" th:field="*{accidentId}"  type="hidden">
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">项目名称：</Strong>
+				<div class="col-sm-8">
+				    <label class="form-control" style="border:0px" th:text="*{project.projectName}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">事故等级：</Strong>
+				<div class="col-sm-8">
+				    <label class="form-control" style="border:0px" th:text="*{accidentLevel}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">事故状态：</Strong>
+				<div class="col-sm-8">
+				    <label class="form-control" style="border:0px" th:text="*{accidentStatus}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">事故发生时间：</Strong>
+				<div class="col-sm-8">
+				    <label class="form-control" style="border:0px" th:text="*{accidentTime}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">事故类型：</Strong>
+				<div class="col-sm-8">
+				    <label class="form-control" style="border:0px" th:text="*{accidentType}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">事故报告时间：</Strong>
+				<div class="col-sm-8">
+				    <label class="form-control" style="border:0px" th:text="*{reportTime}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">事故描述：</Strong>
+				<div class="col-sm-8">
+					<textarea id="accidentDescription" name="accidentDescription" th:field="*{accidentDescription}" class="form-control" rows="5" readonly="readonly"></textarea>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">事故分析：</Strong>
+				<div class="col-sm-8">
+					<textarea id="accidentAnalysis" name="accidentAnalysis" th:field="*{accidentAnalysis}" class="form-control" rows="5" readonly="readonly"></textarea>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">事故影响后果：</Strong>
+				<div class="col-sm-8">
+					<textarea id="accidentConsequence" name="accidentConsequence" th:field="*{accidentConsequence}" class="form-control" rows="5" readonly="readonly"></textarea>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">纠正措施：</Strong>
+				<div class="col-sm-8">
+					<textarea id="correctiveAction" name="correctiveAction" th:field="*{correctiveAction}" class="form-control" rows="5" readonly="readonly"></textarea>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">解决时间：</Strong>
+				<div class="col-sm-8">
+				    <label class="form-control" style="border:0px" th:text="*{resolutionTime}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">解决处理人：</Strong>
+				<div class="col-sm-8">
+				    <label class="form-control" style="border:0px" th:text="*{resolutioner}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">预防措施：</Strong>
+				<div class="col-sm-8">
+					<textarea id="preventiveAction" name="preventiveAction" th:field="*{preventiveAction}" class="form-control" rows="5" readonly="readonly"></textarea>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">预防措施责任人：</Strong>
+				<div class="col-sm-8">
+				    <label class="form-control" style="border:0px" th:text="*{preventiver}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">预防措施计划完成时间：</Strong>
+				<div class="col-sm-8">
+				    <label class="form-control" style="border:0px" th:text="*{preventivePlanDate}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">预防措施实际完成时间：</Strong>
+				<div class="col-sm-8">
+				    <label class="form-control" style="border:0px" th:text="*{preventiveOverDate}"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">事故持续时间：</Strong>
+				<div class="col-sm-8">
+				    <label class="form-control" style="border:0px" th:text="*{durationTime}+分钟"></label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<Strong class="col-sm-3 control-label">事故影响时间：</Strong>
+				<div class="col-sm-8">
+				    <label class="form-control" style="border:0px" th:text="*{impactTime}+分钟"></label>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "qualitymanagmt/qaAccident";
+	</script>
+</body>
+</html>

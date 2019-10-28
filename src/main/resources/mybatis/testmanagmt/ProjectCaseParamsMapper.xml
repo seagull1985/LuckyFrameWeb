@@ -61,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectProjectCaseParamsVo"/>
 		<where>  
              <if test="paramsName != null  and paramsName != '' "> and pcp.params_name = #{paramsName}</if>
-             <if test="projectId != null "> and pcp.project_id = #{projectId}</if>
+             <if test="projectId != null and projectId!=0"> and (pcp.project_id = #{projectId} or pcp.project_id=0)</if>
         </where>
 	</select>
         
@@ -99,7 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null  ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
             <if test="updateTime != null  ">update_time = #{updateTime},</if>
-            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            <if test="remark != null ">remark = #{remark},</if>
         </trim>
         where params_id = #{paramsId}
     </update>
