@@ -161,10 +161,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null  ">project_id = #{projectId},</if>
             <if test="planId != null  ">plan_id = #{planId},</if>
             <if test="clientId != null  ">client_id = #{clientId},</if>
-            <if test="emailAddress != null  and emailAddress != ''  ">email_address = #{emailAddress},</if>
+            <if test="emailAddress != null  ">email_address = #{emailAddress},</if>
             <if test="emailSendCondition != null  ">email_send_condition = #{emailSendCondition},</if>
-            <if test="buildingLink != null  and buildingLink != ''  ">building_link = #{buildingLink},</if>
-            <if test="remoteShell != null  and remoteShell != ''  ">remote_shell = #{remoteShell},</if>
+            <if test="buildingLink != null  ">building_link = #{buildingLink},</if>
+            <if test="remoteShell != null  ">remote_shell = #{remoteShell},</if>
             <if test="exThreadCount != null  ">ex_thread_count = #{exThreadCount},</if>
             <if test="taskType != null  ">task_type = #{taskType},</if>
             <if test="browserType != null  ">browser_type = #{browserType},</if>
