@@ -71,13 +71,13 @@ public class ProjectTemplateParamsController extends BaseController
 			jsonParam.setTemplateId(templateId);
 			jsonParam.setParamName("_forTextJson");
 			jsonParam.setParamValue("");
-			jsonParam.setParamType(1);
+			jsonParam.setParamType(0);
 		}else if(templateParams.size()==1&&"_forTextJson".equals(templateParams.get(0).getParamName())){
 			/*判断是否是RAW JSON单文本格式 */
 			jsonParam.setParamsId(templateParams.get(0).getParamsId());
 			jsonParam.setTemplateId(templateId);
 			jsonParam.setParamName("_forTextJson");
-			jsonParam.setParamType(1);
+			jsonParam.setParamType(0);
 			jsonParam.setParamValue(templateParams.get(0).getParamValue());
 			
 			projectTemplateParams=templateParams.get(0);
