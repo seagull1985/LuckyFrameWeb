@@ -110,8 +110,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="templateName != null  and templateName != ''  ">template_name = #{templateName},</if>
             <if test="projectId != null  ">project_id = #{projectId},</if>
-            <if test="headMsg != null  and headMsg != ''  ">head_msg = #{headMsg},</if>
-            <if test="cerificatePath != null  and cerificatePath != ''  ">cerificate_path = #{cerificatePath},</if>
+            <if test="headMsg != null ">head_msg = #{headMsg},</if>
+            <if test="cerificatePath != null ">cerificate_path = #{cerificatePath},</if>
             <if test="encoding != null  and encoding != ''  ">encoding = #{encoding},</if>
             <if test="timeout != null  ">timeout = #{timeout},</if>
             <if test="isResponseHead != null  ">is_response_head = #{isResponseHead},</if>
