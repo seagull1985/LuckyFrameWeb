@@ -26,7 +26,7 @@
 								客户端：
 								<select id="clientId" name="clientId" th:with="type=${clients}">
 								    <option value="">全部</option>
-	                                <option th:each="client : ${type}" th:text="${client.clientIp}" th:value="${client.clientId}" th:selected="${client.clientId == defaultClientId}"></option>
+	                                <option th:each="client : ${type}" th:text="'【'+${client.clientName}+'】'+${client.clientIp}" th:value="${client.clientId}" th:selected="${client.clientId == defaultClientId}"></option>
 	                            </select>
 							</li>
 							
