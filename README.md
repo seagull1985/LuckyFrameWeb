@@ -68,6 +68,9 @@
 ![任务执行](https://images.gitee.com/uploads/images/2019/0611/173555_74ee4629_1215415.jpeg "任务执行.jpg")
 ![用例明细](https://images.gitee.com/uploads/images/2019/0611/173617_f3c5e38d_1215415.jpeg "用例明细.jpg")
 
+# 用户手册
+> [【直达官网查看最新用户手册】](http://www.luckyframe.cn/book/yhsc/syschyy-24.html)
+
 # 版本更新
 > [【直达官网查看版本更新文章】](http://www.luckyframe.cn/dynamic.html)
 
