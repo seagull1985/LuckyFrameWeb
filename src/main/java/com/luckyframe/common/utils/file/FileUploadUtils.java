@@ -42,6 +42,11 @@ public class FileUploadUtils
      * 默认驱动类型jar
      */
     public static final String DRIVEN_JAR_EXTENSION = ".jar";
+    
+    /**
+     * 默认驱动类型python
+     */
+    public static final String DRIVEN_PYTHON_EXTENSION = ".py";
 
     private static int counter = 0;
 

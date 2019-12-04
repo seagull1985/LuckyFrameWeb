@@ -428,9 +428,9 @@ public class TaskSchedulingController extends BaseController
 		String result="获取远程链接失败！";
 		try {
 			if (!file.isEmpty()) {
-				if (!file.getOriginalFilename().endsWith(FileUploadUtils.DRIVEN_JAR_EXTENSION))
+				if (!file.getOriginalFilename().endsWith(FileUploadUtils.DRIVEN_JAR_EXTENSION)&&!file.getOriginalFilename().endsWith(FileUploadUtils.DRIVEN_PYTHON_EXTENSION))
 				{
-					return error("驱动文件只能是.jar格式");
+					return error("驱动文件只能是.jar或.py格式");
 				}
 				
 				File jarFile = FileUploadUtils.uploadJar(LuckyFrameConfig.getUploadPath(), file);
