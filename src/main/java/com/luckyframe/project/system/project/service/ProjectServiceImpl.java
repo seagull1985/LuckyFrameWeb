@@ -169,8 +169,12 @@ public class ProjectServiceImpl implements IProjectService
 				throw new BusinessException(String.format("【%1$s】已生成执行用例明细,不能删除", projectMapper.selectProjectById(projectId).getProjectName()));
 			}
 			if(!PermissionUtils.isProjectPermsPassByProjectId(projectId)){	
-				  throw new BusinessException(String.format("没有项目【%1$s】删除权限", projectMapper.selectProjectById(projectId).getProjectName()));
-			}		
+				throw new BusinessException(String.format("没有项目【%1$s】删除权限", projectMapper.selectProjectById(projectId).getProjectName()));
+			}			
+			List<Project> listProject = selectProjectAll(0);
+			if(listProject.size()<=1){
+				throw new BusinessException(String.format("【%1$s】是系统中唯一项目,不能删除", projectMapper.selectProjectById(projectId).getProjectName()));
+			}
 		}
 		projectCaseModuleMapper.deleteProjectCaseModuleByProjectIds(projectIds);
 		return projectMapper.deleteProjectByIds(projectIds);
