@@ -17,15 +17,15 @@ insert into sys_dict_data values(1014, 15,  'httpClientPatchJson发送Patch请�
 -- ----------------------------
 -- 2、解决移动端安卓关键字(keycode)错误的Bug
 -- ----------------------------
-update sys_dict_data set dict_label='Keycode安卓模拟手机键盘发送指令，同PressKeyCode',dict_value='keycode' where dict_code=3020
+update sys_dict_data set dict_label='Keycode安卓模拟手机键盘发送指令，同PressKeyCode',dict_value='keycode' where dict_code=3020;
 
 -- ----------------------------
 -- 3、优化以及增加页面滑动关键字，增加手指滑动关键字
 -- ----------------------------
-update sys_dict_data set dict_label='SwipePageUp页面向上滑动(参数 持续时间|滚动次数)',dict_value='swipepageup' where dict_code=3024
-update sys_dict_data set dict_label='SwipePageDown页面向下滑动(参数 持续时间|滚动次数)',dict_value='swipepagedown' where dict_code=3025
-update sys_dict_data set dict_label='SwipePageLeft页面向左滑动(参数 持续时间|滚动次数)',dict_value='swipepageleft' where dict_code=3026
-update sys_dict_data set dict_label='SwipePageRight页面向右滑动(参数 持续时间|滚动次数)',dict_value='swipepageright' where dict_code=3027
+update sys_dict_data set dict_label='SwipePageUp页面向上滑动(参数 持续时间|滚动次数)',dict_value='swipepageup' where dict_code=3024;
+update sys_dict_data set dict_label='SwipePageDown页面向下滑动(参数 持续时间|滚动次数)',dict_value='swipepagedown' where dict_code=3025;
+update sys_dict_data set dict_label='SwipePageLeft页面向左滑动(参数 持续时间|滚动次数)',dict_value='swipepageleft' where dict_code=3026;
+update sys_dict_data set dict_label='SwipePageRight页面向右滑动(参数 持续时间|滚动次数)',dict_value='swipepageright' where dict_code=3027;
 insert into sys_dict_data values(3038, 39,  'SwipeUp手指向上滑动(参数 持续时间|滚动次数)', 'swipeup',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2020-01-19 09-27-32', 'luckyframe', '2020-01-19 09-27-32', '手指向上滑动(参数 持续时间|滚动次数)');
 insert into sys_dict_data values(3039, 40,  'SwipeDown手指向下滑动(参数 持续时间|滚动次数)', 'swipedown',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2020-01-19 09-27-32', 'luckyframe', '2020-01-19 09-27-32', '手指向下滑动(参数 持续时间|滚动次数)');
 insert into sys_dict_data values(3040, 41,  'SwipeLeft手指向左滑动(参数 持续时间|滚动次数)', 'swipeleft',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2020-01-19 09-27-32', 'luckyframe', '2020-01-19 09-27-32', '手指向左滑动(参数 持续时间|滚动次数)');
