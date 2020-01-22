@@ -33,6 +33,8 @@ import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseSteps;
 import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseService;
 import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseStepsService;
 
+import cn.hutool.core.util.StrUtil;
+
 /**
  * 测试用例步骤管理 信息操作处理
  * 
@@ -74,6 +76,12 @@ public class ProjectCaseStepsController extends BaseController
 			projectCaseSteps.setStepSerialNumber(1);
 			projectCaseSteps.setStepType(projectCase.getCaseType());
 			stepsList.add(projectCaseSteps);
+		}
+		
+		for(ProjectCaseSteps steps:stepsList){
+			if(StrUtil.isBlank(steps.getStepRemark())){
+				steps.setStepRemark("备注");
+			}
 		}
 		
 		mmap.put("stepsList", stepsList);

@@ -40,6 +40,7 @@
 		<poi.version>3.17</poi.version>
 		<oshi.version>3.9.1</oshi.version>
 		<httpclient.version>4.5.7</httpclient.version>
+		<hutool.version>5.0.6</hutool.version>
 	</properties>
 
 	<dependencies>
@@ -129,6 +130,13 @@
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 			<version>${commons.fileupload.version}</version>
+		</dependency>
+		
+		<!-- hutool工具包 -->
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>${hutool.version}</version>
 		</dependency>
 
 		<!--Shiro核心框架 -->

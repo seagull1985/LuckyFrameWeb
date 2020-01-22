@@ -15,9 +15,9 @@ insert into sys_dict_data values(1013, 14,  'httpClientDeleteJson发送Delete请
 insert into sys_dict_data values(1014, 15,  'httpClientPatchJson发送Patch请求', 'httpClientPatchJson',  'testmanagmt_casestep_httpoperation',   '',   'info',  'Y', '0', 'admin', '2020-01-15 16-20-32', 'luckyframe', '2020-01-15 16-20-32', '使用httpClientPatchJson发送PatchJson请求');
 
 -- ----------------------------
--- 2、解决移动端安卓关键字(keycode)错误的Bug
+-- 2、对移动端安卓关键字(keycode)描述优化
 -- ----------------------------
-update sys_dict_data set dict_label='Keycode安卓模拟手机键盘发送指令，同PressKeyCode',dict_value='keycode' where dict_code=3020;
+update sys_dict_data set dict_label='AndroidKeyCode安卓模拟手机按键，参考Android KeyCode',remark='AndroidKeyCode安卓模拟手机按键，参考Android KeyCode' where dict_code=3020;
 
 -- ----------------------------
 -- 3、优化以及增加页面滑动关键字，增加手指滑动关键字
@@ -34,4 +34,4 @@ insert into sys_dict_data values(3041, 42,  'SwipeRight手指向右滑动(参数
 -- ----------------------------
 -- 4、步骤表添加备注字段
 -- ----------------------------
-ALTER TABLE project_case_steps ADD step_remark VARCHAR ( 200 ) COMMENT '备注字段，给接口类型的用例步骤使用';
+alter table project_case_steps add step_remark varchar(200) comment '备注字段，给接口类型的用例步骤使用';

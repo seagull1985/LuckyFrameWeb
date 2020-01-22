@@ -984,7 +984,7 @@ insert into sys_dict_data values(3016, 17,  'Alertdismiss弹出框点击取消',
 insert into sys_dict_data values(3017, 18,  'Alertgettext获取弹出框TEXT', 'alertgettext',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取弹出框TEXT');
 insert into sys_dict_data values(3018, 19,  'Getcontexthandles获取指定context的值(参数指定1 第一个)', 'getcontexthandles',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取指定context的值(参数指定1 第一个)');
 insert into sys_dict_data values(3019, 20,  'Exjs执行JS脚本', 'exjs',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '执行JS脚本');
-insert into sys_dict_data values(3020, 21,  'Keycode安卓模拟手机键盘发送指令，同PressKeyCode', 'keycode',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '安卓模拟手机键盘发送指令，同PressKeyCode');
+insert into sys_dict_data values(3020, 21,  'AndroidKeyCode安卓模拟手机按键，参考Android KeyCode', 'androidkeycode',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', 'AndroidKeyCode安卓模拟手机按键，参考Android KeyCode');
 insert into sys_dict_data values(3021, 22,  'Gotocontext跳转到指定的context', 'gotocontext',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '跳转到指定的context');
 insert into sys_dict_data values(3022, 23,  'Getcontext获取当前窗口的context', 'getcontext',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取当前窗口的context');
 insert into sys_dict_data values(3023, 24,  'Gettitle获取当前窗口的title', 'gettitle',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2019-02-13 10-27-32', 'luckyframe', '2019-02-13 10-27-32', '获取当前窗口的title');
@@ -1198,6 +1198,7 @@ create table project_case_steps
   expected_result       varchar(2000)                         comment '预期结果',
   step_type             int(2)       not null                 comment '默认类型 0 HTTP接口 1 Web UI 2 API驱动  3移动端',
   extend                varchar(200)                          comment '扩展字段，可用于备注、存储HTTP模板等',
+  step_remark           varchar(200)                          comment '备注字段，给接口类型的用例步骤使用',
   create_by             varchar(64)  default ''               comment '创建者',
   create_time 		    datetime                              comment '创建时间',
   update_by 		    varchar(64)  default ''			      comment '更新者',

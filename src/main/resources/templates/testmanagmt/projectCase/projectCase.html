@@ -60,11 +60,14 @@
 				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="testmanagmt:projectCase:edit">
 					<i class="fa fa-edit"></i> 修改
 				</a>
+				<a class="btn btn-info btn-edit disabled" onclick="$.operate.copy()" shiro:hasPermission="testmanagmt:projectCase:add">
+					<i class="fa fa-clipboard"></i> 复制用例
+				</a>
 				<a class="btn btn-info btn-copy disabled" onclick="$.operate.copy()" shiro:hasPermission="testmanagmt:projectCase:add">
-					<i class="fa fa-copy"></i> 复制用例
+					<i class="fa fa-copy"></i> 批量复制用例
 				</a>
 				<a class="btn btn-info btn-edit disabled" onclick="$.operate.customFull()" shiro:hasPermission="testmanagmt:projectCase:edit">
-					<i class="fa fa-edit"></i> 用例步骤
+					<i class="fa fa-list-ol"></i> 用例步骤
 				</a>
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testmanagmt:projectCase:remove">
 					<i class="fa fa-remove"></i> 删除

@@ -45,7 +45,7 @@
 					<td width="16%">
 						<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepParameters}+'</div>'">
 							<input type="text" class="form-control" name="stepParameters" th:id="stepParameters+${iterStat.count}" th:value="${stepsOb.stepParameters}"/></div></td>
-					<td width="10%" th:title="${stepsOb.action}">
+					<td width="8%" th:title="${stepsOb.action}">
 						<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.action}+'</div>'">
 							<input type="text" class="form-control" name="action" th:id="action+${iterStat.count}" th:value="${stepsOb.action}"/></div></td>
 					<td width="12%">
@@ -69,13 +69,13 @@
 					<td hidden="hidden">
 						<input type="text" class="form-control" name="stepRemark" th:id="stepRemark+${iterStat.count}" th:value="${stepsOb.stepRemark}"/>
 					</td>
-					<td width="8%" style="vertical-align: middle;">
-						<a class="fa fa-file fa-5" th:id="a_stepMark+${iterStat.count}" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepRemark}+'</div>'" style="font-size: 20px; cursor: pointer;" onclick="showRemarkModal(this)" ></a>
-						<a class="fa fa-plus-circle fa-5" style="font-size: 20px; cursor: pointer;" onclick="addsteps(this,0)"></a>
-						<a class="fa fa-chevron-circle-down fa-5" style="font-size: 20px; cursor: pointer;" onclick="addsteps(this,1)"></a>
-						<a class="fa fa-minus-circle fa-5" style="font-size: 20px; cursor: pointer;" onclick="delsteps(this)"></a>
-						<a class="fa fa-arrow-circle-up fa-5" style="font-size: 20px; cursor: pointer;" onclick="upsteps(this)"></a>
-						<a class="fa fa-arrow-circle-down fa-5" style="font-size: 20px; cursor: pointer;" onclick="downsteps(this)"></a>
+					<td width="10%" style="vertical-align: middle;">
+						<a class="fa fa-bookmark-o fa-5" th:id="a_stepMark+${iterStat.count}" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepRemark}+'</div>'" style="font-size: 20px; cursor: pointer;" onclick="showRemarkModal(this)" ></a>
+						<a class="fa fa-plus-circle fa-5" style="font-size: 20px; cursor: pointer;" data-toggle="tooltip" data-html="true" th:title="增加步骤" onclick="addsteps(this,0)"></a>
+						<a class="fa fa-chevron-circle-down fa-5" style="font-size: 20px; cursor: pointer;" data-toggle="tooltip" data-html="true" th:title="复制步骤" onclick="addsteps(this,1)"></a>
+						<a class="fa fa-minus-circle fa-5" style="font-size: 20px; cursor: pointer;" data-toggle="tooltip" data-html="true" th:title="删除步骤" onclick="delsteps(this)"></a>
+						<a class="fa fa-arrow-circle-up fa-5" style="font-size: 20px; cursor: pointer;" data-toggle="tooltip" data-html="true" th:title="上移步骤" onclick="upsteps(this)"></a>
+						<a class="fa fa-arrow-circle-down fa-5" style="font-size: 20px; cursor: pointer;" data-toggle="tooltip" data-html="true" th:title="下移步骤" onclick="downsteps(this)"></a>
 					</td>
 				</tr>
 				</tbody>
@@ -90,8 +90,6 @@
 	</div>
 
 </div>
-<div th:include="include::footer"></div>
-<!-- bootstrap-suggest 下拉搜索框插件 -->
 
 <div class="modal fade" id="remarkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document"  style="width:30%">
@@ -103,16 +101,19 @@
 				<h4 class="modal-title" id="myModalLabel">备注</h4>
 			</div>
 			<div class="modal-body ibox-content">
-				<textarea autocomplete="off" type="text" class="form-control" id="remarkArea" style="resize:none;width: 100%; height: 100%;font-size: large" rows="6" cols="20"></textarea>
+				<textarea class="form-control" id="remarkArea" style="resize:none;width: 100%; height: 100%;font-size: large" rows="6" cols="20"></textarea>
 			</div>
 			<div class="modal-footer">
 				<label id="modalAlert" style="float:left;font-size: large;color: #ff0000"></label>
-				<button id="modal-save" type="button" class="btn btn-primary">保存</button>
+				<label id="modalAlert" style="float:left;color: #ff0000">注意：点击确定(暂存) > 右下角保存用例</label>
+				<button id="modal-save" type="button" class="btn btn-primary">确定</button>
 			</div>
 		</div>
 	</div>
 </div>
 
+<div th:include="include::footer"></div>
+<!-- bootstrap-suggest 下拉搜索框插件 -->
 <script th:src="@{/ajax/libs/bootstrap-suggest/bootstrap-suggest.min.js}"></script>
 <script type="text/javascript">
 	var prefix = ctx + "testmanagmt/projectCaseSteps";
@@ -123,12 +124,16 @@
 
 	function showRemarkModal(e) {
 		id = e.id.replace(/[^0-9]/ig, "");
-		console.log(id);
 		$('#remarkModal').on('show.bs.modal', function () {
 			let modal = $(this);
 			let remarkSource = $("#stepRemark" + id);
-			modal.find('#remarkArea').text(remarkSource.val());
-			modal.find('#remarkArea').val(remarkSource.val());
+			if(remarkSource.val()!='备注'){
+				modal.find('#remarkArea').text(remarkSource.val());
+				modal.find('#remarkArea').val(remarkSource.val());
+			}else{
+				modal.find('#remarkArea').text('');
+				modal.find('#remarkArea').val('');
+			}
 			modal.find('#modalAlert').text('');
 		});
 		$("#remarkModal").modal('show');
@@ -147,8 +152,6 @@
 			modal.modal('hide');
 		}
 	});
-
-	$("[data-toggle='tooltip']").tooltip();
 
 	/*解决table中多个name属性一致的问题，使用ID进行验证*/
 	$(function () {
@@ -178,6 +181,7 @@
 			initSuggest(oTable.rows[i].cells[6].children[0].children[0]);
 		}
 
+		$("[data-toggle='tooltip']").tooltip();
 	});
 
 	$("#form-projectCaseSteps-edit").validate({
@@ -493,12 +497,6 @@
 		}
 		$.modal.open("用例调试", url, null, null, "调试");
 	}
-
-
-
-
-
-
 </script>
 </body>
 </html>

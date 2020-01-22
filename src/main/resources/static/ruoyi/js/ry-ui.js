@@ -689,13 +689,15 @@
 				var ids=id.toString().split(",");
 				if(ids.length>1)
 				{
-					var data='{"caseIds":"'+id+'"}';
-					var json = $.parseJSON(data);
-					$.operate.post(prefix + "/batchCopy", json);
-					$.table.refresh();
-					return;
-				}
-            	$.modal.open("复制" + $.table._option.modalName, url);
+	            	$.modal.confirm("确认要复制选中的" + ids.length + "条数据吗?", function() {
+						var data='{"caseIds":"'+id+'"}';
+						var json = $.parseJSON(data);
+						$.operate.post(prefix + "/batchCopy", json);
+						$.table.refresh();
+	            	});
+				}else{
+					$.modal.open("复制" + $.table._option.modalName, url);
+				}          	
             },
             // 工具栏表格树修改
             editTree: function() {
@@ -732,7 +734,7 @@
             	    var row = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
             	    url = $.table._option.customUrl.replace("{id}", row);
             	}
-            	$.modal.openFull($.table._option.childrenModalName, url);
+            	$.modal.openFull($.table._option.childrenModalName, url, null, null, "保存");
             },
             // 保存信息
             save: function(url, data) {
