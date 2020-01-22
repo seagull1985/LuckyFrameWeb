@@ -203,7 +203,51 @@ public class ProjectCaseController extends BaseController
 		mmap.put("projectCaseModule", projectCase.getProjectCaseModule());
 	    return prefix + "/copy";
 	}
-	
+
+	/**
+	 * 批量复制用例
+	 * @param caseIds
+	 * @return
+	 * @author FJ
+	 * @date 2020年1月13日
+	 */
+	@RequiresPermissions("testmanagmt:projectCase:add")
+	@Log(title = "项目测试用例管理", businessType = BusinessType.INSERT)
+	@PostMapping("/batchCopy")
+	@ResponseBody
+	public AjaxResult batchCopy(String caseIds)
+	{
+		String ids[]=caseIds.split(",");
+		int num=0;
+		for (String id : ids) {
+			if(StringUtils.isNotEmpty(id))
+			{
+				Integer caseId=Integer.valueOf(id);
+				ProjectCase projectCase=projectCaseService.selectProjectCaseById(caseId);
+				if(projectCase==null)
+				{
+					continue;
+				}
+				ProjectCaseSteps projectCaseSteps = new ProjectCaseSteps();
+				projectCaseSteps.setCaseId(caseId);
+				List<ProjectCaseSteps> listSteps = projectCaseStepsService.selectProjectCaseStepsList(projectCaseSteps);
+				projectCase.setCaseId(0);
+				projectCase.setCaseName("Copy【"+projectCase.getCaseName()+"】");
+				num=projectCaseService.insertProjectCase(projectCase);
+				for(ProjectCaseSteps step:listSteps){
+					step.setStepId(0);
+					step.setCaseId(projectCase.getCaseId());
+					if(step.getProjectId()!=projectCase.getProjectId()){
+						step.setProjectId(projectCase.getProjectId());
+						step.setExtend(null);
+					}
+					projectCaseStepsService.insertProjectCaseSteps(step);
+				}
+			}
+		}
+		return toAjax(num);
+	}
+
 	/**
 	 * 复制用例
 	 * @param projectProtocolTemplate

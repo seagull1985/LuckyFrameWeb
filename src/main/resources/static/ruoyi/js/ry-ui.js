@@ -686,6 +686,15 @@
             		}
             	    url = $.table._option.copyUrl.replace("{id}", id);
             	}
+				var ids=id.toString().split(",");
+				if(ids.length>1)
+				{
+					var data='{"caseIds":"'+id+'"}';
+					var json = $.parseJSON(data);
+					$.operate.post(prefix + "/batchCopy", json);
+					$.table.refresh();
+					return;
+				}
             	$.modal.open("复制" + $.table._option.modalName, url);
             },
             // 工具栏表格树修改
