@@ -1,101 +1,106 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.luckyframe.project.testmanagmt.projectCase.mapper.ProjectCaseStepsMapper">
-    
+
     <resultMap type="ProjectCaseSteps" id="ProjectCaseStepsResult">
-        <result property="stepId"    column="step_id"    />
-        <result property="caseId"    column="case_id"    />
-        <result property="projectId"    column="project_id"    />
-        <result property="stepSerialNumber"    column="step_serial_number"    />
-        <result property="stepPath"    column="step_path"    />
-        <result property="stepOperation"    column="step_operation"    />
-        <result property="stepParameters"    column="step_parameters"    />
-        <result property="action"    column="action"    />
-        <result property="expectedResult"    column="expected_result"    />
-        <result property="stepType"    column="step_type"    />
-        <result property="extend"    column="extend"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
+        <result property="stepId" column="step_id"/>
+        <result property="caseId" column="case_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="stepSerialNumber" column="step_serial_number"/>
+        <result property="stepPath" column="step_path"/>
+        <result property="stepOperation" column="step_operation"/>
+        <result property="stepParameters" column="step_parameters"/>
+        <result property="action" column="action"/>
+        <result property="expectedResult" column="expected_result"/>
+        <result property="stepType" column="step_type"/>
+        <result property="extend" column="extend"/>
+        <result property="stepRemark" column="step_remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
     </resultMap>
-	
-	<sql id="selectProjectCaseStepsVo">
-        select step_id, case_id, project_id, step_serial_number, step_path, step_operation, step_parameters, action, expected_result, step_type, extend, create_by, create_time, update_by, update_time from project_case_steps
+
+    <sql id="selectProjectCaseStepsVo">
+        select step_id, case_id, project_id, step_serial_number, step_path, step_operation, step_parameters, action, expected_result, step_type, extend, step_remark, create_by, create_time, update_by, update_time from project_case_steps
     </sql>
-	
+
     <select id="selectProjectCaseStepsList" parameterType="ProjectCaseSteps" resultMap="ProjectCaseStepsResult">
         <include refid="selectProjectCaseStepsVo"/>
-        <where>  
-            <if test="stepId != null "> and step_id = #{stepId}</if>
-             <if test="caseId != null "> and case_id = #{caseId}</if>
-             <if test="projectId != null "> and project_id = #{projectId}</if>
-             <if test="stepSerialNumber != null "> and step_serial_number = #{stepSerialNumber}</if>
-             <if test="stepPath != null  and stepPath != '' "> and step_path = #{stepPath}</if>
-             <if test="stepOperation != null  and stepOperation != '' "> and step_operation = #{stepOperation}</if>
-             <if test="stepParameters != null  and stepParameters != '' "> and step_parameters = #{stepParameters}</if>
-             <if test="action != null  and action != '' "> and action = #{action}</if>
-             <if test="expectedResult != null  and expectedResult != '' "> and expected_result = #{expectedResult}</if>
-             <if test="stepType != null "> and step_type = #{stepType}</if>
-             <if test="extend != null  and extend != '' "> and extend = #{extend}</if>
-             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
-             <if test="createTime != null "> and create_time = #{createTime}</if>
-             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
-             <if test="updateTime != null "> and update_time = #{updateTime}</if>
-         </where>
-         order by step_serial_number
+        <where>
+            <if test="stepId != null ">and step_id = #{stepId}</if>
+            <if test="caseId != null ">and case_id = #{caseId}</if>
+            <if test="projectId != null ">and project_id = #{projectId}</if>
+            <if test="stepSerialNumber != null ">and step_serial_number = #{stepSerialNumber}</if>
+            <if test="stepPath != null  and stepPath != '' ">and step_path = #{stepPath}</if>
+            <if test="stepOperation != null  and stepOperation != '' ">and step_operation = #{stepOperation}</if>
+            <if test="stepParameters != null  and stepParameters != '' ">and step_parameters = #{stepParameters}</if>
+            <if test="action != null  and action != '' ">and action = #{action}</if>
+            <if test="expectedResult != null  and expectedResult != '' ">and expected_result = #{expectedResult}</if>
+            <if test="stepType != null ">and step_type = #{stepType}</if>
+            <if test="extend != null  and extend != '' ">and extend = #{extend}</if>
+            <if test="stepRemark != null  and stepRemark != '' ">and step_remark = #{stepRemark}</if>
+            <if test="createBy != null  and createBy != '' ">and create_by = #{createBy}</if>
+            <if test="createTime != null ">and create_time = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != '' ">and update_by = #{updateBy}</if>
+            <if test="updateTime != null ">and update_time = #{updateTime}</if>
+        </where>
+        order by step_serial_number
     </select>
-    
+
     <select id="selectProjectCaseStepsById" parameterType="Integer" resultMap="ProjectCaseStepsResult">
         <include refid="selectProjectCaseStepsVo"/>
         where step_id = #{stepId}
     </select>
-    
-    <select id="selectProjectCaseStepsByCaseIdAndStepNum" parameterType="ProjectCaseSteps" resultMap="ProjectCaseStepsResult">
+
+    <select id="selectProjectCaseStepsByCaseIdAndStepNum" parameterType="ProjectCaseSteps"
+            resultMap="ProjectCaseStepsResult">
         <include refid="selectProjectCaseStepsVo"/>
         where case_id = #{caseId} and step_serial_number = #{stepSerialNumber}
     </select>
-        
+
     <insert id="insertProjectCaseSteps" parameterType="ProjectCaseSteps" useGeneratedKeys="true" keyProperty="stepId">
         insert into project_case_steps
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-		    <if test="stepId != null and stepId !=0  ">step_id,</if>
-			<if test="caseId != null  ">case_id,</if>
-			<if test="projectId != null  ">project_id,</if>
-			<if test="stepSerialNumber != null  ">step_serial_number,</if>
-			<if test="stepPath != null  and stepPath != ''  ">step_path,</if>
-			<if test="stepOperation != null  and stepOperation != ''  ">step_operation,</if>
-			<if test="stepParameters != null  and stepParameters != ''  ">step_parameters,</if>
-			<if test="action != null  and action != ''  ">action,</if>
-			<if test="expectedResult != null  and expectedResult != ''  ">expected_result,</if>
-			<if test="stepType != null  ">step_type,</if>
-			<if test="extend != null  and extend != ''  ">extend,</if>
-			<if test="createBy != null  and createBy != ''  ">create_by,</if>
-			<if test="createTime != null  ">create_time,</if>
-			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
-			<if test="updateTime != null  ">update_time,</if>
-         </trim>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stepId != null and stepId !=0  ">step_id,</if>
+            <if test="caseId != null  ">case_id,</if>
+            <if test="projectId != null  ">project_id,</if>
+            <if test="stepSerialNumber != null  ">step_serial_number,</if>
+            <if test="stepPath != null  and stepPath != ''  ">step_path,</if>
+            <if test="stepOperation != null  and stepOperation != ''  ">step_operation,</if>
+            <if test="stepParameters != null  and stepParameters != ''  ">step_parameters,</if>
+            <if test="action != null  and action != ''  ">action,</if>
+            <if test="expectedResult != null  and expectedResult != ''  ">expected_result,</if>
+            <if test="stepType != null  ">step_type,</if>
+            <if test="extend != null  and extend != ''  ">extend,</if>
+            <if test="stepRemark != null  and stepRemark != ''  ">step_remark,</if>
+            <if test="createBy != null  and createBy != ''  ">create_by,</if>
+            <if test="createTime != null  ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+            <if test="updateTime != null  ">update_time,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="stepId != null and stepId !=0  ">#{stepId},</if>
-			<if test="caseId != null  ">#{caseId},</if>
-			<if test="projectId != null  ">#{projectId},</if>
-			<if test="stepSerialNumber != null  ">#{stepSerialNumber},</if>
-			<if test="stepPath != null  and stepPath != ''  ">#{stepPath},</if>
-			<if test="stepOperation != null  and stepOperation != ''  ">#{stepOperation},</if>
-			<if test="stepParameters != null  and stepParameters != ''  ">#{stepParameters},</if>
-			<if test="action != null  and action != ''  ">#{action},</if>
-			<if test="expectedResult != null  and expectedResult != ''  ">#{expectedResult},</if>
-			<if test="stepType != null  ">#{stepType},</if>
-			<if test="extend != null  and extend != ''  ">#{extend},</if>
-			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
-			<if test="createTime != null  ">#{createTime},</if>
-			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
-			<if test="updateTime != null  ">#{updateTime},</if>
-         </trim>
+            <if test="caseId != null  ">#{caseId},</if>
+            <if test="projectId != null  ">#{projectId},</if>
+            <if test="stepSerialNumber != null  ">#{stepSerialNumber},</if>
+            <if test="stepPath != null  and stepPath != ''  ">#{stepPath},</if>
+            <if test="stepOperation != null  and stepOperation != ''  ">#{stepOperation},</if>
+            <if test="stepParameters != null  and stepParameters != ''  ">#{stepParameters},</if>
+            <if test="action != null  and action != ''  ">#{action},</if>
+            <if test="expectedResult != null  and expectedResult != ''  ">#{expectedResult},</if>
+            <if test="stepType != null  ">#{stepType},</if>
+            <if test="extend != null  and extend != ''  ">#{extend},</if>
+            <if test="stepRemark != null  and stepRemark != ''  ">#{stepRemark},</if>
+            <if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+            <if test="createTime != null  ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+            <if test="updateTime != null  ">#{updateTime},</if>
+        </trim>
     </insert>
-	 
+
     <update id="updateProjectCaseSteps" parameterType="ProjectCaseSteps">
         update project_case_steps
         <trim prefix="SET" suffixOverrides=",">
@@ -109,6 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="expectedResult != null  ">expected_result = #{expectedResult},</if>
             <if test="stepType != null  ">step_type = #{stepType},</if>
             <if test="extend != null  ">extend = #{extend},</if>
+            <if test="stepRemark != null  ">step_remark = #{stepRemark},</if>
             <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
             <if test="createTime != null  ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
@@ -117,18 +123,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where step_id = #{stepId}
     </update>
 
-	<delete id="deleteProjectCaseStepsByCaseId" parameterType="Integer">
+    <delete id="deleteProjectCaseStepsByCaseId" parameterType="Integer">
         delete from project_case_steps where case_id = #{caseId}
     </delete>
-	
+
     <delete id="deleteProjectCaseStepsByIds" parameterType="String">
-        delete from project_case_steps where step_id in 
+        delete from project_case_steps where step_id in
         <foreach item="stepId" collection="array" open="(" separator="," close=")">
             #{stepId}
         </foreach>
-    </delete>   
-    	
-	<select id="selectProjectCaseStepsCountByTemplateId" parameterType="Integer" resultType="Integer">
+    </delete>
+
+    <select id="selectProjectCaseStepsCountByTemplateId" parameterType="Integer" resultType="Integer">
 		select count(1) from project_case_steps where step_type=0 and extend like concat('【', #{extend}, '】%')
 	</select>
 </mapper>

@@ -7,14 +7,14 @@ import com.luckyframe.framework.web.domain.BaseEntity;
 
 /**
  * 测试用例步骤管理表 project_case_steps
- * 
+ *
  * @author luckyframe
  * @date 2019-02-26
  */
 public class ProjectCaseSteps extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	/** 步骤ID */
 	private Integer stepId;
 	/** 用例ID */
@@ -37,105 +37,115 @@ public class ProjectCaseSteps extends BaseEntity
 	private Integer stepType;
 	/** 扩展字段，可用于备注、存储HTTP模板等 */
 	private String extend;
+	/** 备注字段，用于接口类型的步骤的备注 */
+	private String stepRemark;
 
-	public void setStepId(Integer stepId) 
+	public void setStepId(Integer stepId)
 	{
 		this.stepId = stepId;
 	}
 
-	public Integer getStepId() 
+	public Integer getStepId()
 	{
 		return stepId;
 	}
-	public void setCaseId(Integer caseId) 
+	public void setCaseId(Integer caseId)
 	{
 		this.caseId = caseId;
 	}
 
-	public Integer getCaseId() 
+	public Integer getCaseId()
 	{
 		return caseId;
 	}
-	public void setProjectId(Integer projectId) 
+	public void setProjectId(Integer projectId)
 	{
 		this.projectId = projectId;
 	}
 
-	public Integer getProjectId() 
+	public Integer getProjectId()
 	{
 		return projectId;
 	}
-	public void setStepSerialNumber(Integer stepSerialNumber) 
+	public void setStepSerialNumber(Integer stepSerialNumber)
 	{
 		this.stepSerialNumber = stepSerialNumber;
 	}
 
-	public Integer getStepSerialNumber() 
+	public Integer getStepSerialNumber()
 	{
 		return stepSerialNumber;
 	}
-	public void setStepPath(String stepPath) 
+	public void setStepPath(String stepPath)
 	{
 		this.stepPath = stepPath;
 	}
 
-	public String getStepPath() 
+	public String getStepPath()
 	{
 		return stepPath;
 	}
-	public void setStepOperation(String stepOperation) 
+	public void setStepOperation(String stepOperation)
 	{
 		this.stepOperation = stepOperation;
 	}
 
-	public String getStepOperation() 
+	public String getStepOperation()
 	{
 		return stepOperation;
 	}
-	public void setStepParameters(String stepParameters) 
+	public void setStepParameters(String stepParameters)
 	{
 		this.stepParameters = stepParameters;
 	}
 
-	public String getStepParameters() 
+	public String getStepParameters()
 	{
 		return stepParameters;
 	}
-	public void setAction(String action) 
+	public void setAction(String action)
 	{
 		this.action = action;
 	}
 
-	public String getAction() 
+	public String getAction()
 	{
 		return action;
 	}
-	public void setExpectedResult(String expectedResult) 
+	public void setExpectedResult(String expectedResult)
 	{
 		this.expectedResult = expectedResult;
 	}
 
-	public String getExpectedResult() 
+	public String getExpectedResult()
 	{
 		return expectedResult;
 	}
-	public void setStepType(Integer stepType) 
+	public void setStepType(Integer stepType)
 	{
 		this.stepType = stepType;
 	}
 
-	public Integer getStepType() 
+	public Integer getStepType()
 	{
 		return stepType;
 	}
-	public void setExtend(String extend) 
+	public void setExtend(String extend)
 	{
 		this.extend = extend;
 	}
 
-	public String getExtend() 
+	public String getExtend()
 	{
 		return extend;
+	}
+
+	public String getStepRemark() {
+		return stepRemark;
+	}
+
+	public void setStepRemark(String stepRemark) {
+		this.stepRemark = stepRemark;
 	}
 
     public String toString() {
@@ -151,6 +161,7 @@ public class ProjectCaseSteps extends BaseEntity
             .append("expectedResult", getExpectedResult())
             .append("stepType", getStepType())
             .append("extend", getExtend())
+			.append("stepRemark", getStepRemark())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

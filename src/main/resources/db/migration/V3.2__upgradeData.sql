@@ -30,3 +30,8 @@ insert into sys_dict_data values(3038, 39,  'SwipeUp手指向上滑动(参数 �
 insert into sys_dict_data values(3039, 40,  'SwipeDown手指向下滑动(参数 持续时间|滚动次数)', 'swipedown',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2020-01-19 09-27-32', 'luckyframe', '2020-01-19 09-27-32', '手指向下滑动(参数 持续时间|滚动次数)');
 insert into sys_dict_data values(3040, 41,  'SwipeLeft手指向左滑动(参数 持续时间|滚动次数)', 'swipeleft',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2020-01-19 09-27-32', 'luckyframe', '2020-01-19 09-27-32', '手指向左滑动(参数 持续时间|滚动次数)');
 insert into sys_dict_data values(3041, 42,  'SwipeRight手指向右滑动(参数 持续时间|滚动次数)', 'swiperight',  'testmanagmt_casestep_muioperation',   '',   'info',  'Y', '0', 'admin', '2020-01-19 09-27-32', 'luckyframe', '2020-01-19 09-27-32', '手指向右滑动(参数 持续时间|滚动次数)');
+
+-- ----------------------------
+-- 4、步骤表添加备注字段
+-- ----------------------------
+ALTER TABLE project_case_steps ADD step_remark VARCHAR ( 200 ) COMMENT '备注字段，给接口类型的用例步骤使用';
