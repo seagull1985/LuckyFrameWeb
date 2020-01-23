@@ -82,6 +82,15 @@ public class ProjectCaseStepsController extends BaseController
 			if(StrUtil.isBlank(steps.getStepRemark())){
 				steps.setStepRemark("备注");
 			}
+			if(StrUtil.isBlank(steps.getExtend())){
+				steps.setExtend("");;
+			}
+			if(StrUtil.isBlank(steps.getAction())){
+				steps.setAction("");
+			}
+			if(StrUtil.isBlank(steps.getStepParameters())){
+				steps.setStepParameters("");
+			}
 		}
 		
 		mmap.put("stepsList", stepsList);
