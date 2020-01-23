@@ -127,13 +127,21 @@
 					field : 'project.projectName', 
 					title : '项目名称',
 					width : '10%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+					formatter : function(value,
+							row, index) {
+							return $.table.tooltip(value);
+					}
 				},
 				{
 					field : 'projectCaseModule.moduleName', 
 					title : '模块名称',
 					width : '12%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+					formatter : function(value,
+							row, index) {
+							return $.table.tooltip(value);
+					}
 				},
 				{
 					field : 'caseSign', 
