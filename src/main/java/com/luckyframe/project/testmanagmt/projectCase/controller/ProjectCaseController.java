@@ -189,10 +189,23 @@ public class ProjectCaseController extends BaseController
 	 * @date 2019年3月13日
 	 */
 	@GetMapping("/copy/{caseId}")
-	public String copy(@PathVariable("caseId") Integer caseId, ModelMap mmap)
+	public String copy(@PathVariable("caseId") String caseId, ModelMap mmap)
 	{
-		ProjectCase projectCase = projectCaseService.selectProjectCaseById(caseId);
-		projectCase.setCaseName("Copy【"+projectCase.getCaseName()+"】");
+		ProjectCase projectCase = null;
+		if(caseId.indexOf(",")!=-1)
+		{
+			String[] caseIdArray=caseId.split(",");
+			//批量复制
+			projectCase=projectCaseService.selectProjectCaseById(Integer.valueOf(caseIdArray[0]));
+			mmap.put("caseIdList", caseId);
+		}
+		else
+		{
+			//复制一个
+			projectCase=projectCaseService.selectProjectCaseById(Integer.valueOf(caseId));
+			projectCase.setCaseName("Copy【"+projectCase.getCaseName()+"】");
+		}
+
         List<Project> projects=projectService.selectProjectAll(projectCase.getProjectId());
         mmap.put("projects", projects);
         if(projects.size()>0){
@@ -215,30 +228,36 @@ public class ProjectCaseController extends BaseController
 	@Log(title = "项目测试用例管理", businessType = BusinessType.INSERT)
 	@PostMapping("/batchCopy")
 	@ResponseBody
-	public AjaxResult batchCopy(String caseIds)
+	public AjaxResult batchCopy(ProjectCase projectCase)
 	{
-		String ids[]=caseIds.split(",");
+		if(projectCase.getCaseIdList()==null)
+		{
+			return error("请先选择用例再复制！");
+		}
+		String ids[]=projectCase.getCaseIdList().split(",");
 		int num=0;
 		for (String id : ids) {
 			if(StringUtils.isNotEmpty(id))
 			{
 				Integer caseId=Integer.valueOf(id);
-				ProjectCase projectCase=projectCaseService.selectProjectCaseById(caseId);
-				if(projectCase==null)
+				ProjectCase copyProjectCase=projectCaseService.selectProjectCaseById(caseId);
+				if(copyProjectCase==null)
 				{
 					continue;
 				}
 				ProjectCaseSteps projectCaseSteps = new ProjectCaseSteps();
 				projectCaseSteps.setCaseId(caseId);
 				List<ProjectCaseSteps> listSteps = projectCaseStepsService.selectProjectCaseStepsList(projectCaseSteps);
-				projectCase.setCaseId(0);
-				projectCase.setCaseName("Copy【"+projectCase.getCaseName()+"】");
-				num=projectCaseService.insertProjectCase(projectCase);
+				copyProjectCase.setCaseId(0);
+				copyProjectCase.setCaseName("Copy【"+copyProjectCase.getCaseName()+"】");
+				copyProjectCase.setProjectId(projectCase.getProjectId());
+				copyProjectCase.setModuleId(projectCase.getModuleId());
+				num=projectCaseService.insertProjectCase(copyProjectCase);
 				for(ProjectCaseSteps step:listSteps){
 					step.setStepId(0);
-					step.setCaseId(projectCase.getCaseId());
-					if(step.getProjectId()!=projectCase.getProjectId()){
-						step.setProjectId(projectCase.getProjectId());
+					step.setCaseId(copyProjectCase.getCaseId());
+					if(step.getProjectId()!=copyProjectCase.getProjectId()){
+						step.setProjectId(copyProjectCase.getProjectId());
 						step.setExtend(null);
 					}
 					projectCaseStepsService.insertProjectCaseSteps(step);

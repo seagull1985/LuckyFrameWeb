@@ -686,18 +686,7 @@
             		}
             	    url = $.table._option.copyUrl.replace("{id}", id);
             	}
-				var ids=id.toString().split(",");
-				if(ids.length>1)
-				{
-	            	$.modal.confirm("确认要复制选中的" + ids.length + "条数据吗?", function() {
-						var data='{"caseIds":"'+id+'"}';
-						var json = $.parseJSON(data);
-						$.operate.post(prefix + "/batchCopy", json);
-						$.table.refresh();
-	            	});
-				}else{
-					$.modal.open("复制" + $.table._option.modalName, url);
-				}          	
+				$.modal.open("复制" + $.table._option.modalName, url);
             },
             // 工具栏表格树修改
             editTree: function() {
