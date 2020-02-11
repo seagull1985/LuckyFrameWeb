@@ -9,7 +9,8 @@
             <input id="caseSerialNumber" name="caseSerialNumber" th:field="*{caseSerialNumber}"  type="hidden">
             <input id="caseSign" name="caseSign" th:field="*{caseSign}"  type="hidden">
             <input id="treeId" name="moduleId" type="hidden" th:value="${projectCaseModule.moduleId}"/>
-            <div class="form-group">	
+			<input id="caseIdList" name="caseIdList" type="hidden" th:value="${caseIdList}" />
+            <div class="form-group">
 				<label class="col-sm-3 control-label">项目名称：</label>
 				<div class="col-sm-8">
 				    <select class="form-control" id="projectId" name="projectId" onchange="initializeModuleTree()">
@@ -24,13 +25,13 @@
 				    <input class="form-control" type="text" onclick="selectModuleTree()" id="treeName" readonly="true" th:value="${projectCaseModule.moduleName}"/>
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group" th:if="${caseIdList==null}">
 				<label class="col-sm-3 control-label">用例名称：</label>
 				<div class="col-sm-8">
 					<input id="caseName" name="caseName" th:field="*{caseName}" class="form-control" type="text">
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group" th:if="${caseIdList==null}">
 				<label class="col-sm-3 control-label">用例类型：</label>
 				<div class="col-sm-8">
 					<select class="form-control m-b" th:field="*{caseType}" id="caseType" name="caseType" th:with="type=${@dict.getType('testmanagmt_case_type')}">
@@ -38,7 +39,7 @@
 					</select>
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group" th:if="${caseIdList==null}">
 				<label class="col-sm-3 control-label">步骤失败：</label>
 				<div class="col-sm-8">
 				    <label>当前用例后续步骤 &nbsp;&nbsp;</label>
@@ -48,7 +49,7 @@
 				    </div>
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group" th:if="${caseIdList==null}">
 				<label class="col-sm-3 control-label">备注：</label>
 				<div class="col-sm-8">
 					<textarea id="remark" name="remark" th:field="*{remark}" class="form-control"></textarea>
@@ -103,7 +104,15 @@
 		
 		function submitHandler() {
 	        if ($.validate.form()) {
-	            $.operate.save(prefix + "/copy", $('#form-projectCase-edit').serialize());
+	        	var caseIdList=$("#caseIdList").val();
+	        	if(caseIdList!="")
+				{
+					$.operate.save(prefix + "/batchCopy", $('#form-projectCase-edit').serialize());
+				}
+	        	else
+				{
+					$.operate.save(prefix + "/copy", $('#form-projectCase-edit').serialize());
+				}
 	        }
 	    }
 		

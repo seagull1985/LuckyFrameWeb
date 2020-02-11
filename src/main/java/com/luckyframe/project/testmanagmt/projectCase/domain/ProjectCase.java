@@ -53,6 +53,16 @@ public class ProjectCase extends BaseEntity
 	private Integer planId;
 	/** 关联计划用例ID标识 */
 	private Integer planCaseId;
+	/*批量复制id数组*/
+	private String caseIdList;
+
+	public String getCaseIdList() {
+		return caseIdList;
+	}
+
+	public void setCaseIdList(String caseIdList) {
+		this.caseIdList = caseIdList;
+	}
 
 	public Integer getPlanCaseId() {
 		return planCaseId;
