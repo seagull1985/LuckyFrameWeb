@@ -217,7 +217,7 @@ public class OpenGetApiController
 	}
 	
 	/**
-	 * 通过用例编号获取实体
+	 * 通过用例ID获取实体
 	 * @param req
 	 * @param rsp
 	 * @author Seagull
