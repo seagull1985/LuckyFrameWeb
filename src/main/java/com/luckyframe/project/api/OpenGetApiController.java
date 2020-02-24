@@ -124,7 +124,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
-			pw.print(lfConfig.getVersion());
+			pw.print("Version "+lfConfig.getVersion());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.error("获取服务器版本号出现异常", e);
