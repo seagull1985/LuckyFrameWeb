@@ -271,4 +271,10 @@ public class ClientServiceImpl implements IClientService
         }
         return returnClientProjects;
     }
+
+	@Override
+	public Client selectClientByClientName(String clientName) {
+		Client info = clientMapper.selectClientByClientName(clientName);
+		return info;
+	}
 }

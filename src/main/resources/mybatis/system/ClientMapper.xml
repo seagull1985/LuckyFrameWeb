@@ -102,4 +102,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="checkIpUnique" parameterType="String" resultMap="ClientResult">
 		select client_id, job_id, client_ip from sys_client where client_ip=#{client_ip}
 	</select>
+
+    <select id="selectClientByClientName" parameterType="String" resultMap="ClientResult">
+		select client_id, job_id, client_name,status from sys_client where client_name=#{clientName} limit 1
+	</select>
 </mapper>

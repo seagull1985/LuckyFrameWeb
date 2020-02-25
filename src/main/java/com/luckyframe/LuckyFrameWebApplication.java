@@ -1,10 +1,18 @@
 package com.luckyframe;
 
+import com.luckyframe.common.netty.NettyServer;
 import org.mybatis.spring.annotation.MapperScan;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+
+import java.net.InetSocketAddress;
 
 /**
  * 启动LuckyFrameWeb程序
@@ -17,12 +25,34 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  */
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class,FlywayAutoConfiguration.class })
 @MapperScan("com.luckyframe.project.*.*.mapper")
-public class LuckyFrameWebApplication
+public class LuckyFrameWebApplication  implements CommandLineRunner
 {
+
+    @Value("${netty.port}")
+    private int port;
+
+    @Value("${netty.url}")
+    private String url;
+
+    @Autowired
+    private NettyServer server;
+
+    private static final Logger log = LoggerFactory.getLogger(LuckyFrameWebApplication.class);
+
     public static void main(String[] args)
     {
         System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(LuckyFrameWebApplication.class, args);
         System.out.println("LuckyFrameWeb启动成功......");
+    }
+
+
+    @Override
+    public void run(String... args) throws Exception {
+        InetSocketAddress address = new InetSocketAddress(url,port);
+        System.out.println("服务端启动成功："+url+":"+port);
+        server.start(address);
+
+
     }
 }

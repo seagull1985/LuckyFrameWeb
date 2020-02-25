@@ -100,6 +100,8 @@ public class ClientHeart {
 			}
 		} catch (RuntimeException | KeyManagementException | NoSuchAlgorithmException | NoHttpResponseException e) {
 			if (null==ClientHeart.getClientStatus(params) || ClientHeart.getClientStatus(params) != 1) {
+				if(params.contains("nettyClient-"))
+					return;
 				Client client = new Client();
 				client.setClientIp(params);
 				client.setRemark("检测客户端远程异常");
