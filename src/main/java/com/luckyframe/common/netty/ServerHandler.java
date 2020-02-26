@@ -13,8 +13,8 @@ import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.system.client.mapper.ClientMapper;
 import com.luckyframe.project.system.client.service.IClientService;
 import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -22,38 +22,35 @@ import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Component("ServerHandler")
 @ChannelHandler.Sharable
-public class ServerHandler extends ChannelInboundHandlerAdapter  {
+public class ServerHandler extends ChannelHandlerAdapter {
 
-    @Autowired
+    @Resource
     private ClientMapper clientMapper;
 
-    @Autowired
+    @Resource
     private LuckyFrameConfig lfConfig;
 
-    @Autowired
+    @Resource
     private IClientService clientService;
 
-    @Autowired
-    private IJobService jobService;
-
-    @Autowired
+    @Resource
     private NettyChannelMap nettyChannelMap;
 
-    @Autowired
+    @Resource
     private JobMapper jobMapper;
 
-    @Autowired
+    @Resource
     private Scheduler scheduler;
 
-    private ChannelHandlerContext ctx;
+    protected ChannelHandlerContext ctx;
 
     private CountDownLatch latch;
 
@@ -64,7 +61,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter  {
     /**
      * 同步标志
      */
-    private int rec;
+    protected int rec;
     /**
      * 客户端返回的结果
      */
@@ -79,7 +76,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter  {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         JSONObject json= JSON.parseObject(msg.toString());
-       /* log.info("心跳发送成功!");*/
+        /*
+        * ClientUp客户端启动，自动注册到服务端中
+        * */
         if("clientUp".equals(json.get("method")))
         {
             ChannelMap.setChannel(json.get("hostName").toString(),ctx.channel());
@@ -95,9 +94,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter  {
             log.info("#############客户端上线##############");
             log.info("上线主机名为："+json.get("hostName"));
             String hostName=json.get("hostName").toString();
-            String clientIp=ctx.channel().remoteAddress().toString();
             //检查客户端是否已经注册入库
-            Client client=clientService.selectClientByClientName(hostName);
+            Client client=clientService.selectClientByClientIP(hostName);
             if(client==null)
             {
                 client = new Client();
@@ -109,7 +107,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter  {
             if(client.getClientId()==null)
             {
                 //未注册则自动注册入库
-                int result = 0;
                 Job job=new Job();
                 job.setJobName(JobConstants.JOB_JOBNAME_FOR_CLIENTHEART);
                 job.setJobGroup(JobConstants.JOB_GROUPNAME_FOR_CLIENTHEART);
@@ -120,7 +117,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter  {
                 job.setStatus(JobConstants.JOB_STATUS_FOR_CLIENTHEART);
                 job.setRemark("");
                 /*在公共调度表中插入数据*/
-                result = jobMapper.insertJob(job);
+                int result = jobMapper.insertJob(job);
                 if(result<1){
                     //登录失败，断开连接
                     ctx.close();
@@ -147,20 +144,24 @@ public class ServerHandler extends ChannelInboundHandlerAdapter  {
             if(lfConfig.getVersion().equals(json.get("version"))){
                 //版本号一致
                 client.setClientIp(hostName);
-                client.setClientName(hostName);
                 client.setRemark("检测客户端状态成功");
                 client.setStatus(0);
-                clientMapper.updateClient(client);
+                if(client.getClientId()!=null)
+                    clientMapper.updateClient(client);
+                else
+                    clientMapper.insertClient(client);
                 //登录成功,把channel存到服务端的map中
                 nettyChannelMap.add(hostName,(SocketChannel)ctx.channel());
                 //登陆成功，放入map中用于心跳
                 NettyServer.clientMap.put(hostName,"0");
             }else{
                 client.setClientIp(hostName);
-                client.setClientName(hostName);
                 client.setRemark("客户端("+json.get("version")+")与服务器("+lfConfig.getVersion()+")版本不一致");
                 client.setStatus(1);
-                clientMapper.updateClient(client);
+                if(client.getClientId()!=null)
+                    clientMapper.updateClient(client);
+                else
+                    clientMapper.insertClient(client);
                 //登陆失败，删除心跳map中的数据
                 NettyServer.clientMap.remove(hostName);
                 //登录失败，断开连接
@@ -169,6 +170,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter  {
         }
         else if("return".equals(json.get("method")))
         {
+            /*
+            * 向客户端请求后返回的数据
+            * */
             Result re =JSONObject.parseObject(json.get("data").toString(),Result.class);
             //校验返回的信息是否是同一个信息
             if (unidId.equals(re.getUniId())){
@@ -179,14 +183,16 @@ public class ServerHandler extends ChannelInboundHandlerAdapter  {
         }
         else if("ping".equals(json.get("method")))
         {
+            /*
+            * 客户端心跳检测
+            * */
             String hostName=json.get("hostName").toString();
             if(NettyServer.clientMap.get(hostName)==null||(!"0".equals(NettyServer.clientMap.get(hostName))))
             {
                 //检查客户端是否已经注册入库
-                Client client=clientService.selectClientByClientName(hostName);
+                Client client=clientService.selectClientByClientIP(hostName);
                 //版本号一致
                 client.setClientIp(hostName);
-                client.setClientName(hostName);
                 client.setRemark("检测客户端状态成功");
                 client.setStatus(0);
                 clientMapper.updateClient(client);
@@ -199,12 +205,12 @@ public class ServerHandler extends ChannelInboundHandlerAdapter  {
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         cause.printStackTrace();
         ctx.close();
     }
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx)  {
         //channel失效，从Map中移除
         nettyChannelMap.remove((SocketChannel)ctx.channel());
     }

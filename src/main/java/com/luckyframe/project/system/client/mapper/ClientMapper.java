@@ -88,9 +88,9 @@ public interface ClientMapper
 
 
 	/**
-	 * 根据客户端名称查找客户端
-	 * @param clientName
+	 * 根据客户端名称查找客户端(netty方式)
+	 * @param clientIP
 	 * @return
 	 */
-	public Client selectClientByClientName(String clientName);
+	public Client selectClientByClientIP(String clientIP);
 }

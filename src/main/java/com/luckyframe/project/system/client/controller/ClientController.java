@@ -3,7 +3,10 @@ package com.luckyframe.project.system.client.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import com.luckyframe.common.netty.NettyChannelMap;
 import com.luckyframe.common.netty.NettyServer;
+import io.netty.channel.Channel;
+import io.netty.channel.socket.SocketChannel;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,6 +40,8 @@ import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.system.client.service.IClientService;
 import com.luckyframe.project.system.project.service.IProjectService;
 
+import javax.annotation.Resource;
+
 /**
  * 客户端管理 信息操作处理
  * 
@@ -57,6 +62,9 @@ public class ClientController extends BaseController
     
     @Autowired
     private IJobService jobService;
+
+	@Resource
+	private NettyChannelMap nettyChannelMap;
 	
 	@RequiresPermissions("system:client:view")
 	@GetMapping()
@@ -177,6 +185,14 @@ public class ClientController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(Client client)
 	{
+		/*不允许通过服务端修改netty方式的客户端IP
+		* */
+		Client oldClient=clientService.selectClientById(client.getClientId());
+		if(oldClient!=null&&oldClient.getClientIp().contains("netty"))
+		{
+			if(!oldClient.getClientIp().equals(client.getClientIp()))
+				return error("修改使用Netty方式的客户端，请修改客户端配置！");
+		}
 		for(Integer projectId:client.getProjectIds()){
 			if(!PermissionUtils.isProjectPermsPassByProjectId(projectId)){				
 				return error("没有项目【"+projectService.selectProjectById(projectId).getProjectName()+"】修改客户端权限");
@@ -194,7 +210,7 @@ public class ClientController extends BaseController
     	}
     	client.setRemark("修改客户端信息，重新初始化");
 		//更新数据，删除心跳map中的数据
-		NettyServer.clientMap.remove(client.getClientName());
+		NettyServer.clientMap.remove(client.getClientIp());
 		return toAjax(clientService.updateClient(client));
 	}
 	
@@ -212,7 +228,9 @@ public class ClientController extends BaseController
 			String[] idList=ids.split(",");
 			for (String s : idList) {
 				Client client = clientService.selectClientById(Integer.valueOf(s));
-				NettyServer.clientMap.remove(client.getClientName());
+				NettyServer.clientMap.remove(client.getClientIp());
+				Channel channel=nettyChannelMap.get(client.getClientIp());
+				nettyChannelMap.remove((SocketChannel)channel);
 			}
         	return toAjax(clientService.deleteClientByIds(ids));
         }

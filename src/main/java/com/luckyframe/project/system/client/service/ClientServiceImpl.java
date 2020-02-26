@@ -273,8 +273,8 @@ public class ClientServiceImpl implements IClientService
     }
 
 	@Override
-	public Client selectClientByClientName(String clientName) {
-		Client info = clientMapper.selectClientByClientName(clientName);
+	public Client selectClientByClientIP(String clientIP) {
+		Client info = clientMapper.selectClientByClientIP(clientIP);
 		return info;
 	}
 }
