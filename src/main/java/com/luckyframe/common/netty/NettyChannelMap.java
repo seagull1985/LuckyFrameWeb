@@ -39,15 +39,16 @@ public class NettyChannelMap {
             if (entry.getValue()==socketChannel){
                 log.info("#############客户端下线##############");
                 log.info("下线主机名为："+entry.getKey());
-                Client client=clientService.selectClientByClientName(entry.getKey().toString());
+                Client client=clientService.selectClientByClientIP(entry.getKey().toString());
                 if(client!=null)
                 {
                     client.setStatus(1);
                     clientMapper.updateClient(client);
                     //登陆失败，删除心跳map中的数据
-                    NettyServer.clientMap.remove(client.getClientName());
+                    NettyServer.clientMap.remove(client.getClientIp());
                 }
                 map.remove(entry.getKey());
+                socketChannel.close();
             }
         }
     }

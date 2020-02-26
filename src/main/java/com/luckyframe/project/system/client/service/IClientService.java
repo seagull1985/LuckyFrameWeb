@@ -99,9 +99,9 @@ public interface IClientService
 
 
 	/**
-	 * 根据客户端名称查找客户端
+	 * 根据客户端IP查找客户端(netty方式)
 	 * @param clientName
 	 * @return
 	 */
-	public Client selectClientByClientName(String clientName);
+	public Client selectClientByClientIP(String clientIp);
 }
