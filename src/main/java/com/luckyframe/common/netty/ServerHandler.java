@@ -1,5 +1,16 @@
 package com.luckyframe.common.netty;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.locks.ReentrantLock;
+
+import javax.annotation.Resource;
+
+import org.quartz.CronTrigger;
+import org.quartz.Scheduler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.luckyframe.common.constant.JobConstants;
@@ -7,26 +18,17 @@ import com.luckyframe.common.constant.ScheduleConstants;
 import com.luckyframe.framework.config.LuckyFrameConfig;
 import com.luckyframe.project.monitor.job.domain.Job;
 import com.luckyframe.project.monitor.job.mapper.JobMapper;
-import com.luckyframe.project.monitor.job.service.IJobService;
 import com.luckyframe.project.monitor.job.util.ScheduleUtils;
 import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.system.client.mapper.ClientMapper;
 import com.luckyframe.project.system.client.service.IClientService;
+
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
-import org.quartz.CronTrigger;
-import org.quartz.Scheduler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.locks.ReentrantLock;
 
 @Component("ServerHandler")
 @ChannelHandler.Sharable

@@ -35,7 +35,7 @@ public class NettyChannelMap {
     }
 
     public  void remove(SocketChannel socketChannel){
-        for (Map.Entry entry:map.entrySet()){
+        for (@SuppressWarnings("rawtypes") Map.Entry entry:map.entrySet()){
             if (entry.getValue()==socketChannel){
                 log.info("#############客户端下线##############");
                 log.info("下线主机名为："+entry.getKey());

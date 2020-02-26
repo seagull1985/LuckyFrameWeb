@@ -131,7 +131,7 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>${commons.fileupload.version}</version>
 		</dependency>
-		
+
 		<!-- hutool工具包 -->
 		<dependency>
 			<groupId>cn.hutool</groupId>
@@ -281,14 +281,23 @@
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 		</dependency>
-		<!--netty-->
+		<!--netty -->
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
-			<version>5.0.0.Alpha2</version>
 		</dependency>
-
 	</dependencies>
+	<!--排除版本管理警告-->
+	<dependencyManagement>
+		<dependencies>
+			<!--netty-->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-all</artifactId>
+				<version>5.0.0.Alpha2</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -302,9 +311,9 @@
 			</plugin>
 			<!-- 数据库版本控制插件 -->
 			<plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-            </plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+			</plugin>
 		</plugins>
 	</build>
 

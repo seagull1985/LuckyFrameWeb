@@ -191,7 +191,7 @@ public class ClientController extends BaseController
 		if(oldClient!=null&&oldClient.getClientIp().contains("netty"))
 		{
 			if(!oldClient.getClientIp().equals(client.getClientIp()))
-				return error("修改使用Netty方式的客户端，请修改客户端配置！");
+				return error("Netty通信的客户端，如需修改客户端IP，请在客户端配置！");
 		}
 		for(Integer projectId:client.getProjectIds()){
 			if(!PermissionUtils.isProjectPermsPassByProjectId(projectId)){				
