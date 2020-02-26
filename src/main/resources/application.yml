@@ -8,7 +8,10 @@ luckyframe:
   copyrightYear: 2019
   # 获取ip地址开关
   addressEnabled: true
-
+# netty配置
+netty:
+  url: 0.0.0.0
+  port: 7070
 # 开发环境配置
 server:
   # 服务端口

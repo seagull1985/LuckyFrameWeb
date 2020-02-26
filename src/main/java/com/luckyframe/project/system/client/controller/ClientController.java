@@ -3,6 +3,7 @@ package com.luckyframe.project.system.client.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import com.luckyframe.common.netty.NettyServer;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,7 +48,7 @@ import com.luckyframe.project.system.project.service.IProjectService;
 public class ClientController extends BaseController
 {
     private String prefix = "system/client";
-	
+
 	@Autowired
 	private IClientService clientService;
 	
@@ -192,6 +193,8 @@ public class ClientController extends BaseController
     		return AjaxResult.error();
     	}
     	client.setRemark("修改客户端信息，重新初始化");
+		//更新数据，删除心跳map中的数据
+		NettyServer.clientMap.remove(client.getClientName());
 		return toAjax(clientService.updateClient(client));
 	}
 	
@@ -206,6 +209,11 @@ public class ClientController extends BaseController
 	{		
         try
         {
+			String[] idList=ids.split(",");
+			for (String s : idList) {
+				Client client = clientService.selectClientById(Integer.valueOf(s));
+				NettyServer.clientMap.remove(client.getClientName());
+			}
         	return toAjax(clientService.deleteClientByIds(ids));
         }
         catch (BusinessException e)

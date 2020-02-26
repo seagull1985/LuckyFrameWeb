@@ -96,4 +96,12 @@ public interface IClientService
      * @date 2019年3月14日
      */
     public List<Client> selectClientsByProjectId(int projectId);
+
+
+	/**
+	 * 根据客户端名称查找客户端
+	 * @param clientName
+	 * @return
+	 */
+	public Client selectClientByClientName(String clientName);
 }

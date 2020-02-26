@@ -85,4 +85,12 @@ public interface ClientMapper
 	 * @date 2019年2月25日
 	 */
 	public Client checkIpUnique(String clientIp);
+
+
+	/**
+	 * 根据客户端名称查找客户端
+	 * @param clientName
+	 * @return
+	 */
+	public Client selectClientByClientName(String clientName);
 }

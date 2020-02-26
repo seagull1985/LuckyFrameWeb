@@ -16,7 +16,11 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
+import com.alibaba.fastjson.JSONObject;
+import com.luckyframe.common.netty.NettyServer;
+import com.luckyframe.common.netty.Result;
 import org.apache.http.HttpEntity;
 import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.config.RequestConfig;
@@ -47,6 +51,38 @@ public class HttpRequest {
 	 * @date 2019年5月14日
 	 */
 	public static String httpClientPost(String urlParam,String jsonparams,Integer socketTimeout) throws NoSuchAlgorithmException, KeyManagementException, UnsupportedEncodingException, IOException{
+		//测试netty同步等待
+		if(urlParam.contains("netty"))
+		{
+			int firstIndex=urlParam.indexOf("netty");
+			int lastIndex=urlParam.lastIndexOf(":");
+			String clientId=urlParam.substring(firstIndex,lastIndex);
+			JSONObject tmp=new JSONObject();
+			String uuid= UUID.randomUUID().toString();
+			//封装调度参数
+			String tmpMethod=urlParam.substring(lastIndex+5);
+			tmp.put("method","run");
+			tmp.put("data",jsonparams);
+			tmp.put("uuid",uuid);
+			tmp.put("url",tmpMethod);
+			tmp.put("getOrPost","post");
+			tmp.put("socketTimeout",socketTimeout);
+			Result re= null;
+			try {
+				re = NettyServer.write(tmp.toString(),clientId, uuid);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if(1==re.getCode())
+			{
+				//请求成功，返回结果
+				return (String)re.getMessage();
+			}
+			else
+			{
+				throw new RuntimeException();
+			}
+		}
 		StringBuffer resultBuffer = null;
 		CloseableHttpClient httpclient=HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(urlParam);
@@ -106,6 +142,38 @@ public class HttpRequest {
 	 * @date 2019年5月14日
 	 */
 	public static String httpClientGet(String urlParam, Map<String, Object> params,Integer socketTimeout) throws NoSuchAlgorithmException, KeyManagementException,NoHttpResponseException {
+		//测试netty同步等待
+		if(urlParam.contains("netty"))
+		{
+			int firstIndex=urlParam.indexOf("netty");
+			int lastIndex=urlParam.lastIndexOf(":");
+			String clientId=urlParam.substring(firstIndex,lastIndex);
+			JSONObject tmp=new JSONObject();
+			String uuid= UUID.randomUUID().toString();
+			//封装调度参数
+			String tmpMethod=urlParam.substring(lastIndex+5);
+			tmp.put("method","run");
+			tmp.put("data",params);
+			tmp.put("uuid",uuid);
+			tmp.put("url",tmpMethod);
+			tmp.put("getOrPost","get");
+			tmp.put("socketTimeout",socketTimeout);
+			Result re= null;
+			try {
+				re = NettyServer.write(tmp.toString(),clientId, uuid);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if(1==re.getCode())
+			{
+				//请求成功，返回结果
+				return (String)re.getMessage();
+			}
+			else
+			{
+				throw new RuntimeException();
+			}
+		}
 		StringBuffer resultBuffer = null;
 		CloseableHttpClient httpclient=HttpClients.createDefault();
 		BufferedReader br = null;
@@ -170,6 +238,37 @@ public class HttpRequest {
 	 * @date 2019年3月15日
 	 */
 	public static String httpClientUploadFile(String urlParam, String loadpath, File file) throws NoSuchAlgorithmException, KeyManagementException, HttpHostConnectException {
+		//测试netty同步等待
+		if(urlParam.contains("netty"))
+		{
+			int firstIndex=urlParam.indexOf("netty");
+			int lastIndex=urlParam.lastIndexOf(":");
+			String clientId=urlParam.substring(firstIndex,lastIndex);
+			JSONObject tmp=new JSONObject();
+			String uuid= UUID.randomUUID().toString();
+			//封装调度参数
+			String tmpMethod=urlParam.substring(lastIndex+5);
+			tmp.put("method","download");
+			tmp.put("path",loadpath);
+			tmp.put("fileName",file.getName());
+			tmp.put("uuid",uuid);
+			tmp.put("url",tmpMethod);
+			Result re= null;
+			try {
+				re = NettyServer.write(tmp.toString(),clientId, uuid);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if(1==re.getCode())
+			{
+				//请求成功，返回结果
+				return "上传成功";
+			}
+			else
+			{
+				throw new RuntimeException();
+			}
+		}
 		StringBuffer resultBuffer = null;
 		CloseableHttpClient httpclient=HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(urlParam);
