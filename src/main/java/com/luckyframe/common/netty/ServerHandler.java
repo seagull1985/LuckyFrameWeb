@@ -83,6 +83,18 @@ public class ServerHandler extends ChannelHandlerAdapter {
         * */
         if("clientUp".equals(json.get("method")))
         {
+            if(nettyChannelMap.get(json.get("hostName").toString())!=null)
+            {
+                JSONObject tmp=new JSONObject();
+                tmp.put("method","return");
+                tmp.put("message","客户端名称重复，自动注册失败");
+                tmp.put("success","-1");
+                ctx.writeAndFlush(tmp.toString());
+                log.error("客户端host.name重复，注册失败:"+json.get("hostName").toString());
+                //登录失败，断开连接
+                ctx.close();
+                return;
+            }
             ChannelMap.setChannel(json.get("hostName").toString(),ctx.channel());
             ChannelMap.setChannelLock(json.get("hostName").toString(),new ReentrantLock());
             //返回接受成功消息
