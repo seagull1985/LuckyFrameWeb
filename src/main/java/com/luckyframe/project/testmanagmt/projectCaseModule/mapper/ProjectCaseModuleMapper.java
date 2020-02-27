@@ -113,5 +113,15 @@ public interface ProjectCaseModuleMapper
      * @date 2019年2月28日
      */
     public int selectProjectCaseModuleCountByProjectId(Integer projectId);
+
+	/**
+	 * 精准查询测试用例模块管理列表
+	 *
+	 * @param projectCaseModule 测试用例模块管理信息
+	 * @return 测试用例模块管理集合
+	 * @author summer
+	 * @date 2020年2月26日
+	 */
+	public List<ProjectCaseModule> selectProjectCaseModuleListPrecise(ProjectCaseModule projectCaseModule);
     
 }

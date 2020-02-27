@@ -24,6 +24,7 @@ import com.luckyframe.project.system.project.domain.Project;
 import com.luckyframe.project.system.project.service.IProjectService;
 import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseModule;
 import com.luckyframe.project.testmanagmt.projectCaseModule.service.IProjectCaseModuleService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 测试用例模块管理 信息操作处理
@@ -196,4 +197,40 @@ public class ProjectCaseModuleController extends BaseController
     	ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(projectId);
         return projectCaseModule;
     }
+
+	/**
+	 * 批量导入用例模块
+	 * @param file
+	 * @param updateSupport
+	 * @return
+	 * @author summer
+	 * @date 2020/02/26
+	 * @throws Exception
+	 */
+	@Log(title = "用例模块", businessType = BusinessType.IMPORT)
+	@RequiresPermissions("testmanagmt:projectCaseModule:import")
+	@PostMapping("/import")
+	@ResponseBody
+	public AjaxResult importProjectCaseModules(MultipartFile file, boolean updateSupport) throws Exception
+	{
+		ExcelUtil<ProjectCaseModule> util = new ExcelUtil<ProjectCaseModule>(ProjectCaseModule.class);
+		List<ProjectCaseModule> modulesList = util.importExcel(file.getInputStream());
+		String message = projectCaseModuleService.importProjectCaseModules(modulesList);
+		return AjaxResult.success(message);
+	}
+
+	/**
+	 * 下载导入模板
+	 * @return
+	 * @author summer
+	 * @date 2020/02/26
+	 */
+	@RequiresPermissions("testmanagmt:projectCaseModule:view")
+	@GetMapping("/importTemplate")
+	@ResponseBody
+	public AjaxResult importTemplate()
+	{
+		ExcelUtil<ProjectCaseModule> util = new ExcelUtil<ProjectCaseModule>(ProjectCaseModule.class);
+		return util.importTemplateExcel("用例模块");
+	}
 }
