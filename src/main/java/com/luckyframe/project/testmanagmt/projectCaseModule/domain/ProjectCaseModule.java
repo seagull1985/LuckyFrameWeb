@@ -1,5 +1,6 @@
 package com.luckyframe.project.testmanagmt.projectCaseModule.domain;
 
+import com.luckyframe.framework.aspectj.lang.annotation.Excel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -15,24 +16,34 @@ import com.luckyframe.project.system.project.domain.Project;
 public class ProjectCaseModule extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-	
+	/** 所属项目名称 */
+	@Excel(name = "项目名称", type = Excel.Type.ALL)
+	private String projectName;
+
 	/** 模块ID */
 	private Integer moduleId;
 	/** 模块名字 */
+	@Excel(name = "模块名称", type = Excel.Type.ALL)
 	private String moduleName;
 	/** 项目ID */
 	private Integer projectId;
 	/** 父模块id */
 	private Integer parentId;
+
 	/** 祖模块列表 */
+	@Excel(name = "祖模块列表", type = Excel.Type.ALL)
 	private String ancestors;
 	/** 显示顺序 */
+	@Excel(name = "显示顺序", type = Excel.Type.ALL)
 	private Integer orderNum;
-	/** 所属项目名称 */
-	private String projectName;
+
+	/** 备注 */
+	@Excel(name = "备注", type = Excel.Type.ALL)
+	private String remark;
+
 	/** 关联项目实体 */
 	private Project project;
-	
+
 	public Project getProject() {
 		return project;
 	}
@@ -41,57 +52,57 @@ public class ProjectCaseModule extends BaseEntity
 		this.project = project;
 	}
 
-	public void setModuleId(Integer moduleId) 
+	public void setModuleId(Integer moduleId)
 	{
 		this.moduleId = moduleId;
 	}
 
-	public Integer getModuleId() 
+	public Integer getModuleId()
 	{
 		return moduleId;
 	}
-	public void setModuleName(String moduleName) 
+	public void setModuleName(String moduleName)
 	{
 		this.moduleName = moduleName;
 	}
 
-	public String getModuleName() 
+	public String getModuleName()
 	{
 		return moduleName;
 	}
-	public void setProjectId(Integer projectId) 
+	public void setProjectId(Integer projectId)
 	{
 		this.projectId = projectId;
 	}
 
-	public Integer getProjectId() 
+	public Integer getProjectId()
 	{
 		return projectId;
 	}
-	public void setParentId(Integer parentId) 
+	public void setParentId(Integer parentId)
 	{
 		this.parentId = parentId;
 	}
 
-	public Integer getParentId() 
+	public Integer getParentId()
 	{
 		return parentId;
 	}
-	public void setAncestors(String ancestors) 
+	public void setAncestors(String ancestors)
 	{
 		this.ancestors = ancestors;
 	}
 
-	public String getAncestors() 
+	public String getAncestors()
 	{
 		return ancestors;
 	}
-	public void setOrderNum(Integer orderNum) 
+	public void setOrderNum(Integer orderNum)
 	{
 		this.orderNum = orderNum;
 	}
 
-	public Integer getOrderNum() 
+	public Integer getOrderNum()
 	{
 		return orderNum;
 	}
@@ -104,20 +115,30 @@ public class ProjectCaseModule extends BaseEntity
 		this.projectName = projectName;
 	}
 
+	public void setRemark(String remark)
+	{
+		this.remark = remark;
+	}
+
+	public String getRemark()
+	{
+		return remark;
+	}
+
 	public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("moduleId", getModuleId())
-            .append("moduleName", getModuleName())
-            .append("projectId", getProjectId())
-            .append("parentId", getParentId())
-            .append("ancestors", getAncestors())
-            .append("orderNum", getOrderNum())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .append("remark", getRemark())
-            .append("projectName", getProjectName())
-            .toString();
-    }
+		return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+				.append("moduleId", getModuleId())
+				.append("moduleName", getModuleName())
+				.append("projectId", getProjectId())
+				.append("parentId", getParentId())
+				.append("ancestors", getAncestors())
+				.append("orderNum", getOrderNum())
+				.append("createBy", getCreateBy())
+				.append("createTime", getCreateTime())
+				.append("updateBy", getUpdateBy())
+				.append("updateTime", getUpdateTime())
+				.append("remark", getRemark())
+				.append("projectName", getProjectName())
+				.toString();
+	}
 }

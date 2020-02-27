@@ -88,4 +88,13 @@ public interface IProjectCaseModuleService
      * @date 2019年2月28日
      */
     public ProjectCaseModule selectProjectCaseModuleParentZeroByProjectId(Integer projectId);
+
+	/**
+	 * 增加导入用例模块
+	 * @param modulesList 用例模块列表
+	 * @return String
+	 * @author summer
+	 * @date 2020/02/26
+	 */
+	public String importProjectCaseModules(List<ProjectCaseModule> modulesList);
 }
