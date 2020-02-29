@@ -75,22 +75,22 @@ public class NettyServer {
                     //如果超时，将超时标志设置为1
                     //printerServerHandler.setTimeout(1);
                     log.error("netty请求超时60s");
-                    return new Result(2,"请求超时",null);
+                    return new Result(2,"请求超时",null,null);
                 }else{
-                    return new Result(0,"客户端已关闭!",null);
+                    return new Result(0,"客户端已关闭!",null,null);
                 }
             }
 
         }catch (Exception e){
             e.printStackTrace();
-            return new Result(0,"服务出错!",null);
+            return new Result(0,"服务出错!",null,null);
 
         }finally {
             if (lock != null){
                 lock.unlock();
             }
         }
-        return new Result(0,"客户端没有连接!",null);
+        return new Result(0,"客户端没有连接!",null,null);
     }
 
 }

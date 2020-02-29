@@ -12,11 +12,20 @@ public class Result implements Serializable {
 	private int code;
     private Object message;
     private String uniId;
-
-    public Result(int code, Object message, String uniId) {
+    private FileUploadFile fileUploadFile;
+    public Result(int code, Object message, String uniId,FileUploadFile fileUploadFile) {
         this.code = code;
         this.message = message;
         this.uniId = uniId;
+        this.fileUploadFile=fileUploadFile;
+    }
+
+    public FileUploadFile getFileUploadFile() {
+        return fileUploadFile;
+    }
+
+    public void setFileUploadFile(FileUploadFile fileUploadFile) {
+        this.fileUploadFile = fileUploadFile;
     }
 
     public int getCode() {
