@@ -231,7 +231,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
             byte[] bytes = ef.getBytes();
             byteRead = ef.getEndPos();
             String md5 = ef.getFile_md5();//文件名
-            String path = file_dir + File.separator + ef.getFile().getName();
+            String path = file_dir + File.separator + json.get("imgName");
             File file = new File(path);
             if(!file.getParentFile().exists())
             {
@@ -247,7 +247,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
             tmp.put("uuid",json.get("uuid").toString());
             tmp.put("start",start);
             Map<String,Object> jsonparams =new HashMap<>();
-            jsonparams.put("imgName",file.getName());
+            jsonparams.put("imgName",json.get("imgName"));
             tmp.put("data",jsonparams);
             ctx.writeAndFlush(tmp.toString());
             randomAccessFile.close();
