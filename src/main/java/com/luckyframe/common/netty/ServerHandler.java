@@ -1,5 +1,9 @@
 package com.luckyframe.common.netty;
 
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -22,7 +26,6 @@ import com.luckyframe.project.monitor.job.util.ScheduleUtils;
 import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.system.client.mapper.ClientMapper;
 import com.luckyframe.project.system.client.service.IClientService;
-
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
@@ -52,9 +55,15 @@ public class ServerHandler extends ChannelHandlerAdapter {
     @Resource
     private Scheduler scheduler;
 
+    private static String file_dir = System.getProperty("user.dir")+"/tmp";
+
     protected ChannelHandlerContext ctx;
 
     private CountDownLatch latch;
+
+    private int byteRead;
+
+    private volatile int start = 0;
 
     /**
      * 消息的唯一ID
@@ -77,6 +86,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
     private static final Logger log = LoggerFactory.getLogger(ServerHandler.class);
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+
         JSONObject json= JSON.parseObject(msg.toString());
         /*
         * ClientUp客户端启动，自动注册到服务端中
@@ -107,7 +117,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
             //接收到客户端上线消息
             log.info("#############客户端上线##############");
             log.info("上线主机名为："+json.get("hostName"));
-            String hostName=json.get("hostName").toString();
+            String hostName=new String(json.get("hostName").toString().getBytes("UTF-8"),"UTF-8");
             //检查客户端是否已经注册入库
             Client client=clientService.selectClientByClientIP(hostName);
             if(client==null)
@@ -201,10 +211,10 @@ public class ServerHandler extends ChannelHandlerAdapter {
             * 客户端心跳检测
             * */
             String hostName=json.get("hostName").toString();
-            if(NettyServer.clientMap.get(hostName)==null||(!"0".equals(NettyServer.clientMap.get(hostName))))
+            //检查客户端是否已经注册入库
+            Client client=clientService.selectClientByClientIP(hostName);
+            if(NettyServer.clientMap.get(hostName)==null||(!"0".equals(NettyServer.clientMap.get(hostName)))||(0!=client.getStatus()))
             {
-                //检查客户端是否已经注册入库
-                Client client=clientService.selectClientByClientIP(hostName);
                 //版本号一致
                 client.setClientIp(hostName);
                 client.setRemark("检测客户端状态成功");
@@ -213,6 +223,35 @@ public class ServerHandler extends ChannelHandlerAdapter {
                 //更新客户端状态成功
                 NettyServer.clientMap.put(hostName,"0");
             }
+        }
+        else if("upload".equals(json.get("method")))
+        {
+            Result re =JSONObject.parseObject(json.get("data").toString(),Result.class);
+            FileUploadFile ef = re.getFileUploadFile();
+            byte[] bytes = ef.getBytes();
+            byteRead = ef.getEndPos();
+            String md5 = ef.getFile_md5();//文件名
+            String path = file_dir + File.separator + ef.getFile().getName();
+            File file = new File(path);
+            if(!file.getParentFile().exists())
+            {
+                file.getParentFile().mkdir();
+            }
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");//r: 只读模式 rw:读写模式
+            randomAccessFile.seek(start);//移动文件记录指针的位置,
+            randomAccessFile.write(bytes);//调用了seek（start）方法，是指把文件的记录指针定位到start字节的位置。也就是说程序将从start字节开始写数据
+            start = start + byteRead;
+            JSONObject tmp=new JSONObject();
+            tmp.put("method","upload");
+            tmp.put("success","1");
+            tmp.put("uuid",json.get("uuid").toString());
+            tmp.put("start",start);
+            Map<String,Object> jsonparams =new HashMap<>();
+            jsonparams.put("imgName",file.getName());
+            tmp.put("data",jsonparams);
+            ctx.writeAndFlush(tmp.toString());
+            randomAccessFile.close();
+            log.info("处理完毕,文件路径:"+path+","+byteRead);
         }
         //刷新缓存区
         ctx.flush();

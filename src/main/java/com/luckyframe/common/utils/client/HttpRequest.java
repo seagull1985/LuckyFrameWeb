@@ -1,12 +1,6 @@
 package com.luckyframe.common.utils.client;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -36,6 +30,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HttpRequest {
+
+	private static String file_dir = System.getProperty("user.dir")+"/tmp";
+
+
     private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
 	/**
 	 * 使用HttpClient以JSON格式发送post请求
@@ -323,6 +321,59 @@ public class HttpRequest {
 	 * @date 2019年3月15日
 	 */
 	public static byte[] getFile(String urlParam, Map<String, Object> params) throws IOException, HttpHostConnectException{
+		//测试netty同步等待
+		if(urlParam.contains("netty"))
+		{
+			int firstIndex=urlParam.indexOf("netty");
+			int lastIndex=urlParam.lastIndexOf(":");
+			String clientId=urlParam.substring(firstIndex,lastIndex);
+			JSONObject tmp=new JSONObject();
+			String uuid= UUID.randomUUID().toString();
+			//封装调度参数
+			String tmpMethod=urlParam.substring(lastIndex+5);
+			tmp.put("method","upload");
+			tmp.put("data",params);
+			tmp.put("uuid",uuid);
+			tmp.put("start",0);
+			Result re= null;
+			try {
+				re = NettyServer.write(tmp.toString(),clientId, uuid);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if(1==re.getCode())
+			{
+				//请求成功，返回结果
+				String fileName=params.get("imgName").toString();
+				File file=new File(file_dir+File.separator+fileName);
+				try {
+					//获取输入流
+					FileInputStream fis = new FileInputStream(file);
+					//新的 byte 数组输出流，缓冲区容量1024byte
+					ByteArrayOutputStream bos = new ByteArrayOutputStream(1024);
+					//缓存
+					byte[] b = new byte[1024];
+					int n;
+					while ((n = fis.read(b)) != -1) {
+						bos.write(b, 0, n);
+					}
+					fis.close();
+					//改变为byte[]
+					byte[] data = bos.toByteArray();
+					//
+					bos.close();
+					return data;
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.error("获取截图失败，截图文件名为："+fileName);
+				}
+				return null;
+			}
+			else
+			{
+				throw new RuntimeException();
+			}
+		}
 		// 构建请求参数
 		StringBuffer sbParams = new StringBuffer();
 		if (params != null && params.size() > 0) {
