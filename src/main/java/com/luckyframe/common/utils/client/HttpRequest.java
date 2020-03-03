@@ -15,6 +15,8 @@ import java.util.UUID;
 import com.alibaba.fastjson.JSONObject;
 import com.luckyframe.common.netty.NettyServer;
 import com.luckyframe.common.netty.Result;
+import com.luckyframe.common.netty.ServerHandler;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.config.RequestConfig;
@@ -329,12 +331,12 @@ public class HttpRequest {
 			String clientId=urlParam.substring(firstIndex,lastIndex);
 			JSONObject tmp=new JSONObject();
 			String uuid= UUID.randomUUID().toString();
-			//封装调度参数
-			String tmpMethod=urlParam.substring(lastIndex+5);
+
 			tmp.put("method","upload");
 			tmp.put("data",params);
 			tmp.put("uuid",uuid);
 			tmp.put("start",0);
+			ServerHandler.start = 0;
 			Result re= null;
 			try {
 				re = NettyServer.write(tmp.toString(),clientId, uuid);

@@ -63,7 +63,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
 
     private int byteRead;
 
-    private volatile int start = 0;
+    public volatile static int start = 0;
 
     /**
      * 消息的唯一ID
@@ -230,7 +230,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
             FileUploadFile ef = re.getFileUploadFile();
             byte[] bytes = ef.getBytes();
             byteRead = ef.getEndPos();
-            String md5 = ef.getFile_md5();//文件名
+            //String md5 = ef.getFile_md5();//文件名
             String path = file_dir + File.separator + json.get("imgName");
             File file = new File(path);
             if(!file.getParentFile().exists())

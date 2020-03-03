@@ -2,6 +2,7 @@ package com.luckyframe.common.netty;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -10,6 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.luckyframe.project.system.client.domain.Client;
+import com.luckyframe.project.system.client.mapper.ClientMapper;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -24,6 +28,9 @@ public class NettyServer {
 
     @Autowired
     private ServerChannelInitializer serverChannelInitializer;
+	
+	@Autowired
+	private ClientMapper clientMapper;
 
     //logger
     private static final Logger log = LoggerFactory.getLogger(NettyServer.class);
@@ -35,6 +42,14 @@ public class NettyServer {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
+        	//重置客户端状态
+        	List<Client> clientList = clientMapper.selectClientList(new Client());
+        	for(Client client:clientList){
+        		client.setStatus(1);
+        		client.setRemark("服务端启动重新初始化");
+        		clientMapper.updateClient(client);
+        	}
+        	
             ServerBootstrap bootstrap = new ServerBootstrap()
                     .group(bossGroup,workerGroup)
                     .channel(NioServerSocketChannel.class)
