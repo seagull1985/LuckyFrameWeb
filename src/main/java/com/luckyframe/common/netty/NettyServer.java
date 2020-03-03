@@ -6,6 +6,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
+import io.netty.buffer.Unpooled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,7 @@ public class NettyServer {
                     ServerHandler nettyServerHandler = (ServerHandler) channel.pipeline().get("handler");
                     nettyServerHandler.resetSync(latch,1);
                     nettyServerHandler.setUnidId(uniId);
-                    channel.writeAndFlush(obj).sync();
+                    channel.writeAndFlush(Unpooled.copiedBuffer((obj + "$_").getBytes()));
                     //同步返回结果
                     if (latch.await(60, TimeUnit.SECONDS)){
                         // printerServerHandler.setTimeout(0);

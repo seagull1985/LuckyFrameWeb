@@ -362,6 +362,12 @@ public class HttpRequest {
 					byte[] data = bos.toByteArray();
 					//
 					bos.close();
+					try{
+						file.delete();
+					}catch (Exception e){
+						e.printStackTrace();
+						log.error("删除截图失败，截图文件名为："+fileName);
+					}
 					return data;
 				} catch (Exception e) {
 					e.printStackTrace();

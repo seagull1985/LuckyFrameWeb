@@ -9,6 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.annotation.Resource;
 
+import io.netty.buffer.Unpooled;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.slf4j.Logger;
@@ -61,9 +62,6 @@ public class ServerHandler extends ChannelHandlerAdapter {
 
     private CountDownLatch latch;
 
-    private int byteRead;
-
-    private volatile int start = 0;
 
     /**
      * 消息的唯一ID
@@ -99,7 +97,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
                 tmp.put("method","return");
                 tmp.put("message","客户端名称重复，自动注册失败");
                 tmp.put("success","-1");
-                ctx.writeAndFlush(tmp.toString());
+                sendMessage(ctx,tmp.toString());
                 log.error("客户端host.name重复，注册失败:"+json.get("hostName").toString());
                 //登录失败，断开连接
                 ctx.close();
@@ -107,13 +105,6 @@ public class ServerHandler extends ChannelHandlerAdapter {
             }
             ChannelMap.setChannel(json.get("hostName").toString(),ctx.channel());
             ChannelMap.setChannelLock(json.get("hostName").toString(),new ReentrantLock());
-            //返回接受成功消息
-            JSONObject tmp=new JSONObject();
-            tmp.put("method","return");
-            tmp.put("message","收到消息");
-            tmp.put("success","1");
-            ctx.writeAndFlush(tmp.toString());
-
             //接收到客户端上线消息
             log.info("#############客户端上线##############");
             log.info("上线主机名为："+json.get("hostName"));
@@ -178,6 +169,12 @@ public class ServerHandler extends ChannelHandlerAdapter {
                 nettyChannelMap.add(hostName,(SocketChannel)ctx.channel());
                 //登陆成功，放入map中用于心跳
                 NettyServer.clientMap.put(hostName,"0");
+                //返回接受成功消息
+                JSONObject tmp=new JSONObject();
+                tmp.put("method","return");
+                tmp.put("message","自动注册成功");
+                tmp.put("success","1");
+                sendMessage(ctx,tmp.toString());
             }else{
                 client.setClientIp(hostName);
                 client.setRemark("客户端("+json.get("version")+")与服务器("+lfConfig.getVersion()+")版本不一致");
@@ -188,6 +185,12 @@ public class ServerHandler extends ChannelHandlerAdapter {
                     clientMapper.insertClient(client);
                 //登陆失败，删除心跳map中的数据
                 NettyServer.clientMap.remove(hostName);
+                //返回接受成功消息
+                JSONObject tmp=new JSONObject();
+                tmp.put("method","return");
+                tmp.put("message","自动注册失败，"+"客户端("+json.get("version")+")与服务器("+lfConfig.getVersion()+")版本不一致");
+                tmp.put("success","0");
+                sendMessage(ctx,tmp.toString());
                 //登录失败，断开连接
                 ctx.close();
             }
@@ -227,9 +230,10 @@ public class ServerHandler extends ChannelHandlerAdapter {
         else if("upload".equals(json.get("method")))
         {
             Result re =JSONObject.parseObject(json.get("data").toString(),Result.class);
+            int start = Integer.valueOf(json.get("start").toString());
             FileUploadFile ef = re.getFileUploadFile();
             byte[] bytes = ef.getBytes();
-            byteRead = ef.getEndPos();
+            int byteRead = ef.getEndPos();
             String md5 = ef.getFile_md5();//文件名
             String path = file_dir + File.separator + json.get("imgName");
             File file = new File(path);
@@ -249,12 +253,10 @@ public class ServerHandler extends ChannelHandlerAdapter {
             Map<String,Object> jsonparams =new HashMap<>();
             jsonparams.put("imgName",json.get("imgName"));
             tmp.put("data",jsonparams);
-            ctx.writeAndFlush(tmp.toString());
+            sendMessage(ctx,tmp.toString());
             randomAccessFile.close();
             log.info("处理完毕,文件路径:"+path+","+byteRead);
         }
-        //刷新缓存区
-        ctx.flush();
     }
 
     @Override
@@ -306,6 +308,8 @@ public class ServerHandler extends ChannelHandlerAdapter {
         return result;
     }
 
-
+    public static void sendMessage(ChannelHandlerContext ctx, String json) throws InterruptedException {
+        ctx.channel().writeAndFlush(Unpooled.copiedBuffer((json + "$_").getBytes()));
+    }
 
 }
