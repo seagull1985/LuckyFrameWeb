@@ -1,6 +1,13 @@
 package com.luckyframe.common.utils.client;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -11,11 +18,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
-
-import com.alibaba.fastjson.JSONObject;
-import com.luckyframe.common.netty.NettyServer;
-import com.luckyframe.common.netty.Result;
-import com.luckyframe.common.netty.ServerHandler;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NoHttpResponseException;
@@ -30,6 +32,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.alibaba.fastjson.JSONObject;
+import com.luckyframe.common.netty.NettyServer;
+import com.luckyframe.common.netty.Result;
 
 public class HttpRequest {
 
@@ -336,7 +342,6 @@ public class HttpRequest {
 			tmp.put("data",params);
 			tmp.put("uuid",uuid);
 			tmp.put("start",0);
-			ServerHandler.start = 0;
 			Result re= null;
 			try {
 				re = NettyServer.write(tmp.toString(),clientId, uuid);
