@@ -16,6 +16,7 @@ import com.luckyframe.project.system.client.domain.Client;
 import com.luckyframe.project.system.client.mapper.ClientMapper;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
@@ -81,7 +82,8 @@ public class NettyServer {
                     ServerHandler nettyServerHandler = (ServerHandler) channel.pipeline().get("handler");
                     nettyServerHandler.resetSync(latch,1);
                     nettyServerHandler.setUnidId(uniId);
-                    channel.writeAndFlush(obj).sync();
+                    //channel.writeAndFlush(obj).sync();
+                    channel.writeAndFlush(Unpooled.copiedBuffer((obj + "$_").getBytes()));
                     //同步返回结果
                     if (latch.await(60, TimeUnit.SECONDS)){
                         // printerServerHandler.setTimeout(0);
