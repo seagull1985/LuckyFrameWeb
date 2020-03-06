@@ -400,7 +400,7 @@ public class TaskCaseExecuteController extends BaseController
 			response.setHeader("content-type", "text/html");
 			OutputStream eos = response.getOutputStream();
 			String notes = "获取图片异常，请在客户端项目所在的目录\\log\\ScreenShot\\下检查【" + fileName + "】是否存在！";
-			eos.write(notes.getBytes());
+			eos.write(notes.getBytes("UTF-8"));
 			eos.flush();
 			eos.close();
 		}
