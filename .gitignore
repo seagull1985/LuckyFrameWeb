@@ -1,2 +1,5 @@
 /target/
-/src/main/resources/hibernate.cfg.xml
+*.iml
+*.classpath
+*.project
+*.prefs
