@@ -2,7 +2,8 @@ package com.luckyframe.project.testmanagmt.projectCase.mapper;
 
 import java.util.List;
 
-import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseDebug;	
+import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseDebug;
+import org.springframework.stereotype.Component;
 
 /**
  * 用例调试日志记录 数据层
@@ -10,6 +11,7 @@ import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseDebug;
  * @author luckyframe
  * @date 2019-03-14
  */
+@Component
 public interface ProjectCaseDebugMapper 
 {
 	/**

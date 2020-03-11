@@ -118,14 +118,11 @@ public class ClientServiceImpl implements IClientService
 		ClientHeart.iniClientListen(client.getClientIp());
 	    return clientMapper.updateClient(client);
 	}
-	
+
 	/**
 	 * 根据IP修改客户端状态以及备注
-	 * @param clientIp
-	 * @param status
+	 * @param client
 	 * @return
-	 * @author Seagull
-	 * @date 2019年4月13日
 	 */
 	@Override
 	public int updateClientStatusByIp(Client client)

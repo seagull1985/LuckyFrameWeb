@@ -2,7 +2,8 @@ package com.luckyframe.project.testexecution.taskCaseExecute.mapper;
 
 import java.util.List;
 
-import com.luckyframe.project.testexecution.taskCaseExecute.domain.TaskCaseExecute;	
+import com.luckyframe.project.testexecution.taskCaseExecute.domain.TaskCaseExecute;
+import org.springframework.stereotype.Component;
 
 /**
  * 任务用例执行记录 数据层
@@ -10,6 +11,7 @@ import com.luckyframe.project.testexecution.taskCaseExecute.domain.TaskCaseExecu
  * @author luckyframe
  * @date 2019-04-08
  */
+@Component
 public interface TaskCaseExecuteMapper 
 {
 	/**

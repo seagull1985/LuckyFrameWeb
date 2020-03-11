@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseModule;	
+import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseModule;
+import org.springframework.stereotype.Component;
 
 /**
  * 测试用例模块管理 数据层
@@ -12,6 +13,7 @@ import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseMo
  * @author luckyframe
  * @date 2019-02-26
  */
+@Component
 public interface ProjectCaseModuleMapper 
 {
 	/**

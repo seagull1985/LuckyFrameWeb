@@ -162,15 +162,11 @@ public class TaskCaseExecuteController extends BaseController
         ExcelUtil<TaskCaseExecute> util = new ExcelUtil<TaskCaseExecute>(TaskCaseExecute.class);
         return util.exportExcel(list, "taskCaseExecute");
     }
-	
+
 	/**
 	 * 运行所有非成功用例
-	 * @param taskCaseExecute
+	 * @param logId
 	 * @return
-	 * @author Seagull
-	 * @throws IOException 
-	 * @throws UnsupportedEncodingException 
-	 * @date 2019年4月23日
 	 */
 	@RequiresPermissions("testmanagmt:projectCase:edit")
 	@Log(title = "同步测试结果到用例步骤", businessType = BusinessType.UPDATE)
@@ -196,15 +192,13 @@ public class TaskCaseExecuteController extends BaseController
 		}		
 		return toAjax(result);
 	}
-	
+
 	/**
 	 * 运行所有非成功用例
-	 * @param taskCaseExecute
+	 * @param taskId
 	 * @return
-	 * @author Seagull
-	 * @throws IOException 
-	 * @throws UnsupportedEncodingException 
-	 * @date 2019年4月23日
+	 * @throws UnsupportedEncodingException
+	 * @throws IOException
 	 */
 	@RequiresPermissions("testexecution:taskScheduling:execution")
 	@Log(title = "运行所有非成功用例", businessType = BusinessType.RUNCASE)

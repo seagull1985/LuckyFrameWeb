@@ -2,12 +2,14 @@ package com.luckyframe.project.monitor.online.mapper;
 
 import java.util.List;
 import com.luckyframe.project.monitor.online.domain.UserOnline;
+import org.springframework.stereotype.Component;
 
 /**
  * 在线用户 数据层
  * 
  * @author ruoyi
  */
+@Component
 public interface UserOnlineMapper
 {
     /**

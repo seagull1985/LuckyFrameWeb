@@ -2,7 +2,8 @@ package com.luckyframe.project.qualitymanagmt.qaVersion.mapper;
 
 import java.util.List;
 
-import com.luckyframe.project.qualitymanagmt.qaVersion.domain.QaVersion;	
+import com.luckyframe.project.qualitymanagmt.qaVersion.domain.QaVersion;
+import org.springframework.stereotype.Component;
 
 /**
  * 质量管理-版本管理 数据层
@@ -10,6 +11,7 @@ import com.luckyframe.project.qualitymanagmt.qaVersion.domain.QaVersion;
  * @author luckyframe
  * @date 2019-08-05
  */
+@Component
 public interface QaVersionMapper 
 {
 	/**

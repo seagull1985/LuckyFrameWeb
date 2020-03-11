@@ -2,12 +2,14 @@ package com.luckyframe.project.monitor.job.mapper;
 
 import java.util.List;
 import com.luckyframe.project.monitor.job.domain.JobLog;
+import org.springframework.stereotype.Component;
 
 /**
  * 调度任务日志信息 数据层
  * 
  * @author ruoyi
  */
+@Component
 public interface JobLogMapper
 {
     /**

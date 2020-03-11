@@ -25,12 +25,11 @@ public interface IJobService
      * @return 调度任务对象信息
      */
     public Job selectJobById(Long jobId);
-    
+
     /**
      * 通过调度任务方法参数查询调度信息
-     * 
-     * @param jobId 调度任务ID
-     * @return 调度任务对象信息
+     * @param methodParams
+     * @return
      */
     public Job selectJobByMethodParams(String methodParams);
 

@@ -2,7 +2,8 @@ package com.luckyframe.project.testexecution.taskCaseLog.mapper;
 
 import java.util.List;
 
-import com.luckyframe.project.testexecution.taskCaseLog.domain.TaskCaseLog;	
+import com.luckyframe.project.testexecution.taskCaseLog.domain.TaskCaseLog;
+import org.springframework.stereotype.Component;
 
 /**
  * 用例日志明细 数据层
@@ -10,6 +11,7 @@ import com.luckyframe.project.testexecution.taskCaseLog.domain.TaskCaseLog;
  * @author luckyframe
  * @date 2019-04-08
  */
+@Component
 public interface TaskCaseLogMapper 
 {
 	/**

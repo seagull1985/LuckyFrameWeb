@@ -2,7 +2,8 @@ package com.luckyframe.project.testexecution.taskScheduling.mapper;
 
 import java.util.List;
 
-import com.luckyframe.project.testexecution.taskScheduling.domain.TaskScheduling;	
+import com.luckyframe.project.testexecution.taskScheduling.domain.TaskScheduling;
+import org.springframework.stereotype.Component;
 
 /**
  * 测试任务调度 数据层
@@ -10,6 +11,7 @@ import com.luckyframe.project.testexecution.taskScheduling.domain.TaskScheduling
  * @author luckyframe
  * @date 2019-03-23
  */
+@Component
 public interface TaskSchedulingMapper 
 {
 	/**

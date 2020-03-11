@@ -2,7 +2,8 @@ package com.luckyframe.project.system.role.mapper;
 
 import java.util.List;
 
-import com.luckyframe.project.system.role.domain.RoleProject;	
+import com.luckyframe.project.system.role.domain.RoleProject;
+import org.springframework.stereotype.Component;
 
 /**
  * 角色和项目关联 数据层
@@ -10,6 +11,7 @@ import com.luckyframe.project.system.role.domain.RoleProject;
  * @author luckyframe
  * @date 2019-02-13
  */
+@Component
 public interface RoleProjectMapper 
 {
 	/**

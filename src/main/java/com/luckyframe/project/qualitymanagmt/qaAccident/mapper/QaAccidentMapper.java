@@ -3,7 +3,8 @@ package com.luckyframe.project.qualitymanagmt.qaAccident.mapper;
 import java.util.List;
 import java.util.Map;
 
-import com.luckyframe.project.qualitymanagmt.qaAccident.domain.QaAccident;	
+import com.luckyframe.project.qualitymanagmt.qaAccident.domain.QaAccident;
+import org.springframework.stereotype.Component;
 
 /**
  * 生产事故登记 数据层
@@ -11,6 +12,7 @@ import com.luckyframe.project.qualitymanagmt.qaAccident.domain.QaAccident;
  * @author luckyframe
  * @date 2019-07-12
  */
+@Component
 public interface QaAccidentMapper 
 {
 	/**

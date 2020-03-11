@@ -3,12 +3,14 @@ package com.luckyframe.project.system.dict.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import com.luckyframe.project.system.dict.domain.DictData;
+import org.springframework.stereotype.Component;
 
 /**
  * 字典表 数据层
  * 
  * @author ruoyi
  */
+@Component
 public interface DictDataMapper
 {
     /**

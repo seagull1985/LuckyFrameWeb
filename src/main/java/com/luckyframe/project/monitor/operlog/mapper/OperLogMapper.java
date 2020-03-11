@@ -2,12 +2,14 @@ package com.luckyframe.project.monitor.operlog.mapper;
 
 import java.util.List;
 import com.luckyframe.project.monitor.operlog.domain.OperLog;
+import org.springframework.stereotype.Component;
 
 /**
  * 操作日志 数据层
  * 
  * @author ruoyi
  */
+@Component
 public interface OperLogMapper
 {
     /**

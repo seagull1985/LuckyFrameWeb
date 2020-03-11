@@ -2,7 +2,8 @@ package com.luckyframe.project.testmanagmt.projectCaseParams.mapper;
 
 import java.util.List;
 
-import com.luckyframe.project.testmanagmt.projectCaseParams.domain.ProjectCaseParams;	
+import com.luckyframe.project.testmanagmt.projectCaseParams.domain.ProjectCaseParams;
+import org.springframework.stereotype.Component;
 
 /**
  * 用例公共参数 数据层
@@ -10,6 +11,7 @@ import com.luckyframe.project.testmanagmt.projectCaseParams.domain.ProjectCasePa
  * @author luckyframe
  * @date 2019-03-21
  */
+@Component
 public interface ProjectCaseParamsMapper 
 {
 	/**

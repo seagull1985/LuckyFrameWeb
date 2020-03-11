@@ -3,7 +3,8 @@ package com.luckyframe.project.testexecution.taskExecute.mapper;
 import java.util.Date;
 import java.util.List;
 
-import com.luckyframe.project.testexecution.taskExecute.domain.TaskExecute;	
+import com.luckyframe.project.testexecution.taskExecute.domain.TaskExecute;
+import org.springframework.stereotype.Component;
 
 /**
  * 测试任务执行 数据层
@@ -11,6 +12,7 @@ import com.luckyframe.project.testexecution.taskExecute.domain.TaskExecute;
  * @author luckyframe
  * @date 2019-04-08
  */
+@Component
 public interface TaskExecuteMapper 
 {
 	/**

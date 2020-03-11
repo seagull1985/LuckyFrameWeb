@@ -3,12 +3,14 @@ package com.luckyframe.project.system.menu.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import com.luckyframe.project.system.menu.domain.Menu;
+import org.springframework.stereotype.Component;
 
 /**
  * 菜单表 数据层
  * 
  * @author ruoyi
  */
+@Component
 public interface MenuMapper
 {
     /**

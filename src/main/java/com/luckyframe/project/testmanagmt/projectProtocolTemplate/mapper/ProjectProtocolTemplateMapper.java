@@ -2,7 +2,8 @@ package com.luckyframe.project.testmanagmt.projectProtocolTemplate.mapper;
 
 import java.util.List;
 
-import com.luckyframe.project.testmanagmt.projectProtocolTemplate.domain.ProjectProtocolTemplate;	
+import com.luckyframe.project.testmanagmt.projectProtocolTemplate.domain.ProjectProtocolTemplate;
+import org.springframework.stereotype.Component;
 
 /**
  * 协议模板管理 数据层
@@ -10,6 +11,7 @@ import com.luckyframe.project.testmanagmt.projectProtocolTemplate.domain.Project
  * @author luckyframe
  * @date 2019-03-04
  */
+@Component
 public interface ProjectProtocolTemplateMapper 
 {
 	/**

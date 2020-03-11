@@ -9,6 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.annotation.Resource;
 
+import com.luckyframe.project.monitor.job.service.IJobService;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.slf4j.Logger;
@@ -52,7 +53,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
     private NettyChannelMap nettyChannelMap;
 
     @Resource
-    private JobMapper jobMapper;
+    private IJobService jobService;
 
     @Resource
     private Scheduler scheduler;
@@ -108,54 +109,66 @@ public class ServerHandler extends ChannelHandlerAdapter {
 
             //接收到客户端上线消息
             log.info("#############客户端上线##############");
-            log.info("上线主机名为："+json.get("hostName"));
+            log.info("上线客户端名称："+json.get("clientName")+"，主机名："+json.get("hostName")+", IP地址：" + json.get("ip"));
             String hostName=new String(json.get("hostName").toString().getBytes("UTF-8"),"UTF-8");
+            String clientName=new String(json.get("clientName").toString().getBytes("UTF-8"),"UTF-8");
             //检查客户端是否已经注册入库
             Client client=clientService.selectClientByClientIP(hostName);
-            if(client==null)
+            if(null==client)
             {
-                client = new Client();
-                client.setClientIp(hostName);
-                client.setClientName(hostName);
-                client.setCheckinterval(30);
-                client.setClientPath("/TestDriven");
-            }
-            if(client.getClientId()==null)
-            {
-                //未注册则自动注册入库
-                Job job=new Job();
-                job.setJobName(JobConstants.JOB_JOBNAME_FOR_CLIENTHEART);
-                job.setJobGroup(JobConstants.JOB_GROUPNAME_FOR_CLIENTHEART);
-                job.setMethodName(JobConstants.JOB_METHODNAME_FOR_CLIENTHEART);
-                job.setMethodParams(client.getClientIp());
-                job.setCronExpression("0/"+client.getCheckinterval().toString()+" * * * * ? ");
-                job.setMisfirePolicy(ScheduleConstants.MISFIRE_DO_NOTHING);
-                job.setStatus(JobConstants.JOB_STATUS_FOR_CLIENTHEART);
-                job.setRemark("");
-                /*在公共调度表中插入数据*/
-                int result = jobMapper.insertJob(job);
-                if(result<1){
-                    //登录失败，断开连接
-                    ctx.close();
-                    throw new Exception("新增客户端时无法插入任务调度表");
+                //兼容HTTP方式增加的客户端
+                client=clientService.selectClientByClientIP(json.get("ip").toString());
+                int result = 0 ;
+                if(null!=client){
+                    client.setClientIp(hostName);
+                    client.setClientName(clientName);
+                    client.setStatus(2);
+                    client.setRemark("更新NETTY通信方式");
+
+                    Job job=jobService.selectJobById(client.getJobId().longValue());
+                    job.setStatus(JobConstants.JOB_STATUS_FOR_PAUSE);
+                    job.setMethodParams(hostName);
+
+                    /*在公共调度表中插入数据*/
+                    result = jobService.updateJob(job);
+                    if(result<1){
+                        //登录失败，断开连接
+                        ctx.close();
+                        throw new Exception("客户端时无法更新任务调度表");
+                    }
+
+                    clientService.updateClient(client);
+                }else{
+                    client = new Client();
+                    client.setClientIp(hostName);
+                    client.setClientName(clientName);
+                    client.setCheckinterval(9999999);
+                    client.setClientPath("/TestDriven");
+                    client.setStatus(2);
+
+                    //未注册则自动注册入库
+                    Job job=new Job();
+                    job.setJobName(JobConstants.JOB_JOBNAME_FOR_CLIENTHEART);
+                    job.setJobGroup(JobConstants.JOB_GROUPNAME_FOR_CLIENTHEART);
+                    job.setMethodName(JobConstants.JOB_METHODNAME_FOR_CLIENTHEART);
+                    job.setMethodParams(client.getClientIp());
+                    job.setCronExpression("0/"+client.getCheckinterval().toString()+" * * * * ? ");
+                    job.setMisfirePolicy(ScheduleConstants.MISFIRE_DO_NOTHING);
+                    job.setStatus(JobConstants.JOB_STATUS_FOR_PAUSE);
+                    job.setRemark("");
+                    /*在公共调度表中插入数据*/
+                    result = jobService.insertJobCron(job);
+                    if(result<1){
+                        //登录失败，断开连接
+                        ctx.close();
+                        throw new Exception("新增客户端时无法插入任务调度表");
+                    }
+
+                    /*在调度预约表中插入数据*/
+                    client.setJobId(job.getJobId().intValue());
+                    clientService.insertClient(client);
+                    log.info("主机名为："+json.get("hostName")+"自动注册成功");
                 }
-                //更新jobLis
-                CronTrigger cronTrigger = ScheduleUtils.getCronTrigger(scheduler, job.getJobId());
-                // 如果不存在，则创建
-                if (cronTrigger == null)
-                {
-                    ScheduleUtils.createScheduleJob(scheduler, job);
-                }
-                else
-                {
-                    ScheduleUtils.updateScheduleJob(scheduler, job, cronTrigger);
-                }
-                /*在调度预约表中插入数据*/
-                client.setJobId(job.getJobId().intValue());
-                client.setClientIp(hostName);
-                client.setClientName(hostName);
-                clientService.insertClient(client);
-                log.info("主机名为："+json.get("hostName")+"自动注册成功");
             }
             if(lfConfig.getVersion().equals(json.get("version"))){
                 //版本号一致

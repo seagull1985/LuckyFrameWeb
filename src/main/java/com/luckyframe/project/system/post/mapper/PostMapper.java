@@ -2,12 +2,14 @@ package com.luckyframe.project.system.post.mapper;
 
 import java.util.List;
 import com.luckyframe.project.system.post.domain.Post;
+import org.springframework.stereotype.Component;
 
 /**
  * 岗位信息 数据层
  * 
  * @author ruoyi
  */
+@Component
 public interface PostMapper
 {
     /**

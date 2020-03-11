@@ -81,7 +81,7 @@ public class JobServiceImpl implements IJobService
     /**
      * 通过调度任务方法参数查询调度信息
      * 
-     * @param jobId 调度任务ID
+     * @param methodParams jobId 调度任务ID
      * @return 调度任务对象信息
      */
     @Override

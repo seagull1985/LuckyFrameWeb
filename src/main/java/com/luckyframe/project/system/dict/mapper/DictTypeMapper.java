@@ -3,6 +3,7 @@ package com.luckyframe.project.system.dict.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.luckyframe.project.system.dict.domain.DictType;
+import org.springframework.stereotype.Component;
 
 /**
  * 字典表 数据层
@@ -10,6 +11,7 @@ import com.luckyframe.project.system.dict.domain.DictType;
  * @author ruoyi
  */
 @Mapper
+@Component
 public interface DictTypeMapper
 {
     /**

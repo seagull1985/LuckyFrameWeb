@@ -1,6 +1,8 @@
 package com.luckyframe.project.system.notice.mapper;
 
 import com.luckyframe.project.system.notice.domain.Notice;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 /**
@@ -8,6 +10,7 @@ import java.util.List;
  * 
  * @author ruoyi
  */
+@Component
 public interface NoticeMapper
 {
     /**

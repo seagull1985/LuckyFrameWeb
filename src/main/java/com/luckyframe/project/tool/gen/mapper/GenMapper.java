@@ -3,12 +3,14 @@ package com.luckyframe.project.tool.gen.mapper;
 import java.util.List;
 import com.luckyframe.project.tool.gen.domain.ColumnInfo;
 import com.luckyframe.project.tool.gen.domain.TableInfo;
+import org.springframework.stereotype.Component;
 
 /**
  * 代码生成 数据层
  * 
  * @author ruoyi
  */
+@Component
 public interface GenMapper
 {
     /**

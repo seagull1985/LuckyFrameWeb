@@ -3,12 +3,14 @@ package com.luckyframe.project.system.dept.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import com.luckyframe.project.system.dept.domain.Dept;
+import org.springframework.stereotype.Component;
 
 /**
  * 部门管理 数据层
  * 
  * @author ruoyi
  */
+@Component
 public interface DeptMapper
 {
     /**

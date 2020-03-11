@@ -2,12 +2,14 @@ package com.luckyframe.project.monitor.logininfor.mapper;
 
 import java.util.List;
 import com.luckyframe.project.monitor.logininfor.domain.Logininfor;
+import org.springframework.stereotype.Component;
 
 /**
  * 系统访问日志情况信息 数据层
  * 
  * @author ruoyi
  */
+@Component
 public interface LogininforMapper
 {
     /**

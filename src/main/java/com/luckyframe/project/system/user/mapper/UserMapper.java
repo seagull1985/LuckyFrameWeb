@@ -1,6 +1,8 @@
 package com.luckyframe.project.system.user.mapper;
 
 import com.luckyframe.project.system.user.domain.User;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 /**
@@ -8,6 +10,7 @@ import java.util.List;
  * 
  * @author ruoyi
  */
+@Component
 public interface UserMapper
 {
     /**

@@ -2,12 +2,14 @@ package com.luckyframe.project.system.role.mapper;
 
 import java.util.List;
 import com.luckyframe.project.system.role.domain.Role;
+import org.springframework.stereotype.Component;
 
 /**
  * 角色表 数据层
  * 
  * @author ruoyi
  */
+@Component
 public interface RoleMapper
 {
     /**

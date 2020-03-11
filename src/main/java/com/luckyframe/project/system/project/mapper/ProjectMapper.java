@@ -1,7 +1,9 @@
 package com.luckyframe.project.system.project.mapper;
 
 import com.luckyframe.project.system.project.domain.Project;
-import java.util.List;	
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * 测试项目管理 数据层
@@ -9,6 +11,7 @@ import java.util.List;
  * @author luckyframe
  * @date 2019-02-13
  */
+@Component
 public interface ProjectMapper 
 {
 	/**

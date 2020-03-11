@@ -20,5 +20,8 @@ public class JobConstants {
     public final static String JOB_GROUPNAME_FOR_CLIENTHEART = "客户端心跳监听";
     public final static String JOB_JOBNAME_FOR_CLIENTHEART = "clientHeart";
     public final static String JOB_METHODNAME_FOR_CLIENTHEART = "heartTask";
-    public final static String JOB_STATUS_FOR_CLIENTHEART = "0";
+
+    /** JOB状态 */
+    public final static String JOB_STATUS_FOR_RUN = "0";
+    public final static String JOB_STATUS_FOR_PAUSE = "1";
 }

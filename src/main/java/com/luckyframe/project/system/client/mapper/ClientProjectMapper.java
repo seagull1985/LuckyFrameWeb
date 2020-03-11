@@ -3,7 +3,8 @@ package com.luckyframe.project.system.client.mapper;
 import java.util.List;
 
 import com.luckyframe.project.system.client.domain.Client;
-import com.luckyframe.project.system.client.domain.ClientProject;	
+import com.luckyframe.project.system.client.domain.ClientProject;
+import org.springframework.stereotype.Component;
 
 /**
  * 客户端与项目关联 数据层
@@ -11,6 +12,7 @@ import com.luckyframe.project.system.client.domain.ClientProject;
  * @author luckyframe
  * @date 2019-02-20
  */
+@Component
 public interface ClientProjectMapper 
 {
 	/**

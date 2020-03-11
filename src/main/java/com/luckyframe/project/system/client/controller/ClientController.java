@@ -151,7 +151,7 @@ public class ClientController extends BaseController
     	job.setMethodParams(client.getClientIp());
     	job.setCronExpression("0/"+client.getCheckinterval().toString()+" * * * * ? ");
     	job.setMisfirePolicy(ScheduleConstants.MISFIRE_DO_NOTHING);
-    	job.setStatus(JobConstants.JOB_STATUS_FOR_CLIENTHEART);
+    	job.setStatus(JobConstants.JOB_STATUS_FOR_RUN);
     	job.setRemark("");
     	/*在公共调度表中插入数据*/
     	result = jobService.insertJobCron(job);
