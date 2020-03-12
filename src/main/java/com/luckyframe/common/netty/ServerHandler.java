@@ -2,6 +2,7 @@ package com.luckyframe.common.netty;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -92,26 +93,26 @@ public class ServerHandler extends ChannelHandlerAdapter {
         * */
         if("clientUp".equals(json.get("method")))
         {
-            if(nettyChannelMap.get(json.get("hostName").toString())!=null)
+            String hostName=URLDecoder.decode(json.get("hostName").toString(), "GBK");
+            String clientName=URLDecoder.decode(json.get("clientName").toString(), "GBK");
+            if(nettyChannelMap.get(hostName)!=null)
             {
                 JSONObject tmp=new JSONObject();
                 tmp.put("method","return");
                 tmp.put("message","客户端名称重复，自动注册失败");
                 tmp.put("success","-1");
                 sendMessage(ctx,tmp.toString());
-                log.error("客户端host.name重复，注册失败:"+json.get("hostName").toString());
+                log.error("客户端host.name重复，注册失败:"+hostName);
                 //登录失败，断开连接
                 ctx.close();
                 return;
             }
-            ChannelMap.setChannel(json.get("hostName").toString(),ctx.channel());
-            ChannelMap.setChannelLock(json.get("hostName").toString(),new ReentrantLock());
+            ChannelMap.setChannel(hostName,ctx.channel());
+            ChannelMap.setChannelLock(hostName,new ReentrantLock());
 
             //接收到客户端上线消息
             log.info("#############客户端上线##############");
             log.info("上线客户端名称："+json.get("clientName")+"，主机名："+json.get("hostName")+", IP地址：" + json.get("ip"));
-            String hostName=new String(json.get("hostName").toString().getBytes("UTF-8"),"UTF-8");
-            String clientName=new String(json.get("clientName").toString().getBytes("UTF-8"),"UTF-8");
             //检查客户端是否已经注册入库
             Client client=clientService.selectClientByClientIP(hostName);
             if(null==client)
@@ -226,6 +227,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
             * 向客户端请求后返回的数据
             * */
             Result re =JSONObject.parseObject(json.get("data").toString(),Result.class);
+            re.setMessage(URLDecoder.decode(re.getMessage().toString(), "GBK"));
             //校验返回的信息是否是同一个信息
             if (unidId.equals(re.getUniId())){
                 latch.countDown();//消息返回完毕，释放同步锁，具体业务需要判断指令是否匹配
