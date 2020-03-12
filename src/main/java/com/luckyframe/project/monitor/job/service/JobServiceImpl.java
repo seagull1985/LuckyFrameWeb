@@ -4,7 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
+import cn.hutool.core.util.StrUtil;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ import com.luckyframe.project.monitor.job.util.ScheduleUtils;
 @Service
 public class JobServiceImpl implements IJobService
 {
-    @Autowired
+    @Resource
     private Scheduler scheduler;
 
     @Autowired
@@ -218,9 +220,14 @@ public class JobServiceImpl implements IJobService
     @Override
     public int insertJobCron(Job job)
     {
-        job.setCreateBy(ShiroUtils.getLoginName());
+        if(StrUtil.isNotEmpty(job.getCreateBy())){
+            job.setCreateBy(job.getCreateBy());
+            job.setUpdateBy(job.getCreateBy());
+        }else{
+            job.setCreateBy(ShiroUtils.getLoginName());
+            job.setUpdateBy(ShiroUtils.getLoginName());
+        }
         job.setCreateTime(new Date());
-        job.setUpdateBy(ShiroUtils.getLoginName());
         job.setUpdateTime(new Date());
         //job.setStatus(ScheduleConstants.Status.PAUSE.getValue());
         int rows = jobMapper.insertJob(job);
@@ -239,7 +246,11 @@ public class JobServiceImpl implements IJobService
     @Override
     public int updateJob(Job job)
     {
-        job.setUpdateBy(ShiroUtils.getLoginName());
+        if(StrUtil.isNotEmpty(job.getUpdateBy())){
+            job.setUpdateBy(job.getUpdateBy());
+        }else{
+            job.setUpdateBy(ShiroUtils.getLoginName());
+        }
         job.setUpdateTime(new Date());
         int rows = jobMapper.updateJob(job);
         if (rows > 0)

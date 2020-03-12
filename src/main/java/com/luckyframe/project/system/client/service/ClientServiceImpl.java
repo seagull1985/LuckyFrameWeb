@@ -111,10 +111,12 @@ public class ClientServiceImpl implements IClientService
 	@Override
 	public int updateClient(Client client)
 	{
-		//先删除客户端与项目关联关系
-		clientProjectMapper.deleteClientProjectById(client.getClientId());
-        // 新增客户端与项目关联
-		insertClientProject(client);
+		if(!"NETTY".equals(client.getUpdateBy())){
+			//先删除客户端与项目关联关系
+			clientProjectMapper.deleteClientProjectById(client.getClientId());
+			// 新增客户端与项目关联
+			insertClientProject(client);
+		}
 		ClientHeart.iniClientListen(client.getClientIp());
 	    return clientMapper.updateClient(client);
 	}

@@ -124,10 +124,12 @@ public class ServerHandler extends ChannelHandlerAdapter {
                     client.setClientName(clientName);
                     client.setStatus(2);
                     client.setRemark("更新NETTY通信方式");
+                    client.setUpdateBy("NETTY");
 
                     Job job=jobService.selectJobById(client.getJobId().longValue());
                     job.setStatus(JobConstants.JOB_STATUS_FOR_PAUSE);
                     job.setMethodParams(hostName);
+                    job.setUpdateBy("netty");
 
                     /*在公共调度表中插入数据*/
                     result = jobService.updateJob(job);
@@ -142,7 +144,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
                     client = new Client();
                     client.setClientIp(hostName);
                     client.setClientName(clientName);
-                    client.setCheckinterval(9999999);
+                    client.setCheckinterval(30);
                     client.setClientPath("/TestDriven");
                     client.setStatus(2);
 
@@ -156,6 +158,8 @@ public class ServerHandler extends ChannelHandlerAdapter {
                     job.setMisfirePolicy(ScheduleConstants.MISFIRE_DO_NOTHING);
                     job.setStatus(JobConstants.JOB_STATUS_FOR_PAUSE);
                     job.setRemark("");
+                    job.setCreateBy("netty");
+                    job.setUpdateBy("netty");
                     /*在公共调度表中插入数据*/
                     result = jobService.insertJobCron(job);
                     if(result<1){
@@ -175,10 +179,13 @@ public class ServerHandler extends ChannelHandlerAdapter {
                 client.setClientIp(hostName);
                 client.setRemark("检测客户端状态成功");
                 client.setStatus(0);
-                if(client.getClientId()!=null)
+                if(client.getClientId()!=null){
+                    client.setUpdateBy("NETTY");
                     clientMapper.updateClient(client);
-                else
+                }else{
                     clientMapper.insertClient(client);
+                }
+
                 //登录成功,把channel存到服务端的map中
                 nettyChannelMap.add(hostName,(SocketChannel)ctx.channel());
                 //登陆成功，放入map中用于心跳
@@ -194,9 +201,13 @@ public class ServerHandler extends ChannelHandlerAdapter {
                 client.setRemark("客户端("+json.get("version")+")与服务器("+lfConfig.getVersion()+")版本不一致");
                 client.setStatus(1);
                 if(client.getClientId()!=null)
+                {
+                    client.setUpdateBy("NETTY");
                     clientMapper.updateClient(client);
-                else
+                }else{
                     clientMapper.insertClient(client);
+                }
+
                 //登陆失败，删除心跳map中的数据
                 NettyServer.clientMap.remove(hostName);
                 //返回接受成功消息
@@ -236,6 +247,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
                 client.setClientIp(hostName);
                 client.setRemark("检测客户端状态成功");
                 client.setStatus(0);
+                client.setUpdateBy("NETTY");
                 clientMapper.updateClient(client);
                 //更新客户端状态成功
                 NettyServer.clientMap.put(hostName,"0");
