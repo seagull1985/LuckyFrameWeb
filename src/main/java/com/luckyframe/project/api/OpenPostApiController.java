@@ -66,8 +66,7 @@ public class OpenPostApiController
 	
 	/**
 	 * 根据项目ID获取公共参数列表
-	 * @param req
-	 * @param rsp
+	 * @param jsonObject
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
@@ -81,7 +80,7 @@ public class OpenPostApiController
 			result = projectCaseDebugService.insertProjectCaseDebug(projectCaseDebug);			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			log.error("根据项目ID获取公共参数列表出现异常", e);
+			log.error("提交调试日志出现异常", e);
 		}
 		if(result>0){
 			return "提交调试日志成功！";
@@ -92,8 +91,7 @@ public class OpenPostApiController
 	
 	/**
 	 * 增加用例执行明细
-	 * @param req
-	 * @param rsp
+	 * @param jsonObject
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
@@ -120,8 +118,7 @@ public class OpenPostApiController
 
 	/**
 	 * 修改用例执行状态
-	 * @param req
-	 * @param rsp
+	 * @param jsonObject
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
@@ -156,8 +153,7 @@ public class OpenPostApiController
 	
 	/**
 	 * 增加用例日志明细
-	 * @param req
-	 * @param rsp
+	 * @param jsonObject
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */

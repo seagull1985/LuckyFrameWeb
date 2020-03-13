@@ -2,6 +2,7 @@ package com.luckyframe.common.netty;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -86,15 +87,16 @@ public class ServerHandler extends ChannelHandlerAdapter {
     private static final Logger log = LoggerFactory.getLogger(ServerHandler.class);
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-
-        JSONObject json= JSON.parseObject(msg.toString());
+        //统一转编码
+        String msgstr = URLDecoder.decode(msg.toString(), "UTF-8");
+        JSONObject json= JSON.parseObject(msgstr);
         /*
         * ClientUp客户端启动，自动注册到服务端中
         * */
         if("clientUp".equals(json.get("method")))
         {
-            String hostName=URLDecoder.decode(json.get("hostName").toString(), "GBK");
-            String clientName=URLDecoder.decode(json.get("clientName").toString(), "GBK");
+            String hostName=json.get("hostName").toString();
+            String clientName=json.get("clientName").toString();
             if(nettyChannelMap.get(hostName)!=null)
             {
                 JSONObject tmp=new JSONObject();
@@ -227,7 +229,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
             * 向客户端请求后返回的数据
             * */
             Result re =JSONObject.parseObject(json.get("data").toString(),Result.class);
-            re.setMessage(URLDecoder.decode(re.getMessage().toString(), "GBK"));
+            //re.setMessage(URLDecoder.decode(re.getMessage().toString(), "GBK"));
             //校验返回的信息是否是同一个信息
             if (unidId.equals(re.getUniId())){
                 latch.countDown();//消息返回完毕，释放同步锁，具体业务需要判断指令是否匹配
@@ -241,10 +243,11 @@ public class ServerHandler extends ChannelHandlerAdapter {
             * 客户端心跳检测
             * */
             String hostName=json.get("hostName").toString();
-            //检查客户端是否已经注册入库
-            Client client=clientService.selectClientByClientIP(hostName);
-            if(NettyServer.clientMap.get(hostName)==null||(!"0".equals(NettyServer.clientMap.get(hostName)))||(0!=client.getStatus()))
+
+            if(NettyServer.clientMap.get(hostName)==null||(!"0".equals(NettyServer.clientMap.get(hostName))))
             {
+                //检查客户端是否已经注册入库
+                Client client=clientService.selectClientByClientIP(hostName);
                 //版本号一致
                 client.setClientIp(hostName);
                 client.setRemark("检测客户端状态成功");
@@ -336,7 +339,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
         return result;
     }
 
-    public static void sendMessage(ChannelHandlerContext ctx, String json) throws InterruptedException {
+    private static void sendMessage(ChannelHandlerContext ctx, String json) throws InterruptedException, UnsupportedEncodingException {
 	        ctx.channel().writeAndFlush(Unpooled.copiedBuffer((json + "$_").getBytes()));
 	    }
 
