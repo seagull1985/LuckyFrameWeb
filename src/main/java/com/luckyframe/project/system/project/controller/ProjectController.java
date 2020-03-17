@@ -33,8 +33,6 @@ import com.luckyframe.project.system.project.service.IProjectService;
 @RequestMapping("/system/project")
 public class ProjectController extends BaseController
 {
-    private String prefix = "system/project";
-	
 	@Autowired
 	private IProjectService projectService;
 	
@@ -42,7 +40,7 @@ public class ProjectController extends BaseController
 	@GetMapping()
 	public String project()
 	{
-	    return prefix + "/project";
+	    return "system/project/project";
 	}
 	
 	/**
@@ -68,7 +66,7 @@ public class ProjectController extends BaseController
     public AjaxResult export(Project project)
     {
     	List<Project> list = projectService.selectProjectList(project);
-        ExcelUtil<Project> util = new ExcelUtil<Project>(Project.class);
+        ExcelUtil<Project> util = new ExcelUtil<>(Project.class);
         return util.exportExcel(list, "project");
     }
 	
@@ -78,7 +76,7 @@ public class ProjectController extends BaseController
 	@GetMapping("/add")
 	public String add()
 	{
-	    return prefix + "/add";
+	    return "system/project/add";
 	}
 	
 	/**
@@ -101,7 +99,7 @@ public class ProjectController extends BaseController
 	{
 		Project project = projectService.selectProjectById(projectId);
 		mmap.put("project", project);
-	    return prefix + "/edit";
+	    return "system/project/edit";
 	}
 	
 	/**

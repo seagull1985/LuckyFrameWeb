@@ -53,8 +53,7 @@ public class ProjectPlanCaseServiceImpl implements IProjectPlanCaseService
 	
 	/**
 	 * 根据计划ID查询用例集合
-	 * @param planId
-	 * @return
+	 * @param planId 测试计划ID
 	 * @author Seagull
 	 * @date 2019年3月18日
 	 */
@@ -98,7 +97,7 @@ public class ProjectPlanCaseServiceImpl implements IProjectPlanCaseService
 	/**
      * 删除测试计划用例对象
      * 
-     * @param ids 需要删除的数据ID
+     * @param planCaseIds 需要删除的数据ID
      * @return 结果
      */
 	@Override
@@ -109,8 +108,7 @@ public class ProjectPlanCaseServiceImpl implements IProjectPlanCaseService
 	
 	/**
 	 * 删除单个测试计划用例对象
-	 * @param planCaseId
-	 * @return
+	 * @param planCaseId 计划用例ID
 	 * @author Seagull
 	 * @date 2019年3月20日
 	 */
@@ -122,8 +120,7 @@ public class ProjectPlanCaseServiceImpl implements IProjectPlanCaseService
 	
 	/**
 	 * 查询指定测试计划下绑定用例总数
-	 * @param planId
-	 * @return
+	 * @param planId 测试计划ID
 	 * @author Seagull
 	 * @date 2019年5月13日
 	 */

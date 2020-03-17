@@ -32,8 +32,6 @@ import com.luckyframe.project.system.dict.service.IDictDataService;
 @RequestMapping("/system/dict/data")
 public class DictDataController extends BaseController
 {
-    private String prefix = "system/dict/data";
-
     @Autowired
     private IDictDataService dictDataService;
 
@@ -41,7 +39,7 @@ public class DictDataController extends BaseController
     @GetMapping()
     public String dictData()
     {
-        return prefix + "/data";
+        return "system/dict/data/data";
     }
 
     @PostMapping("/list")
@@ -61,7 +59,7 @@ public class DictDataController extends BaseController
     public AjaxResult export(DictData dictData)
     {
         List<DictData> list = dictDataService.selectDictDataList(dictData);
-        ExcelUtil<DictData> util = new ExcelUtil<DictData>(DictData.class);
+        ExcelUtil<DictData> util = new ExcelUtil<>(DictData.class);
         return util.exportExcel(list, "字典数据");
     }
 
@@ -72,7 +70,7 @@ public class DictDataController extends BaseController
     public String add(@PathVariable("dictType") String dictType, ModelMap mmap)
     {
         mmap.put("dictType", dictType);
-        return prefix + "/add";
+        return "system/dict/data/add";
     }
 
     /**
@@ -94,7 +92,7 @@ public class DictDataController extends BaseController
     public String edit(@PathVariable("dictCode") Long dictCode, ModelMap mmap)
     {
         mmap.put("dict", dictDataService.selectDictDataById(dictCode));
-        return prefix + "/edit";
+        return "system/dict/data/edit";
     }
 
     /**
@@ -120,8 +118,8 @@ public class DictDataController extends BaseController
   
 	/**
 	 * Ajax前台获取操作字典
-	 * @param stepType
-	 * @return
+	 * @param stepType 步骤类型
+	 * @return 返回步骤类型集合
 	 * @author Seagull
 	 * @date 2019年3月12日
 	 */
@@ -130,7 +128,7 @@ public class DictDataController extends BaseController
 	public String getDictDataListByStepType(@PathVariable("stepType") Integer stepType) {
 		String str = "{\"message\": \"\",\"value\": ,\"code\": 200,\"redirect\": \"\" }";
 		try {
-			JSONObject json = new JSONObject();
+			JSONObject json;
 			DictData dictData=new DictData();
 			if(stepType==0){
 				dictData.setDictType("testmanagmt_casestep_httpoperation");

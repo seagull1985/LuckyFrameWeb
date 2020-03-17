@@ -36,8 +36,6 @@ public class ProfileController extends BaseController
 {
     private static final Logger log = LoggerFactory.getLogger(ProfileController.class);
 
-    private String prefix = "system/user/profile";
-
     @Autowired
     private IUserService userService;
 
@@ -66,7 +64,7 @@ public class ProfileController extends BaseController
         	projectName = projectService.selectProjectById(user.getProjectId()).getProjectName();
         }
         mmap.put("projectName", projectName);
-        return prefix + "/profile";
+        return "system/user/profile/profile";
     }
 
     @GetMapping("/checkPassword")
@@ -74,11 +72,7 @@ public class ProfileController extends BaseController
     public boolean checkPassword(String password)
     {
         User user = getSysUser();
-        if (passwordService.matches(user, password))
-        {
-            return true;
-        }
-        return false;
+        return passwordService.matches(user, password);
     }
 
     @GetMapping("/resetPwd")
@@ -86,7 +80,7 @@ public class ProfileController extends BaseController
     {
         User user = getSysUser();
         mmap.put("user", userService.selectUserById(user.getUserId()));
-        return prefix + "/resetPwd";
+        return "system/user/profile/resetPwd";
     }
 
     @Log(title = "重置密码", businessType = BusinessType.UPDATE)
@@ -121,7 +115,7 @@ public class ProfileController extends BaseController
         User user = getSysUser();
         mmap.put("user", userService.selectUserById(user.getUserId()));
         mmap.put("projects", projectService.selectProjectAll(0));
-        return prefix + "/edit";
+        return "system/user/profile/edit";
     }
 
     /**
@@ -132,7 +126,7 @@ public class ProfileController extends BaseController
     {
         User user = getSysUser();
         mmap.put("user", userService.selectUserById(user.getUserId()));
-        return prefix + "/avatar";
+        return "system/user/profile/avatar";
     }
 
     /**

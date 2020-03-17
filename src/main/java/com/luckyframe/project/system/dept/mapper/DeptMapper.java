@@ -19,7 +19,7 @@ public interface DeptMapper
      * @param dept 部门信息
      * @return 结果
      */
-    public int selectDeptCount(Dept dept);
+    int selectDeptCount(Dept dept);
 
     /**
      * 查询部门是否存在用户
@@ -27,7 +27,7 @@ public interface DeptMapper
      * @param deptId 部门ID
      * @return 结果
      */
-    public int checkDeptExistUser(Long deptId);
+    int checkDeptExistUser(Long deptId);
 
     /**
      * 查询部门管理数据
@@ -35,7 +35,7 @@ public interface DeptMapper
      * @param dept 部门信息
      * @return 部门信息集合
      */
-    public List<Dept> selectDeptList(Dept dept);
+    List<Dept> selectDeptList(Dept dept);
 
     /**
      * 删除部门管理信息
@@ -43,7 +43,7 @@ public interface DeptMapper
      * @param deptId 部门ID
      * @return 结果
      */
-    public int deleteDeptById(Long deptId);
+    int deleteDeptById(Long deptId);
 
     /**
      * 新增部门信息
@@ -51,7 +51,7 @@ public interface DeptMapper
      * @param dept 部门信息
      * @return 结果
      */
-    public int insertDept(Dept dept);
+    int insertDept(Dept dept);
 
     /**
      * 修改部门信息
@@ -59,7 +59,7 @@ public interface DeptMapper
      * @param dept 部门信息
      * @return 结果
      */
-    public int updateDept(Dept dept);
+    int updateDept(Dept dept);
 
     /**
      * 修改子元素关系
@@ -67,7 +67,7 @@ public interface DeptMapper
      * @param depts 子元素
      * @return 结果
      */
-    public int updateDeptChildren(@Param("depts") List<Dept> depts);
+    int updateDeptChildren(@Param("depts") List<Dept> depts);
 
     /**
      * 根据部门ID查询信息
@@ -75,7 +75,7 @@ public interface DeptMapper
      * @param deptId 部门ID
      * @return 部门信息
      */
-    public Dept selectDeptById(Long deptId);
+    Dept selectDeptById(Long deptId);
 
     /**
      * 校验部门名称是否唯一
@@ -84,7 +84,7 @@ public interface DeptMapper
      * @param parentId 父部门ID
      * @return 结果
      */
-    public Dept checkDeptNameUnique(@Param("deptName") String deptName, @Param("parentId") Long parentId);
+    Dept checkDeptNameUnique(@Param("deptName") String deptName, @Param("parentId") Long parentId);
 
     /**
      * 根据角色ID查询部门
@@ -92,12 +92,12 @@ public interface DeptMapper
      * @param roleId 角色ID
      * @return 部门列表
      */
-    public List<String> selectRoleDeptTree(Long roleId);
+    List<String> selectRoleDeptTree(Long roleId);
 
     /**
      * 修改所在部门的父级部门状态
      * 
      * @param dept 部门
      */
-    public void updateDeptStatus(Dept dept);
+    void updateDeptStatus(Dept dept);
 }

@@ -20,16 +20,15 @@ public interface ProjectPlanMapper
      * @param planId 测试计划ID
      * @return 测试计划信息
      */
-	public ProjectPlan selectProjectPlanById(Integer planId);
+	ProjectPlan selectProjectPlanById(Integer planId);
 	
 	/**
 	 * 根据计划名称查询测试计划信息
-	 * @param planName
-	 * @return
+	 * @param planName 测试计划名称
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
-	public ProjectPlan selectProjectPlanByPlanName(String planName);
+	ProjectPlan selectProjectPlanByPlanName(String planName);
 	
 	/**
      * 查询测试计划列表
@@ -37,7 +36,7 @@ public interface ProjectPlanMapper
      * @param projectPlan 测试计划信息
      * @return 测试计划集合
      */
-	public List<ProjectPlan> selectProjectPlanList(ProjectPlan projectPlan);
+	List<ProjectPlan> selectProjectPlanList(ProjectPlan projectPlan);
 	
 	/**
      * 新增测试计划
@@ -45,7 +44,7 @@ public interface ProjectPlanMapper
      * @param projectPlan 测试计划信息
      * @return 结果
      */
-	public int insertProjectPlan(ProjectPlan projectPlan);
+	int insertProjectPlan(ProjectPlan projectPlan);
 	
 	/**
      * 修改测试计划
@@ -53,7 +52,7 @@ public interface ProjectPlanMapper
      * @param projectPlan 测试计划信息
      * @return 结果
      */
-	public int updateProjectPlan(ProjectPlan projectPlan);
+	int updateProjectPlan(ProjectPlan projectPlan);
 	
 	/**
      * 删除测试计划
@@ -61,7 +60,7 @@ public interface ProjectPlanMapper
      * @param planId 测试计划ID
      * @return 结果
      */
-	public int deleteProjectPlanById(Integer planId);
+	int deleteProjectPlanById(Integer planId);
 	
 	/**
      * 批量删除测试计划
@@ -69,15 +68,14 @@ public interface ProjectPlanMapper
      * @param planIds 需要删除的数据ID
      * @return 结果
      */
-	public int deleteProjectPlanByIds(String[] planIds);
+	int deleteProjectPlanByIds(String[] planIds);
 	
 	/**
 	 * 检查测试计划名称唯一性
-	 * @param planName
-	 * @return
+	 * @param planName 测试计划名称
 	 * @author Seagull
 	 * @date 2019年3月18日
 	 */
-	public ProjectPlan checkProjectPlanNameUnique(String planName);
+	ProjectPlan checkProjectPlanNameUnique(String planName);
 	
 }

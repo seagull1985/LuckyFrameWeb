@@ -15,12 +15,12 @@ import com.luckyframe.framework.web.controller.BaseController;
 @RequestMapping("/monitor/data")
 public class DruidController extends BaseController
 {
-    private String prefix = "/monitor/druid";
 
     @RequiresPermissions("monitor:data:view")
     @GetMapping()
     public String index()
     {
+        String prefix = "/monitor/druid";
         return redirect(prefix + "/index");
     }
 }

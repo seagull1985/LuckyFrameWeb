@@ -35,8 +35,8 @@ public class TaskCaseExecuteServiceImpl implements ITaskCaseExecuteService
 	
 	/**
 	 * 根据taskId跟caseId查询用例执行信息
-	 * @param taskCaseExecute
-	 * @return
+	 * @param taskCaseExecute 用例执行对象中的taskId以及caseId
+	 * @return 执行用例对象
 	 * @author Seagull
 	 * @date 2019年4月22日
 	 */
@@ -60,8 +60,8 @@ public class TaskCaseExecuteServiceImpl implements ITaskCaseExecuteService
 	
 	/**
 	 * 查询执行任务中所有执行未成功的用例
-	 * @param taskId
-	 * @return
+	 * @param taskId 任务执行ID
+	 * @return 用例执行对象集合
 	 * @author Seagull
 	 * @date 2019年4月23日
 	 */
@@ -73,8 +73,8 @@ public class TaskCaseExecuteServiceImpl implements ITaskCaseExecuteService
 	
 	/**
 	 * 根据任务ID查询用例执行列表
-	 * @param taskId
-	 * @return
+	 * @param taskId 任务执行ID
+	 * @return 用例执行对象集合
 	 * @author Seagull
 	 * @date 2019年4月9日
 	 */
@@ -125,7 +125,7 @@ public class TaskCaseExecuteServiceImpl implements ITaskCaseExecuteService
 	
 	/**
 	 * 查询已执行的总用例数
-	 * @return
+	 * @return 已经执行的用例数量
 	 * @author Seagull
 	 * @date 2019年4月28日
 	 */
@@ -137,7 +137,7 @@ public class TaskCaseExecuteServiceImpl implements ITaskCaseExecuteService
     
 	/**
 	 * 查询已成功执行的总用例数
-	 * @return
+	 * @return 成功执行的用例数量
 	 * @author Seagull
 	 * @date 2019年4月28日
 	 */

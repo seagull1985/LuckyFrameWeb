@@ -18,16 +18,15 @@ public interface IProjectCaseStepsService
      * @param stepId 测试用例步骤管理ID
      * @return 测试用例步骤管理信息
      */
-	public ProjectCaseSteps selectProjectCaseStepsById(Integer stepId);
+	ProjectCaseSteps selectProjectCaseStepsById(Integer stepId);
 	
 	/**
 	 * 通过用例ID以及步骤序号获取步骤实体
-	 * @param projectCaseSteps
-	 * @return
+	 * @param projectCaseSteps 用例步骤对象
 	 * @author Seagull
 	 * @date 2019年4月25日
 	 */
-	public ProjectCaseSteps selectProjectCaseStepsByCaseIdAndStepNum(ProjectCaseSteps projectCaseSteps);
+	ProjectCaseSteps selectProjectCaseStepsByCaseIdAndStepNum(ProjectCaseSteps projectCaseSteps);
 	
 	/**
      * 查询测试用例步骤管理列表
@@ -35,7 +34,7 @@ public interface IProjectCaseStepsService
      * @param projectCaseSteps 测试用例步骤管理信息
      * @return 测试用例步骤管理集合
      */
-	public List<ProjectCaseSteps> selectProjectCaseStepsList(ProjectCaseSteps projectCaseSteps);
+	List<ProjectCaseSteps> selectProjectCaseStepsList(ProjectCaseSteps projectCaseSteps);
 	
 	/**
      * 新增测试用例步骤管理
@@ -43,7 +42,7 @@ public interface IProjectCaseStepsService
      * @param projectCaseSteps 测试用例步骤管理信息
      * @return 结果
      */
-	public int insertProjectCaseSteps(ProjectCaseSteps projectCaseSteps);
+	int insertProjectCaseSteps(ProjectCaseSteps projectCaseSteps);
 	
 	/**
      * 修改测试用例步骤管理
@@ -51,15 +50,14 @@ public interface IProjectCaseStepsService
      * @param projectCaseSteps 测试用例步骤管理信息
      * @return 结果
      */
-	public int updateProjectCaseSteps(ProjectCaseSteps projectCaseSteps);
+	int updateProjectCaseSteps(ProjectCaseSteps projectCaseSteps);
 		
 	/**
 	 * 删除单条用例中的所有步骤
-	 * @param listSteps
-	 * @return
+	 * @param listSteps 步骤集合
 	 * @author Seagull
 	 * @date 2019年3月13日
 	 */
-	public int deleteProjectCaseStepsByIds(List<ProjectCaseSteps> listSteps);
+	int deleteProjectCaseStepsByIds(List<ProjectCaseSteps> listSteps);
 	
 }

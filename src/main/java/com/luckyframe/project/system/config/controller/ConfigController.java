@@ -28,8 +28,6 @@ import com.luckyframe.project.system.config.service.IConfigService;
 @RequestMapping("/system/config")
 public class ConfigController extends BaseController
 {
-    private String prefix = "system/config";
-
     @Autowired
     private IConfigService configService;
 
@@ -37,7 +35,7 @@ public class ConfigController extends BaseController
     @GetMapping()
     public String config()
     {
-        return prefix + "/config";
+        return "system/config/config";
     }
 
     /**
@@ -60,7 +58,7 @@ public class ConfigController extends BaseController
     public AjaxResult export(Config config)
     {
         List<Config> list = configService.selectConfigList(config);
-        ExcelUtil<Config> util = new ExcelUtil<Config>(Config.class);
+        ExcelUtil<Config> util = new ExcelUtil<>(Config.class);
         return util.exportExcel(list, "参数数据");
     }
 
@@ -70,7 +68,7 @@ public class ConfigController extends BaseController
     @GetMapping("/add")
     public String add()
     {
-        return prefix + "/add";
+        return "system/config/add";
     }
 
     /**
@@ -92,7 +90,7 @@ public class ConfigController extends BaseController
     public String edit(@PathVariable("configId") Long configId, ModelMap mmap)
     {
         mmap.put("config", configService.selectConfigById(configId));
-        return prefix + "/edit";
+        return "system/config/edit";
     }
 
     /**

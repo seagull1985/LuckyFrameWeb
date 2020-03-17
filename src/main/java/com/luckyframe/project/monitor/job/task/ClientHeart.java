@@ -44,7 +44,7 @@ public class ClientHeart {
 	}
 
 	/* 避免频繁查询数据库，记录客户端状态 0 正常 1 链接失败 2 状态未知 */
-	private static Map<String, Integer> clientListen = new HashMap<String, Integer>(0);
+	private static Map<String, Integer> clientListen = new HashMap<>(0);
 
 	public static void iniClientListen(String clientIp) {
 		clientListen.put(clientIp, 2);

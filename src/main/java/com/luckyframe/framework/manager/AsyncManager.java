@@ -13,10 +13,6 @@ import com.luckyframe.common.utils.spring.SpringUtils;
  */
 public class AsyncManager
 {
-    /**
-     * 操作延迟10毫秒
-     */
-    private final int OPERATE_DELAY_TIME = 10;
 
     /**
      * 异步操作任务调度线程池
@@ -40,6 +36,10 @@ public class AsyncManager
      */
     public void execute(TimerTask task)
     {
+        /**
+         * 操作延迟10毫秒
+         */
+        int OPERATE_DELAY_TIME = 10;
         executor.schedule(task, OPERATE_DELAY_TIME, TimeUnit.MILLISECONDS);
     }
 

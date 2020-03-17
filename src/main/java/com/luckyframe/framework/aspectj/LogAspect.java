@@ -53,9 +53,6 @@ public class LogAspect
 
     /**
      * 拦截异常操作
-     * 
-     * @param joinPoint
-     * @param e
      */
     @AfterThrowing(value = "logPointCut()", throwing = "e")
     public void doAfter(JoinPoint joinPoint, Exception e)
@@ -123,7 +120,6 @@ public class LogAspect
      * 
      * @param log 日志
      * @param operLog 操作日志
-     * @throws Exception
      */
     public void getControllerMethodDescription(Log log, OperLog operLog) throws Exception
     {
@@ -144,8 +140,7 @@ public class LogAspect
     /**
      * 获取请求的参数，放到log中
      * 
-     * @param operLog
-     * @param request
+     * @param operLog 操作日志对象
      */
     private void setRequestValue(OperLog operLog)
     {
@@ -157,8 +152,7 @@ public class LogAspect
     /**
      * 是否存在注解，如果存在就获取
      */
-    private Log getAnnotationLog(JoinPoint joinPoint) throws Exception
-    {
+    private Log getAnnotationLog(JoinPoint joinPoint) {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();

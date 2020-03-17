@@ -52,8 +52,6 @@ import javax.annotation.Resource;
 @RequestMapping("/system/client")
 public class ClientController extends BaseController
 {
-    private String prefix = "system/client";
-
 	@Autowired
 	private IClientService clientService;
 	
@@ -70,7 +68,7 @@ public class ClientController extends BaseController
 	@GetMapping()
 	public String client()
 	{
-	    return prefix + "/client";
+	    return "system/client/client";
 	}
 	
 	/**
@@ -93,7 +91,7 @@ public class ClientController extends BaseController
     	Client client = clientService.selectClientById(clientId);
 		String result = HttpRequest.httpClientGet(
 				"http://" + client.getClientIp() + ":" + ClientConstants.CLIENT_MONITOR_PORT + "/getClientMonitorData",
-				new HashMap<String, Object>(0),15000);
+				new HashMap<>(0),15000);
 		System.out.println(result);
 		JSONObject jSONObject = JSONObject.parseObject(result);
 		System.out.println(jSONObject.toJSONString());
@@ -101,7 +99,7 @@ public class ClientController extends BaseController
 		SetServer server = JSONObject.parseObject(jSONObject.toJSONString(),SetServer.class);
 		System.out.println(JSONObject.toJSONString(server));
         mmap.put("server", server);
-        return prefix + "/showMonitor";
+        return "system/client/showMonitor";
     }
 	
 	/**
@@ -113,7 +111,7 @@ public class ClientController extends BaseController
     public AjaxResult export(Client client)
     {
     	List<Client> list = clientService.selectClientList(client);
-        ExcelUtil<Client> util = new ExcelUtil<Client>(Client.class);
+        ExcelUtil<Client> util = new ExcelUtil<>(Client.class);
         return util.exportExcel(list, "client");
     }
 	
@@ -124,7 +122,7 @@ public class ClientController extends BaseController
 	public String add(ModelMap mmap)
 	{
         mmap.put("projects", projectService.selectProjectAll(0));
-	    return prefix + "/add";
+	    return "system/client/add";
 	}
 	
 	/**
@@ -143,7 +141,7 @@ public class ClientController extends BaseController
 			}		
 		}
 		
-		int result = 0;
+		int result;
 		Job job=new Job();
     	job.setJobName(JobConstants.JOB_JOBNAME_FOR_CLIENTHEART);
     	job.setJobGroup(JobConstants.JOB_GROUPNAME_FOR_CLIENTHEART);
@@ -173,7 +171,7 @@ public class ClientController extends BaseController
 		Client client = clientService.selectClientById(clientId);
 		mmap.put("projects", projectService.selectProjectsByClientId(clientId));
 		mmap.put("client", client);
-	    return prefix + "/edit";
+	    return "system/client/edit";
 	}
 	
 	/**
@@ -199,7 +197,7 @@ public class ClientController extends BaseController
 			}		
 		}
 		
-		int result = 0;
+		int result;
 		Job job=jobService.selectJobById(client.getJobId().longValue());
     	job.setMethodParams(client.getClientIp());
     	job.setCronExpression("0/"+client.getCheckinterval().toString()+" * * * * ? ");
@@ -259,13 +257,11 @@ public class ClientController extends BaseController
     {
         return clientService.checkIpUnique(client);
     }
-    
+
 	/**
-	 * 测试用例Debug运行
-	 * @param listSteps
-	 * @return
-	 * @author Seagull
-	 * @date 2019年3月14日
+	 * 根据客户端IP返回驱动路径
+	 * @param clientId 客户端ID
+	 * @return 返回驱动路径
 	 */
     @GetMapping("/getDriverPathList/{clientId}")
 	@ResponseBody
@@ -278,8 +274,8 @@ public class ClientController extends BaseController
     
 	/**
 	 * 通过项目ID获取客户端列表
-	 * @param projectId
-	 * @return
+	 * @param projectId 项目ID
+	 * @return 返回客户端列表
 	 * @author Seagull
 	 * @date 2019年3月26日
 	 */
@@ -294,8 +290,8 @@ public class ClientController extends BaseController
     
 	/**
 	 * 根据客户端ID获取状态
-	 * @param clientId
-	 * @return
+	 * @param clientId 客户端ID
+	 * @return 返回客户端状态
 	 * @author Seagull
 	 * @date 2019年8月16日
 	 */

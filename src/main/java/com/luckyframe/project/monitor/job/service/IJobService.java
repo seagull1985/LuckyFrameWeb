@@ -16,7 +16,7 @@ public interface IJobService
      * @param job 调度信息
      * @return 调度任务集合
      */
-    public List<Job> selectJobList(Job job);
+    List<Job> selectJobList(Job job);
 
     /**
      * 通过调度任务ID查询调度信息
@@ -24,14 +24,14 @@ public interface IJobService
      * @param jobId 调度任务ID
      * @return 调度任务对象信息
      */
-    public Job selectJobById(Long jobId);
+    Job selectJobById(Long jobId);
 
     /**
      * 通过调度任务方法参数查询调度信息
-     * @param methodParams
-     * @return
+     * @param methodParams job中的参数
+     * @return 通过参数查询JOB
      */
-    public Job selectJobByMethodParams(String methodParams);
+    Job selectJobByMethodParams(String methodParams);
 
     /**
      * 暂停任务
@@ -39,14 +39,14 @@ public interface IJobService
      * @param job 调度信息
      * @return 结果
      */
-    public int pauseJob(Job job);
+    int pauseJob(Job job);
     
     /**
      * 停止单次任务
      * 
      * @param job 调度信息
      */
-    public int pauseOnceJob(Job job);
+    int pauseOnceJob(Job job);
 
     /**
      * 恢复任务
@@ -54,7 +54,7 @@ public interface IJobService
      * @param job 调度信息
      * @return 结果
      */
-    public int resumeJob(Job job);
+    int resumeJob(Job job);
 
     /**
      * 删除任务后，所对应的trigger也将被删除
@@ -62,7 +62,7 @@ public interface IJobService
      * @param job 调度信息
      * @return 结果
      */
-    public int deleteJob(Job job);
+    int deleteJob(Job job);
 
     /**
      * 批量删除调度信息
@@ -70,7 +70,7 @@ public interface IJobService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public void deleteJobByIds(String ids);
+    void deleteJobByIds(String ids);
 
     /**
      * 任务调度状态修改
@@ -78,7 +78,7 @@ public interface IJobService
      * @param job 调度信息
      * @return 结果
      */
-    public int changeStatus(Job job);
+    int changeStatus(Job job);
 
     /**
      * 立即运行任务
@@ -86,7 +86,7 @@ public interface IJobService
      * @param job 调度信息
      * @return 结果
      */
-    public int run(Job job);
+    int run(Job job);
 
     /**
      * 新增任务表达式
@@ -94,7 +94,7 @@ public interface IJobService
      * @param job 调度信息
      * @return 结果
      */
-    public int insertJobCron(Job job);
+    int insertJobCron(Job job);
 
     /**
      * 更新任务的时间表达式
@@ -102,7 +102,7 @@ public interface IJobService
      * @param job 调度信息
      * @return 结果
      */
-    public int updateJob(Job job);
+    int updateJob(Job job);
     
     /**
      * 校验cron表达式是否有效
@@ -110,6 +110,6 @@ public interface IJobService
      * @param cronExpression 表达式
      * @return 结果
      */
-    public boolean checkCronExpressionIsValid(String cronExpression);
+    boolean checkCronExpressionIsValid(String cronExpression);
     
 }

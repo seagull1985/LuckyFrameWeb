@@ -53,8 +53,7 @@ public class ProjectCaseParamsServiceImpl implements IProjectCaseParamsService
 	
 	/**
 	 * 根据项目ID查询所有项目中以及当前项目下的公共参数
-	 * @param projectId
-	 * @return
+	 * @param projectId 项目ID
 	 * @author Seagull
 	 * @date 2019年6月18日
 	 */
@@ -126,9 +125,9 @@ public class ProjectCaseParamsServiceImpl implements IProjectCaseParamsService
     @Override
     public String checkProjectCaseParamsNameUnique(ProjectCaseParams projectCaseParams)
     {
-        Long paramsId = StringUtils.isNull(projectCaseParams.getParamsId()) ? -1L : projectCaseParams.getParamsId();
+        long paramsId = StringUtils.isNull(projectCaseParams.getParamsId()) ? -1L : projectCaseParams.getParamsId();
         ProjectCaseParams info = projectCaseParamsMapper.checkProjectCaseParamsNameUnique(projectCaseParams);
-        if (StringUtils.isNotNull(info) && info.getParamsId().longValue() != paramsId.longValue())
+        if (StringUtils.isNotNull(info) && info.getParamsId().longValue() != paramsId)
         {
             return ProjectCaseParamsConstants.PROJECTCASEPARAMS_NAME_NOT_UNIQUE;
         }

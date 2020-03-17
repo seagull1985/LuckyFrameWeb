@@ -45,8 +45,6 @@ import cn.hutool.core.util.StrUtil;
 @RequestMapping("/testmanagmt/projectCaseSteps")
 public class ProjectCaseStepsController extends BaseController
 {
-    private String prefix = "testmanagmt/projectCase";
-	
 	@Autowired
 	private IProjectCaseStepsService projectCaseStepsService;
 
@@ -83,7 +81,7 @@ public class ProjectCaseStepsController extends BaseController
 				steps.setStepRemark("备注");
 			}
 			if(StrUtil.isBlank(steps.getExtend())){
-				steps.setExtend("");;
+				steps.setExtend("");
 			}
 			if(StrUtil.isBlank(steps.getAction())){
 				steps.setAction("");
@@ -95,7 +93,7 @@ public class ProjectCaseStepsController extends BaseController
 		
 		mmap.put("stepsList", stepsList);
 		mmap.put("projectCase", projectCase);
-	    return prefix + "/projectCaseSteps";
+	    return "testmanagmt/projectCase/projectCaseSteps";
 	}
 	
 	/**
@@ -124,9 +122,6 @@ public class ProjectCaseStepsController extends BaseController
 
 	/**
 	 * 行内子查询步骤
-	 * @param request
-	 * @param response
-	 * @throws IOException
 	 * @author Seagull
 	 * @date 2019年5月9日
 	 */
@@ -137,10 +132,10 @@ public class ProjectCaseStepsController extends BaseController
 		response.setCharacterEncoding("utf-8");
 		PrintWriter pw = response.getWriter();
 		String caseIdStr = request.getParameter("caseId");
-		Integer caseId = 0;
+		int caseId = 0;
 		// 得到客户端传递的查询参数
 		if (StringUtils.isNotEmpty(caseIdStr)) {
-			caseId = Integer.valueOf(caseIdStr);
+			caseId = Integer.parseInt(caseIdStr);
 		}
 				
 		ProjectCaseSteps projectCaseSteps = new ProjectCaseSteps();

@@ -49,7 +49,6 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
 	
 	/**
 	 * 查询最后一条执行记录
-	 * @return
 	 * @author Seagull
 	 * @date 2019年4月24日
 	 */
@@ -61,8 +60,7 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
     
 	/**
 	 * 根据任务名称查询任务实体
-	 * @param taskName
-	 * @return
+	 * @param taskName 任务名称
 	 * @author Seagull
 	 * @date 2019年6月18日
 	 */
@@ -74,8 +72,7 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
     
 	/**
 	 * 查询当前项目下最后一条执行记录
-	 * @param projectId
-	 * @return
+	 * @param projectId 项目ID
 	 * @author Seagull
 	 * @date 2019年5月15日
 	 */
@@ -136,7 +133,7 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
 	public int deleteTaskExecuteByIds(String ids)
 	{
 		String[] taskIds=Convert.toStrArray(ids);
-		Integer result=0;
+		int result=0;
 		for(String taskIdstr:taskIds){
 			Integer taskId=Integer.valueOf(taskIdstr);
 			TaskExecute taskExecute = taskExecuteMapper.selectTaskExecuteById(taskId);
@@ -169,7 +166,6 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
 	
 	/**
 	 * 查询最早一条执行任务日期
-	 * @return
 	 * @author Seagull
 	 * @date 2019年4月28日
 	 */
@@ -190,14 +186,13 @@ public class TaskExecuteServiceImpl implements ITaskExecuteService
     
 	/**
 	 * 查询30天内任务统计执行数据
-	 * @return
 	 * @author Seagull
 	 * @date 2019年4月29日
 	 */
     @Override
 	public List<TaskExecute> selectTaskExecuteListForThirtyDays()
 	{
-    	Date date = new Date();
+    	Date date;
     	Calendar calendar = new GregorianCalendar();
     	/*30天前*/
     	calendar.add(Calendar.DATE, -30);

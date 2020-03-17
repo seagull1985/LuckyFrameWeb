@@ -18,7 +18,7 @@ public interface IProjectPlanCaseService
      * @param planCaseId 测试计划用例ID
      * @return 测试计划用例信息
      */
-	public ProjectPlanCase selectProjectPlanCaseById(Integer planCaseId);
+	ProjectPlanCase selectProjectPlanCaseById(Integer planCaseId);
 	
 	/**
      * 查询测试计划用例列表
@@ -26,16 +26,15 @@ public interface IProjectPlanCaseService
      * @param projectPlanCase 测试计划用例信息
      * @return 测试计划用例集合
      */
-	public List<ProjectPlanCase> selectProjectPlanCaseList(ProjectPlanCase projectPlanCase);
+	List<ProjectPlanCase> selectProjectPlanCaseList(ProjectPlanCase projectPlanCase);
 	
 	/**
 	 * 根据计划ID查询用例集合
-	 * @param planId
-	 * @return
+	 * @param planId 测试计划ID
 	 * @author Seagull
 	 * @date 2019年3月18日
 	 */
-	public List<ProjectPlanCase> selectProjectPlanCaseListByPlanId(Integer planId);
+	List<ProjectPlanCase> selectProjectPlanCaseListByPlanId(Integer planId);
 	
 	/**
      * 新增测试计划用例
@@ -43,7 +42,7 @@ public interface IProjectPlanCaseService
      * @param projectPlanCase 测试计划用例信息
      * @return 结果
      */
-	public int insertProjectPlanCase(ProjectPlanCase projectPlanCase);
+	int insertProjectPlanCase(ProjectPlanCase projectPlanCase);
 	
 	/**
      * 修改测试计划用例
@@ -51,31 +50,29 @@ public interface IProjectPlanCaseService
      * @param projectPlanCase 测试计划用例信息
      * @return 结果
      */
-	public int updateProjectPlanCase(ProjectPlanCase projectPlanCase);
+	int updateProjectPlanCase(ProjectPlanCase projectPlanCase);
 		
 	/**
      * 删除测试计划用例信息
      * 
-     * @param ids 需要删除的数据ID
+     * @param planCaseIds 计划用例ID
      * @return 结果
      */
-	public int deleteProjectPlanCaseByIds(String[] planCaseIds);
+	int deleteProjectPlanCaseByIds(String[] planCaseIds);
 	
 	/**
 	 * 删除单个测试计划用例对象
-	 * @param planCaseId
-	 * @return
+	 * @param planCaseId 计划用例ID
 	 * @author Seagull
 	 * @date 2019年3月20日
 	 */
-	public int deleteProjectPlanCaseById(Integer planCaseId);
+	int deleteProjectPlanCaseById(Integer planCaseId);
 	
 	/**
 	 * 查询指定测试计划下绑定用例总数
-	 * @param planId
-	 * @return
+	 * @param planId 测试计划ID
 	 * @author Seagull
 	 * @date 2019年5月13日
 	 */
-	public Integer selectProjectPlanCaseCountByPlanId(Integer planId);
+	Integer selectProjectPlanCaseCountByPlanId(Integer planId);
 }

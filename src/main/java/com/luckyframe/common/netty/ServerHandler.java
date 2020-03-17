@@ -121,7 +121,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
             {
                 //兼容HTTP方式增加的客户端
                 client=clientService.selectClientByClientIP(json.get("ip").toString());
-                int result = 0 ;
+                int result;
                 if(null!=client){
                     client.setClientIp(hostName);
                     client.setClientName(clientName);
@@ -261,7 +261,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
         else if("upload".equals(json.get("method")))
         {
             Result re =JSONObject.parseObject(json.get("data").toString(),Result.class);
-            int start = Integer.valueOf(json.get("start").toString());
+            int start = Integer.parseInt(json.get("start").toString());
             FileUploadFile ef = re.getFileUploadFile();
             byte[] bytes = ef.getBytes();
             int byteRead = ef.getEndPos();
@@ -339,7 +339,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
         return result;
     }
 
-    private static void sendMessage(ChannelHandlerContext ctx, String json) throws InterruptedException, UnsupportedEncodingException {
+    private static void sendMessage(ChannelHandlerContext ctx, String json) {
 	        ctx.channel().writeAndFlush(Unpooled.copiedBuffer((json + "$_").getBytes()));
 	    }
 

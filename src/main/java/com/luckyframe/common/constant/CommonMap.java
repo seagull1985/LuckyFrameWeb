@@ -11,7 +11,7 @@ import java.util.Map;
 public class CommonMap
 {
     /** 状态编码转换 */
-    public static Map<String, String> javaTypeMap = new HashMap<String, String>();
+    public static Map<String, String> javaTypeMap = new HashMap<>();
 
     static
     {

@@ -15,12 +15,11 @@ import com.luckyframe.framework.web.controller.BaseController;
 @RequestMapping("/tool/build")
 public class BuildController extends BaseController
 {
-    private String prefix = "tool/build";
 
     @RequiresPermissions("tool:build:view")
     @GetMapping()
     public String build()
     {
-        return prefix + "/build";
+        return "tool/build/build";
     }
 }

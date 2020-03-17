@@ -109,9 +109,9 @@ public class ConfigServiceImpl implements IConfigService
     @Override
     public String checkConfigKeyUnique(Config config)
     {
-        Long configId = StringUtils.isNull(config.getConfigId()) ? -1L : config.getConfigId();
+        long configId = StringUtils.isNull(config.getConfigId()) ? -1L : config.getConfigId();
         Config info = configMapper.checkConfigKeyUnique(config.getConfigKey());
-        if (StringUtils.isNotNull(info) && info.getConfigId().longValue() != configId.longValue())
+        if (StringUtils.isNotNull(info) && info.getConfigId() != configId)
         {
             return UserConstants.CONFIG_KEY_NOT_UNIQUE;
         }

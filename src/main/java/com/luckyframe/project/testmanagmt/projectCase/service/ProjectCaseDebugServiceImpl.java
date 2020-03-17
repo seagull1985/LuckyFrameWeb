@@ -83,8 +83,7 @@ public class ProjectCaseDebugServiceImpl implements IProjectCaseDebugService
 	
 	/**
 	 * 根据id,useid,caseid删除调试日志
-	 * @param projectCaseDebug
-	 * @return
+	 * @param projectCaseDebug 用例调试对象
 	 * @author Seagull
 	 * @date 2019年3月15日
 	 */

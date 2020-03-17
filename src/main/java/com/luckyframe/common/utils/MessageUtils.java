@@ -15,7 +15,6 @@ public class MessageUtils
      *
      * @param code 消息键
      * @param args 参数
-     * @return
      */
     public static String message(String code, Object... args)
     {

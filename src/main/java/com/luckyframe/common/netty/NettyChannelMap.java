@@ -18,7 +18,7 @@ public class NettyChannelMap {
     //logger
     private static final Logger log = LoggerFactory.getLogger(NettyChannelMap.class);
 
-    private static Map<String, SocketChannel> map=new ConcurrentHashMap<String, SocketChannel>();
+    private static Map<String, SocketChannel> map= new ConcurrentHashMap<>();
 
     @Autowired
     private IClientService clientService;

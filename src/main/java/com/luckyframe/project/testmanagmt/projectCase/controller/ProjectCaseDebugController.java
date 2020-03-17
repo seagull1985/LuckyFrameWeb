@@ -39,8 +39,6 @@ import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseServic
 @RequestMapping("/testmanagmt/projectCaseDebug")
 public class ProjectCaseDebugController extends BaseController
 {
-    private String prefix = "testmanagmt/projectCase";
-	
 	@Autowired
 	private IProjectCaseDebugService projectCaseDebugService;
 	
@@ -52,9 +50,8 @@ public class ProjectCaseDebugController extends BaseController
 	
 	/**
 	 * 测试用例Debug
-	 * @param caseId
-	 * @param mmap
-	 * @return
+	 * @param caseId 用例ID
+	 * @param mmap 返回数据模型
 	 * @author Seagull
 	 * @date 2019年3月14日
 	 */
@@ -72,13 +69,12 @@ public class ProjectCaseDebugController extends BaseController
 		}		
 		mmap.put("projectCaseDebug", projectCaseDebug);
 		mmap.put("clients", clients);
-	    return prefix + "/debugCase";
+	    return "testmanagmt/projectCase/debugCase";
 	}
 	
 	/**
 	 * 测试用例Debug运行
-	 * @param listSteps
-	 * @return
+	 * @param projectCaseDebug 调试用例对象
 	 * @author Seagull
 	 * @date 2019年3月14日
 	 */
@@ -122,8 +118,7 @@ public class ProjectCaseDebugController extends BaseController
 	
 	/**
 	 * 获取用例调试日志
-	 * @param listSteps
-	 * @return
+	 * @param projectCaseDebug 调试用例对象
 	 * @author Seagull
 	 * @date 2019年3月14日
 	 */
@@ -135,12 +130,12 @@ public class ProjectCaseDebugController extends BaseController
 		JSONObject json = new JSONObject();
 		/*调试结束标识 0 进行中 1结束 2异常*/
 		String status="0";
-		String ms="获取调试日志失败！";
+		String ms;
 		try {
 			List<ProjectCaseDebug> logList=projectCaseDebugService.selectProjectCaseDebugList(projectCaseDebug);
 			StringBuilder stringBuilder = new StringBuilder();
 			for(ProjectCaseDebug log:logList){
-				stringBuilder.append(log.getLogLevel()+": "+log.getLogDetail()+"</br>");
+				stringBuilder.append(log.getLogLevel()).append(": ").append(log.getLogDetail()).append("</br>");
 				status=log.getDebugIsend().toString();
 			}
 			ms=stringBuilder.toString();

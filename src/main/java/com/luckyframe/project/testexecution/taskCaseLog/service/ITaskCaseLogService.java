@@ -18,7 +18,7 @@ public interface ITaskCaseLogService
      * @param logId 用例日志明细ID
      * @return 用例日志明细信息
      */
-	public TaskCaseLog selectTaskCaseLogById(Integer logId);
+	TaskCaseLog selectTaskCaseLogById(Integer logId);
 	
 	/**
      * 查询用例日志明细列表
@@ -26,16 +26,16 @@ public interface ITaskCaseLogService
      * @param taskCaseLog 用例日志明细信息
      * @return 用例日志明细集合
      */
-	public List<TaskCaseLog> selectTaskCaseLogList(TaskCaseLog taskCaseLog);
+	List<TaskCaseLog> selectTaskCaseLogList(TaskCaseLog taskCaseLog);
 	
 	/**
 	 * 根据执行用例ID查询日志
-	 * @param taskCaseId
-	 * @return
+	 * @param taskCaseId 执行用例ID
+	 * @return 返回执行日志集合
 	 * @author Seagull
 	 * @date 2019年4月11日
 	 */
-	public List<TaskCaseLog> selectTaskCaseLogListByTaskCaseId(Integer taskCaseId);
+	List<TaskCaseLog> selectTaskCaseLogListByTaskCaseId(Integer taskCaseId);
 	
 	/**
      * 新增用例日志明细
@@ -43,7 +43,7 @@ public interface ITaskCaseLogService
      * @param taskCaseLog 用例日志明细信息
      * @return 结果
      */
-	public int insertTaskCaseLog(TaskCaseLog taskCaseLog);
+	int insertTaskCaseLog(TaskCaseLog taskCaseLog);
 	
 	/**
      * 修改用例日志明细
@@ -51,7 +51,7 @@ public interface ITaskCaseLogService
      * @param taskCaseLog 用例日志明细信息
      * @return 结果
      */
-	public int updateTaskCaseLog(TaskCaseLog taskCaseLog);
+	int updateTaskCaseLog(TaskCaseLog taskCaseLog);
 		
 	/**
      * 删除用例日志明细信息
@@ -59,22 +59,22 @@ public interface ITaskCaseLogService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-	public int deleteTaskCaseLogByIds(String ids);
+	int deleteTaskCaseLogByIds(String ids);
 	
 	/**
 	 * 根据TaskCaseId删除执行日志
-	 * @param taskCaseId
-	 * @return
+	 * @param taskCaseId 用例执行ID
+	 * @return 返回删除数量
 	 * @author Seagull
 	 * @date 2019年4月23日
 	 */
-	public int deleteTaskCaseLogByTaskCaseId(Integer taskCaseId);
+	int deleteTaskCaseLogByTaskCaseId(Integer taskCaseId);
 	
 	/**
 	 * 查询总日志数
-	 * @return
+	 * @return 返回日志数量
 	 * @author Seagull
 	 * @date 2019年4月28日
 	 */
-	public int selectTaskCaseLogCount();
+	int selectTaskCaseLogCount();
 }

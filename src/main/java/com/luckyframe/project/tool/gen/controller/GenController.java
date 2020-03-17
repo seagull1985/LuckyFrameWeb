@@ -29,8 +29,6 @@ import com.luckyframe.project.tool.gen.service.IGenService;
 @RequestMapping("/tool/gen")
 public class GenController extends BaseController
 {
-    private String prefix = "tool/gen";
-
     @Autowired
     private IGenService genService;
 
@@ -38,7 +36,7 @@ public class GenController extends BaseController
     @GetMapping()
     public String gen()
     {
-        return prefix + "/gen";
+        return "tool/gen/gen";
     }
 
     @RequiresPermissions("tool:gen:list")

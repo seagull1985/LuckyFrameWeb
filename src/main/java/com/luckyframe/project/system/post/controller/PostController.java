@@ -28,8 +28,6 @@ import com.luckyframe.project.system.post.service.IPostService;
 @RequestMapping("/system/post")
 public class PostController extends BaseController
 {
-    private String prefix = "system/post";
-
     @Autowired
     private IPostService postService;
 
@@ -37,7 +35,7 @@ public class PostController extends BaseController
     @GetMapping()
     public String operlog()
     {
-        return prefix + "/post";
+        return "system/post/post";
     }
 
     @RequiresPermissions("system:post:list")
@@ -57,7 +55,7 @@ public class PostController extends BaseController
     public AjaxResult export(Post post)
     {
         List<Post> list = postService.selectPostList(post);
-        ExcelUtil<Post> util = new ExcelUtil<Post>(Post.class);
+        ExcelUtil<Post> util = new ExcelUtil<>(Post.class);
         return util.exportExcel(list, "岗位数据");
     }
 
@@ -83,7 +81,7 @@ public class PostController extends BaseController
     @GetMapping("/add")
     public String add()
     {
-        return prefix + "/add";
+        return "system/post/add";
     }
 
     /**
@@ -105,7 +103,7 @@ public class PostController extends BaseController
     public String edit(@PathVariable("postId") Long postId, ModelMap mmap)
     {
         mmap.put("post", postService.selectPostById(postId));
-        return prefix + "/edit";
+        return "system/post/edit";
     }
 
     /**

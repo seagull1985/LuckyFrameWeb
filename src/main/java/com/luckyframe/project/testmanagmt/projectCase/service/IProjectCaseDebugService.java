@@ -18,7 +18,7 @@ public interface IProjectCaseDebugService
      * @param debugId 用例调试日志记录ID
      * @return 用例调试日志记录信息
      */
-	public ProjectCaseDebug selectProjectCaseDebugById(Integer debugId);
+	ProjectCaseDebug selectProjectCaseDebugById(Integer debugId);
 	
 	/**
      * 查询用例调试日志记录列表
@@ -26,7 +26,7 @@ public interface IProjectCaseDebugService
      * @param projectCaseDebug 用例调试日志记录信息
      * @return 用例调试日志记录集合
      */
-	public List<ProjectCaseDebug> selectProjectCaseDebugList(ProjectCaseDebug projectCaseDebug);
+	List<ProjectCaseDebug> selectProjectCaseDebugList(ProjectCaseDebug projectCaseDebug);
 	
 	/**
      * 新增用例调试日志记录
@@ -34,7 +34,7 @@ public interface IProjectCaseDebugService
      * @param projectCaseDebug 用例调试日志记录信息
      * @return 结果
      */
-	public int insertProjectCaseDebug(ProjectCaseDebug projectCaseDebug);
+	int insertProjectCaseDebug(ProjectCaseDebug projectCaseDebug);
 	
 	/**
      * 修改用例调试日志记录
@@ -42,7 +42,7 @@ public interface IProjectCaseDebugService
      * @param projectCaseDebug 用例调试日志记录信息
      * @return 结果
      */
-	public int updateProjectCaseDebug(ProjectCaseDebug projectCaseDebug);
+	int updateProjectCaseDebug(ProjectCaseDebug projectCaseDebug);
 		
 	/**
      * 删除用例调试日志记录信息
@@ -50,15 +50,14 @@ public interface IProjectCaseDebugService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-	public int deleteProjectCaseDebugByIds(String ids);
+	int deleteProjectCaseDebugByIds(String ids);
 	
 	/**
 	 * 根据id,useid,caseid删除调试日志
-	 * @param projectCaseDebug
-	 * @return
+	 * @param projectCaseDebug 用例调试对象
 	 * @author Seagull
 	 * @date 2019年3月15日
 	 */
-	public int deleteProjectCaseDebugById(ProjectCaseDebug projectCaseDebug);
+	int deleteProjectCaseDebugById(ProjectCaseDebug projectCaseDebug);
 	
 }

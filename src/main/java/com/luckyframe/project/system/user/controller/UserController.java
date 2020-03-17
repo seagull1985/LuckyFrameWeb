@@ -34,8 +34,6 @@ import com.luckyframe.project.system.user.service.IUserService;
 @RequestMapping("/system/user")
 public class UserController extends BaseController
 {
-    private String prefix = "system/user";
-
     @Autowired
     private IUserService userService;
 
@@ -52,7 +50,7 @@ public class UserController extends BaseController
     @GetMapping()
     public String user()
     {
-        return prefix + "/user";
+        return "system/user/user";
     }
 
     @RequiresPermissions("system:user:list")
@@ -72,7 +70,7 @@ public class UserController extends BaseController
     public AjaxResult export(User user)
     {
         List<User> list = userService.selectUserList(user);
-        ExcelUtil<User> util = new ExcelUtil<User>(User.class);
+        ExcelUtil<User> util = new ExcelUtil<>(User.class);
         return util.exportExcel(list, "用户数据");
     }
 
@@ -82,7 +80,7 @@ public class UserController extends BaseController
     @ResponseBody
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
     {
-        ExcelUtil<User> util = new ExcelUtil<User>(User.class);
+        ExcelUtil<User> util = new ExcelUtil<>(User.class);
         List<User> userList = util.importExcel(file.getInputStream());
         String message = userService.importUser(userList, updateSupport);
         return AjaxResult.success(message);
@@ -93,7 +91,7 @@ public class UserController extends BaseController
     @ResponseBody
     public AjaxResult importTemplate()
     {
-        ExcelUtil<User> util = new ExcelUtil<User>(User.class);
+        ExcelUtil<User> util = new ExcelUtil<>(User.class);
         return util.importTemplateExcel("用户数据");
     }
 
@@ -106,7 +104,7 @@ public class UserController extends BaseController
         mmap.put("roles", roleService.selectRoleAll());
         mmap.put("posts", postService.selectPostAll());
         mmap.put("projects", projectService.selectProjectAll(0));
-        return prefix + "/add";
+        return "system/user/add";
     }
 
     /**
@@ -136,7 +134,7 @@ public class UserController extends BaseController
         mmap.put("roles", roleService.selectRolesByUserId(userId));
         mmap.put("posts", postService.selectPostsByUserId(userId));
         mmap.put("projects", projectService.selectProjectAll(0));
-        return prefix + "/edit";
+        return "system/user/edit";
     }
 
     /**
@@ -162,7 +160,7 @@ public class UserController extends BaseController
     public String resetPwd(@PathVariable("userId") Long userId, ModelMap mmap)
     {
         mmap.put("user", userService.selectUserById(userId));
-        return prefix + "/resetPwd";
+        return "system/user/resetPwd";
     }
 
     @RequiresPermissions("system:user:resetPwd")

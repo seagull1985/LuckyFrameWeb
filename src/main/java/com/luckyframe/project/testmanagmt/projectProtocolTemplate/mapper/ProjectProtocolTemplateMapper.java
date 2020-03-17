@@ -20,7 +20,7 @@ public interface ProjectProtocolTemplateMapper
      * @param templateId 协议模板管理ID
      * @return 协议模板管理信息
      */
-	public ProjectProtocolTemplate selectProjectProtocolTemplateById(Integer templateId);
+	ProjectProtocolTemplate selectProjectProtocolTemplateById(Integer templateId);
 	
 	/**
      * 查询协议模板管理列表
@@ -28,7 +28,7 @@ public interface ProjectProtocolTemplateMapper
      * @param projectProtocolTemplate 协议模板管理信息
      * @return 协议模板管理集合
      */
-	public List<ProjectProtocolTemplate> selectProjectProtocolTemplateList(ProjectProtocolTemplate projectProtocolTemplate);
+	List<ProjectProtocolTemplate> selectProjectProtocolTemplateList(ProjectProtocolTemplate projectProtocolTemplate);
 	
 	/**
      * 新增协议模板管理
@@ -36,7 +36,7 @@ public interface ProjectProtocolTemplateMapper
      * @param projectProtocolTemplate 协议模板管理信息
      * @return 结果
      */
-	public int insertProjectProtocolTemplate(ProjectProtocolTemplate projectProtocolTemplate);
+	int insertProjectProtocolTemplate(ProjectProtocolTemplate projectProtocolTemplate);
 	
 	/**
      * 修改协议模板管理
@@ -44,7 +44,7 @@ public interface ProjectProtocolTemplateMapper
      * @param projectProtocolTemplate 协议模板管理信息
      * @return 结果
      */
-	public int updateProjectProtocolTemplate(ProjectProtocolTemplate projectProtocolTemplate);
+	int updateProjectProtocolTemplate(ProjectProtocolTemplate projectProtocolTemplate);
 	
 	/**
      * 删除协议模板管理
@@ -52,7 +52,7 @@ public interface ProjectProtocolTemplateMapper
      * @param templateId 协议模板管理ID
      * @return 结果
      */
-	public int deleteProjectProtocolTemplateById(Integer templateId);
+	int deleteProjectProtocolTemplateById(Integer templateId);
 	
 	/**
      * 批量删除协议模板管理
@@ -60,15 +60,14 @@ public interface ProjectProtocolTemplateMapper
      * @param templateIds 需要删除的数据ID
      * @return 结果
      */
-	public int deleteProjectProtocolTemplateByIds(String[] templateIds);
+	int deleteProjectProtocolTemplateByIds(String[] templateIds);
 	
 	
 	/**
 	 * 检查协议名称唯一性
-	 * @param templateName
-	 * @return
+	 * @param projectProtocolTemplate 协议模板对象
 	 * @author Seagull
 	 * @date 2019年3月4日
 	 */
-	public ProjectProtocolTemplate checkProjectProtocolTemplateNameUnique(ProjectProtocolTemplate projectProtocolTemplate);
+	ProjectProtocolTemplate checkProjectProtocolTemplateNameUnique(ProjectProtocolTemplate projectProtocolTemplate);
 }

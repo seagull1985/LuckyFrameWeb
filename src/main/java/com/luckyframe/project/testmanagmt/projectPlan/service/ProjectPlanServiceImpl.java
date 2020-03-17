@@ -50,7 +50,7 @@ public class ProjectPlanServiceImpl implements IProjectPlanService
 	/**
      * 根据计划名称查询测试计划信息
      * 
-     * @param planId 测试计划ID
+     * @param planName 测试计划名称
      * @return 测试计划信息
      */
     @Override
@@ -73,8 +73,7 @@ public class ProjectPlanServiceImpl implements IProjectPlanService
 	
 	/**
 	 * 根据项目ID查询测试计划列表
-	 * @param projectId
-	 * @return
+	 * @param projectId 项目ID
 	 * @author Seagull
 	 * @date 2019年3月23日
 	 */
@@ -129,9 +128,9 @@ public class ProjectPlanServiceImpl implements IProjectPlanService
 	{
 		String[] planIds=Convert.toStrArray(ids);
 		
-		Integer result=0;
+		int result=0;
 		for(String planIdStr:planIds){
-			int planId=Integer.valueOf(planIdStr);
+			int planId=Integer.parseInt(planIdStr);
 			ProjectPlan ProjectPlan = projectPlanMapper.selectProjectPlanById(planId);
 			
 			if(taskSchedulingMapper.selectTaskSchedulingCountByPlanId(planId)>0){
@@ -155,9 +154,9 @@ public class ProjectPlanServiceImpl implements IProjectPlanService
     @Override
     public String checkProjectPlanNameUnique(ProjectPlan projectPlan)
     {
-        Long planId = StringUtils.isNull(projectPlan.getPlanId()) ? -1L : projectPlan.getPlanId();
+        long planId = StringUtils.isNull(projectPlan.getPlanId()) ? -1L : projectPlan.getPlanId();
         ProjectPlan info = projectPlanMapper.checkProjectPlanNameUnique(projectPlan.getPlanName());
-        if (StringUtils.isNotNull(info) && info.getPlanId().longValue() != planId.longValue())
+        if (StringUtils.isNotNull(info) && info.getPlanId().longValue() != planId)
         {
             return ProjectPlanConstants.PROJECTPLAN_NAME_NOT_UNIQUE;
         }

@@ -90,11 +90,7 @@ public class ScheduleUtils
                 pauseJob(scheduler, job.getJobId());
             }
         }
-        catch (SchedulerException e)
-        {
-            log.error("createScheduleJob 异常：", e);
-        }
-        catch (TaskException e)
+        catch (SchedulerException | TaskException e)
         {
             log.error("createScheduleJob 异常：", e);
         }
@@ -128,11 +124,7 @@ public class ScheduleUtils
             }
 
         }
-        catch (SchedulerException e)
-        {
-            log.error("SchedulerException 异常：", e);
-        }
-        catch (TaskException e)
+        catch (SchedulerException | TaskException e)
         {
             log.error("SchedulerException 异常：", e);
         }

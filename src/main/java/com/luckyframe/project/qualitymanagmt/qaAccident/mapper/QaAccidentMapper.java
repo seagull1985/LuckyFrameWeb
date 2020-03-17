@@ -21,7 +21,7 @@ public interface QaAccidentMapper
      * @param accidentId 生产事故登记ID
      * @return 生产事故登记信息
      */
-	public QaAccident selectQaAccidentById(Integer accidentId);
+	QaAccident selectQaAccidentById(Integer accidentId);
 	
 	/**
      * 查询生产事故登记列表
@@ -29,7 +29,7 @@ public interface QaAccidentMapper
      * @param qaAccident 生产事故登记信息
      * @return 生产事故登记集合
      */
-	public List<QaAccident> selectQaAccidentList(QaAccident qaAccident);
+	List<QaAccident> selectQaAccidentList(QaAccident qaAccident);
 	
 	/**
      * 新增生产事故登记
@@ -37,7 +37,7 @@ public interface QaAccidentMapper
      * @param qaAccident 生产事故登记信息
      * @return 结果
      */
-	public int insertQaAccident(QaAccident qaAccident);
+	int insertQaAccident(QaAccident qaAccident);
 	
 	/**
      * 修改生产事故登记
@@ -45,7 +45,7 @@ public interface QaAccidentMapper
      * @param qaAccident 生产事故登记信息
      * @return 结果
      */
-	public int updateQaAccident(QaAccident qaAccident);
+	int updateQaAccident(QaAccident qaAccident);
 	
 	/**
      * 删除生产事故登记
@@ -53,7 +53,7 @@ public interface QaAccidentMapper
      * @param accidentId 生产事故登记ID
      * @return 结果
      */
-	public int deleteQaAccidentById(Integer accidentId);
+	int deleteQaAccidentById(Integer accidentId);
 	
 	/**
      * 批量删除生产事故登记
@@ -61,23 +61,23 @@ public interface QaAccidentMapper
      * @param accidentIds 需要删除的数据ID
      * @return 结果
      */
-	public int deleteQaAccidentByIds(String[] accidentIds);
+	int deleteQaAccidentByIds(String[] accidentIds);
 	
 	/**
 	 * 事故根据类型分组统计
-	 * @param qaAccident
-	 * @return
+	 * @param qaAccident 事故对象
+	 * @return 返回LIST
 	 * @author Seagull
 	 * @date 2019年8月1日
 	 */
-	public List<Map<Object,Object>> selectGroupByAccidentType(QaAccident qaAccident);
+	List<Map<Object,Object>> selectGroupByAccidentType(QaAccident qaAccident);
 	
 	/**
 	 * 事故根据级别分组统计
-	 * @param qaAccident
-	 * @return
+	 * @param qaAccident 事故对象
+	 * @return 返回LIST
 	 * @author Seagull
 	 * @date 2019年8月1日
 	 */
-	public List<Map<Object,Object>> selectGroupByAccidentLevel(QaAccident qaAccident);
+	List<Map<Object,Object>> selectGroupByAccidentLevel(QaAccident qaAccident);
 }

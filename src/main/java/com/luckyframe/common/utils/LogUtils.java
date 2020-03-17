@@ -21,8 +21,6 @@ public class LogUtils
 
     /**
      * 记录访问日志 [username][jsessionid][ip][accept][UserAgent][url][params][Referer]
-     *
-     * @param request
      */
     public static void logAccess(HttpServletRequest request)
     {
@@ -34,38 +32,31 @@ public class LogUtils
         String url = request.getRequestURI();
         String params = getParams(request);
 
-        StringBuilder s = new StringBuilder();
-        s.append(getBlock(username));
-        s.append(getBlock(jsessionId));
-        s.append(getBlock(ip));
-        s.append(getBlock(accept));
-        s.append(getBlock(userAgent));
-        s.append(getBlock(url));
-        s.append(getBlock(params));
-        s.append(getBlock(request.getHeader("Referer")));
-        getAccessLog().info(s.toString());
+        String s = getBlock(username) +
+                getBlock(jsessionId) +
+                getBlock(ip) +
+                getBlock(accept) +
+                getBlock(userAgent) +
+                getBlock(url) +
+                getBlock(params) +
+                getBlock(request.getHeader("Referer"));
+        getAccessLog().info(s);
     }
 
     /**
      * 记录异常错误 格式 [exception]
-     *
-     * @param message
-     * @param e
      */
     public static void logError(String message, Throwable e)
     {
         String username = getUsername();
-        StringBuilder s = new StringBuilder();
-        s.append(getBlock("exception"));
-        s.append(getBlock(username));
-        s.append(getBlock(message));
-        ERROR_LOG.error(s.toString(), e);
+        String s = getBlock("exception") +
+                getBlock(username) +
+                getBlock(message);
+        ERROR_LOG.error(s, e);
     }
 
     /**
      * 记录页面错误 错误日志记录 [page/eception][username][statusCode][errorMessage][servletName][uri][exceptionName][ip][exception]
-     *
-     * @param request
      */
     public static void logPageError(HttpServletRequest request)
     {

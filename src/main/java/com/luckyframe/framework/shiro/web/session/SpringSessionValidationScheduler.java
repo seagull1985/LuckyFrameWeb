@@ -77,7 +77,6 @@ public class SpringSessionValidationScheduler implements SessionValidationSchedu
      * <p>
      * Unless this method is called, the default value is {@link #DEFAULT_SESSION_VALIDATION_INTERVAL}.
      *
-     * @param sessionValidationInterval
      */
     public void setSessionValidationInterval(long sessionValidationInterval)
     {
@@ -101,15 +100,10 @@ public class SpringSessionValidationScheduler implements SessionValidationSchedu
 
         try
         {
-            executorService.scheduleAtFixedRate(new Runnable()
-            {
-                @Override
-                public void run()
+            executorService.scheduleAtFixedRate(() -> {
+                if (enabled)
                 {
-                    if (enabled)
-                    {
-                        sessionManager.validateSessions();
-                    }
+                    sessionManager.validateSessions();
                 }
             }, 1000, sessionValidationInterval, TimeUnit.MILLISECONDS);
 

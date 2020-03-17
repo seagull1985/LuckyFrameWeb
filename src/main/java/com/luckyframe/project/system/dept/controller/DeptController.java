@@ -29,8 +29,6 @@ import com.luckyframe.project.system.role.domain.Role;
 @RequestMapping("/system/dept")
 public class DeptController extends BaseController
 {
-    private String prefix = "system/dept";
-
     @Autowired
     private IDeptService deptService;
 
@@ -38,7 +36,7 @@ public class DeptController extends BaseController
     @GetMapping()
     public String dept()
     {
-        return prefix + "/dept";
+        return "system/dept/dept";
     }
 
     @RequiresPermissions("system:dept:list")
@@ -46,8 +44,7 @@ public class DeptController extends BaseController
     @ResponseBody
     public List<Dept> list(Dept dept)
     {
-        List<Dept> deptList = deptService.selectDeptList(dept);
-        return deptList;
+        return deptService.selectDeptList(dept);
     }
 
     /**
@@ -57,7 +54,7 @@ public class DeptController extends BaseController
     public String add(@PathVariable("parentId") Long parentId, ModelMap mmap)
     {
         mmap.put("dept", deptService.selectDeptById(parentId));
-        return prefix + "/add";
+        return "system/dept/add";
     }
 
     /**
@@ -84,7 +81,7 @@ public class DeptController extends BaseController
             dept.setParentName("无");
         }
         mmap.put("dept", dept);
-        return prefix + "/edit";
+        return "system/dept/edit";
     }
 
     /**
@@ -136,7 +133,7 @@ public class DeptController extends BaseController
     public String selectDeptTree(@PathVariable("deptId") Long deptId, ModelMap mmap)
     {
         mmap.put("dept", deptService.selectDeptById(deptId));
-        return prefix + "/tree";
+        return "system/dept/tree";
     }
 
     /**
@@ -146,8 +143,7 @@ public class DeptController extends BaseController
     @ResponseBody
     public List<Map<String, Object>> treeData()
     {
-        List<Map<String, Object>> tree = deptService.selectDeptTree(new Dept());
-        return tree;
+        return deptService.selectDeptTree(new Dept());
     }
 
     /**
@@ -157,7 +153,6 @@ public class DeptController extends BaseController
     @ResponseBody
     public List<Map<String, Object>> deptTreeData(Role role)
     {
-        List<Map<String, Object>> tree = deptService.roleDeptTreeData(role);
-        return tree;
+        return deptService.roleDeptTreeData(role);
     }
 }

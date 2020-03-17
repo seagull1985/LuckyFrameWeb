@@ -22,7 +22,6 @@ public class PermissionUtils
      * 权限错误消息提醒
      * 
      * @param permissionsStr 错误信息
-     * @return
      */
     public static String getMsg(String permissionsStr)
     {
@@ -53,8 +52,7 @@ public class PermissionUtils
     
 	/**
 	 * 查询用户项目权限
-	 * @param projectId
-	 * @return
+	 * @param projectId 项目ID
 	 * @author Seagull
 	 * @date 2019年4月12日
 	 */
@@ -62,11 +60,11 @@ public class PermissionUtils
 	{
 		List<Integer> projectIDList = ShiroUtils.getProjectIdForRoles();
     	
-    	Boolean result = false;
+    	boolean result = false;
     	
     	if(null==ShiroUtils.getLoginName()){
     		logger.warn("项目访问权限不通过，用户登录名在ShiroUtils中为空...");
-    		return result;
+    		return false;
     	}
     	
     	/*超级管理员权限*/

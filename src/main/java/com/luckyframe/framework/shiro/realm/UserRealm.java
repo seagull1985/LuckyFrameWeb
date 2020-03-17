@@ -59,9 +59,9 @@ public class UserRealm extends AuthorizingRealm
     {
         User user = ShiroUtils.getSysUser();
         // 角色列表
-        Set<String> roles = new HashSet<String>();
+        Set<String> roles;
         // 功能列表
-        Set<String> menus = new HashSet<String>();
+        Set<String> menus;
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         // 管理员拥有所有权限
         if (user.isAdmin())
@@ -95,7 +95,7 @@ public class UserRealm extends AuthorizingRealm
             password = new String(upToken.getPassword());
         }
 
-        User user = null;
+        User user;
         try
         {
             user = loginService.login(username, password);
@@ -116,21 +116,15 @@ public class UserRealm extends AuthorizingRealm
         {
             throw new ExcessiveAttemptsException(e.getMessage(), e);
         }
-        catch (UserBlockedException e)
+        catch (UserBlockedException | RoleBlockedException e)
         {
             throw new LockedAccountException(e.getMessage(), e);
-        }
-        catch (RoleBlockedException e)
-        {
-            throw new LockedAccountException(e.getMessage(), e);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             log.info("对用户[" + username + "]进行登录验证..验证未通过{}", e.getMessage());
             throw new AuthenticationException(e.getMessage(), e);
         }
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, password, getName());
-        return info;
+        return new SimpleAuthenticationInfo(user, password, getName());
     }
 
     /**

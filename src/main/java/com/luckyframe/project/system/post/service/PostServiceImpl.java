@@ -90,7 +90,6 @@ public class PostServiceImpl implements IPostService
      * 批量删除岗位信息
      * 
      * @param ids 需要删除的数据ID
-     * @throws Exception
      */
     @Override
     public int deletePostByIds(String ids) throws BusinessException
@@ -154,9 +153,9 @@ public class PostServiceImpl implements IPostService
     @Override
     public String checkPostNameUnique(Post post)
     {
-        Long postId = StringUtils.isNull(post.getPostId()) ? -1L : post.getPostId();
+        long postId = StringUtils.isNull(post.getPostId()) ? -1L : post.getPostId();
         Post info = postMapper.checkPostNameUnique(post.getPostName());
-        if (StringUtils.isNotNull(info) && info.getPostId().longValue() != postId.longValue())
+        if (StringUtils.isNotNull(info) && info.getPostId() != postId)
         {
             return UserConstants.POST_NAME_NOT_UNIQUE;
         }
@@ -172,9 +171,9 @@ public class PostServiceImpl implements IPostService
     @Override
     public String checkPostCodeUnique(Post post)
     {
-        Long postId = StringUtils.isNull(post.getPostId()) ? -1L : post.getPostId();
+        long postId = StringUtils.isNull(post.getPostId()) ? -1L : post.getPostId();
         Post info = postMapper.checkPostCodeUnique(post.getPostCode());
-        if (StringUtils.isNotNull(info) && info.getPostId().longValue() != postId.longValue())
+        if (StringUtils.isNotNull(info) && info.getPostId() != postId)
         {
             return UserConstants.POST_CODE_NOT_UNIQUE;
         }

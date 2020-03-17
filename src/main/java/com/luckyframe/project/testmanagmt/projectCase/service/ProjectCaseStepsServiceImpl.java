@@ -40,8 +40,7 @@ public class ProjectCaseStepsServiceImpl implements IProjectCaseStepsService
 	
 	/**
 	 * 通过用例ID以及步骤序号获取步骤实体
-	 * @param projectCaseSteps
-	 * @return
+	 * @param projectCaseSteps 用例步骤对象
 	 * @author Seagull
 	 * @date 2019年4月25日
 	 */
@@ -104,7 +103,7 @@ public class ProjectCaseStepsServiceImpl implements IProjectCaseStepsService
 	/**
      * 删除测试用例步骤管理对象
      * 
-     * @param ids 需要删除的数据ID
+     * @param listSteps 步骤对象集合
      * @return 结果
      */
 	@Override

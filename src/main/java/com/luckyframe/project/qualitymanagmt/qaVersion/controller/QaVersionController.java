@@ -35,8 +35,6 @@ import com.luckyframe.project.system.project.service.IProjectService;
 @RequestMapping("/qualitymanagmt/qaVersion")
 public class QaVersionController extends BaseController
 {
-    private String prefix = "qualitymanagmt/qaVersion";
-	
 	@Autowired
 	private IQaVersionService qaVersionService;
 	
@@ -55,7 +53,7 @@ public class QaVersionController extends BaseController
             }
         }
         
-	    return prefix + "/qaVersion";
+	    return "qualitymanagmt/qaVersion/qaVersion";
 	}
 	
 	/**
@@ -81,7 +79,7 @@ public class QaVersionController extends BaseController
     public AjaxResult export(QaVersion qaVersion)
     {
     	List<QaVersion> list = qaVersionService.selectQaVersionList(qaVersion);
-        ExcelUtil<QaVersion> util = new ExcelUtil<QaVersion>(QaVersion.class);
+        ExcelUtil<QaVersion> util = new ExcelUtil<>(QaVersion.class);
         return util.exportExcel(list, "qaVersion");
     }
 	
@@ -99,7 +97,7 @@ public class QaVersionController extends BaseController
 			}
 		}
 		
-	    return prefix + "/add";
+	    return "qualitymanagmt/qaVersion/add";
 	}
 	
 	/**
@@ -124,7 +122,7 @@ public class QaVersionController extends BaseController
         mmap.put("projects", projects);
 		QaVersion qaVersion = qaVersionService.selectQaVersionById(versionId);
 		mmap.put("qaVersion", qaVersion);
-	    return prefix + "/edit";
+	    return "qualitymanagmt/qaVersion/edit";
 	}
 	
 	/**
@@ -147,7 +145,7 @@ public class QaVersionController extends BaseController
 	{
 		QaVersion qaVersion = qaVersionService.selectQaVersionById(versionId);
 		mmap.put("qaVersion", qaVersion);
-	    return prefix + "/detail";
+	    return "qualitymanagmt/qaVersion/detail";
 	}
 	
 	/**

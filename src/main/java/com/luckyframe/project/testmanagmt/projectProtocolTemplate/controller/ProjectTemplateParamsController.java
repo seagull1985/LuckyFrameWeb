@@ -33,8 +33,6 @@ import com.luckyframe.project.testmanagmt.projectProtocolTemplate.service.IProje
 @RequestMapping("/testmanagmt/projectTemplateParams")
 public class ProjectTemplateParamsController extends BaseController
 {
-    private String prefix = "testmanagmt/projectProtocolTemplate";
-	
 	@Autowired
 	private IProjectTemplateParamsService projectTemplateParamsService;
 
@@ -43,9 +41,8 @@ public class ProjectTemplateParamsController extends BaseController
 	
 	/**
 	 * 修改模板参数
-	 * @param templateId
-	 * @param mmap
-	 * @return
+	 * @param templateId 模板ID
+	 * @param mmap 返回数据模型
 	 * @author Seagull
 	 * @date 2019年3月7日
 	 */
@@ -101,7 +98,7 @@ public class ProjectTemplateParamsController extends BaseController
 		mmap.put("templateParams", templateParams);
 		mmap.put("paramsType", paramsType);
 		mmap.put("jsonParam", jsonParam);
-	    return prefix + "/projectTemplateParams";
+	    return "testmanagmt/projectProtocolTemplate/projectTemplateParams";
 	}
 	
 	/**

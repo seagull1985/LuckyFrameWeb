@@ -100,7 +100,7 @@ public class ProjectProtocolTemplateServiceImpl implements IProjectProtocolTempl
 	public int deleteProjectProtocolTemplateByIds(String ids) throws BusinessException
 	{
 		String[] templateIds=Convert.toStrArray(ids);
-		Integer result=0;
+		int result=0;
 		for(String templateIdstr:templateIds){
 			Integer templateId=Integer.valueOf(templateIdstr);
 			ProjectProtocolTemplate projectProtocolTemplate = projectProtocolTemplateMapper.selectProjectProtocolTemplateById(templateId);
@@ -127,9 +127,9 @@ public class ProjectProtocolTemplateServiceImpl implements IProjectProtocolTempl
     @Override
     public String checkProjectProtocolTemplateNameUnique(ProjectProtocolTemplate projectProtocolTemplate)
     {
-        Long templateId = StringUtils.isNull(projectProtocolTemplate.getTemplateId()) ? -1L : projectProtocolTemplate.getTemplateId();
+        long templateId = StringUtils.isNull(projectProtocolTemplate.getTemplateId()) ? -1L : projectProtocolTemplate.getTemplateId();
         ProjectProtocolTemplate info = projectProtocolTemplateMapper.checkProjectProtocolTemplateNameUnique(projectProtocolTemplate);
-        if (StringUtils.isNotNull(info) && info.getTemplateId().longValue() != templateId.longValue())
+        if (StringUtils.isNotNull(info) && info.getTemplateId().longValue() != templateId)
         {
             return ProjectProtocolTemplateConstants.PROJECTPROTOCOLTEMPLATE_NAME_NOT_UNIQUE;
         }

@@ -81,12 +81,12 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO
             boolean isGuest = onlineSession.getUserId() == null || onlineSession.getUserId() == 0L;
 
             // session 数据变更了 同步
-            if (isGuest == false && onlineSession.isAttributeChanged())
+            if (!isGuest && onlineSession.isAttributeChanged())
             {
                 needSync = true;
             }
 
-            if (needSync == false)
+            if (!needSync)
             {
                 return;
             }

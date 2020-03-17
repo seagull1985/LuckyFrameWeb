@@ -58,8 +58,7 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
     
 	/**
 	 * 根据用例编号查询实体
-	 * @param caseSign
-	 * @return
+	 * @param caseSign 用例编号
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
@@ -83,8 +82,7 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
 	
 	/**
 	 * 根据项目ID查询用例集合
-	 * @param projectId
-	 * @return
+	 * @param projectId 项目ID
 	 * @author Seagull
 	 * @date 2019年3月18日
 	 */
@@ -98,29 +96,27 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
 	
 	/**
 	 * 根据计划ID查询用例列表
-	 * @param projectCase
-	 * @return
+	 * @param projectCase 用例对象
 	 * @author Seagull
 	 * @date 2019年4月10日
 	 */
 	@Override
 	public List<ProjectCase> selectProjectCaseListForPlan(ProjectCase projectCase)
 	{	
-		List<ProjectCase> projectCaseList = new ArrayList<ProjectCase>();
+		List<ProjectCase> projectCaseList = new ArrayList<>();
 		if(StringUtils.isNotEmpty(projectCase.getPlanId())){
-			List<ProjectPlanCase> projectPlanCaseList = new ArrayList<ProjectPlanCase>();
+			List<ProjectPlanCase> projectPlanCaseList;
 			ProjectPlanCase projectPlanCase = new ProjectPlanCase();
 			projectPlanCase.setPlanId(projectCase.getPlanId());
-			/**查询计划内跟所有用例分两个语句*/
+			//查询计划内跟所有用例分两个语句
 			if(projectCase.isFlag()){
 				projectCaseList = projectCaseMapper.selectProjectCaseListForPlan(projectCase);
-				projectPlanCaseList = projectPlanCaseMapper.selectProjectPlanCaseList(projectPlanCase);
 			}else{
 				projectCaseList = projectCaseMapper.selectProjectCaseList(projectCase);
-				projectPlanCaseList = projectPlanCaseMapper.selectProjectPlanCaseList(projectPlanCase);
 			}
-			
-			/**用例集合加入优先级以及标识*/
+			projectPlanCaseList = projectPlanCaseMapper.selectProjectPlanCaseList(projectPlanCase);
+
+			//用例集合加入优先级以及标识
 			for(ProjectCase pc:projectCaseList){
 				pc.setPlanId(projectCase.getPlanId());
 				for (ProjectPlanCase ppc:projectPlanCaseList) {
@@ -184,7 +180,7 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
 	public int deleteProjectCaseByIds(String ids)
 	{
 		String[] caseIds=Convert.toStrArray(ids);
-		Integer result=0;
+		int result=0;
 		for(String caseIdstr:caseIds){
 			Integer caseId=Integer.valueOf(caseIdstr);
 			ProjectCase projectCase = projectCaseMapper.selectProjectCaseById(caseId);
@@ -211,9 +207,9 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
     @Override
     public String checkProjectCaseNameUnique(ProjectCase projectCase)
     {
-        Long caseId = StringUtils.isNull(projectCase.getCaseId()) ? -1L : projectCase.getCaseId();
+        long caseId = StringUtils.isNull(projectCase.getCaseId()) ? -1L : projectCase.getCaseId();
         List<ProjectCase> info = projectCaseMapper.checkProjectCaseNameUnique(projectCase);
-        if (info.size()>0 && (info.get(0).getCaseId().longValue() != caseId.longValue() || projectCase.getPriority()==99999999))
+        if (info.size()>0 && (info.get(0).getCaseId().longValue() != caseId || projectCase.getPriority()==99999999))
         {
             return ProjectCaseConstants.PROJECTCASE_NAME_NOT_UNIQUE;
         }
@@ -222,7 +218,6 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
     
 	/**
 	 * 查询总用例数
-	 * @return
 	 * @author Seagull
 	 * @date 2019年4月28日
 	 */
@@ -234,14 +229,13 @@ public class ProjectCaseServiceImpl implements IProjectCaseService
     
 	/**
 	 * 查询30天内更新的用例数
-	 * @return
 	 * @author Seagull
 	 * @date 2019年4月28日
 	 */
     @Override
 	public int selectProjectCaseCountForThirtyDays()
 	{
-    	Date date = new Date();
+    	Date date;
     	Calendar calendar = new GregorianCalendar();
     	/*30天前*/
     	calendar.add(Calendar.DATE, -30);

@@ -46,8 +46,7 @@ public class DataScopeAspect
     }
 
     @Before("dataScopePointCut()")
-    public void doBefore(JoinPoint point) throws Throwable
-    {
+    public void doBefore(JoinPoint point) {
         handleDataScope(point);
     }
 

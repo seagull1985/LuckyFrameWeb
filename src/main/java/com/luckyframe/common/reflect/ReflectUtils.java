@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -143,7 +144,7 @@ public class ReflectUtils
         }
         catch (Exception e)
         {
-            String msg = "method: " + method + ", obj: " + obj + ", args: " + args + "";
+            String msg = "method: " + method + ", obj: " + obj + ", args: " + Arrays.toString(args) + "";
             throw convertReflectionExceptionToUnchecked(msg, e);
         }
     }
@@ -212,7 +213,7 @@ public class ReflectUtils
         }
         catch (Exception e)
         {
-            String msg = "method: " + method + ", obj: " + obj + ", args: " + args + "";
+            String msg = "method: " + method + ", obj: " + obj + ", args: " + Arrays.toString(args) + "";
             throw convertReflectionExceptionToUnchecked(msg, e);
         }
     }
@@ -237,9 +238,8 @@ public class ReflectUtils
                 makeAccessible(field);
                 return field;
             }
-            catch (NoSuchFieldException e)
+            catch (NoSuchFieldException ignored)
             {
-                continue;
             }
         }
         return null;
@@ -268,9 +268,8 @@ public class ReflectUtils
                 makeAccessible(method);
                 return method;
             }
-            catch (NoSuchMethodException e)
+            catch (NoSuchMethodException ignored)
             {
-                continue;
             }
         }
         return null;

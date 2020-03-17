@@ -45,7 +45,7 @@ public class LogininforServiceImpl implements ILogininforService
      * 批量删除系统登录日志
      * 
      * @param ids 需要删除的数据
-     * @return
+     * @return 返回日志删除条数
      */
     @Override
     public int deleteLogininforByIds(String ids)

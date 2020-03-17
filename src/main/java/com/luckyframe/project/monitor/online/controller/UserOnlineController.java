@@ -29,7 +29,6 @@ import com.luckyframe.project.monitor.online.service.IUserOnlineService;
 @RequestMapping("/monitor/online")
 public class UserOnlineController extends BaseController
 {
-    private String prefix = "monitor/online";
 
     @Autowired
     private IUserOnlineService userOnlineService;
@@ -41,7 +40,7 @@ public class UserOnlineController extends BaseController
     @GetMapping()
     public String online()
     {
-        return prefix + "/online";
+        return "monitor/online/online";
     }
 
     @RequiresPermissions("monitor:online:list")

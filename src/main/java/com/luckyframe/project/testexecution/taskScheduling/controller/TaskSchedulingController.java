@@ -2,10 +2,7 @@ package com.luckyframe.project.testexecution.taskScheduling.controller;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,8 +58,6 @@ import com.luckyframe.project.testmanagmt.projectPlan.service.IProjectPlanServic
 @RequestMapping("/testexecution/taskScheduling")
 public class TaskSchedulingController extends BaseController
 {
-    private String prefix = "testexecution/taskScheduling";
-	
 	@Autowired
 	private ITaskSchedulingService taskSchedulingService;
 	
@@ -94,7 +89,7 @@ public class TaskSchedulingController extends BaseController
         	}
         }
         
-	    return prefix + "/taskScheduling";
+	    return "testexecution/taskScheduling/taskScheduling";
 	}
 	
 	/**
@@ -120,7 +115,7 @@ public class TaskSchedulingController extends BaseController
     public AjaxResult export(TaskScheduling taskScheduling)
     {
     	List<TaskScheduling> list = taskSchedulingService.selectTaskSchedulingList(taskScheduling);
-        ExcelUtil<TaskScheduling> util = new ExcelUtil<TaskScheduling>(TaskScheduling.class);
+        ExcelUtil<TaskScheduling> util = new ExcelUtil<>(TaskScheduling.class);
         return util.exportExcel(list, "taskScheduling");
     }
 	
@@ -147,7 +142,7 @@ public class TaskSchedulingController extends BaseController
         		mmap.put("driverPathList", driverPathList);
         	}       	
         }       
-	    return prefix + "/add";
+	    return "testexecution/taskScheduling/add";
 	}
 	
 	/**
@@ -163,7 +158,7 @@ public class TaskSchedulingController extends BaseController
 			return error("没有此项目保存任务调度权限");
 		}
 		
-		int result = 0;
+		int result;
 		Job job=new Job();
     	job.setJobName(JobConstants.JOB_JOBNAME_FOR_TASKSCHEDULING);
     	job.setJobGroup(JobConstants.JOB_GROUPNAME_FOR_TASKSCHEDULING);
@@ -178,8 +173,7 @@ public class TaskSchedulingController extends BaseController
     		return AjaxResult.error();
     	}
     	/*在调度预约表中插入数据*/
-    	result=0;
-    	taskScheduling.setJobId(job.getJobId().intValue());
+		taskScheduling.setJobId(job.getJobId().intValue());
     	result = taskSchedulingService.insertTaskScheduling(taskScheduling);
     	if(result<1){
     		return AjaxResult.error();
@@ -214,7 +208,7 @@ public class TaskSchedulingController extends BaseController
         taskScheduling.setStatus(taskScheduling.getJob().getStatus());
         taskScheduling.setRemark(taskScheduling.getJob().getRemark());
 		mmap.put("taskScheduling", taskScheduling);
-	    return prefix + "/edit";
+	    return "testexecution/taskScheduling/edit";
 	}
 	
 	/**
@@ -230,7 +224,7 @@ public class TaskSchedulingController extends BaseController
 			return error("没有此项目修改任务调度权限");
 		}
 		
-		int result = 0;
+		int result;
 		Job job=new Job();
 		job.setJobId(taskScheduling.getJobId().longValue());
     	job.setJobName(JobConstants.JOB_JOBNAME_FOR_TASKSCHEDULING);
@@ -247,8 +241,7 @@ public class TaskSchedulingController extends BaseController
     		return AjaxResult.error();
     	}
     	/*在调度预约表中插入数据*/
-    	result=0;
-    	result = taskSchedulingService.updateTaskScheduling(taskScheduling);
+		result = taskSchedulingService.updateTaskScheduling(taskScheduling);
     	if(result<1){
     		return AjaxResult.error();
     	}
@@ -277,8 +270,7 @@ public class TaskSchedulingController extends BaseController
 	
     /**
      * 校验调度任务名称唯一性
-     * @param taskScheduling
-     * @return
+     * @param taskScheduling 调度任务对象
      * @author Seagull
      * @date 2019年3月26日
      */
@@ -291,8 +283,7 @@ public class TaskSchedulingController extends BaseController
     
     /**
      * 检查Cron表达式有效性
-     * @param taskScheduling
-     * @return
+     * @param taskScheduling 调度任务对象
      * @author Seagull
      * @date 2019年3月28日
      */
@@ -309,8 +300,7 @@ public class TaskSchedulingController extends BaseController
     
 	/**
 	 * 通过项目ID获取调度列表
-	 * @param projectId
-	 * @return
+	 * @param projectId 项目ID
 	 * @author Seagull
 	 * @date 2019年4月8日
 	 */
@@ -325,8 +315,7 @@ public class TaskSchedulingController extends BaseController
     
 	/**
 	 * 查询日志
-	 * @param mmap
-	 * @return
+	 * @param mmap 返回数据模型
 	 * @author Seagull
 	 * @date 2019年4月25日
 	 */
@@ -341,16 +330,14 @@ public class TaskSchedulingController extends BaseController
 		String defaultDate = sdf.format(dt);
         mmap.put("clientList", clientList);  
         mmap.put("defaultDate", defaultDate);
-	    return prefix + "/queryLog";
+	    return "testexecution/taskScheduling/queryLog";
 	}
 	
     /**
      * 获取客户端日志
-     * @param mmap
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
+     * @param mmap 返回数据模型
+     * @param request HTTP请求
+     * @param response HTTP响应
      * @author Seagull
      * @date 2019年4月25日
      */
@@ -378,7 +365,7 @@ public class TaskSchedulingController extends BaseController
 		}
 		String result="获取日志远程链接失败！";
 		try{    		
-    		Map<String, Object> params = new HashMap<String, Object>(0);
+    		Map<String, Object> params = new HashMap<>(0);
     		params.put("filename", storeName);
 			result=HttpRequest.httpClientGet("http://"+clientIp+":"+ClientConstants.CLIENT_MONITOR_PORT+"/getLogdDetail", params,60000);
 			result=result.replace("##n##", "\n");
@@ -387,13 +374,12 @@ public class TaskSchedulingController extends BaseController
 			return result;
 		}
 		mmap.put("data", result);
-		return prefix + "/showLog";
+		return "testexecution/taskScheduling/showLog";
 	}
 	
 	/**
 	 * 上传驱动页面
-	 * @param mmap
-	 * @return
+	 * @param mmap 返回数据模型
 	 * @author Seagull
 	 * @date 2019年4月26日
 	 */
@@ -408,15 +394,14 @@ public class TaskSchedulingController extends BaseController
     		List<String> driverPathList = clientService.selectClientDriverListById(clientList.get(0).getClientId());
     		mmap.put("driverPathList", driverPathList);
     	}
-	    return prefix + "/uploadJar";
+	    return "testexecution/taskScheduling/uploadJar";
 	}
 	
 	/**
 	 * 上传驱动到客户端
-	 * @param file
-	 * @param clientIp
-	 * @param driverPath
-	 * @return
+	 * @param file 文件对象
+	 * @param clientIp 客户端IP
+	 * @param driverPath 驱动路径
 	 * @author Seagull
 	 * @date 2019年7月26日
 	 */
@@ -425,10 +410,10 @@ public class TaskSchedulingController extends BaseController
 	@PostMapping("/uploadJar")
 	@ResponseBody
 	public AjaxResult uploadJar(@RequestParam("drivenfile") MultipartFile file, @RequestParam("clientIp") String clientIp,@RequestParam("driverPath") String driverPath) {
-		String result="获取远程链接失败！";
+		String result;
 		try {
 			if (!file.isEmpty()) {
-				if (!file.getOriginalFilename().endsWith(FileUploadUtils.DRIVEN_JAR_EXTENSION)&&!file.getOriginalFilename().endsWith(FileUploadUtils.DRIVEN_PYTHON_EXTENSION))
+				if (!Objects.requireNonNull(file.getOriginalFilename()).endsWith(FileUploadUtils.DRIVEN_JAR_EXTENSION)&&!file.getOriginalFilename().endsWith(FileUploadUtils.DRIVEN_PYTHON_EXTENSION))
 				{
 					return error("驱动文件只能是.jar或.py格式");
 				}

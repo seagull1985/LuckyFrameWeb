@@ -39,8 +39,6 @@ import com.luckyframe.project.testmanagmt.projectPlan.service.IProjectPlanServic
 @RequestMapping("/testmanagmt/projectPlan")
 public class ProjectPlanController extends BaseController
 {
-    private String prefix = "testmanagmt/projectPlan";
-	
 	@Autowired
 	private IProjectPlanService projectPlanService;
 	
@@ -56,7 +54,7 @@ public class ProjectPlanController extends BaseController
         if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
         	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
         }
-	    return prefix + "/projectPlan";
+	    return "testmanagmt/projectPlan/projectPlan";
 	}
 	
 	/**
@@ -82,7 +80,7 @@ public class ProjectPlanController extends BaseController
     public AjaxResult export(ProjectPlan projectPlan)
     {
     	List<ProjectPlan> list = projectPlanService.selectProjectPlanList(projectPlan);
-        ExcelUtil<ProjectPlan> util = new ExcelUtil<ProjectPlan>(ProjectPlan.class);
+        ExcelUtil<ProjectPlan> util = new ExcelUtil<>(ProjectPlan.class);
         return util.exportExcel(list, "projectPlan");
     }
 	
@@ -97,7 +95,7 @@ public class ProjectPlanController extends BaseController
         if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
         	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
         }
-	    return prefix + "/add";
+	    return "testmanagmt/projectPlan/add";
 	}
 	
 	/**
@@ -123,7 +121,7 @@ public class ProjectPlanController extends BaseController
 	{
 		ProjectPlan projectPlan = projectPlanService.selectProjectPlanById(planId);
 		mmap.put("projectPlan", projectPlan);
-	    return prefix + "/edit";
+	    return "testmanagmt/projectPlan/edit";
 	}
 	
 	/**
@@ -162,8 +160,7 @@ public class ProjectPlanController extends BaseController
 	
     /**
      * 校验测试计划名称唯一性
-     * @param projectPlan
-     * @return
+     * @param projectPlan 测试计划对象
      * @author Seagull
      * @date 2019年3月18日
      */
@@ -176,8 +173,7 @@ public class ProjectPlanController extends BaseController
     
 	/**
 	 * 通过项目ID获取项目计划列表
-	 * @param projectId
-	 * @return
+	 * @param projectId 项目ID
 	 * @author Seagull
 	 * @date 2019年3月26日
 	 */

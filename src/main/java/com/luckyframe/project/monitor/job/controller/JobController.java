@@ -28,8 +28,6 @@ import com.luckyframe.project.monitor.job.service.IJobService;
 @RequestMapping("/monitor/job")
 public class JobController extends BaseController
 {
-    private String prefix = "monitor/job";
-
     @Autowired
     private IJobService jobService;
 
@@ -37,7 +35,7 @@ public class JobController extends BaseController
     @GetMapping()
     public String job()
     {
-        return prefix + "/job";
+        return "monitor/job/job";
     }
 
     @RequiresPermissions("monitor:job:list")
@@ -57,7 +55,7 @@ public class JobController extends BaseController
     public AjaxResult export(Job job)
     {
         List<Job> list = jobService.selectJobList(job);
-        ExcelUtil<Job> util = new ExcelUtil<Job>(Job.class);
+        ExcelUtil<Job> util = new ExcelUtil<>(Job.class);
         return util.exportExcel(list, "定时任务");
     }
 
@@ -85,7 +83,7 @@ public class JobController extends BaseController
     {
         mmap.put("name", "job");
         mmap.put("job", jobService.selectJobById(jobId));
-        return prefix + "/detail";
+        return "monitor/job/detail";
     }
 
     /**
@@ -118,7 +116,7 @@ public class JobController extends BaseController
     @GetMapping("/add")
     public String add()
     {
-        return prefix + "/add";
+        return "monitor/job/add";
     }
 
     /**
@@ -140,7 +138,7 @@ public class JobController extends BaseController
     public String edit(@PathVariable("jobId") Long jobId, ModelMap mmap)
     {
         mmap.put("job", jobService.selectJobById(jobId));
-        return prefix + "/edit";
+        return "monitor/job/edit";
     }
 
     /**

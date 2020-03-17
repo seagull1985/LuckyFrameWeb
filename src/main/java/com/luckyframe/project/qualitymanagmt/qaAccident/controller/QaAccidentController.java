@@ -1,22 +1,5 @@
 package com.luckyframe.project.qualitymanagmt.qaAccident.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.alibaba.fastjson.JSONArray;
 import com.luckyframe.common.utils.DateUtils;
 import com.luckyframe.common.utils.StringUtils;
@@ -32,6 +15,16 @@ import com.luckyframe.project.qualitymanagmt.qaAccident.domain.QaAccident;
 import com.luckyframe.project.qualitymanagmt.qaAccident.service.IQaAccidentService;
 import com.luckyframe.project.system.project.domain.Project;
 import com.luckyframe.project.system.project.service.IProjectService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 生产事故登记 信息操作处理
@@ -43,8 +36,6 @@ import com.luckyframe.project.system.project.service.IProjectService;
 @RequestMapping("/qualitymanagmt/qaAccident")
 public class QaAccidentController extends BaseController
 {
-    private String prefix = "qualitymanagmt/qaAccident";
-	
 	@Autowired
 	private IQaAccidentService qaAccidentService;
 	
@@ -63,7 +54,7 @@ public class QaAccidentController extends BaseController
             }
         }
         
-	    return prefix + "/qaAccident";
+	    return "qualitymanagmt/qaAccident/qaAccident";
 	}
 	
 	/**
@@ -89,7 +80,7 @@ public class QaAccidentController extends BaseController
     public AjaxResult export(QaAccident qaAccident)
     {
     	List<QaAccident> list = qaAccidentService.selectQaAccidentList(qaAccident);
-        ExcelUtil<QaAccident> util = new ExcelUtil<QaAccident>(QaAccident.class);
+        ExcelUtil<QaAccident> util = new ExcelUtil<>(QaAccident.class);
         return util.exportExcel(list, "qaAccident");
     }
 	
@@ -107,7 +98,7 @@ public class QaAccidentController extends BaseController
 			}
 		}
         
-	    return prefix + "/add";
+	    return "qualitymanagmt/qaAccident/add";
 	}
 	
 	/**
@@ -132,7 +123,7 @@ public class QaAccidentController extends BaseController
         mmap.put("projects", projects);
 		QaAccident qaAccident = qaAccidentService.selectQaAccidentById(accidentId);
 		mmap.put("qaAccident", qaAccident);
-	    return prefix + "/edit";
+	    return "qualitymanagmt/qaAccident/edit";
 	}
 	
 	/**
@@ -155,7 +146,7 @@ public class QaAccidentController extends BaseController
 	{
 		QaAccident qaAccident = qaAccidentService.selectQaAccidentById(accidentId);
 		mmap.put("qaAccident", qaAccident);
-	    return prefix + "/detail";
+	    return "qualitymanagmt/qaAccident/detail";
 	}
 	
 	/**
@@ -172,8 +163,8 @@ public class QaAccidentController extends BaseController
 	
 	/**
 	 * 图形展示查询条件
-	 * @param mmap
-	 * @return
+	 * @param mmap 查询对象
+	 * @return 返回查询数据
 	 * @author Seagull
 	 * @date 2019年4月25日
 	 */
@@ -184,15 +175,14 @@ public class QaAccidentController extends BaseController
         mmap.put("projects", projects);
         mmap.put("defaultStartDate", DateUtils.getDateByNum(-7));
         mmap.put("defaultEndDate", DateUtils.getDate());
-	    return prefix + "/queryGraph";
+	    return "qualitymanagmt/qaAccident/queryGraph";
 	}
-	
+
 	/**
 	 * 图形展示生产事故
-	 * @param mmap
-	 * @return
-	 * @author Seagull
-	 * @date 2019年7月30日
+	 * @param request 请求数据
+	 * @param mmap 模型MAP
+	 * @return 返回mmap数据
 	 */
 	@GetMapping("/showGraph")
 	public String showGraph(HttpServletRequest request,ModelMap mmap)
@@ -204,7 +194,7 @@ public class QaAccidentController extends BaseController
 		String dataLatitude = request.getParameter("dataLatitude");
 		String projectName="生产事故分析图";
 		if(StringUtils.isNotEmpty(projectId)){
-	        Project project=projectService.selectProjectById(Integer.valueOf(projectId));
+	        Project project=projectService.selectProjectById(Integer.parseInt(projectId));
 	        projectName = project.getProjectName()+" "+projectName;
 		}
 		
@@ -214,15 +204,13 @@ public class QaAccidentController extends BaseController
         mmap.put("queryEndDate", queryEndDate);
         mmap.put("Statistical", Statistical);
         mmap.put("dataLatitude", dataLatitude);
-	    return prefix + "/showGraph";
+	    return "qualitymanagmt/qaAccident/showGraph";
 	}
-	
+
 	/**
 	 * 图形展示生产事故异步加载数据
-	 * @param mmap
-	 * @return
-	 * @author Seagull
-	 * @date 2019年7月30日
+	 * @param request 请求
+	 * @return 拉取数据
 	 */
 	@ResponseBody
 	@GetMapping("/getGraphData")
@@ -238,7 +226,7 @@ public class QaAccidentController extends BaseController
 		if(StringUtils.isNotEmpty(projectId)){
 			qaAccident.setProjectId(Integer.valueOf(projectId));
 		}
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		params.put("beginTime", queryStartDate);
 		params.put("endTime", queryEndDate);
 		qaAccident.setParams(params);
@@ -252,7 +240,7 @@ public class QaAccidentController extends BaseController
 			qaAccident.setAccidentType("true");
 		}		
 		
-		List<Map<Object, Object>> list = new ArrayList<Map<Object, Object>>();
+		List<Map<Object, Object>> list;
 		
 		/*事故类型或是等级纬度*/
 		if("0".equals(statistical)){
@@ -267,7 +255,7 @@ public class QaAccidentController extends BaseController
 			Map<Object, Object> map=list.get(i);
 			PieCharts pieData=new PieCharts();
 			pieData.setName(map.get("selectName").toString());
-			pieData.setValue(Double.valueOf(map.get("selectValue").toString()));
+			pieData.setValue(Double.parseDouble(map.get("selectValue").toString()));
 			arraydata[i] = pieData;
 			legendData[i] = map.get("selectName").toString();
 		}
@@ -277,7 +265,6 @@ public class QaAccidentController extends BaseController
 
 		JSONArray jsonArrayData = (JSONArray)JSONArray.toJSON(arraydata);
 		JSONArray jsonArraylegendData = (JSONArray)JSONArray.toJSON(legendData);
-		String result="{\"seriesData\":"+jsonArrayData.toString()+",\"legendData\":"+jsonArraylegendData.toString()+",\"titleText\":\""+titleText+"\",\"titleSubText\":\""+titleSubText+"\"}";
-	    return result;
+		return "{\"seriesData\":"+jsonArrayData.toString()+",\"legendData\":"+jsonArraylegendData.toString()+",\"titleText\":\""+titleText+"\",\"titleSubText\":\""+titleSubText+"\"}";
 	}
 }

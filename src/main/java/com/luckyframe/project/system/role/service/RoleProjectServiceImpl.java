@@ -47,8 +47,8 @@ public class RoleProjectServiceImpl implements IRoleProjectService
 	
 	/**
 	 * 查询用户项目权限
-	 * @param userId
-	 * @return
+	 * @param userId 用户ID
+	 * @return 返回用户项目权限ID集合
 	 * @author Seagull
 	 * @date 2019年4月11日
 	 */

@@ -47,8 +47,8 @@ public class TaskCaseLogServiceImpl implements ITaskCaseLogService
 	
 	/**
 	 * 根据执行用例ID查询日志
-	 * @param taskCaseId
-	 * @return
+	 * @param taskCaseId 用例执行ID
+	 * @return 返回执行日志集合
 	 * @author Seagull
 	 * @date 2019年4月11日
 	 */
@@ -98,8 +98,8 @@ public class TaskCaseLogServiceImpl implements ITaskCaseLogService
 	
 	/**
 	 * 根据TaskCaseId删除执行日志
-	 * @param taskCaseId
-	 * @return
+	 * @param taskCaseId 用例执行ID
+	 * @return 返回删除日志数量
 	 * @author Seagull
 	 * @date 2019年4月23日
 	 */
@@ -111,7 +111,7 @@ public class TaskCaseLogServiceImpl implements ITaskCaseLogService
 	
 	/**
 	 * 查询总日志数
-	 * @return
+	 * @return 返回日志数量
 	 * @author Seagull
 	 * @date 2019年4月28日
 	 */

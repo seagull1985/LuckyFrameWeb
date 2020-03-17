@@ -17,7 +17,6 @@ import com.luckyframe.project.monitor.server.domain.Server;
 @RequestMapping("/monitor/server")
 public class ServerController extends BaseController
 {
-    private String prefix = "monitor/server";
 
     @RequiresPermissions("monitor:server:view")
     @GetMapping()
@@ -26,6 +25,6 @@ public class ServerController extends BaseController
         Server server = new Server();
         server.copyTo();
         mmap.put("server", server);
-        return prefix + "/server";
+        return "monitor/server/server";
     }
 }

@@ -69,7 +69,7 @@ public class NettyServer {
     }
 
 
-    public static Result write(Object obj, String tenantId ,String uniId) throws Exception {
+    public static Result write(Object obj, String tenantId ,String uniId) {
         // 获取锁
         Lock lock = ChannelMap.getChannelLock(tenantId);
         try {

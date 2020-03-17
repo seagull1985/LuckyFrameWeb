@@ -41,8 +41,6 @@ import com.luckyframe.project.testmanagmt.projectCaseModule.service.IProjectCase
 @RequestMapping("/testmanagmt/projectCase")
 public class ProjectCaseController extends BaseController
 {
-    private String prefix = "testmanagmt/projectCase";
-	
 	@Autowired
 	private IProjectCaseService projectCaseService;
 	
@@ -70,7 +68,7 @@ public class ProjectCaseController extends BaseController
         	mmap.put("projectCaseModule", projectCaseModule);
         }
         
-	    return prefix + "/projectCase";
+	    return "testmanagmt/projectCase/projectCase";
 	}
 	
 	/**
@@ -110,7 +108,7 @@ public class ProjectCaseController extends BaseController
 		}
 		
     	List<ProjectCase> list = projectCaseService.selectProjectCaseList(projectCase);
-        ExcelUtil<ProjectCase> util = new ExcelUtil<ProjectCase>(ProjectCase.class);
+        ExcelUtil<ProjectCase> util = new ExcelUtil<>(ProjectCase.class);
         return util.exportExcel(list, "测试用例");
     }
 	
@@ -122,7 +120,7 @@ public class ProjectCaseController extends BaseController
 		List<Project> projects = projectService.selectProjectAll(0);
 		mmap.put("projects", projects);
 		if (projects.size() > 0) {
-			ProjectCaseModule projectCaseModule = new ProjectCaseModule();
+			ProjectCaseModule projectCaseModule;
 			if (StringUtils.isNotEmpty(ShiroUtils.getProjectId())) {
 				mmap.put("defaultProjectId", ShiroUtils.getProjectId());
 				projectCaseModule = projectCaseModuleService
@@ -133,7 +131,7 @@ public class ProjectCaseController extends BaseController
 			}
 			mmap.put("projectCaseModule", projectCaseModule);
 		}
-		return prefix + "/add";
+		return "testmanagmt/projectCase/add";
 	}
 	
 	/**
@@ -161,7 +159,7 @@ public class ProjectCaseController extends BaseController
 		ProjectCase projectCase = projectCaseService.selectProjectCaseById(caseId);
 		mmap.put("projectCase", projectCase);
     	mmap.put("projectCaseModule", projectCase.getProjectCaseModule());
-	    return prefix + "/edit";
+	    return "testmanagmt/projectCase/edit";
 	}
 	
 	/**
@@ -182,17 +180,16 @@ public class ProjectCaseController extends BaseController
 	
 	/**
 	 * 复制用例
-	 * @param caseId
-	 * @param mmap
-	 * @return
+	 * @param caseId 用例ID
+	 * @param mmap 返回数据模型
 	 * @author Seagull
 	 * @date 2019年3月13日
 	 */
 	@GetMapping("/copy/{caseId}")
 	public String copy(@PathVariable("caseId") String caseId, ModelMap mmap)
 	{
-		ProjectCase projectCase = null;
-		if(caseId.indexOf(",")!=-1)
+		ProjectCase projectCase;
+		if(caseId.contains(","))
 		{
 			String[] caseIdArray=caseId.split(",");
 			//批量复制
@@ -214,13 +211,12 @@ public class ProjectCaseController extends BaseController
         }
 		mmap.put("projectCase", projectCase);
 		mmap.put("projectCaseModule", projectCase.getProjectCaseModule());
-	    return prefix + "/copy";
+	    return "testmanagmt/projectCase/copy";
 	}
 
 	/**
 	 * 批量复制用例
-	 * @param caseIds
-	 * @return
+	 * @param projectCase 测试用例对象
 	 * @author FJ
 	 * @date 2020年1月13日
 	 */
@@ -234,7 +230,7 @@ public class ProjectCaseController extends BaseController
 		{
 			return error("请先选择用例再复制！");
 		}
-		String ids[]=projectCase.getCaseIdList().split(",");
+		String[] ids =projectCase.getCaseIdList().split(",");
 		int num=0;
 		for (String id : ids) {
 			if(StringUtils.isNotEmpty(id))
@@ -256,7 +252,7 @@ public class ProjectCaseController extends BaseController
 				for(ProjectCaseSteps step:listSteps){
 					step.setStepId(0);
 					step.setCaseId(copyProjectCase.getCaseId());
-					if(step.getProjectId()!=copyProjectCase.getProjectId()){
+					if(!step.getProjectId().equals(copyProjectCase.getProjectId())){
 						step.setProjectId(copyProjectCase.getProjectId());
 						step.setExtend(null);
 					}
@@ -269,8 +265,7 @@ public class ProjectCaseController extends BaseController
 
 	/**
 	 * 复制用例
-	 * @param projectProtocolTemplate
-	 * @return
+	 * @param projectCase 测试用例对象
 	 * @author Seagull
 	 * @date 2019年3月9日
 	 */
@@ -292,7 +287,7 @@ public class ProjectCaseController extends BaseController
 		for(ProjectCaseSteps step:listSteps){
 			step.setStepId(0);
 			step.setCaseId(projectCase.getCaseId());
-			if(step.getProjectId()!=projectCase.getProjectId()){
+			if(!step.getProjectId().equals(projectCase.getProjectId())){
 				step.setProjectId(projectCase.getProjectId());
 				step.setExtend(null);
 			}
@@ -322,8 +317,7 @@ public class ProjectCaseController extends BaseController
 
     /**
      * 校验测试用例名称唯一性
-     * @param projectCase
-     * @return
+     * @param projectCase 测试用例对象
      * @author Seagull
      * @date 2019年2月28日
      */

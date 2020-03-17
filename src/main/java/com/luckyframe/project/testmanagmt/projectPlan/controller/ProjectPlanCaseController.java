@@ -40,8 +40,6 @@ import com.luckyframe.project.testmanagmt.projectPlan.service.IProjectPlanServic
 @RequestMapping("/testmanagmt/projectPlanCase")
 public class ProjectPlanCaseController extends BaseController
 {
-    private String prefix = "testmanagmt/projectPlan";
-	
 	@Autowired
 	private IProjectPlanService projectPlanService;
 	
@@ -61,7 +59,7 @@ public class ProjectPlanCaseController extends BaseController
 		ProjectPlan projectPlan = projectPlanService.selectProjectPlanById(planId);
         ProjectCaseModule projectCaseModule = projectCaseModuleService.selectProjectCaseModuleParentZeroByProjectId(projectPlan.getProjectId());
         mmap.put("projectCaseModule", projectCaseModule);
-	    return prefix + "/projectPlanCase";
+	    return "testmanagmt/projectPlan/projectPlanCase";
 	}
 	
 	/**
@@ -80,7 +78,7 @@ public class ProjectPlanCaseController extends BaseController
 		}
 		
 		startPage();
-		/**获取项目下的用例集合*/
+		//获取项目下的用例集合
 		List<ProjectCase> projectCaseList = projectCaseService.selectProjectCaseListForPlan(projectCase);
 		
 		return getDataTable(projectCaseList);
@@ -88,8 +86,7 @@ public class ProjectPlanCaseController extends BaseController
 	
 	/**
 	 * 保存测试计划用例操作
-	 * @param projectCases
-	 * @return
+	 * @param projectCases 用例对象集
 	 * @author Seagull
 	 * @date 2019年9月30日
 	 */
@@ -100,7 +97,7 @@ public class ProjectPlanCaseController extends BaseController
 	public AjaxResult savePlanCase(@RequestBody List<ProjectCase> projectCases)
 	{
 		int resultCount=0;
-		int planId=0;
+		int planId;
 		
 		if(projectCases.size()==0){
 			return toAjax(1);
@@ -139,8 +136,7 @@ public class ProjectPlanCaseController extends BaseController
 	
 	/**
 	 * 保存项目所有用例到测试计划
-	 * @param projectCases
-	 * @return
+	 * @param projectCaseSearch 用例对象
 	 * @author Seagull
 	 * @date 2019年9月30日
 	 */
@@ -211,7 +207,7 @@ public class ProjectPlanCaseController extends BaseController
 			return error("没有此项目保存计划用例优先级权限");
 		}
 		
-		int resultCount=0;
+		int resultCount;
 		ProjectPlanCase projectPlanCase = new ProjectPlanCase();
 		if(StringUtils.isEmpty(projectCase.getPlanCaseId())){
 			projectPlanCase.setPlanId(projectCase.getPlanId());

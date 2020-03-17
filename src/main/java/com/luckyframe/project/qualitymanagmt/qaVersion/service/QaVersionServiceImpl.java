@@ -144,7 +144,7 @@ public class QaVersionServiceImpl implements IQaVersionService
 	public static void main(String[] args) {
 		int i=-3;
 		int b=14;
-		Float a = (float) i/b;
+		float a = (float) i/b;
 		BigDecimal bb = new BigDecimal(a*100);  
 		float   m_price   =  bb.setScale(2,  BigDecimal.ROUND_HALF_UP).floatValue(); 
 		System.out.println(m_price);

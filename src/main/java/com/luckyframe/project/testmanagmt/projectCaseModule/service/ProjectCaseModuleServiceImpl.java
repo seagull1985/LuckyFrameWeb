@@ -54,8 +54,7 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
 	
 	/**
 	 * 通过父级ID查询子列表
-	 * @param parentId
-	 * @return
+	 * @param parentId 父节点ID
 	 * @author Seagull
 	 * @date 2019年2月26日
 	 */
@@ -131,8 +130,8 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
 	
     /**
      * 修改子模块关系
-     * @param parentId
-     * @param ancestors
+     * @param parentProjectCaseModule 父节点模块对象
+     * @param ancestors ancestors
      * @author Seagull
      * @date 2019年2月27日
      */
@@ -154,7 +153,7 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
 	/**
      * 删除测试用例模块管理对象
      * 
-     * @param ids 需要删除的数据ID
+     * @param moduleId 需要删除的数据ID
      * @return 结果
      */
 	@Override
@@ -177,7 +176,7 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
     @Override
     public List<Map<String, Object>> selectProjectCaseModuleTree(ProjectCaseModule projectCaseModule)
     {
-        List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> trees;
         List<ProjectCaseModule> pcmList = projectCaseModuleMapper.selectProjectCaseModuleList(projectCaseModule);
         trees = getTrees(pcmList);
         return trees;
@@ -185,18 +184,17 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
     
     /**
      * 对象转模块树
-     * @param pcmList
-     * @return
+     * @param pcmList 模块集合
      * @author Seagull
      * @date 2019年2月26日
      */
     private List<Map<String, Object>> getTrees(List<ProjectCaseModule> pcmList)
     {
 
-        List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> trees = new ArrayList<>();
         for (ProjectCaseModule pcm : pcmList)
         {
-                Map<String, Object> pcmMap = new HashMap<String, Object>();
+                Map<String, Object> pcmMap = new HashMap<>();
                 pcmMap.put("id", pcm.getModuleId());
                 pcmMap.put("pId", pcm.getParentId());
                 pcmMap.put("name", pcm.getModuleName());
@@ -229,29 +227,23 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
 			throw new BusinessException("导入用例模块不能为空！");
 		}
 
-		List<ProjectCaseModule> modulesListBeforeSort = new ArrayList<>();
-		for (ProjectCaseModule module : modulesList) {
-			modulesListBeforeSort.add(module);
-		}
+		List<ProjectCaseModule> modulesListBeforeSort = new ArrayList<>(modulesList);
 
 		//按照组模块列表长度升序排序
-		modulesList.sort(new Comparator<ProjectCaseModule>() {
-			@Override
-			public int compare(ProjectCaseModule o1, ProjectCaseModule o2) {
-				if(o1.getAncestors() != null&&o1.getAncestors()!=""&&o2.getAncestors()!=null&&o2.getAncestors()!="") {
-					return Integer.compare(o1.getAncestors().split(",").length, o2.getAncestors().split(",").length);
-				}
-				else if(o1.getAncestors() == null||o1.getAncestors()==""){
-					return -1;
+		modulesList.sort((o1, o2) -> {
+			if(o1.getAncestors() != null&& !o1.getAncestors().equals("") &&o2.getAncestors()!=null&& !o2.getAncestors().equals("")) {
+				return Integer.compare(o1.getAncestors().split(",").length, o2.getAncestors().split(",").length);
+			}
+			else if(o1.getAncestors() == null|| o1.getAncestors().equals("")){
+				return -1;
 
-				}
-				else if(o2.getAncestors() == null||o2.getAncestors()==""){
-					return 1;
+			}
+			else if(o2.getAncestors() == null|| o2.getAncestors().equals("")){
+				return 1;
 
-				}
-				else{
-					return 0;
-				}
+			}
+			else{
+				return 0;
 			}
 		});
 
@@ -293,7 +285,7 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
 								if(i == 0) {
 									sb.replace(module.getAncestors().indexOf(ancestors[i]), module.getAncestors().indexOf(ancestors[i]) + ancestors[i].length(), nodes.get(0).getModuleId().toString());
 								}
-								else if(i>0){
+								else {
 									sb.replace(StringUtils.ordinalIndexOf(sb,",",i)+1, StringUtils.ordinalIndexOf(sb,",",i)+1+ ancestors[i].length(), nodes.get(0).getModuleId().toString());
 								}
 
@@ -307,7 +299,7 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
 							if(i == 0) {
 								sb.replace(module.getAncestors().indexOf(ancestors[i]), module.getAncestors().indexOf(ancestors[i]) + ancestors[i].length(), nodeMap.get(ancestors[i]).toString());
 							}
-							else if(i>0){
+							else {
 								sb.replace(StringUtils.ordinalIndexOf(sb,",",i)+1, StringUtils.ordinalIndexOf(sb,",",i)+1+ ancestors[i].length(), nodeMap.get(ancestors[i]).toString());
 							}
 						}
@@ -315,7 +307,7 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
 					}
 					if(flag == 0){  //如果路径不存在，则抛出错误
 						failcount++;
-						failureMsg.append("<br/>" + "第" + (modulesListBeforeSort.indexOf(module) + 2) + "行,祖模块列表路径不正确！");
+						failureMsg.append("<br/>" + "第").append(modulesListBeforeSort.indexOf(module) + 2).append("行,祖模块列表路径不正确！");
 					}
 					else{   //如果路径存在
 						if (pcmlist.size() <= 0)   //如果模块不存在，则插入
@@ -336,31 +328,31 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
 				{
 
 					failcount++;
-					failureMsg.append("<br/>" + "第" + (modulesListBeforeSort.indexOf(module) + 2) + "行,项目名称不正确！");
+					failureMsg.append("<br/>" + "第").append(modulesListBeforeSort.indexOf(module) + 2).append("行,项目名称不正确！");
 				} else if (module.getModuleName().equals(""))   //模块名称为空
 				{
 					failcount++;
-					failureMsg.append("<br/>" + "第" + (modulesListBeforeSort.indexOf(module) + 2) + "行,模块名称不能为空！");
+					failureMsg.append("<br/>" + "第").append(modulesListBeforeSort.indexOf(module) + 2).append("行,模块名称不能为空！");
 				} else if (module.getAncestors().equals(""))   //祖模块列表为空
 				{
 					failcount++;
-					failureMsg.append("<br/>" + "第" + (modulesListBeforeSort.indexOf(module) + 2) + "行,祖模块列表不能为空！");
+					failureMsg.append("<br/>" + "第").append(modulesListBeforeSort.indexOf(module) + 2).append("行,祖模块列表不能为空！");
 				}
 			} catch (Exception e) {
 				failcount++;
 				String msg = "<br/>" + "第" +  (modulesListBeforeSort.indexOf(module) + 2) + "行导入失败：";
-				failureMsg.append(msg + e.getMessage());
+				failureMsg.append(msg).append(e.getMessage());
 
 			}
 		}
 		if ((insertcount + updatecount) == modulesList.size()) {    //如果全部成功
-			successMsg.append("<br/>" + modulesList.size() + "行全部导入成功，");
+			successMsg.append("<br/>").append(modulesList.size()).append("行全部导入成功，");
 			if (insertcount > 0 && updatecount > 0) {
-				successMsg.append("插入数据" + insertcount + "行，更新数据" + updatecount + "行！");
+				successMsg.append("插入数据").append(insertcount).append("行，更新数据").append(updatecount).append("行！");
 			} else if (insertcount > 0) {
-				successMsg.append("插入数据" + insertcount + "行！");
+				successMsg.append("插入数据").append(insertcount).append("行！");
 			} else {
-				successMsg.append("更新数据" + updatecount + "行！");
+				successMsg.append("更新数据").append(updatecount).append("行！");
 			}
 		} else if (failcount == modulesList.size()) {  //如果全部失败
 			failureMsg.insert(0, modulesList.size() + "行全部导入失败，" + failureMsg);
@@ -369,11 +361,11 @@ public class ProjectCaseModuleServiceImpl implements IProjectCaseModuleService
 		else     //如果部分成功，部分失败
 		{
 			if (insertcount > 0 & updatecount > 0) {
-				successMsg.append("成功导入" + (insertcount + updatecount) + "行，插入数据" + insertcount + "行，更新数据" + updatecount + "行！" + failcount + "行导入失败，" + failureMsg);
+				successMsg.append("成功导入").append(insertcount + updatecount).append("行，插入数据").append(insertcount).append("行，更新数据").append(updatecount).append("行！").append(failcount).append("行导入失败，").append(failureMsg);
 			} else if (insertcount > 0) {
-				successMsg.append("成功导入" + (insertcount + updatecount) + "行，插入数据" + insertcount + "行！" + failcount + "行导入失败，" + failureMsg);
+				successMsg.append("成功导入").append(insertcount + updatecount).append("行，插入数据").append(insertcount).append("行！").append(failcount).append("行导入失败，").append(failureMsg);
 			} else {
-				successMsg.append("成功导入" + (insertcount + updatecount) + "行，更新数据" + updatecount + "行！" + failcount + "行导入失败，" + failureMsg);
+				successMsg.append("成功导入").append(insertcount + updatecount).append("行，更新数据").append(updatecount).append("行！").append(failcount).append("行导入失败，").append(failureMsg);
 			}
 		}
 		return successMsg.toString();

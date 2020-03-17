@@ -20,7 +20,7 @@ public interface RoleProjectMapper
      * @param roleId 角色和项目关联ID
      * @return 角色和项目关联信息
      */
-	public List<RoleProject> selectRoleProjectsById(Integer roleId);
+	List<RoleProject> selectRoleProjectsById(Integer roleId);
 	
 	/**
      * 查询角色和项目关联列表
@@ -28,16 +28,16 @@ public interface RoleProjectMapper
      * @param roleProject 角色和项目关联信息
      * @return 角色和项目关联集合
      */
-	public List<RoleProject> selectRoleProjectList(RoleProject roleProject);
+	List<RoleProject> selectRoleProjectList(RoleProject roleProject);
 	
     /**
      * 根据用户ID查询项目权限
-     * @param userId
-     * @return
+     * @param userId 用户ID
+     * @return 项目ID集合
      * @author Seagull
      * @date 2019年4月11日
      */
-    public List<Integer> selectProjectPermsByUserId(Long userId);
+    List<Integer> selectProjectPermsByUserId(Long userId);
 	
 	/**
      * 新增角色和项目关联
@@ -45,7 +45,7 @@ public interface RoleProjectMapper
      * @param roleProject 角色和项目关联信息
      * @return 结果
      */
-	public int insertRoleProject(RoleProject roleProject);
+	int insertRoleProject(RoleProject roleProject);
 	
 	/**
      * 修改角色和项目关联
@@ -53,7 +53,7 @@ public interface RoleProjectMapper
      * @param roleProject 角色和项目关联信息
      * @return 结果
      */
-	public int updateRoleProject(RoleProject roleProject);
+	int updateRoleProject(RoleProject roleProject);
 	
 	/**
      * 删除角色和项目关联
@@ -61,7 +61,7 @@ public interface RoleProjectMapper
      * @param roleId 角色和项目关联ID
      * @return 结果
      */
-	public int deleteRoleProjectById(Integer roleId);
+	int deleteRoleProjectById(Integer roleId);
 	
 	/**
      * 批量删除角色和项目关联
@@ -69,14 +69,14 @@ public interface RoleProjectMapper
      * @param roleIds 需要删除的数据ID
      * @return 结果
      */
-	public int deleteRoleProjectByIds(String[] roleIds);
+	int deleteRoleProjectByIds(String[] roleIds);
 	
     /**
      * 批量新增角色与项目信息
-     * @param roleProjectList
-     * @return
+     * @param roleProjectList 项目角色权限集合
+     * @return 新增结果
      * @author Seagull
      * @date 2019年2月25日
      */
-    public int insertBatchRoleProject(List<RoleProject> roleProjectList);
+    int insertBatchRoleProject(List<RoleProject> roleProjectList);
 }

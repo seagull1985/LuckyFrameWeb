@@ -42,8 +42,6 @@ import com.luckyframe.project.testmanagmt.projectProtocolTemplate.service.IProje
 @RequestMapping("/testmanagmt/projectProtocolTemplate")
 public class ProjectProtocolTemplateController extends BaseController
 {
-    private String prefix = "testmanagmt/projectProtocolTemplate";
-	
 	@Autowired
 	private IProjectProtocolTemplateService projectProtocolTemplateService;
 	
@@ -62,7 +60,7 @@ public class ProjectProtocolTemplateController extends BaseController
         if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
         	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
         }
-	    return prefix + "/projectProtocolTemplate";
+	    return "testmanagmt/projectProtocolTemplate/projectProtocolTemplate";
 	}
 	
 	/**
@@ -88,7 +86,7 @@ public class ProjectProtocolTemplateController extends BaseController
     public AjaxResult export(ProjectProtocolTemplate projectProtocolTemplate)
     {
     	List<ProjectProtocolTemplate> list = projectProtocolTemplateService.selectProjectProtocolTemplateList(projectProtocolTemplate);
-        ExcelUtil<ProjectProtocolTemplate> util = new ExcelUtil<ProjectProtocolTemplate>(ProjectProtocolTemplate.class);
+        ExcelUtil<ProjectProtocolTemplate> util = new ExcelUtil<>(ProjectProtocolTemplate.class);
         return util.exportExcel(list, "projectProtocolTemplate");
     }
 	
@@ -103,7 +101,7 @@ public class ProjectProtocolTemplateController extends BaseController
         if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
         	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
         }
-	    return prefix + "/add";
+	    return "testmanagmt/projectProtocolTemplate/add";
 	}
 	
 	/**
@@ -129,7 +127,7 @@ public class ProjectProtocolTemplateController extends BaseController
 	{
 		ProjectProtocolTemplate projectProtocolTemplate = projectProtocolTemplateService.selectProjectProtocolTemplateById(templateId);
 		mmap.put("projectProtocolTemplate", projectProtocolTemplate);
-	    return prefix + "/edit";
+	    return "testmanagmt/projectProtocolTemplate/edit";
 	}
 	
 	/**
@@ -149,9 +147,8 @@ public class ProjectProtocolTemplateController extends BaseController
 	
 	/**
 	 * 复制协议模板管理
-	 * @param templateId
-	 * @param mmap
-	 * @return
+	 * @param templateId 模板ID
+	 * @param mmap 返回数据模型
 	 * @author Seagull
 	 * @date 2019年3月9日
 	 */
@@ -163,13 +160,12 @@ public class ProjectProtocolTemplateController extends BaseController
 		mmap.put("projectProtocolTemplate", projectProtocolTemplate);
         List<Project> projects=projectService.selectProjectAll(projectProtocolTemplate.getProjectId());
         mmap.put("projects", projects);
-	    return prefix + "/copy";
+	    return "testmanagmt/projectProtocolTemplate/copy";
 	}
 	
 	/**
 	 * 复制协议模板
-	 * @param projectProtocolTemplate
-	 * @return
+	 * @param projectProtocolTemplate 协议模板对象
 	 * @author Seagull
 	 * @date 2019年3月9日
 	 */
@@ -216,8 +212,7 @@ public class ProjectProtocolTemplateController extends BaseController
 	
 	/**
 	 * 校验协议模板名称在项目中的唯一性
-	 * @param projectProtocolTemplate
-	 * @return
+	 * @param projectProtocolTemplate 协议模板对象
 	 * @author Seagull
 	 * @date 2019年3月4日
 	 */
@@ -230,8 +225,7 @@ public class ProjectProtocolTemplateController extends BaseController
     
 	/**
 	 * Ajax前台获取协议模板列表
-	 * @param projectId
-	 * @return
+	 * @param projectId 项目ID
 	 * @author Seagull
 	 * @date 2019年3月12日
 	 */
@@ -240,7 +234,7 @@ public class ProjectProtocolTemplateController extends BaseController
 	public String getTemplateListByProjectId(@PathVariable("projectId") Integer projectId) {
 		String str = "{\"message\": \"\",\"value\": ,\"code\": 200,\"redirect\": \"\" }";
 		try {
-			JSONObject json = new JSONObject();
+			JSONObject json;
 			ProjectProtocolTemplate projectProtocolTemplate=new ProjectProtocolTemplate();
 			projectProtocolTemplate.setProjectId(projectId);
 			List<ProjectProtocolTemplate> ptlist = projectProtocolTemplateService.selectProjectProtocolTemplateList(projectProtocolTemplate);

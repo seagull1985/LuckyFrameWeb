@@ -20,7 +20,7 @@ public interface TaskCaseLogMapper
      * @param logId 用例日志明细ID
      * @return 用例日志明细信息
      */
-	public TaskCaseLog selectTaskCaseLogById(Integer logId);
+	TaskCaseLog selectTaskCaseLogById(Integer logId);
 	
 	/**
      * 查询用例日志明细列表
@@ -28,7 +28,7 @@ public interface TaskCaseLogMapper
      * @param taskCaseLog 用例日志明细信息
      * @return 用例日志明细集合
      */
-	public List<TaskCaseLog> selectTaskCaseLogList(TaskCaseLog taskCaseLog);
+	List<TaskCaseLog> selectTaskCaseLogList(TaskCaseLog taskCaseLog);
 	
 	/**
      * 新增用例日志明细
@@ -36,7 +36,7 @@ public interface TaskCaseLogMapper
      * @param taskCaseLog 用例日志明细信息
      * @return 结果
      */
-	public int insertTaskCaseLog(TaskCaseLog taskCaseLog);
+	int insertTaskCaseLog(TaskCaseLog taskCaseLog);
 	
 	/**
      * 修改用例日志明细
@@ -44,7 +44,7 @@ public interface TaskCaseLogMapper
      * @param taskCaseLog 用例日志明细信息
      * @return 结果
      */
-	public int updateTaskCaseLog(TaskCaseLog taskCaseLog);
+	int updateTaskCaseLog(TaskCaseLog taskCaseLog);
 	
 	/**
      * 删除用例日志明细
@@ -52,25 +52,25 @@ public interface TaskCaseLogMapper
      * @param logId 用例日志明细ID
      * @return 结果
      */
-	public int deleteTaskCaseLogById(Integer logId);
+	int deleteTaskCaseLogById(Integer logId);
 	
 	/**
 	 * 根据TaskId删除日志明细
-	 * @param taskId
-	 * @return
+	 * @param taskId 测试任务ID
+	 * @return 返回删除数量
 	 * @author Seagull
 	 * @date 2019年4月13日
 	 */
-	public int deleteTaskCaseLogByTaskId(Integer taskId);
+	int deleteTaskCaseLogByTaskId(Integer taskId);
 	
 	/**
 	 * 根据TaskCaseId删除日志明细
-	 * @param taskCaseId
-	 * @return
+	 * @param taskCaseId 用例执行ID
+	 * @return 返回删除数量
 	 * @author Seagull
 	 * @date 2019年4月23日
 	 */
-	public int deleteTaskCaseLogByTaskCaseId(Integer taskCaseId);
+	int deleteTaskCaseLogByTaskCaseId(Integer taskCaseId);
 	
 	/**
      * 批量删除用例日志明细
@@ -78,13 +78,13 @@ public interface TaskCaseLogMapper
      * @param logIds 需要删除的数据ID
      * @return 结果
      */
-	public int deleteTaskCaseLogByIds(String[] logIds);
+	int deleteTaskCaseLogByIds(String[] logIds);
 	
     /**
      * 查询已执行的总日志数
-     * @return
+     * @return 人财两空总日志数量
      * @author Seagull
      * @date 2019年4月28日
      */
-    public int selectTaskCaseLogCount();
+    int selectTaskCaseLogCount();
 }

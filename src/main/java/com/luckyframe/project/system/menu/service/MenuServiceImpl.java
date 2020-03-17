@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,7 +46,7 @@ public class MenuServiceImpl implements IMenuService
     @Override
     public List<Menu> selectMenusByUser(User user)
     {
-        List<Menu> menus = new LinkedList<Menu>();
+        List<Menu> menus;
         // 管理员显示所有菜单信息
         if (user.isAdmin())
         {
@@ -113,7 +112,7 @@ public class MenuServiceImpl implements IMenuService
     public List<Map<String, Object>> roleMenuTreeData(Role role)
     {
         Long roleId = role.getRoleId();
-        List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> trees;
         List<Menu> menuList = menuMapper.selectMenuAll();
         if (StringUtils.isNotNull(roleId))
         {
@@ -135,7 +134,7 @@ public class MenuServiceImpl implements IMenuService
     @Override
     public List<Map<String, Object>> menuTreeData()
     {
-        List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> trees;
         List<Menu> menuList = menuMapper.selectMenuAll();
         trees = getTrees(menuList, false, null, false);
         return trees;
@@ -168,18 +167,18 @@ public class MenuServiceImpl implements IMenuService
      * @param isCheck 是否需要选中
      * @param roleMenuList 角色已存在菜单列表
      * @param permsFlag 是否需要显示权限标识
-     * @return
+     * @return 获取菜单集合
      */
     public List<Map<String, Object>> getTrees(List<Menu> menuList, boolean isCheck, List<String> roleMenuList,
             boolean permsFlag)
     {
-        List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> trees = new ArrayList<>();
         for (Menu menu : menuList)
         {
-            Map<String, Object> deptMap = new HashMap<String, Object>();
+            Map<String, Object> deptMap = new HashMap<>();
             deptMap.put("id", menu.getMenuId());
             deptMap.put("pId", menu.getParentId());
-            deptMap.put("name", transMenuName(menu, roleMenuList, permsFlag));
+            deptMap.put("name", transMenuName(menu, permsFlag));
             deptMap.put("title", menu.getMenuName());
             if (isCheck)
             {
@@ -194,13 +193,13 @@ public class MenuServiceImpl implements IMenuService
         return trees;
     }
 
-    public String transMenuName(Menu menu, List<String> roleMenuList, boolean permsFlag)
+    public String transMenuName(Menu menu, boolean permsFlag)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(menu.getMenuName());
         if (permsFlag)
         {
-            sb.append("<font color=\"#888\">&nbsp;&nbsp;&nbsp;" + menu.getPerms() + "</font>");
+            sb.append("<font color=\"#888\">&nbsp;&nbsp;&nbsp;").append(menu.getPerms()).append("</font>");
         }
         return sb.toString();
     }
@@ -291,9 +290,9 @@ public class MenuServiceImpl implements IMenuService
     @Override
     public String checkMenuNameUnique(Menu menu)
     {
-        Long menuId = StringUtils.isNull(menu.getMenuId()) ? -1L : menu.getMenuId();
+        long menuId = StringUtils.isNull(menu.getMenuId()) ? -1L : menu.getMenuId();
         Menu info = menuMapper.checkMenuNameUnique(menu.getMenuName(), menu.getParentId());
-        if (StringUtils.isNotNull(info) && info.getMenuId().longValue() != menuId.longValue())
+        if (StringUtils.isNotNull(info) && info.getMenuId() != menuId)
         {
             return UserConstants.MENU_NAME_NOT_UNIQUE;
         }

@@ -3,13 +3,13 @@ package com.luckyframe.project.testexecution.taskCaseExecute.controller;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.ConnectException;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -69,8 +69,7 @@ import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseStepsS
 @RequestMapping("/testexecution/taskCaseExecute")
 public class TaskCaseExecuteController extends BaseController
 {
-    private String prefix = "testexecution/taskCaseExecute";
-	
+
 	@Autowired
 	private ITaskCaseExecuteService taskCaseExecuteService;
 	
@@ -132,8 +131,8 @@ public class TaskCaseExecuteController extends BaseController
     	mmap.put("defaultCaseStatus", caseStatusStr);
         List<TaskExecute> taskExecutes = taskExecuteService.selectTaskExecuteList(taskExecute);
         mmap.put("taskExecutes", taskExecutes);
-        
-	    return prefix + "/taskCaseExecute";
+
+		return  "testexecution/taskCaseExecute/taskCaseExecute";
 	}
 	
 	/**
@@ -159,14 +158,14 @@ public class TaskCaseExecuteController extends BaseController
     public AjaxResult export(TaskCaseExecute taskCaseExecute)
     {
     	List<TaskCaseExecute> list = taskCaseExecuteService.selectTaskCaseExecuteList(taskCaseExecute);
-        ExcelUtil<TaskCaseExecute> util = new ExcelUtil<TaskCaseExecute>(TaskCaseExecute.class);
+        ExcelUtil<TaskCaseExecute> util = new ExcelUtil<>(TaskCaseExecute.class);
         return util.exportExcel(list, "taskCaseExecute");
     }
 
 	/**
 	 * 运行所有非成功用例
-	 * @param logId
-	 * @return
+	 * @param logId 日志ID
+	 * @return 返回查询结果
 	 */
 	@RequiresPermissions("testmanagmt:projectCase:edit")
 	@Log(title = "同步测试结果到用例步骤", businessType = BusinessType.UPDATE)
@@ -174,7 +173,7 @@ public class TaskCaseExecuteController extends BaseController
 	@ResponseBody
 	public AjaxResult synchronousTestResults(Integer logId)
 	{
-		Integer result=0;
+		int result;
 		try {
 			TaskCaseLog taskCaseLog = taskCaseLogService.selectTaskCaseLogById(logId);
 			TaskCaseExecute taskCaseExecute = taskCaseExecuteService.selectTaskCaseExecuteById(taskCaseLog.getTaskCaseId());
@@ -195,10 +194,10 @@ public class TaskCaseExecuteController extends BaseController
 
 	/**
 	 * 运行所有非成功用例
-	 * @param taskId
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 * @throws IOException
+	 * @param taskId 任务ID
+	 * @return 返回运行结果
+	 * @throws UnsupportedEncodingException 编码支持异常
+	 * @throws IOException IO异常
 	 */
 	@RequiresPermissions("testexecution:taskScheduling:execution")
 	@Log(title = "运行所有非成功用例", businessType = BusinessType.RUNCASE)
@@ -218,18 +217,13 @@ public class TaskCaseExecuteController extends BaseController
 		try {
 			HttpRequest.httpClientPost(url, JSONObject.toJSONString(runBatchCaseEntity),3000);
 		} catch (ConnectException e) {
-			// TODO Auto-generated catch block
-			return AjaxResult.error("唤起客户端失败，请检查原因");
-		} catch (KeyManagementException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return AjaxResult.error("执行用例出现异常，请检查原因");
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
+			return AjaxResult.error("唤起客户端失败，请检查原因");
+		} catch (KeyManagementException | NoSuchAlgorithmException e) {
 			e.printStackTrace();
 			return AjaxResult.error("执行用例出现异常，请检查原因");
 		} catch (RuntimeException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
 			return AjaxResult.error("执行用例链接客户端超时，请检查原因");
 		}
 		
@@ -238,18 +232,16 @@ public class TaskCaseExecuteController extends BaseController
 	
 	/**
 	 * 运行选择的用例
-	 * @param ids
-	 * @return
+	 * @param ids 运行用例ID集合
+	 * @return 返回运行结果
 	 * @author Seagull
-	 * @throws IOException 
-	 * @throws UnsupportedEncodingException 
 	 * @date 2019年4月23日
 	 */
 	@RequiresPermissions("testexecution:taskScheduling:execution")
 	@Log(title = "运行选择的用例", businessType = BusinessType.RUNCASE)
 	@PostMapping( "/runSelectCase")
 	@ResponseBody
-	public AjaxResult runSelectCase(String ids,Integer taskId) throws UnsupportedEncodingException, IOException
+	public AjaxResult runSelectCase(String ids,Integer taskId) throws IOException
 	{
 		TaskExecute taskExecute = taskExecuteService.selectTaskExecuteById(taskId);
 		TaskScheduling taskScheduling = taskSchedulingService.selectTaskSchedulingById(taskExecute.getSchedulingId());
@@ -265,16 +257,13 @@ public class TaskCaseExecuteController extends BaseController
 		try {
 			HttpRequest.httpClientPost(url, JSONObject.toJSONString(runBatchCaseEntity),3000);
 		} catch (ConnectException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
 			return AjaxResult.error("唤起客户端失败，请检查原因");
-		} catch (KeyManagementException e) {
-			// TODO Auto-generated catch block
-			return AjaxResult.error("执行用例出现异常，请检查原因");
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
+		} catch (KeyManagementException | NoSuchAlgorithmException e) {
+			e.printStackTrace();
 			return AjaxResult.error("执行用例出现异常，请检查原因");
 		} catch (RuntimeException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
 			return AjaxResult.error("执行用例链接客户端超时，请检查原因");
 		}
 		return AjaxResult.success("开始运行您选择的失败用例...");
@@ -282,8 +271,8 @@ public class TaskCaseExecuteController extends BaseController
 	
 	/**
 	 * 根据任务ID获取任务进度条
-	 * @param taskId
-	 * @return
+	 * @param taskId 任务ID
+	 * @return 返回任务进度数据
 	 * @author Seagull
 	 * @date 2019年4月9日
 	 */
@@ -312,7 +301,7 @@ public class TaskCaseExecuteController extends BaseController
     			}
     		}
 
-    		Integer percent = (int)((Double.valueOf(taskCaseExecuteList.size()-caseNoexecCount) / Double.valueOf(taskExecute.getCaseTotalCount())) * 100);
+    		Integer percent = (int)(((double) (taskCaseExecuteList.size() - caseNoexecCount) / Double.valueOf(taskExecute.getCaseTotalCount())) * 100);
     		taskExecute.setCaseSuccCount(caseSuccCount);
     		taskExecute.setCaseFailCount(caseFailCount);
     		taskExecute.setCaseLockCount(caseLockCount);
@@ -325,9 +314,7 @@ public class TaskCaseExecuteController extends BaseController
 
 	/**
 	 * 展示日志中的图片
-	 * @param request
-	 * @param response
-	 * @throws Exception
+	 * @param request 请求图片
 	 */
 	@RequestMapping(value = "/showImage.do")
 	public void showImage(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -336,9 +323,9 @@ public class TaskCaseExecuteController extends BaseController
 		TaskExecute taskExecute = taskExecuteService.selectTaskExecuteById(taskCaseLog.getTaskId());
 		TaskScheduling TaskScheduling = taskSchedulingService.selectTaskSchedulingById(taskExecute.getSchedulingId());
 		String fileName = taskCaseLog.getImgname()+".png";
-		String newName = new String(fileName.getBytes("ISO-8859-1"), "UTF-8");
+		String newName = new String(fileName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
-		Map<String, Object> params = new HashMap<String, Object>(0);
+		Map<String, Object> params = new HashMap<>(0);
 		params.put("imgName", newName);
 		byte[] bfis = HttpRequest.getFile(
 				"http://" + TaskScheduling.getClient().getClientIp() + ":" + ClientConstants.CLIENT_MONITOR_PORT + "/getLogImg", params);
@@ -357,11 +344,7 @@ public class TaskCaseExecuteController extends BaseController
 				os.write(bfis);
 				os.flush();
 				os.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -369,7 +352,7 @@ public class TaskCaseExecuteController extends BaseController
 			System.out.println(pathName);
 			OutputStream os = response.getOutputStream();
 			try {
-				int count = 0;
+				int count;
 				byte[] buffer = new byte[1024 * 1024];
 				while ((count = fis.read(buffer)) != -1) {
 					os.write(buffer, 0, count);
@@ -381,10 +364,9 @@ public class TaskCaseExecuteController extends BaseController
 				if (os != null) {
 					os.flush();
 				}
+				assert os != null;
 				os.close();
-				if (fis != null) {
-					fis.close();
-				}
+				fis.close();
 				if (file.exists()) {
 					file.delete();
 				}
@@ -394,7 +376,7 @@ public class TaskCaseExecuteController extends BaseController
 			response.setHeader("content-type", "text/html");
 			OutputStream eos = response.getOutputStream();
 			String notes = "获取图片异常，请在客户端项目所在的目录\\log\\ScreenShot\\下检查【" + fileName + "】是否存在！";
-			eos.write(notes.getBytes("UTF-8"));
+			eos.write(notes.getBytes(StandardCharsets.UTF_8));
 			eos.flush();
 			eos.close();
 		}
@@ -402,19 +384,17 @@ public class TaskCaseExecuteController extends BaseController
 	
 	/**
 	 * 获取任务相关数据
-	 * @param req
-	 * @param rsp
-	 * @throws Exception
+	 * @param rsp HTTP响应
 	 */
 	@RequestMapping(value = "/getMainData.do")
-	public void getMainData(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+	public void getMainData(HttpServletResponse rsp) throws Exception {
 		String[] taskdata = new String[2];
 		String[] casedata = new String[2];
 		String[] logdata = new String[2];
 		String[] caseadddata = new String[2];
 
 		Date minDate = taskExecuteService.selectTaskExecuteMinData();
-		String dateInterval = String.valueOf(DateUtils.getDatePoor(new Date(), minDate));
+		String dateInterval = DateUtils.getDatePoor(new Date(), minDate);
 		taskdata[0] = dateInterval;
 		taskdata[1] = String.valueOf(taskExecuteService.selectTaskExecuteCount());
 
@@ -431,7 +411,7 @@ public class TaskCaseExecuteController extends BaseController
 		}
 
 		String daysStr=dateInterval.substring(0, dateInterval.indexOf("天"));
-		int days=Integer.valueOf(daysStr);
+		int days=Integer.parseInt(daysStr);
 		if (0 == casecount) {
 			logdata[0] = "0";
 		} else {
@@ -470,12 +450,10 @@ public class TaskCaseExecuteController extends BaseController
 	
 	/**
 	 * 获取报表
-	 * @param req
-	 * @param rsp
-	 * @throws Exception
+	 * @param rsp HTTP响应
 	 */
 	@RequestMapping(value = "/getMianLineReport.do")
-	public void getMianLineReport(HttpServletRequest req, HttpServletResponse rsp) throws Exception {
+	public void getMianLineReport(HttpServletResponse rsp) throws Exception {
 		List<TaskExecute> taskExecuteList = taskExecuteService.selectTaskExecuteListForThirtyDays();
 
 		String[] casetotal;
@@ -508,6 +486,7 @@ public class TaskCaseExecuteController extends BaseController
 			createdate[0] = DateUtils.getDate();
 		}
 
+		assert taskExecuteList != null;
 		for (int i = 0; i < taskExecuteList.size(); i++) {
 			casetotal[i] = taskExecuteList.get(i).getCaseTotalCount().toString();
 			casesuc[i] = taskExecuteList.get(i).getCaseSuccCount().toString();

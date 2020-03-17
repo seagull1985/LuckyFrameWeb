@@ -143,14 +143,13 @@ public class RoleServiceImpl implements IRoleService
         roleProjectMapper.deleteRoleProjectById(roleId.intValue());
         // 删除角色与菜单关联
         roleMenuMapper.deleteRoleMenuByRoleId(roleId);
-        return roleMapper.deleteRoleById(roleId) > 0 ? true : false;
+        return roleMapper.deleteRoleById(roleId) > 0;
     }
 
     /**
      * 批量删除角色信息
      * 
      * @param ids 需要删除的数据ID
-     * @throws Exception
      */
     @Override
     public int deleteRoleByIds(String ids) throws BusinessException
@@ -238,7 +237,7 @@ public class RoleServiceImpl implements IRoleService
     {
         int rows = 1;
         // 新增用户与角色管理
-        List<RoleMenu> list = new ArrayList<RoleMenu>();
+        List<RoleMenu> list = new ArrayList<>();
         for (Long menuId : role.getMenuIds())
         {
             RoleMenu rm = new RoleMenu();
@@ -262,7 +261,7 @@ public class RoleServiceImpl implements IRoleService
     {
         int rows = 1;
         // 新增角色与部门（数据权限）管理
-        List<RoleDept> list = new ArrayList<RoleDept>();
+        List<RoleDept> list = new ArrayList<>();
         for (Long deptId : role.getDeptIds())
         {
             RoleDept rd = new RoleDept();
@@ -279,7 +278,7 @@ public class RoleServiceImpl implements IRoleService
 
 	/**
 	 * 批量增加角色与项目的对应关系
-	 * @param role
+	 * @param role 角色对象
 	 * @author Seagull
 	 * @date 2019年2月25日
 	 */
@@ -289,7 +288,7 @@ public class RoleServiceImpl implements IRoleService
         if (StringUtils.isNotNull(projects))
         {
             // 新增客户端与项目的映射表
-            List<RoleProject> roleProjectList = new ArrayList<RoleProject>();
+            List<RoleProject> roleProjectList = new ArrayList<>();
             for (Integer projectId : projects)
             {
             	RoleProject rp = new RoleProject();
@@ -313,9 +312,9 @@ public class RoleServiceImpl implements IRoleService
     @Override
     public String checkRoleNameUnique(Role role)
     {
-        Long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
+        long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
         Role info = roleMapper.checkRoleNameUnique(role.getRoleName());
-        if (StringUtils.isNotNull(info) && info.getRoleId().longValue() != roleId.longValue())
+        if (StringUtils.isNotNull(info) && info.getRoleId() != roleId)
         {
             return UserConstants.ROLE_NAME_NOT_UNIQUE;
         }
@@ -331,9 +330,9 @@ public class RoleServiceImpl implements IRoleService
     @Override
     public String checkRoleKeyUnique(Role role)
     {
-        Long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
+        long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
         Role info = roleMapper.checkRoleKeyUnique(role.getRoleKey());
-        if (StringUtils.isNotNull(info) && info.getRoleId().longValue() != roleId.longValue())
+        if (StringUtils.isNotNull(info) && info.getRoleId() != roleId)
         {
             return UserConstants.ROLE_KEY_NOT_UNIQUE;
         }

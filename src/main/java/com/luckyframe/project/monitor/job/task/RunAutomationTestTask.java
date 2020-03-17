@@ -51,8 +51,7 @@ public class RunAutomationTestTask
 		runAutomationTestTask = this;
 	}
 	
-    public void runTask(String params) throws UnsupportedEncodingException, IOException,ConnectException
-    {        
+    public void runTask(String params) throws IOException {
 		TaskScheduling taskScheduling = taskSchedulingService.selectTaskSchedulingById(Integer.valueOf(params));
 		
 		if(null!=taskScheduling){
@@ -77,10 +76,7 @@ public class RunAutomationTestTask
 				log.error("测试任务执行，远程链接客户端出现异常...");
 				taskExecute.setTaskStatus(4);
 				taskExecuteService.updateTaskExecute(taskExecute);
-			} catch (KeyManagementException e) {
-				// TODO Auto-generated catch block
-				log.error("测试任务执行，远程链接客户端出现异常...");
-			} catch (NoSuchAlgorithmException e) {
+			} catch (KeyManagementException | NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
 				log.error("测试任务执行，远程链接客户端出现异常...");
 			}

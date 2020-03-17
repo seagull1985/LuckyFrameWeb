@@ -30,8 +30,6 @@ import com.luckyframe.project.system.role.service.IRoleService;
 @RequestMapping("/system/role")
 public class RoleController extends BaseController
 {
-    private String prefix = "system/role";
-
     @Autowired
     private IRoleService roleService;
     
@@ -42,7 +40,7 @@ public class RoleController extends BaseController
     @GetMapping()
     public String role()
     {
-        return prefix + "/role";
+        return "system/role/role";
     }
 
     @RequiresPermissions("system:role:list")
@@ -62,7 +60,7 @@ public class RoleController extends BaseController
     public AjaxResult export(Role role)
     {
         List<Role> list = roleService.selectRoleList(role);
-        ExcelUtil<Role> util = new ExcelUtil<Role>(Role.class);
+        ExcelUtil<Role> util = new ExcelUtil<>(Role.class);
         return util.exportExcel(list, "角色数据");
     }
 
@@ -73,7 +71,7 @@ public class RoleController extends BaseController
     public String add(ModelMap mmap)
     {
     	mmap.put("projects", projectService.selectProjectAll(0));
-        return prefix + "/add";
+        return "system/role/add";
     }
 
     /**
@@ -98,7 +96,7 @@ public class RoleController extends BaseController
     {
     	mmap.put("projects", projectService.selectProjectsByRoleId(roleId.intValue()));
         mmap.put("role", roleService.selectRoleById(roleId));
-        return prefix + "/edit";
+        return "system/role/edit";
     }
 
     /**
@@ -121,7 +119,7 @@ public class RoleController extends BaseController
     public String rule(@PathVariable("roleId") Long roleId, ModelMap mmap)
     {
         mmap.put("role", roleService.selectRoleById(roleId));
-        return prefix + "/rule";
+        return "system/role/rule";
     }
 
     /**
@@ -179,7 +177,7 @@ public class RoleController extends BaseController
     @GetMapping("/selectMenuTree")
     public String selectMenuTree()
     {
-        return prefix + "/tree";
+        return "system/role/tree";
     }
 
     /**

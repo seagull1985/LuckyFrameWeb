@@ -28,8 +28,6 @@ import com.luckyframe.project.system.dict.service.IDictTypeService;
 @RequestMapping("/system/dict")
 public class DictTypeController extends BaseController
 {
-    private String prefix = "system/dict/type";
-
     @Autowired
     private IDictTypeService dictTypeService;
 
@@ -37,7 +35,7 @@ public class DictTypeController extends BaseController
     @GetMapping()
     public String dictType()
     {
-        return prefix + "/type";
+        return "system/dict/type/type";
     }
 
     @PostMapping("/list")
@@ -58,7 +56,7 @@ public class DictTypeController extends BaseController
     {
 
         List<DictType> list = dictTypeService.selectDictTypeList(dictType);
-        ExcelUtil<DictType> util = new ExcelUtil<DictType>(DictType.class);
+        ExcelUtil<DictType> util = new ExcelUtil<>(DictType.class);
         return util.exportExcel(list, "字典类型");
     }
 
@@ -68,7 +66,7 @@ public class DictTypeController extends BaseController
     @GetMapping("/add")
     public String add()
     {
-        return prefix + "/add";
+        return "system/dict/type/add";
     }
 
     /**
@@ -90,7 +88,7 @@ public class DictTypeController extends BaseController
     public String edit(@PathVariable("dictId") Long dictId, ModelMap mmap)
     {
         mmap.put("dict", dictTypeService.selectDictTypeById(dictId));
-        return prefix + "/edit";
+        return "system/dict/type/edit";
     }
 
     /**

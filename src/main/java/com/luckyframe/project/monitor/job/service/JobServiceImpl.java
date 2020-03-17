@@ -60,7 +60,7 @@ public class JobServiceImpl implements IJobService
      * 获取quartz调度器的计划任务列表
      * 
      * @param job 调度信息
-     * @return
+     * @return 返回JOB列表
      */
     @Override
     public List<Job> selectJobList(Job job)
@@ -167,7 +167,6 @@ public class JobServiceImpl implements IJobService
      * 批量删除调度信息
      * 
      * @param ids 需要删除的数据ID
-     * @return 结果
      */
     @Override
     public void deleteJobByIds(String ids)

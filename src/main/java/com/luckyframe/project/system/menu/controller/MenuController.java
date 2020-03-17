@@ -28,8 +28,6 @@ import com.luckyframe.project.system.role.domain.Role;
 @RequestMapping("/system/menu")
 public class MenuController extends BaseController
 {
-    private String prefix = "system/menu";
-
     @Autowired
     private IMenuService menuService;
 
@@ -37,7 +35,7 @@ public class MenuController extends BaseController
     @GetMapping()
     public String menu()
     {
-        return prefix + "/menu";
+        return "system/menu/menu";
     }
 
     @RequiresPermissions("system:menu:list")
@@ -45,8 +43,7 @@ public class MenuController extends BaseController
     @ResponseBody
     public List<Menu> list(Menu menu)
     {
-        List<Menu> menuList = menuService.selectMenuList(menu);
-        return menuList;
+        return menuService.selectMenuList(menu);
     }
 
     /**
@@ -75,7 +72,7 @@ public class MenuController extends BaseController
     @GetMapping("/add/{parentId}")
     public String add(@PathVariable("parentId") Long parentId, ModelMap mmap)
     {
-        Menu menu = null;
+        Menu menu;
         if (0L != parentId)
         {
             menu = menuService.selectMenuById(parentId);
@@ -87,7 +84,7 @@ public class MenuController extends BaseController
             menu.setMenuName("主目录");
         }
         mmap.put("menu", menu);
-        return prefix + "/add";
+        return "system/menu/add";
     }
 
     /**
@@ -109,7 +106,7 @@ public class MenuController extends BaseController
     public String edit(@PathVariable("menuId") Long menuId, ModelMap mmap)
     {
         mmap.put("menu", menuService.selectMenuById(menuId));
-        return prefix + "/edit";
+        return "system/menu/edit";
     }
 
     /**
@@ -130,7 +127,7 @@ public class MenuController extends BaseController
     @GetMapping("/icon")
     public String icon()
     {
-        return prefix + "/icon";
+        return "system/menu/icon";
     }
 
     /**
@@ -150,8 +147,7 @@ public class MenuController extends BaseController
     @ResponseBody
     public List<Map<String, Object>> roleMenuTreeData(Role role)
     {
-        List<Map<String, Object>> tree = menuService.roleMenuTreeData(role);
-        return tree;
+        return menuService.roleMenuTreeData(role);
     }
 
     /**
@@ -159,10 +155,9 @@ public class MenuController extends BaseController
      */
     @GetMapping("/menuTreeData")
     @ResponseBody
-    public List<Map<String, Object>> menuTreeData(Role role)
+    public List<Map<String, Object>> menuTreeData()
     {
-        List<Map<String, Object>> tree = menuService.menuTreeData();
-        return tree;
+        return menuService.menuTreeData();
     }
 
     /**
@@ -172,6 +167,6 @@ public class MenuController extends BaseController
     public String selectMenuTree(@PathVariable("menuId") Long menuId, ModelMap mmap)
     {
         mmap.put("menu", menuService.selectMenuById(menuId));
-        return prefix + "/tree";
+        return "system/menu/tree";
     }
 }

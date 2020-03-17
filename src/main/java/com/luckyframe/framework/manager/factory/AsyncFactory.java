@@ -98,14 +98,13 @@ public class AsyncFactory
             @Override
             public void run()
             {
-                StringBuilder s = new StringBuilder();
-                s.append(LogUtils.getBlock(ip));
-                s.append(AddressUtils.getRealAddressByIP(ip));
-                s.append(LogUtils.getBlock(username));
-                s.append(LogUtils.getBlock(status));
-                s.append(LogUtils.getBlock(message));
                 // 打印信息到日志
-                sys_user_logger.info(s.toString(), args);
+                String s = LogUtils.getBlock(ip) +
+                        AddressUtils.getRealAddressByIP(ip) +
+                        LogUtils.getBlock(username) +
+                        LogUtils.getBlock(status) +
+                        LogUtils.getBlock(message);
+                sys_user_logger.info(s, args);
                 // 获取客户端操作系统
                 String os = userAgent.getOperatingSystem().getName();
                 // 获取客户端浏览器

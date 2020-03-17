@@ -21,13 +21,10 @@ public class TreeUtils
      */
     public static List<Menu> getChildPerms(List<Menu> list, int parentId)
     {
-        List<Menu> returnList = new ArrayList<Menu>();
-        for (Iterator<Menu> iterator = list.iterator(); iterator.hasNext();)
-        {
-            Menu t = (Menu) iterator.next();
+        List<Menu> returnList = new ArrayList<>();
+        for (Menu t : list) {
             // 一、根据传入的某个父节点ID,遍历该父节点的所有子节点
-            if (t.getParentId() == parentId)
-            {
+            if (t.getParentId() == parentId) {
                 recursionFn(list, t);
                 returnList.add(t);
             }
@@ -37,9 +34,6 @@ public class TreeUtils
 
     /**
      * 递归列表
-     * 
-     * @param list
-     * @param t
      */
     private static void recursionFn(List<Menu> list, Menu t)
     {
@@ -51,10 +45,7 @@ public class TreeUtils
             if (hasChild(list, tChild))
             {
                 // 判断是否有子节点
-                Iterator<Menu> it = childList.iterator();
-                while (it.hasNext())
-                {
-                    Menu n = (Menu) it.next();
+                for (Menu n : childList) {
                     recursionFn(list, n);
                 }
             }
@@ -67,20 +58,16 @@ public class TreeUtils
     private static List<Menu> getChildList(List<Menu> list, Menu t)
     {
 
-        List<Menu> tlist = new ArrayList<Menu>();
-        Iterator<Menu> it = list.iterator();
-        while (it.hasNext())
-        {
-            Menu n = (Menu) it.next();
-            if (n.getParentId().longValue() == t.getMenuId().longValue())
-            {
+        List<Menu> tlist = new ArrayList<>();
+        for (Menu n : list) {
+            if (n.getParentId().longValue() == t.getMenuId().longValue()) {
                 tlist.add(n);
             }
         }
         return tlist;
     }
 
-    List<Menu> returnList = new ArrayList<Menu>();
+    List<Menu> returnList = new ArrayList<>();
 
     /**
      * 根据父节点的ID获取所有子节点
@@ -95,12 +82,9 @@ public class TreeUtils
         {
             return null;
         }
-        for (Iterator<Menu> iterator = list.iterator(); iterator.hasNext();)
-        {
-            Menu node = (Menu) iterator.next();
+        for (Menu node : list) {
             // 一、根据传入的某个父节点ID,遍历该父节点的所有子节点
-            if (node.getParentId() == typeId)
-            {
+            if (node.getParentId() == typeId) {
                 recursionFn(list, node, prefix);
             }
             // 二、遍历所有的父节点下的所有子节点
@@ -119,10 +103,7 @@ public class TreeUtils
         {
             // 判断是否有子节点
             returnList.add(node);
-            Iterator<Menu> it = childList.iterator();
-            while (it.hasNext())
-            {
-                Menu n = (Menu) it.next();
+            for (Menu n : childList) {
                 n.setMenuName(p + n.getMenuName());
                 recursionFn(list, n, p + p);
             }

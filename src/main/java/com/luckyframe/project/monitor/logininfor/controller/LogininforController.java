@@ -26,7 +26,6 @@ import com.luckyframe.project.monitor.logininfor.service.ILogininforService;
 @RequestMapping("/monitor/logininfor")
 public class LogininforController extends BaseController
 {
-    private String prefix = "monitor/logininfor";
 
     @Autowired
     private ILogininforService logininforService;
@@ -35,7 +34,7 @@ public class LogininforController extends BaseController
     @GetMapping()
     public String logininfor()
     {
-        return prefix + "/logininfor";
+        return "monitor/logininfor/logininfor";
     }
 
     @RequiresPermissions("monitor:logininfor:list")
@@ -55,7 +54,7 @@ public class LogininforController extends BaseController
     public AjaxResult export(Logininfor logininfor)
     {
         List<Logininfor> list = logininforService.selectLogininforList(logininfor);
-        ExcelUtil<Logininfor> util = new ExcelUtil<Logininfor>(Logininfor.class);
+        ExcelUtil<Logininfor> util = new ExcelUtil<>(Logininfor.class);
         return util.exportExcel(list, "登陆日志");
     }
 

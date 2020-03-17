@@ -37,8 +37,6 @@ import com.luckyframe.project.testmanagmt.projectCaseParams.service.IProjectCase
 @RequestMapping("/testmanagmt/projectCaseParams")
 public class ProjectCaseParamsController extends BaseController
 {
-    private String prefix = "testmanagmt/projectCaseParams";
-	
 	@Autowired
 	private IProjectCaseParamsService projectCaseParamsService;
 	
@@ -54,7 +52,7 @@ public class ProjectCaseParamsController extends BaseController
         if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
         	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
         }
-	    return prefix + "/projectCaseParams";
+	    return "testmanagmt/projectCaseParams/projectCaseParams";
 	}
 	
 	/**
@@ -80,7 +78,7 @@ public class ProjectCaseParamsController extends BaseController
     public AjaxResult export(ProjectCaseParams projectCaseParams)
     {
     	List<ProjectCaseParams> list = projectCaseParamsService.selectProjectCaseParamsList(projectCaseParams);
-        ExcelUtil<ProjectCaseParams> util = new ExcelUtil<ProjectCaseParams>(ProjectCaseParams.class);
+        ExcelUtil<ProjectCaseParams> util = new ExcelUtil<>(ProjectCaseParams.class);
         return util.exportExcel(list, "projectCaseParams");
     }
 	
@@ -95,7 +93,7 @@ public class ProjectCaseParamsController extends BaseController
         if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
         	mmap.put("defaultProjectId", ShiroUtils.getProjectId());
         }
-	    return prefix + "/add";
+	    return "testmanagmt/projectCaseParams/add";
 	}
 	
 	/**
@@ -123,7 +121,7 @@ public class ProjectCaseParamsController extends BaseController
         mmap.put("projects", projects);
 		ProjectCaseParams projectCaseParams = projectCaseParamsService.selectProjectCaseParamsById(paramsId);
 		mmap.put("projectCaseParams", projectCaseParams);
-	    return prefix + "/edit";
+	    return "testmanagmt/projectCaseParams/edit";
 	}
 	
 	/**
@@ -161,8 +159,7 @@ public class ProjectCaseParamsController extends BaseController
 	
     /**
      * 校验用例参数名称唯一性
-     * @param projectPlan
-     * @return
+     * @param projectCaseParams 公共参数对象
      * @author Seagull
      * @date 2019年3月22日
      */

@@ -3,6 +3,7 @@ package com.luckyframe.project.testmanagmt.projectProtocolTemplate.service;
 import java.util.List;
 
 import com.luckyframe.project.testmanagmt.projectProtocolTemplate.domain.ProjectProtocolTemplate;
+import org.springframework.stereotype.Component;
 
 /**
  * 协议模板管理 服务层
@@ -18,7 +19,7 @@ public interface IProjectProtocolTemplateService
      * @param templateId 协议模板管理ID
      * @return 协议模板管理信息
      */
-	public ProjectProtocolTemplate selectProjectProtocolTemplateById(Integer templateId);
+	ProjectProtocolTemplate selectProjectProtocolTemplateById(Integer templateId);
 	
 	/**
      * 查询协议模板管理列表
@@ -26,7 +27,7 @@ public interface IProjectProtocolTemplateService
      * @param projectProtocolTemplate 协议模板管理信息
      * @return 协议模板管理集合
      */
-	public List<ProjectProtocolTemplate> selectProjectProtocolTemplateList(ProjectProtocolTemplate projectProtocolTemplate);
+	List<ProjectProtocolTemplate> selectProjectProtocolTemplateList(ProjectProtocolTemplate projectProtocolTemplate);
 	
 	/**
      * 新增协议模板管理
@@ -34,7 +35,7 @@ public interface IProjectProtocolTemplateService
      * @param projectProtocolTemplate 协议模板管理信息
      * @return 结果
      */
-	public int insertProjectProtocolTemplate(ProjectProtocolTemplate projectProtocolTemplate);
+	int insertProjectProtocolTemplate(ProjectProtocolTemplate projectProtocolTemplate);
 	
 	/**
      * 修改协议模板管理
@@ -42,7 +43,7 @@ public interface IProjectProtocolTemplateService
      * @param projectProtocolTemplate 协议模板管理信息
      * @return 结果
      */
-	public int updateProjectProtocolTemplate(ProjectProtocolTemplate projectProtocolTemplate);
+	int updateProjectProtocolTemplate(ProjectProtocolTemplate projectProtocolTemplate);
 		
 	/**
      * 删除协议模板管理信息
@@ -50,14 +51,13 @@ public interface IProjectProtocolTemplateService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-	public int deleteProjectProtocolTemplateByIds(String ids);
+	int deleteProjectProtocolTemplateByIds(String ids);
 	
 	/**
 	 * 检验模板名称在项目中的唯一性
-	 * @param projectProtocolTemplate
-	 * @return
+	 * @param projectProtocolTemplate 协议模板对象
 	 * @author Seagull
 	 * @date 2019年3月4日
 	 */
-	 public String checkProjectProtocolTemplateNameUnique(ProjectProtocolTemplate projectProtocolTemplate);
+	 String checkProjectProtocolTemplateNameUnique(ProjectProtocolTemplate projectProtocolTemplate);
 }

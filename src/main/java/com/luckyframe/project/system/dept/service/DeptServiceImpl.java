@@ -49,7 +49,7 @@ public class DeptServiceImpl implements IDeptService
     @DataScope(tableAlias = "d")
     public List<Map<String, Object>> selectDeptTree(Dept dept)
     {
-        List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> trees;
         List<Dept> deptList = deptMapper.selectDeptList(dept);
         trees = getTrees(deptList, false, null);
         return trees;
@@ -65,7 +65,7 @@ public class DeptServiceImpl implements IDeptService
     public List<Map<String, Object>> roleDeptTreeData(Role role)
     {
         Long roleId = role.getRoleId();
-        List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> trees;
         List<Dept> deptList = selectDeptList(new Dept());
         if (StringUtils.isNotNull(roleId))
         {
@@ -85,17 +85,17 @@ public class DeptServiceImpl implements IDeptService
      * @param deptList 部门列表
      * @param isCheck 是否需要选中
      * @param roleDeptList 角色已存在菜单列表
-     * @return
+     * @return 返回部门树数据
      */
     public List<Map<String, Object>> getTrees(List<Dept> deptList, boolean isCheck, List<String> roleDeptList)
     {
 
-        List<Map<String, Object>> trees = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> trees = new ArrayList<>();
         for (Dept dept : deptList)
         {
             if (UserConstants.DEPT_NORMAL.equals(dept.getStatus()))
             {
-                Map<String, Object> deptMap = new HashMap<String, Object>();
+                Map<String, Object> deptMap = new HashMap<>();
                 deptMap.put("id", dept.getDeptId());
                 deptMap.put("pId", dept.getParentId());
                 deptMap.put("name", dept.getDeptName());
@@ -138,7 +138,7 @@ public class DeptServiceImpl implements IDeptService
     public boolean checkDeptExistUser(Long deptId)
     {
         int result = deptMapper.checkDeptExistUser(deptId);
-        return result > 0 ? true : false;
+        return result > 0;
     }
 
     /**
@@ -254,9 +254,9 @@ public class DeptServiceImpl implements IDeptService
     @Override
     public String checkDeptNameUnique(Dept dept)
     {
-        Long deptId = StringUtils.isNull(dept.getDeptId()) ? -1L : dept.getDeptId();
+        long deptId = StringUtils.isNull(dept.getDeptId()) ? -1L : dept.getDeptId();
         Dept info = deptMapper.checkDeptNameUnique(dept.getDeptName(), dept.getParentId());
-        if (StringUtils.isNotNull(info) && info.getDeptId().longValue() != deptId.longValue())
+        if (StringUtils.isNotNull(info) && info.getDeptId() != deptId)
         {
             return UserConstants.DEPT_NAME_NOT_UNIQUE;
         }

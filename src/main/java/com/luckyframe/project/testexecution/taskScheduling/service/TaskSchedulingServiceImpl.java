@@ -62,8 +62,7 @@ public class TaskSchedulingServiceImpl implements ITaskSchedulingService
 	
 	/**
 	 * 根据客户端ID查询调度列表
-	 * @param clientId
-	 * @return
+	 * @param clientId 客户端ID
 	 * @author Seagull
 	 * @date 2019年3月29日
 	 */
@@ -77,8 +76,7 @@ public class TaskSchedulingServiceImpl implements ITaskSchedulingService
 	
 	/**
 	 * 根据项目ID查询调度列表
-	 * @param projectId
-	 * @return
+	 * @param projectId 项目ID
 	 * @author Seagull
 	 * @date 2019年4月8日
 	 */
@@ -131,7 +129,7 @@ public class TaskSchedulingServiceImpl implements ITaskSchedulingService
 	public int deleteTaskSchedulingByIds(String ids)
 	{
 		String[] tsIds = Convert.toStrArray(ids);
-		Integer result=0;
+		int result=0;
 		for(String tsId:tsIds){
 			TaskScheduling taskScheduling = taskSchedulingMapper.selectTaskSchedulingById(Integer.valueOf(tsId));
 			
@@ -153,17 +151,16 @@ public class TaskSchedulingServiceImpl implements ITaskSchedulingService
 	
     /**
      * 检查调度任务名称唯一性
-     * @param taskScheduling
-     * @return
+     * @param taskScheduling 调度任务对象
      * @author Seagull
      * @date 2019年3月27日
      */
     @Override
     public String checkSchedulingNameUnique(TaskScheduling taskScheduling)
     {
-        Long schedulingId = StringUtils.isNull(taskScheduling.getSchedulingId()) ? -1L : taskScheduling.getSchedulingId();
+        long schedulingId = StringUtils.isNull(taskScheduling.getSchedulingId()) ? -1L : taskScheduling.getSchedulingId();
         TaskScheduling info = taskSchedulingMapper.checkSchedulingNameUnique(taskScheduling.getSchedulingName());
-        if (StringUtils.isNotNull(info) && info.getSchedulingId().longValue() != schedulingId.longValue())
+        if (StringUtils.isNotNull(info) && info.getSchedulingId().longValue() != schedulingId)
         {
             return TaskSchedulingConstants.TASKSCHEDULING_NAME_NOT_UNIQUE;
         }
@@ -172,8 +169,7 @@ public class TaskSchedulingServiceImpl implements ITaskSchedulingService
     
     /**
      * 根据调度名称查询调度对象
-     * @param schedulingName
-     * @return
+     * @param schedulingName 调度名称
      * @author Seagull
      * @date 2019年9月4日
      */

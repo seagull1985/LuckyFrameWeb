@@ -18,7 +18,7 @@ public interface IProjectCaseParamsService
      * @param paramsId 用例公共参数ID
      * @return 用例公共参数信息
      */
-	public ProjectCaseParams selectProjectCaseParamsById(Integer paramsId);
+	ProjectCaseParams selectProjectCaseParamsById(Integer paramsId);
 	
 	/**
      * 查询用例公共参数列表
@@ -26,16 +26,15 @@ public interface IProjectCaseParamsService
      * @param projectCaseParams 用例公共参数信息
      * @return 用例公共参数集合
      */
-	public List<ProjectCaseParams> selectProjectCaseParamsList(ProjectCaseParams projectCaseParams);
+	List<ProjectCaseParams> selectProjectCaseParamsList(ProjectCaseParams projectCaseParams);
 	
 	/**
 	 * 根据项目ID查询所有项目中以及当前项目下的公共参数
-	 * @param projectId
-	 * @return
+	 * @param projectId 项目ID
 	 * @author Seagull
 	 * @date 2019年6月18日
 	 */
-	public List<ProjectCaseParams> selectProjectCaseParamsListByProjectId(Integer projectId);
+	List<ProjectCaseParams> selectProjectCaseParamsListByProjectId(Integer projectId);
 	
 	/**
      * 新增用例公共参数
@@ -43,7 +42,7 @@ public interface IProjectCaseParamsService
      * @param projectCaseParams 用例公共参数信息
      * @return 结果
      */
-	public int insertProjectCaseParams(ProjectCaseParams projectCaseParams);
+	int insertProjectCaseParams(ProjectCaseParams projectCaseParams);
 	
 	/**
      * 修改用例公共参数
@@ -51,7 +50,7 @@ public interface IProjectCaseParamsService
      * @param projectCaseParams 用例公共参数信息
      * @return 结果
      */
-	public int updateProjectCaseParams(ProjectCaseParams projectCaseParams);
+	int updateProjectCaseParams(ProjectCaseParams projectCaseParams);
 		
 	/**
      * 删除用例公共参数信息
@@ -59,14 +58,13 @@ public interface IProjectCaseParamsService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-	public int deleteProjectCaseParamsByIds(String ids);
+	int deleteProjectCaseParamsByIds(String ids);
 	
     /**
      * 校验用例参数名称是否唯一
-     * @param projectCaseParams
-     * @return
+     * @param projectCaseParams 公共参数对象
      * @author Seagull
      * @date 2019年3月22日
      */
-    public String checkProjectCaseParamsNameUnique(ProjectCaseParams projectCaseParams);
+    String checkProjectCaseParamsNameUnique(ProjectCaseParams projectCaseParams);
 }

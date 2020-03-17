@@ -28,8 +28,6 @@ import com.luckyframe.project.monitor.job.service.IJobLogService;
 @RequestMapping("/monitor/jobLog")
 public class JobLogController extends BaseController
 {
-    private String prefix = "monitor/job";
-
     @Autowired
     private IJobLogService jobLogService;
 
@@ -37,7 +35,7 @@ public class JobLogController extends BaseController
     @GetMapping()
     public String jobLog()
     {
-        return prefix + "/jobLog";
+        return "monitor/job/jobLog";
     }
 
     @RequiresPermissions("monitor:job:list")
@@ -57,7 +55,7 @@ public class JobLogController extends BaseController
     public AjaxResult export(JobLog jobLog)
     {
         List<JobLog> list = jobLogService.selectJobLogList(jobLog);
-        ExcelUtil<JobLog> util = new ExcelUtil<JobLog>(JobLog.class);
+        ExcelUtil<JobLog> util = new ExcelUtil<>(JobLog.class);
         return util.exportExcel(list, "调度日志");
     }
 
@@ -76,7 +74,7 @@ public class JobLogController extends BaseController
     {
         mmap.put("name", "jobLog");
         mmap.put("jobLog", jobLogService.selectJobLogById(jobLogId));
-        return prefix + "/detail";
+        return "monitor/job/detail";
     }
     
     @Log(title = "调度日志", businessType = BusinessType.CLEAN)

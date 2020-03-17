@@ -91,7 +91,7 @@ public class ProjectServiceImpl implements IProjectService
     	List<Project> projectList= selectProjectList(new Project());
     	if(projectId!=0){
     		for(Project p:projectList){
-    			if(p.getProjectId()==projectId){
+    			if(p.getProjectId().equals(projectId)){
     				p.setFlag(true);
     			}   			
     		}   		
@@ -149,7 +149,7 @@ public class ProjectServiceImpl implements IProjectService
 	{
 		String[] projectIds=Convert.toStrArray(ids);
 		for(String projectIdStr:projectIds){
-			int projectId=Integer.valueOf(projectIdStr);
+			int projectId=Integer.parseInt(projectIdStr);
 			if(projectCaseModuleMapper.selectProjectCaseModuleCountByProjectId(projectId)>0){
 				throw new BusinessException(String.format("【%1$s】已绑定子用例模块,不能删除", projectMapper.selectProjectById(projectId).getProjectName()));
 			}
@@ -182,8 +182,8 @@ public class ProjectServiceImpl implements IProjectService
 	
     /**
      * 根据客户端ID查询所有项目列表(打标记)
-     * @param userId
-     * @return
+     * @param clientId 客户端ID
+     * @return 返回项目集合
      * @author Seagull
      * @date 2019年2月25日
      */
@@ -208,8 +208,8 @@ public class ProjectServiceImpl implements IProjectService
     
     /**
      * 根据角色ID查询所有项目列表(打标记)
-     * @param roleId
-     * @return
+     * @param roleId 角色ID
+     * @return 返回项目集合
      * @author Seagull
      * @date 2019年2月25日
      */
@@ -238,9 +238,9 @@ public class ProjectServiceImpl implements IProjectService
     @Override
     public String checkProjectNameUnique(Project project)
     {
-        Long projectId = StringUtils.isNull(project.getProjectId()) ? -1L : project.getProjectId();
+        long projectId = StringUtils.isNull(project.getProjectId()) ? -1L : project.getProjectId();
         Project info = projectMapper.checkProjectNameUnique(project.getProjectName());
-        if (StringUtils.isNotNull(info) && info.getProjectId().longValue() != projectId.longValue())
+        if (StringUtils.isNotNull(info) && info.getProjectId().longValue() != projectId)
         {
             return ProjectConstants.PROJECT_NAME_NOT_UNIQUE;
         }
@@ -253,9 +253,9 @@ public class ProjectServiceImpl implements IProjectService
     @Override
     public String checkProjectSignUnique(Project project)
     {
-        Long projectId = StringUtils.isNull(project.getProjectId()) ? -1L : project.getProjectId();
+        long projectId = StringUtils.isNull(project.getProjectId()) ? -1L : project.getProjectId();
         Project info = projectMapper.checkProjectSignUnique(project.getProjectSign());
-        if (StringUtils.isNotNull(info) && info.getProjectId().longValue() != projectId.longValue())
+        if (StringUtils.isNotNull(info) && info.getProjectId().longValue() != projectId)
         {
             return ProjectConstants.PROJECT_SIGN_NOT_UNIQUE;
         }

@@ -2,6 +2,7 @@ package com.luckyframe.common.xss;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,21 +34,17 @@ public class XssFilter implements Filter
     public boolean enabled = false;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException
-    {
+    public void init(FilterConfig filterConfig) {
         String tempExcludes = filterConfig.getInitParameter("excludes");
         String tempEnabled = filterConfig.getInitParameter("enabled");
         if (StringUtils.isNotEmpty(tempExcludes))
         {
             String[] url = tempExcludes.split(",");
-            for (int i = 0; url != null && i < url.length; i++)
-            {
-                excludes.add(url[i]);
-            }
+            Collections.addAll(excludes, url);
         }
         if (StringUtils.isNotEmpty(tempEnabled))
         {
-            enabled = Boolean.valueOf(tempEnabled);
+            enabled = Boolean.parseBoolean(tempEnabled);
         }
     }
 

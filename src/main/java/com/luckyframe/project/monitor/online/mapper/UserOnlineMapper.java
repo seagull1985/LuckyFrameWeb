@@ -18,7 +18,7 @@ public interface UserOnlineMapper
      * @param sessionId 会话ID
      * @return 在线用户信息
      */
-    public UserOnline selectOnlineById(String sessionId);
+    UserOnline selectOnlineById(String sessionId);
 
     /**
      * 通过会话序号删除信息
@@ -26,7 +26,7 @@ public interface UserOnlineMapper
      * @param sessionId 会话ID
      * @return 在线用户信息
      */
-    public int deleteOnlineById(String sessionId);
+    int deleteOnlineById(String sessionId);
 
     /**
      * 保存会话信息
@@ -34,7 +34,7 @@ public interface UserOnlineMapper
      * @param online 会话信息
      * @return 结果
      */
-    public int saveOnline(UserOnline online);
+    int saveOnline(UserOnline online);
 
     /**
      * 查询会话集合
@@ -42,7 +42,7 @@ public interface UserOnlineMapper
      * @param userOnline 会话参数
      * @return 会话集合
      */
-    public List<UserOnline> selectUserOnlineList(UserOnline userOnline);
+    List<UserOnline> selectUserOnlineList(UserOnline userOnline);
 
     /**
      * 查询过期会话集合
@@ -50,5 +50,5 @@ public interface UserOnlineMapper
      * @param lastAccessTime 过期时间
      * @return 会话集合
      */
-    public List<UserOnline> selectOnlineByExpired(String lastAccessTime);
+    List<UserOnline> selectOnlineByExpired(String lastAccessTime);
 }

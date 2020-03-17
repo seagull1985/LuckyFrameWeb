@@ -235,7 +235,7 @@ public class UserServiceImpl implements IUserService
         if (StringUtils.isNotNull(roles))
         {
             // 新增用户与角色管理
-            List<UserRole> list = new ArrayList<UserRole>();
+            List<UserRole> list = new ArrayList<>();
             for (Long roleId : user.getRoleIds())
             {
                 UserRole ur = new UserRole();
@@ -261,7 +261,7 @@ public class UserServiceImpl implements IUserService
         if (StringUtils.isNotNull(posts))
         {
             // 新增用户与岗位管理
-            List<UserPost> list = new ArrayList<UserPost>();
+            List<UserPost> list = new ArrayList<>();
             for (Long postId : user.getPostIds())
             {
                 UserPost up = new UserPost();
@@ -280,7 +280,7 @@ public class UserServiceImpl implements IUserService
      * 校验用户名称是否唯一
      * 
      * @param loginName 用户名
-     * @return
+     * @return 返回校验结果
      */
     @Override
     public String checkLoginNameUnique(String loginName)
@@ -297,14 +297,14 @@ public class UserServiceImpl implements IUserService
      * 校验用户名称是否唯一
      *
      * @param user 用户信息
-     * @return
+     * @return 返回校验结果
      */
     @Override
     public String checkPhoneUnique(User user)
     {
-        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
+        long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
         User info = userMapper.checkPhoneUnique(user.getPhonenumber());
-        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        if (StringUtils.isNotNull(info) && info.getUserId() != userId)
         {
             return UserConstants.USER_PHONE_NOT_UNIQUE;
         }
@@ -315,14 +315,14 @@ public class UserServiceImpl implements IUserService
      * 校验email是否唯一
      *
      * @param user 用户信息
-     * @return
+     * @return 返回校验结果
      */
     @Override
     public String checkEmailUnique(User user)
     {
-        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
+        long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
         User info = userMapper.checkEmailUnique(user.getEmail());
-        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        if (StringUtils.isNotNull(info) && info.getUserId() != userId)
         {
             return UserConstants.USER_EMAIL_NOT_UNIQUE;
         }
@@ -339,7 +339,7 @@ public class UserServiceImpl implements IUserService
     public String selectUserRoleGroup(Long userId)
     {
         List<Role> list = roleMapper.selectRolesByUserId(userId);
-        StringBuffer idsStr = new StringBuffer();
+        StringBuilder idsStr = new StringBuilder();
         for (Role role : list)
         {
             idsStr.append(role.getRoleName()).append(",");
@@ -361,7 +361,7 @@ public class UserServiceImpl implements IUserService
     public String selectUserPostGroup(Long userId)
     {
         List<Post> list = postMapper.selectPostsByUserId(userId);
-        StringBuffer idsStr = new StringBuffer();
+        StringBuilder idsStr = new StringBuilder();
         for (Post post : list)
         {
             idsStr.append(post.getPostName()).append(",");
@@ -405,26 +405,26 @@ public class UserServiceImpl implements IUserService
                     user.setCreateBy(operName);
                     this.insertUser(user);
                     successNum++;
-                    successMsg.append("<br/>" + successNum + "、账号 " + user.getLoginName() + " 导入成功");
+                    successMsg.append("<br/>").append(successNum).append("、账号 ").append(user.getLoginName()).append(" 导入成功");
                 }
                 else if (isUpdateSupport)
                 {
                     user.setUpdateBy(operName);
                     this.updateUser(user);
                     successNum++;
-                    successMsg.append("<br/>" + successNum + "、账号 " + user.getLoginName() + " 更新成功");
+                    successMsg.append("<br/>").append(successNum).append("、账号 ").append(user.getLoginName()).append(" 更新成功");
                 }
                 else
                 {
                     failureNum++;
-                    failureMsg.append("<br/>" + failureNum + "、账号 " + user.getLoginName() + " 已存在");
+                    failureMsg.append("<br/>").append(failureNum).append("、账号 ").append(user.getLoginName()).append(" 已存在");
                 }
             }
             catch (Exception e)
             {
                 failureNum++;
                 String msg = "<br/>" + failureNum + "、账号 " + user.getLoginName() + " 导入失败：";
-                failureMsg.append(msg + e.getMessage());
+                failureMsg.append(msg).append(e.getMessage());
                 log.error(msg, e);
             }
         }

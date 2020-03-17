@@ -1,17 +1,5 @@
 package com.luckyframe.project.api;
 
-import java.io.PrintWriter;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -34,6 +22,16 @@ import com.luckyframe.project.testmanagmt.projectProtocolTemplate.domain.Project
 import com.luckyframe.project.testmanagmt.projectProtocolTemplate.domain.ProjectTemplateParams;
 import com.luckyframe.project.testmanagmt.projectProtocolTemplate.service.IProjectProtocolTemplateService;
 import com.luckyframe.project.testmanagmt.projectProtocolTemplate.service.IProjectTemplateParamsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * 统一API对外获取数据类
@@ -50,40 +48,40 @@ public class OpenGetApiController
 {
     private static final Logger log = LoggerFactory.getLogger(OpenGetApiController.class);
 
-	@Autowired
+	@Resource
 	private IProjectPlanService projectPlanService;
 	
-	@Autowired
+	@Resource
 	private IProjectCaseService projectCaseService;
 	
-	@Autowired
+	@Resource
 	private IProjectCaseStepsService projectCaseStepsService;
 	
-	@Autowired
+	@Resource
 	private ITaskExecuteService taskExecuteService;
 	
-	@Autowired
+	@Resource
 	private IProjectCaseParamsService projectCaseParamsService;
 	
-	@Autowired
+	@Resource
 	private ITaskSchedulingService taskSchedulingService;
 	
-	@Autowired
+	@Resource
 	private ITaskCaseExecuteService taskCaseExecuteService;
 	
-	@Autowired
+	@Resource
 	private IProjectProtocolTemplateService projectProtocolTemplateService;
 	
-	@Autowired
+	@Resource
 	private IProjectTemplateParamsService projectTemplateParamsService;
 	
-    @Autowired
+    @Resource
     private LuckyFrameConfig lfConfig;
 
 	/**
 	 * 通过计划ID获取用例列表
-	 * @param req
-	 * @param rsp
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
@@ -105,15 +103,14 @@ public class OpenGetApiController
 			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectcases));
 			pw.print(array.toString());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			log.error("通过计划ID获取用例列表出现异常", e);
 		}
 	}
 	
 	/**
 	 * 获取服务器版本号
-	 * @param req
-	 * @param rsp
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
 	 * @author Seagull
 	 * @date 2019年4月24日
 	 */
@@ -126,15 +123,14 @@ public class OpenGetApiController
 			PrintWriter pw = rsp.getWriter();
 			pw.print("Version "+lfConfig.getVersion());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			log.error("获取服务器版本号出现异常", e);
 		}
 	}
 	
 	/**
 	 * 通过计划名称获取用例列表
-	 * @param req
-	 * @param rsp
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
@@ -157,7 +153,6 @@ public class OpenGetApiController
 			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectcases));
 			pw.print(array.toString());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			log.error("通过计划名称获取用例列表出现异常", e);
 		}
 	}
@@ -165,8 +160,8 @@ public class OpenGetApiController
 	
 	/**
 	 * 通过用例ID获取步骤列表
-	 * @param req
-	 * @param rsp
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
@@ -187,15 +182,14 @@ public class OpenGetApiController
 			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectCaseStepsList));
 			pw.print(array.toString());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			log.error("通过用例ID获取步骤列表出现异常", e);
 		}
 	}
 	
 	/**
 	 * 通过taskId获取实体
-	 * @param req
-	 * @param rsp
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
@@ -211,15 +205,14 @@ public class OpenGetApiController
 
 			pw.print(JSONObject.toJSONString(taskExecute));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			log.error("通过taskId获取实体出现异常", e);
 		}
 	}
 	
 	/**
 	 * 通过用例ID获取实体
-	 * @param req
-	 * @param rsp
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
@@ -235,15 +228,14 @@ public class OpenGetApiController
 
 			pw.print(JSONObject.toJSONString(projectCase));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			log.error("通过用例编号获取实体出现异常", e);
 		}
 	}
 	
 	/**
 	 * 通过用例编号获取实体
-	 * @param req
-	 * @param rsp
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
@@ -259,15 +251,14 @@ public class OpenGetApiController
 
 			pw.print(JSONObject.toJSONString(projectCase));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			log.error("通过用例编号获取实体出现异常", e);
 		}
 	}
 	
 	/**
 	 * 根据项目ID获取公共参数列表
-	 * @param req
-	 * @param rsp
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
@@ -285,15 +276,14 @@ public class OpenGetApiController
 			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectCaseParamsList));
 			pw.print(array.toString());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			log.error("根据项目ID获取公共参数列表出现异常", e);
 		}
 	}
 	
 	/**
 	 * 通过执行任务ID获取调度实体
-	 * @param req
-	 * @param rsp
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
@@ -310,15 +300,14 @@ public class OpenGetApiController
 
 			pw.print(JSONObject.toJSONString(taskScheduling));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			log.error("通过执行任务ID获取调度实体出现异常", e);
 		}
 	}
 	
 	/**
 	 * 通过计划名称获取用例列表
-	 * @param req
-	 * @param rsp
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
 	 * @author Seagull
 	 * @date 2019年4月16日
 	 */
@@ -342,15 +331,14 @@ public class OpenGetApiController
 			JSONArray array= JSONArray.parseArray(JSON.toJSONString(caseIdArr));
 			pw.print(array.toString());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			log.error("通过计划名称获取用例列表出现异常", e);
 		}
 	}
 	
 	/**
 	 * 通过模板ID获取实体
-	 * @param req
-	 * @param rsp
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
 	 * @author Seagull
 	 * @date 2019年4月24日
 	 */
@@ -366,15 +354,14 @@ public class OpenGetApiController
 
 			pw.print(JSONObject.toJSONString(projectProtocolTemplate));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			log.error("通过模板ID获取实体出现异常", e);
 		}
 	}
 	
 	/**
 	 * 根据模板ID获取参数
-	 * @param req
-	 * @param rsp
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
 	 * @author Seagull
 	 * @date 2019年4月24日
 	 */
@@ -394,7 +381,6 @@ public class OpenGetApiController
 			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectTemplateParamsList));
 			pw.print(array.toString());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			log.error("根据模板ID获取参数出现异常", e);
 		}
 	}
