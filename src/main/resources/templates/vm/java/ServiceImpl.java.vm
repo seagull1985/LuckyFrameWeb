@@ -1,4 +1,4 @@
-package ${package}.service;
+package templates.vm.java;package ${package}.service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,8 @@ public class ${className}ServiceImpl implements I${className}Service
 	/**
      * 查询${tableComment}信息
      * 
-     * @param ${primaryKey.attrname} ${tableComment}ID
-     * @return ${tableComment}信息
+     * @param ${primaryKey.attrname} ${tableComment}ID 主键ID
+     * @return ${tableComment}信息 基础信息
      */
     @Override
 	public ${className} select${className}ById(${primaryKey.attrType} ${primaryKey.attrname})
@@ -35,7 +35,7 @@ public class ${className}ServiceImpl implements I${className}Service
 	/**
      * 查询${tableComment}列表
      * 
-     * @param ${classname} ${tableComment}信息
+     * @param ${classname} ${tableComment}信息 基础信息
      * @return ${tableComment}集合
      */
 	@Override
@@ -47,7 +47,7 @@ public class ${className}ServiceImpl implements I${className}Service
     /**
      * 新增${tableComment}
      * 
-     * @param ${classname} ${tableComment}信息
+     * @param ${classname} ${tableComment}信息 基础信息
      * @return 结果
      */
 	@Override
@@ -59,7 +59,7 @@ public class ${className}ServiceImpl implements I${className}Service
 	/**
      * 修改${tableComment}
      * 
-     * @param ${classname} ${tableComment}信息
+     * @param ${classname} ${tableComment}信息 基础信息
      * @return 结果
      */
 	@Override

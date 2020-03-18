@@ -61,7 +61,7 @@ public class Md5Utils
         }
         catch (Exception e)
         {
-            log.error("not supported charset...{}", e);
+            log.error("not supported charset...", e);
             return s;
         }
     }

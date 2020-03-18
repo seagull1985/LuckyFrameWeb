@@ -21,7 +21,7 @@ public interface ClientProjectMapper
      * @param clientId 客户端与项目关联ID
      * @return 客户端与项目关联信息
      */
-	public List<ClientProject> selectClientProjectsById(int clientId);
+	List<ClientProject> selectClientProjectsById(int clientId);
 	
 	/**
      * 查询客户端与项目关联列表
@@ -29,7 +29,7 @@ public interface ClientProjectMapper
      * @param clientProject 客户端与项目关联信息
      * @return 客户端与项目关联集合
      */
-	public List<ClientProject> selectClientProjectList(ClientProject clientProject);
+	List<ClientProject> selectClientProjectList(ClientProject clientProject);
 	
 	/**
      * 新增客户端与项目关联
@@ -37,7 +37,7 @@ public interface ClientProjectMapper
      * @param clientProject 客户端与项目关联信息
      * @return 结果
      */
-	public int insertClientProject(ClientProject clientProject);
+	int insertClientProject(ClientProject clientProject);
 	
 	/**
      * 修改客户端与项目关联
@@ -45,7 +45,7 @@ public interface ClientProjectMapper
      * @param clientProject 客户端与项目关联信息
      * @return 结果
      */
-	public int updateClientProject(ClientProject clientProject);
+	int updateClientProject(ClientProject clientProject);
 	
 	/**
      * 删除客户端与项目关联
@@ -53,7 +53,7 @@ public interface ClientProjectMapper
      * @param clientId 客户端与项目关联ID
      * @return 结果
      */
-	public int deleteClientProjectById(int clientId);
+	int deleteClientProjectById(int clientId);
 	
 	/**
      * 批量删除客户端与项目关联
@@ -61,33 +61,29 @@ public interface ClientProjectMapper
      * @param clientIds 需要删除的数据ID
      * @return 结果
      */
-	public int deleteClientProjectByIds(String[] clientIds);
+	int deleteClientProjectByIds(String[] clientIds);
 	
     /**
      * 批量新增客户端与项目信息
-     * @param ClientProjectList
-     * @return
      * @author Seagull
      * @date 2019年2月20日
      */
-    public int insertBatchClientProject(List<ClientProject> clientProjectList);
+    int insertBatchClientProject(List<ClientProject> clientProjectList);
     
     /**
      * 查询项目是否有绑定的客户端
-     * @param projectId
-     * @return
+     * @param projectId 项目ID
      * @author Seagull
      * @date 2019年2月28日
      */
-    public int selectClientProjectCountByProjectId(Integer projectId);
+    int selectClientProjectCountByProjectId(Integer projectId);
     
     /**
      * 根据projectId查询客户端列表
-     * @param projectId
-     * @return
+     * @param projectId 项目ID
      * @author Seagull
      * @date 2019年3月14日
      */
-    public List<Client> selectClientsByProjectId(int projectId);
+    List<Client> selectClientsByProjectId(int projectId);
 	
 }

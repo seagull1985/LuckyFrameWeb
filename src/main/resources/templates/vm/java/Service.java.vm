@@ -1,4 +1,4 @@
-package ${package}.service;
+package templates.vm.java;package ${package}.service;
 
 import ${package}.domain.${className};
 import java.util.List;
@@ -14,7 +14,7 @@ public interface I${className}Service
 	/**
      * 查询${tableComment}信息
      * 
-     * @param ${primaryKey.attrname} ${tableComment}ID
+     * @param ${primaryKey.attrname} ${tableComment}ID 主键ID
      * @return ${tableComment}信息
      */
 	public ${className} select${className}ById(${primaryKey.attrType} ${primaryKey.attrname});
@@ -22,7 +22,7 @@ public interface I${className}Service
 	/**
      * 查询${tableComment}列表
      * 
-     * @param ${classname} ${tableComment}信息
+     * @param ${classname} ${tableComment}信息 基本信息
      * @return ${tableComment}集合
      */
 	public List<${className}> select${className}List(${className} ${classname});
@@ -30,7 +30,7 @@ public interface I${className}Service
 	/**
      * 新增${tableComment}
      * 
-     * @param ${classname} ${tableComment}信息
+     * @param ${classname} ${tableComment}信息 基本信息
      * @return 结果
      */
 	public int insert${className}(${className} ${classname});
@@ -38,7 +38,7 @@ public interface I${className}Service
 	/**
      * 修改${tableComment}
      * 
-     * @param ${classname} ${tableComment}信息
+     * @param ${classname} ${tableComment}信息 基本信息
      * @return 结果
      */
 	public int update${className}(${className} ${classname});
