@@ -39,15 +39,21 @@
 			</div>
 			
 			<div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="monitor:logininfor:remove">
+				<shiro:hasPermission name="monitor:logininfor:remove">
+				<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()">
 		            <i class="fa fa-remove"></i> 删除
 		        </a>
-		        <a class="btn btn-danger" onclick="$.operate.clean()" shiro:hasPermission="monitor:logininfor:remove">
+				</shiro:hasPermission>
+				<shiro:hasPermission name="monitor:logininfor:remove">
+		        <a class="btn btn-danger" onclick="$.operate.clean()">
 	                <i class="fa fa-trash"></i> 清空
 	            </a>
-	            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="monitor:logininfor:export">
+				</shiro:hasPermission>
+				<shiro:hasPermission name="monitor:logininfor:export">
+	            <a class="btn btn-warning" onclick="$.table.exportExcel()">
 		            <i class="fa fa-download"></i> 导出
 		        </a>
+				</shiro:hasPermission>
 	        </div>
         
 	        <div class="col-sm-12 select-table table-striped">

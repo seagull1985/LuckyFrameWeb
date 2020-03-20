@@ -58,12 +58,16 @@
 			</div>
 			
 	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="run()" shiro:hasPermission="testexecution:taskCaseExecute:execution">
+				<shiro:hasPermission name="testexecution:taskCaseExecute:execution">
+				<a class="btn btn-success" onclick="run()">
 					<i class="fa fa-forward"></i> 执行全部非成功用例
 				</a>
-				<a class="btn btn-info btn-del btn-del disabled" onclick="runSelect()" shiro:hasPermission="testexecution:taskCaseExecute:execution">
+				</shiro:hasPermission>
+				<shiro:hasPermission name="testexecution:taskCaseExecute:execution">
+				<a class="btn btn-info btn-del btn-del disabled" onclick="runSelect()">
 					<i class="fa fa-play"></i> 执行所选用例
 				</a>
+				</shiro:hasPermission>
 			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
@@ -79,7 +83,95 @@
         var taskExecutePrefix = ctx + "testexecution/taskExecute";
 
         $(function() {
-            var options = {
+
+
+			//初始化子表格(无限循环)
+			const InitSubTable = function (index, row, $detail) {
+				const cur_table = $detail.html('<table style="word-break:break-all;"></table>').find('table');
+				$(cur_table).bootstrapTable({
+					url: logPrefix + "/list",
+					method: 'get',
+					queryParams: {
+						taskCaseId: row.taskCaseId
+					},
+					clickToSelect: false,
+					detailView: false,//父子表
+					uniqueId: "logId",
+					columns: [{
+						field: 'logId',
+						title: '序号',
+						width: '5%',
+						formatter: function (value, row, index) {
+							return '<p align="center">' + (index + 1) + '</p>';
+						}
+					},
+						{
+							field: 'logStep',
+							title: '步骤编号',
+							width: '8%',
+							formatter: function (value,
+												 row, index) {
+								if (value != "ending") {
+									return "步骤_" + value;
+								} else {
+									return '<font style="color:#00bf5f">' + value + '</font>';
+								}
+
+							}
+						}, {
+							field: 'logDetail',
+							title: '日志明细',
+							width: '65%',
+							cellStyle: function (value, row, index, field) {
+								if (row.logGrade != "info") {
+									return {
+										css: {"color": "#ff0000"}
+									};
+								} else {
+									return {
+										css: {"color": "#00bf5f"}
+									};
+								}
+							}
+						}, {
+							field: 'createTime',
+							title: '日志时间',
+							width: '12%',
+							formatter: function (value,
+												 row, index) {
+								return $.common.formatTime(value);
+							}
+						}, {
+							field: 'logGrade',
+							title: '日志级别',
+							width: '10%',
+							formatter: function (value,
+												 row, index) {
+								if (row.imgname == null) {
+									if (value != 'info') {
+										if (row.logDetail.indexOf('测试结果：') > 0) {
+											return '<font style="color:#ff0000">' + value + '</font>&nbsp;&nbsp;&nbsp;&nbsp;' +
+													'<a href="#" onclick="updateStep(' + row.logId + ')">同步结果</a> ';
+										} else {
+											return '<font style="color:#ff0000">' + value + '</font>';
+										}
+									} else {
+										return '<font style="color:#00bf5f">' + value + '</font>';
+									}
+								} else {
+									return '<font style="color:#ff0000">' + value + '</font>&nbsp;&nbsp;&nbsp;&nbsp;' +
+											'<a onclick="showPlanCase(' + row.logId + ')">错误截图</a> ';
+								}
+							}
+						},],
+					//无线循环取子表，直到子表里面没有记录
+					onExpandRow: function (index, row, $Subdetail) {
+						oInit.InitSubTable(index, row, $Subdetail);
+					},
+
+				});
+			};
+			var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
@@ -175,15 +267,15 @@
 					formatter : function(value,
 							row, index) {
 						if(value==0){
-							return '<font style="color:#00bf5f">成功</font>';
+							return '<span style="color:#00bf5f">成功</span>';
 						}else if(value==1){
-							return '<font style="color:#ff0000">失败</font>';
+							return '<span style="color:#ff0000">失败</span>';
 						}else if(value==2){
-							return '<font style="color:#FF7F00">锁定</font>';
+							return '<span style="color:#FF7F00">锁定</span>';
 						}else if(value==3){
-							return '<font style="color:#0066FF">执行中</font>';
+							return '<span style="color:#0066FF">执行中</span>';
 						}else{
-							return '<font style="color:#9966FF">未执行</font>';
+							return '<span style="color:#9966FF">未执行</span>';
 						}
 					}
 				}],
@@ -192,93 +284,6 @@
 					InitSubTable(index, row, $detail);
 				}
             };
-            
-          //初始化子表格(无限循环)
-		  InitSubTable = function(index, row, $detail) {
-				var cur_table = $detail.html('<table style="word-break:break-all;word-wrap:break-all;"></table>').find('table');
-				$(cur_table).bootstrapTable({
-					url : logPrefix + "/list",
-					method : 'get',
-					queryParams : {
-	                    taskCaseId:   row.taskCaseId
-					},
-					clickToSelect : false,
-					detailView : false,//父子表
-					uniqueId : "logId",
-					columns : [{
-						field : 'logId',
-						title : '序号',
-						width : '5%',
-						formatter : function(value, row, index) {  
-							return '<p align="center">'+(index+1)+'</p>';  
-				         } 
-					},  
-					{
-						field : 'logStep',
-						title : '步骤编号',
-						width : '8%',
-						formatter : function(value,
-								row, index) {
-							if(value!="ending"){
-								return "步骤_"+value;
-							}else{
-								return '<font style="color:#00bf5f">'+value+'</font>';
-							}
-							
-						}
-					}, {
-						field : 'logDetail',
-						title : '日志明细',
-						width : '65%',
-						cellStyle : function (value, row, index, field) {
-							if(row.logGrade!="info"){
-								  return {
-									    css: {"color": "#ff0000"}
-									  };
-							 }else{
-								  return {
-									    css: {"color": "#00bf5f"}
-									  };
-							 }
-							}
-					}, {
-						field : 'createTime',
-						title : '日志时间',
-						width : '12%',
-						formatter : function(value,
-								row, index) {
-							return $.common.formatTime(value);
-						}
-					}, {
-						field : 'logGrade',
-						title : '日志级别',
-						width : '10%',
-						formatter : function(value,
-								row, index) {
-							if(row.imgname==null){
-								if(value!='info'){
-									if(row.logDetail.indexOf('测试结果：')>0){
-										return '<font style="color:#ff0000">'+value+'</font>&nbsp;&nbsp;&nbsp;&nbsp;'+
-										'<a href="#" onclick="updateStep('+row.logId+')">同步结果</a> ';
-									}else{
-									    return '<font style="color:#ff0000">'+value+'</font>';
-									}
-								}else{
-									return '<font style="color:#00bf5f">'+value+'</font>';
-								}								
-							}else{
-								return '<font style="color:#ff0000">'+value+'</font>&nbsp;&nbsp;&nbsp;&nbsp;'+
-								'<a onclick="showPlanCase('+row.logId+')">错误截图</a> ';
-							}
-						}
-					}, ],
-					//无线循环取子表，直到子表里面没有记录
-					onExpandRow : function(index, row, $Subdetail) {
-						oInit.InitSubTable(index, row, $Subdetail);
-					},
-
-				});
-          };
                 
             $.table.init(options);
         });

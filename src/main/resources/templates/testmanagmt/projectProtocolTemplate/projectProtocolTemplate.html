@@ -32,21 +32,31 @@
 			</div>
 			
 	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="testmanagmt:projectProtocolTemplate:add">
+				<shiro:hasPermission name="testmanagmt:projectProtocolTemplate:add">
+				<a class="btn btn-success" onclick="$.operate.add()">
 					<i class="fa fa-plus"></i> 添加
 				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="testmanagmt:projectProtocolTemplate:edit">
+				</shiro:hasPermission>
+				<shiro:hasPermission name="testmanagmt:projectProtocolTemplate:edit">
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
 					<i class="fa fa-edit"></i> 修改
 				</a>
-				<a class="btn btn-info btn-edit disabled" onclick="$.operate.customFull()" shiro:hasPermission="testmanagmt:projectProtocolTemplate:edit">
+				</shiro:hasPermission>
+				<shiro:hasPermission name="testmanagmt:projectProtocolTemplate:edit">
+				<a class="btn btn-info btn-edit disabled" onclick="$.operate.customFull()">
 					<i class="fa fa-folder-open-o"></i> 模板参数
 				</a>
-				<a class="btn btn-info btn-edit disabled" onclick="$.operate.copy()" shiro:hasPermission="testmanagmt:projectProtocolTemplate:add">
+				</shiro:hasPermission>
+				<shiro:hasPermission name="testmanagmt:projectProtocolTemplate:add">
+				<a class="btn btn-info btn-edit disabled" onclick="$.operate.copy()">
 					<i class="fa fa-copy"></i> 复制模板
 				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testmanagmt:projectProtocolTemplate:remove">
+				</shiro:hasPermission>
+				<shiro:hasPermission name="testmanagmt:projectProtocolTemplate:remove">
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()">
 					<i class="fa fa-remove"></i> 删除
 				</a>
+				</shiro:hasPermission>
 			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>

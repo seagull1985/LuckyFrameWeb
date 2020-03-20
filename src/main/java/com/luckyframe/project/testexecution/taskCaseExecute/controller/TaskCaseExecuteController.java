@@ -215,13 +215,10 @@ public class TaskCaseExecuteController extends BaseController
 		runBatchCaseEntity.setLoadpath(taskScheduling.getClientDriverPath());
 		runBatchCaseEntity.setBatchcase(TaskSchedulingConstants.RUNCASEALLFAIL);
 		try {
-			HttpRequest.httpClientPost(url, JSONObject.toJSONString(runBatchCaseEntity),3000);
+			HttpRequest.httpClientPost(url, taskScheduling.getClient(), JSONObject.toJSONString(runBatchCaseEntity),3000);
 		} catch (ConnectException e) {
 			e.printStackTrace();
 			return AjaxResult.error("唤起客户端失败，请检查原因");
-		} catch (KeyManagementException | NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			return AjaxResult.error("执行用例出现异常，请检查原因");
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			return AjaxResult.error("执行用例链接客户端超时，请检查原因");
@@ -255,13 +252,10 @@ public class TaskCaseExecuteController extends BaseController
 		runBatchCaseEntity.setBatchcase(batchCase);
 		
 		try {
-			HttpRequest.httpClientPost(url, JSONObject.toJSONString(runBatchCaseEntity),3000);
+			HttpRequest.httpClientPost(url, taskScheduling.getClient(), JSONObject.toJSONString(runBatchCaseEntity),3000);
 		} catch (ConnectException e) {
 			e.printStackTrace();
 			return AjaxResult.error("唤起客户端失败，请检查原因");
-		} catch (KeyManagementException | NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			return AjaxResult.error("执行用例出现异常，请检查原因");
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			return AjaxResult.error("执行用例链接客户端超时，请检查原因");
@@ -328,7 +322,7 @@ public class TaskCaseExecuteController extends BaseController
 		Map<String, Object> params = new HashMap<>(0);
 		params.put("imgName", newName);
 		byte[] bfis = HttpRequest.getFile(
-				"http://" + TaskScheduling.getClient().getClientIp() + ":" + ClientConstants.CLIENT_MONITOR_PORT + "/getLogImg", params);
+				"http://" + TaskScheduling.getClient().getClientIp() + ":" + ClientConstants.CLIENT_MONITOR_PORT + "/getLogImg", TaskScheduling.getClient(), params);
 
 		if (bfis.length != 0) {
 			response.setContentType("image/jpeg");

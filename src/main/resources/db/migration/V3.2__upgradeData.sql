@@ -35,3 +35,9 @@ insert into sys_dict_data values(3041, 42,  'SwipeRight手指向右滑动(参数
 -- 4、步骤表添加备注字段
 -- ----------------------------
 alter table project_case_steps add step_remark varchar(200) comment '备注字段，给接口类型的用例步骤使用';
+
+-- ----------------------------
+-- 5、修改客户端表适配netty协议
+-- ----------------------------
+alter table sys_client modify column job_id int(8) default null COMMENT '心跳任务ID';
+alter table sys_client add client_type int(2) default 0 comment '客户端链接类型 0 普通HTTP 1 NETTY通信';

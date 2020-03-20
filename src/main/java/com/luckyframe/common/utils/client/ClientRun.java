@@ -4,8 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
 
 import com.alibaba.fastjson.JSONObject;
 import com.luckyframe.common.constant.ClientConstants;
@@ -26,10 +25,10 @@ import com.luckyframe.project.testexecution.taskScheduling.service.ITaskScheduli
  */
 public class ClientRun {
 	
-	@Autowired
+	@Resource
 	private ITaskSchedulingService taskSchedulingService;
 	
-	@Autowired
+	@Resource
 	private ITaskExecuteService taskExecuteService;
 	
 	public static ClientRun clientRun;
@@ -61,7 +60,7 @@ public class ClientRun {
     			runTaskEntity.setLoadPath(taskScheduling.getClientDriverPath());
     		}
 
-			result=HttpRequest.httpClientPost("http://"+taskScheduling.getClient().getClientIp()+":"+ClientConstants.CLIENT_MONITOR_PORT+"/runtask", JSONObject.toJSONString(runTaskEntity),3000);
+			result=HttpRequest.httpClientPost("http://"+taskScheduling.getClient().getClientIp()+":"+ClientConstants.CLIENT_MONITOR_PORT+"/runtask", taskScheduling.getClient(),JSONObject.toJSONString(runTaskEntity),3000);
     		System.out.println(result);
     		return result;
 		}catch (Exception e) {

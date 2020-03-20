@@ -3,524 +3,544 @@
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
 <body class="gray-bg">
-    
-     <div class="container-div">
-		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="formId">
-					<div class="select-list">
-					<input id="treeId" name="moduleId" type="hidden" th:value="${projectCaseModule.moduleId}"/>
-						<ul>
-							<li>
-								用例名称：<input type="text" name="caseName"/>
-							</li>
 
-							<li>
-								用例编号：<input type="text" name="caseSign"/>
-							</li>
-							
-							<li>
-								更新者：<input type="text" name="updateBy"/>
-							</li>
-							
-							<li>
-								项目：
-								<select id="projectId" name="projectId" th:with="type=${projects}" onchange="initializeModuleTree()">
-								    <option value="">所有项目</option>
-	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == defaultProjectId}"></option>
-	                            </select>
-							</li>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <input id="treeId" name="moduleId" type="hidden" th:value="${projectCaseModule.moduleId}"/>
+                    <ul>
+                        <li>
+                            用例名称：<input type="text" name="caseName"/>
+                        </li>
 
-							<li>
-								模块：
-								<input type="text" onclick="selectModuleTree()" id="treeName" readonly="true" value=""/>
-							</li>
+                        <li>
+                            用例编号：<input type="text" name="caseSign"/>
+                        </li>
 
-							<li>
-								用例类型：
-								<select name="caseType" th:with="type=${@dict.getType('testmanagmt_case_type')}">
-									<option value="">所有</option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-								</select>
-							</li>
+                        <li>
+                            更新者：<input type="text" name="updateBy"/>
+                        </li>
 
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="resetForm()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
-					</div>
-				</form>
-			</div>
-			
-	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="testmanagmt:projectCase:add">
-					<i class="fa fa-plus"></i> 添加
-				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="testmanagmt:projectCase:edit">
-					<i class="fa fa-edit"></i> 修改
-				</a>
-				<a class="btn btn-info btn-edit disabled" onclick="$.operate.copy()" shiro:hasPermission="testmanagmt:projectCase:add">
-					<i class="fa fa-clipboard"></i> 复制用例
-				</a>
-				<a class="btn btn-info btn-copy disabled" onclick="$.operate.copy()" shiro:hasPermission="testmanagmt:projectCase:add">
-					<i class="fa fa-copy"></i> 批量复制用例
-				</a>
-				<a class="btn btn-info btn-edit disabled" onclick="$.operate.customFull()" shiro:hasPermission="testmanagmt:projectCase:edit">
-					<i class="fa fa-list-ol"></i> 用例步骤
-				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="testmanagmt:projectCase:remove">
-					<i class="fa fa-remove"></i> 删除
-				</a>
-  				<a class="btn btn-warning" onclick="$.table.exportExcel('formId')" shiro:hasPermission="testmanagmt:projectCase:export">
-						<i class="fa fa-download"></i> 导出
-				 </a>
-			</div>
-			<div class="col-sm-12 select-table table-striped">
-				<table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
-			</div>
-		</div>
-	</div>
-    <div th:include="include :: footer"></div>
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('testmanagmt:projectCase:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('testmanagmt:projectCase:remove')}]];
-        var prefix = ctx + "testmanagmt/projectCase";
-        var modulePrefix = ctx + "testmanagmt/projectCaseModule"
-        var stepsPrefix = ctx + "testmanagmt/projectCaseSteps";
+                        <li>
+                            项目：
+                            <select id="projectId" name="projectId" th:with="type=${projects}"
+                                    onchange="initializeModuleTree()">
+                                <option value="">所有项目</option>
+                                <option th:each="projects : ${type}" th:text="${projects.projectName}"
+                                        th:value="${projects.projectId}"
+                                        th:selected="${projects.projectId == defaultProjectId}"></option>
+                            </select>
+                        </li>
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                copyUrl: prefix + "/copy/{id}",
-                removeUrl: prefix + "/remove",
-                customUrl: stepsPrefix + "/edit/{id}",
-				exportUrl: prefix + "/export",
-                modalName: "测试用例",
-                childrenModalName: "用例步骤编辑",
-				search: false,
-				queryParams: function(params) {
-	            	return {
-	        			// 传递参数查询参数
-	                    pageSize:       params.limit,
-	                    pageNum:        params.offset / params.limit + 1,
-	                    searchValue:    params.search,
-	                    orderByColumn:  params.sort,
-	                    isAsc:          params.order,
-	                    projectId:      $('#projectId').val()
-	        		};
-				},
-		        showExport: false,
-		        detailView : true, //是否显示父子表
+                        <li>
+                            模块：
+                            <input type="text" onclick="selectModuleTree()" id="treeName" readonly="true" value=""/>
+                        </li>
+
+                        <li>
+                            用例类型：
+                            <select name="caseType" th:with="type=${@dict.getType('testmanagmt_case_type')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="resetForm()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+            <shiro:hasPermission name="testmanagmt:projectCase:add">
+                <a class="btn btn-success" onclick="$.operate.add()">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="testmanagmt:projectCase:edit">
+                <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="testmanagmt:projectCase:add">
+                <a class="btn btn-info btn-edit disabled" onclick="$.operate.copy()">
+                    <i class="fa fa-clipboard"></i> 复制用例
+                </a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="testmanagmt:projectCase:add">
+                <a class="btn btn-info btn-copy disabled" onclick="$.operate.copy()">
+                    <i class="fa fa-copy"></i> 批量复制用例
+                </a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="testmanagmt:projectCase:edit">
+                <a class="btn btn-info btn-edit disabled" onclick="$.operate.customFull()">
+                    <i class="fa fa-list-ol"></i> 用例步骤
+                </a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="testmanagmt:projectCase:remove">
+                <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="testmanagmt:projectCase:export">
+                <a class="btn btn-warning" onclick="$.table.exportExcel('formId')">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </shiro:hasPermission>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('testmanagmt:projectCase:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('testmanagmt:projectCase:remove')}]];
+    var prefix = ctx + "testmanagmt/projectCase";
+    var modulePrefix = ctx + "testmanagmt/projectCaseModule"
+    var stepsPrefix = ctx + "testmanagmt/projectCaseSteps";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            copyUrl: prefix + "/copy/{id}",
+            removeUrl: prefix + "/remove",
+            customUrl: stepsPrefix + "/edit/{id}",
+            exportUrl: prefix + "/export",
+            modalName: "测试用例",
+            childrenModalName: "用例步骤编辑",
+            search: false,
+            queryParams: function (params) {
+                return {
+                    // 传递参数查询参数
+                    pageSize: params.limit,
+                    pageNum: params.offset / params.limit + 1,
+                    searchValue: params.search,
+                    orderByColumn: params.sort,
+                    isAsc: params.order,
+                    projectId: $('#projectId').val()
+                };
+            },
+            showExport: false,
+            detailView: true, //是否显示父子表
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'caseId',
+                    title: '测试用例ID',
+                    sortable: true,
+                    visible: false
+                },
+                {
+                    field: 'project.projectName',
+                    title: '项目名称',
+                    width: '10%',
+                    class: 'myTDLengthHidden',
+                    formatter: function (value,
+                                         row, index) {
+                        return $.table.tooltip(value);
+                    }
+                },
+                {
+                    field: 'projectCaseModule.moduleName',
+                    title: '模块名称',
+                    width: '12%',
+                    class: 'myTDLengthHidden',
+                    formatter: function (value,
+                                         row, index) {
+                        return $.table.tooltip(value);
+                    }
+                },
+                {
+                    field: 'caseSign',
+                    title: '用例编号',
+                    sortable: true,
+                    width: '7%',
+                    class: 'myTDLengthHidden'
+                },
+                {
+                    field: 'caseName',
+                    title: '用例名称',
+                    width: '25%',
+                    class: 'myTDLengthHidden',
+                    editable: {
+                        type: 'text',
+                        title: '用例名称',
+                        emptytext: "【用例名称】为空",
+                        validate: function (value) {
+                            if (value.length > 200)
+                                return '用例名称不能超过200个字符';
+                            if (value.length == 0)
+                                return '用例名称不能为空';
+                        }
+                    }
+                },
+                {
+                    field: 'caseType',
+                    title: '用例类型',
+                    width: '8%',
+                    class: 'myTDLengthHidden',
+                    editable: {
+                        type: 'select',
+                        title: '用例类型',
+                        source: [{
+                            value: 0,
+                            text: "HTTP接口"
+                        }, {
+                            value: 1,
+                            text: "Web UI"
+                        }, {
+                            value: 2,
+                            text: "API驱动"
+                        }, {
+                            value: 3,
+                            text: "移动端"
+                        }]
+                    }
+                },
+                {
+                    field: 'failcontinue',
+                    title: '失败处理',
+                    width: '8%',
+                    class: 'myTDLengthHidden',
+                    editable: {
+                        type: 'select',
+                        title: '失败处理',
+                        source: [{
+                            value: 0,
+                            text: "后续步骤中断"
+                        }, {
+                            value: 1,
+                            text: "后续步骤继续"
+                        }]
+                    }
+                },
+                {
+                    field: 'createBy',
+                    title: '创建者',
+                    visible: false
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    visible: false
+                },
+                {
+                    field: 'updateBy',
+                    title: '更新者',
+                    width: '6%',
+                    class: 'myTDLengthHidden'
+                },
+                {
+                    field: 'updateTime',
+                    title: '更新时间',
+                    sortable: true,
+                    width: '12%',
+                    class: 'myTDLengthHidden'
+                },
+                {
+                    field: 'remark',
+                    title: '备注',
+                    width: '12%',
+                    class: 'myTDLengthHidden',
+                    editable: {
+                        type: 'textarea',
+                        title: '备注',
+                        emptytext: "【备注】为空",
+                        validate: function (value) {
+                            if (value.length > 200)
+                                return '备注不能超过200个字符';
+                        }
+                    }
+                }],
+
+            onEditableSave: function (field, row, oldValue, $el) {
+                $('#bootstrap-table').bootstrapTable("resetView");
+                /*用例跟模块以及项目表做了表关联，导致提交修改数据会报错，须先删除对象中的关联其他对象*/
+                delete row.projectCaseModule;
+                delete row.project;
+                $.ajax({
+                    type: "post",
+                    url: prefix + "/edit",
+                    data: row,
+                    dataType: 'JSON',
+                    success: function (result) {
+                        if (result.code == 0) {
+                            $.modal.msgSuccess(result.msg);
+                        } else {
+                            $.modal.alertError(result.msg);
+                        }
+                    },
+                    error: function () {
+                        $.modal.alertError("系统错误");
+                    }
+
+                });
+            },
+            //注册加载子表的事件。注意下这里的三个参数！
+            onExpandRow: function (index, row, $detail) {
+                InitSubTable(index, row, $detail);
+            }
+        };
+
+        //初始化子表格(无限循环)
+        InitSubTable = function (index, row, $detail) {
+            var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+            $(cur_table).bootstrapTable({
+                url: stepsPrefix + '/list',
+                method: 'get',
+                queryParams: {
+                    caseId: row.caseId
+                },
+                clickToSelect: true,
+                detailView: false,//父子表
+                uniqueId: "stepId",
                 columns: [{
-		            checkbox: true
-		        },
-				{
-					field : 'caseId', 
-					title : '测试用例ID',
-					sortable: true,
-					visible: false
-				},
-				{
-					field : 'project.projectName', 
-					title : '项目名称',
-					width : '10%',
-					class : 'myTDLengthHidden',
-					formatter : function(value,
-							row, index) {
-							return $.table.tooltip(value);
-					}
-				},
-				{
-					field : 'projectCaseModule.moduleName', 
-					title : '模块名称',
-					width : '12%',
-					class : 'myTDLengthHidden',
-					formatter : function(value,
-							row, index) {
-							return $.table.tooltip(value);
-					}
-				},
-				{
-					field : 'caseSign', 
-					title : '用例编号',
-					sortable: true,
-					width : '7%',
-					class : 'myTDLengthHidden'
-				},
-				{
-					field : 'caseName', 
-					title : '用例名称',
-					width : '25%',
-					class : 'myTDLengthHidden',
-					editable : {
-						type : 'text',
-						title : '用例名称',
-						emptytext : "【用例名称】为空",
-						validate : function(value) {
-							if (value.length > 200)
-								return '用例名称不能超过200个字符';
-							if (value.length == 0)
-								return '用例名称不能为空';
-						}
-					}
-				},
-				{
-					field : 'caseType', 
-					title : '用例类型',
-					width : '8%',
-					class : 'myTDLengthHidden',
-					editable : {
-						type : 'select',
-						title : '用例类型',
-						source : [ {
-							value : 0,
-							text : "HTTP接口"
-						}, {
-							value : 1,
-							text : "Web UI"
-						}, {
-							value : 2,
-							text : "API驱动"
-						}, {
-							value : 3,
-							text : "移动端"
-						}]
-					}
-				},
-				{
-					field : 'failcontinue', 
-					title : '失败处理',
-					width : '8%',
-					class : 'myTDLengthHidden',
-					editable : {
-						type : 'select',
-						title : '失败处理',
-						source : [{
-							value : 0,
-							text : "后续步骤中断"
-						}, {
-							value : 1,
-							text : "后续步骤继续"
-						}]
-					}
-				},
-				{
-					field : 'createBy', 
-					title : '创建者',
-					visible: false
-				},
-				{
-					field : 'createTime', 
-					title : '创建时间',
-					visible: false
-				},
-				{
-					field : 'updateBy', 
-					title : '更新者',
-					width : '6%',
-					class : 'myTDLengthHidden'
-				},
-				{
-					field : 'updateTime', 
-					title : '更新时间',
-					sortable: true,
-					width : '12%',
-					class : 'myTDLengthHidden'
-				},
-				{
-					field : 'remark', 
-					title : '备注',
-					width : '12%',
-					class : 'myTDLengthHidden',
-					editable : {
-						type : 'textarea',
-						title : '备注',
-						emptytext : "【备注】为空",
-						validate : function(value) {
-							if (value.length > 200)
-								return '备注不能超过200个字符';
-						}
-					}
-				}],
-				
-				onEditableSave : function(field, row, oldValue, $el) {	
-					$('#bootstrap-table').bootstrapTable("resetView");
-					/*用例跟模块以及项目表做了表关联，导致提交修改数据会报错，须先删除对象中的关联其他对象*/
-					delete row.projectCaseModule;
-					delete row.project;
- 					$.ajax({
-						type : "post",
-						url : prefix + "/edit",
-						data : row,
-						dataType : 'JSON',
-						success : function(result) {
-			                if (result.code == 0) {
-			                	$.modal.msgSuccess(result.msg);
-			                } else {
-			                    $.modal.alertError(result.msg);
-			                }
-						},
-						error : function() {
-							$.modal.alertError("系统错误");
-						}
+                    checkbox: true,
+                    visible: false
+                }, {
+                    field: 'stepSerialNumber',
+                    title: '步骤编号',
+                    width: '5%',
+                    class: 'myTDLengthHidden'
+                }, {
+                    field: 'stepPath',
+                    title: '包路径|定位路径',
+                    width: '15%',
+                    class: 'myTDLengthHidden',
+                    editable: {
+                        type: 'text',
+                        title: '包路径|定位路径',
+                        emptytext: "【包路径|定位路径】为空",
+                        validate: function (value) {
+                            if (value.length > 500)
+                                return '包路径|定位路径不能超过500个字符';
+                            if (value.length == 0)
+                                return '包路径|定位路径不能为空';
+                        }
+                    }
+                }, {
+                    field: 'stepOperation',
+                    title: '方法名|操作',
+                    width: '15%',
+                    class: 'myTDLengthHidden',
+                    editable: {
+                        type: 'text',
+                        title: '方法名|操作',
+                        emptytext: "【方法名|操作】为空",
+                        validate: function (value) {
+                            if (value.length > 100)
+                                return '方法名|操作不能超过100个字符';
+                            if (value.length < 2)
+                                return '方法名|操作不能小于2个字符';
+                        }
+                    }
+                }, {
+                    field: 'stepParameters',
+                    title: '参数',
+                    width: '15%',
+                    class: 'myTDLengthHidden',
+                    editable: {
+                        type: 'text',
+                        title: '参数',
+                        emptytext: "【参数】为空",
+                        validate: function (value) {
+                            if (value.length > 500)
+                                return '参数不能超过500个字符';
+                        }
+                    }
+                }, {
+                    field: 'action',
+                    title: '步骤动作',
+                    width: '10%',
+                    class: 'myTDLengthHidden',
+                    editable: {
+                        type: 'text',
+                        title: '步骤动作',
+                        emptytext: "【步骤动作】为空",
+                        validate: function (value) {
+                            if (value.length > 50)
+                                return '步骤动作不能超过50个字符';
+                        }
+                    }
+                }, {
+                    field: 'expectedResult',
+                    title: '预期结果',
+                    width: '10%',
+                    class: 'myTDLengthHidden',
+                    formatter: function (value,
+                                         row, index) {
+                        value = value.replace(new RegExp("\"", "gm"), "&quot;");
+                        return value + ' ';
+                    },
+                    editable: {
+                        type: 'text',
+                        title: '预期结果',
+                        emptytext: "【预期结果】为空",
+                        validate: function (value) {
+                            if (value.length > 2000)
+                                return '预期结果不能超过2000个字符';
+                            if (value.length == 0)
+                                return '预期结果不能为空';
+                        }
+                    }
+                }, {
+                    field: 'stepType',
+                    title: '步骤类型',
+                    width: '5%',
+                    class: 'myTDLengthHidden',
+                    editable: {
+                        type: 'select',
+                        title: '步骤类型',
+                        source: [{
+                            value: 0,
+                            text: "HTTP接口"
+                        }, {
+                            value: 1,
+                            text: "Web UI"
+                        }, {
+                            value: 2,
+                            text: "API驱动"
+                        }, {
+                            value: 3,
+                            text: "移动端"
+                        }]
+                    }
+                }, {
+                    field: 'updateTime',
+                    title: '更新时间',
+                    width: '10%',
+                    class: 'myTDLengthHidden',
+                    formatter: function (value,
+                                         row, index) {
+                        return $.common.formatTime(value);
+                    }
+                }, {
+                    field: 'updateBy',
+                    title: '更新人员',
+                    width: '5%',
+                    class: 'myTDLengthHidden'
+                }, {
+                    field: 'extend',
+                    title: '扩展字段',
+                    width: '10%',
+                    class: 'myTDLengthHidden'
+                }, {
+                    field: 'stepId',
+                    title: 'stepId',
+                    visible: false
+                }, {
+                    field: 'projectId',
+                    title: '项目ID',
+                    visible: false
+                }, {
+                    field: 'caseId',
+                    title: '用例ID',
+                    visible: false
+                },],
+                //无线循环取子表，直到子表里面没有记录
+                onExpandRow: function (index, row, $Subdetail) {
+                    oInit.InitSubTable(index, row, $Subdetail);
+                },
 
-					});
-				},
-				//注册加载子表的事件。注意下这里的三个参数！
-				onExpandRow : function(index, row, $detail) {
-					InitSubTable(index, row, $detail);
-				}
+                onEditableSave: function (field, row, oldValue, $el) {
+                    if (field == 'expectedResult') {
+                        var str = row.expectedResult.split("");
+                        if (str[str.length - 1] == ' ') {
+                            row.expectedResult = row.expectedResult.substring(0, row.expectedResult.length - 1);
+                        }
+                    }
+
+                    $('#cur_table').bootstrapTable("resetView");
+                    console.log(row);
+                    $.ajax({
+                        type: "post",
+                        url: stepsPrefix + '/stepEditSave',
+                        data: row,
+                        dataType: 'JSON',
+                        success: function (result) {
+                            if (result.code == 0) {
+                                $.modal.msgSuccess(result.msg);
+                            } else {
+                                $.modal.alertError(result.msg);
+                            }
+                        },
+                        error: function () {
+                            $.modal.alertError("系统错误");
+                        }
+
+                    });
+                },
+            });
+
+        };
+
+        $.table.init(options);
+    });
+
+    /*查询条件选择用例模块*/
+    function selectModuleTree() {
+        var projectId = $("#projectId  option:selected").val();
+        if (projectId == "") {
+            $.modal.alertError("请先选择项目");
+        } else {
+            var options = {
+                title: '模块选择',
+                width: "380",
+                url: modulePrefix + "/selectProjectCaseModuleTree/" + $("#treeId").val(),
+                callBack: doSubmit
             };
-            
-			//初始化子表格(无限循环)
-			InitSubTable = function(index, row, $detail) {
-				var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
-				$(cur_table).bootstrapTable({
-					url : stepsPrefix+'/list',
-					method : 'get',
-					queryParams : {
-	                    caseId:   row.caseId
-					},
-					clickToSelect : true,
-					detailView : false,//父子表
-					uniqueId : "stepId",
-					columns : [ {
-						checkbox : true,
-						visible : false
-					}, {
-						field : 'stepSerialNumber',
-						title : '步骤编号',
-						width : '5%',
-						class : 'myTDLengthHidden'
-					}, {
-						field : 'stepPath',
-						title : '包路径|定位路径',
-						width : '15%',
-						class : 'myTDLengthHidden',
-						editable : {
-							type : 'text',
-							title : '包路径|定位路径',
-							emptytext : "【包路径|定位路径】为空",
-							validate : function(value) {
-								if (value.length > 500)
-									return '包路径|定位路径不能超过500个字符';
-								if (value.length == 0)
-									return '包路径|定位路径不能为空';
-							}
-						}
-					}, {
-						field : 'stepOperation',
-						title : '方法名|操作',
-						width : '15%',
-						class : 'myTDLengthHidden',
-						editable : {
-							type : 'text',
-							title : '方法名|操作',
-							emptytext : "【方法名|操作】为空",
-							validate : function(value) {
-								if (value.length > 100)
-									return '方法名|操作不能超过100个字符';
-								if (value.length < 2)
-									return '方法名|操作不能小于2个字符';
-							}
-						}
-					}, {
-						field : 'stepParameters',
-						title : '参数',
-						width : '15%',
-						class : 'myTDLengthHidden',
-						editable : {
-							type : 'text',
-							title : '参数',
-							emptytext : "【参数】为空",
-							validate : function(value) {
-								if (value.length > 500)
-									return '参数不能超过500个字符';
-							}
-						}
-					}, {
-						field : 'action',
-						title : '步骤动作',
-						width : '10%',
-						class : 'myTDLengthHidden',
-						editable : {
-							type : 'text',
-							title : '步骤动作',
-							emptytext : "【步骤动作】为空",
-							validate : function(value) {
-								if (value.length > 50)
-									return '步骤动作不能超过50个字符';
-							}
-						}
-					}, {
-						field : 'expectedResult',
-						title : '预期结果',
-						width : '10%',
-						class : 'myTDLengthHidden',
-						formatter : function(value,
-								row, index) {
-							    value = value.replace(new RegExp("\"","gm"),"&quot;");
-								return value+' ';
-						},
-						editable : {
-							type : 'text',
-							title : '预期结果',
-							emptytext : "【预期结果】为空",
-							validate : function(value) {
-								if (value.length > 2000)
-									return '预期结果不能超过2000个字符';
-								if (value.length == 0)
-									return '预期结果不能为空';
-							}
-						}
-					}, {
-						field : 'stepType',
-						title : '步骤类型',
-						width : '5%',
-						class : 'myTDLengthHidden',
-						editable : {
-							type : 'select',
-							title : '步骤类型',
-							source : [ {
-								value : 0,
-								text : "HTTP接口"
-							}, {
-								value : 1,
-								text : "Web UI"
-							}, {
-								value : 2,
-								text : "API驱动"
-							}, {
-								value : 3,
-								text : "移动端"
-							}]
-						}
-					}, {
-						field : 'updateTime',
-						title : '更新时间',
-						width : '10%',
-						class : 'myTDLengthHidden',
-						formatter : function(value,
-								row, index) {
-							return $.common.formatTime(value);
-						}
-					}, {
-						field : 'updateBy',
-						title : '更新人员',
-						width : '5%',
-						class : 'myTDLengthHidden'
-					}, {
-						field : 'extend',
-						title : '扩展字段',
-						width : '10%',
-						class : 'myTDLengthHidden'
-					}, {
-						field : 'stepId',
-						title : 'stepId',
-						visible : false
-					}, {
-						field : 'projectId',
-						title : '项目ID',
-						visible : false
-					}, {
-						field : 'caseId',
-						title : '用例ID',
-						visible : false
-					}, ],
-					//无线循环取子表，直到子表里面没有记录
-					onExpandRow : function(index, row, $Subdetail) {
-						oInit.InitSubTable(index, row, $Subdetail);
-					},
+            $.modal.openOptions(options);
+        }
+    }
 
-					onEditableSave : function(field, row, oldValue, $el) {						
- 						if(field=='expectedResult'){
- 							var str=row.expectedResult.split("");
-							if(str[str.length-1]==' '){
-								row.expectedResult=row.expectedResult.substring(0,row.expectedResult.length-1);
-							}
-						}
+    function doSubmit(index, layero) {
+        var body = layer.getChildFrame('body', index);
+        $("#treeId").val(body.find('#treeId').val());
+        $("#treeName").val(body.find('#treeName').val());
+        layer.close(index);
+    }
 
-						$('#cur_table').bootstrapTable("resetView");
-						console.log(row);
-						$.ajax({
-							type : "post",
-							url : stepsPrefix+'/stepEditSave',
-							data : row,
-							dataType : 'JSON',
-							success : function(result) {
-				                if (result.code == 0) {
-				                	$.modal.msgSuccess(result.msg);
-				                } else {
-				                    $.modal.alertError(result.msg);
-				                }
-							},
-							error : function() {
-								$.modal.alertError("系统错误");
-							}
+    /*选择项目初始化模块树*/
+    function initializeModuleTree() {
+        var projectId = $("#projectId  option:selected").val();
+        if (projectId == "") {
+            $("#treeId").val("");
+            $("#treeName").val("");
+        } else {
+            $.ajax({
+                cache: true,
+                type: "GET",
+                url: modulePrefix + "/getModuleByProjectId/" + projectId,
+                data: {},
+                async: false,
+                error: function (request) {
+                    $.modal.alertError("系统错误");
+                },
+                success: function (data) {
+                    $("#treeId").val(data.moduleId);
+                    $("#treeName").val(data.moduleName);
+                }
+            });
+        }
+    }
 
-						});
-					},
-				});
-
-			};
-			
-            $.table.init(options);
-        });
-        
-		/*查询条件选择用例模块*/
-		function selectModuleTree() {
-			var projectId=$("#projectId  option:selected").val();
-			if(projectId==""){
-				$.modal.alertError("请先选择项目");
-			}else{
-				var options = {
-						title: '模块选择',
-						width: "380",
-						url: modulePrefix + "/selectProjectCaseModuleTree/" + $("#treeId").val(),
-						callBack: doSubmit
-					};
-					$.modal.openOptions(options);
-			}
-		}
-		
-		function doSubmit(index, layero){
-			var body = layer.getChildFrame('body', index);
-   			$("#treeId").val(body.find('#treeId').val());
-   			$("#treeName").val(body.find('#treeName').val());
-   			layer.close(index);
-		}
-		
-		/*选择项目初始化模块树*/
-		function initializeModuleTree() {
-			var projectId=$("#projectId  option:selected").val();
-			if(projectId==""){
-	   			$("#treeId").val("");
-	   			$("#treeName").val("");
-			}else{
-				$.ajax({
-					cache : true,
-					type : "GET",
-					url : modulePrefix + "/getModuleByProjectId/" + projectId,
-					data : {},
-					async : false,
-					error : function(request) {
-						$.modal.alertError("系统错误");
-					},
-					success : function(data) {
-			   			$("#treeId").val(data.moduleId);
-			   			$("#treeName").val(data.moduleName);
-					}
-				});
-			}
-		}
-		
-		function resetForm(){
-			initializeModuleTree();
-			$.form.reset();
-		}
-    </script>
+    function resetForm() {
+        initializeModuleTree();
+        $.form.reset();
+    }
+</script>
 </body>
 </html>

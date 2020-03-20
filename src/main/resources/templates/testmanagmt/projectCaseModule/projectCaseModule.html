@@ -35,9 +35,11 @@
                 <a class="btn btn-info" id="expandAllBtn">
                     <i class="fa fa-exchange"></i> 展开/折叠
                 </a>
-				<a class="btn btn-info" onclick="$.table.importExcel2()" shiro:hasPermission="testmanagmt:projectCaseModule:import">
+				<shiro:hasPermission name="testmanagmt:projectCaseModule:import">
+				<a class="btn btn-info" onclick="$.table.importExcel2()">
 					<i class="fa fa-upload"></i> 导入
 				</a>
+				</shiro:hasPermission>
 			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-tree-table" data-mobile-responsive="true"></table>

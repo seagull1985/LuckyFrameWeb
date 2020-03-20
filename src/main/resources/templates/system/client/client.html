@@ -3,190 +3,212 @@
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
 <body class="gray-bg">
-    
-     <div class="container-div">
-		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="formId">
-					<div class="select-list">
-						<ul>
-							<li>
-								客户端名称：<input type="text" name="clientName"/>
-							</li>
 
-							<li>
-								客户端IP：<input type="text" name="clientIp"/>
-							</li>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            客户端名称：<input type="text" name="clientName"/>
+                        </li>
 
-							<li>
-								备注：<input type="text" name="remark"/>
-							</li>
+                        <li>
+                            客户端IP：<input type="text" name="clientIp"/>
+                        </li>
 
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
-					</div>
-				</form>
-			</div>
-			
-	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:client:add">
-					<i class="fa fa-plus"></i> 添加
-				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:client:edit">
-					<i class="fa fa-edit"></i> 修改
-				</a>
-				<a class="btn btn-info btn-edit disabled" onclick="showMonitor()" shiro:hasPermission="system:client:view">
-					<i class="fa fa-edit"></i> 监控资源
-				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:client:remove">
-					<i class="fa fa-remove"></i> 删除
-				</a>
-			</div>
-			<div class="col-sm-12 select-table table-striped">
-				<table id="bootstrap-table" data-mobile-responsive="true"></table>
-			</div>
-		</div>
-	</div>
-    <div th:include="include :: footer"></div>
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:client:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:client:remove')}]];
-        var prefix = ctx + "system/client";
+                        <li>
+                            备注：<input type="text" name="remark"/>
+                        </li>
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-				exportUrl: prefix + "/export",
-				customUrl: prefix + "/showMonitor/{id}",
-                modalName: "客户端",
-				search: false,
-		        showExport: true,
-                columns: [{
-		            checkbox: true
-		        },
-				{
-					field : 'clientId', 
-					title : '客户端ID',
-					visible: false
-				},
-				{
-					field : 'clientName', 
-					title : '客户端名称'
-				},
-				{
-					field : 'clientIp', 
-					title : '客户端IP'
-				},
-				{
-					field : 'status', 
-					title : '客户端状态',
-					formatter : function(value,
-							row, index) {
-						if(value==0){
-							var hdiv ='<span id="statusSpan' + row.clientId + '" class="glyphicon glyphicon-ok-sign" style="color: rgb(0, 175, 0);"> 状态正常</span>';
-						}else if(value==1){
-							var hdiv = '<span id="statusSpan' + row.clientId + '" class="glyphicon glyphicon-minus-sign" style="color: rgb(199, 0, 0);"> 状态异常</span>';
-						}else{
-							var hdiv = '<span id="statusSpan' + row.clientId + '" class="glyphicon glyphicon-question-sign" style="color: rgb(255, 168, 0); font-size: 14px;"> 状态未知</span>';
-						}
-						refreshClientStatus(row.clientId);
-						return  '<font id="statusFont' + row.clientId + '">'+hdiv+'</font>';
-					}
-				},
-				{
-					field : 'checkinterval', 
-					title : '心跳间隔',
-					formatter : function(value,
-							row, index) {
-						return value+'秒';
-					}
-				},
-				{
-					field : 'clientPath', 
-					title : '驱动路径'
-				},
-				{
-					field : 'remark', 
-					title : '备注'
-				},
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.clientId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+            <shiro:hasPermission name="system:client:add">
+                <a class="btn btn-success" onclick="$.operate.add()">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="system:client:edit">
+                <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="system:client:view">
+                <a class="btn btn-info btn-edit disabled" onclick="showMonitor()">
+                    <i class="fa fa-edit"></i> 监控资源
+                </a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="system:client:remove">
+                <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+            </shiro:hasPermission>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:client:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:client:remove')}]];
+    var prefix = ctx + "system/client";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            customUrl: prefix + "/showMonitor/{id}",
+            modalName: "客户端",
+            search: false,
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'clientId',
+                    title: '客户端ID',
+                    visible: false
+                },
+                {
+                    field: 'clientName',
+                    title: '客户端名称'
+                },
+                {
+                    field: 'clientIp',
+                    title: '客户端IP'
+                },
+                {
+                    field: 'clientType',
+                    title: '链接类型',
+                    formatter: function (value,
+                                         row, index) {
+                        if (value == 0) {
+                            return "HTTP";
+                        } else {
+                            return "NETTY";
+                        }
+                    }
+                },
+                {
+                    field: 'status',
+                    title: '客户端状态',
+                    formatter: function (value,
+                                         row, index) {
+                        if (value == 0) {
+                            var hdiv = '<span id="statusSpan' + row.clientId + '" class="glyphicon glyphicon-ok-sign" style="color: rgb(0, 175, 0);"> 状态正常</span>';
+                        } else if (value == 1) {
+                            var hdiv = '<span id="statusSpan' + row.clientId + '" class="glyphicon glyphicon-minus-sign" style="color: rgb(199, 0, 0);"> 状态异常</span>';
+                        } else {
+                            var hdiv = '<span id="statusSpan' + row.clientId + '" class="glyphicon glyphicon-question-sign" style="color: rgb(255, 168, 0); font-size: 14px;"> 状态未知</span>';
+                        }
+                        refreshClientStatus(row.clientId);
+                        return '<font id="statusFont' + row.clientId + '">' + hdiv + '</font>';
+                    }
+                },
+                {
+                    field: 'checkinterval',
+                    title: '心跳间隔',
+                    formatter: function (value,
+                                         row, index) {
+                        return value + '秒';
+                    }
+                },
+                {
+                    field: 'clientPath',
+                    title: '驱动路径'
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.clientId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.clientId + '\')"><i class="fa fa-remove"></i>删除</a>');
-						return actions.join('');
-		            }
-		        }]
-            };
-            $.table.init(options);
-        });
-        
-        function showMonitor() {
-        	var row= $.map($('#bootstrap-table').bootstrapTable('getSelections'), function (row) {
-    	        return row;
-    	    });
-        	
-         	if(0!=row[0].status){
-        		$.modal.msgWarning("客户端非正常状态，不能查询");
-        		return true;
-        	}
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
 
-        	var url = "/404.html";
-        	if ($.common.isNotEmpty(row)) {
-        	    url = $.table._option.customUrl.replace("{id}", row[0].clientId);
-        	}
-        	$.modal.openViewFull("客户端资源监控 "+row[0].clientName+" ["+row[0].clientIp+"]", url, null, null);
+    function showMonitor() {
+        var row = $.map($('#bootstrap-table').bootstrapTable('getSelections'), function (row) {
+            return row;
+        });
+
+        if (0 != row[0].status) {
+            $.modal.msgWarning("客户端非正常状态，不能查询");
+            return true;
         }
 
-		 /*刷新客户端状态*/
-		 function refreshClientStatus(clientId){
-		   var url = prefix + "/getClientStatusByClientId/"+clientId;
-		   $.getJSON(url, null, function call(result) {
-			       	if(result.status==0){
-			       		/*删除老的span*/
-			       		var oldSpan=document.getElementById("statusSpan"+clientId);
-			       		oldSpan.parentNode.removeChild(oldSpan);
-			       		/*新建一个待更新span*/
-			       		var updateSpan=document.createElement("span");
-			       		updateSpan.innerText = "状态正常"
-			       		updateSpan.setAttribute("class", "glyphicon glyphicon-ok-sign");
-			       		updateSpan.setAttribute("style", "color: rgb(0, 175, 0)");
-			       		updateSpan.setAttribute("id", "statusSpan"+clientId);
-			       		document.getElementById("statusFont"+clientId).appendChild(updateSpan);
-			       	}else if(result.status==1){
-			       		/*删除老的span*/
-			       		var oldSpan=document.getElementById("statusSpan"+clientId);
-			       		oldSpan.parentNode.removeChild(oldSpan);
-			       		/*新建一个待更新span*/
-			       		var updateSpan=document.createElement("span");
-			       		updateSpan.innerText = "状态异常"
-			       		updateSpan.setAttribute("class", "glyphicon glyphicon-minus-sign");
-			       		updateSpan.setAttribute("style", "color: rgb(199, 0, 0);");
-			       		updateSpan.setAttribute("id", "statusSpan"+clientId);
-			       		document.getElementById("statusFont"+clientId).appendChild(updateSpan);
-					}else if(result.status==2){
-			       		/*删除老的span*/
-			       		var oldSpan=document.getElementById("statusSpan"+clientId);
-			       		oldSpan.parentNode.removeChild(oldSpan);
-			       		/*新建一个待更新span*/
-			       		var updateSpan=document.createElement("span");
-			       		updateSpan.innerText = "状态未知"
-			       		updateSpan.setAttribute("class", "glyphicon glyphicon-question-sign");
-			       		updateSpan.setAttribute("style", "color: rgb(255, 168, 0);");
-			       		updateSpan.setAttribute("id", "statusSpan"+clientId);
-			       		document.getElementById("statusFont"+clientId).appendChild(updateSpan);
-					}
-		   });
-		   setTimeout("refreshClientStatus("+clientId+")", 5000);
-		 }
-    </script>
+        var url = "/404.html";
+        if ($.common.isNotEmpty(row)) {
+            url = $.table._option.customUrl.replace("{id}", row[0].clientId);
+        }
+        $.modal.openViewFull("客户端资源监控 " + row[0].clientName + " [" + row[0].clientIp + "]", url, null, null);
+    }
+
+    /*刷新客户端状态*/
+    function refreshClientStatus(clientId) {
+        var url = prefix + "/getClientStatusByClientId/" + clientId;
+        $.getJSON(url, null, function call(result) {
+            if (result.status == 0) {
+                /*删除老的span*/
+                var oldSpan = document.getElementById("statusSpan" + clientId);
+                oldSpan.parentNode.removeChild(oldSpan);
+                /*新建一个待更新span*/
+                var updateSpan = document.createElement("span");
+                updateSpan.innerText = "状态正常"
+                updateSpan.setAttribute("class", "glyphicon glyphicon-ok-sign");
+                updateSpan.setAttribute("style", "color: rgb(0, 175, 0)");
+                updateSpan.setAttribute("id", "statusSpan" + clientId);
+                document.getElementById("statusFont" + clientId).appendChild(updateSpan);
+            } else if (result.status == 1) {
+                /*删除老的span*/
+                var oldSpan = document.getElementById("statusSpan" + clientId);
+                oldSpan.parentNode.removeChild(oldSpan);
+                /*新建一个待更新span*/
+                var updateSpan = document.createElement("span");
+                updateSpan.innerText = "状态异常"
+                updateSpan.setAttribute("class", "glyphicon glyphicon-minus-sign");
+                updateSpan.setAttribute("style", "color: rgb(199, 0, 0);");
+                updateSpan.setAttribute("id", "statusSpan" + clientId);
+                document.getElementById("statusFont" + clientId).appendChild(updateSpan);
+            } else if (result.status == 2) {
+                /*删除老的span*/
+                var oldSpan = document.getElementById("statusSpan" + clientId);
+                oldSpan.parentNode.removeChild(oldSpan);
+                /*新建一个待更新span*/
+                var updateSpan = document.createElement("span");
+                updateSpan.innerText = "状态未知"
+                updateSpan.setAttribute("class", "glyphicon glyphicon-question-sign");
+                updateSpan.setAttribute("style", "color: rgb(255, 168, 0);");
+                updateSpan.setAttribute("id", "statusSpan" + clientId);
+                document.getElementById("statusFont" + clientId).appendChild(updateSpan);
+            }
+        });
+        setTimeout("refreshClientStatus(" + clientId + ")", 5000);
+    }
+</script>
 </body>
 </html>

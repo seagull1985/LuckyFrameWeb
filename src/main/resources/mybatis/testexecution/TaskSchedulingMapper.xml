@@ -70,6 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="checkinterval"    column="checkinterval"    />
         <result property="clientPath"    column="client_path"    />
         <result property="remark"    column="remark"    />
+        <result property="clientType"    column="client_type"    />
     </resultMap>
     
 	<sql id="selectTaskSchedulingVo">
@@ -77,7 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         sj.job_name, sj.job_group, sj.method_name, sj.method_params, sj.cron_expression, sj.misfire_policy, sj.status, sj.remark, sj.update_time, 
         sp.project_name,sp.dept_id,sp.project_sign, 
         pp.plan_name, pp.plan_case_count, 
-        sc.client_name, sc.client_ip, sc.status, sc.client_path 
+        sc.client_name, sc.client_type, sc.client_ip, sc.status, sc.client_path
         from task_scheduling ts
         left join sys_job sj on ts.job_id = sj.job_id 
         left join sys_project sp on ts.project_id = sp.project_id 

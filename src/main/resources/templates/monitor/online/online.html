@@ -27,9 +27,11 @@
 			</div>
 			
 	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-	            <a class="btn btn-danger btn-del disabled" onclick="javascript:batchForceLogout()" shiro:hasPermission="monitor:online:batchForceLogout">
+				<shiro:hasPermission name="monitor:online:batchForceLogout">
+	            <a class="btn btn-danger btn-del disabled" onclick="javascript:batchForceLogout()">
 	                <i class="fa fa-sign-out"></i> 强退
 	            </a>
+				</shiro:hasPermission>
 	        </div>
 	        
 	        <div class="col-sm-12 select-table table-striped">

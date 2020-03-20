@@ -39,18 +39,26 @@
 			</div>
 			
 	       <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-	            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:dict:add">
+			   <shiro:hasPermission name="system:dict:add">
+	            <a class="btn btn-success" onclick="$.operate.add()">
 	                <i class="fa fa-plus"></i> 新增
 	            </a>
-	            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:dict:edit">
+			   </shiro:hasPermission>
+			   <shiro:hasPermission name="system:dict:edit">
+	            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
 		            <i class="fa fa-edit"></i> 修改
 		        </a>
-				<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:dict:remove">
+			   </shiro:hasPermission>
+			   <shiro:hasPermission name="system:dict:remove">
+				<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()">
 		            <i class="fa fa-remove"></i> 删除
 		        </a>
-		        <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:dict:export">
+			   </shiro:hasPermission>
+			   <shiro:hasPermission name="system:dict:export">
+		        <a class="btn btn-warning" onclick="$.table.exportExcel()">
 		            <i class="fa fa-download"></i> 导出
 		        </a>
+			   </shiro:hasPermission>
 	        </div>
 	        
 	        <div class="col-sm-12 select-table table-striped">

@@ -367,7 +367,8 @@ public class TaskSchedulingController extends BaseController
 		try{    		
     		Map<String, Object> params = new HashMap<>(0);
     		params.put("filename", storeName);
-			result=HttpRequest.httpClientGet("http://"+clientIp+":"+ClientConstants.CLIENT_MONITOR_PORT+"/getLogdDetail", params,60000);
+			Client client = clientService.selectClientByClientIP(clientIp);
+			result=HttpRequest.httpClientGet("http://"+clientIp+":"+ClientConstants.CLIENT_MONITOR_PORT+"/getLogdDetail", client, params,60000);
 			result=result.replace("##n##", "\n");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -422,7 +423,7 @@ public class TaskSchedulingController extends BaseController
 				
 				try {
 					result = HttpRequest.httpClientUploadFile(
-							"http://" + clientIp + ":" + ClientConstants.CLIENT_MONITOR_PORT + "/uploadJar", driverPath,
+							"http://" + clientIp + ":" + ClientConstants.CLIENT_MONITOR_PORT + "/uploadJar", clientService.selectClientByClientIP(clientIp), driverPath,
 							jarFile);
 				} catch (Exception e) {
 					return error("获取远程链接失败！");

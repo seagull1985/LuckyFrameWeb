@@ -21,6 +21,8 @@ public class Client extends BaseEntity
 	private Integer clientId;
 	/** 心跳任务ID */
 	private Integer jobId;
+	/** 心跳任务ID */
+	private Integer clientType;
 	/** 客户端名称 */
 	private String clientName;
 	/** 客户端IP */
@@ -46,6 +48,14 @@ public class Client extends BaseEntity
 
 	public void setJobId(Integer jobId) {
 		this.jobId = jobId;
+	}
+
+	public Integer getClientType() {
+		return clientType;
+	}
+
+	public void setClientType(Integer clientType) {
+		this.clientType = clientType;
 	}
 
 	public List<String> getClientPathList() {

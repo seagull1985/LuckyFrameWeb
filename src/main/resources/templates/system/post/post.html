@@ -33,18 +33,26 @@
 			</div>
 			
 			<div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:post:add">
+				<shiro:hasPermission name="system:post:add">
+				<a class="btn btn-success" onclick="$.operate.add()">
 	                <i class="fa fa-plus"></i> 新增
 	            </a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:post:edit">
+				</shiro:hasPermission>
+				<shiro:hasPermission name="system:post:edit">
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
 		            <i class="fa fa-edit"></i> 修改
 		        </a>
-				<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:post:remove">
+				</shiro:hasPermission>
+				<shiro:hasPermission name="system:post:remove">
+				<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()">
 		            <i class="fa fa-remove"></i> 删除
 		        </a>
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:post:export">
+				</shiro:hasPermission>
+				<shiro:hasPermission name="system:post:export">
+				<a class="btn btn-warning" onclick="$.table.exportExcel()">
 		            <i class="fa fa-download"></i> 导出
 		        </a>
+				</shiro:hasPermission>
 	        </div>
 	        
 	        <div class="col-sm-12 select-table table-striped">

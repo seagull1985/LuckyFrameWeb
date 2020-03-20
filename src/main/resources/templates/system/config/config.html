@@ -41,9 +41,11 @@
 <!-- 		        <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:config:add">
 		            <i class="fa fa-plus"></i> 新增
 		        </a> -->
-		        <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:config:edit">
+				<shiro:hasPermission name="system:config:edit">
+		        <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
 		            <i class="fa fa-edit"></i> 修改
 		        </a>
+				</shiro:hasPermission>
 <!-- 		        <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:config:remove">
 		            <i class="fa fa-remove"></i> 删除
 		        </a>

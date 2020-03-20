@@ -63,15 +63,21 @@
 			</div>
 			
 	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="qualitymanagmt:qaAccident:add">
+				<shiro:hasPermission name="qualitymanagmt:qaAccident:add">
+				<a class="btn btn-success" onclick="$.operate.add()">
 					<i class="fa fa-plus"></i> 添加
 				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="qualitymanagmt:qaAccident:edit">
+				</shiro:hasPermission>
+				<shiro:hasPermission name="qualitymanagmt:qaAccident:edit">
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
 					<i class="fa fa-edit"></i> 修改
 				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="qualitymanagmt:qaAccident:remove">
+				</shiro:hasPermission>
+				<shiro:hasPermission name="qualitymanagmt:qaAccident:remove">
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()">
 					<i class="fa fa-remove"></i> 删除
 				</a>
+				</shiro:hasPermission>
 				<a class="btn btn-info" onclick="showQueryGraph()">
 					<i class="fa fa-pie-chart"></i> 图形分析
 				</a>

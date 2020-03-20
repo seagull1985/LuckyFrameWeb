@@ -90,7 +90,7 @@ public class ClientController extends BaseController
     {
     	Client client = clientService.selectClientById(clientId);
 		String result = HttpRequest.httpClientGet(
-				"http://" + client.getClientIp() + ":" + ClientConstants.CLIENT_MONITOR_PORT + "/getClientMonitorData",
+				"http://" + client.getClientIp() + ":" + ClientConstants.CLIENT_MONITOR_PORT + "/getClientMonitorData",client,
 				new HashMap<>(0),15000);
 		System.out.println(result);
 		JSONObject jSONObject = JSONObject.parseObject(result);
@@ -186,29 +186,34 @@ public class ClientController extends BaseController
 		/*不允许通过服务端修改netty方式的客户端IP
 		* */
 		Client oldClient=clientService.selectClientById(client.getClientId());
-		if(oldClient!=null&&oldClient.getClientIp().contains("netty"))
+		if(oldClient!=null&&oldClient.getClientType().equals(1))
 		{
+			client.setStatus(1);
 			if(!oldClient.getClientIp().equals(client.getClientIp()))
-				return error("Netty通信的客户端，如需修改客户端IP，请在客户端配置！");
+				return error("Netty客户端，请在客户端配置文件修改IP、名称");
 		}
 		for(Integer projectId:client.getProjectIds()){
 			if(!PermissionUtils.isProjectPermsPassByProjectId(projectId)){				
 				return error("没有项目【"+projectService.selectProjectById(projectId).getProjectName()+"】修改客户端权限");
 			}		
 		}
-		
-		int result;
-		Job job=jobService.selectJobById(client.getJobId().longValue());
-    	job.setMethodParams(client.getClientIp());
-    	job.setCronExpression("0/"+client.getCheckinterval().toString()+" * * * * ? ");
-    	/*在公共调度表中插入数据*/
-    	result = jobService.updateJob(job);
-    	if(result<1){
-    		return AjaxResult.error();
-    	}
+
+		if(oldClient!=null&&oldClient.getClientType().equals(0)){
+			int result;
+			Job job=jobService.selectJobById(client.getJobId().longValue());
+			job.setMethodParams(client.getClientIp());
+			job.setCronExpression("0/"+client.getCheckinterval().toString()+" * * * * ? ");
+			/*在公共调度表中插入数据*/
+			result = jobService.updateJob(job);
+			if(result<1){
+				return AjaxResult.error();
+			}
+		}else{
+			//更新数据，删除心跳map中的数据
+			NettyServer.clientMap.remove(client.getClientIp());
+		}
+
     	client.setRemark("修改客户端信息，重新初始化");
-		//更新数据，删除心跳map中的数据
-		NettyServer.clientMap.remove(client.getClientIp());
 		return toAjax(clientService.updateClient(client));
 	}
 	

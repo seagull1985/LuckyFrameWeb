@@ -29,12 +29,16 @@
 			</div>
                 
             <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-		        <a class="btn btn-success" onclick="$.operate.add(100)" shiro:hasPermission="system:dept:add">
+				<shiro:hasPermission name="system:dept:add">
+		        <a class="btn btn-success" onclick="$.operate.add(100)">
                     <i class="fa fa-plus"></i> 新增
                 </a>
-                <a class="btn btn-primary" onclick="$.operate.editTree()" shiro:hasPermission="system:dept:edit">
+				</shiro:hasPermission>
+				<shiro:hasPermission name="system:dept:edit">
+                <a class="btn btn-primary" onclick="$.operate.editTree()">
 		            <i class="fa fa-edit"></i> 修改
 		        </a>
+				</shiro:hasPermission>
                 <a class="btn btn-info" id="expandAllBtn">
                     <i class="fa fa-exchange"></i> 展开/折叠
                 </a>

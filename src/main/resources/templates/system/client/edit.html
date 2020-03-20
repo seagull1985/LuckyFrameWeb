@@ -4,8 +4,10 @@
 <head th:include="include :: header"></head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <!--/*@thymesVar id="client" type="java"*/-->
         <form class="form-horizontal m" id="form-client-edit" th:object="${client}">
             <input id="clientId" name="clientId" th:field="*{clientId}"  type="hidden">
+			<input id="clientType" name="clientType" th:field="*{clientType}"  type="hidden">
             <input id="jobId" name="jobId" th:field="*{jobId}"  type="hidden">
             <input id="status" name="status" value='2' type="hidden"/>
 			<div class="form-group">	
@@ -133,6 +135,7 @@
         function edit() {
         	var clientId = $("input[name='clientId']").val();
         	var jobId = $("input[name='jobId']").val();
+			var clientType = $("input[name='clientType']").val();
         	var clientName = $("input[name='clientName']").val();
         	var clientIp = $("input[name='clientIp']").val();
         	var checkinterval = $("input[name='checkinterval']").val();
@@ -147,6 +150,7 @@
         		data : {
         			"clientId":clientId,
         			"jobId":jobId,
+					"clientType":clientType,
         			"clientName": clientName,
         			"clientIp": clientIp,
         			"checkinterval": checkinterval,

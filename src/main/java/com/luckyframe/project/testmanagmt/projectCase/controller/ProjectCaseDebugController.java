@@ -97,7 +97,7 @@ public class ProjectCaseDebugController extends BaseController
 	    	webDebugCaseEntity.setUserId(ShiroUtils.getUserId().intValue());
 			Client client = clientService.selectClientById(projectCaseDebug.getClientId());
 			String url= "http://"+client.getClientIp()+":"+ClientConstants.CLIENT_MONITOR_PORT+"/webDebugCase";
-			String result=HttpRequest.httpClientPost(url, JSONObject.toJSONString(webDebugCaseEntity),3000);
+			String result=HttpRequest.httpClientPost(url, client,JSONObject.toJSONString(webDebugCaseEntity),3000);
 			
 			if(result.contains("正常")){
 				json.put("status", "info");

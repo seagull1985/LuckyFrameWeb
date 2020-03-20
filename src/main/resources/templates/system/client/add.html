@@ -6,6 +6,7 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-client-add">
             <input name="status"  type="hidden" id="status" value='2'/>
+			<input name="clientType"  type="hidden" id="clientType" value='0'/>
             <input name="remark"  type="hidden" id="remark" value=''/>
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">客户端名称：</label>
@@ -37,6 +38,7 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">应用项目：</label>
 				<div class="col-sm-8">
+					<!--/*@thymesVar id="projects" type="com.luckyframe.project.system.client.controller"*/-->
 					<label th:each="project:${projects}" class="check-box">
 						<input name="project" type="checkbox" th:value="${project.projectId}" th:text="${project.projectName}">
 					</label>
@@ -125,6 +127,7 @@
         	var clientPath = $("input[name='clientPath']").val();
         	var remark = $("input[name='remark']").val();
         	var status = $("input[name='status']").val();
+			var clientType = $("input[name='clientType']").val();
         	var projectIds = $.form.selectCheckeds("project");
         	$.ajax({
         		cache : true,
@@ -137,6 +140,7 @@
         			"clientPath": clientPath,
         			"remark": remark,
         			"status": status,
+					"clientType": clientType,
         			"projectIds": projectIds
         		},
         		async : false,

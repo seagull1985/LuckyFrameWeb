@@ -1,6 +1,8 @@
 package com.luckyframe.project.system.client.service;
 
 import com.luckyframe.project.system.client.domain.Client;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 /**
@@ -41,6 +43,14 @@ public interface IClientService
      * @return 结果
      */
 	int insertClient(Client client);
+
+	/**
+	 * NETTY方便新增客户端管理
+	 *
+	 * @param client 客户端管理信息
+	 * @return 结果
+	 */
+	int insertClientForNetty(Client client);
 	
 	/**
      * 修改客户端管理
@@ -49,6 +59,14 @@ public interface IClientService
      * @return 结果
      */
 	int updateClient(Client client);
+
+	/**
+	 * NETTY方式修改客户端管理
+	 *
+	 * @param client 客户端管理信息
+	 * @return 结果
+	 */
+	int updateClientForNetty(Client client);
 	
 	/**
 	 * 根据IP修改客户端状态以及备注

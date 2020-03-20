@@ -70,15 +70,12 @@ public class RunAutomationTestTask
 			runTaskEntity.setSchedulingName(taskScheduling.getSchedulingName());
 			runTaskEntity.setLoadPath(taskScheduling.getClientDriverPath());
 			try {
-				HttpRequest.httpClientPost(url, JSONObject.toJSONString(runTaskEntity),3000);
+				HttpRequest.httpClientPost(url, taskScheduling.getClient(), JSONObject.toJSONString(runTaskEntity),3000);
 			} catch (ConnectException e) {
 				// TODO Auto-generated catch block
 				log.error("测试任务执行，远程链接客户端出现异常...");
 				taskExecute.setTaskStatus(4);
 				taskExecuteService.updateTaskExecute(taskExecute);
-			} catch (KeyManagementException | NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				log.error("测试任务执行，远程链接客户端出现异常...");
 			}
 		}
     }

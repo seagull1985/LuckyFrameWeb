@@ -45,9 +45,11 @@
 		         <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="monitor:job:export">
 		            <i class="fa fa-download"></i> 导出
 		        </a> -->
-		        <a class="btn btn-info" onclick="javascript:jobLog()" shiro:hasPermission="monitor:job:list">
+				<shiro:hasPermission name="monitor:job:list">
+		        <a class="btn btn-info" onclick="javascript:jobLog()">
 		            <i class="fa fa-list"></i> 日志
 		        </a>
+				</shiro:hasPermission>
 	        </div>
         
 	        <div class="col-sm-12 select-table table-striped">
