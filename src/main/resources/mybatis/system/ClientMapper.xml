@@ -109,6 +109,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
     <select id="selectClientByClientIP" parameterType="String" resultMap="ClientResult">
-		select client_id,job_id,client_type,client_name,status from sys_client where client_ip=#{clientIP} limit 1
+		select client_id,job_id,client_type,client_name,status,client_path from sys_client where client_ip=#{clientIP} limit 1
 	</select>
 </mapper>

@@ -155,12 +155,13 @@ public class ServerHandler extends ChannelHandlerAdapter {
                     client.setRemark("客户端兼容NETTY通信注册成功");
                     clientService.updateClientForNetty(client);
                 }else {
+                    client.setClientName(clientName);
+                    client.setClientIp(hostName);
                     client.setRemark("客户端NETTY通信链接成功");
                 }
             }
             if (lfConfig.getVersion().equals(json.get("version"))) {
                 //版本号一致
-                client.setClientIp(hostName);
                 client.setStatus(0);
                 if (client.getClientId() != null) {
                     clientService.updateClientForNetty(client);
@@ -179,7 +180,6 @@ public class ServerHandler extends ChannelHandlerAdapter {
                 tmp.put("success", "1");
                 sendMessage(ctx, tmp.toString());
             } else {
-                client.setClientIp(hostName);
                 client.setRemark("客户端(" + json.get("version") + ")与服务器(" + lfConfig.getVersion() + ")版本不一致");
                 client.setStatus(1);
                 if (client.getClientId() != null) {
