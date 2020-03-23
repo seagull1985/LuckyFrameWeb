@@ -155,7 +155,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
                     client.setRemark("客户端兼容NETTY通信注册成功");
                     clientService.updateClientForNetty(client);
                 }else {
-                    //client.setClientName(clientName);
+                    client.setClientName(clientName);
                     client.setClientIp(hostName);
                     client.setRemark("客户端NETTY通信链接成功");
                 }
