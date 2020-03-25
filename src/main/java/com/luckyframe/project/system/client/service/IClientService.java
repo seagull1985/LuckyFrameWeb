@@ -1,9 +1,8 @@
 package com.luckyframe.project.system.client.service;
 
-import com.luckyframe.project.system.client.domain.Client;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
+
+import com.luckyframe.project.system.client.domain.Client;
 
 /**
  * 客户端管理 服务层

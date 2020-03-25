@@ -1,8 +1,8 @@
 package com.luckyframe.common.utils;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+
 import com.luckyframe.project.system.menu.domain.Menu;
 
 /**

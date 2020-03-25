@@ -3,7 +3,6 @@ package com.luckyframe.project.testmanagmt.projectProtocolTemplate.service;
 import java.util.List;
 
 import com.luckyframe.project.testmanagmt.projectProtocolTemplate.domain.ProjectProtocolTemplate;
-import org.springframework.stereotype.Component;
 
 /**
  * 协议模板管理 服务层

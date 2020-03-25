@@ -1,6 +1,5 @@
 package com.luckyframe.framework.shiro.realm;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;

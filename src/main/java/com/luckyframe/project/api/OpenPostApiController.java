@@ -3,9 +3,10 @@ package com.luckyframe.project.api;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,8 +28,6 @@ import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseDebug;
 import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseDebugService;
 import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseService;
-
-import javax.annotation.Resource;
 
 /**
  * 统一API对外操作类
