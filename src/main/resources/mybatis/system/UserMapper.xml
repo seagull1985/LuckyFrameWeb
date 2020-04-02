@@ -18,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="status"       column="status"       />
 		<result property="delFlag"      column="del_flag"     />
 		<result property="projectId"    column="project_id"     />
+		<result property="dateQuantum"  column="date_quantum"     />
 		<result property="loginIp"      column="login_ip"     />
 		<result property="loginDate"    column="login_date"   />
 		<result property="createBy"     column="create_by"    />
@@ -47,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<sql id="selectUserVo">
-        select  u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.project_id, u.login_ip, u.login_date, u.create_time, u.remark,
+        select  u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.project_id, u.date_quantum, u.login_ip, u.login_date, u.create_time, u.remark,
        		    d.dept_id, d.parent_id, d.dept_name, d.order_num, d.status as dept_status,
        		    r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
 		from sys_user u
@@ -57,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 	
 	<select id="selectUserList" parameterType="User" resultMap="UserResult">
-		select u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.del_flag, u.project_id, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name from sys_user u
+		select u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.del_flag, u.project_id, u.date_quantum, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name from sys_user u
 		left join sys_dept d on u.dept_id = d.dept_id
 		where u.del_flag = '0'
 		<if test="loginName != null and loginName != ''">
@@ -135,6 +136,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="phonenumber != null and phonenumber != ''">phonenumber = #{phonenumber},</if>
  			<if test="sex != null and sex != ''">sex = #{sex},</if>
  			<if test="projectId != ''">project_id = #{projectId},</if>
+			<if test="dateQuantum != ''">date_quantum = #{dateQuantum},</if>
  			<if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
  			<if test="password != null and password != ''">password = #{password},</if>
  			<if test="salt != null and salt != ''">salt = #{salt},</if>
@@ -158,6 +160,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="phonenumber != null and phonenumber != ''">phonenumber,</if>
  			<if test="sex != null and sex != ''">sex,</if>
  			<if test="projectId != null and projectId != ''">project_id,</if>
+		    <if test="dateQuantum != null and dateQuantum != ''">date_quantum,</if>
  			<if test="password != null and password != ''">password,</if>
  			<if test="salt != null and salt != ''">salt,</if>
  			<if test="status != null and status != ''">status,</if>
@@ -173,6 +176,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="phonenumber != null and phonenumber != ''">#{phonenumber},</if>
  			<if test="sex != null and sex != ''">#{sex},</if>
  			<if test="projectId != null and projectId != ''">#{projectId},</if>
+		    <if test="dateQuantum != null and dateQuantum != ''">#{dateQuantum},</if>
  			<if test="password != null and password != ''">#{password},</if>
  			<if test="salt != null and salt != ''">#{salt},</if>
  			<if test="status != null and status != ''">#{status},</if>

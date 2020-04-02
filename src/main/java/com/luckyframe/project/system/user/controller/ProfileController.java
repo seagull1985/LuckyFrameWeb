@@ -142,6 +142,7 @@ public class ProfileController extends BaseController
         currentUser.setEmail(user.getEmail());
         currentUser.setPhonenumber(user.getPhonenumber());
         currentUser.setSex(user.getSex());
+        currentUser.setDateQuantum(user.getDateQuantum());
         currentUser.setProjectId(user.getProjectId());
         if (userService.updateUserInfo(currentUser) > 0)
         {

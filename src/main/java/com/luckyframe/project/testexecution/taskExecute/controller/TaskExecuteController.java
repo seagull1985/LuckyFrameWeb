@@ -73,6 +73,9 @@ public class TaskExecuteController extends BaseController
         }else{
         	String endDateStr = DateUtils.getDate();
         	String startDateStr = DateUtils.getDateByNum(-7);
+			if(StringUtils.isNotEmpty(ShiroUtils.getDateQuantum())){
+				startDateStr = DateUtils.getDateByNum(1-ShiroUtils.getDateQuantum());
+			}
         	mmap.put("endDateStr", endDateStr);
         	mmap.put("startDateStr", startDateStr);
         	if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){

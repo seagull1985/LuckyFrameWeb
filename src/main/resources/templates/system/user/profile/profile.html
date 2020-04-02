@@ -40,14 +40,15 @@
 	                            </div>
 	                        </div>
 	                        <div class="col-sm-8">
-	                            <h3><strong>[[${user.loginName}]]</strong></h3>
-	                            <p><i class="fa fa-user"></i> [[${user.userName}]] / [[${#strings.defaultString(roleGroup,'无角色')}]]
-	                            <p><i class="fa fa-phone"></i> [[${user.phonenumber}]]</p>
-	                            <p><i class="fa fa-group"></i> [[${user.dept?.deptName}]] / [[${#strings.defaultString(postGroup,'无岗位')}]]</p>
+	                            <h3><strong> [[${user.loginName}]]</strong></h3>
+	                            <p><i class="fa fa-user"></i> 用户名称/角色：[[${user.userName}]] / [[${#strings.defaultString(roleGroup,'无角色')}]]
+	                            <p><i class="fa fa-phone"></i> 电话：[[${user.phonenumber}]]</p>
+	                            <p><i class="fa fa-group"></i> 部门/岗位：[[${user.dept?.deptName}]] / [[${#strings.defaultString(postGroup,'无岗位')}]]</p>
 	                            <p><i class="fa fa-transgender"></i> 性别：[[${user.sex}]]</p>
-	                            <p><i class="fa fa-envelope-o"></i> [[${user.email}]]</p>
-	                            <p><i class="fa fa-calendar"></i> [[${#dates.format(user.createTime, 'yyyy-MM-dd HH:mm:ss')}]]</p>
-	                            <p><i class="fa fa-product-hunt"></i> [[${projectName}]]</p>
+	                            <p><i class="fa fa-envelope-o"></i> Email地址：[[${user.email}]]</p>
+	                            <p><i class="fa fa-calendar"></i> 注册时间：[[${#dates.format(user.createTime, 'yyyy-MM-dd HH:mm:ss')}]]</p>
+                                <p><i class="fa fa-calendar-check-o"></i> 默认查询时间段：[[${user.dateQuantum}]] 天</p>
+	                            <p><i class="fa fa-product-hunt"></i> 默认查询项目：[[${projectName}]]</p>
 	                        </div>
 	                        <div class="clearfix"></div>
 	                    </a>

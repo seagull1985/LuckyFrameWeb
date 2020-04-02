@@ -69,6 +69,9 @@ public class User extends BaseEntity
 
     /** 用户设置的默认项目 */
     private Integer projectId;
+
+    /** 用户设置的默认项目 */
+    private Integer dateQuantum;
     
     /** 最后登陆IP */
     @Excel(name = "最后登陆IP", type = Type.EXPORT)
@@ -260,6 +263,14 @@ public class User extends BaseEntity
 	public void setProjectId(Integer projectId) {
 		this.projectId = projectId;
 	}
+
+    public Integer getDateQuantum() {
+        return dateQuantum;
+    }
+
+    public void setDateQuantum(Integer dateQuantum) {
+        this.dateQuantum = dateQuantum;
+    }
 
 	public String getLoginIp()
     {

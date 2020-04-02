@@ -78,6 +78,11 @@ public class ShiroUtils
     {
         return getSysUser().getProjectId();
     }
+
+    public static Integer getDateQuantum()
+    {
+        return getSysUser().getDateQuantum();
+    }
     
     public static List<Integer> getProjectIdForRoles()
     {
