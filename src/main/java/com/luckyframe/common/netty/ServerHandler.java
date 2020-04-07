@@ -73,8 +73,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //统一转编码
-        String msgstr = URLDecoder.decode(msg.toString(), "UTF-8");
-        JSONObject json = JSON.parseObject(msgstr);
+        JSONObject json = JSON.parseObject(msg.toString());
         /*
          * ClientUp客户端启动，自动注册到服务端中
          * */
