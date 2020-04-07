@@ -33,7 +33,7 @@
 						</div></td>
 					<td width="18%">
 						<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepPath}+'</div>'">
-							<input type="text" class="form-control" name="stepPath" th:id="stepPath+${iterStat.count}" th:value="${stepsOb.stepPath}"/></div></td>
+							<input type="text" class="form-control" name="stepPath" th:id="stepPath+${iterStat.count}" th:value="${stepsOb.stepPath}" ondblclick="showPathModal(this)"/></div></td>
 					<td width="13%">
 						<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepOperation}+'</div>'">
 							<input type="text" class="form-control" name="stepOperation" th:id="stepOperation+${iterStat.count}" th:value="${stepsOb.stepOperation}"/>
@@ -44,7 +44,7 @@
 					</td>
 					<td width="16%">
 						<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepParameters}+'</div>'">
-							<input type="text" class="form-control" name="stepParameters" th:id="stepParameters+${iterStat.count}" th:value="${stepsOb.stepParameters}"/></div></td>
+							<input type="text" class="form-control" name="stepParameters" th:id="stepParameters+${iterStat.count}" th:value="${stepsOb.stepParameters}" ondblclick="showParamsModal(this)" /></div></td>
 					<td width="8%" th:title="${stepsOb.action}">
 						<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.action}+'</div>'">
 							<input type="text" class="form-control" name="action" th:id="action+${iterStat.count}" th:value="${stepsOb.action}"/></div></td>
@@ -104,9 +104,51 @@
 				<textarea class="form-control" id="remarkArea" style="resize:none;width: 100%; height: 100%;font-size: large" rows="6" cols="20"></textarea>
 			</div>
 			<div class="modal-footer">
-				<label id="modalAlert" style="float:left;font-size: large;color: #ff0000"></label>
-				<label id="modalAlert" style="float:left;color: #ff0000">注意：点击确定(暂存) > 右下角保存用例</label>
+				<label style="float:left;font-size: large;color: #ff0000"></label>
+				<label id="modalAlert" style="float:left;color: #ff0000">注意：点击确定暂存备注 > 右下角保存用例</label>
 				<button id="modal-save" type="button" class="btn btn-primary">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="paramsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document"  style="width:30%">
+		<div class="modal-content" >
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="myParamsLabel">参数</h4>
+			</div>
+			<div class="modal-body ibox-content">
+				<textarea class="form-control" id="paramsArea" style="resize:none;width: 100%; height: 100%;font-size: large" rows="6" cols="20"></textarea>
+			</div>
+			<div class="modal-footer">
+				<label style="float:left;font-size: large;color: #ff0000"></label>
+				<label id="paramsAlert" style="float:left;color: #ff0000">注意：点击确定暂存参数 > 右下角保存用例</label>
+				<button id="params-save" type="button" class="btn btn-primary">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="pathModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document"  style="width:30%">
+		<div class="modal-content" >
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="myPathLabel">包|定位路径</h4>
+			</div>
+			<div class="modal-body ibox-content">
+				<textarea class="form-control" id="pathArea" style="resize:none;width: 100%; height: 100%;font-size: large" rows="6" cols="20"></textarea>
+			</div>
+			<div class="modal-footer">
+				<label style="float:left;font-size: large;color: #ff0000"></label>
+				<label id="pathAlert" style="float:left;color: #ff0000">注意：点击确定暂存定位路径 > 右下角保存用例</label>
+				<button id="path-save" type="button" class="btn btn-primary">确定</button>
 			</div>
 		</div>
 	</div>
@@ -134,7 +176,7 @@
 				modal.find('#remarkArea').text('');
 				modal.find('#remarkArea').val('');
 			}
-			modal.find('#modalAlert').text('');
+			//modal.find('#modalAlert').text('');
 		});
 		$("#remarkModal").modal('show');
 	}
@@ -146,9 +188,61 @@
 		if (remark.length > 200) {
 			$("#modalAlert").text("备注长度不能超过200！");
 		} else {
-			$("#modalAlert").text("");
+			$("#modalAlert").text("注意：点击确定暂存备注 > 右下角保存用例");
 			remarkSource.val(remark);
 			remarkSource.text(remark);
+			modal.modal('hide');
+		}
+	});
+
+	function showParamsModal(e) {
+		id = e.id.replace(/[^0-9]/ig, "");
+		$('#paramsModal').on('show.bs.modal', function () {
+			let modal = $(this);
+			let paramsSource = $("#stepParameters" + id);
+			modal.find('#paramsArea').text(paramsSource.val());
+			modal.find('#paramsArea').val(paramsSource.val());
+			//modal.find('#paramsAlert').text('');
+		});
+		$("#paramsModal").modal('show');
+	}
+
+	$('#params-save').click(function () {
+		let modal = $('#paramsModal');
+		let paramsSource = $("#stepParameters" + id);
+		let params = modal.find('#paramsArea').val();
+		if (params.length > 500) {
+			$("#paramsAlert").text("参数长度不能超过500！");
+		} else {
+			$("#paramsAlert").text("注意：点击确定暂存参数 > 右下角保存用例");
+			paramsSource.val(params);
+			paramsSource.text(params);
+			modal.modal('hide');
+		}
+	});
+
+	function showPathModal(e) {
+		id = e.id.replace(/[^0-9]/ig, "");
+		$('#pathModal').on('show.bs.modal', function () {
+			let modal = $(this);
+			let pathSource = $("#stepPath" + id);
+			modal.find('#pathArea').text(pathSource.val());
+			modal.find('#pathArea').val(pathSource.val());
+			//modal.find('#pathAlert').text('');
+		});
+		$("#pathModal").modal('show');
+	}
+
+	$('#path-save').click(function () {
+		let modal = $('#pathModal');
+		let pathSource = $("#stepPath" + id);
+		let path = modal.find('#pathArea').val();
+		if (path.length > 500) {
+			$("#pathAlert").text("包|定位路径长度不能超过500！");
+		} else {
+			$("#pathAlert").text("注意：点击确定暂存定位路径 > 右下角保存用例");
+			pathSource.val(path);
+			pathSource.text(path);
 			modal.modal('hide');
 		}
 	});
