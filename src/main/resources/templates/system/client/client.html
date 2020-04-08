@@ -56,7 +56,7 @@
             </shiro:hasPermission>
         </div>
         <div class="col-sm-12 select-table table-striped">
-            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+            <table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
         </div>
     </div>
 </div>
@@ -87,15 +87,21 @@
                 },
                 {
                     field: 'clientName',
-                    title: '客户端名称'
+                    title: '客户端名称',
+                    width: '10%',
+                    class: 'myTDLengthHidden'
                 },
                 {
                     field: 'clientIp',
-                    title: '客户端IP'
+                    title: '客户端IP',
+                    width: '15%',
+                    class: 'myTDLengthHidden'
                 },
                 {
                     field: 'clientType',
                     title: '链接类型',
+                    width: '10%',
+                    class: 'myTDLengthHidden',
                     formatter: function (value,
                                          row, index) {
                         if (value == 0) {
@@ -108,6 +114,8 @@
                 {
                     field: 'status',
                     title: '客户端状态',
+                    width: '10%',
+                    class: 'myTDLengthHidden',
                     formatter: function (value,
                                          row, index) {
                         if (value == 0) {
@@ -124,6 +132,8 @@
                 {
                     field: 'checkinterval',
                     title: '心跳间隔',
+                    width: '10%',
+                    class: 'myTDLengthHidden',
                     formatter: function (value,
                                          row, index) {
                         return value + '秒';
@@ -131,15 +141,21 @@
                 },
                 {
                     field: 'clientPath',
-                    title: '驱动路径'
+                    title: '驱动路径',
+                    width: '15%',
+                    class: 'myTDLengthHidden'
                 },
                 {
                     field: 'remark',
-                    title: '备注'
+                    title: '备注',
+                    width: '10%',
+                    class: 'myTDLengthHidden'
                 },
                 {
                     title: '操作',
                     align: 'center',
+                    width: '20%',
+                    class: 'myTDLengthHidden',
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.clientId + '\')"><i class="fa fa-edit"></i>编辑</a> ');

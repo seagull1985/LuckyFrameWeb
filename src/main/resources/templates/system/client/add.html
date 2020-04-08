@@ -32,7 +32,7 @@
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">驱动路径：</label>
 				<div class="col-sm-8">
-					<input id="clientPath" name="clientPath" class="form-control" type="text" value="/TestDriven">
+					<textarea id="clientPath" rows="5" name="clientPath" class="form-control" type="text" value="/TestDriven">/TestDriven</textarea>
 				</div>
 			</div>
 			<div class="form-group">
@@ -96,12 +96,7 @@
 				clientPath:{
         			required:true,
         			minlength: 2,
-        			maxlength: 100,
-				},
-				clientPath:{
-        			required:true,
-        			minlength: 2,
-        			maxlength: 100,
+        			maxlength: 500,
 				},
 			},
         	messages: {
@@ -124,7 +119,7 @@
         	var clientName = $("input[name='clientName']").val();
         	var clientIp = $("input[name='clientIp']").val();
         	var checkinterval = $("input[name='checkinterval']").val();
-        	var clientPath = $("input[name='clientPath']").val();
+        	var clientPath = $("textarea[name='clientPath']").val();
         	var remark = $("input[name='remark']").val();
         	var status = $("input[name='status']").val();
 			var clientType = $("input[name='clientType']").val();
