@@ -168,7 +168,11 @@
                     title: '用例编号',
                     sortable: true,
                     width: '7%',
-                    class: 'myTDLengthHidden'
+                    class: 'myTDLengthHidden',
+                    formatter: function (value, row, index) {
+                        console.log(row);
+                        return '<a class="btn btn-info btn-edit" onclick="$.operate.customFull('+row.caseId+')">'+value+'</a>';
+                    }
                 },
                 {
                     field: 'caseName',
