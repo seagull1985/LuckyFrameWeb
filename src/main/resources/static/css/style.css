@@ -478,7 +478,7 @@ body.body-small.fixed-sidebar.mini-navbar .navbar-static-side {
     top: 0px;
     padding: 10px 10px 10px 10px;
     text-align: center;
-    background-color: #00BFFF;
+    background-color: #003333;
     border-bottom: dashed 1px #fff;
 }
 
@@ -6671,7 +6671,7 @@ body.rtls .top-navigation .footer.fixed, body.rtls.top-navigation .footer.fixed 
 }
 
 .navbar-static-side {
-    background: #00BFFF;
+    background: #003333;
 }
 
 .nav-close {

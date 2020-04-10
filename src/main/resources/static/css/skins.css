@@ -6,7 +6,7 @@
 */
 /** À¶É«Ö÷Ìâ skin-blue **/
 .skin-blue .navbar {
-	background-color: #1E90FF
+	background-color: #003366
 }
 
 .skin-blue .navbar .nav>li>a {
@@ -38,7 +38,7 @@
 }
 
 .skin-blue .navbar .sidebar-toggle:hover {
-	background-color: #00CCCC
+	background-color: #009999
 }
 
 @media ( max-width :767px) {
@@ -49,12 +49,12 @@
 		color: #fff
 	}
 	.skin-blue .navbar .dropdown-menu li a:hover {
-		background: #00CCCC
+		background: #009999
 	}
 }
 
 .skin-blue .logo {
-	background-color: #00BFFF;
+	background-color: #003333;
 	color: #fff;
 	border-bottom: 0 solid transparent
 }
@@ -89,7 +89,7 @@
 
 .skin-blue .nav>li.active {
 	color: #fff;
-	background: #0099CC;
+	background: #009999;
 	border-left: 3px solid #3c8dbc;
 }
 
