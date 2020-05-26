@@ -67,7 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="createTime != null "> and pc.create_time = #{createTime}</if>
              <if test="updateBy != null  and updateBy != '' "> and pc.update_by = #{updateBy}</if>
              <if test="updateTime != null "> and pc.update_time = #{updateTime}</if>
-             <if test="remark != null  and remark != '' "> and pc.remark = #{remark}</if>
+             <if test="remark != null  and remark != '' "> and pc.remark  like concat('%', #{remark}, '%')</if>
          </where>
          order by pc.case_id desc
     </select>
@@ -92,7 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null "> and pc.create_time = #{createTime}</if>
             <if test="updateBy != null  and updateBy != '' "> and pc.update_by = #{updateBy}</if>
             <if test="updateTime != null "> and pc.update_time = #{updateTime}</if>
-            <if test="remark != null  and remark != '' "> and pc.remark = #{remark}</if>
+            <if test="remark != null  and remark != '' "> and pc.remark  like concat('%', #{remark}, '%')</if>
             <if test="planId != null and flag == true"> and ppc.plan_id = #{planId}</if>
          </where>
          order by ppc.priority asc,pc.case_id desc
