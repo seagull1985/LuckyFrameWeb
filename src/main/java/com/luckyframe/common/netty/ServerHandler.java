@@ -174,8 +174,9 @@ public class ServerHandler extends ChannelHandlerAdapter {
                 NettyServer.clientMap.put(hostName, "0");
                 //返回接受成功消息
                 JSONObject tmp = new JSONObject();
-                tmp.put("method", "return");
+                tmp.put("method", "loginReturn");
                 tmp.put("message", "自动注册成功");
+                tmp.put("clientId", client.getClientId());
                 tmp.put("success", "1");
                 sendMessage(ctx, tmp.toString());
             } else {

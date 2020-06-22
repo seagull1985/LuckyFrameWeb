@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.system.clientConfig.mapper.ClientConfigMapper">
+    
+    <resultMap type="ClientConfig" id="ClientConfigResult">
+        <result property="id"    column="id"    />
+        <result property="clientId"    column="client_id"    />
+        <result property="configKey"    column="config_key"    />
+        <result property="configValue"    column="config_value"    />
+    </resultMap>
+	
+	<sql id="selectClientConfigVo">
+        select id, client_id, config_key, config_value from sys_client_config
+    </sql>
+	
+    <select id="selectClientConfigList" parameterType="ClientConfig" resultMap="ClientConfigResult">
+        <include refid="selectClientConfigVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="clientId != null "> and client_id = #{clientId}</if>
+             <if test="configKey != null  and configKey != '' "> and config_key = #{configKey}</if>
+             <if test="configValue != null  and configValue != '' "> and config_value = #{configValue}</if>
+         </where>
+    </select>
+    
+    <select id="selectClientConfigById" parameterType="Integer" resultMap="ClientConfigResult">
+        <include refid="selectClientConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertClientConfig" parameterType="ClientConfig">
+        insert into sys_client_config
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="clientId != null  ">client_id,</if>
+			<if test="configKey != null  and configKey != ''  ">config_key,</if>
+			<if test="configValue != null  and configValue != ''  ">config_value,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="clientId != null  ">#{clientId},</if>
+			<if test="configKey != null  and configKey != ''  ">#{configKey},</if>
+			<if test="configValue != null  and configValue != ''  ">#{configValue},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateClientConfig" parameterType="ClientConfig">
+        update sys_client_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clientId != null  ">client_id = #{clientId},</if>
+            <if test="configKey != null  and configKey != ''  ">config_key = #{configKey},</if>
+            <if test="configValue != null  and configValue != ''  ">config_value = #{configValue},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteClientConfigById" parameterType="Integer">
+        delete from sys_client_config where id = #{id}
+    </delete>
+	
+    <delete id="deleteClientConfigByIds" parameterType="String">
+        delete from sys_client_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectClientConfig" resultType="com.luckyframe.project.system.clientConfig.domain.ClientConfig" parameterType="ClientConfig">
+        select
+        scc.id id,
+        scc.client_id clientId,
+        scc.config_key configKey,
+        scc.config_value configValue,
+        sc.client_name clientName,
+        sc.client_ip clientIp
+        from sys_client_config scc left join sys_client sc on scc.client_id=sc.client_id where 1=1
+        <if test="clientName != null and clientName != ''">
+            AND sc.client_name like concat('%', #{clientName}, '%')
+        </if>
+        <if test="clientIp != null and clientIp != ''">
+            AND sc.client_ip like concat('%', #{clientIp}, '%')
+        </if>
+        <if test="clientId != null and clientId != ''">
+            AND scc.client_id =#{clientId}
+        </if>
+        <if test="configKey != null and configKey != ''">
+            AND scc.config_key like concat('%', #{configKey}, '%')
+        </if>
+    </select>
+    <select id="selectClientConfigValue" resultType="com.luckyframe.project.system.clientConfig.domain.ClientConfig">
+        select
+         config_value configValue
+
+         from sys_client_config where 1=1
+        <if test="clientId != null and clientId != ''">
+            AND client_id=#{clientId}
+        </if>
+        <if test="key != null and key != ''">
+            AND config_key = #{key}
+        </if>
+        limit 1
+    </select>
+    
+</mapper>

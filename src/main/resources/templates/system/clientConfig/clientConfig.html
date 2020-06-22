@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg" onload="initClient()">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								<div>
+									<label style="float:left;margin: 5px 1px 5px 0px;">客户端：</label>
+									<select id="clientId" name="clientId" class="form-control m-b" style="float:left">
+										<option value=""></option>
+									</select>
+								</div>
+							</li>
+							<li>
+								客户端配置名称：<input type="text" name="configKey"/>
+							</li>
+
+							<li>
+								客户端配置值：<input type="text" name="configValue"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:clientConfig:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:clientConfig:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:clientConfig:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:clientConfig:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:clientConfig:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:clientConfig:remove')}]];
+        var prefix = ctx + "system/clientConfig";
+		var clientPrefix = ctx + "system/client";
+
+
+		$(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "客户端配置",
+				search: false,
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '主键',
+					visible: false
+				},
+				{
+					field : 'clientName',
+					title : '客户端名称',
+					sortable: true
+				},
+				{
+					field : 'clientIp',
+					title : '客户端Ip',
+					sortable: true
+				},
+				{
+					field : 'configKey', 
+					title : '客户端配置名称',
+					sortable: true
+				},
+				{
+					field : 'configValue', 
+					title : '客户端配置值',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+
+		function initClient() {
+			var url =clientPrefix + "/all";
+			var options = "";
+			var data=null;
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: data,
+				cache: false,
+				contentType: false,
+				processData: false,
+				dataType: 'json',
+				success: function(result) {
+					/*清空原有客户端列表*/
+					while($("#clientId").length>1){
+						$("#clientId option").remove();
+					}
+					let json=JSON.stringify(result);
+					/*设置新的客户端列表*/
+					$.each(result, function(i, node){
+						options +=  "<option value='"+node.clientId+"'>"+node.clientName+"("+node.clientIp+")"+"</option>";
+					});
+					$("#clientId").append(options);
+				},
+				error: function(error) {
+					$.modal.alertWarning("获取客户端信息失败。");
+				}
+			});
+		}
+    </script>
+</body>
+</html>

@@ -307,4 +307,16 @@ public class ClientController extends BaseController
     	Client client = clientService.selectClientById(clientId);
 		return JSONObject.toJSONString(client);
 	}
+
+	/**
+	 * 查询所有客户端管理列表
+	 */
+	@RequiresPermissions("system:client:export")
+	@PostMapping("/all")
+	@ResponseBody
+	public List<Client> all(Client client)
+	{
+		List<Client> list = clientService.selectClientList(client);
+		return list;
+	}
 }

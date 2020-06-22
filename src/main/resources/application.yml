@@ -155,3 +155,7 @@ flyway:
     ignore-future-migrations: false
     # 当初始化好连接时要执行的SQL
     init-sql: show tables;
+client:
+  config:
+    slat: 12331312
+    pass: 123
