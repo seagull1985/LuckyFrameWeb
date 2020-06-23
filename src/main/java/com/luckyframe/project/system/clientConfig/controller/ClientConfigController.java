@@ -3,6 +3,7 @@ package com.luckyframe.project.system.clientConfig.controller;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.luckyframe.common.utils.EncryptionUtils;
 import com.luckyframe.common.utils.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ import com.luckyframe.framework.web.controller.BaseController;
 import com.luckyframe.framework.web.page.TableDataInfo;
 import com.luckyframe.framework.web.domain.AjaxResult;
 import com.luckyframe.common.utils.poi.ExcelUtil;
-import com.luckyframe.common.utils.EncryptionUtils.EncryptionUtils;
 /**
  * 客户端配置 信息操作处理
  * 
