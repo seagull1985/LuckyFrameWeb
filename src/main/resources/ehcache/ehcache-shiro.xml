@@ -11,7 +11,7 @@
             eternal="false"
             timeToIdleSeconds="36000"
             timeToLiveSeconds="36000"
-            overflowToDisk="false">
+            overflowToDisk="true">
     </defaultCache>
 
     <!-- 登录记录缓存 锁定10分钟 -->
@@ -20,7 +20,7 @@
            eternal="false"
            timeToIdleSeconds="36000"
            timeToLiveSeconds="36000"
-           overflowToDisk="false"
+           overflowToDisk="true"
            statistics="true">
     </cache>
 
