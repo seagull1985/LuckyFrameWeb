@@ -21,13 +21,13 @@ create table if not exists sys_client_config (
 -- ----------------------------
 -- 2、增加客户端配置菜单&修改菜单排序
 -- ----------------------------
-update sys_menu t set t.order_num=8 where t.menu_id=106
+update sys_menu t set t.order_num=8 where t.menu_id=106;
 insert ignore into sys_menu values('128',  '客户端配置', '1', '7', '/system/clientConfig',    'C', '0', 'system:clientConfig:view','#', 'admin', '2020-07-07 19:15:32', 'luckyframe', '2020-07-07 19:15:32', '客户端配置菜单');
 
 -- ----------------------------
 -- 3、增加客户端配置页面按钮权限
 -- ----------------------------
-INSERT INTO `luckyframe`.`sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('1104', '客户端配置查询', '128', '1', '#', 'F', '0', 'system:clientConfig:list', '#', 'admin', '2020-07-07 19:15:32', 'luckyframe', '2020-07-07 19:15:32', '');
-INSERT INTO `luckyframe`.`sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('1105', '客户端配置新增', '128', '2', '#', 'F', '0', 'system:clientConfig:add', '#', 'admin', '2020-07-07 19:15:32', 'luckyframe', '2020-07-07 19:15:32', '');
-INSERT INTO `luckyframe`.`sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('1106', '客户端配置修改', '128', '3', '#', 'F', '0', 'system:clientConfig:edit', '#', 'admin', '2020-07-07 19:15:32', 'luckyframe', '2020-07-07 19:15:32', '');
-INSERT INTO `luckyframe`.`sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('1107', '客户端配置删除', '128', '4', '#', 'F', '0', 'system:clientConfig:remove', '#', 'admin', '2020-07-07 19:15:32', 'luckyframe', '2020-07-07 19:15:32', '');
+INSERT INTO `luckyframe`.`sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('1105', '客户端配置查询', '128', '1', '#', 'F', '0', 'system:clientConfig:list', '#', 'admin', '2020-07-07 19:15:32', 'luckyframe', '2020-07-07 19:15:32', '');
+INSERT INTO `luckyframe`.`sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('1106', '客户端配置新增', '128', '2', '#', 'F', '0', 'system:clientConfig:add', '#', 'admin', '2020-07-07 19:15:32', 'luckyframe', '2020-07-07 19:15:32', '');
+INSERT INTO `luckyframe`.`sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('1107', '客户端配置修改', '128', '3', '#', 'F', '0', 'system:clientConfig:edit', '#', 'admin', '2020-07-07 19:15:32', 'luckyframe', '2020-07-07 19:15:32', '');
+INSERT INTO `luckyframe`.`sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('1108', '客户端配置删除', '128', '4', '#', 'F', '0', 'system:clientConfig:remove', '#', 'admin', '2020-07-07 19:15:32', 'luckyframe', '2020-07-07 19:15:32', '');
