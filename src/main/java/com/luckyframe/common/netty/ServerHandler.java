@@ -61,11 +61,39 @@ public class ServerHandler extends ChannelHandlerAdapter {
     /**
      * 客户端返回的结果
      */
-    private Result result;
+    private Result clientResult;
     /**
      * 心跳丢失次数
      */
     private int counter = 0;
+    /**
+     * 客户端Json图片Key
+     */
+    private static final String IMG_NAME = "imgName";
+    /**
+     * 客户端Json请求方法
+     */
+    private static final String CLIENT_METHOD = "method";
+    /**
+     * 客户端Json请求名称
+     */
+    private static final String CLIENT_HOSTNAME = "hostName";
+    /**
+     * 客户端Json请求消息内容
+     */
+    private static final String CLIENT_MESSAGE = "message";
+    /**
+     * 客户端Json注册状态
+     */
+    private static final String CLIENT_SUCCESS = "success";
+    /**
+     * 客户端Json注册版本
+     */
+    private static final String CLIENT_VERSION = "version";
+    /**
+     * 客户端Json请求返回内容
+     */
+    private static final String CLIENT_RETURN = "return";
 
 
     private static final Logger log = LoggerFactory.getLogger(ServerHandler.class);
@@ -77,14 +105,14 @@ public class ServerHandler extends ChannelHandlerAdapter {
         /*
          * ClientUp客户端启动，自动注册到服务端中
          * */
-        if ("clientUp".equals(json.get("method"))) {
-            String hostName = json.get("hostName").toString();
+        if ("clientUp".equals(json.get(CLIENT_METHOD))) {
+            String hostName = json.get(CLIENT_HOSTNAME).toString();
             String clientName = json.get("clientName").toString();
             if (nettyChannelMap.get(hostName) != null) {
                 JSONObject tmp = new JSONObject();
-                tmp.put("method", "return");
-                tmp.put("message", "客户端名称重复，自动注册失败");
-                tmp.put("success", "-1");
+                tmp.put(CLIENT_METHOD, CLIENT_RETURN);
+                tmp.put(CLIENT_MESSAGE, "客户端名称重复，自动注册失败");
+                tmp.put(CLIENT_SUCCESS, "-1");
                 sendMessage(ctx, tmp.toString());
                 log.error("客户端host.name重复，注册失败:" + hostName);
                 //登录失败，断开连接
@@ -96,7 +124,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
 
             //接收到客户端上线消息
             log.info("#############客户端上线##############");
-            log.info("上线客户端名称：" + json.get("clientName") + "，主机名：" + json.get("hostName") + ", IP地址：" + json.get("ip"));
+            log.info("上线客户端名称：" + json.get("clientName") + "，主机名：" + json.get(CLIENT_HOSTNAME) + ", IP地址：" + json.get("ip"));
             //检查客户端是否已经注册入库
             Client client = clientService.selectClientByClientIP(hostName);
             if (null == client) {
@@ -131,7 +159,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
 
                     /*在调度预约表中插入数据*/
                     clientService.insertClientForNetty(client);
-                    log.info("主机名为：" + json.get("hostName") + "自动注册成功");
+                    log.info("主机名为：" + json.get(CLIENT_HOSTNAME) + "自动注册成功");
                 }
             } else {
                 //兼容HTTP方式增加的客户端
@@ -159,7 +187,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
                     client.setRemark("客户端NETTY通信链接成功");
                 }
             }
-            if (lfConfig.getVersion().equals(json.get("version"))) {
+            if (lfConfig.getVersion().equals(json.get(CLIENT_VERSION))) {
                 //版本号一致
                 client.setStatus(0);
                 if (client.getClientId() != null) {
@@ -174,13 +202,13 @@ public class ServerHandler extends ChannelHandlerAdapter {
                 NettyServer.clientMap.put(hostName, "0");
                 //返回接受成功消息
                 JSONObject tmp = new JSONObject();
-                tmp.put("method", "loginReturn");
-                tmp.put("message", "自动注册成功");
+                tmp.put(CLIENT_METHOD, "loginReturn");
+                tmp.put(CLIENT_MESSAGE, "自动注册成功");
                 tmp.put("clientId", client.getClientId());
-                tmp.put("success", "1");
+                tmp.put(CLIENT_SUCCESS, "1");
                 sendMessage(ctx, tmp.toString());
             } else {
-                client.setRemark("客户端(" + json.get("version") + ")与服务器(" + lfConfig.getVersion() + ")版本不一致");
+                client.setRemark("客户端(" + json.get(CLIENT_VERSION) + ")与服务器(" + lfConfig.getVersion() + ")版本不一致");
                 client.setStatus(1);
                 if (client.getClientId() != null) {
                     clientService.updateClientForNetty(client);
@@ -192,30 +220,30 @@ public class ServerHandler extends ChannelHandlerAdapter {
                 NettyServer.clientMap.remove(hostName);
                 //返回接受成功消息
                 JSONObject tmp = new JSONObject();
-                tmp.put("method", "return");
-                tmp.put("message", "自动注册失败，" + "客户端(" + json.get("version") + ")与服务器(" + lfConfig.getVersion() + ")版本不一致");
-                tmp.put("success", "0");
+                tmp.put(CLIENT_METHOD, CLIENT_RETURN);
+                tmp.put(CLIENT_MESSAGE, "自动注册失败，" + "客户端(" +
+                        json.get(CLIENT_VERSION) + ")与服务器(" + lfConfig.getVersion() + ")版本不一致");
+                tmp.put(CLIENT_SUCCESS, "0");
                 sendMessage(ctx, tmp.toString());
                 //登录失败，断开连接
                 ctx.close();
             }
-        } else if ("return".equals(json.get("method"))) {
+        } else if (CLIENT_RETURN.equals(json.get(CLIENT_METHOD))) {
             /*
              * 向客户端请求后返回的数据
              * */
             Result re = JSONObject.parseObject(json.get("data").toString(), Result.class);
-            //re.setMessage(URLDecoder.decode(re.getMessage().toString(), "GBK"));
             //校验返回的信息是否是同一个信息
             if (unidId.equals(re.getUniId())) {
                 latch.countDown();//消息返回完毕，释放同步锁，具体业务需要判断指令是否匹配
                 rec = 0;
-                result = re;
+                clientResult = re;
             }
-        } else if ("ping".equals(json.get("method"))) {
+        } else if ("ping".equals(json.get(CLIENT_METHOD))) {
             /*
              * 客户端心跳检测
              * */
-            String hostName = json.get("hostName").toString();
+            String hostName = json.get(CLIENT_HOSTNAME).toString();
 
             if (NettyServer.clientMap.get(hostName) == null || (!"0".equals(NettyServer.clientMap.get(hostName)))) {
                 //检查客户端是否已经注册入库
@@ -228,14 +256,14 @@ public class ServerHandler extends ChannelHandlerAdapter {
                 //更新客户端状态成功
                 NettyServer.clientMap.put(hostName, "0");
             }
-        } else if ("upload".equals(json.get("method"))) {
+        } else if ("upload".equals(json.get(CLIENT_METHOD))) {
             Result re = JSONObject.parseObject(json.get("data").toString(), Result.class);
             int start = Integer.parseInt(json.get("start").toString());
             FileUploadFile ef = re.getFileUploadFile();
             byte[] bytes = ef.getBytes();
             int byteRead = ef.getEndPos();
             //String md5 = ef.getFile_md5();//文件名
-            String path = file_dir + File.separator + json.get("imgName");
+            String path = file_dir + File.separator + json.get(IMG_NAME);
             File file = new File(path);
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdir();
@@ -245,16 +273,18 @@ public class ServerHandler extends ChannelHandlerAdapter {
             randomAccessFile.write(bytes);//调用了seek（start）方法，是指把文件的记录指针定位到start字节的位置。也就是说程序将从start字节开始写数据
             start = start + byteRead;
             JSONObject tmp = new JSONObject();
-            tmp.put("method", "upload");
-            tmp.put("success", "1");
+            tmp.put(CLIENT_METHOD, "upload");
+            tmp.put(CLIENT_SUCCESS, "1");
             tmp.put("uuid", json.get("uuid").toString());
             tmp.put("start", start);
             Map<String, Object> jsonparams = new HashMap<>();
-            jsonparams.put("imgName", json.get("imgName"));
+            jsonparams.put(IMG_NAME, json.get(IMG_NAME));
             tmp.put("data", jsonparams);
             sendMessage(ctx, tmp.toString());
             randomAccessFile.close();
             log.info("处理完毕,文件路径:" + path + "," + byteRead);
+        } else {
+            log.info("客户端请求方法没有定义，请检查..." +CLIENT_METHOD+": " + json.get(CLIENT_METHOD));
         }
     }
 
@@ -305,7 +335,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
     }
 
     public Result getResult() {
-        return result;
+        return clientResult;
     }
 
     private static void sendMessage(ChannelHandlerContext ctx, String json) {

@@ -48,12 +48,12 @@ public class EncryptionUtils {
     private static String USER_PUBLIC_KEY;
 
     @Value("${client.config.privateKey}")
-    public  void setUserPrivateKey(String userPrivateKey) {
+    public static void setUserPrivateKey(String userPrivateKey) {
         USER_PRIVATE_KEY = userPrivateKey;
     }
 
     @Value("${client.config.publicKey}")
-    public  void setUserPublicKey(String userPublicKey) {
+    public static void setUserPublicKey(String userPublicKey) {
         USER_PUBLIC_KEY = userPublicKey;
     }
 
