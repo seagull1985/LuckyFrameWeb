@@ -97,7 +97,7 @@
 				</div>
 			</div>
 			<div class="form-group">	
-				<label class="col-sm-3 control-label">邮件通知逻辑：</label>
+				<label class="col-sm-3 control-label">任务结果通知：</label>
 				<div class="col-sm-8">
 				    <label class="radio-box"> <input type="radio" name="emailSendCondition" th:field="*{emailSendCondition}" value="-1" /> 不通知 </label> 
 					<label class="radio-box"> <input type="radio" name="emailSendCondition" th:field="*{emailSendCondition}" value="0" /> 默认 </label> 
@@ -109,6 +109,12 @@
 				<label class="col-sm-3 control-label">邮件通知地址：</label>
 				<div class="col-sm-8">
 					<textarea id="emailAddress" name="emailAddress" th:field="*{emailAddress}" class="form-control" placeholder="多个邮件地址用;分隔"></textarea>
+				</div>
+			</div>
+			<div class="form-group" id="divPushUrl" style="display:none;">
+				<label class="col-sm-3 control-label">第三方推送地址：</label>
+				<div class="col-sm-8">
+					<textarea id="pushUrl" name="pushUrl" th:field="*{pushUrl}" class="form-control" placeholder="例如：企业微信或是钉钉机器人WebHook推送地址"></textarea>
 				</div>
 			</div>
 			<div class="form-group">	
@@ -148,9 +154,11 @@
 		    
 		    var emailSendCondition=$('input:radio[name="emailSendCondition"]:checked').val();
 		    if(emailSendCondition!='-1'){
-				$("#divEmailAddress").css("display","block");	
+				$("#divEmailAddress").css("display","block");
+				$("#divPushUrl").css("display","block");
 			}else{
 				$("#divEmailAddress").css("display","none");
+				$("#divPushUrl").css("display","none");
 			}    	
 	    });
 	
@@ -224,6 +232,9 @@
 				"emailAddress":{
 					maxlength:300
 				},
+				"pushUrl":{
+					maxlength:200
+				},
 				"buildingLink":{
 					maxlength:200
 				},
@@ -264,9 +275,11 @@
 		$("input:radio[name='emailSendCondition']").on('ifChecked', function(event){
 			var emailSendCondition=$(this).val();
 		    if(emailSendCondition!='-1'){
-				$("#divEmailAddress").css("display","block");	
+				$("#divEmailAddress").css("display","block");
+				$("#divPushUrl").css("display","block");
 			}else{
 				$("#divEmailAddress").css("display","none");
+				$("#divPushUrl").css("display","none");
 			}
 		});
 

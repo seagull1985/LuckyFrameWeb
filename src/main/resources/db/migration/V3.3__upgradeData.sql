@@ -31,3 +31,8 @@ insert ignore into `luckyframe`.`sys_menu` (`menu_id`, `menu_name`, `parent_id`,
 insert ignore into `luckyframe`.`sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) values ('1106', '客户端配置新增', '128', '2', '#', 'F', '0', 'system:clientConfig:add', '#', 'admin', '2020-07-07 19:15:32', 'luckyframe', '2020-07-07 19:15:32', '');
 insert ignore into `luckyframe`.`sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) values ('1107', '客户端配置修改', '128', '3', '#', 'F', '0', 'system:clientConfig:edit', '#', 'admin', '2020-07-07 19:15:32', 'luckyframe', '2020-07-07 19:15:32', '');
 insert ignore into `luckyframe`.`sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) values ('1108', '客户端配置删除', '128', '4', '#', 'F', '0', 'system:clientConfig:remove', '#', 'admin', '2020-07-07 19:15:32', 'luckyframe', '2020-07-07 19:15:32', '');
+
+-- ----------------------------
+-- 4、调度任务中增加第三方推送指定URL 例如：钉钉、企业微信
+-- ----------------------------
+alter table task_scheduling add push_url varchar(200) comment '第三方推送地址URL';

@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="planId"    column="plan_id"    />
         <result property="clientId"    column="client_id"    />
         <result property="emailAddress"    column="email_address"    />
+        <result property="pushUrl"    column="push_url"    />
         <result property="emailSendCondition"    column="email_send_condition"    />
         <result property="buildingLink"    column="building_link"    />
         <result property="remoteShell"    column="remote_shell"    />
@@ -74,7 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
     
 	<sql id="selectTaskSchedulingVo">
-        select ts.scheduling_id, ts.scheduling_name, ts.job_id, ts.project_id, ts.plan_id, ts.client_id, ts.email_address, ts.email_send_condition, ts.building_link, ts.remote_shell, ts.ex_thread_count, ts.task_type, ts.browser_type, ts.task_timeout, ts.client_driver_path, 
+        select ts.scheduling_id, ts.scheduling_name, ts.job_id, ts.project_id, ts.plan_id, ts.client_id, ts.email_address, ts.push_url, ts.email_send_condition, ts.building_link, ts.remote_shell, ts.ex_thread_count, ts.task_type, ts.browser_type, ts.task_timeout, ts.client_driver_path,
         sj.job_name, sj.job_group, sj.method_name, sj.method_params, sj.cron_expression, sj.misfire_policy, sj.status, sj.remark, sj.update_time, 
         sp.project_name,sp.dept_id,sp.project_sign, 
         pp.plan_name, pp.plan_case_count, 
@@ -96,6 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="planId != null "> and ts.plan_id = #{planId}</if>
              <if test="clientId != null "> and ts.client_id = #{clientId}</if>
              <if test="emailAddress != null  and emailAddress != '' "> and ts.email_address = #{emailAddress}</if>
+             <if test="pushUrl != null  and pushUrl != '' "> and ts.push_url = #{pushUrl}</if>
              <if test="emailSendCondition != null "> and ts.email_send_condition = #{emailSendCondition}</if>
              <if test="buildingLink != null  and buildingLink != '' "> and ts.building_link = #{buildingLink}</if>
              <if test="remoteShell != null  and remoteShell != '' "> and ts.remote_shell = #{remoteShell}</if>
@@ -127,6 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="planId != null  ">plan_id,</if>
 			<if test="clientId != null  ">client_id,</if>
 			<if test="emailAddress != null  and emailAddress != ''  ">email_address,</if>
+            <if test="pushUrl != null  and pushUrl != ''  ">push_url,</if>
 			<if test="emailSendCondition != null  ">email_send_condition,</if>
 			<if test="buildingLink != null  and buildingLink != ''  ">building_link,</if>
 			<if test="remoteShell != null  and remoteShell != ''  ">remote_shell,</if>
@@ -143,6 +146,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="planId != null  ">#{planId},</if>
 			<if test="clientId != null  ">#{clientId},</if>
 			<if test="emailAddress != null  and emailAddress != ''  ">#{emailAddress},</if>
+            <if test="pushUrl != null  and pushUrl != ''  ">#{pushUrl},</if>
 			<if test="emailSendCondition != null  ">#{emailSendCondition},</if>
 			<if test="buildingLink != null  and buildingLink != ''  ">#{buildingLink},</if>
 			<if test="remoteShell != null  and remoteShell != ''  ">#{remoteShell},</if>
@@ -163,6 +167,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="planId != null  ">plan_id = #{planId},</if>
             <if test="clientId != null  ">client_id = #{clientId},</if>
             <if test="emailAddress != null  ">email_address = #{emailAddress},</if>
+            <if test="pushUrl != null  ">push_url = #{pushUrl},</if>
             <if test="emailSendCondition != null  ">email_send_condition = #{emailSendCondition},</if>
             <if test="buildingLink != null  ">building_link = #{buildingLink},</if>
             <if test="remoteShell != null  ">remote_shell = #{remoteShell},</if>
