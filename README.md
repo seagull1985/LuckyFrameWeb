@@ -36,10 +36,9 @@
 # 介绍
 
 **LuckyFrame 开源自动化测试平台 - 自动化测试 X 时代来了**
-> LuckyFrame QQ官方交流①群(即将满群) 487954492
+> QQ官方交流①群(即将满群) 487954492
 <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=WXalHSZwm5LotDLOyBMDJ8Y8AihyrSgJ&jump_from=webapi"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="LuckyFrame官方交流①群" title="LuckyFrame官方交流①群"></a>
-<br>
-LuckyFrame QQ官方交流②群(火速加入) 552149398 
+交流②群(火速加入) 552149398 
 <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=iQQnUSj952rB3b-3qeRCi3vugVoJ0XLK&jump_from=webapi"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="LuckyFrame官方交流②群" title="LuckyFrame官方交流②群"></a>
  
 **LuckyFrame测试平台公众号  欢迎关注**
