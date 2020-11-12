@@ -12,8 +12,8 @@
 </p>
  
 <p align="center">
-  <a href="#">
-   <img alt="maven" src="https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg">
+  <a href="https://gitee.com/seagull1985/LuckyFrameWeb/stargazers">
+    <img alt="GVP" src="https://gitee.com/seagull1985/LuckyFrameWeb/badge/star.svg?theme=gvp">
   </a>
   <a href="#">
    <img alt="code style" src="https://img.shields.io/badge/%20LICENSE-AGPL--3.0-blue.svg">
@@ -22,7 +22,7 @@
    <img alt="code style" src="https://img.shields.io/badge/BUILD-PASSING-green.svg">
   </a>
   <a href="http://git.oschina.net/seagull1985/LuckyFrameWeb/releases">
-   <img src="https://img.shields.io/badge/LuckyFrame-V3.3 releases-green.svg" >
+   <img src="https://img.shields.io/badge/LuckyFrame-V3.4 releases-green.svg" >
   </a>
 </p>
 
