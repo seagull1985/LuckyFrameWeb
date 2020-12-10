@@ -38,7 +38,6 @@ public class NettyServer {
 
     public static final HashMap<String,String> clientMap=new HashMap<>();
 
-
     public void start(InetSocketAddress address){
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
