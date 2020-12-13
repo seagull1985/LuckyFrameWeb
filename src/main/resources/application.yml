@@ -5,13 +5,13 @@ luckyframe:
   # 版本
   version: 3.4
   # 版权年份
-  copyrightYear: 2020
+  copyrightYear: 2021
   # 获取ip地址开关
   addressEnabled: true
 # netty配置
 netty:
   url: 0.0.0.0
-  port: 7071
+  port: 7070
   # netty通信编码，防止乱码
   socketChannel:
     # 编码格式
