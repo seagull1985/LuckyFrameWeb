@@ -124,13 +124,22 @@
 				{
 					field : 'project.projectName', 
 					title : '项目名称',
-					width : '9%',
-					class : 'myTDLengthHidden'
+					width : '11%',
+					class : 'myTDLengthHidden',
+					formatter: function (value,
+										 row, index) {
+						return $.table.tooltip(value);
+					}
 				},
 				{
 					field : 'projectPlan.planName', 
 					title : '计划名称',
-					width : '16%'
+					width : '16%',
+					class : 'myTDLengthHidden',
+					formatter: function (value,
+										 row, index) {
+						return $.table.tooltip(value);
+					}
 				},
 				{
 					field : 'job.misfirePolicy', 
@@ -161,12 +170,16 @@
 					field : 'client.clientIp', 
 					title : '客户端IP',
 					width : '10%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+					formatter: function (value,
+										 row, index) {
+						return $.table.tooltip(value);
+					}
 				},
 				{
 					field : 'exThreadCount', 
 					title : '线程',
-					width : '7%',
+					width : '5%',
 					class : 'myTDLengthHidden'
 				},
 				{

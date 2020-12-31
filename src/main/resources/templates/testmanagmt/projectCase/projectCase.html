@@ -149,7 +149,7 @@
                 {
                     field: 'project.projectName',
                     title: '项目名称',
-                    width: '10%',
+                    width: '8%',
                     class: 'myTDLengthHidden',
                     formatter: function (value,
                                          row, index) {
@@ -159,7 +159,7 @@
                 {
                     field: 'projectCaseModule.moduleName',
                     title: '模块名称',
-                    width: '12%',
+                    width: '11%',
                     class: 'myTDLengthHidden',
                     formatter: function (value,
                                          row, index) {
@@ -170,7 +170,7 @@
                     field: 'caseSign',
                     title: '用例编号',
                     sortable: true,
-                    width: '7%',
+                    width: '10%',
                     class: 'myTDLengthHidden',
                     formatter: function (value, row, index) {
                         return '<a class="btn btn-info btn-edit" onclick="$.operate.customFull('+row.caseId+')">'+value+'</a>';
@@ -254,7 +254,11 @@
                     title: '更新时间',
                     sortable: true,
                     width: '12%',
-                    class: 'myTDLengthHidden'
+                    class: 'myTDLengthHidden',
+                    formatter: function (value,
+                                         row, index) {
+                        return $.table.tooltip(value);
+                    }
                 },
                 {
                     field: 'remark',

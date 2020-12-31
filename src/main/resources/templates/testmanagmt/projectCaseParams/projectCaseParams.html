@@ -99,9 +99,9 @@
 					class : 'myTDLengthHidden',
 					formatter: function(value, row, index) {
 						if(null!=value){
-							return value;
+							return $.table.tooltip(value);
 						}else{
-							return "所有项目";
+							return $.table.tooltip("所有项目");
 						}
 					}
 				},
@@ -109,7 +109,11 @@
 					field : 'paramsName', 
 					title : '参数名称',
 					width : '10%',
-					class : 'myTDLengthHidden'
+					class : 'myTDLengthHidden',
+					formatter: function (value,
+										 row, index) {
+						return $.table.tooltip(value);
+					}
 				},
 				{
 					field : 'paramsValue', 
@@ -141,20 +145,28 @@
 				{
 					field : 'updateBy', 
 					title : '更新者',
-					width : '10%',
-					class : 'myTDLengthHidden'
+					width : '5%',
+					class : 'myTDLengthHidden',
+					formatter: function (value,
+										 row, index) {
+						return $.table.tooltip(value);
+					}
 				},
 				{
 					field : 'updateTime', 
 					title : '更新时间',
 					sortable: true,
-					width : '10%',
-					class : 'myTDLengthHidden'
+					width : '12%',
+					class : 'myTDLengthHidden',
+					formatter: function (value,
+										 row, index) {
+						return $.table.tooltip(value);
+					}
 				},
 				{
 					field : 'remark', 
 					title : '备注',
-					width : '10%',
+					width : '13%',
 					class : 'myTDLengthHidden',
 					editable : {
 						type : 'textarea',
