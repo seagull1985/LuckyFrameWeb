@@ -66,7 +66,7 @@ public class OpenPostApiController
     private IJobService jobService;
 	
 	/**
-	 * 根据项目ID获取公共参数列表
+	 * 提交用例调试日志内容
 	 * @param jsonObject 请求json对象
 	 * @author Seagull
 	 * @date 2019年4月16日
