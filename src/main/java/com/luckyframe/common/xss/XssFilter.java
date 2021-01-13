@@ -53,14 +53,21 @@ public class XssFilter implements Filter
             throws IOException, ServletException
     {
         HttpServletRequest req = (HttpServletRequest) request;
+        String path = req.getRequestURI();
         HttpServletResponse resp = (HttpServletResponse) response;
-        if (handleExcludeURL(req, resp))
-        {
-            chain.doFilter(request, response);
-            return;
+        try {
+            if (handleExcludeURL(req, resp))
+            {
+                chain.doFilter(request, response);
+                return;
+            }
+            XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper((HttpServletRequest) request);
+            chain.doFilter(xssRequest, response);
+        } catch (Throwable t) {
+            System.out.println(req.getRequestURI());
+            t.printStackTrace();
         }
-        XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper((HttpServletRequest) request);
-        chain.doFilter(xssRequest, response);
+
     }
 
     private boolean handleExcludeURL(HttpServletRequest request, HttpServletResponse response)
@@ -74,6 +81,7 @@ public class XssFilter implements Filter
             return false;
         }
         String url = request.getServletPath();
+
         for (String pattern : excludes)
         {
             Pattern p = Pattern.compile("^" + pattern);

@@ -132,7 +132,8 @@ public class ClientConfigController extends BaseController
 	 */
 	@GetMapping("/config/{clientId}/{key}")
 	@ResponseBody
-	public String config(@PathVariable("clientId") Integer clientId,@PathVariable("key") String key) throws Exception {
+	public String config(@PathVariable("clientId") String clientIdStr,@PathVariable("key") String key) throws Exception {
+		Integer clientId = Integer.getInteger(clientIdStr);
 		String value = clientConfigService.queryConfigValue(clientId, key);
 		JSONObject res=new JSONObject();
 		res.put("code",200);

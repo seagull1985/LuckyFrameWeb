@@ -311,7 +311,7 @@ public class ClientController extends BaseController
 	/**
 	 * 查询所有客户端管理列表
 	 */
-	@RequiresPermissions("system:client:export")
+	@RequiresPermissions("system:client:view")
 	@PostMapping("/all")
 	@ResponseBody
 	public List<Client> all(Client client)
