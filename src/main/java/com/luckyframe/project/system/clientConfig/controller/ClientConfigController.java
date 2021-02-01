@@ -99,6 +99,7 @@ public class ClientConfigController extends BaseController
 	public String edit(@PathVariable("id") Integer id, ModelMap mmap)
 	{
 		ClientConfig clientConfig = clientConfigService.selectClientConfigById(id);
+		clientConfig.setCurrentClientId(clientConfig.getClientId());
 		mmap.put("clientConfig", clientConfig);
 	    return prefix + "/edit";
 	}

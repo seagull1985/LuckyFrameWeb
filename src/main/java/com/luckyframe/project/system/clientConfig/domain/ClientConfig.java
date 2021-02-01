@@ -18,6 +18,8 @@ public class ClientConfig extends BaseEntity
 	private Integer id;
 	/** 客户端id */
 	private Integer clientId;
+	/** 原始客户端id */
+	private Integer currentClientId;
 	/** 客户端配置名称 */
 	private String configKey;
 	/** 客户端配置值 */
@@ -78,6 +80,14 @@ public class ClientConfig extends BaseEntity
 
 	public void setClientIp(String clientIp) {
 		this.clientIp = clientIp;
+	}
+
+	public Integer getCurrentClientId() {
+		return currentClientId;
+	}
+
+	public void setCurrentClientId(Integer currentClientId) {
+		this.currentClientId = currentClientId;
 	}
 
 	@Override

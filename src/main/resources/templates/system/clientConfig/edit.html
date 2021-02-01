@@ -6,11 +6,11 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-clientConfig-edit" th:object="${clientConfig}">
             <input id="id" name="id" th:field="*{id}"  type="hidden">
-			<input id="currentId"  th:field="*{clientId}"  type="hidden">
+			<input id="currentClientId"  th:field="*{currentClientId}"  type="hidden">
 			<div class="form-group">
 				<label class="col-sm-3 control-label">客户端：</label>
 				<div class="col-sm-8">
-					<select id="clientId" name="clientId" class="form-control m-b" style="float:left">
+					<select id="clientId" name="clientId" th:field="*{clientId}" class="form-control m-b" style="float:left">
 					</select>
 				</div>
 			</div>
@@ -58,7 +58,7 @@
 				processData: false,
 				dataType: 'json',
 				success: function(result) {
-					var id=$("#currentId").val();
+					var id=$("#currentClientId").val();
 					var current="";
 					/*清空原有客户端列表*/
 					while($("#clientId").length>1){
@@ -79,11 +79,18 @@
 					current+=options;
 
 					$("#clientId").append(current);
+					$("#clientId").val(id);
 				},
 				error: function(error) {
 					$.modal.alertWarning("获取客户端信息失败。");
 				}
 			});
+		}
+		/*选择客户端*/
+		function selectClient(){
+			var clientId = $("#clientId").val();
+			if($.common.isEmpty(clientId)) return;
+			console.log(clientId);
 		}
 	</script>
 </body>
