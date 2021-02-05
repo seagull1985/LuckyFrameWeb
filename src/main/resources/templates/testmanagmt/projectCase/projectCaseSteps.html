@@ -293,7 +293,7 @@
 						/*不同的校验规则，不同的错误提示*/
 						$.validator.messages.required = "HTTP必填请求URL";
 						return true;
-					}else if(stepType=="2" && $("#stepPath"+num).val()==""){
+					}else if(stepType=="2" && $("#stepOperation"+num).val()!="runcase" && $("#stepPath"+num).val()==""){
 						$.validator.messages.required = "API必填包路径";
 						return true;
 					}else{
