@@ -279,6 +279,35 @@ public class OpenGetApiController
 			log.error("根据项目ID获取公共参数列表出现异常", e);
 		}
 	}
+
+
+	/**
+	 * 根据项目ID和环境获取公共参数列表
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
+	 * @author jerelli
+	 * @date 2020年11月16日
+	 */
+	@RequestMapping(value = "/clientGetParamsByProjectIdAndEnvName.do")
+	public void clientGetParamsByProjectIdAndEnvName(HttpServletRequest req, HttpServletResponse rsp) {
+		// 更新实体
+		try {
+			rsp.setContentType("text/html;charset=GBK");
+			req.setCharacterEncoding("GBK");
+			PrintWriter pw = rsp.getWriter();
+			Integer projectId = Integer.valueOf(req.getParameter("projectId"));
+			String envName=req.getParameter("envName");
+			List<ProjectCaseParams> projectCaseParamsList = projectCaseParamsService.selectProjectCaseParamsListByProjectIdAndEnvName(projectId,envName);
+			System.out.println("88888888888888");
+			System.out.println(projectCaseParamsList.toString());
+			System.out.println("88888888888888");
+			// 转换成json字符串
+			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectCaseParamsList));
+			pw.print(array.toString());
+		} catch (Exception e) {
+			log.error("根据项目ID和环境获取公共参数列表出现异常", e);
+		}
+	}
 	
 	/**
 	 * 通过执行任务ID获取调度实体

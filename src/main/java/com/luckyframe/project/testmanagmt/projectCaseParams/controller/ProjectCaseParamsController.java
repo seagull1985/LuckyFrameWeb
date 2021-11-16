@@ -2,6 +2,8 @@ package com.luckyframe.project.testmanagmt.projectCaseParams.controller;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -169,5 +171,20 @@ public class ProjectCaseParamsController extends BaseController
     {
         return projectCaseParamsService.checkProjectCaseParamsNameUnique(projectCaseParams);
     }
+
+	/**
+	 * 通过项目ID获取项目计划列表
+	 * @param projectId 项目ID
+	 * @author Seagull
+	 * @date 2019年3月26日
+	 */
+	@GetMapping("/getProjectEnvListByProjectId/{projectId}")
+	@ResponseBody
+	public String getProjectEnvListByProjectId(@PathVariable("projectId") Integer projectId)
+	{
+		List<String> envList = projectCaseParamsService.selectProjectEnvListByProjectId(projectId);
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(envList));
+		return jsonArray.toJSONString();
+	}
 	
 }

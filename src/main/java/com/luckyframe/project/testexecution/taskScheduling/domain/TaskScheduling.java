@@ -32,6 +32,8 @@ public class TaskScheduling extends BaseEntity
 	private Integer planId;
 	/** 客户端ID */
 	private Integer clientId;
+	/** 环境 */
+	private String envName;
 	/** 邮件通知地址 */
 	private String emailAddress;
 	/** 第三方推送地址 */
@@ -117,6 +119,13 @@ public class TaskScheduling extends BaseEntity
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getEnvName() {
+		return envName;
+	}
+
+	public void setEnvName(String envName) {
+		this.envName = envName;
 	}
 
 	public Client getClient() {
@@ -294,6 +303,7 @@ public class TaskScheduling extends BaseEntity
             .append("projectId", getProjectId())
             .append("planId", getPlanId())
             .append("clientId", getClientId())
+			.append("envName", getEnvName())
             .append("emailAddress", getEmailAddress())
 			.append("pushUrl", getPushUrl())
             .append("emailSendCondition", getEmailSendCondition())

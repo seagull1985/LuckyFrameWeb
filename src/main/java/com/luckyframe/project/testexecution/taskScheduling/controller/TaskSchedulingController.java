@@ -7,6 +7,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.luckyframe.project.testmanagmt.projectCaseParams.service.IProjectCaseParamsService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -72,6 +73,9 @@ public class TaskSchedulingController extends BaseController
 	
     @Autowired
     private IJobService jobService;
+
+	@Autowired
+	private IProjectCaseParamsService projectCaseParamsService;
 	
 	@RequiresPermissions("testexecution:taskScheduling:view")
 	@GetMapping()
@@ -137,6 +141,8 @@ public class TaskSchedulingController extends BaseController
         	mmap.put("planList", planList);
         	List<Client> clientList = clientService.selectClientsByProjectId(projectId);
         	mmap.put("clientList", clientList);
+			List<String> envList=projectCaseParamsService.selectProjectEnvListByProjectId(projectId);
+			mmap.put("envList",envList);
         	if(clientList.size()>0){
         		List<String> driverPathList = clientService.selectClientDriverListById(clientList.get(0).getClientId());
         		mmap.put("driverPathList", driverPathList);
@@ -198,6 +204,8 @@ public class TaskSchedulingController extends BaseController
         	mmap.put("planList", planList);
         	List<Client> clientList = clientService.selectClientsByProjectId(taskScheduling.getProjectId());
         	mmap.put("clientList", clientList);
+			List<String> envList= projectCaseParamsService.selectProjectEnvListByProjectId(taskScheduling.getProjectId());
+			mmap.put("envList",envList);
         	if(clientList.size()>0){
         		List<String> driverPathList = clientService.selectClientDriverListById(taskScheduling.getClientId());
         		mmap.put("driverPathList", driverPathList);

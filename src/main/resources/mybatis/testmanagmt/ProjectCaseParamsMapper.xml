@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.luckyframe.project.testmanagmt.projectCaseParams.mapper.ProjectCaseParamsMapper">
-    
+
     <resultMap type="ProjectCaseParams" id="ProjectCaseParamsResult">
         <result property="paramsId"    column="params_id"    />
+        <result property="envName"    column="env_name"    />
         <result property="paramsName"    column="params_name"    />
         <result property="paramsValue"    column="params_value"    />
         <result property="projectId"    column="project_id"    />
@@ -16,82 +17,102 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"    column="remark"    />
         <association property="project"  column="project_id" javaType="Project" resultMap="ProjectResult" />
     </resultMap>
-    
+
     <resultMap type="Project" id="ProjectResult">
         <id property="projectId"    column="project_id"    />
         <result property="projectName"    column="project_name"    />
         <result property="deptId"    column="dept_id"    />
         <result property="projectSign"    column="project_sign"    />
     </resultMap>
-	
-	<sql id="selectProjectCaseParamsVo">
-        select pcp.params_id, pcp.params_name, pcp.params_value, pcp.project_id, pcp.create_by, pcp.create_time, pcp.update_by, pcp.update_time, pcp.remark, 
-        sp.project_name,sp.dept_id,sp.project_sign  
-        from project_case_params pcp 
-        left join sys_project sp on pcp.project_id = sp.project_id 
+
+    <sql id="selectProjectCaseParamsVo">
+        select pcp.params_id, pcp.env_name,pcp.params_name, pcp.params_value, pcp.project_id, pcp.create_by, pcp.create_time, pcp.update_by, pcp.update_time, pcp.remark,
+               sp.project_name,sp.dept_id,sp.project_sign
+        from project_case_params pcp
+                 left join sys_project sp on pcp.project_id = sp.project_id
     </sql>
-	
+
     <select id="selectProjectCaseParamsList" parameterType="ProjectCaseParams" resultMap="ProjectCaseParamsResult">
         <include refid="selectProjectCaseParamsVo"/>
-        <where>  
+        <where>
             <if test="paramsId != null "> and pcp.params_id = #{paramsId}</if>
-             <if test="paramsName != null  and paramsName != '' "> and pcp.params_name like concat('%', #{paramsName}, '%')</if>
-             <if test="paramsValue != null  and paramsValue != '' "> and pcp.params_value like concat('%', #{paramsValue}, '%')</if>
-             <if test="projectId != null "> and pcp.project_id = #{projectId}</if>
-             <if test="createBy != null  and createBy != '' "> and pcp.create_by = #{createBy}</if>
-             <if test="createTime != null "> and pcp.create_time = #{createTime}</if>
-             <if test="updateBy != null  and updateBy != '' "> and pcp.update_by = #{updateBy}</if>
-             <if test="updateTime != null "> and pcp.update_time = #{updateTime}</if>
-             <if test="remark != null  and remark != '' "> and pcp.remark = #{remark}</if>
-         </where>
-         order by pcp.params_id desc 
+            <if test="envName != null  and envName != '' "> and pcp.env_name like concat('%', #{envName}, '%')</if>
+            <if test="paramsName != null  and paramsName != '' "> and pcp.params_name like concat('%', #{paramsName}, '%')</if>
+            <if test="paramsValue != null  and paramsValue != '' "> and pcp.params_value like concat('%', #{paramsValue}, '%')</if>
+            <if test="projectId != null "> and pcp.project_id = #{projectId}</if>
+            <if test="createBy != null  and createBy != '' "> and pcp.create_by = #{createBy}</if>
+            <if test="createTime != null "> and pcp.create_time = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != '' "> and pcp.update_by = #{updateBy}</if>
+            <if test="updateTime != null "> and pcp.update_time = #{updateTime}</if>
+            <if test="remark != null  and remark != '' "> and pcp.remark = #{remark}</if>
+        </where>
+        order by pcp.params_id desc
     </select>
-    
+
     <select id="selectProjectCaseParamsById" parameterType="Integer" resultMap="ProjectCaseParamsResult">
         <include refid="selectProjectCaseParamsVo"/>
         where pcp.params_id = #{paramsId}
     </select>
-    
+
     <select id="selectProjectCaseParamsListByProjectId" parameterType="Integer" resultMap="ProjectCaseParamsResult">
         <include refid="selectProjectCaseParamsVo"/>
         where pcp.project_id = #{projectId} or pcp.project_id = 0
     </select>
-    
+
+    <select id="selectProjectCaseParamsListByProjectIdAndEnvName" resultMap="ProjectCaseParamsResult">
+        <include refid="selectProjectCaseParamsVo"/>
+        <where>
+            <if test="envName != null  and envName != '' "> and (pcp.env_name = #{envName} or pcp.env_name="common")</if>
+            <if test="projectId != null and projectId!=0"> and (pcp.project_id = #{projectId} or pcp.project_id = 0)</if>
+        </where>
+    </select>
+
+    <select id="selectProjectEnvListByProjectId" resultType="java.lang.String">
+        select DISTINCT env_name from project_case_params t
+        <where>
+            <if test="projectId != null"> and t.project_id = #{projectId} and env_name!="common" </if>
+        </where>
+    </select>
+
     <select id="checkProjectCaseParamsNameUnique" parameterType="ProjectCaseParams" resultMap="ProjectCaseParamsResult">
         <include refid="selectProjectCaseParamsVo"/>
-		<where>  
-             <if test="paramsName != null  and paramsName != '' "> and pcp.params_name = #{paramsName}</if>
-             <if test="projectId != null and projectId!=0"> and (pcp.project_id = #{projectId} or pcp.project_id=0)</if>
+        <where>
+            <if test="paramsName != null  and paramsName != '' "> and pcp.params_name = #{paramsName}</if>
+            <if test="envName != null  and envName != '' "> and pcp.env_name = #{envName}</if>
+            <if test="projectId != null and projectId!=0"> and (pcp.project_id = #{projectId} or pcp.project_id=0)</if>
         </where>
-	</select>
-        
+    </select>
+
     <insert id="insertProjectCaseParams" parameterType="ProjectCaseParams" useGeneratedKeys="true" keyProperty="paramsId">
         insert into project_case_params
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="paramsName != null  and paramsName != ''  ">params_name,</if>
-			<if test="paramsValue != null  and paramsValue != ''  ">params_value,</if>
-			<if test="projectId != null  ">project_id,</if>
-			<if test="createBy != null  and createBy != ''  ">create_by,</if>
-			<if test="createTime != null  ">create_time,</if>
-			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
-			<if test="updateTime != null  ">update_time,</if>
-			<if test="remark != null  and remark != ''  ">remark,</if>
-         </trim>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="envName != null  and envName != ''  ">env_name,</if>
+            <if test="paramsName != null  and paramsName != ''  ">params_name,</if>
+            <if test="paramsValue != null  and paramsValue != ''  ">params_value,</if>
+            <if test="projectId != null  ">project_id,</if>
+            <if test="createBy != null  and createBy != ''  ">create_by,</if>
+            <if test="createTime != null  ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+            <if test="updateTime != null  ">update_time,</if>
+            <if test="remark != null  and remark != ''  ">remark,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="paramsName != null  and paramsName != ''  ">#{paramsName},</if>
-			<if test="paramsValue != null  and paramsValue != ''  ">#{paramsValue},</if>
-			<if test="projectId != null  ">#{projectId},</if>
-			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
-			<if test="createTime != null  ">#{createTime},</if>
-			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
-			<if test="updateTime != null  ">#{updateTime},</if>
-			<if test="remark != null  and remark != ''  ">#{remark},</if>
-         </trim>
+            <if test="envName != null  and envName != ''  ">#{envName},</if>
+            <if test="paramsName != null  and paramsName != ''  ">#{paramsName},</if>
+            <if test="paramsValue != null  and paramsValue != ''  ">#{paramsValue},</if>
+            <if test="projectId != null  ">#{projectId},</if>
+            <if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+            <if test="createTime != null  ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+            <if test="updateTime != null  ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''  ">#{remark},</if>
+        </trim>
     </insert>
-	 
+
     <update id="updateProjectCaseParams" parameterType="ProjectCaseParams">
         update project_case_params
         <trim prefix="SET" suffixOverrides=",">
+            <if test="envName != null  and envName != ''  ">env_name = #{envName},</if>
             <if test="paramsName != null  and paramsName != ''  ">params_name = #{paramsName},</if>
             <if test="paramsValue != null  and paramsValue != ''  ">params_value = #{paramsValue},</if>
             <if test="projectId != null  ">project_id = #{projectId},</if>
@@ -104,15 +125,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where params_id = #{paramsId}
     </update>
 
-	<delete id="deleteProjectCaseParamsById" parameterType="Integer">
+    <delete id="deleteProjectCaseParamsById" parameterType="Integer">
         delete from project_case_params where params_id = #{paramsId}
     </delete>
-	
+
     <delete id="deleteProjectCaseParamsByIds" parameterType="String">
-        delete from project_case_params where params_id in 
+        delete from project_case_params where params_id in
         <foreach item="paramsId" collection="array" open="(" separator="," close=")">
             #{paramsId}
         </foreach>
     </delete>
-    
+
 </mapper>

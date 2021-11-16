@@ -27,6 +27,14 @@
 	                </select>
 				</div>
 			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">测试环境：</label>
+				<div class="col-sm-8">
+					<select id="envName" name="envName" class="form-control m-b" th:with="type=${envList}">
+						<option th:each="envName : ${type}" th:text="${envName}" th:value="${envName}"></option>
+					</select>
+				</div>
+			</div>
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">客户端：</label>
 				<div class="col-sm-8">
@@ -173,6 +181,9 @@
 				planId:{
 					required:true,
 				},
+				envName:{
+					required:true,
+				},
 				clientId:{
 					required:true,
 				},
@@ -267,6 +278,7 @@
 			var projectId = $("#projectId").val();
 			if($.common.isEmpty(projectId)) return;
 			setPlanList(projectId);
+			setEnvList(projectId);
 			setClientList(projectId);
 	    }
 		
@@ -311,6 +323,23 @@
 	  		    $("#planId").html(options);
 	       });
 		  }
+
+		/*设置环境列表*/
+		function setEnvList(projectId){
+			var url =envPrefix + "/getProjectEnvListByProjectId/"+projectId;
+			var options = "";
+			$.getJSON(url, null, function call(result) {
+				/*清空环境列表*/
+				while($("#envName").length>1){
+					$("#envName option[index='1']").remove();
+				}
+				/*设置新的环境列表*/
+				$.each(result, function(i, node){
+					options +=  "<option value='"+node+"'>"+node+"</option>";
+				});
+				$("#envName").html(options);
+			});
+		}
 		 
 		 /*设置驱动目录列表*/
 		 function setDriverPathList(){

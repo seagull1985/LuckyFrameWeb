@@ -29,6 +29,14 @@
 	                </select>
 				</div>
 			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">测试环境：</label>
+				<div class="col-sm-8">
+					<select id="envName" name="envName" class="form-control m-b" th:with="type=${envList}">
+						<option th:each="envName : ${type}" th:text="${envName}" th:value="${envName}" th:field="*{envName}"></option>
+					</select>
+				</div>
+			</div>
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">客户端：</label>
 				<div class="col-sm-8">
@@ -143,6 +151,7 @@
 	    var prefix = ctx + "testexecution/taskScheduling";
 	    var clientPrefix = ctx + "system/client";
 	    var planPrefix = ctx + "testmanagmt/projectPlan";
+		var envPrefix=ctx+"testmanagmt/projectCaseParams";
 	    
 	    $(function() {
 			var taskType=$('input:radio[name="taskType"]:checked').val();
@@ -192,6 +201,9 @@
 					required:true,
 				},
 				planId:{
+					required:true,
+				},
+				envName:{
 					required:true,
 				},
 				clientId:{
@@ -288,6 +300,7 @@
 			if($.common.isEmpty(projectId)) return;
 			setPlanList(projectId);
 			setClientList(projectId);
+			setEnvList(projectId);
 	    }
 		
 		 /*设置客户端列表*/
@@ -314,6 +327,23 @@
 	  		    setDriverPathList();
 	       });
 		  }
+
+		/*设置环境列表*/
+		function setEnvList(projectId){
+			var url =envPrefix + "/getProjectEnvListByProjectId/"+projectId;
+			var options = "";
+			$.getJSON(url, null, function call(result) {
+				/*清空原有环境列表*/
+				while($("#envName").length>1){
+					$("#envName option[index='1']").remove();
+				}
+				/*设置新的环境列表*/
+				$.each(result, function(i, node){
+					options +=  "<option value='"+node+"'>"+node+"</option>";
+				});
+				$("#envName").html(options);
+			});
+		}
 		 
 		 /*设置项目计划列表*/
 		 function setPlanList(projectId){
