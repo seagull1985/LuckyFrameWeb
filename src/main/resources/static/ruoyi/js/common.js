@@ -157,6 +157,7 @@ function createMenuItem(dataUrl, menuName) {
             return false;*/
         	//选项卡菜单已存在先关闭，再重新打开
             $(this).remove();
+			$('[data-id="'+ dataId +'"]', topWindow).remove();
         }
     });
 
