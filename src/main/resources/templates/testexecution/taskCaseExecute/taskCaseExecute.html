@@ -83,8 +83,6 @@
         var taskExecutePrefix = ctx + "testexecution/taskExecute";
 
         $(function() {
-
-
 			//初始化子表格(无限循环)
 			const InitSubTable = function (index, row, $detail) {
 				const cur_table = $detail.html('<table style="word-break:break-all;"></table>').find('table');
@@ -125,11 +123,11 @@
 							cellStyle: function (value, row, index, field) {
 								if (row.logGrade != "info") {
 									return {
-										css: {"color": "#ff0000"}
+										css: {"color": "#ff0000","class":"test1"}
 									};
 								} else {
 									return {
-										css: {"color": "#00bf5f"}
+										css: {"color": "#00bf5f","class":"test2"}
 									};
 								}
 							}
@@ -153,7 +151,7 @@
 											return '<font style="color:#ff0000">' + value + '</font>&nbsp;&nbsp;&nbsp;&nbsp;' +
 													'<a href="#" onclick="updateStep(' + row.logId + ')">同步结果</a> ';
 										} else {
-											return '<font style="color:#ff0000">' + value + '</font>';
+											return '<font style="color:#ff0000">' +  value + '</font>';
 										}
 									} else {
 										return '<font style="color:#00bf5f">' + value + '</font>';
@@ -165,10 +163,9 @@
 							}
 						},],
 					//无线循环取子表，直到子表里面没有记录
-					onExpandRow: function (index, row, $Subdetail) {
-						oInit.InitSubTable(index, row, $Subdetail);
-					},
-
+					// onExpandRow: function (index, row, $Subdetail) {
+					// 	oInit.InitSubTable(index, row, $Subdetail);
+					// },
 				});
 			};
 			var options = {
@@ -215,17 +212,20 @@
 				{
 					field : 'caseId', 
 					title : '用例ID',
-					visible: false
+					width : '5%',
+					visible: true
 				},
 				{
 					field : 'taskId', 
 					title : '任务ID',
-					visible: false
+					width : '5%',
+					visible: true
 				},
 				{
 					field : 'projectId', 
 					title : '项目ID',
-					visible: false
+					width : '5%',
+					visible: true
 				},
 				{
 					field : 'caseSign', 
@@ -236,7 +236,7 @@
 				{
 					field : 'caseName', 
 					title : '用例名称',
-					width : '50%',
+					width : '20%',
 					class : 'myTDLengthHidden'
 				},
 				{
@@ -278,7 +278,22 @@
 							return '<span style="color:#9966FF">未执行</span>';
 						}
 					}
-				}],
+				},
+						//修改点
+					{
+						field : 'failureReason',
+						title : '失败原因',
+						width : '15%',
+						id:'myTDLengthHiddenFy',
+						class : 'myTDLengthHidden',
+						formatter : function(value,
+											 row, index) {
+							var innerText = getFailedInfo(row.taskCaseId,'error');
+
+							return '<span style="color:#ff0000;word-break:break-all;white-space:pre-wrap">'+ innerText+'</span>';
+
+						}
+					}],
 				//注册加载子表的事件。注意下这里的三个参数！
 				onExpandRow : function(index, row, $detail) {
 					InitSubTable(index, row, $detail);
@@ -286,8 +301,11 @@
             };
                 
             $.table.init(options);
+
+
         });
-        
+
+
 		/* 同步测试结果到用例步骤 */
 		function updateStep(logId){
     		$.modal.confirm("确认要同步测试结果到步骤中吗？", function() {
@@ -296,7 +314,26 @@
     			$.operate.submit(url, "post", "json", data);
     		});
 		}
-		
+
+
+
+
+		/*获取失败原因*/
+		function getFailedInfo(taskCaseId,error){
+			var url =logPrefix + "/list";
+			var options = "";
+			var data = {"taskCaseId": taskCaseId,"errorInfo": error};
+			$.ajaxSettings.async = false;
+			$.getJSON(url, data, function call(result) {
+				/*设置新的调度列表*/
+				$.each(result, function(i, node){
+					options =  options + node.logDetail ;
+				});
+			});
+			return options;
+		}
+
+
 		/* 运行所有非成功用例 */
 		function run(){
     		$.modal.confirm("确认要运行所有非成功用例吗？", function() {
@@ -337,12 +374,12 @@
         	   /*设置新的调度列表*/
                $.each(result, function(i, node){
         		  options +=  "<option value='"+node.taskId+"'>"+node.taskName+"</option>";
-        	    }); 
+        	    });
         	    $("#taskId").html(options);
           });
          }
-        
-        /*弹出层展示图片*/
+
+		/*弹出层展示图片*/
         function showPlanCase(logId) {
         	var url = prefix+"/showImage.do?logId="+logId;
         	$.modal.openViewFull($.table._option.childrenModalName, url, null, null);

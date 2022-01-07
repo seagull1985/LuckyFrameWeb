@@ -104,7 +104,8 @@
 				{
 					field : 'schedulingId', 
 					title : '调度ID',
-					visible: false,
+					visible: true,
+					width : '5%',
 					sortable: true
 				},
 				{
@@ -115,7 +116,7 @@
 				{
 					field : 'schedulingName', 
 					title : '调度名称',
-					width : '20%',
+					width : '15%',
 					formatter : function(value,
 							row, index) {
 						return '<a href="#" onclick="taskExcute('+row.schedulingId+')">'+ value + '</a> ';
