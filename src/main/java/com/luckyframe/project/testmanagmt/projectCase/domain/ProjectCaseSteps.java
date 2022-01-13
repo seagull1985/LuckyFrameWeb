@@ -17,7 +17,6 @@ public class ProjectCaseSteps extends BaseEntity
 	private static final long serialVersionUID = 1L;
 
 	/** 步骤ID */
-    @Excel(name = "步骤ID")
 	private Integer stepId;
 	/** 用例ID */
     @Excel(name = "用例ID")
