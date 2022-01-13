@@ -285,6 +285,11 @@
                     <span class="glyphicon glyphicon-export" aria-hidden="true"></span> 导出用例列表
                 </a>
             </shiro:hasPermission>
+            <shiro:hasPermission name="testmanagmt:projectCase:exportcasestep">
+                <a class="btn btn-warning" onclick="exportcasestepExcel()">
+                    <span class="glyphicon glyphicon-export" aria-hidden="true"></span> 导出用例步骤
+                </a>
+            </shiro:hasPermission>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
@@ -741,6 +746,28 @@
     function resetForm() {
         initializeModuleTree();
         $.form.reset();
+    }
+
+    /* 导出用例步骤*/
+    function exportcasestepExcel() {
+        $.modal.loading("正在导出数据，请稍后...");
+        var caseId = $($("tr[class='selected']").find('td')[4]).find("a").attr("pt_caseId");
+        $.ajax({
+            type: "POST",
+            url: stepsPrefix + "/export",
+            data: {caseId:caseId},
+            async: false,
+            error: function (result) {
+                $.modal.alertError(result.msg);
+                $.modal.closeLoading();
+            },
+            success: function (result) {
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + result.msg + "&delete=" + true;
+                }
+                $.modal.closeLoading();
+            }
+        });
     }
 </script>
 </body>

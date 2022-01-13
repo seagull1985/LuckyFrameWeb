@@ -7,17 +7,13 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.luckyframe.common.utils.poi.ExcelUtil;
+import com.luckyframe.project.testmanagmt.projectCaseModule.domain.ProjectCaseModule;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -162,4 +158,36 @@ public class ProjectCaseStepsController extends BaseController
 		
 		return toAjax(projectCaseStepsService.updateProjectCaseSteps(projectCaseSteps));
 	}
+
+    /**
+     * @author lifengyang
+     * 用例步骤导出
+     */
+    @RequiresPermissions("testmanagmt:projectCase:exportcasestep")
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(@RequestParam("caseId") Integer caseId)
+    {
+        ProjectCase projectCase=projectCaseService.selectProjectCaseById(caseId);
+        ProjectCaseSteps projectCaseSteps = new ProjectCaseSteps();
+        projectCaseSteps.setCaseId(caseId);
+        List<ProjectCaseSteps> stepsList=projectCaseStepsService.selectProjectCaseStepsList(projectCaseSteps);
+
+        if(stepsList.size()==0){
+            projectCaseSteps.setAction("");
+            projectCaseSteps.setExpectedResult("");
+            projectCaseSteps.setExtend("");
+            projectCaseSteps.setProjectId(projectCase.getProjectId());
+            projectCaseSteps.setStepId(0);
+            projectCaseSteps.setStepOperation("");
+            projectCaseSteps.setStepParameters("");
+            projectCaseSteps.setStepPath("");
+            projectCaseSteps.setStepSerialNumber(1);
+            projectCaseSteps.setStepType(projectCase.getCaseType());
+            stepsList.add(projectCaseSteps);
+        }
+
+        ExcelUtil<ProjectCaseSteps> util = new ExcelUtil<>(ProjectCaseSteps.class);
+        return util.exportExcel(stepsList, "测试用例步骤");
+    }
 }

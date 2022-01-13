@@ -1,5 +1,6 @@
 package com.luckyframe.project.testmanagmt.projectCase.domain;
 
+import com.luckyframe.framework.aspectj.lang.annotation.Excel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -16,28 +17,39 @@ public class ProjectCaseSteps extends BaseEntity
 	private static final long serialVersionUID = 1L;
 
 	/** 步骤ID */
+    @Excel(name = "步骤ID")
 	private Integer stepId;
 	/** 用例ID */
+    @Excel(name = "用例ID")
 	private Integer caseId;
 	/** 项目ID */
+    @Excel(name = "项目ID")
 	private Integer projectId;
 	/** 步骤序号 */
 	private Integer stepSerialNumber;
 	/** 包路径|定位路径 */
+    @Excel(name = "包路径|定位路径")
 	private String stepPath;
 	/** 方法名|操作 */
+    @Excel(name = "方法名|操作")
 	private String stepOperation;
 	/** 参数 */
+    @Excel(name = "参数")
 	private String stepParameters;
 	/** 步骤动作 */
+    @Excel(name = "步骤动作")
 	private String action;
 	/** 预期结果 */
+    @Excel(name = "预期结果")
 	private String expectedResult;
 	/** 默认类型 0 HTTP接口 1 Web UI 2 API驱动  3移动端 */
+    @Excel(name = "默认类型")
 	private Integer stepType;
 	/** 扩展字段，可用于备注、存储HTTP模板等 */
+    @Excel(name = "扩展字段")
 	private String extend;
 	/** 备注字段，用于接口类型的步骤的备注 */
+    @Excel(name = "备注字段")
 	private String stepRemark;
 
 	public void setStepId(Integer stepId)
