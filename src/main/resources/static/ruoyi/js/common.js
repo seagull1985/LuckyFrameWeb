@@ -157,6 +157,7 @@ function createMenuItem(dataUrl, menuName) {
             return false;*/
         	//选项卡菜单已存在先关闭，再重新打开
             $(this).remove();
+            //移除掉重复的页面
 			$('[data-id="'+ dataId +'"]', topWindow).remove();
         }
     });
