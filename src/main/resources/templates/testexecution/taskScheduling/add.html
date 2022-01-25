@@ -19,12 +19,31 @@
 	                </select>
 				</div>
 			</div>
-			<div class="form-group">	
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">计划类型：</label>
+				<div class="col-sm-8">
+					<label class="radio-box"> <input type="radio" name="planType" value="1" th:checked="true" /> 单计划 </label>
+					<label class="radio-box"> <input type="radio" name="planType" value="2" /> 聚合计划 </label>
+				</div>
+			</div>
+
+			<div class="form-group" id="divPlanType">
 				<label class="col-sm-3 control-label">测试计划：</label>
 				<div class="col-sm-8">
 					<select id="planId" name="planId" class="form-control m-b" th:with="type=${planList}">
-	                    <option th:each="plan : ${type}" th:text="${plan.planName}" th:value="${plan.planId}"></option>
-	                </select>
+						<option style="display:none"></option>
+						<option th:each="plan : ${type}" th:text="${plan.planName}" th:value="${plan.planId}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group" id="divSuiteType" style="display:none;">
+				<label class="col-sm-3 control-label">聚合计划：</label>
+				<div class="col-sm-8">
+					<select id="suiteId" name="suiteId" class="form-control m-b" th:with="type=${suiteList}">
+						<option style="display:none"></option>
+						<option th:each="suite : ${type}" th:text="${suite.suiteName}" th:value="${suite.suiteId}"></option>
+					</select>
 				</div>
 			</div>
 			<div class="form-group">
@@ -148,6 +167,8 @@
 		var prefix = ctx + "testexecution/taskScheduling";
 		var clientPrefix = ctx + "system/client";
 		var planPrefix = ctx + "testmanagmt/projectPlan";
+		var suitePrefix=ctx+ "testmanagmt/projectSuite";
+		var envPrefix=ctx+"testmanagmt/projectCaseParams";
 		
 		$.validator.setDefaults({
 			ignore:":hidden:not(select)",
@@ -180,6 +201,9 @@
 				},
 				planId:{
 					required:true,
+				},
+				suiteId:{
+					required:false,
 				},
 				envName:{
 					required:true,
@@ -261,6 +285,18 @@
 				$("#divBrowserType").css("display","none");
 			}
 		});
+
+		//获取radio当前选中的值；icheck-radio change事件；点击事件，不能使用onclick;
+		$("input:radio[name='planType']").on('ifChecked', function(event){
+			var planType=$(this).val();
+			if(planType=='1'){
+				$("#divPlanType").css("display","block");
+				$("#divSuiteType").css("display","none");
+			}else{
+				$("#divPlanType").css("display","none");
+				$("#divSuiteType").css("display","block");
+			}
+		});
 		
 		//获取radio当前选中的值；icheck-radio change事件；点击事件，不能使用onclick;
 		$("input:radio[name='emailSendCondition']").on('ifChecked', function(event){
@@ -278,6 +314,7 @@
 			var projectId = $("#projectId").val();
 			if($.common.isEmpty(projectId)) return;
 			setPlanList(projectId);
+			setSuiteList(projectId);
 			setEnvList(projectId);
 			setClientList(projectId);
 	    }
@@ -323,6 +360,25 @@
 	  		    $("#planId").html(options);
 	       });
 		  }
+
+		/*设置聚合计划列表*/
+		function setSuiteList(projectId){
+			// var suiteId=$("#suiteId").val();
+			// if($.common.isEmpty(suiteId)) return;
+			var url =suitePrefix + "/getProjectSuiteListByProjectId/"+projectId;
+			var options = "";
+			$.getJSON(url, null, function call(result) {
+				/*清空原有客户端列表*/
+				while($("#suiteId").length>1){
+					$("#suiteId option[index='1']").remove();
+				}
+				/*设置新的客户端列表*/
+				$.each(result, function(i, node){
+					options +=  "<option value='"+node.suiteId+"'>"+node.suiteName+"</option>";
+				});
+				$("#suiteId").html(options);
+			});
+		}
 
 		/*设置环境列表*/
 		function setEnvList(projectId){

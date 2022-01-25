@@ -1,8 +1,11 @@
 package com.luckyframe.project.testmanagmt.projectPlan.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.luckyframe.project.testmanagmt.projectSuite.domain.ProjectSuitePlan;
+import com.luckyframe.project.testmanagmt.projectSuite.mapper.ProjectSuitePlanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +34,9 @@ public class ProjectPlanServiceImpl implements IProjectPlanService
 	
 	@Autowired
 	private ProjectPlanCaseMapper projectPlanCaseMapper;
+
+	@Autowired
+	private ProjectSuitePlanMapper projectSuitePlanMapper;
 	
 	@Autowired
 	private TaskSchedulingMapper taskSchedulingMapper;
@@ -83,6 +89,36 @@ public class ProjectPlanServiceImpl implements IProjectPlanService
 		ProjectPlan projectPlan = new ProjectPlan();
 		projectPlan.setProjectId(projectId);
 	    return projectPlanMapper.selectProjectPlanList(projectPlan);
+	}
+
+	@Override
+	public List<ProjectPlan> selectProjectPlanListForSuite(ProjectPlan projectPlan) {
+		List<ProjectPlan> projectPlanList=new ArrayList<>();
+		if(StringUtils.isNotEmpty(projectPlan.getSuiteId())){
+			List<ProjectSuitePlan> projectSuitePlanList;
+			ProjectSuitePlan projectSuitePlan=new ProjectSuitePlan();
+			projectSuitePlan.setSuiteId(projectPlan.getSuiteId());
+			if(projectPlan.isFlag()){
+				projectPlanList=projectPlanMapper.selectProjectPlanListForSuite(projectPlan);
+			}
+			else {
+				projectPlanList=projectPlanMapper.selectProjectPlanList(projectPlan);
+			}
+			projectSuitePlanList=projectSuitePlanMapper.selectProjectSuitePlanList(projectSuitePlan);
+
+			for(ProjectPlan pp:projectPlanList){
+				pp.setSuiteId(projectPlan.getSuiteId());
+				for(ProjectSuitePlan psp:projectSuitePlanList){
+					if(pp.getPlanId().equals(psp.getPlanId())){
+						pp.setFlag(true);
+						pp.setPriority(psp.getPriority());
+						pp.setSuitePlanId(psp.getSuitePlanId());
+						break;
+					}
+				}
+			}
+		}
+		return projectPlanList;
 	}
 	
     /**

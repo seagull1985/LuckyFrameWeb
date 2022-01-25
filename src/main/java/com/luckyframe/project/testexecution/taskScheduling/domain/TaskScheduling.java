@@ -1,5 +1,6 @@
 package com.luckyframe.project.testexecution.taskScheduling.domain;
 
+import com.luckyframe.project.testmanagmt.projectSuite.domain.ProjectSuite;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -30,6 +31,8 @@ public class TaskScheduling extends BaseEntity
 	private Integer projectId;
 	/** 测试计划ID */
 	private Integer planId;
+	/** 聚合计划ID */
+	private Integer suiteId;
 	/** 客户端ID */
 	private Integer clientId;
 	/** 环境 */
@@ -50,6 +53,8 @@ public class TaskScheduling extends BaseEntity
 	private Integer taskType;
 	/** UI自动化浏览器类型 0 IE 1 火狐 2 谷歌 3 Edge */
 	private Integer browserType;
+	/** 计划类型 1 单计划 2 聚合计划 */
+	private Integer planType;
 	/** 任务超时时间(分钟) */
 	private Integer taskTimeout;
 	/** 客户端测试驱动桩路径 */
@@ -60,6 +65,8 @@ public class TaskScheduling extends BaseEntity
 	private Job job;
 	/** 关联项目计划 */
 	private ProjectPlan projectPlan;
+	/** 关联聚合计划 */
+	private ProjectSuite projectSuite;
 	/** 关联客户端 */
 	private Client client;
 	/** 任务名称 */
@@ -196,6 +203,13 @@ public class TaskScheduling extends BaseEntity
 	{
 		return planId;
 	}
+	public Integer getSuiteId() {
+		return suiteId;
+	}
+
+	public void setSuiteId(Integer suiteId) {
+		this.suiteId = suiteId;
+	}
 	public void setClientId(Integer clientId) 
 	{
 		this.clientId = clientId;
@@ -209,6 +223,14 @@ public class TaskScheduling extends BaseEntity
 	{
 		this.emailAddress = emailAddress;
 	}
+	public Integer getPlanType() {
+		return planType;
+	}
+
+	public void setPlanType(Integer planType) {
+		this.planType = planType;
+	}
+
 
 	public String getEmailAddress() 
 	{
@@ -295,6 +317,13 @@ public class TaskScheduling extends BaseEntity
 	{
 		return clientDriverPath;
 	}
+	public ProjectSuite getProjectSuite() {
+		return projectSuite;
+	}
+
+	public void setProjectSuite(ProjectSuite projectSuite) {
+		this.projectSuite = projectSuite;
+	}
 
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -302,6 +331,7 @@ public class TaskScheduling extends BaseEntity
             .append("jobId", getJobId())
             .append("projectId", getProjectId())
             .append("planId", getPlanId())
+			.append("suiteId", getSuiteId())
             .append("clientId", getClientId())
 			.append("envName", getEnvName())
             .append("emailAddress", getEmailAddress())
@@ -311,6 +341,7 @@ public class TaskScheduling extends BaseEntity
             .append("remoteShell", getRemoteShell())
             .append("exThreadCount", getExThreadCount())
             .append("taskType", getTaskType())
+			.append("planType", getPlanType())
             .append("browserType", getBrowserType())
             .append("taskTimeout", getTaskTimeout())
             .append("clientDriverPath", getClientDriverPath())

@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.luckyframe.project.testmanagmt.projectCaseParams.service.IProjectCaseParamsService;
+import com.luckyframe.project.testmanagmt.projectSuite.domain.ProjectSuite;
+import com.luckyframe.project.testmanagmt.projectSuite.service.IprojectSuiteService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -67,6 +69,9 @@ public class TaskSchedulingController extends BaseController
 	
 	@Autowired
 	private IProjectPlanService projectPlanService;
+
+	@Autowired
+	private IprojectSuiteService projectSuiteService;
 	
 	@Autowired
 	private IClientService clientService;
@@ -139,6 +144,8 @@ public class TaskSchedulingController extends BaseController
             }          
         	List<ProjectPlan> planList = projectPlanService.selectProjectPlanListByProjectId(projectId);
         	mmap.put("planList", planList);
+			List<ProjectSuite> suiteList=projectSuiteService.selectProjectSuiteListByProjectId(projectId);
+			mmap.put("suiteList",suiteList);
         	List<Client> clientList = clientService.selectClientsByProjectId(projectId);
         	mmap.put("clientList", clientList);
 			List<String> envList=projectCaseParamsService.selectProjectEnvListByProjectId(projectId);
@@ -202,6 +209,8 @@ public class TaskSchedulingController extends BaseController
         if(projects.size()>0){
         	List<ProjectPlan> planList = projectPlanService.selectProjectPlanListByProjectId(taskScheduling.getProjectId());
         	mmap.put("planList", planList);
+			List<ProjectSuite> suiteList=projectSuiteService.selectProjectSuiteListByProjectId(taskScheduling.getProjectId());
+			mmap.put("suiteList",suiteList);
         	List<Client> clientList = clientService.selectClientsByProjectId(taskScheduling.getProjectId());
         	mmap.put("clientList", clientList);
 			List<String> envList= projectCaseParamsService.selectProjectEnvListByProjectId(taskScheduling.getProjectId());

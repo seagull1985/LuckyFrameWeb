@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.luckyframe.project.testmanagmt.projectSuite.mapper.ProjectSuitePlanMapper">
+
+
+    <resultMap type="ProjectSuitePlan" id="ProjectSuitePlanResult">
+        <result property="suitePlanId"    column="suite_plan_id"    />
+        <result property="suiteId"    column="suite_id"    />
+        <result property="planId"    column="plan_id"    />
+        <result property="priority"    column="priority"    />
+    </resultMap>
+
+    <sql id="selectProjectSuitePlanVo">
+        select suite_plan_id, suite_id, plan_id ,priority from project_suite_plan
+    </sql>
+
+    <select id="selectProjectSuitePlanList" parameterType="ProjectSuitePlan" resultMap="ProjectSuitePlanResult">
+        <include refid="selectProjectSuitePlanVo"/>
+        <where>
+            <if test="suitePlanId != null "> and suite_plan_id = #{suitePlanId}</if>
+            <if test="suiteId != null "> and suite_id = #{suiteId}</if>
+            <if test="planId != null "> and plan_id = #{planId}</if>
+            <if test="priority != null "> and priority = #{priority}</if>
+        </where>
+    </select>
+
+    <select id="selectProjectSuitePlanById" parameterType="Integer" resultMap="ProjectSuitePlanResult">
+        <include refid="selectProjectSuitePlanVo"/>
+        where suite_plan_id = #{suitePlanId}
+    </select>
+
+    <insert id="insertProjectSuitePlan" parameterType="ProjectSuitePlan" useGeneratedKeys="true" keyProperty="suitePlanId">
+        insert into project_suite_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="suitePlanId != null and suitePlanId !=0 ">suite_plan_id,</if>
+            <if test="suiteId != null  ">suite_id,</if>
+            <if test="planId != null  ">plan_id,</if>
+            <if test="priority != null  ">priority,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="suitePlanId != null and suitePlanId !=0 ">#{suitePlanId},</if>
+            <if test="suiteId != null  ">#{suiteId},</if>
+            <if test="planId != null  ">#{planId},</if>
+            <if test="priority != null  ">#{priority},</if>
+        </trim>
+    </insert>
+
+    <update id="updateProjectSuitePlan" parameterType="ProjectSuitePlan">
+        update project_suite_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="suiteId != null  ">suite_id = #{suiteId},</if>
+            <if test="planId != null  ">plan_id = #{planId},</if>
+            <if test="priority != null  ">priority = #{priority},</if>
+        </trim>
+        where suite_plan_id = #{suitePlanId}
+    </update>
+
+    <delete id="deleteProjectSuitePlanById" parameterType="Integer">
+        delete from project_suite_plan where suite_plan_id = #{suitePlanId}
+    </delete>
+
+    <delete id="deleteProjectSuitePlanByIds" parameterType="String">
+        delete from project_suite_plan where suite_plan_id in
+        <foreach item="suitePlanId" collection="array" open="(" separator="," close=")">
+            #{suitePlanId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteProjectSuitePlanBySuiteId" parameterType="Integer">
+        delete from project_suite_plan where suite_id = #{suiteId}
+    </delete>
+
+    <select id="selectProjectSuitePlanCountByPlanId" parameterType="Integer" resultType="Integer">
+        select count(1) from project_suite_plan where plan_id=#{plan_id}
+    </select>
+
+    <select id="selectProjectSuitePlanCountBySuiteId" parameterType="Integer" resultType="Integer">
+        select count(1) from project_suite_plan where suite_id=#{suite_id}
+    </select>
+</mapper>

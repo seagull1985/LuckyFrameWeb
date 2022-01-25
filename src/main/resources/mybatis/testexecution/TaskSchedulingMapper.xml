@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.luckyframe.project.testexecution.taskScheduling.mapper.TaskSchedulingMapper">
-    
+
     <resultMap type="TaskScheduling" id="TaskSchedulingResult">
         <result property="schedulingId"    column="scheduling_id"    />
         <result property="schedulingName"    column="scheduling_name"    />
         <result property="jobId"    column="job_id"    />
         <result property="projectId"    column="project_id"    />
         <result property="planId"    column="plan_id"    />
+        <result property="suiteId"    column="suite_id"    />
         <result property="envName"    column="env_name"    />
         <result property="clientId"    column="client_id"    />
         <result property="emailAddress"    column="email_address"    />
@@ -19,38 +20,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remoteShell"    column="remote_shell"    />
         <result property="exThreadCount"    column="ex_thread_count"    />
         <result property="taskType"    column="task_type"    />
+        <result property="planType"    column="plan_type"    />
         <result property="browserType"    column="browser_type"    />
         <result property="taskTimeout"    column="task_timeout"    />
         <result property="clientDriverPath"    column="client_driver_path"    />
         <association property="job"  column="job_id" javaType="Job" resultMap="JobResult" />
         <association property="project"  column="project_id" javaType="Project" resultMap="ProjectResult" />
         <association property="projectPlan"  column="plan_id" javaType="ProjectPlan" resultMap="ProjectPlanResult" />
+        <association property="projectSuite"  column="suite_id" javaType="ProjectSuite" resultMap="ProjectSuiteResult" />
         <association property="client"  column="client_id" javaType="Client" resultMap="ClientResult" />
     </resultMap>
-	
+
     <resultMap type="Job" id="JobResult">
-		<id     property="jobId"          column="job_id"          />
-		<result property="jobName"        column="job_name"        />
-		<result property="jobGroup"       column="job_group"       />
-		<result property="methodName"     column="method_name"     />
-		<result property="methodParams"   column="method_params"   />
-		<result property="cronExpression" column="cron_expression" />
-		<result property="misfirePolicy"  column="misfire_policy"  />
-		<result property="status"         column="status"          />
-		<result property="createBy"       column="create_by"       />
-		<result property="createTime"     column="create_time"     />
-		<result property="updateBy"       column="update_by"       />
-		<result property="updateTime"     column="update_time"     />
-		<result property="remark"         column="remark"          />
-	</resultMap>
-	
-	<resultMap type="Project" id="ProjectResult">
+        <id     property="jobId"          column="job_id"          />
+        <result property="jobName"        column="job_name"        />
+        <result property="jobGroup"       column="job_group"       />
+        <result property="methodName"     column="method_name"     />
+        <result property="methodParams"   column="method_params"   />
+        <result property="cronExpression" column="cron_expression" />
+        <result property="misfirePolicy"  column="misfire_policy"  />
+        <result property="status"         column="status"          />
+        <result property="createBy"       column="create_by"       />
+        <result property="createTime"     column="create_time"     />
+        <result property="updateBy"       column="update_by"       />
+        <result property="updateTime"     column="update_time"     />
+        <result property="remark"         column="remark"          />
+    </resultMap>
+
+    <resultMap type="Project" id="ProjectResult">
         <id property="projectId"    column="project_id"    />
         <result property="projectName"    column="project_name"    />
         <result property="deptId"    column="dept_id"    />
         <result property="projectSign"    column="project_sign"    />
     </resultMap>
-    
+
     <resultMap type="ProjectPlan" id="ProjectPlanResult">
         <id property="planId"    column="plan_id"    />
         <result property="planName"    column="plan_name"    />
@@ -63,7 +66,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"    column="remark"    />
         <association property="project"  column="project_id" javaType="Project" resultMap="ProjectResult" />
     </resultMap>
-    
+
+    <resultMap type="ProjectSuite" id="ProjectSuiteResult">
+        <id property="suiteId"    column="suite_id"    />
+        <result property="suiteName"    column="suite_name"    />
+        <result property="suitePlanCount"    column="suite_plan_count"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <association property="project"  column="project_id" javaType="Project" resultMap="ProjectResult" />
+    </resultMap>
+
+
     <resultMap type="Client" id="ClientResult">
         <id property="clientId"    column="client_id"    />
         <result property="clientName"    column="client_name"    />
@@ -74,101 +91,110 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"    column="remark"    />
         <result property="clientType"    column="client_type"    />
     </resultMap>
-    
-	<sql id="selectTaskSchedulingVo">
-        select ts.scheduling_id, ts.scheduling_name, ts.job_id,ts.env_name, ts.project_id, ts.plan_id, ts.client_id, ts.email_address, ts.push_url, ts.email_send_condition, ts.building_link, ts.remote_shell, ts.ex_thread_count, ts.task_type, ts.browser_type, ts.task_timeout, ts.client_driver_path,
-        sj.job_name, sj.job_group, sj.method_name, sj.method_params, sj.cron_expression, sj.misfire_policy, sj.status, sj.remark, sj.update_time, 
-        sp.project_name,sp.dept_id,sp.project_sign, 
-        pp.plan_name, pp.plan_case_count, 
-        sc.client_name, sc.client_type, sc.client_ip, sc.status, sc.client_path
+
+    <sql id="selectTaskSchedulingVo">
+        select ts.scheduling_id, ts.scheduling_name, ts.job_id, ts.env_name,ts.project_id, ts.plan_id,ts.suite_id,ts.catch_id, ts.client_id, ts.email_address,ts.push_url, ts.email_send_condition, ts.building_link, ts.remote_shell, ts.ex_thread_count, ts.task_type,ts.plan_type, ts.browser_type, ts.task_timeout, ts.client_driver_path,
+               sj.job_name, sj.job_group, sj.method_name, sj.method_params, sj.cron_expression, sj.misfire_policy, sj.status, sj.remark, sj.update_time,
+               sp.project_name,sp.dept_id,sp.project_sign,
+               pp.plan_name, pp.plan_case_count,
+               ps.suite_name,ps.suite_plan_count,
+               sc.client_name, sc.client_type, sc.client_ip, sc.status, sc.client_path
         from task_scheduling ts
-        left join sys_job sj on ts.job_id = sj.job_id 
-        left join sys_project sp on ts.project_id = sp.project_id 
-        left join project_plan pp on ts.plan_id = pp.plan_id 
-        left join sys_client sc on ts.client_id = sc.client_id 
+                 left join sys_job sj on ts.job_id = sj.job_id
+                 left join sys_project sp on ts.project_id = sp.project_id
+                 left join project_plan pp on ts.plan_id = pp.plan_id
+                 left join project_suite ps on ts.suite_id=ps.suite_id
+                 left join sys_client sc on ts.client_id = sc.client_id
     </sql>
-	
+
     <select id="selectTaskSchedulingList" parameterType="TaskScheduling" resultMap="TaskSchedulingResult">
         <include refid="selectTaskSchedulingVo"/>
-        <where>  
-             <if test="schedulingId != null "> and ts.scheduling_id = #{schedulingId}</if>
-             <if test="schedulingName != null  and schedulingName != '' "> and ts.scheduling_name like concat('%', #{schedulingName}, '%')</if>
-             <if test="jobId != null "> and ts.job_id = #{jobId}</if>
-             <if test="projectId != null "> and ts.project_id = #{projectId}</if>
-             <if test="planId != null "> and ts.plan_id = #{planId}</if>
+        <where>
+            <if test="schedulingId != null "> and ts.scheduling_id = #{schedulingId}</if>
+            <if test="schedulingName != null  and schedulingName != '' "> and ts.scheduling_name like concat('%', #{schedulingName}, '%')</if>
+            <if test="jobId != null "> and ts.job_id = #{jobId}</if>
+            <if test="projectId != null "> and ts.project_id = #{projectId}</if>
+            <if test="planId != null "> and ts.plan_id = #{planId}</if>
+            <if test="suiteId != null "> and ts.suite_id = #{suiteId}</if>
             <if test="envName != null "> and ts.env_name = #{envName}</if>
-             <if test="clientId != null "> and ts.client_id = #{clientId}</if>
-             <if test="emailAddress != null  and emailAddress != '' "> and ts.email_address = #{emailAddress}</if>
-             <if test="pushUrl != null  and pushUrl != '' "> and ts.push_url = #{pushUrl}</if>
-             <if test="emailSendCondition != null "> and ts.email_send_condition = #{emailSendCondition}</if>
-             <if test="buildingLink != null  and buildingLink != '' "> and ts.building_link = #{buildingLink}</if>
-             <if test="remoteShell != null  and remoteShell != '' "> and ts.remote_shell = #{remoteShell}</if>
-             <if test="exThreadCount != null "> and ts.ex_thread_count = #{exThreadCount}</if>
-             <if test="taskType != null "> and ts.task_type = #{taskType}</if>
-             <if test="browserType != null "> and ts.browser_type = #{browserType}</if>
-             <if test="taskTimeout != null "> and ts.task_timeout = #{taskTimeout}</if>
-             <if test="clientDriverPath != null  and clientDriverPath != '' "> and ts.client_driver_path = #{clientDriverPath}</if>
-         </where>
-         order by ts.scheduling_id desc
+            <if test="clientId != null "> and ts.client_id = #{clientId}</if>
+            <if test="emailAddress != null  and emailAddress != '' "> and ts.email_address = #{emailAddress}</if>
+            <if test="pushUrl != null  and pushUrl != '' "> and ts.push_url = #{pushUrl}</if>
+            <if test="emailSendCondition != null "> and ts.email_send_condition = #{emailSendCondition}</if>
+            <if test="buildingLink != null  and buildingLink != '' "> and ts.building_link = #{buildingLink}</if>
+            <if test="remoteShell != null  and remoteShell != '' "> and ts.remote_shell = #{remoteShell}</if>
+            <if test="exThreadCount != null "> and ts.ex_thread_count = #{exThreadCount}</if>
+            <if test="taskType != null "> and ts.task_type = #{taskType}</if>
+            <if test="planType != null "> and ts.plan_type = #{planType}</if>
+            <if test="browserType != null "> and ts.browser_type = #{browserType}</if>
+            <if test="taskTimeout != null "> and ts.task_timeout = #{taskTimeout}</if>
+            <if test="clientDriverPath != null  and clientDriverPath != '' "> and ts.client_driver_path = #{clientDriverPath}</if>
+        </where>
+        order by ts.scheduling_id desc
     </select>
-    
+
     <select id="selectTaskSchedulingById" parameterType="Integer" resultMap="TaskSchedulingResult">
         <include refid="selectTaskSchedulingVo"/>
         where ts.scheduling_id = #{schedulingId}
     </select>
-    
+
     <select id="checkSchedulingNameUnique" parameterType="String" resultMap="TaskSchedulingResult">
         <include refid="selectTaskSchedulingVo"/>
-		where ts.scheduling_name=#{scheduling_name}
-	</select>
-        
+        where ts.scheduling_name=#{scheduling_name}
+    </select>
+
     <insert id="insertTaskScheduling" parameterType="TaskScheduling" useGeneratedKeys="true" keyProperty="schedulingId">
         insert into task_scheduling
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-		    <if test="schedulingName != null  and schedulingName != '' ">scheduling_name,</if>
-			<if test="jobId != null  ">job_id,</if>
-			<if test="projectId != null  ">project_id,</if>
-			<if test="planId != null  ">plan_id,</if>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="schedulingName != null  and schedulingName != '' ">scheduling_name,</if>
+            <if test="jobId != null  ">job_id,</if>
+            <if test="projectId != null  ">project_id,</if>
+            <if test="planId != null  ">plan_id,</if>
+            <if test="suiteId != null  ">suite_id,</if>
             <if test="envName != null  ">env_name,</if>
-			<if test="clientId != null  ">client_id,</if>
-			<if test="emailAddress != null  and emailAddress != ''  ">email_address,</if>
+            <if test="clientId != null  ">client_id,</if>
+            <if test="emailAddress != null  and emailAddress != ''  ">email_address,</if>
             <if test="pushUrl != null  and pushUrl != ''  ">push_url,</if>
-			<if test="emailSendCondition != null  ">email_send_condition,</if>
-			<if test="buildingLink != null  and buildingLink != ''  ">building_link,</if>
-			<if test="remoteShell != null  and remoteShell != ''  ">remote_shell,</if>
-			<if test="exThreadCount != null  ">ex_thread_count,</if>
-			<if test="taskType != null  ">task_type,</if>
-			<if test="browserType != null  ">browser_type,</if>
-			<if test="taskTimeout != null  ">task_timeout,</if>
-			<if test="clientDriverPath != null  and clientDriverPath != ''  ">client_driver_path,</if>
-         </trim>
+            <if test="emailSendCondition != null  ">email_send_condition,</if>
+            <if test="buildingLink != null  and buildingLink != ''  ">building_link,</if>
+            <if test="remoteShell != null  and remoteShell != ''  ">remote_shell,</if>
+            <if test="exThreadCount != null  ">ex_thread_count,</if>
+            <if test="taskType != null  ">task_type,</if>
+            <if test="planType != null  ">plan_type,</if>
+            <if test="browserType != null  ">browser_type,</if>
+            <if test="taskTimeout != null  ">task_timeout,</if>
+            <if test="clientDriverPath != null  and clientDriverPath != ''  ">client_driver_path,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="schedulingName != null  and schedulingName != '' ">#{schedulingName},</if>
-			<if test="jobId != null  ">#{jobId},</if>
-			<if test="projectId != null  ">#{projectId},</if>
-			<if test="planId != null  ">#{planId},</if>
+            <if test="jobId != null  ">#{jobId},</if>
+            <if test="projectId != null  ">#{projectId},</if>
+            <if test="planId != null  ">#{planId},</if>
+            <if test="suiteId != null  ">#{suiteId},</if>
             <if test="envName != null  ">#{envName},</if>
-			<if test="clientId != null  ">#{clientId},</if>
-			<if test="emailAddress != null  and emailAddress != ''  ">#{emailAddress},</if>
+            <if test="clientId != null  ">#{clientId},</if>
+            <if test="emailAddress != null  and emailAddress != ''  ">#{emailAddress},</if>
             <if test="pushUrl != null  and pushUrl != ''  ">#{pushUrl},</if>
-			<if test="emailSendCondition != null  ">#{emailSendCondition},</if>
-			<if test="buildingLink != null  and buildingLink != ''  ">#{buildingLink},</if>
-			<if test="remoteShell != null  and remoteShell != ''  ">#{remoteShell},</if>
-			<if test="exThreadCount != null  ">#{exThreadCount},</if>
-			<if test="taskType != null  ">#{taskType},</if>
-			<if test="browserType != null  ">#{browserType},</if>
-			<if test="taskTimeout != null  ">#{taskTimeout},</if>
-			<if test="clientDriverPath != null  and clientDriverPath != ''  ">#{clientDriverPath},</if>
-         </trim>
+            <if test="emailSendCondition != null  ">#{emailSendCondition},</if>
+            <if test="buildingLink != null  and buildingLink != ''  ">#{buildingLink},</if>
+            <if test="remoteShell != null  and remoteShell != ''  ">#{remoteShell},</if>
+            <if test="exThreadCount != null  ">#{exThreadCount},</if>
+            <if test="taskType != null  ">#{taskType},</if>
+            <if test="planType != null  ">#{planType},</if>
+            <if test="browserType != null  ">#{browserType},</if>
+            <if test="taskTimeout != null  ">#{taskTimeout},</if>
+            <if test="clientDriverPath != null  and clientDriverPath != ''  ">#{clientDriverPath},</if>
+        </trim>
     </insert>
-	 
+
     <update id="updateTaskScheduling" parameterType="TaskScheduling">
         update task_scheduling
         <trim prefix="SET" suffixOverrides=",">
             <if test="schedulingName != null  and schedulingName != ''  ">scheduling_name = #{schedulingName},</if>
             <if test="jobId != null  ">job_id = #{jobId},</if>
             <if test="projectId != null  ">project_id = #{projectId},</if>
-            <if test="planId != null  ">plan_id = #{planId},</if>
+            plan_id = #{planId},
+            suite_id = #{suiteId},
             <if test="envName != null  ">env_name = #{envName},</if>
             <if test="clientId != null  ">client_id = #{clientId},</if>
             <if test="emailAddress != null  ">email_address = #{emailAddress},</if>
@@ -178,6 +204,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remoteShell != null  ">remote_shell = #{remoteShell},</if>
             <if test="exThreadCount != null  ">ex_thread_count = #{exThreadCount},</if>
             <if test="taskType != null  ">task_type = #{taskType},</if>
+            <if test="planType != null  ">plan_type = #{planType},</if>
             <if test="browserType != null  ">browser_type = #{browserType},</if>
             <if test="taskTimeout != null  ">task_timeout = #{taskTimeout},</if>
             <if test="clientDriverPath != null  and clientDriverPath != ''  ">client_driver_path = #{clientDriverPath},</if>
@@ -188,24 +215,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteTaskSchedulingById" parameterType="Integer">
         delete from task_scheduling where scheduling_id = #{schedulingId}
     </delete>
-	
+
     <delete id="deleteTaskSchedulingByIds" parameterType="String">
-        delete from task_scheduling where scheduling_id in 
+        delete from task_scheduling where scheduling_id in
         <foreach item="schedulingId" collection="array" open="(" separator="," close=")">
             #{schedulingId}
         </foreach>
     </delete>
-    
+
     <select id="selectTaskSchedulingCountByProjectId" parameterType="Integer" resultType="Integer">
-		select count(1) from task_scheduling where project_id=#{project_id}
-	</select>
-	
-	<select id="selectTaskSchedulingCountByClientId" parameterType="Integer" resultType="Integer">
-		select count(1) from task_scheduling where client_id=#{client_id}
-	</select>
-	
+        select count(1) from task_scheduling where project_id=#{project_id}
+    </select>
+
+    <select id="selectTaskSchedulingCountByClientId" parameterType="Integer" resultType="Integer">
+        select count(1) from task_scheduling where client_id=#{client_id}
+    </select>
+
     <select id="selectTaskSchedulingCountByPlanId" parameterType="Integer" resultType="Integer">
-		select count(1) from task_scheduling where plan_id=#{plan_id}
-	</select>
-	
+        select count(1) from task_scheduling where plan_id=#{plan_id}
+    </select>
+
+    <select id="selectTaskSchedulingCountBySuiteId" parameterType="Integer" resultType="Integer">
+        select count(1) from task_scheduling where suite_id=#{suite_id}
+    </select>
+
+
+
 </mapper>

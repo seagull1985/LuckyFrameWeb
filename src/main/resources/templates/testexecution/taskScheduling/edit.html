@@ -7,13 +7,13 @@
         <form class="form-horizontal m" id="form-taskScheduling-edit" th:object="${taskScheduling}">
             <input id="schedulingId" name="schedulingId" th:field="*{schedulingId}"  type="hidden">
             <input id="jobId" name="jobId" th:field="*{jobId}"  type="hidden">
-           <div class="form-group">	
+           <div class="form-group">
 				<label class="col-sm-3 control-label">调度名称：</label>
 				<div class="col-sm-8">
 					<input id="schedulingName" name="schedulingName" th:field="*{schedulingName}" class="form-control" type="text">
 				</div>
 		   </div>
-			<div class="form-group">	
+			<div class="form-group">
 				<label class="col-sm-3 control-label">项目名称：</label>
 				<div class="col-sm-8">
 					<select id="projectId" name="projectId" th:field="*{projectId}" class="form-control m-b" th:with="type=${projects}" onchange="initializeChildren()">
@@ -21,12 +21,28 @@
 	                </select>
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group">
+				<label class="col-sm-3 control-label">计划类型：</label>
+				<div class="col-sm-8">
+					<label class="radio-box"> <input type="radio" name="planType" th:field="*{planType}" value="1" th:checked="true" /> 单计划 </label>
+					<label class="radio-box"> <input type="radio" name="planType" th:field="*{planType}" value="2" /> 聚合计划 </label>
+
+				</div>
+			</div>
+			<div class="form-group" id="divPlanType">
 				<label class="col-sm-3 control-label">测试计划：</label>
 				<div class="col-sm-8">
 					<select id="planId" name="planId" th:field="*{planId}" class="form-control m-b" th:with="type=${planList}">
-	                    <option th:each="plan : ${type}" th:text="${plan.planName}" th:value="${plan.planId}" th:selected="${plan.planId == taskScheduling.planId}"></option>
-	                </select>
+						<option th:each="plan : ${type}" th:text="${plan.planName}" th:value="${plan.planId}" th:selected="${taskScheduling.planId!=null && plan.planId == taskScheduling.planId}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group" id="divSuiteType" style="display:none;">
+				<label class="col-sm-3 control-label">聚合计划：</label>
+				<div class="col-sm-8">
+					<select id="suiteId" name="suiteId" th:field="*{suiteId}" class="form-control m-b" th:with="type=${suiteList}">
+						<option th:each="suite : ${type}" th:text="${suite.suiteName}" th:value="${suite.suiteId}" th:selected="${taskScheduling.suiteId!=null && suite.suiteId == taskScheduling.suiteId}"></option>
+					</select>
 				</div>
 			</div>
 			<div class="form-group">
@@ -37,7 +53,7 @@
 					</select>
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group">
 				<label class="col-sm-3 control-label">客户端：</label>
 				<div class="col-sm-8">
 					<select id="clientId" name="clientId" th:field="*{clientId}" class="form-control m-b" th:with="type=${clientList}" onchange="setDriverPathList()">
@@ -45,7 +61,7 @@
 	                </select>
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group">
 				<label class="col-sm-3 control-label">客户端测试驱动桩路径：</label>
 				<div class="col-sm-8">
 					<select id="clientDriverPath" name="clientDriverPath" th:field="*{clientDriverPath}" class="form-control m-b" th:with="type=${driverPathList}">
@@ -53,49 +69,49 @@
 	                </select>
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group">
 				<label class="col-sm-3 control-label">客户端执行线程数：</label>
 				<div class="col-sm-8">
 					<input id="exThreadCount" name="exThreadCount" th:field="*{exThreadCount}" class="form-control" type="text">
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group">
 				<label class="col-sm-3 control-label">任务类型：</label>
 				<div class="col-sm-8">
-				    <label class="radio-box"> <input type="radio" name="taskType" th:field="*{taskType}" value="0"/> 接口 </label> 
-					<label class="radio-box"> <input type="radio" name="taskType" th:field="*{taskType}" value="1" /> Web UI </label> 
+				    <label class="radio-box"> <input type="radio" name="taskType" th:field="*{taskType}" value="0"/> 接口 </label>
+					<label class="radio-box"> <input type="radio" name="taskType" th:field="*{taskType}" value="1" /> Web UI </label>
 					<label class="radio-box"> <input type="radio" name="taskType" th:field="*{taskType}" value="2" /> 移动端 </label>
 				</div>
 			</div>
-			<div class="form-group" id="divBrowserType" style="display:none;">	
+			<div class="form-group" id="divBrowserType" style="display:none;">
 				<label class="col-sm-3 control-label">浏览器类型：</label>
 				<div class="col-sm-8">
-					<label class="radio-box"> <input type="radio" name="browserType" th:field="*{browserType}" value="0"/> IE </label> 
-					<label class="radio-box"> <input type="radio" name="browserType" th:field="*{browserType}" value="1" /> 火狐 </label> 
+					<label class="radio-box"> <input type="radio" name="browserType" th:field="*{browserType}" value="0"/> IE </label>
+					<label class="radio-box"> <input type="radio" name="browserType" th:field="*{browserType}" value="1" /> 火狐 </label>
 					<label class="radio-box"> <input type="radio" name="browserType" th:field="*{browserType}" value="2" /> 谷歌 </label>
 					<label class="radio-box"> <input type="radio" name="browserType" th:field="*{browserType}" value="3" /> Edge </label>
 				</div>
-			</div>	
-			<div class="form-group">	
+			</div>
+			<div class="form-group">
 				<label class="col-sm-3 control-label">任务超时时间(分钟)：</label>
 				<div class="col-sm-8">
 					<input id="taskTimeout" name="taskTimeout" th:field="*{taskTimeout}" class="form-control" type="text">
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group">
 				<label class="col-sm-3 control-label">Cron执行表达式：</label>
 				<div class="col-sm-8">
 					<input id="cronExpression" name="cronExpression" th:field="*{cronExpression}" class="form-control" type="text">
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group">
 				<label class="col-sm-3 control-label">执行策略：</label>
 				<div class="col-sm-8">
-					<label class="radio-box"> <input type="radio" name="misfirePolicy" th:field="*{misfirePolicy}" value="3" /> 默认Cron执行 </label> 
-					<label class="radio-box"> <input type="radio" name="misfirePolicy" th:field="*{misfirePolicy}" value="2" /> 按Cron自动执行一次 </label> 
+					<label class="radio-box"> <input type="radio" name="misfirePolicy" th:field="*{misfirePolicy}" value="3" /> 默认Cron执行 </label>
+					<label class="radio-box"> <input type="radio" name="misfirePolicy" th:field="*{misfirePolicy}" value="2" /> 按Cron自动执行一次 </label>
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group">
 				<label class="col-sm-3 control-label">任务状态：</label>
 				<div class="col-sm-8">
 					<div class="radio-box" th:each="dict : ${@dict.getType('sys_job_status')}">
@@ -104,16 +120,16 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group">
 				<label class="col-sm-3 control-label">任务结果通知：</label>
 				<div class="col-sm-8">
-				    <label class="radio-box"> <input type="radio" name="emailSendCondition" th:field="*{emailSendCondition}" value="-1" /> 不通知 </label> 
-					<label class="radio-box"> <input type="radio" name="emailSendCondition" th:field="*{emailSendCondition}" value="0" /> 默认 </label> 
-					<label class="radio-box"> <input type="radio" name="emailSendCondition" th:field="*{emailSendCondition}" value="1" /> 任务成功 </label> 
+				    <label class="radio-box"> <input type="radio" name="emailSendCondition" th:field="*{emailSendCondition}" value="-1" /> 不通知 </label>
+					<label class="radio-box"> <input type="radio" name="emailSendCondition" th:field="*{emailSendCondition}" value="0" /> 默认 </label>
+					<label class="radio-box"> <input type="radio" name="emailSendCondition" th:field="*{emailSendCondition}" value="1" /> 任务成功 </label>
 					<label class="radio-box"> <input type="radio" name="emailSendCondition" th:field="*{emailSendCondition}" value="2" /> 任务失败 </label>
 				</div>
-			</div>			
-			<div class="form-group" id="divEmailAddress" style="display:none;">	
+			</div>
+			<div class="form-group" id="divEmailAddress" style="display:none;">
 				<label class="col-sm-3 control-label">邮件通知地址：</label>
 				<div class="col-sm-8">
 					<textarea id="emailAddress" name="emailAddress" th:field="*{emailAddress}" class="form-control" placeholder="多个邮件地址用;分隔"></textarea>
@@ -125,20 +141,20 @@
 					<textarea id="pushUrl" name="pushUrl" th:field="*{pushUrl}" class="form-control" placeholder="例如：企业微信或是钉钉机器人WebHook推送地址"></textarea>
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group">
 				<label class="col-sm-3 control-label">jenkins名称：</label>
 				<div class="col-sm-8">
 					<textarea id="buildingLink" name="buildingLink" th:field="*{buildingLink}" class="form-control" placeholder="Jenkins中的项目名称，多个以;分隔"></textarea>
 				</div>
 			</div>
-			<div class="form-group">	
+			<div class="form-group">
 				<label class="col-sm-3 control-label">远程执行Shell脚本：</label>
 				<div class="col-sm-8">
 					<textarea id="remoteShell" name="remoteShell" th:field="*{remoteShell}" class="form-control" placeholder="格式：服务器IP;服务器用户名;服务器密码;ssh端口;Shell命令; 例：10.218.88.88;root;123456;22;cd /home/tomcat-7.0-7080/bin&&./restart.sh;"></textarea>
 				</div>
 			</div>
 
-			<div class="form-group">	
+			<div class="form-group">
 				<label class="col-sm-3 control-label">备注：</label>
 				<div class="col-sm-8">
 					<textarea id="remark" name="remark" th:field="*{remark}" class="form-control"></textarea>
@@ -151,16 +167,26 @@
 	    var prefix = ctx + "testexecution/taskScheduling";
 	    var clientPrefix = ctx + "system/client";
 	    var planPrefix = ctx + "testmanagmt/projectPlan";
+		var suitePrefix=ctx+"testmanagmt/projectSuite";
 		var envPrefix=ctx+"testmanagmt/projectCaseParams";
-	    
+
 	    $(function() {
 			var taskType=$('input:radio[name="taskType"]:checked').val();
 		    if(taskType=='1'){
-				$("#divBrowserType").css("display","block");	
+				$("#divBrowserType").css("display","block");
 			}else{
 				$("#divBrowserType").css("display","none");
 			}
-		    
+
+			var planType=$('input:radio[name="planType"]:checked').val();
+			if(planType=='1'){
+				$("#divPlanType").css("display","block");
+				$("#divSuiteType").css("display","none");
+			}else{
+				$("#divPlanType").css("display","none");
+				$("#divSuiteType").css("display","block");
+			}
+
 		    var emailSendCondition=$('input:radio[name="emailSendCondition"]:checked').val();
 		    if(emailSendCondition!='-1'){
 				$("#divEmailAddress").css("display","block");
@@ -168,16 +194,16 @@
 			}else{
 				$("#divEmailAddress").css("display","none");
 				$("#divPushUrl").css("display","none");
-			}    	
+			}
 	    });
-	
+
 		$.validator.setDefaults({
 			ignore:":hidden:not(select)",
 			submitHandler : function() {
 				save();
 			}
 		});
-		
+
 		$("#form-taskScheduling-edit").validate({
 			rules:{
 				schedulingName:{
@@ -202,6 +228,9 @@
 				},
 				planId:{
 					required:true,
+				},
+				suiteId:{
+					required:false,
 				},
 				envName:{
 					required:true,
@@ -266,23 +295,35 @@
                 }
             }
 		});
-		
+
 		function submitHandler() {
 	        if ($.validate.form()) {
 	            $.operate.save(prefix + "/edit", $('#form-taskScheduling-edit').serialize());
 	        }
 	    }
-		
+
 		//获取radio当前选中的值；icheck-radio change事件；点击事件，不能使用onclick;
 		$("input:radio[name='taskType']").on('ifChecked', function(event){
 			var taskType=$(this).val();
 		    if(taskType=='1'){
-				$("#divBrowserType").css("display","block");	
+				$("#divBrowserType").css("display","block");
 			}else{
 				$("#divBrowserType").css("display","none");
 			}
 		});
-		
+
+		//获取radio当前选中的值；icheck-radio change事件；点击事件，不能使用onclick;
+		$("input:radio[name='planType']").on('ifChecked', function(event){
+			var planType=$(this).val();
+			if(planType=='1'){
+				$("#divPlanType").css("display","block");
+				$("#divSuiteType").css("display","none");
+			}else{
+				$("#divPlanType").css("display","none");
+				$("#divSuiteType").css("display","block");
+			}
+		});
+
 		//获取radio当前选中的值；icheck-radio change事件；点击事件，不能使用onclick;
 		$("input:radio[name='emailSendCondition']").on('ifChecked', function(event){
 			var emailSendCondition=$(this).val();
@@ -299,10 +340,11 @@
 			var projectId = $("#projectId").val();
 			if($.common.isEmpty(projectId)) return;
 			setPlanList(projectId);
+			setSuiteList(projectId);
 			setClientList(projectId);
 			setEnvList(projectId);
 	    }
-		
+
 		 /*设置客户端列表*/
 		 function setClientList(projectId){
 	       var url =clientPrefix + "/getClientListByProjectId/"+projectId;
@@ -321,7 +363,7 @@
 	    		   }else{
 	    			   options +=  "<option style='color:#DAA520' value='"+node.clientId+"'>【"+node.clientName+"】"+node.clientIp+" 【客户端状态未知】</option>";
 	    		   }
-	  		    }); 
+	  		    });
 	  		    $("#clientId").html(options);
 	  		    /*初始化驱动目录列表*/
 	  		    setDriverPathList();
@@ -344,25 +386,45 @@
 				$("#envName").html(options);
 			});
 		}
-		 
-		 /*设置项目计划列表*/
-		 function setPlanList(projectId){
-	       var url =planPrefix + "/getProjectPlanListByProjectId/"+projectId;
-	       var options = "";
-	       $.getJSON(url, null, function call(result) {
-	    	   /*清空原有客户端列表*/
-	 		   while($("#planId").length>1){
-				  $("#planId option[index='1']").remove();
-			    }
-	 		   /*设置新的客户端列表*/
-	            $.each(result, function(i, node){
-	  			  options +=  "<option value='"+node.planId+"'>"+node.planName+"</option>";
-	  		    }); 
-	  		    $("#planId").html(options);
-	       });
-		  }
-		 
-		 /*设置驱动目录列表*/
+
+		/*设置项目计划列表*/
+		function setPlanList(projectId){
+			// var planId=$("#planId").val();
+			// if($.common.isEmpty(planId)) return;
+			var url =planPrefix + "/getProjectPlanListByProjectId/"+projectId;
+			var options = "";
+			$.getJSON(url, null, function call(result) {
+				/*清空原有客户端列表*/
+				while($("#planId").length>1){
+					$("#planId option[index='1']").remove();
+				}
+				/*设置新的客户端列表*/
+				$.each(result, function(i, node){
+					options +=  "<option value='"+node.planId+"'>"+node.planName+"</option>";
+				});
+				$("#planId").html(options);
+			});
+		}
+		/*设置聚合计划列表*/
+		function setSuiteList(projectId){
+			// var suiteId=$("#suiteId").val();
+			// if($.common.isEmpty(suiteId)) return;
+			var url =suitePrefix + "/getProjectSuiteListByProjectId/"+projectId;
+			var options = "";
+			$.getJSON(url, null, function call(result) {
+				/*清空原有客户端列表*/
+				while($("#suiteId").length>1){
+					$("#suiteId option[index='1']").remove();
+				}
+				/*设置新的客户端列表*/
+				$.each(result, function(i, node){
+					options +=  "<option value='"+node.suiteId+"'>"+node.suiteName+"</option>";
+				});
+				$("#suiteId").html(options);
+			});
+		}
+
+		/*设置驱动目录列表*/
 		 function setDriverPathList(){
 		   var clientId = $("#clientId").val();
 		   if($.common.isEmpty(clientId)) return;
@@ -376,7 +438,7 @@
 	 		   /*设置新的客户端列表*/
 	            $.each(result, function(i, node){
 	  			  options +=  "<option value='"+node+"'>"+node+"</option>";
-	  		    }); 
+	  		    });
 	  		    $("#clientDriverPath").html(options);
 	       });
 		  }

@@ -28,6 +28,13 @@ public interface ITaskCaseExecuteService
 	 * @date 2019年4月22日
 	 */
 	TaskCaseExecute selectTaskCaseExecuteByTaskIdAndCaseId(TaskCaseExecute taskCaseExecute);
+
+	/**
+	 * 根据taskid planid caseid查询用例执行信息
+	 * @param taskCaseExecute
+	 * @return
+	 */
+	TaskCaseExecute selectTaskCaseExecuteByTaskIdAndPlanIdAndCaseId(TaskCaseExecute taskCaseExecute);
 	
 	/**
      * 查询任务用例执行记录列表
