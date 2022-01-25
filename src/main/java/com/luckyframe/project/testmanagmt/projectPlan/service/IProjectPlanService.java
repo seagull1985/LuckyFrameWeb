@@ -43,6 +43,9 @@ public interface IProjectPlanService
 	 * @date 2019年3月23日
 	 */
 	List<ProjectPlan> selectProjectPlanListByProjectId(Integer projectId);
+
+
+	List<ProjectPlan> selectProjectPlanListForSuite(ProjectPlan projectPlan);
 	
 	/**
      * 新增测试计划

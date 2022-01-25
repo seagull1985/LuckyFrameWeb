@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input id="projectId" name="projectId" type="hidden" th:value="${projectSuite.projectId}"/>
+                <input id="suiteId" name="suiteId" type="hidden" th:value="${projectSuite.suiteId}"/>
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            测试计划名称：<input type="text" name="planName"/>
+                        </li>
+                        <li>
+                            <label style="vertical-align:middle;height:25px">聚合计划：</label>
+                            <input type="checkbox" name="flag" style="width:20px;height:20px;cursor: pointer;"/>
+                        </li>
+
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('testmanagmt:projectSuite:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('testmanagmt:projectSuite:remove')}]];
+        var prefix = ctx + "testmanagmt/projectSuitePlan";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+				exportUrl: prefix + "/export",
+                modalName: "测试用例",
+				search: false,
+				queryParams: function(params) {
+	            	return {
+	        			// 传递参数查询参数
+	                    pageSize:       params.limit,
+	                    pageNum:        params.offset / params.limit + 1,
+	                    searchValue:    params.search,
+	                    orderByColumn:  params.sort,
+	                    isAsc:          params.order,
+	                    suiteId:         $('#suiteId').val(),
+	                    projectId:      $('#projectId').val()
+	        		};
+				},
+		        showExport: false,
+                columns: [{
+                	field : 'flag',
+					checkbox : true,
+					formatter: function (value, row, index) {
+					        return {
+					            checked : row.flag//设置选中
+					        };
+					}
+		        },
+				{
+					field : 'planId',
+					title : '测试计划ID',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'suitePlanId',
+					title : '聚合计划ID',
+					visible: false
+				},
+				{
+					field : 'suiteId',
+					title : '聚合计划ID',
+					visible: false
+				},
+				{
+					field : 'priority',
+					title : '执行优先级',
+					width : '40%',
+					editable : {
+						type : 'text',
+						title : '执行优先级',
+						emptytext : "0",
+						validate : function(value) {
+							if (isNaN(value)) return '优先级必须是数字';
+	                        if (!(/(^[1-9]\d*$)/.test(value))) return '优先级必须是正整数';
+							if (value.length > 8) return '优先级不能超过8个字符';
+						}
+					}
+				},
+
+
+				{
+					field : 'planName',
+					title : '计划名称',
+					width : '50%',
+					class : 'myTDLengthHidden',
+                    formatter: function(value, row, index) {
+                    	return $.table.tooltip(value);
+                    }
+				},
+				{
+					field : 'createBy',
+					title : '创建者',
+					visible: false
+				},
+				{
+					field : 'createTime',
+					title : '创建时间',
+					visible: false
+				},
+				{
+					field : 'updateBy',
+					title : '更新者',
+					visible: false
+				},
+				{
+					field : 'updateTime',
+					title : '更新时间',
+					sortable: true,
+					visible: false
+				},
+				{
+					field : 'remark',
+					title : '备注',
+					width : '15%',
+					class : 'myTDLengthHidden',
+                    formatter: function(value, row, index) {
+                    	return $.table.tooltip(value);
+                    }
+				}],
+				onEditableSave: function (field, row, oldValue, $el) {
+					$.operate.saveJsonUnBack(prefix + "/edit", JSON.stringify(row));
+	            }
+            };
+            $.table.init(options);
+        });
+
+        /*添加选择的用例到测试计划中*/
+	    function submitHandler(){
+	    	var rows = $.map($('#bootstrap-table').bootstrapTable('getData'), function (row) {
+    	        return row;
+    	    });
+
+     		$.modal.confirm("确认保存您选择的用例到计划中吗?", function() {
+				$.operate.saveJsonUnBack(prefix + "/saveSuitePlan", JSON.stringify(rows));
+    		});
+
+	    }
+
+	    /*添加项目中所有的用例到测试计划中*/
+	    function submitHandlerAll(){
+     		$.modal.confirm("确认保存查询用例集合到计划中吗?", function() {
+            	var config = {
+            	        url: prefix + "/saveSuiteAllPlan",
+            	        type: "post",
+            	        dataType: "json",
+            	        data: $('#formId').serialize(),
+            	        beforeSend: function () {
+            	        	$.modal.loading("正在处理中，请稍后...");
+            	        	$.modal.disable();
+            	        },
+            	        success: function(result) {
+                        	if (result.code == web_status.SUCCESS) {
+                            	$.modal.msgSuccess(result.msg);
+                        		$.table.refresh();
+                            } else {
+                            	$.modal.alertError(result.msg);
+                            }
+                            $.modal.enable();
+                            $.modal.closeLoading();
+            	        }
+            	    };
+            	  $.ajax(config);
+    		});
+
+	    }
+
+		function doSubmit(index, layero){
+			var body = layer.getChildFrame('body', index);
+   			$("#treeId").val(body.find('#treeId').val());
+   			$("#treeName").val(body.find('#treeName').val());
+   			layer.close(index);
+		}
+
+		function resetForm(){
+			$("#treeId").val("");
+			$.form.reset();
+		}
+    </script>
+</body>
+</html>

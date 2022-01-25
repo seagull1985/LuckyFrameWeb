@@ -101,8 +101,16 @@ public class TaskSchedulingServiceImpl implements ITaskSchedulingService
 		taskScheduling.setCreateTime(new Date());
 		taskScheduling.setUpdateBy(ShiroUtils.getLoginName());
 		taskScheduling.setUpdateTime(new Date());
-		
-	    return taskSchedulingMapper.insertTaskScheduling(taskScheduling);
+
+		//2021年1月23日 前端不会改，在后端当planType=1时，去掉suiteId,为2则反之
+		if(taskScheduling.getPlanType()==1){
+			taskScheduling.setSuiteId(null);
+		}
+		else if(taskScheduling.getPlanType()==2){
+			taskScheduling.setPlanId(null);
+		}
+
+		return taskSchedulingMapper.insertTaskScheduling(taskScheduling);
 	}
 	
 	/**
@@ -116,7 +124,15 @@ public class TaskSchedulingServiceImpl implements ITaskSchedulingService
 	{
 		taskScheduling.setUpdateBy(ShiroUtils.getLoginName());
 		taskScheduling.setUpdateTime(new Date());
-	    return taskSchedulingMapper.updateTaskScheduling(taskScheduling);
+		//2021年1月23日 前端不会改，在后端当planType=1时，去掉suiteId,为2则反之
+		if(taskScheduling.getPlanType()==1){
+			taskScheduling.setSuiteId(null);
+		}
+		else if(taskScheduling.getPlanType()==2){
+			taskScheduling.setPlanId(null);
+		}
+
+		return taskSchedulingMapper.updateTaskScheduling(taskScheduling);
 	}
 
 	/**

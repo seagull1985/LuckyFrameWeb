@@ -3,6 +3,7 @@ package com.luckyframe.project.testmanagmt.projectCaseParams.mapper;
 import java.util.List;
 
 import com.luckyframe.project.testmanagmt.projectCaseParams.domain.ProjectCaseParams;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 /**
@@ -37,6 +38,22 @@ public interface ProjectCaseParamsMapper
 	 * @date 2019年6月18日
 	 */
 	List<ProjectCaseParams> selectProjectCaseParamsListByProjectId(Integer projectId);
+
+	/**
+	 * 根据项目ID和环境查询项目下以及所有项目公共的参数
+	 * @param projectId 项目ID
+	 * @param envName 环境
+	 * @author jerelli
+	 * @date 2020年6月18日
+	 */
+	List<ProjectCaseParams> selectProjectCaseParamsListByProjectIdAndEnvName(@Param("projectId") Integer projectId, @Param("envName") String envName);
+
+	/**
+	 * 根据项目ID查询环境
+	 * @param projectId
+	 * @return
+	 */
+	List<String> selectProjectEnvListByProjectId(@Param("projectId") Integer projectId);
 	
 	/**
      * 新增用例公共参数

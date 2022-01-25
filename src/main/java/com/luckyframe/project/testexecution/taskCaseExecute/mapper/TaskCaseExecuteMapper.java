@@ -30,6 +30,13 @@ public interface TaskCaseExecuteMapper
 	 * @date 2019年4月22日
 	 */
 	TaskCaseExecute selectTaskCaseExecuteByTaskIdAndCaseId(TaskCaseExecute taskCaseExecute);
+
+	/**
+	 * 根据任务ID以及计划ID和用例ID查询实体
+	 * @param taskCaseExecute
+	 * @return
+	 */
+	TaskCaseExecute selectTaskCaseExecuteByTaskIdAndPlanIdAndCaseId(TaskCaseExecute taskCaseExecute);
 	
 	/**
      * 查询任务用例执行记录列表
