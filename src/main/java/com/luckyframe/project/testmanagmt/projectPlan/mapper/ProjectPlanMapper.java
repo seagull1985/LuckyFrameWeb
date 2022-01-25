@@ -3,6 +3,7 @@ package com.luckyframe.project.testmanagmt.projectPlan.mapper;
 import java.util.List;
 
 import com.luckyframe.project.testmanagmt.projectPlan.domain.ProjectPlan;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 /**
@@ -37,6 +38,16 @@ public interface ProjectPlanMapper
      * @return 测试计划集合
      */
 	List<ProjectPlan> selectProjectPlanList(ProjectPlan projectPlan);
+
+	/**
+	 * 根据聚合计划ID查询测试计划
+	 * @param suiteId
+	 * @return
+	 */
+	List<ProjectPlan> selectProjectPlanListBySuiteId(@Param("suiteId") Integer suiteId);
+
+
+	List<ProjectPlan> selectProjectPlanListForSuite(ProjectPlan projectPlan);
 	
 	/**
      * 新增测试计划

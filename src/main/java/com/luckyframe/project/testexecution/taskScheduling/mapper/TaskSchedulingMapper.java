@@ -93,4 +93,12 @@ public interface TaskSchedulingMapper
      * @date 2019年4月12日
      */
     int selectTaskSchedulingCountByPlanId(Integer planId);
+
+	/**
+	 * 查询聚合计划下有没有调度
+	 * @param suiteId 聚合测试计划ID
+	 * @author jerelli
+	 * @date 2021年1月6日
+	 */
+	int selectTaskSchedulingCountBySuiteId(Integer suiteId);
 }

@@ -35,6 +35,21 @@ public interface IProjectCaseParamsService
 	 * @date 2019年6月18日
 	 */
 	List<ProjectCaseParams> selectProjectCaseParamsListByProjectId(Integer projectId);
+
+	/**
+	 * 根据项目ID和环境查询所有项目中以及当前项目下的公共参数
+	 * @param projectId 项目ID
+	 * @author Seagull
+	 * @date 2019年6月18日
+	 */
+	List<ProjectCaseParams> selectProjectCaseParamsListByProjectIdAndEnvName(Integer projectId,String envName);
+
+	/**
+	 * 根据项目ID查询该项目下所有的环境
+	 * @param projectId
+	 * @return
+	 */
+	List<String> selectProjectEnvListByProjectId(Integer projectId);
 	
 	/**
      * 新增用例公共参数

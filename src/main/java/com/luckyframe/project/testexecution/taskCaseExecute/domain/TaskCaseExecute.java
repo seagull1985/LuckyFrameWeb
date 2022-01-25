@@ -19,6 +19,8 @@ public class TaskCaseExecute extends BaseEntity
 	private Integer taskCaseId;
 	/** 任务ID */
 	private Integer taskId;
+	/** 计划ID */
+	private Integer planId;
 	/** 项目ID */
 	private Integer projectId;
 	/** 用例ID */
@@ -65,6 +67,13 @@ public class TaskCaseExecute extends BaseEntity
 	public Integer getTaskId() 
 	{
 		return taskId;
+	}
+	public Integer getPlanId() {
+		return planId;
+	}
+
+	public void setPlanId(Integer planId) {
+		this.planId = planId;
 	}
 	public void setProjectId(Integer projectId) 
 	{
@@ -152,6 +161,7 @@ public class TaskCaseExecute extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("taskCaseId", getTaskCaseId())
             .append("taskId", getTaskId())
+            .append("planId", getPlanId())
             .append("projectId", getProjectId())
             .append("caseSign", getCaseSign())
             .append("caseName", getCaseName())

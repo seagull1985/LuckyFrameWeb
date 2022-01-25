@@ -46,6 +46,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </where>
          order by pp.plan_id desc
     </select>
+
+    <select id="selectProjectPlanListBySuiteId" parameterType="Integer" resultMap="ProjectPlanResult">
+        SELECT pp.plan_id,pp.plan_name,pp.plan_case_count,pp.project_id, pp.create_by, pp.create_time, pp.update_by, pp.update_time, pp.remark FROM `project_suite_plan`  psp
+        INNER JOIN project_suite ps on psp.suite_id=ps.suite_id
+        RIGHT JOIN project_plan pp on psp.plan_id=pp.plan_id
+        <where>
+            <if test="suiteId !=null" >and ps.suite_id = ${suiteId}</if>
+        </where>
+        order by ps.suite_id desc
+    </select>
+
+    <select id="selectProjectPlanListForSuite" parameterType="ProjectPlan" resultMap="ProjectPlanResult">
+        SELECT pp.plan_id,pp.plan_name,pp.plan_case_count,pp.project_id, pp.create_by, pp.create_time, pp.update_by, pp.update_time, pp.remark FROM `project_suite_plan`  psp
+        INNER JOIN project_suite ps on psp.suite_id=ps.suite_id
+        RIGHT JOIN project_plan pp on psp.plan_id=pp.plan_id
+        <where>
+            <if test="suiteId != null "> and ps.suite_id = #{suiteId}</if>
+            <if test="projectId != null "> and ps.project_id = #{projectId}</if>
+            <if test="createBy != null  and createBy != '' "> and ps.create_by = #{createBy}</if>
+            <if test="createTime != null "> and ps.create_time = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != '' "> and ps.update_by = #{updateBy}</if>
+            <if test="updateTime != null "> and ps.update_time = #{updateTime}</if>
+            <if test="remark != null  and remark != '' "> and ps.remark  like concat('%', #{remark}, '%')</if>
+            <if test="planId != null and flag == true"> and psp.plan_id = #{planId}</if>
+            <if test="planName != null  and planName != '' "> and pp.plan_name like concat('%', #{planName}, '%')</if>
+        </where>
+        order by psp.priority asc,ps.suite_id desc
+    </select>
     
     <select id="selectProjectPlanById" parameterType="Integer" resultMap="ProjectPlanResult">
         <include refid="selectProjectPlanVo"/>

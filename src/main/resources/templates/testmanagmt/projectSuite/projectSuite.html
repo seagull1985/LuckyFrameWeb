@@ -1,0 +1,246 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            项目：
+                            <select id="projectId" name="projectId" th:with="type=${projects}">
+                                <option value="">所有项目</option>
+                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == defaultProjectId}"></option>
+                            </select>
+                        </li>
+
+                        <li>
+                            聚合计划名称：<input type="text" name="suiteName"/>
+                        </li>
+
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+            <shiro:hasPermission name="testmanagmt:projectSuite:add">
+                <a class="btn btn-success" onclick="$.operate.add()">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="testmanagmt:projectSuite:edit">
+                <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="testmanagmt:projectSuite:edit">
+                <a class="btn btn-info btn-edit disabled" onclick="showSuitePlan()">
+                    <i class="fa fa-edit"></i> 聚合计划管理
+                </a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="testmanagmt:projectSuite:remove">
+                <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+            </shiro:hasPermission>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('testmanagmt:projectSuite:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('testmanagmt:projectSuite:remove')}]];
+        var prefix = ctx + "testmanagmt/projectSuite";
+        var suitePlanPrefix = ctx + "testmanagmt/projectSuitePlan";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                customUrl: suitePlanPrefix + "/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "聚合计划",
+                childrenModalName: "聚合计划编辑",
+				search: false,
+				queryParams: function(params) {
+	            	return {
+	        			// 传递参数查询参数
+	                    pageSize:       params.limit,
+	                    pageNum:        params.offset / params.limit + 1,
+	                    searchValue:    params.search,
+	                    orderByColumn:  params.sort,
+	                    isAsc:          params.order,
+	                    projectId:      $('#projectId').val()
+	        		};
+				},
+		        showExport: false,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'suiteId',
+					title : '聚合计划ID',
+					visible: false
+				},
+				{
+					field : 'suiteName',
+					title : '聚合计划名称',
+					width : '20%',
+					class : 'myTDLengthHidden',
+					editable : {
+						type : 'text',
+						title : '聚合计划名称',
+						emptytext : "【聚合计划名称】为空",
+						validate : function(value) {
+							if (value.length > 50)
+								return '聚合计划名称不能超过50个字符';
+							if (value.length == 0)
+								return '聚合计划名称不能为空';
+						}
+					}
+				},
+				{
+					field : 'project.projectName',
+					title : '项目名称',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'suitePlanCount',
+					title : '包含计划总数',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'createBy',
+					title : '创建者',
+					visible: false
+				},
+				{
+					field : 'createTime',
+					title : '创建时间',
+					visible: false
+				},
+				{
+					field : 'updateBy',
+					title : '更新者',
+					width : '10%',
+					class : 'myTDLengthHidden'
+				},
+				{
+					field : 'updateTime',
+					title : '更新时间',
+					width : '15%',
+					class : 'myTDLengthHidden',
+					sortable: true
+				},
+				{
+					field : 'remark',
+					title : '备注',
+					width : '10%',
+					class : 'myTDLengthHidden',
+					editable : {
+						type : 'textarea',
+						title : '备注',
+						emptytext : "【备注】为空",
+						validate : function(value) {
+							if (value.length > 200)
+								return '备注不能超过200个字符';
+						}
+					}
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+					width : '20%',
+					class : 'myTDLengthHidden',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.suiteId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.suiteId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }],
+		        //行内编辑
+				onEditableSave : function(field, row, oldValue, $el) {
+					$('#bootstrap-table').bootstrapTable("resetView");
+					delete row.project;
+ 					$.ajax({
+						type : "post",
+						url : prefix + "/edit",
+						data : row,
+						dataType : 'JSON',
+						success : function(result) {
+			                if (result.code == 0) {
+			                	$.modal.msgSuccess(result.msg);
+			                } else {
+			                    $.modal.alertError(result.msg);
+			                }
+						},
+						error : function() {
+							$.modal.alertError("系统错误");
+						}
+
+					});
+				}
+            };
+            $.table.init(options);
+        });
+
+        function showSuitePlan() {
+        	var row= $.map($('#bootstrap-table').bootstrapTable('getSelections'), function (row) {
+    	        return row;
+    	    });
+
+        	var url = "/404.html";
+        	if ($.common.isNotEmpty(row)) {
+        	    url = $.table._option.customUrl.replace("{id}", row[0].suiteId);
+        	}
+        	openFull($.table._option.childrenModalName+": ["+row[0].suiteName+"]", url);
+        }
+
+        function openFull(title, url, width, height) {
+        	//如果是移动端，就使用自适应大小弹窗
+        	if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+        	    width = 'auto';
+        	    height = 'auto';
+        	}
+            var index = layer.open({
+        		type: 2,
+        		area: [width + 'px', height + 'px'],
+        		fix: false,
+        		//不固定
+        		maxmin: true,
+        		shade: 0.3,
+        		title: title,
+        		content: url,
+        		btn: ["保存选择用例",  '关闭'],
+        		// 弹层外区域关闭
+        		shadeClose: true,
+        		yes: function(index, layero) {
+        	        var iframeWin = layero.find('iframe')[0];
+        	        iframeWin.contentWindow.submitHandler();
+        	    },
+        	    cancel: function(index) {
+        	        return true;
+        	    }
+        	});
+            layer.full(index);
+        }
+    </script>
+</body>
+</html>

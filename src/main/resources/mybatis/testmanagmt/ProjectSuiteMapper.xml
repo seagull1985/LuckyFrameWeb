@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.testmanagmt.projectSuite.mapper.ProjectSuiteMapper">
+
+    <resultMap type="ProjectSuite" id="ProjectSuiteResult">
+        <result property="suiteId"    column="suite_id"    />
+        <result property="suiteName"    column="suite_name"    />
+        <result property="suitePlanCount"    column="suite_plan_count"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <association property="project"  column="project_id" javaType="Project" resultMap="ProjectResult" />
+    </resultMap>
+
+    <resultMap type="Project" id="ProjectResult">
+        <id property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="projectSign"    column="project_sign"    />
+    </resultMap>
+
+    <sql id="selectProjectSuiteVo">
+        select ps.suite_id, ps.suite_name, ps.suite_plan_count, ps.project_id, ps.create_by, ps.create_time, ps.update_by, ps.update_time, ps.remark,
+        sp.project_name,sp.dept_id,sp.project_sign
+        from project_suite ps
+        left join sys_project sp on ps.project_id = sp.project_id
+    </sql>
+
+    <select id="selectProjectSuiteList" parameterType="ProjectSuite" resultMap="ProjectSuiteResult">
+        <include refid="selectProjectSuiteVo"/>
+        <where>
+            <if test="suiteId != null "> and ps.suite_id = #{suiteId}</if>
+            <if test="suiteName != null  and suiteName != '' "> and ps.suite_name like concat('%', #{suiteName}, '%')</if>
+            <if test="suitePlanCount != null "> and ps.suite_plan_count = #{suitePlanCount}</if>
+            <if test="projectId != null "> and ps.project_id = #{projectId}</if>
+            <if test="createBy != null  and createBy != '' "> and ps.create_by = #{createBy}</if>
+            <if test="createTime != null "> and ps.create_time = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != '' "> and ps.update_by = #{updateBy}</if>
+            <if test="updateTime != null "> and ps.update_time = #{updateTime}</if>
+            <if test="remark != null  and remark != '' "> and ps.remark = #{remark}</if>
+        </where>
+        order by ps.suite_id desc
+    </select>
+
+    <select id="selectProjectSuiteById" parameterType="Integer" resultMap="ProjectSuiteResult">
+        <include refid="selectProjectSuiteVo"/>
+        where ps.suite_id = #{suiteId}
+    </select>
+
+    <select id="selectProjectSuiteBySuiteName" parameterType="String" resultMap="ProjectSuiteResult">
+        <include refid="selectProjectSuiteVo"/>
+        where ps.suite_name = #{suiteName}
+    </select>
+
+    <select id="checkProjectSuiteNameUnique" parameterType="String" resultMap="ProjectSuiteResult">
+        <include refid="selectProjectSuiteVo"/>
+        where ps.suite_name=#{suite_name}
+    </select>
+
+    <insert id="insertProjectSuite" parameterType="ProjectSuite" useGeneratedKeys="true" keyProperty="suiteId">
+        insert into project_suite
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="suiteName != null  and suiteName != ''  ">suite_name,</if>
+            <if test="suitePlanCount != null  ">suite_plan_count,</if>
+            <if test="projectId != null  ">project_id,</if>
+            <if test="createBy != null  and createBy != ''  ">create_by,</if>
+            <if test="createTime != null  ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+            <if test="updateTime != null  ">update_time,</if>
+            <if test="remark != null  and remark != ''  ">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="suiteName != null  and suiteName != ''  ">#{suiteName},</if>
+            <if test="suitePlanCount != null  ">#{suitePlanCount},</if>
+            <if test="projectId != null  ">#{projectId},</if>
+            <if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+            <if test="createTime != null  ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+            <if test="updateTime != null  ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''  ">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateProjectSuite" parameterType="ProjectSuite">
+        update project_suite
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="suiteName != null  and suiteName != ''  ">suite_name = #{suiteName},</if>
+            <if test="suitePlanCount != null  ">suite_plan_count = #{suitePlanCount},</if>
+            <if test="projectId != null  ">project_id = #{projectId},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            <if test="remark != null ">remark = #{remark},</if>
+        </trim>
+        where suite_id = #{suiteId}
+    </update>
+
+    <delete id="deleteProjectSuiteById" parameterType="Integer">
+        delete from project_suite where suite_id = #{suiteId}
+    </delete>
+
+    <delete id="deleteProjectSuiteByIds" parameterType="String">
+        delete from project_suite where suite_id in
+        <foreach item="suiteId" collection="array" open="(" separator="," close=")">
+            #{suiteId}
+        </foreach>
+    </delete>
+
+</mapper>
