@@ -10,16 +10,16 @@
 -- ----------------------------
 -- 1、数据字典表增加Web UI内置关键字 getvalue
 -- ----------------------------
-insert ignore into sys_dict_data values(2048, 49,  'GetValue获取指定对象值', 'getvalue',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2021-06-30 14-27-32', 'luckyframe', '2021-06-30 14-27-32', '获取指定对象值');
+INSERT INTO sys_dict_data values(2048, 49,  'GetValue获取指定对象值', 'getvalue',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2021-06-30 14-27-32', 'luckyframe', '2021-06-30 14-27-32', '获取指定对象值');
 
 -- ----------------------------
 -- 2、任务调度表增加一列环境
 -- ----------------------------
-alter table task_scheduling add env_name VARCHAR(255) COMMENT '测试环境';
+ALTER TABLE task_scheduling ADD env_name VARCHAR(255) COMMENT '测试环境';
 -- ----------------------------
 -- 3、公共参数表增加一列环境
 -- ----------------------------
-alter table project_case_params add env_name VARCHAR(255) COMMENT '测试环境';
+ALTER TABLE project_case_params ADD env_name VARCHAR(255) COMMENT '测试环境';
 -- ----------------------------
 -- 4、新建聚合计划表
 -- ----------------------------
@@ -48,24 +48,35 @@ CREATE TABLE `project_suite_plan` (
                                       KEY `plan_id` (`plan_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8 COMMENT='聚合计划';
 -- ----------------------------
--- 6、插入菜单
+-- 6、调度任务表添加两列
 -- ----------------------------
-INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('2000', '聚合计划', '4', '5', '/testmanagmt/projectSuite', 'C', '0', 'testmanagmt:projectSuite:view', '#', 'admin', '2021-01-14 03:43:57', '', NULL, '');
-INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('2001', '聚合计划新增', '2000', '1', '#', 'F', '0', 'testmanagmt:projectSuite:add', '#', 'admin', '2021-01-14 03:44:23', '', NULL, '');
-INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('2002', '聚合计划编辑', '2000', '2', '#', 'F', '0', 'testmanagmt:projectSuite:edit', '#', 'admin', '2021-01-14 03:44:39', '', NULL, '');
-INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('2003', '聚合计划删除', '2000', '3', '#', 'F', '0', 'testmanagmt:projectSuite:remove', '#', 'admin', '2021-01-14 03:44:56', '', NULL, '');
-INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('2004', '聚合计划查询', '2000', '4', '#', 'F', '0', 'testmanagmt:projectSuite:list', '#', 'admin', '2021-01-14 03:45:11', '', NULL, '');
+ALTER TABLE task_scheduling ADD suite_id int COMMENT '聚合计划ID';
+ALTER TABLE task_scheduling ADD plan_type int DEFAULT 1 COMMENT '计划类型 1 单个计划 2聚合计划';
+UPDATE task_scheduling SET plan_type=1 where plan_type=0;
 -- ----------------------------
--- 7、调度任务表添加两列
+-- 7、任务执行表添加一列
 -- ----------------------------
-alter table task_scheduling add suite_id int COMMENT '聚合计划ID';
-alter table task_scheduling add plan_type int DEFAULT 1 COMMENT '计划类型 1 单个计划 2聚合计划';
-update task_scheduling set plan_type=1 where plan_type=0;
+ALTER TABLE task_case_execute ADD plan_id int DEFAULT NULL COMMENT "计划ID";
 -- ----------------------------
--- 8、任务执行表添加一列
+-- 8、修改plan_id默认为null
 -- ----------------------------
-alter table task_case_execute add plan_id int DEFAULT NULL COMMENT "计划ID";
+ALTER TABLE task_scheduling MODIFY plan_id int(11) DEFAULT NULL;
 -- ----------------------------
--- 9、修改plan_id默认为null
+-- 9、增加用例导出导入权限控制菜单
 -- ----------------------------
-alter table task_scheduling MODIFY plan_id int(11) DEFAULT NULL;
+INSERT INTO sys_menu
+(menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES('1109', '用例步骤导入', '118', '6', '#', 'F', '0', 'testmanagmt:projectCase:import', '#', 'admin', '2021-12-13 17:36:51', 'admin', '2021-12-13 17:39:59', '');
+-- ----------------------------
+-- 10、插入菜单
+-- ----------------------------
+INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('1110', '聚合计划', '4', '6', '/testmanagmt/projectSuite', 'C', '0', 'testmanagmt:projectSuite:view', '#', 'admin', '2021-01-14 03:43:57', '', NULL, '');
+INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('1111', '聚合计划新增', '1110', '1', '#', 'F', '0', 'testmanagmt:projectSuite:add', '#', 'admin', '2021-01-14 03:44:23', '', NULL, '');
+INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('1112', '聚合计划编辑', '1110', '2', '#', 'F', '0', 'testmanagmt:projectSuite:edit', '#', 'admin', '2021-01-14 03:44:39', '', NULL, '');
+INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('1113', '聚合计划删除', '1110', '3', '#', 'F', '0', 'testmanagmt:projectSuite:remove', '#', 'admin', '2021-01-14 03:44:56', '', NULL, '');
+INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('1114', '聚合计划查询', '1110', '4', '#', 'F', '0', 'testmanagmt:projectSuite:list', '#', 'admin', '2021-01-14 03:45:11', '', NULL, '');

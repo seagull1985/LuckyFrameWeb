@@ -46,7 +46,7 @@
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
 				exportUrl: prefix + "/export",
-                modalName: "测试用例",
+                modalName: "测试计划",
 				search: false,
 				queryParams: function(params) {
 	            	return {
@@ -149,21 +149,21 @@
             $.table.init(options);
         });
 
-        /*添加选择的用例到测试计划中*/
+        /*添加选择的测试计划到聚合计划中*/
 	    function submitHandler(){
 	    	var rows = $.map($('#bootstrap-table').bootstrapTable('getData'), function (row) {
     	        return row;
     	    });
 
-     		$.modal.confirm("确认保存您选择的用例到计划中吗?", function() {
+     		$.modal.confirm("确认保存您的聚合计划吗?", function() {
 				$.operate.saveJsonUnBack(prefix + "/saveSuitePlan", JSON.stringify(rows));
     		});
 
 	    }
 
-	    /*添加项目中所有的用例到测试计划中*/
+	    /*添加项目中所有的计划到聚合计划中*/
 	    function submitHandlerAll(){
-     		$.modal.confirm("确认保存查询用例集合到计划中吗?", function() {
+     		$.modal.confirm("确认保存查询计划到聚合计划中吗?", function() {
             	var config = {
             	        url: prefix + "/saveSuiteAllPlan",
             	        type: "post",

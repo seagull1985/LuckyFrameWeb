@@ -93,7 +93,7 @@
     </resultMap>
 
     <sql id="selectTaskSchedulingVo">
-        select ts.scheduling_id, ts.scheduling_name, ts.job_id, ts.env_name,ts.project_id, ts.plan_id,ts.suite_id,ts.catch_id, ts.client_id, ts.email_address,ts.push_url, ts.email_send_condition, ts.building_link, ts.remote_shell, ts.ex_thread_count, ts.task_type,ts.plan_type, ts.browser_type, ts.task_timeout, ts.client_driver_path,
+        select ts.scheduling_id, ts.scheduling_name, ts.job_id, ts.env_name,ts.project_id, ts.plan_id,ts.suite_id, ts.client_id, ts.email_address,ts.push_url, ts.email_send_condition, ts.building_link, ts.remote_shell, ts.ex_thread_count, ts.task_type,ts.plan_type, ts.browser_type, ts.task_timeout, ts.client_driver_path,
                sj.job_name, sj.job_group, sj.method_name, sj.method_params, sj.cron_expression, sj.misfire_policy, sj.status, sj.remark, sj.update_time,
                sp.project_name,sp.dept_id,sp.project_sign,
                pp.plan_name, pp.plan_case_count,
