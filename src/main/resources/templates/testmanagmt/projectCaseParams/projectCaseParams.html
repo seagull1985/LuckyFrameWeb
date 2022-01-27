@@ -17,6 +17,10 @@
 	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == defaultProjectId}"></option>
 	                            </select>
 							</li>
+
+							<li>
+								环境：<input type="text" name="envName"/>
+							</li>
 							
 							<li>
 								参数名称：<input type="text" name="paramsName"/>
@@ -104,6 +108,12 @@
 							return $.table.tooltip("所有项目");
 						}
 					}
+				},
+				{
+					field : 'envName',
+					title : '环境',
+					width : '10%',
+					class : 'myTDLengthHidden'
 				},
 				{
 					field : 'paramsName', 

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.luckyframe.project.testexecution.taskCaseExecute.mapper.TaskCaseExecuteMapper">
-    
+
     <resultMap type="TaskCaseExecute" id="TaskCaseExecuteResult">
         <result property="taskCaseId"    column="task_case_id"    />
         <result property="taskId"    column="task_id"    />
+        <result property="planId"    column="plan_id"    />
         <result property="projectId"    column="project_id"    />
         <result property="caseId"    column="case_id"    />
         <result property="caseSign"    column="case_sign"    />
@@ -18,81 +19,90 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
-	
-	<sql id="selectTaskCaseExecuteVo">
-        select task_case_id, task_id, project_id, case_id, case_sign, case_name, case_status, finish_time, create_by, create_time, update_by, update_time from task_case_execute
+
+    <sql id="selectTaskCaseExecuteVo">
+        select task_case_id, task_id,plan_id, project_id, case_id, case_sign, case_name, case_status, finish_time, create_by, create_time, update_by, update_time from task_case_execute
     </sql>
-	
+
     <select id="selectTaskCaseExecuteList" parameterType="TaskCaseExecute" resultMap="TaskCaseExecuteResult">
         <include refid="selectTaskCaseExecuteVo"/>
-        <where>  
+        <where>
             <if test="taskCaseId != null "> and task_case_id = #{taskCaseId}</if>
-             <if test="taskId != null "> and task_id = #{taskId}</if>
-             <if test="projectId != null and projectId != 0"> and project_id = #{projectId}</if>
-             <if test="caseId != null "> and case_id = #{caseId}</if>
-             <if test="caseSign != null  and caseSign != '' "> and case_sign like concat('%', #{caseSign}, '%')</if>
-             <if test="caseName != null  and caseName != '' "> and case_name like concat('%', #{caseName}, '%')</if>
-             <if test="caseStatus != null "> and case_status = #{caseStatus}</if>
-             <if test="finishTime != null "> and finish_time = #{finishTime}</if>
-		     <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-			    and date_format(update_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-		     </if>
-		     <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-			    and date_format(update_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
-		     </if>
-         </where>
-         order by task_case_id desc
+            <if test="taskId != null "> and task_id = #{taskId}</if>
+            <if test="planId != null "> and plan_id = #{planId}</if>
+            <if test="projectId != null and projectId != 0"> and project_id = #{projectId}</if>
+            <if test="caseId != null "> and case_id = #{caseId}</if>
+            <if test="caseSign != null  and caseSign != '' "> and case_sign like concat('%', #{caseSign}, '%')</if>
+            <if test="caseName != null  and caseName != '' "> and case_name like concat('%', #{caseName}, '%')</if>
+            <if test="caseStatus != null "> and case_status = #{caseStatus}</if>
+            <if test="finishTime != null "> and finish_time = #{finishTime}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(update_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(update_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        order by task_case_id desc
     </select>
-    
+
     <select id="selectTaskCaseExecuteById" parameterType="Integer" resultMap="TaskCaseExecuteResult">
         <include refid="selectTaskCaseExecuteVo"/>
         where task_case_id = #{taskCaseId}
     </select>
-    
+
     <select id="selectTaskCaseExecuteByTaskIdAndCaseId" parameterType="TaskCaseExecute" resultMap="TaskCaseExecuteResult">
         <include refid="selectTaskCaseExecuteVo"/>
         where task_id = #{taskId} and case_id = #{caseId}
     </select>
-        
+
+    <select id="selectTaskCaseExecuteByTaskIdAndPlanIdAndCaseId" parameterType="TaskCaseExecute" resultMap="TaskCaseExecuteResult">
+        <include refid="selectTaskCaseExecuteVo"/>
+        where task_id = #{taskId} and case_id = #{caseId} and plan_id=#{planId}
+    </select>
+
     <select id="selectTaskCaseExecuteListForUnSucByTaskId" parameterType="Integer" resultMap="TaskCaseExecuteResult">
         <include refid="selectTaskCaseExecuteVo"/>
         where task_id = #{taskId} and case_status!=0
     </select>
-    
+
     <insert id="insertTaskCaseExecute" parameterType="TaskCaseExecute" useGeneratedKeys="true" keyProperty="taskCaseId">
         insert into task_case_execute
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="taskId != null  ">task_id,</if>
-			<if test="projectId != null  ">project_id,</if>
-			<if test="caseId != null  ">case_id,</if>
-			<if test="caseSign != null  and caseSign != ''  ">case_sign,</if>
-			<if test="caseName != null  and caseName != ''  ">case_name,</if>
-			<if test="caseStatus != null  ">case_status,</if>
-			<if test="finishTime != null  ">finish_time,</if>
-			<if test="createBy != null  and createBy != ''  ">create_by,</if>
-			<if test="createTime != null  ">create_time,</if>
-			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
-			<if test="updateTime != null  ">update_time,</if>
-         </trim>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null  ">task_id,</if>
+            <if test="planId != null  ">plan_id,</if>
+            <if test="projectId != null  ">project_id,</if>
+            <if test="caseId != null  ">case_id,</if>
+            <if test="caseSign != null  and caseSign != ''  ">case_sign,</if>
+            <if test="caseName != null  and caseName != ''  ">case_name,</if>
+            <if test="caseStatus != null  ">case_status,</if>
+            <if test="finishTime != null  ">finish_time,</if>
+            <if test="createBy != null  and createBy != ''  ">create_by,</if>
+            <if test="createTime != null  ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+            <if test="updateTime != null  ">update_time,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="taskId != null  ">#{taskId},</if>
-			<if test="projectId != null  ">#{projectId},</if>
-			<if test="caseId != null  ">#{caseId},</if>
-			<if test="caseSign != null  and caseSign != ''  ">#{caseSign},</if>
-			<if test="caseName != null  and caseName != ''  ">#{caseName},</if>
-			<if test="caseStatus != null  ">#{caseStatus},</if>
-			<if test="finishTime != null  ">#{finishTime},</if>
-			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
-			<if test="createTime != null  ">#{createTime},</if>
-			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
-			<if test="updateTime != null  ">#{updateTime},</if>
-         </trim>
+            <if test="taskId != null  ">#{taskId},</if>
+            <if test="planId != null  ">#{planId},</if>
+            <if test="projectId != null  ">#{projectId},</if>
+            <if test="caseId != null  ">#{caseId},</if>
+            <if test="caseSign != null  and caseSign != ''  ">#{caseSign},</if>
+            <if test="caseName != null  and caseName != ''  ">#{caseName},</if>
+            <if test="caseStatus != null  ">#{caseStatus},</if>
+            <if test="finishTime != null  ">#{finishTime},</if>
+            <if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+            <if test="createTime != null  ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+            <if test="updateTime != null  ">#{updateTime},</if>
+        </trim>
     </insert>
-	 
+
     <update id="updateTaskCaseExecute" parameterType="TaskCaseExecute">
         update task_case_execute
         <trim prefix="SET" suffixOverrides=",">
             <if test="taskId != null  ">task_id = #{taskId},</if>
+            <if test="planId != null  ">plan_id = #{planId},</if>
             <if test="projectId != null  ">project_id = #{projectId},</if>
             <if test="caseId != null  ">case_id = #{caseId},</if>
             <if test="caseSign != null  and caseSign != ''  ">case_sign = #{caseSign},</if>
@@ -107,30 +117,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where task_case_id = #{taskCaseId}
     </update>
 
-	<delete id="deleteTaskCaseExecuteById" parameterType="Integer">
+    <delete id="deleteTaskCaseExecuteById" parameterType="Integer">
         delete from task_case_execute where task_case_id = #{taskCaseId}
     </delete>
-    
-    	<delete id="deleteTaskCaseExecuteByTaskId" parameterType="Integer">
+
+    <delete id="deleteTaskCaseExecuteByTaskId" parameterType="Integer">
         delete from task_case_execute where task_id = #{taskId}
     </delete>
-	
+
     <delete id="deleteTaskCaseExecuteByIds" parameterType="String">
-        delete from task_case_execute where task_case_id in 
+        delete from task_case_execute where task_case_id in
         <foreach item="taskCaseId" collection="array" open="(" separator="," close=")">
             #{taskCaseId}
         </foreach>
     </delete>
-    
+
     <select id="selectTaskCaseExecuteCountByProjectId" parameterType="Integer" resultType="Integer">
-		select count(1) from task_case_execute where project_id=#{project_id}
-	</select>
-	
-	<select id="selectTaskCaseExecuteCount" resultType="Integer">
-		select count(1) from task_case_execute
-	</select>
-	
+        select count(1) from task_case_execute where project_id=#{project_id}
+    </select>
+
+    <select id="selectTaskCaseExecuteCount" resultType="Integer">
+        select count(1) from task_case_execute
+    </select>
+
     <select id="selectTaskCaseExecuteCountForSuccess" resultType="Integer">
-		select count(1) from task_case_execute where case_status=0
-	</select>
+        select count(1) from task_case_execute where case_status=0
+    </select>
 </mapper>

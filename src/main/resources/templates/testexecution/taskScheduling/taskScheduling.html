@@ -3,127 +3,128 @@
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
 <body class="gray-bg">
-    
-     <div class="container-div">
-		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="formId">
-					<div class="select-list">
-						<ul>
-							<li>
-								项目：
-								<select id="projectId" name="projectId" th:with="type=${projects}">
-								    <option value="">所有项目</option>
-	                                <option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == defaultProjectId}"></option>
-	                            </select>
-							</li>
-							
-							<li>
-								调度名称：<input type="text" name="schedulingName"/>
-							</li>
 
-							<li>
-								客户端：
-								<select id="clientId" name="clientId" th:with="type=${clients}">
-								    <option value="">全部</option>
-	                                <option th:each="client : ${type}" th:text="'【'+${client.clientName}+'】'+${client.clientIp}" th:value="${client.clientId}" th:selected="${client.clientId == defaultClientId}"></option>
-	                            </select>
-							</li>
-							
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
-					</div>
-				</form>
-			</div>
-			
-	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<shiro:hasPermission name="testexecution:taskScheduling:add">
+<div class="container-div">
+	<div class="row">
+		<div class="col-sm-12 search-collapse">
+			<form id="formId">
+				<div class="select-list">
+					<ul>
+						<li>
+							项目：
+							<select id="projectId" name="projectId" th:with="type=${projects}">
+								<option value="">所有项目</option>
+								<option th:each="projects : ${type}" th:text="${projects.projectName}" th:value="${projects.projectId}" th:selected="${projects.projectId == defaultProjectId}"></option>
+							</select>
+						</li>
+
+						<li>
+							调度名称：<input type="text" name="schedulingName"/>
+						</li>
+
+						<li>
+							客户端：
+							<select id="clientId" name="clientId" th:with="type=${clients}">
+								<option value="">全部</option>
+								<!--	                                <option th:each="client : ${type}" th:text="'【'+${client.clientName}+'】'+${client.clientIp}" th:value="${client.clientId}" th:selected="${client.clientId == defaultClientId}"></option>-->
+								<option th:each="client : ${type}" th:text="'【'+${client.clientName}+'】'+${client.clientIp}" th:value="${client.clientId}"></option>
+							</select>
+						</li>
+
+						<li>
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+
+		<div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+			<shiro:hasPermission name="testexecution:taskScheduling:add">
 				<a class="btn btn-success" onclick="$.operate.add()">
 					<i class="fa fa-plus"></i> 添加
 				</a>
-				</shiro:hasPermission>
-				<shiro:hasPermission name="testexecution:taskScheduling:edit">
+			</shiro:hasPermission>
+			<shiro:hasPermission name="testexecution:taskScheduling:edit">
 				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
 					<i class="fa fa-edit"></i> 修改
 				</a>
-				</shiro:hasPermission>
-				<shiro:hasPermission name="testexecution:taskScheduling:remove">
+			</shiro:hasPermission>
+			<shiro:hasPermission name="testexecution:taskScheduling:remove">
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()">
 					<i class="fa fa-remove"></i> 删除
 				</a>
-				</shiro:hasPermission>
-				<a class="btn btn-info" onclick="showQueryLog()">
-					<i class="fa fa-eye"></i> 查看日志
-				</a>
-				<a class="btn btn-info" onclick="uploadJar()">
-					<i class="fa fa-cloud-upload"></i> 上传驱动包
-				</a>
-			</div>
-			<div class="col-sm-12 select-table table-striped">
-				<table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
-			</div>
+			</shiro:hasPermission>
+			<a class="btn btn-info" onclick="showQueryLog()">
+				<i class="fa fa-eye"></i> 查看日志
+			</a>
+			<a class="btn btn-info" onclick="uploadJar()">
+				<i class="fa fa-cloud-upload"></i> 上传驱动包
+			</a>
+		</div>
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true" style="table-layout:fixed"></table>
 		</div>
 	</div>
-    <div th:include="include :: footer"></div>
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('testexecution:taskScheduling:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('testexecution:taskScheduling:remove')}]];
-        var statusFlag = [[${@permission.hasPermi('testexecution:taskScheduling:execution')}]];
-        var detailFlag = [[${@permission.hasPermi('testexecution:taskScheduling:view')}]];
-        var prefix = ctx + "testexecution/taskScheduling";
-        var taskPrefix = ctx + "testexecution/taskExecute";
-        var jobPrefix = ctx + "monitor/job";
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+	var editFlag = [[${@permission.hasPermi('testexecution:taskScheduling:edit')}]];
+	var removeFlag = [[${@permission.hasPermi('testexecution:taskScheduling:remove')}]];
+	var statusFlag = [[${@permission.hasPermi('testexecution:taskScheduling:execution')}]];
+	var detailFlag = [[${@permission.hasPermi('testexecution:taskScheduling:view')}]];
+	var prefix = ctx + "testexecution/taskScheduling";
+	var taskPrefix = ctx + "testexecution/taskExecute";
+	var jobPrefix = ctx + "monitor/job";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-				exportUrl: prefix + "/export",
-                modalName: "测试任务调度",
-				search: false,
-				queryParams: function(params) {
-	            	return {
-	        			// 传递参数查询参数
-	                    pageSize:       params.limit,
-	                    pageNum:        params.offset / params.limit + 1,
-	                    searchValue:    params.search,
-	                    orderByColumn:  params.sort,
-	                    isAsc:          params.order,
-	                    projectId:      $('#projectId').val()
-	        		};
-				},
-		        showExport: false,
-                columns: [{
-		            checkbox: true
-		        },
+	$(function() {
+		var options = {
+			url: prefix + "/list",
+			createUrl: prefix + "/add",
+			updateUrl: prefix + "/edit/{id}",
+			removeUrl: prefix + "/remove",
+			exportUrl: prefix + "/export",
+			modalName: "测试任务调度",
+			search: false,
+			queryParams: function(params) {
+				return {
+					// 传递参数查询参数
+					pageSize:       params.limit,
+					pageNum:        params.offset / params.limit + 1,
+					searchValue:    params.search,
+					orderByColumn:  params.sort,
+					isAsc:          params.order,
+					projectId:      $('#projectId').val()
+				};
+			},
+			showExport: false,
+			columns: [{
+				checkbox: true
+			},
 				{
-					field : 'schedulingId', 
+					field : 'schedulingId',
 					title : '调度ID',
 					visible: true,
 					width : '5%',
 					sortable: true
 				},
 				{
-					field : 'jobId', 
+					field : 'jobId',
 					title : '调度任务ID',
 					visible: false
 				},
 				{
-					field : 'schedulingName', 
+					field : 'schedulingName',
 					title : '调度名称',
 					width : '15%',
 					formatter : function(value,
-							row, index) {
+										 row, index) {
 						return '<a href="#" onclick="taskExcute('+row.schedulingId+')">'+ value + '</a> ';
 					}
 				},
 				{
-					field : 'project.projectName', 
+					field : 'project.projectName',
 					title : '项目名称',
 					width : '11%',
 					class : 'myTDLengthHidden',
@@ -133,7 +134,7 @@
 					}
 				},
 				{
-					field : 'projectPlan.planName', 
+					field : 'projectPlan.planName',
 					title : '计划名称',
 					width : '16%',
 					class : 'myTDLengthHidden',
@@ -143,7 +144,17 @@
 					}
 				},
 				{
-					field : 'job.misfirePolicy', 
+					field : 'projectSuite.suiteName',
+					title : '聚合计划名称',
+					width : '16%'
+				},
+				{
+					field : 'envName',
+					title : '测试环境',
+					width : '10%'
+				},
+				{
+					field : 'job.misfirePolicy',
 					title : '调度策略',
 					width : '8%',
 					class : 'myTDLengthHidden',
@@ -162,13 +173,13 @@
 					}
 				},
 				{
-					field : 'job.cronExpression', 
+					field : 'job.cronExpression',
 					title : 'Cron',
 					width : '10%',
 					class : 'myTDLengthHidden'
 				},
 				{
-					field : 'client.clientIp', 
+					field : 'client.clientIp',
 					title : '客户端IP',
 					width : '10%',
 					class : 'myTDLengthHidden',
@@ -178,89 +189,90 @@
 					}
 				},
 				{
-					field : 'exThreadCount', 
+					field : 'exThreadCount',
 					title : '线程',
-					width : '5%',
-					class : 'myTDLengthHidden'
+					width : '7%',
+					class : 'myTDLengthHidden',
+					visible: false
 				},
 				{
-		        	visible: statusFlag == 'hidden' ? false : true,
-				    title: '任务状态',
-				    align: 'center',
-				    width : '10%',
-				    formatter: function (value, row, index) {
-				    	return statusTools(row);
-				    }
+					visible: statusFlag == 'hidden' ? false : true,
+					title: '任务状态',
+					align: 'center',
+					width : '10%',
+					formatter: function (value, row, index) {
+						return statusTools(row);
+					}
 				},
 				{
-					field : 'job.updateTime', 
+					field : 'job.updateTime',
 					title : '更新时间',
 					width : '10%',
 					visible: false
 				},
-		        {
-		            title: '操作',
-		            align: 'center',
+				{
+					title: '操作',
+					align: 'center',
 					width : '10%',
 					class : 'myTDLengthHidden',
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-		            	actions.push('<a class="btn btn-primary btn-xs ' + statusFlag + '" href="#" onclick="run(\'' + row.jobId + '\')"><i class="fa fa-play-circle-o"></i> 执行</a> ');
-		                /* actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="#" onclick="$.operate.detail(\'' + row.schedulingId + '\')"><i class="fa fa-search"></i>详细</a> '); */
+					formatter: function(value, row, index) {
+						var actions = [];
+						actions.push('<a class="btn btn-primary btn-xs ' + statusFlag + '" href="#" onclick="run(\'' + row.jobId + '\')"><i class="fa fa-play-circle-o"></i> 执行</a> ');
+						/* actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="#" onclick="$.operate.detail(\'' + row.schedulingId + '\')"><i class="fa fa-search"></i>详细</a> '); */
 						return actions.join('');
-		            }
-		        }]
-            };
-            $.table.init(options);
-        });
-        
-		/* 调度任务状态显示 */
-		function statusTools(row) {
-		    if (row.job.status == '1') {
-    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="start(\'' + row.jobId + '\',\''+ row.job.misfirePolicy+ '\')"></i> ';
-    		} else {
-    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="stop(\'' + row.jobId + '\',\''+ row.job.misfirePolicy+ '\')"></i> ';
-    		}
-		}
-		
-		/* 立即执行一次 */
-		function run(jobId) {
-			$.modal.confirm("确认要立即执行任务吗？", function() {
-				$.operate.post(jobPrefix + "/run", { "jobId": jobId});
-		    })
-		}
+					}
+				}]
+		};
+		$.table.init(options);
+	});
 
-		/* 调度任务-停用 */
-		function stop(jobId,misfirePolicy) {
-			$.modal.confirm("确认要停用任务吗？", function() {
-				$.operate.post(jobPrefix + "/changeStatus", { "jobId": jobId, "status": 1, "misfirePolicy":misfirePolicy });
-		    })
+	/* 调度任务状态显示 */
+	function statusTools(row) {
+		if (row.job.status == '1') {
+			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="start(\'' + row.jobId + '\',\''+ row.job.misfirePolicy+ '\')"></i> ';
+		} else {
+			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="stop(\'' + row.jobId + '\',\''+ row.job.misfirePolicy+ '\')"></i> ';
 		}
+	}
 
-		/* 调度任务-启用 */
-		function start(jobId,misfirePolicy) {
-			$.modal.confirm("确认要启用任务吗？", function() {
-				$.operate.post(jobPrefix + "/changeStatus", { "jobId": jobId, "status": 0, "misfirePolicy":misfirePolicy });
-		    })
-		}
-		
-		/* 测试任务查询 */
-		function taskExcute(schedulingId) {
-			var url = taskPrefix + '?schedulingId=' + schedulingId;
-			createMenuItem(url, "任务执行");
-		}
-		
-        /*弹出层查看日志*/
-        function showQueryLog() {
-        	var url = prefix+"/queryLog";
-        	 $.modal.open("查看日志", url,null,null,"查看");
-        }
-        
-        /*弹出层上传Jar*/
-        function uploadJar() {
-        	var url = prefix+"/showUploadJar";
-        	 $.modal.open("上传Jar至客户端", url,null,null,"上传");
-        }
-    </script>
+	/* 立即执行一次 */
+	function run(jobId) {
+		$.modal.confirm("确认要立即执行任务吗？", function() {
+			$.operate.post(jobPrefix + "/run", { "jobId": jobId});
+		})
+	}
+
+	/* 调度任务-停用 */
+	function stop(jobId,misfirePolicy) {
+		$.modal.confirm("确认要停用任务吗？", function() {
+			$.operate.post(jobPrefix + "/changeStatus", { "jobId": jobId, "status": 1, "misfirePolicy":misfirePolicy });
+		})
+	}
+
+	/* 调度任务-启用 */
+	function start(jobId,misfirePolicy) {
+		$.modal.confirm("确认要启用任务吗？", function() {
+			$.operate.post(jobPrefix + "/changeStatus", { "jobId": jobId, "status": 0, "misfirePolicy":misfirePolicy });
+		})
+	}
+
+	/* 测试任务查询 */
+	function taskExcute(schedulingId) {
+		var url = taskPrefix + '?schedulingId=' + schedulingId;
+		createMenuItem(url, "任务执行");
+	}
+
+	/*弹出层查看日志*/
+	function showQueryLog() {
+		var url = prefix+"/queryLog";
+		$.modal.open("查看日志", url,null,null,"查看");
+	}
+
+	/*弹出层上传Jar*/
+	function uploadJar() {
+		var url = prefix+"/showUploadJar";
+		$.modal.open("上传Jar至客户端", url,null,null,"上传");
+	}
+</script>
 </body>
 </html>

@@ -45,7 +45,14 @@ public class TaskCaseExecuteServiceImpl implements ITaskCaseExecuteService
 	{
 	    return taskCaseExecuteMapper.selectTaskCaseExecuteByTaskIdAndCaseId(taskCaseExecute);
 	}
-    
+
+	@Override
+	public TaskCaseExecute selectTaskCaseExecuteByTaskIdAndPlanIdAndCaseId(TaskCaseExecute taskCaseExecute)
+	{
+		return taskCaseExecuteMapper.selectTaskCaseExecuteByTaskIdAndPlanIdAndCaseId(taskCaseExecute);
+	}
+
+
 	/**
      * 查询任务用例执行记录列表
      * 

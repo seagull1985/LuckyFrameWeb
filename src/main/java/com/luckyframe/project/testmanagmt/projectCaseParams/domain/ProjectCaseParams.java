@@ -19,6 +19,8 @@ public class ProjectCaseParams extends BaseEntity
 	
 	/** 用例参数ID */
 	private Integer paramsId;
+	/** 环境 */
+	private String envName;
 	/** 参数名称 */
 	private String paramsName;
 	/** 参数值 */
@@ -54,6 +56,13 @@ public class ProjectCaseParams extends BaseEntity
 	public Integer getParamsId() 
 	{
 		return paramsId;
+	}
+	public String getEnvName() {
+		return envName;
+	}
+
+	public void setEnvName(String envName) {
+		this.envName = envName;
 	}
 	public void setParamsName(String paramsName) 
 	{
@@ -131,6 +140,7 @@ public class ProjectCaseParams extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("paramsId", getParamsId())
+			.append("envName", getEnvName())
             .append("paramsName", getParamsName())
             .append("paramsValue", getParamsValue())
             .append("projectId", getProjectId())
