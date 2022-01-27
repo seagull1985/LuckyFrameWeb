@@ -8,10 +8,16 @@
  此脚本属于应用自动升级数据库表结构以及数据脚本，无需手动执行，请慎重！！！！
 */
 -- ----------------------------
--- 1、数据字典表增加Web UI内置关键字 getvalue
+-- 1、数据字典表增加Web UI内置关键字 getvalue，switchtowindow，windowsetsize
 -- ----------------------------
-INSERT INTO sys_dict_data values(2048, 49,  'GetValue获取指定对象值', 'getvalue',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2021-06-30 14-27-32', 'luckyframe', '2021-06-30 14-27-32', '获取指定对象值');
-
+INSERT INTO sys_dict_data
+VALUES(2048, 49,  'GetValue获取指定对象值', 'getvalue',  'testmanagmt_casestep_uioperation',   '',   'info',  'Y', '0', 'admin', '2021-06-30 14-27-32', 'luckyframe', '2021-06-30 14-27-32', '获取指定对象值');
+INSERT INTO sys_dict_data
+(dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(2049, 50, 'Switchtowindow切换句柄并关闭之前窗口', 'switchtowindow', 'testmanagmt_casestep_uioperation', '', 'info', 'Y', '0', 'admin', '2021-12-07 20:24:26', 'admin', '2021-12-07 20:25:39', '切换句柄并关闭之前窗口');
+INSERT INTO sys_dict_data
+(dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+VALUES(2050, 51, 'Windowsetsize设置浏览器窗口大小', 'windowsetsize', 'testmanagmt_casestep_uioperation', '', 'info', 'Y', '0', 'admin', '2021-12-30 15:26:27', 'admin', '2021-12-30 15:26:43', '设置浏览器窗口大小');
 -- ----------------------------
 -- 2、任务调度表增加一列环境
 -- ----------------------------
