@@ -2,6 +2,7 @@ package com.luckyframe.project.testmanagmt.projectCase.controller;
 
 import java.util.List;
 
+import cn.hutool.json.JSONUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -62,6 +63,8 @@ public class ProjectCaseDebugController extends BaseController
 		ProjectCaseDebug projectCaseDebug=new ProjectCaseDebug();
 		projectCaseDebug.setCaseId(caseId);
 		projectCaseDebug.setUserId(ShiroUtils.getUserId().intValue());
+		//修改点
+		projectCaseDebug.setCaseType(projectCase.getCaseType());
 		List<Client> clients=clientService.selectClientsByProjectId(projectCase.getProjectId());
 		if(clients.size()>0){
 			List<String> driverPathList=clientService.selectClientDriverListById(clients.get(0).getClientId());
@@ -95,6 +98,9 @@ public class ProjectCaseDebugController extends BaseController
 	        }
 	    	webDebugCaseEntity.setCaseId(projectCaseDebug.getCaseId());
 	    	webDebugCaseEntity.setUserId(ShiroUtils.getUserId().intValue());
+	    	//修改点
+	    	webDebugCaseEntity.setCaseType(projectCaseDebug.getCaseType());
+	    	webDebugCaseEntity.setBrowserType(projectCaseDebug.getBrowserType());
 			Client client = clientService.selectClientById(projectCaseDebug.getClientId());
 			String url= "http://"+client.getClientIp()+":"+ClientConstants.CLIENT_MONITOR_PORT+"/webDebugCase";
 			String result=HttpRequest.httpClientPost(url, client,JSONObject.toJSONString(webDebugCaseEntity),3000);

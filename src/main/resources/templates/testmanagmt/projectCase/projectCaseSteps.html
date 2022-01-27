@@ -87,6 +87,9 @@
 		<div class="col-lg-4 text-center" style="width: 100%">
 			<button class="btn btn-info" id="debugButton" onclick="showDebugModal()" type="button" style="padding-left: 36px;padding-right: 36px;" th:if="${projectCase.caseType==0||projectCase.caseType==2}">调&nbsp;&nbsp;&nbsp;&nbsp;试</button>
 		</div>
+		<div class="col-lg-4 text-center" style="width: 100%">
+			<button class="btn btn-info" id="debugButton2" onclick="showDebugModal()" type="button" style="padding-left: 36px;padding-right: 36px;" th:if="${projectCase.caseType==1}">调&nbsp;&nbsp;&nbsp;&nbsp;试</button><!--修改点-->
+		</div>
 	</div>
 
 </div>
@@ -321,12 +324,14 @@
 						/*不同的校验规则，不同的错误提示*/
 						$.validator.messages.required = "HTTP接口必填";
 						return true;
-					}else if(stepType=="2" && $("#expectedResult"+num).val()==""){
-						$.validator.messages.required = "API接口必填";
-						return true;
-					}else{
+					}else {
 						return false;
 					}
+					//修改点
+				// else if(stepType=="2" && $("#expectedResult"+num).val()==""){
+				// 		$.validator.messages.required = "API接口必填";
+				// 		return true;
+				// 	}
 				}
 			},
 			extend:{

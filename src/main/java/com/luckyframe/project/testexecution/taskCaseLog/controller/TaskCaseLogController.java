@@ -54,13 +54,15 @@ public class TaskCaseLogController extends BaseController
 		response.setCharacterEncoding("utf-8");
 		PrintWriter pw = response.getWriter();
 		String taskCaseIdStr = request.getParameter("taskCaseId");
+		String errorInfo = request.getParameter("errorInfo");
+
 		int taskCaseId = 0;
 		// 得到客户端传递的查询参数
 		if (StringUtils.isNotEmpty(taskCaseIdStr)) {
 			taskCaseId = Integer.parseInt(taskCaseIdStr);
 		}
 				
-        List<TaskCaseLog> loglist = taskCaseLogService.selectTaskCaseLogListByTaskCaseId(taskCaseId);
+        List<TaskCaseLog> loglist = taskCaseLogService.selectTaskCaseLogListByTaskCaseId(taskCaseId,errorInfo);
 		// 转换成json字符串
 		JSONArray recordJson= JSONArray.parseArray(JSON.toJSONString(loglist));
 		pw.print(recordJson);

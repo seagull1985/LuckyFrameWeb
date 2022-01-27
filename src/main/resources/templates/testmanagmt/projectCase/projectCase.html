@@ -2,7 +2,188 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
+<!--修改点-->
+<style>
+    .upload_dialog_div{
+        position:fixed;
+        left:0px;
+        right:0px;
+        top:0px;
+        bottom:0px;
+        overflow:auto;
+        visibility:hidden;
+        background-color: rgba(60,60,60,0.5);
+        z-index:99;
+    }
+    .style_content_div{
+        position:relative;
+        margin:auto;
+        margin-top:160px;
+        width:400px;
+        height:160px;
+        background: #ffffff;
+    }
+    .style_content_upper_div{
+        position:absolute;
+        left:0px;
+        top:0px;
+        width:400px;
+        height:100px;
+        background:#ffffff;
+    }
+    .style_content_lower_div{
+        position:absolute;
+        left:0px;
+        top:100px;
+        width:400px;
+        height:60px;
+        background:#ffffff;
+    }
+
+    .style_content_file_div{
+        position:absolute;
+        left:15px;
+        top:20px;
+        width:380px;
+        height:60px;
+    }
+    .style_file_span{
+        float:left;
+        width:120px;
+        height:36px;
+        font-size:24px;
+        text-align:right;
+    }
+    .style_file_content{
+        margin-top:5px;
+    }
+    .style_content_prog_div{
+        position:absolute;
+        left:18px;
+        top:57px;
+        width:360px;
+        height:40px;
+    }
+    .style_prog_span_hit{
+        color:#ff0000;
+    }
+    .style_prog_content{
+        width:360px;
+        visibility:hidden;
+    }
+</style>
+<script>
+    function createHttpRequest()
+    {
+        var xmlHttp=null;
+        try{
+            // Firefox, Opera 8.0+, Safari
+            xmlHttp=new XMLHttpRequest();
+        }catch (e){
+            // Internet Explorer
+            try{
+                xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+            }catch (e){
+                try{
+                    xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+                }catch (e){
+                    alert("您的浏览器不支持AJAX！");
+                }
+            }
+        }
+        return xmlHttp;
+    }
+
+    function uploadFileToServer(){
+        var caseId = $($("tr[class='selected']").find('td')[4]).find("a").attr("pt_caseId");
+        var projectId = $($("tr[class='selected']").find('td')[4]).find("a").attr("pt_projectId");
+        var stepType= $($("tr[class='selected']").find('td')[4]).find("a").attr("pt_caseType");
+        // alert(caseId+" "+projectId+" "+stepType);
+
+        var uploadFile = document.getElementById("upload_file_id");
+        var uploadTip = document.getElementById("upload_tip_id");
+        var uploadProgress = document.getElementById("upload_progress_id");
+
+        if(uploadFile.value==""){
+            uploadTip.innerText="请选择一个文件";
+        }else if(uploadFile.files[0].size>0 &&uploadFile.files[0].size<(100*1024*1024)){
+            try{
+                if(window.FileReader){
+                    var fReader = new FileReader();
+                    var xhreq=createHttpRequest();
+                    var form = new FormData();
+                    form.append('caseId',caseId);
+                    form.append('projectId', projectId);
+                    form.append('stepType', stepType);
+                    form.append('file', uploadFile.files[0]);
+                    xhreq.onreadystatechange=function(){
+                        if(xhreq.readyState==4){
+                            if(xhreq.status==200){
+                                uploadTip.innerText="文件上传成功";
+                                setTimeout(function(){
+                                    hideUploadDialog()
+                                },2000);	//2秒后隐藏
+                            }else{
+                                uploadTip.innerText="文件上传失败了";
+                            }
+                        }
+                    }
+                    fReader.onload=function(e){
+                        xhreq.open("POST","/testmanagmt/RecordController/insert",true);
+                        xhreq.setRequestHeader("ContentType", "multipart/form-data"); //流类型
+                        xhreq.send(form);
+                    }
+                    fReader.onprogress = function(e){
+                        uploadProgress.value = e.loaded*100/e.total;
+                    }
+                    fReader.readAsArrayBuffer(uploadFile.files[0]);
+                    uploadProgress.style.visibility="visible";
+                    uploadProgress.value = 0;
+                }else{
+                    uploadTip.innerText="浏览器不支持上传文件";
+                }
+            }catch(e){
+                uploadTip.innerText="文件上传失败";
+            }
+        }else{
+            uploadTip.innerText="文件不符合要求";
+        }
+    }
+    function showUploadDialog(){
+        var up_dialog=document.getElementById("upload_dialog");
+        document.getElementById("upload_tip_id").innerText="请选择要上传的文件";
+        document.getElementById("upload_progress_id").style.visibility="hidden";
+        up_dialog.style.visibility="visible";
+    }
+    function hideUploadDialog(){
+        var up_dialog=document.getElementById("upload_dialog");
+        document.getElementById("upload_progress_id").style.visibility="hidden";
+        up_dialog.style.visibility="hidden";
+    }
+</script>
+
 <body class="gray-bg">
+<!--修改点-->
+<div id="upload_dialog" class="upload_dialog_div">
+    <div class="style_content_div">
+        <div class="style_content_upper_div">
+            <div class="style_content_file_div">
+                <span class="style_file_span"> 文件：</span>
+                <input class="style_file_content" type="file" id="upload_file_id"/>
+            </div>
+            <div class="style_content_prog_div">
+                <span class="style_prog_span_hit" id="upload_tip_id"> 请选择要上传的文件 </span>
+                <progress class="style_prog_content" id="upload_progress_id" value="0" max="100"></progress>
+            </div>
+        </div>
+        <div class="style_content_lower_div">
+            <div class="layui-layer-btn layui-layer-btn-">
+                <a class="layui-layer-btn1" onclick="hideUploadDialog()">取消</a>
+                <a class="layui-layer-btn0" onclick="uploadFileToServer()">确认</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container-div">
     <div class="row">
@@ -88,6 +269,12 @@
                     <i class="fa fa-list-ol"></i> 用例步骤
                 </a>
             </shiro:hasPermission>
+            <!--修改点-->
+            <shiro:hasPermission name="testmanagmt:projectCase:import">
+                <a class="btn btn-info btn-import" onclick="showUploadDialog()">
+                    <span class="glyphicon glyphicon-import" aria-hidden="true"></span> 用例步骤导入
+                </a>
+            </shiro:hasPermission>
             <shiro:hasPermission name="testmanagmt:projectCase:remove">
                 <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()">
                     <i class="fa fa-remove"></i> 删除
@@ -95,7 +282,12 @@
             </shiro:hasPermission>
             <shiro:hasPermission name="testmanagmt:projectCase:export">
                 <a class="btn btn-warning" onclick="$.table.exportExcel('formId')">
-                    <i class="fa fa-download"></i> 导出
+                    <span class="glyphicon glyphicon-export" aria-hidden="true"></span> 导出用例列表
+                </a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="testmanagmt:projectCase:exportcasestep">
+                <a class="btn btn-warning" onclick="exportcasestepExcel()">
+                    <span class="glyphicon glyphicon-export" aria-hidden="true"></span> 导出用例步骤
                 </a>
             </shiro:hasPermission>
         </div>
@@ -173,7 +365,11 @@
                     width: '10%',
                     class: 'myTDLengthHidden',
                     formatter: function (value, row, index) {
-                        return '<a class="btn btn-info btn-edit" onclick="$.operate.customFull('+row.caseId+')">'+value+'</a>';
+                        return '<a class="btn btn-info btn-edit" '+
+                            'pt_caseId="'+row.caseId+'" ' +
+                            'pt_projectId="'+row.projectId+'" '+
+                            'pt_caseType="'+row.caseType+'" '+
+                        'onclick="$.operate.customFull('+row.caseId+')">'+value+'</a>';
                     }
                 },
                 {
@@ -550,6 +746,28 @@
     function resetForm() {
         initializeModuleTree();
         $.form.reset();
+    }
+
+    /* 导出用例步骤*/
+    function exportcasestepExcel() {
+        $.modal.loading("正在导出数据，请稍后...");
+        var caseId = $($("tr[class='selected']").find('td')[4]).find("a").attr("pt_caseId");
+        $.ajax({
+            type: "POST",
+            url: stepsPrefix + "/export",
+            data: {caseId:caseId},
+            async: false,
+            error: function (result) {
+                $.modal.alertError(result.msg);
+                $.modal.closeLoading();
+            },
+            success: function (result) {
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + result.msg + "&delete=" + true;
+                }
+                $.modal.closeLoading();
+            }
+        });
     }
 </script>
 </body>

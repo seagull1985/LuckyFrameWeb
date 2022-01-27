@@ -35,7 +35,7 @@ public interface ITaskCaseLogService
 	 * @author Seagull
 	 * @date 2019年4月11日
 	 */
-	List<TaskCaseLog> selectTaskCaseLogListByTaskCaseId(Integer taskCaseId);
+	List<TaskCaseLog> selectTaskCaseLogListByTaskCaseId(Integer taskCaseId,String errorInfo);
 	
 	/**
      * 新增用例日志明细

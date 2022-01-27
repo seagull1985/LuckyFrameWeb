@@ -7,12 +7,21 @@
         <form class="form-horizontal m" id="form-debugCase" th:object="${projectCaseDebug}">
             <input id="caseId" th:field="*{caseId}"  type="hidden">
             <input id="userId" th:field="*{userId}"  type="hidden">
-            <div class="form-group">	
+			<input id="caseType" th:field="*{caseType}"  type="hidden"><!--修改点-->
+			<div class="form-group" id="divBrowserType" style="display:none">
+				<label class="col-sm-3 control-label">浏览器类型：</label>
+				<div class="col-sm-8">
+					<label class="radio-box"> <input type="radio" th:field="*{browserType}" value="0" /> IE </label>
+					<label class="radio-box"> <input type="radio" th:field="*{browserType}" value="1" /> 火狐 </label>
+					<label class="radio-box"> <input type="radio" th:field="*{browserType}" value="2" th:checked="true"/> 谷歌 </label>
+					<label class="radio-box"> <input type="radio" th:field="*{browserType}" value="3" /> Edge </label>
+				</div>
+			</div>
+            <div class="form-group">
 				<label class="col-sm-3 control-label">客户端：</label>
 				<div class="col-sm-8">
 				    <select class="form-control" id="clientId" th:field="*{clientId}" onChange="getDriverPath()">
-						<option th:each="client:${clients}" th:value="${client.clientId}" 
-						  th:text="【+${client.clientName}+】+${client.clientIp}+${client.statusStr}"></option>
+						<option th:each="client:${clients}" th:value="${client.clientId}" th:text="【+${client.clientName}+】+${client.clientIp}+${client.statusStr}"></option>
 					</select>
 				</div>
 			</div>
@@ -113,6 +122,14 @@
 	            $("#driverPath option[index='1']").remove();
 	        }
 	    }
+
+	    //修改点
+	    //控制BrowserType显示
+		if($("#caseType").attr("value")==1){
+			$("#divBrowserType").css("display","block");
+			}else {
+			$("#divBrowserType").css("display", "none");
+		};
 	</script>
 </body>
 </html>

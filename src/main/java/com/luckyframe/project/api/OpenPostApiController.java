@@ -297,7 +297,7 @@ public class OpenPostApiController
 			tce.setCaseId(projectCase.getCaseId());
 			TaskCaseExecute taskCaseExecute = taskCaseExecuteService.selectTaskCaseExecuteByTaskIdAndCaseId(tce);
 			
-			List<TaskCaseLog> loglist = taskCaseLogService.selectTaskCaseLogListByTaskCaseId(taskCaseExecute.getTaskCaseId());
+			List<TaskCaseLog> loglist = taskCaseLogService.selectTaskCaseLogListByTaskCaseId(taskCaseExecute.getTaskCaseId(),null);
 			for(TaskCaseLog tcl:loglist){
 				if(tcl.getLogDetail().contains("测试结果：")){
 					result = tcl.getLogDetail();

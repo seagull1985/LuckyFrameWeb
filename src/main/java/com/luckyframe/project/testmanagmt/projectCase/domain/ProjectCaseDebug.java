@@ -1,5 +1,6 @@
 package com.luckyframe.project.testmanagmt.projectCase.domain;
 
+import com.luckyframe.framework.aspectj.lang.annotation.Excel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.luckyframe.framework.web.domain.BaseEntity;
@@ -30,6 +31,28 @@ public class ProjectCaseDebug extends BaseEntity
 	private Integer clientId;
 	/** 客户端驱动路径 */
 	private String driverPath;
+	//修改点
+	/** 默认类型 0 HTTP接口 1 Web UI 2 API驱动  3移动端 */
+	private Integer caseType;
+
+	/** web UI自动化浏览器类型 0 IE 1 火狐 2 谷歌 3 Edge */
+	private Integer browserType;
+
+	public void setCaseType(Integer caseType) {
+		this.caseType = caseType;
+	}
+
+	public Integer getCaseType() {
+		return caseType;
+	}
+
+	public Integer getBrowserType() {
+		return browserType;
+	}
+
+	public void setBrowserType(Integer browserType) {
+		this.browserType = browserType;
+	}
 
 	public Integer getClientId() {
 		return clientId;
@@ -47,69 +70,70 @@ public class ProjectCaseDebug extends BaseEntity
 		this.driverPath = driverPath;
 	}
 
-	public void setDebugId(Integer debugId) 
+	public void setDebugId(Integer debugId)
 	{
 		this.debugId = debugId;
 	}
 
-	public Integer getDebugId() 
+	public Integer getDebugId()
 	{
 		return debugId;
 	}
-	public void setCaseId(Integer caseId) 
+	public void setCaseId(Integer caseId)
 	{
 		this.caseId = caseId;
 	}
 
-	public Integer getCaseId() 
+	public Integer getCaseId()
 	{
 		return caseId;
 	}
-	public void setUserId(Integer userId) 
+	public void setUserId(Integer userId)
 	{
 		this.userId = userId;
 	}
 
-	public Integer getUserId() 
+	public Integer getUserId()
 	{
 		return userId;
 	}
-	public void setDebugIsend(Integer debugIsend) 
+	public void setDebugIsend(Integer debugIsend)
 	{
 		this.debugIsend = debugIsend;
 	}
 
-	public Integer getDebugIsend() 
+	public Integer getDebugIsend()
 	{
 		return debugIsend;
 	}
-	public void setLogLevel(String logLevel) 
+	public void setLogLevel(String logLevel)
 	{
 		this.logLevel = logLevel;
 	}
 
-	public String getLogLevel() 
+	public String getLogLevel()
 	{
 		return logLevel;
 	}
-	public void setLogDetail(String logDetail) 
+	public void setLogDetail(String logDetail)
 	{
 		this.logDetail = logDetail;
 	}
 
-	public String getLogDetail() 
+	public String getLogDetail()
 	{
 		return logDetail;
 	}
 
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("debugId", getDebugId())
-            .append("caseId", getCaseId())
-            .append("userId", getUserId())
-            .append("debugIsend", getDebugIsend())
-            .append("logLevel", getLogLevel())
-            .append("logDetail", getLogDetail())
-            .toString();
-    }
+	public String toString() {
+		return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+				.append("debugId", getDebugId())
+				.append("caseId", getCaseId())
+				.append("userId", getUserId())
+				.append("caseType",getCaseType())
+				.append("debugIsend", getDebugIsend())
+				.append("logLevel", getLogLevel())
+				.append("logDetail", getLogDetail())
+				.toString();
+	}
 }

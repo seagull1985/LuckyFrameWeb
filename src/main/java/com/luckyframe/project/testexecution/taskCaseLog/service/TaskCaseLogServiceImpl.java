@@ -2,6 +2,7 @@ package com.luckyframe.project.testexecution.taskCaseLog.service;
 
 import java.util.List;
 
+import com.luckyframe.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,10 +54,13 @@ public class TaskCaseLogServiceImpl implements ITaskCaseLogService
 	 * @date 2019年4月11日
 	 */
 	@Override
-	public List<TaskCaseLog> selectTaskCaseLogListByTaskCaseId(Integer taskCaseId)
+	public List<TaskCaseLog> selectTaskCaseLogListByTaskCaseId(Integer taskCaseId,String errorInfo)
 	{
 		TaskCaseLog taskCaseLog = new TaskCaseLog();
 		taskCaseLog.setTaskCaseId(taskCaseId);
+		if(StringUtils.isNotEmpty(errorInfo)) {
+			taskCaseLog.setLogGrade(errorInfo);
+		}
 	    return taskCaseLogMapper.selectTaskCaseLogList(taskCaseLog);
 	}
 	
