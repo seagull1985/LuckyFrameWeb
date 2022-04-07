@@ -19,7 +19,7 @@ public class WebDebugCaseEntity implements Serializable {
 	private Integer caseId;
 	private Integer userId;
 	private String loadpath;
-	//修改点
+	//修改点  HTTP接口 0,  Web UI, 1,   API驱动, 2,   移动端, 3
 	private Integer caseType;
 	private Integer browserType;
 
