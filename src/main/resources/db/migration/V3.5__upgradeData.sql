@@ -27,6 +27,12 @@ ALTER TABLE task_scheduling ADD env_name VARCHAR(255) COMMENT '测试环境';
 -- ----------------------------
 ALTER TABLE project_case_params ADD env_name VARCHAR(255) COMMENT '测试环境';
 -- ----------------------------
+-- 11、在公共参数表以及任务调度表中增加环境变量字段后，处理存量数据。
+-- ----------------------------
+update project_case_params t set t.env_name=(select a.project_name from sys_project a where t.project_id=a.project_id);
+
+update task_scheduling t set t.env_name=(select a.project_name from sys_project a where t.project_id=a.project_id);
+-- ----------------------------
 -- 4、新建聚合计划表
 -- ----------------------------
 CREATE TABLE `project_suite` (
