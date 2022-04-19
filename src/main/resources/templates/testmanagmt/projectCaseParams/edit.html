@@ -69,6 +69,9 @@
                         type: "post",
                         dataType: "json",
                         data: {
+							paramsId: function () {
+								return $.common.trim($("#paramsId").val());
+							},
                             name: function () {
                                 return $.common.trim($("#paramsName").val());
                             },
