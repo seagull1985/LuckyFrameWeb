@@ -92,6 +92,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
+			log.info("通过计划ID获取用例列表>>>>>{}",req.getParameter("planId"));
 			Integer planId = Integer.valueOf(req.getParameter("planId"));
 
 			ProjectCase projectCase=new ProjectCase();
@@ -121,6 +122,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
+			log.info("通过聚合计划ID获取计划列表>>>>>{}",req.getParameter("suiteId"));
 			Integer suiteId = Integer.valueOf(req.getParameter("suiteId"));
 
 
@@ -171,6 +173,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
+			log.info("通过计划名称获取用例列表>>>>>{}",req.getParameter("planName"));
 			String planName = req.getParameter("planName");
 			ProjectPlan projectPlan= projectPlanService.selectProjectPlanByPlanName(planName);
 
@@ -202,6 +205,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
+			log.info("通过用例ID获取步骤列表>>>>>{}",req.getParameter("caseId"));
 			Integer caseId = Integer.valueOf(req.getParameter("caseId"));
 
 			ProjectCaseSteps projectCaseSteps=new ProjectCaseSteps();
@@ -230,6 +234,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
+			log.info("通过taskId获取实体>>>>>{}",req.getParameter("taskId"));
 			Integer taskId = Integer.valueOf(req.getParameter("taskId"));
 			TaskExecute taskExecute = taskExecuteService.selectTaskExecuteById(taskId);
 
@@ -253,6 +258,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
+			log.info("通过用例ID获取实体>>>>>{}",req.getParameter("caseId"));
 			Integer caseId = Integer.valueOf(req.getParameter("caseId"));
 			ProjectCase projectCase = projectCaseService.selectProjectCaseById(caseId);
 
@@ -276,6 +282,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
+			log.info("通过用例编号获取实体>>>>>{}",req.getParameter("caseSign"));
 			String caseSign = req.getParameter("caseSign");
 			ProjectCase projectCase = projectCaseService.selectProjectCaseByCaseSign(caseSign);
 
@@ -299,6 +306,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
+			log.info("根据项目ID获取公共参数列表>>>>>{}",req.getParameter("projectId"));
 			Integer projectId = Integer.valueOf(req.getParameter("projectId"));
 			List<ProjectCaseParams> projectCaseParamsList = projectCaseParamsService.selectProjectCaseParamsListByProjectId(projectId);
 
@@ -325,6 +333,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
+			log.info("根据项目ID和环境获取公共参数列表>>>>>projectId:{},envName:{}",req.getParameter("projectId"),req.getParameter("envName"));
 			Integer projectId = Integer.valueOf(req.getParameter("projectId"));
 			String envName=req.getParameter("envName");
 			List<ProjectCaseParams> projectCaseParamsList = projectCaseParamsService.selectProjectCaseParamsListByProjectIdAndEnvName(projectId,envName);
@@ -353,6 +362,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
+			log.info("通过执行任务ID获取调度实体>>>>>{}",req.getParameter("taskId"));
 			Integer taskId = Integer.valueOf(req.getParameter("taskId"));
 			TaskExecute taskExecute = taskExecuteService.selectTaskExecuteById(taskId);
 			TaskScheduling taskScheduling = taskSchedulingService.selectTaskSchedulingById(taskExecute.getSchedulingId());
@@ -377,6 +387,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
+			log.info("通过计划名称获取用例列表>>>>>{}",req.getParameter("taskId"));
 			Integer taskId = Integer.valueOf(req.getParameter("taskId"));
 			List<TaskCaseExecute> taskCaseExecuteList= taskCaseExecuteService.selectTaskCaseExecuteListForUnSucByTaskId(taskId);
 
@@ -408,6 +419,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
+			log.info("通过模板ID获取实体>>>>>{}",req.getParameter("templateId"));
 			Integer templateId = Integer.valueOf(req.getParameter("templateId"));
 			ProjectProtocolTemplate projectProtocolTemplate = projectProtocolTemplateService.selectProjectProtocolTemplateById(templateId);
 
@@ -431,6 +443,7 @@ public class OpenGetApiController
 			rsp.setContentType("text/html;charset=GBK");
 			req.setCharacterEncoding("GBK");
 			PrintWriter pw = rsp.getWriter();
+			log.info("根据模板ID获取参数>>>>>{}",req.getParameter("templateId"));
 			Integer templateId = Integer.valueOf(req.getParameter("templateId"));
 			ProjectTemplateParams projectTemplateParams = new ProjectTemplateParams();
 			projectTemplateParams.setTemplateId(templateId);
