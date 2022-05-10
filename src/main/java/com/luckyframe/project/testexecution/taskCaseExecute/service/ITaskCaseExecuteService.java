@@ -30,6 +30,15 @@ public interface ITaskCaseExecuteService
 	TaskCaseExecute selectTaskCaseExecuteByTaskIdAndCaseId(TaskCaseExecute taskCaseExecute);
 
 	/**
+	 * 根据taskId跟caseId查询用例执行条数
+	 * @param taskCaseExecute 用例执行对象中的taskId以及caseId
+	 * @return 用例执行条数
+	 * @author Seagull
+	 * @date 2022年5月7日
+	 */
+	int selectTaskCaseExecuteCountByTaskIdAndCaseId(TaskCaseExecute taskCaseExecute);
+
+	/**
 	 * 根据taskid planid caseid查询用例执行信息
 	 * @param taskCaseExecute
 	 * @return

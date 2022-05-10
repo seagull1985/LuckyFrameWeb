@@ -105,7 +105,12 @@ public class OpenPostApiController
 			TaskCaseExecute taskCaseExecute = JSONObject.parseObject(jsonObject.toJSONString(), TaskCaseExecute.class);
 			taskCaseExecute.setCreateTime(new Date());
 			taskCaseExecute.setUpdateTime(new Date());
-			result = taskCaseExecuteService.insertTaskCaseExecute(taskCaseExecute);			
+			int caseCount = taskCaseExecuteService.selectTaskCaseExecuteCountByTaskIdAndCaseId(taskCaseExecute);
+			if(caseCount>0){
+				log.info("当前任务中存在多条重复用例执行(已在{}条)，请检查。",caseCount);
+			}else{
+				result = taskCaseExecuteService.insertTaskCaseExecute(taskCaseExecute);
+			}
 		} catch (Exception e) {
 			log.error("增加用例执行明细出现异常", e);
 		}

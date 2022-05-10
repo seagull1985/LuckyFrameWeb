@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 聚合计划 服务层实现
@@ -37,6 +38,18 @@ public class ProjectSuitePlanServiceImpl implements IprojectSuitePlanService {
     public ProjectSuitePlan selectProjectSuitePlanById(Integer suitePlanId)
     {
         return projectSuitePlanMapper.selectProjectSuitePlanById(suitePlanId);
+    }
+
+    /**
+     * 查询聚合计划用例列表
+     *
+     * @param projectSuitePlan 聚合计划用例列表信息
+     * @return 聚合计划集合
+     */
+    @Override
+    public List<ProjectSuitePlan> selectProjectSuitePlanList(ProjectSuitePlan projectSuitePlan)
+    {
+        return projectSuitePlanMapper.selectProjectSuitePlanList(projectSuitePlan);
     }
 
     /**
@@ -104,5 +117,19 @@ public class ProjectSuitePlanServiceImpl implements IprojectSuitePlanService {
         return projectSuitePlanMapper.selectProjectSuitePlanCountBySuiteId(suiteId);
     }
 
+    /**
+     * 查询同一聚合计划下同一个计划的数量
+     * @param suiteId 聚合测试计划ID  planId 测试计划ID
+     * @author Seagull
+     * @date 2022年5月10日
+     */
+    @Override
+    public int selectProjectSuitePlanCountBySuiteIdAndPlanId(Integer suiteId,Integer planId)
+    {
+        ProjectSuitePlan projectSuitePlan = new ProjectSuitePlan();
+        projectSuitePlan.setSuiteId(suiteId);
+        projectSuitePlan.setPlanId(planId);
+        return projectSuitePlanMapper.selectProjectSuitePlanCountBySuiteIdAndPlanId(projectSuitePlan);
+    }
 
 }

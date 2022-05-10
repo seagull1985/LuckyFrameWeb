@@ -46,6 +46,19 @@ public class TaskCaseExecuteServiceImpl implements ITaskCaseExecuteService
 	    return taskCaseExecuteMapper.selectTaskCaseExecuteByTaskIdAndCaseId(taskCaseExecute);
 	}
 
+	/**
+	 * 根据taskId跟caseId查询用例执行条数
+	 * @param taskCaseExecute 用例执行对象中的taskId以及caseId
+	 * @return 执行用例条数
+	 * @author Seagull
+	 * @date 2022年5月7日
+	 */
+	@Override
+	public int selectTaskCaseExecuteCountByTaskIdAndCaseId(TaskCaseExecute taskCaseExecute)
+	{
+		return taskCaseExecuteMapper.selectTaskCaseExecuteCountByTaskIdAndCaseId(taskCaseExecute);
+	}
+
 	@Override
 	public TaskCaseExecute selectTaskCaseExecuteByTaskIdAndPlanIdAndCaseId(TaskCaseExecute taskCaseExecute)
 	{

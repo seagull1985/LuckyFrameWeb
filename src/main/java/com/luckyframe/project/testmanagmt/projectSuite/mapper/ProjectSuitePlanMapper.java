@@ -31,8 +31,6 @@ public interface ProjectSuitePlanMapper {
      */
     List<ProjectSuitePlan> selectProjectSuitePlanList(ProjectSuitePlan projectSuitePlan);
 
-
-
     /**
      * 新增聚合计划
      *
@@ -88,6 +86,14 @@ public interface ProjectSuitePlanMapper {
      * @date 2019年5月13日
      */
     int selectProjectSuitePlanCountBySuiteId(Integer suiteId);
+
+    /**
+     * 查询同一聚合计划下同一个计划的数量
+     * @param suiteId 聚合测试计划ID  planId 测试计划ID
+     * @author Seagull
+     * @date 2022年5月10日
+     */
+    int selectProjectSuitePlanCountBySuiteIdAndPlanId(ProjectSuitePlan projectSuitePlan);
 
 
 }
