@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luckyframe.project.testmanagmt.projectPageObject.mapper.ProjectPageObjectMapper">
+    
+    <resultMap type="ProjectPageObject" id="ProjectPageObjectResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="pageId"    column="page_id"    />
+        <result property="pageName"    column="page_name"    />
+        <result property="pageParentMenu"    column="page_parentmenu"    />
+        <result property="pageMenu"    column="page_menu"    />
+
+
+    </resultMap>
+	
+	<sql id="selectProjectPageObjectVo">
+        select project_id, create_by, create_time, update_by, update_time, remark, page_id, page_name,page_parentmenu,page_menu  from project_page_object
+    </sql>
+	
+    <select id="selectProjectPageObjectList" parameterType="ProjectPageObject" resultMap="ProjectPageObjectResult">
+        <include refid="selectProjectPageObjectVo"/>
+        <where>  
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+             <if test="pageId != null "> and page_id = #{pageId}</if>
+             <if test="pageName != null  and pageName != '' "> and page_name = #{pageName}</if>
+            <if test="pageParentMenu != null  and pageParentMenu != '' "> and page_parentmenu = #{pageParentMenu}</if>
+            <if test="pageMenu != null  and pageMenu != '' "> and page_menu = #{pageMenu}</if>
+
+        </where>
+    </select>
+    
+    <select id="selectProjectPageObjectById" parameterType="Integer" resultMap="ProjectPageObjectResult">
+        <include refid="selectProjectPageObjectVo"/>
+        where page_id = #{pageId}
+    </select>
+        
+    <insert id="insertProjectPageObject" parameterType="ProjectPageObject">
+        insert into project_page_object
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="projectId != null  ">project_id,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+			<if test="pageId != null  ">page_id,</if>
+			<if test="pageName != null  and pageName != ''  ">page_name,</if>
+            <if test="pageParentMenu != null  and pageParentMenu != ''  ">page_parentmenu,</if>
+            <if test="pageMenu != null  and pageMenu != ''  ">page_menu,</if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="projectId != null  ">#{projectId},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+			<if test="pageId != null  ">#{pageId},</if>
+			<if test="pageName != null  and pageName != ''  ">#{pageName},</if>
+            <if test="pageParentMenu != null  and pageParentMenu != ''  ">#{pageParentMenu},</if>
+            <if test="pageMenu != null  and pageMenu != ''  ">#{pageMenu},</if>
+
+        </trim>
+    </insert>
+    <update id="updateProjectPageObject" parameterType="ProjectPageObject">
+        update project_page_object
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            <if test="pageId != null  ">page_id = #{pageId},</if>
+            <if test="pageName != null  and pageName != ''  ">page_name = #{pageName},</if>
+            <if test="pageParentMenu != null  and pageParentMenu != ''  ">page_parentmenu = #{pageParentMenu},</if>
+            <if test="pageMenu != null  and pageMenu != ''  ">page_menu = #{pageMenu},</if>
+            <if test="projectId != null ">project_id = #{projectId}</if>
+        </trim>
+        where page_id = #{pageId}
+    </update>
+
+	<delete id="deleteProjectPageObjectById" parameterType="Integer">
+        delete from project_page_object where page_id = #{page_id}
+    </delete>
+	
+    <delete id="deleteProjectPageObjectByIds" parameterType="String">
+        delete from project_page_object where page_id in
+        <foreach item="pageId" collection="array" open="(" separator="," close=")">
+            #{pageId}
+        </foreach>
+    </delete>
+    
+</mapper>
