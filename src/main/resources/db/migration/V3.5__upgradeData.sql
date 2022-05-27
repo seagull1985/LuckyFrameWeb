@@ -92,16 +92,3 @@ INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`,
 VALUES ('1113', '聚合计划删除', '1110', '3', '#', 'F', '0', 'testmanagmt:projectSuite:remove', '#', 'admin', '2021-01-14 03:44:56', '', NULL, '');
 INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
 VALUES ('1114', '聚合计划查询', '1110', '4', '#', 'F', '0', 'testmanagmt:projectSuite:list', '#', 'admin', '2021-01-14 03:45:11', '', NULL, '');
--- ----------------------------
--- 11、默认给管理员以及普通角色授权聚合计划菜单权限
--- ----------------------------
-INSERT INTO sys_role_menu(role_id,menu_id) VALUES(1,1110);
-INSERT INTO sys_role_menu(role_id,menu_id) VALUES(1,1111);
-INSERT INTO sys_role_menu(role_id,menu_id) VALUES(1,1112);
-INSERT INTO sys_role_menu(role_id,menu_id) VALUES(1,1113);
-INSERT INTO sys_role_menu(role_id,menu_id) VALUES(1,1114);
-INSERT INTO sys_role_menu(role_id,menu_id) VALUES(2,1110);
-INSERT INTO sys_role_menu(role_id,menu_id) VALUES(2,1111);
-INSERT INTO sys_role_menu(role_id,menu_id) VALUES(2,1112);
-INSERT INTO sys_role_menu(role_id,menu_id) VALUES(2,1113);
-INSERT INTO sys_role_menu(role_id,menu_id) VALUES(2,1114);
