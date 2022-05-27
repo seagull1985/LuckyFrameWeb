@@ -39,42 +39,42 @@ import java.util.List;
  * 这是一个受限制的自由软件！您不能在任何未经允许的前提下对程序代码进行修改和用于商业用途；也不允许对程序代码修改后以任何形式任何目的的再发布。
  * 为了尊重作者的劳动成果，LuckyFrame关键版权信息严禁篡改 有任何疑问欢迎联系作者讨论。 QQ:1573584944 Seagull
  * =================================================================
+ *
  * @author Seagull
  * @date 2019年10月28日
  */
 @Controller
 @RequestMapping("/openGetApi")
-public class OpenGetApiController
-{
+public class OpenGetApiController {
     private static final Logger log = LoggerFactory.getLogger(OpenGetApiController.class);
 
-	@Resource
-	private IProjectPlanService projectPlanService;
-	
-	@Resource
-	private IProjectCaseService projectCaseService;
-	
-	@Resource
-	private IProjectCaseStepsService projectCaseStepsService;
-	
-	@Resource
-	private ITaskExecuteService taskExecuteService;
-	
-	@Resource
-	private IProjectCaseParamsService projectCaseParamsService;
-	
-	@Resource
-	private ITaskSchedulingService taskSchedulingService;
-	
-	@Resource
-	private ITaskCaseExecuteService taskCaseExecuteService;
-	
-	@Resource
-	private IProjectProtocolTemplateService projectProtocolTemplateService;
-	
-	@Resource
-	private IProjectTemplateParamsService projectTemplateParamsService;
-	
+    @Resource
+    private IProjectPlanService projectPlanService;
+
+    @Resource
+    private IProjectCaseService projectCaseService;
+
+    @Resource
+    private IProjectCaseStepsService projectCaseStepsService;
+
+    @Resource
+    private ITaskExecuteService taskExecuteService;
+
+    @Resource
+    private IProjectCaseParamsService projectCaseParamsService;
+
+    @Resource
+    private ITaskSchedulingService taskSchedulingService;
+
+    @Resource
+    private ITaskCaseExecuteService taskCaseExecuteService;
+
+    @Resource
+    private IProjectProtocolTemplateService projectProtocolTemplateService;
+
+    @Resource
+    private IProjectTemplateParamsService projectTemplateParamsService;
+
     @Resource
     private LuckyFrameConfig lfConfig;
 
@@ -95,18 +95,18 @@ public class OpenGetApiController
 			log.info("通过计划ID获取用例列表>>>>>{}",req.getParameter("planId"));
 			Integer planId = Integer.valueOf(req.getParameter("planId"));
 
-			ProjectCase projectCase=new ProjectCase();
-			projectCase.setPlanId(planId);
-			projectCase.setFlag(true);
-			List<ProjectCase> projectcases=projectCaseService.selectProjectCaseListForPlan(projectCase);
+            ProjectCase projectCase = new ProjectCase();
+            projectCase.setPlanId(planId);
+            projectCase.setFlag(true);
+            List<ProjectCase> projectcases = projectCaseService.selectProjectCaseListForPlan(projectCase);
 
-			// 转换成json字符串
-			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectcases));
-			pw.print(array.toString());
-		} catch (Exception e) {
-			log.error("通过计划ID获取用例列表出现异常", e);
-		}
-	}
+            // 转换成json字符串
+            JSONArray array = JSONArray.parseArray(JSON.toJSONString(projectcases));
+            pw.print(array.toString());
+        } catch (Exception e) {
+            log.error("通过计划ID获取用例列表出现异常", e);
+        }
+    }
 
 	/**
 	 * 通过聚合计划ID获取计划列表
@@ -126,13 +126,13 @@ public class OpenGetApiController
 			Integer suiteId = Integer.valueOf(req.getParameter("suiteId"));
 
 
-			ProjectPlan projectPlan=new ProjectPlan();
-			projectPlan.setSuiteId(suiteId);
-			projectPlan.setFlag(true);
-			List<ProjectPlan> projectplans=projectPlanService.selectProjectPlanListForSuite(projectPlan);
+            ProjectPlan projectPlan = new ProjectPlan();
+            projectPlan.setSuiteId(suiteId);
+            projectPlan.setFlag(true);
+            List<ProjectPlan> projectplans = projectPlanService.selectProjectPlanListForSuite(projectPlan);
 
 			// 转换成json字符串
-			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectplans));
+			JSONArray array = JSONArray.parseArray(JSON.toJSONString(projectplans));
 			pw.print(array.toString());
 		} catch (Exception e) {
 			log.error("通过聚合计划ID获取计划列表出现异常", e);
@@ -141,6 +141,7 @@ public class OpenGetApiController
 	
 	/**
 	 * 获取服务器版本号
+	 *
 	 * @param req HTTP请求
 	 * @param rsp HTTP响应
 	 * @author Seagull
@@ -161,6 +162,7 @@ public class OpenGetApiController
 	
 	/**
 	 * 通过计划名称获取用例列表
+	 *
 	 * @param req HTTP请求
 	 * @param rsp HTTP响应
 	 * @author Seagull
@@ -177,13 +179,13 @@ public class OpenGetApiController
 			String planName = req.getParameter("planName");
 			ProjectPlan projectPlan= projectPlanService.selectProjectPlanByPlanName(planName);
 
-			ProjectCase projectCase=new ProjectCase();
-			projectCase.setPlanId(projectPlan.getPlanId());
-			projectCase.setFlag(true);
-			List<ProjectCase> projectcases=projectCaseService.selectProjectCaseListForPlan(projectCase);
+            ProjectCase projectCase = new ProjectCase();
+            projectCase.setPlanId(projectPlan.getPlanId());
+            projectCase.setFlag(true);
+            List<ProjectCase> projectcases = projectCaseService.selectProjectCaseListForPlan(projectCase);
 
 			// 转换成json字符串
-			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectcases));
+			JSONArray array = JSONArray.parseArray(JSON.toJSONString(projectcases));
 			pw.print(array.toString());
 		} catch (Exception e) {
 			log.error("通过计划名称获取用例列表出现异常", e);
@@ -193,6 +195,7 @@ public class OpenGetApiController
 	
 	/**
 	 * 通过用例ID获取步骤列表
+	 *
 	 * @param req HTTP请求
 	 * @param rsp HTTP响应
 	 * @author Seagull
@@ -207,11 +210,15 @@ public class OpenGetApiController
 			PrintWriter pw = rsp.getWriter();
 			log.info("通过用例ID获取步骤列表>>>>>{}",req.getParameter("caseId"));
 			Integer caseId = Integer.valueOf(req.getParameter("caseId"));
-
 			ProjectCaseSteps projectCaseSteps=new ProjectCaseSteps();
 			projectCaseSteps.setCaseId(caseId);
 			List<ProjectCaseSteps> projectCaseStepsList=projectCaseStepsService.selectProjectCaseStepsList(projectCaseSteps);
-
+			//在客戶端获取测试用例步骤时，把PO转换为具体的包|路径
+			for (ProjectCaseSteps step : projectCaseStepsList) {
+				if (POUtil.isPO(step)) {
+					POUtil.transPOToStepPath(step);
+				}
+			}
 			// 转换成json字符串
 			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectCaseStepsList));
 			pw.print(array.toString());
@@ -219,7 +226,7 @@ public class OpenGetApiController
 			log.error("通过用例ID获取步骤列表出现异常", e);
 		}
 	}
-	
+
 	/**
 	 * 通过taskId获取实体
 	 * @param req HTTP请求
@@ -310,17 +317,18 @@ public class OpenGetApiController
 			Integer projectId = Integer.valueOf(req.getParameter("projectId"));
 			List<ProjectCaseParams> projectCaseParamsList = projectCaseParamsService.selectProjectCaseParamsListByProjectId(projectId);
 
-			// 转换成json字符串
-			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectCaseParamsList));
-			pw.print(array.toString());
-		} catch (Exception e) {
-			log.error("根据项目ID获取公共参数列表出现异常", e);
-		}
-	}
+            // 转换成json字符串
+            JSONArray array = JSONArray.parseArray(JSON.toJSONString(projectCaseParamsList));
+            pw.print(array.toString());
+        } catch (Exception e) {
+            log.error("根据项目ID获取公共参数列表出现异常", e);
+        }
+    }
 
 
 	/**
 	 * 根据项目ID和环境获取公共参数列表
+	 *
 	 * @param req HTTP请求
 	 * @param rsp HTTP响应
 	 * @author jerelli
@@ -337,9 +345,6 @@ public class OpenGetApiController
 			Integer projectId = Integer.valueOf(req.getParameter("projectId"));
 			String envName=req.getParameter("envName");
 			List<ProjectCaseParams> projectCaseParamsList = projectCaseParamsService.selectProjectCaseParamsListByProjectIdAndEnvName(projectId,envName);
-			System.out.println("88888888888888");
-			System.out.println(projectCaseParamsList.toString());
-			System.out.println("88888888888888");
 			// 转换成json字符串
 			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectCaseParamsList));
 			pw.print(array.toString());
@@ -347,9 +352,10 @@ public class OpenGetApiController
 			log.error("根据项目ID和环境获取公共参数列表出现异常", e);
 		}
 	}
-	
+
 	/**
 	 * 通过执行任务ID获取调度实体
+	 *
 	 * @param req HTTP请求
 	 * @param rsp HTTP响应
 	 * @author Seagull
@@ -375,6 +381,7 @@ public class OpenGetApiController
 	
 	/**
 	 * 通过计划名称获取用例列表
+	 *
 	 * @param req HTTP请求
 	 * @param rsp HTTP响应
 	 * @author Seagull
@@ -391,11 +398,11 @@ public class OpenGetApiController
 			Integer taskId = Integer.valueOf(req.getParameter("taskId"));
 			List<TaskCaseExecute> taskCaseExecuteList= taskCaseExecuteService.selectTaskCaseExecuteListForUnSucByTaskId(taskId);
 
-			Integer[] caseIdArr = new Integer[taskCaseExecuteList.size()];
-			
-			for(int i=0;i<taskCaseExecuteList.size();i++){
-				caseIdArr[i]=taskCaseExecuteList.get(i).getCaseId();
-			}
+            Integer[] caseIdArr = new Integer[taskCaseExecuteList.size()];
+
+            for (int i = 0; i < taskCaseExecuteList.size(); i++) {
+                caseIdArr[i] = taskCaseExecuteList.get(i).getCaseId();
+            }
 
 			// 转换成json字符串
 			JSONArray array= JSONArray.parseArray(JSON.toJSONString(caseIdArr));
@@ -407,6 +414,7 @@ public class OpenGetApiController
 	
 	/**
 	 * 通过模板ID获取实体
+	 *
 	 * @param req HTTP请求
 	 * @param rsp HTTP响应
 	 * @author Seagull
@@ -431,6 +439,7 @@ public class OpenGetApiController
 	
 	/**
 	 * 根据模板ID获取参数
+	 *
 	 * @param req HTTP请求
 	 * @param rsp HTTP响应
 	 * @author Seagull
@@ -449,11 +458,11 @@ public class OpenGetApiController
 			projectTemplateParams.setTemplateId(templateId);
 			List<ProjectTemplateParams> projectTemplateParamsList = projectTemplateParamsService.selectProjectTemplateParamsList(projectTemplateParams);
 
-			// 转换成json字符串
-			JSONArray array= JSONArray.parseArray(JSON.toJSONString(projectTemplateParamsList));
-			pw.print(array.toString());
-		} catch (Exception e) {
-			log.error("根据模板ID获取参数出现异常", e);
-		}
-	}
+            // 转换成json字符串
+            JSONArray array = JSONArray.parseArray(JSON.toJSONString(projectTemplateParamsList));
+            pw.print(array.toString());
+        } catch (Exception e) {
+            log.error("根据模板ID获取参数出现异常", e);
+        }
+    }
 }

@@ -1,600 +1,747 @@
 <!DOCTYPE HTML>
-<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-	<h2 class="thin text-center" th:text="【+${projectCase.caseSign}+】步骤编辑"></h2>
-	<h3 class="thin text-center" th:text="${projectCase.caseName}"></h3>
-	<form class="form-horizontal m" id="form-projectCaseSteps-edit">
-		<div class="form-group">
-			<table class="table table-striped" id="stepsTable">
-				<thead>
-				<tr>
-					<th>步骤</th>
-					<th>包 | 定位路径</th>
-					<th>方法 | 操作</th>
-					<th>参数</th>
-					<th>步骤动作</th>
-					<th>预期结果</th>
-					<th>类型</th>
-					<th>扩展字段</th>
-					<th>操作</th>
-				</tr>
-				</thead>
-				<tbody id="stepsTBody">
-				<tr th:each="stepsOb,iterStat : ${stepsList}">
-					<td width="3%">
-						<div class="col-sm-12 lf-td-div">
-							<input th:id="stepId+${iterStat.count}" name="stepId" type="hidden" th:value="${stepsOb.stepId}"/>
-							<input th:id="caseId+${iterStat.count}" name="caseId" type="hidden" th:value="${stepsOb.caseId}"/>
-							<input th:id="projectId+${iterStat.count}" name="projectId" type="hidden" th:value="${stepsOb.projectId}"/>
-							<label th:name="stepSerialNumber" th:id="stepSerialNumber+${iterStat.count}" th:value="${stepsOb.stepSerialNumber}" th:text="${stepsOb.stepSerialNumber}"></label>
-						</div></td>
-					<td width="18%">
-						<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepPath}+'</div>'">
-							<input type="text" class="form-control" name="stepPath" th:id="stepPath+${iterStat.count}" th:value="${stepsOb.stepPath}" ondblclick="showPathModal(this)"/></div></td>
-					<td width="13%">
-						<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepOperation}+'</div>'">
-							<input type="text" class="form-control" name="stepOperation" th:id="stepOperation+${iterStat.count}" th:value="${stepsOb.stepOperation}"/>
-							<div class="input-group-btn">
-								<ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
-							</div>
-						</div>
-					</td>
-					<td width="16%">
-						<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepParameters}+'</div>'">
-							<input type="text" class="form-control" name="stepParameters" th:id="stepParameters+${iterStat.count}" th:value="${stepsOb.stepParameters}" ondblclick="showParamsModal(this)" /></div></td>
-					<td width="8%" th:title="${stepsOb.action}">
-						<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.action}+'</div>'">
-							<input type="text" class="form-control" name="action" th:id="action+${iterStat.count}" th:value="${stepsOb.action}"/></div></td>
-					<td width="12%">
-						<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.expectedResult}+'</div>'">
-							<input type="text" class="form-control" name="expectedResult" th:id="expectedResult+${iterStat.count}" th:value="${stepsOb.expectedResult}"/></div></td>
-					<td width="10%">
-						<div class="col-sm-12 lf-td-div">
-							<select class="form-control" th:id="stepType+${iterStat.count}" name="stepType" th:with="type=${@dict.getType('testmanagmt_case_type')}" onChange="initSuggest(this)">
-								<option th:each="dict:${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:selected="${dict.dictValue==stepsOb.stepType.toString()}"></option>
-							</select>
-						</div>
-					</td>
-					<td width="10%">
-						<div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.extend}+'</div>'">
-							<input type="text" class="form-control" name="extend" th:id="extend+${iterStat.count}" th:value="${stepsOb.extend}"/>
-							<div class="input-group-btn">
-								<ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
-							</div>
-						</div>
-					</td>
-					<td hidden="hidden">
-						<input type="text" class="form-control" name="stepRemark" th:id="stepRemark+${iterStat.count}" th:value="${stepsOb.stepRemark}"/>
-					</td>
-					<td width="10%" style="vertical-align: middle;">
-						<a class="fa fa-bookmark-o fa-5" th:id="a_stepMark+${iterStat.count}" data-toggle="tooltip" data-html="true" th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepRemark}+'</div>'" style="font-size: 20px; cursor: pointer;" onclick="showRemarkModal(this)" ></a>
-						<a class="fa fa-plus-circle fa-5" style="font-size: 20px; cursor: pointer;" data-toggle="tooltip" data-html="true" th:title="增加步骤" onclick="addsteps(this,0)"></a>
-						<a class="fa fa-chevron-circle-down fa-5" style="font-size: 20px; cursor: pointer;" data-toggle="tooltip" data-html="true" th:title="复制步骤" onclick="addsteps(this,1)"></a>
-						<a class="fa fa-minus-circle fa-5" style="font-size: 20px; cursor: pointer;" data-toggle="tooltip" data-html="true" th:title="删除步骤" onclick="delsteps(this)"></a>
-						<a class="fa fa-arrow-circle-up fa-5" style="font-size: 20px; cursor: pointer;" data-toggle="tooltip" data-html="true" th:title="上移步骤" onclick="upsteps(this)"></a>
-						<a class="fa fa-arrow-circle-down fa-5" style="font-size: 20px; cursor: pointer;" data-toggle="tooltip" data-html="true" th:title="下移步骤" onclick="downsteps(this)"></a>
-					</td>
-				</tr>
-				</tbody>
-			</table>
-		</div>
-	</form>
+    <h2 class="thin text-center" th:text="【+${projectCase.caseSign}+】步骤编辑"></h2>
+    <h3 class="thin text-center" th:text="${projectCase.caseName}"></h3>
+    <form class="form-horizontal m" id="form-projectCaseSteps-edit">
+        <div class="form-group" style="overflow: visible;">
+            <table class="table table-striped" id="stepsTable">
+                <thead>
+                <tr>
+                    <th>步骤</th>
+                    <th>包 | 定位路径</th>
+                    <th>方法 | 操作</th>
+                    <th>参数</th>
+                    <th>步骤动作</th>
+                    <th>预期结果</th>
+                    <th>类型</th>
+                    <th>扩展字段</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="stepsTBody">
+                <tr th:each="stepsOb,iterStat : ${stepsList}">
+                    <td width="3%">
+                        <div class="col-sm-12 lf-td-div">
+                            <input th:id="stepId+${iterStat.count}" name="stepId" type="hidden"
+                                   th:value="${stepsOb.stepId}"/>
+                            <input th:id="caseId+${iterStat.count}" name="caseId" type="hidden"
+                                   th:value="${stepsOb.caseId}"/>
+                            <input th:id="projectId+${iterStat.count}" name="projectId" type="hidden"
+                                   th:value="${stepsOb.projectId}"/>
+                            <label th:name="stepSerialNumber" th:id="stepSerialNumber+${iterStat.count}"
+                                   th:value="${stepsOb.stepSerialNumber}" th:text="${stepsOb.stepSerialNumber}"></label>
+                        </div>
+                    </td>
+                    <td width="18%">
+                        <div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true"
+                             th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepPath}+'</div>'">
+                            <input type="text" class="form-control" name="stepPath" th:id="stepPath+${iterStat.count}"
+                                   th:stepSerialNumber="${stepsOb.stepSerialNumber}" th:projectId="${stepsOb.projectId}"
+                                   th:value="${stepsOb.stepPath}" onclick="showPathModal(this)"/>
+                            <ul th:id="ur+${iterStat.count}" class="dropdown-menu multi-level" role="menu"
+                                aria-labelledby="dropdownMenu"></ul>
+                        </div>
+                    </td>
+                    <td width="13%">
+                        <div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true"
+                             th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepOperation}+'</div>'">
+                            <input type="text" class="form-control" name="stepOperation"
+                                   th:id="stepOperation+${iterStat.count}" th:value="${stepsOb.stepOperation}"/>
+                            <div class="input-group-btn">
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+                            </div>
+                        </div>
+                    </td>
+                    <td width="16%">
+                        <div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true"
+                             th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepParameters}+'</div>'">
+                            <input type="text" class="form-control" name="stepParameters"
+                                   th:id="stepParameters+${iterStat.count}" th:value="${stepsOb.stepParameters}"
+                                   ondblclick="showParamsModal(this)"/></div>
+                    </td>
+                    <td width="8%" th:title="${stepsOb.action}">
+                        <div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true"
+                             th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.action}+'</div>'">
+                            <input type="text" class="form-control" name="action" th:id="action+${iterStat.count}"
+                                   th:value="${stepsOb.action}"/></div>
+                    </td>
+                    <td width="12%">
+                        <div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true"
+                             th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.expectedResult}+'</div>'">
+                            <input type="text" class="form-control" name="expectedResult"
+                                   th:id="expectedResult+${iterStat.count}" th:value="${stepsOb.expectedResult}"/></div>
+                    </td>
+                    <td width="10%">
+                        <div class="col-sm-12 lf-td-div">
+                            <select class="form-control" th:id="stepType+${iterStat.count}" name="stepType"
+                                    th:with="type=${@dict.getType('testmanagmt_case_type')}"
+                                    onChange="initSuggest(this)">
+                                <option th:each="dict:${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                                        th:selected="${dict.dictValue==stepsOb.stepType.toString()}"></option>
+                            </select>
+                        </div>
+                    </td>
+                    <td width="10%">
+                        <div class="col-sm-12 lf-td-div tooltip-show" data-toggle="tooltip" data-html="true"
+                             th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.extend}+'</div>'">
+                            <input type="text" class="form-control" name="extend" th:id="extend+${iterStat.count}"
+                                   th:value="${stepsOb.extend}"/>
+                            <div class="input-group-btn">
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+                            </div>
+                        </div>
+                    </td>
+                    <td hidden="hidden">
+                        <input type="text" class="form-control" name="stepRemark" th:id="stepRemark+${iterStat.count}"
+                               th:value="${stepsOb.stepRemark}"/>
+                    </td>
+                    <td width="10%" style="vertical-align: middle;">
+                        <a class="fa fa-bookmark-o fa-5" th:id="a_stepMark+${iterStat.count}" data-toggle="tooltip"
+                           data-html="true"
+                           th:title="'<div align=&quot;left&quot; style=&quot;word-wrap:break-word&quot;>'+${stepsOb.stepRemark}+'</div>'"
+                           style="font-size: 20px; cursor: pointer;" onclick="showRemarkModal(this)"></a>
+                        <a class="fa fa-plus-circle fa-5" style="font-size: 20px; cursor: pointer;"
+                           data-toggle="tooltip" data-html="true" th:title="增加步骤" onclick="addsteps(this,0)"></a>
+                        <a class="fa fa-chevron-circle-down fa-5" style="font-size: 20px; cursor: pointer;"
+                           data-toggle="tooltip" data-html="true" th:title="复制步骤" onclick="addsteps(this,1)"></a>
+                        <a class="fa fa-minus-circle fa-5" style="font-size: 20px; cursor: pointer;"
+                           data-toggle="tooltip" data-html="true" th:title="删除步骤" onclick="delsteps(this)"></a>
+                        <a class="fa fa-arrow-circle-up fa-5" style="font-size: 20px; cursor: pointer;"
+                           data-toggle="tooltip" data-html="true" th:title="上移步骤" onclick="upsteps(this)"></a>
+                        <a class="fa fa-arrow-circle-down fa-5" style="font-size: 20px; cursor: pointer;"
+                           data-toggle="tooltip" data-html="true" th:title="下移步骤" onclick="downsteps(this)"></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
 
-	<div class="row">
-		<div class="col-lg-4 text-center" style="width: 100%">
-			<button class="btn btn-info" id="debugButton" onclick="showDebugModal()" type="button" style="padding-left: 36px;padding-right: 36px;" th:if="${projectCase.caseType==0||projectCase.caseType==2}">调&nbsp;&nbsp;&nbsp;&nbsp;试</button>
-		</div>
-		<div class="col-lg-4 text-center" style="width: 100%">
-			<button class="btn btn-info" id="debugButton2" onclick="showDebugModal()" type="button" style="padding-left: 36px;padding-right: 36px;" th:if="${projectCase.caseType==1}">调&nbsp;&nbsp;&nbsp;&nbsp;试</button><!--修改点-->
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-lg-4 text-center" style="width: 100%">
+            <button class="btn btn-info" id="debugButton" onclick="showDebugModal()" type="button"
+                    style="padding-left: 36px;padding-right: 36px;"
+                    th:if="${projectCase.caseType==0||projectCase.caseType==2}">调&nbsp;&nbsp;&nbsp;&nbsp;试
+            </button>
+        </div>
+        <div class="col-lg-4 text-center" style="width: 100%">
+            <button class="btn btn-info" id="debugButton2" onclick="showDebugModal()" type="button"
+                    style="padding-left: 36px;padding-right: 36px;" th:if="${projectCase.caseType==1}">调&nbsp;&nbsp;&nbsp;&nbsp;试
+            </button><!--修改点-->
+        </div>
+    </div>
 
 </div>
 
 <div class="modal fade" id="remarkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog" role="document"  style="width:30%">
-		<div class="modal-content" >
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span>
-				</button>
-				<h4 class="modal-title" id="myModalLabel">备注</h4>
-			</div>
-			<div class="modal-body ibox-content">
-				<textarea class="form-control" id="remarkArea" style="resize:none;width: 100%; height: 100%;font-size: large" rows="6" cols="20"></textarea>
-			</div>
-			<div class="modal-footer">
-				<label style="float:left;font-size: large;color: #ff0000"></label>
-				<label id="modalAlert" style="float:left;color: #ff0000">注意：点击确定暂存备注 > 右下角保存用例</label>
-				<button id="modal-save" type="button" class="btn btn-primary">确定</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog" role="document" style="width:30%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">备注</h4>
+            </div>
+            <div class="modal-body ibox-content">
+                <textarea class="form-control" id="remarkArea"
+                          style="resize:none;width: 100%; height: 100%;font-size: large" rows="6" cols="20"></textarea>
+            </div>
+            <div class="modal-footer">
+                <label style="float:left;font-size: large;color: #ff0000"></label>
+                <label id="modalAlert" style="float:left;color: #ff0000">注意：点击确定暂存备注 > 右下角保存用例</label>
+                <button id="modal-save" type="button" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="paramsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog" role="document"  style="width:30%">
-		<div class="modal-content" >
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span>
-				</button>
-				<h4 class="modal-title" id="myParamsLabel">参数</h4>
-			</div>
-			<div class="modal-body ibox-content">
-				<textarea class="form-control" id="paramsArea" style="resize:none;width: 100%; height: 100%;font-size: large" rows="6" cols="20"></textarea>
-			</div>
-			<div class="modal-footer">
-				<label style="float:left;font-size: large;color: #ff0000"></label>
-				<label id="paramsAlert" style="float:left;color: #ff0000">注意：点击确定暂存参数 > 右下角保存用例</label>
-				<button id="params-save" type="button" class="btn btn-primary">确定</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog" role="document" style="width:30%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myParamsLabel">参数</h4>
+            </div>
+            <div class="modal-body ibox-content">
+                <textarea class="form-control" id="paramsArea"
+                          style="resize:none;width: 100%; height: 100%;font-size: large" rows="6" cols="20"></textarea>
+            </div>
+            <div class="modal-footer">
+                <label style="float:left;font-size: large;color: #ff0000"></label>
+                <label id="paramsAlert" style="float:left;color: #ff0000">注意：点击确定暂存参数 > 右下角保存用例</label>
+                <button id="params-save" type="button" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="pathModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog" role="document"  style="width:30%">
-		<div class="modal-content" >
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span>
-				</button>
-				<h4 class="modal-title" id="myPathLabel">包|定位路径</h4>
-			</div>
-			<div class="modal-body ibox-content">
-				<textarea class="form-control" id="pathArea" style="resize:none;width: 100%; height: 100%;font-size: large" rows="6" cols="20"></textarea>
-			</div>
-			<div class="modal-footer">
-				<label style="float:left;font-size: large;color: #ff0000"></label>
-				<label id="pathAlert" style="float:left;color: #ff0000">注意：点击确定暂存定位路径 > 右下角保存用例</label>
-				<button id="path-save" type="button" class="btn btn-primary">确定</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog" role="document" style="width:30%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myPathLabel">包|定位路径</h4>
+            </div>
+            <div class="modal-body ibox-content">
+                <textarea class="form-control" id="pathArea"
+                          style="resize:none;width: 100%; height: 100%;font-size: large" rows="6" cols="20"></textarea>
+            </div>
+            <div class="modal-footer">
+                <label style="float:left;font-size: large;color: #ff0000"></label>
+                <label id="pathAlert" style="float:left;color: #ff0000">注意：点击确定暂存定位路径 > 右下角保存用例</label>
+                <button id="path-save" type="button" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div th:include="include::footer"></div>
 <!-- bootstrap-suggest 下拉搜索框插件 -->
 <script th:src="@{/ajax/libs/bootstrap-suggest/bootstrap-suggest.min.js}"></script>
 <script type="text/javascript">
-	var prefix = ctx + "testmanagmt/projectCaseSteps";
-	var templatePrefix = ctx + "testmanagmt/projectProtocolTemplate";
-	var dictPrefix = ctx + "system/dict/data";
-	var debugPrefix = ctx + "testmanagmt/projectCaseDebug"
-	let id;
+    var prefix = ctx + "testmanagmt/projectCaseSteps";
+    var templatePrefix = ctx + "testmanagmt/projectProtocolTemplate";
+    var dictPrefix = ctx + "system/dict/data";
+    var debugPrefix = ctx + "testmanagmt/projectCaseDebug"
+    var pageObjectPrefix = ctx + "testmanagmt/projectPageObject";
 
-	function showRemarkModal(e) {
-		id = e.id.replace(/[^0-9]/ig, "");
-		$('#remarkModal').on('show.bs.modal', function () {
-			let modal = $(this);
-			let remarkSource = $("#stepRemark" + id);
-			if(remarkSource.val()!='备注'){
-				modal.find('#remarkArea').text(remarkSource.val());
-				modal.find('#remarkArea').val(remarkSource.val());
-			}else{
-				modal.find('#remarkArea').text('');
-				modal.find('#remarkArea').val('');
-			}
-			//modal.find('#modalAlert').text('');
-		});
-		$("#remarkModal").modal('show');
-	}
+    let id;
 
-	$('#modal-save').click(function () {
-		let modal = $('#remarkModal');
-		let remarkSource = $("#stepRemark" + id);
-		let remark = modal.find('#remarkArea').val();
-		if (remark.length > 200) {
-			$("#modalAlert").text("备注长度不能超过200！");
-		} else {
-			$("#modalAlert").text("注意：点击确定暂存备注 > 右下角保存用例");
-			remarkSource.val(remark);
-			remarkSource.text(remark);
-			modal.modal('hide');
-		}
-	});
+    function showRemarkModal(e) {
+        id = e.id.replace(/[^0-9]/ig, "");
+        $('#remarkModal').on('show.bs.modal', function () {
+            let modal = $(this);
+            let remarkSource = $("#stepRemark" + id);
+            if (remarkSource.val() != '备注') {
+                modal.find('#remarkArea').text(remarkSource.val());
+                modal.find('#remarkArea').val(remarkSource.val());
+            } else {
+                modal.find('#remarkArea').text('');
+                modal.find('#remarkArea').val('');
+            }
+            //modal.find('#modalAlert').text('');
+        });
+        $("#remarkModal").modal('show');
+    }
 
-	function showParamsModal(e) {
-		id = e.id.replace(/[^0-9]/ig, "");
-		$('#paramsModal').on('show.bs.modal', function () {
-			let modal = $(this);
-			let paramsSource = $("#stepParameters" + id);
-			modal.find('#paramsArea').text(paramsSource.val());
-			modal.find('#paramsArea').val(paramsSource.val());
-			//modal.find('#paramsAlert').text('');
-		});
-		$("#paramsModal").modal('show');
-	}
+    $('#modal-save').click(function () {
+        let modal = $('#remarkModal');
+        let remarkSource = $("#stepRemark" + id);
+        let remark = modal.find('#remarkArea').val();
+        if (remark.length > 200) {
+            $("#modalAlert").text("备注长度不能超过200！");
+        } else {
+            $("#modalAlert").text("注意：点击确定暂存备注 > 右下角保存用例");
+            remarkSource.val(remark);
+            remarkSource.text(remark);
+            modal.modal('hide');
+        }
+    });
 
-	$('#params-save').click(function () {
-		let modal = $('#paramsModal');
-		let paramsSource = $("#stepParameters" + id);
-		let params = modal.find('#paramsArea').val();
-		if (params.length > 500) {
-			$("#paramsAlert").text("参数长度不能超过500！");
-		} else {
-			$("#paramsAlert").text("注意：点击确定暂存参数 > 右下角保存用例");
-			paramsSource.val(params);
-			paramsSource.text(params);
-			modal.modal('hide');
-		}
-	});
+    function showParamsModal(e) {
+        id = e.id.replace(/[^0-9]/ig, "");
+        $('#paramsModal').on('show.bs.modal', function () {
+            let modal = $(this);
+            let paramsSource = $("#stepParameters" + id);
+            modal.find('#paramsArea').text(paramsSource.val());
+            modal.find('#paramsArea').val(paramsSource.val());
+            //modal.find('#paramsAlert').text('');
+        });
+        $("#paramsModal").modal('show');
+    }
 
-	function showPathModal(e) {
-		id = e.id.replace(/[^0-9]/ig, "");
-		$('#pathModal').on('show.bs.modal', function () {
-			let modal = $(this);
-			let pathSource = $("#stepPath" + id);
-			modal.find('#pathArea').text(pathSource.val());
-			modal.find('#pathArea').val(pathSource.val());
-			//modal.find('#pathAlert').text('');
-		});
-		$("#pathModal").modal('show');
-	}
+    $('#params-save').click(function () {
+        let modal = $('#paramsModal');
+        let paramsSource = $("#stepParameters" + id);
+        let params = modal.find('#paramsArea').val();
+        if (params.length > 500) {
+            $("#paramsAlert").text("参数长度不能超过500！");
+        } else {
+            $("#paramsAlert").text("注意：点击确定暂存参数 > 右下角保存用例");
+            paramsSource.val(params);
+            paramsSource.text(params);
+            modal.modal('hide');
+        }
+    });
 
-	$('#path-save').click(function () {
-		let modal = $('#pathModal');
-		let pathSource = $("#stepPath" + id);
-		let path = modal.find('#pathArea').val();
-		if (path.length > 500) {
-			$("#pathAlert").text("包|定位路径长度不能超过500！");
-		} else {
-			$("#pathAlert").text("注意：点击确定暂存定位路径 > 右下角保存用例");
-			pathSource.val(path);
-			pathSource.text(path);
-			modal.modal('hide');
-		}
-	});
+    function showPathModal(e) {
+        var index = e.id.replace(/[^0-9]/ig, "");
+        var projectId = Number(e.getAttribute("projectId"));
+        $.ajax({
+            type: "post",
+            url: pageObjectPrefix + "/getAllPageObject",
+            data: JSON.stringify({projectId: projectId}),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (result) {
+                $("#stepPath" + index).next().empty();
+                for (var i in result) {
+                    var ul = document.getElementById("stepPath" + index).nextElementSibling;
+                    $("#stepPath" + index).next().show();
+                    var li_pageName = document.createElement("li");
+                    li_pageName.setAttribute("class", "dropdown-submenu");
+                    var a_pageName = document.createElement("a");
+                    a_pageName.setAttribute("data-title", result[i].pageName);
+                    a_pageName.text = result[i].pageName;
+                    li_pageName.appendChild(a_pageName);
+                    var ul_pageDetail = document.createElement("ul");
+                    ul_pageDetail.setAttribute("class", "dropdown-menu");
+                    li_pageName.appendChild(ul_pageDetail);
+                    ul.appendChild(li_pageName);
+                    for (var j in result[i].projectPageDetailList) {
+                        var li_element = document.createElement("li");
+                        var a_element = document.createElement("a");
+                        a_element.setAttribute("data-title", result[i].projectPageDetailList[j].element);
+                        a_element.text = result[i].projectPageDetailList[j].element;
+                        li_element.appendChild(a_element);
+                        ul_pageDetail.appendChild(li_element);
+                    }
+                }
+                $('.dropdown-menu li a').click(function () {
+                    title = $(this).attr("data-title");
+                    pageName = $(this).parent().parent().prev().attr("data-title");
+                    $("#stepPath" + index).val(pageName + "." + title);
+                    $("#stepPath" + index).next().empty();
+                })
+                $("body").bind("click", function (evt) {
+                    if ($(evt.target).parents(".col-sm-12 lf-td-div tooltip-show").length == 0) {
+                        console.log("test2");
+                        $("#stepPath" + index).next().hide();
+                    }
+                });
+            }
+        });
+    }
 
-	/*解决table中多个name属性一致的问题，使用ID进行验证*/
-	$(function () {
-		if ($.validator) {
-			$.validator.prototype.elements = function () {
-				var validator = this,
-						rulesCache = {};
-				return $([]).add(this.currentForm.elements)
-						.filter(":input")
-						.not(":submit, :reset, :image, [disabled]")
-						.not(this.settings.ignore)
-						.filter(function () {
-							var elementIdentification = this.id || this.name;
-							!elementIdentification && validator.settings.debug && window.console && console.error("%o has no id nor name assigned", this);
-							if (elementIdentification in rulesCache || !validator.objectLength($(this).rules()))
-								return false;
-							rulesCache[elementIdentification] = true;
-							return true;
-						});
-			};
+    // function hideUl(e) {
+    // 	var index = e.id.replace(/[^0-9]/ig, "");
+    // 	console.log("diushijiaodian="+index);
+    // 	$("#stepPath" + index).next().hide();
+    // }
 
-		}
+    $('#path-save').click(function () {
+        let modal = $('#pathModal');
+        let pathSource = $("#stepPath" + id);
+        let path = modal.find('#pathArea').val();
+        if (path.length > 500) {
+            $("#pathAlert").text("包|定位路径长度不能超过500！");
+        } else {
+            $("#pathAlert").text("注意：点击确定暂存定位路径 > 右下角保存用例");
+            pathSource.val(path);
+            pathSource.text(path);
+            modal.modal('hide');
+        }
+    });
 
-		/*初始化下拉列表*/
-		var oTable = document.getElementById("stepsTable");
-		for (var i = 1; i < oTable.rows.length; i++) {
-			initSuggest(oTable.rows[i].cells[6].children[0].children[0]);
-		}
+    /*解决table中多个name属性一致的问题，使用ID进行验证*/
+    $(function () {
+        if ($.validator) {
+            $.validator.prototype.elements = function () {
+                var validator = this,
+                    rulesCache = {};
+                return $([]).add(this.currentForm.elements)
+                    .filter(":input")
+                    .not(":submit, :reset, :image, [disabled]")
+                    .not(this.settings.ignore)
+                    .filter(function () {
+                        var elementIdentification = this.id || this.name;
+                        !elementIdentification && validator.settings.debug && window.console && console.error("%o has no id nor name assigned", this);
+                        if (elementIdentification in rulesCache || !validator.objectLength($(this).rules()))
+                            return false;
+                        rulesCache[elementIdentification] = true;
+                        return true;
+                    });
+            };
 
-		$("[data-toggle='tooltip']").tooltip();
-	});
+        }
 
-	$("#form-projectCaseSteps-edit").validate({
-		/*解决错误提示不在输入框的问题*/
-		errorPlacement: function(error, element) {
-			error.appendTo(element.parent());
-		},
-		rules:{
-			stepPath:{
-				maxlength: 500,
-				required: function(value){
-					var num=value.getAttribute("id").substring(8);
-					var stepType=$("#stepType"+num).val();
-					if(stepType=="0" && $("#stepPath"+num).val()==""){
-						/*不同的校验规则，不同的错误提示*/
-						$.validator.messages.required = "HTTP必填请求URL";
-						return true;
-					}else if(stepType=="2" && $("#stepOperation"+num).val()!="runcase" && $("#stepPath"+num).val()==""){
-						$.validator.messages.required = "API必填包路径";
-						return true;
-					}else{
-						return false;
-					}
-				}
-			},
-			stepOperation:{
-				required:true,
-				minlength: 2,
-				maxlength: 100
-			},
-			stepParameters:{
-				maxlength: 500
-			},
-			action:{
-				maxlength: 50
-			},
-			expectedResult:{
-				maxlength: 2000,
-				required: function(value){
-					var num=value.getAttribute("id").substring(14);
-					var stepType=$("#stepType"+num).val();
-					if(stepType=="0" && $("#expectedResult"+num).val()==""){
-						/*不同的校验规则，不同的错误提示*/
-						$.validator.messages.required = "HTTP接口必填";
-						return true;
-					}else {
-						return false;
-					}
-					//修改点
-				// else if(stepType=="2" && $("#expectedResult"+num).val()==""){
-				// 		$.validator.messages.required = "API接口必填";
-				// 		return true;
-				// 	}
-				}
-			},
-			extend:{
-				maxlength: 2000,
-				required: function(value,element){
-					var num=value.getAttribute("id").substring(6);
-					var stepType=$("#stepType"+num).val();
-					if(stepType=="0" && $("#extend"+num).val()==""){
-						/*不同的校验规则，不同的错误提示*/
-						$.validator.messages.required = "HTTP必选模板";
-						return true;
-					}else{
-						return false;
-					}
-				}
-			},
-		},
-		messages: {
-			"stepOperation": {
-				required: "【方法|操作】必填"
-			}
-		}
-	});
+        /*初始化下拉列表*/
+        var oTable = document.getElementById("stepsTable");
+        for (var i = 1; i < oTable.rows.length; i++) {
+            initSuggest(oTable.rows[i].cells[6].children[0].children[0]);
+        }
 
-	function submitHandler() {
-		if ($.validate.form()) {
-			//点击提交按钮时,表单序列化后组装JSONARR
-			var params = $("#form-projectCaseSteps-edit").serializeArray();
-			var values = [];
-			var tparam = {};
-			for ( var item in params) {
-				tparam[params[item].name] = params[item].value;
-				if (params[item].name === "stepRemark") {
-					values.push(tparam);
-					tparam = {};
-				}
-			}
-			var url=prefix + "/editSave";
-			var localUrl=prefix+ "/edit/" + $('#caseId1').val();
-			$.ajax({
-				url: url,
-				type: "post",
-				dataType: "json",
-				contentType:"application/json",
-				data: JSON.stringify(values),
-				beforeSend: function () {
-					$.modal.loading("正在处理中，请稍后...");
-					$.modal.disable();
-				},
-				success: function(result) {
-					if (result.code == web_status.SUCCESS) {
-						$.modal.msgSuccess("保存用例成功");
-						setTimeout(function(){
-							location.replace(localUrl);
-						},800);
-					} else {
-						$.modal.alertError(result.msg);
-					}
-					$.modal.enable();
-					$.modal.closeLoading();
+        $("[data-toggle='tooltip']").tooltip();
+    });
 
-				}
-			});
-			//$.operate.saveJsonUnBack(prefix + "/editSave", JSON.stringify(values));
-		} else {
-			$.modal.msgError("步骤提交验证不通过！");
-		}
-	}
+    $("#form-projectCaseSteps-edit").validate({
+        /*解决错误提示不在输入框的问题*/
+        errorPlacement: function (error, element) {
+            error.appendTo(element.parent());
+        },
+        rules: {
+            stepPath: {
+                maxlength: 500,
+                required: function (value) {
+                    var num = value.getAttribute("id").substring(8);
+                    var stepType = $("#stepType" + num).val();
+                    if (stepType == "0" && $("#stepPath" + num).val() == "") {
+                        /*不同的校验规则，不同的错误提示*/
+                        $.validator.messages.required = "HTTP必填请求URL";
+                        return true;
+                    } else if (stepType == "2" && $("#stepOperation" + num).val() != "runcase" && $("#stepPath" + num).val() == "") {
+                        $.validator.messages.required = "API必填包路径";
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            },
+            stepOperation: {
+                required: true,
+                minlength: 2,
+                maxlength: 100
+            },
+            stepParameters: {
+                maxlength: 500
+            },
+            action: {
+                maxlength: 50
+            },
+            expectedResult: {
+                maxlength: 2000,
+                required: function (value) {
+                    var num = value.getAttribute("id").substring(14);
+                    var stepType = $("#stepType" + num).val();
+                    if (stepType == "0" && $("#expectedResult" + num).val() == "") {
+                        /*不同的校验规则，不同的错误提示*/
+                        $.validator.messages.required = "HTTP接口必填";
+                        return true;
+                    } else {
+                        return false;
+                    }
+                    //修改点
+                    // else if(stepType=="2" && $("#expectedResult"+num).val()==""){
+                    // 		$.validator.messages.required = "API接口必填";
+                    // 		return true;
+                    // 	}
+                }
+            },
+            extend: {
+                maxlength: 2000,
+                required: function (value, element) {
+                    var num = value.getAttribute("id").substring(6);
+                    var stepType = $("#stepType" + num).val();
+                    if (stepType == "0" && $("#extend" + num).val() == "") {
+                        /*不同的校验规则，不同的错误提示*/
+                        $.validator.messages.required = "HTTP必选模板";
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            },
+        },
+        messages: {
+            "stepOperation": {
+                required: "【方法|操作】必填"
+            }
+        }
+    });
 
-	function addsteps(obj,iscopy) {
-		if (obj == null)
-			return;
-		var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
-		var parentTR = parentTD.parentNode;
-		var parentTB = parentTR.parentNode;
-		var clonedNode = parentTR.cloneNode(true); // 克隆节点
-		clonedNode.childNodes[1].childNodes[1].childNodes[1].setAttribute("value", "0"); //修改克隆节点stepId统一为0
-		var clonedTR;
-		if (parentTB.lastChild === parentTR) {
-			clonedTR=parentTB.appendChild(clonedNode);
-		} else {
-			clonedTR=parentTB.insertBefore(clonedNode, parentTR.nextSibling);
-		}
+    function submitHandler() {
+        if ($.validate.form()) {
+            //点击提交按钮时,表单序列化后组装JSONARR
+            var params = $("#form-projectCaseSteps-edit").serializeArray();
+            var values = [];
+            var tparam = {};
+            for (var item in params) {
+                tparam[params[item].name] = params[item].value;
+                if (params[item].name === "stepRemark") {
+                    values.push(tparam);
+                    tparam = {};
+                }
+            }
+            var url = prefix + "/editSave";
+            var localUrl = prefix + "/edit/" + $('#caseId1').val();
+            $.ajax({
+                url: url,
+                type: "post",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(values),
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                    $.modal.disable();
+                },
+                success: function (result) {
+                    if (result.code == web_status.SUCCESS) {
+                        $.modal.msgSuccess("保存用例成功");
+                        setTimeout(function () {
+                            location.replace(localUrl);
+                        }, 800);
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.enable();
+                    $.modal.closeLoading();
 
-		var oTable = document.getElementById("stepsTable");
-		reorderTable(oTable);
-		var typeObj = clonedTR.cells[6].children[0].children[0];
-		initSuggest(typeObj);
-		if(iscopy==0){
-			var index = typeObj.getAttribute("id").substring(8);
-			clearCells(index);
-		}
-	}
+                }
+            });
+            //$.operate.saveJsonUnBack(prefix + "/editSave", JSON.stringify(values));
+        } else {
+            $.modal.msgError("步骤提交验证不通过！");
+        }
+    }
 
-	function clearCells(index) {
-		$("#stepPath" + index).val('');
-		$("#stepOperation" + index).val('');
-		$("#stepParameters" + index).val('');
-		$("#action" + index).val('');
-		$("#expectedResult" + index).val('');
-		$("#extend" + index).val('');
-		$("#stepRemark" + index).val('');
-	}
+    function addsteps(obj, iscopy) {
+        if (obj == null)
+            return;
+        var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
+        var parentTR = parentTD.parentNode;
+        var parentTB = parentTR.parentNode;
+        var clonedNode = parentTR.cloneNode(true); // 克隆节点
+        clonedNode.childNodes[1].childNodes[1].childNodes[1].setAttribute("value", "0"); //修改克隆节点stepId统一为0
+        var clonedTR;
+        if (parentTB.lastChild === parentTR) {
+            clonedTR = parentTB.appendChild(clonedNode);
+        } else {
+            clonedTR = parentTB.insertBefore(clonedNode, parentTR.nextSibling);
+        }
 
-	function delsteps(obj) {
-		if (obj === null) return;
-		var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
-		var parentTR = parentTD.parentNode;
-		var parentTB = parentTR.parentNode;
+        var oTable = document.getElementById("stepsTable");
+        reorderTable(oTable);
+        var typeObj = clonedTR.cells[6].children[0].children[0];
+        initSuggest(typeObj);
+        if (iscopy == 0) {
+            var index = typeObj.getAttribute("id").substring(8);
+            clearCells(index);
+        }
+    }
 
-		var oTable = document.getElementById("stepsTable");
+    function clearCells(index) {
+        $("#stepPath" + index).val('');
+        $("#stepOperation" + index).val('');
+        $("#stepParameters" + index).val('');
+        $("#action" + index).val('');
+        $("#expectedResult" + index).val('');
+        $("#extend" + index).val('');
+        $("#stepRemark" + index).val('');
+    }
 
-		/*标题占用一行*/
-		if (oTable.rows.length < 3) {
-			$.modal.msgWarning("唯一的步骤不能删除");
-			return;
-		}else {
-			parentTB.removeChild(parentTR);
-			reorderTable(oTable);
-		}
-	}
+    function delsteps(obj) {
+        if (obj === null) return;
+        var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
+        var parentTR = parentTD.parentNode;
+        var parentTB = parentTR.parentNode;
 
-	function upsteps(obj) {
-		if (obj === null) return;
-		var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
-		var parentTR = parentTD.parentNode;
-		var oTable = document.getElementById("stepsTable");
-		if (oTable.rows.length >= 3) {
-			swapTr(parentTR, oTable.rows[parentTR.sectionRowIndex]);
-			reorderTable(oTable);
-		}else{
-			$.modal.msgWarning("只有一个步骤，无需上移");
-		}
-	}
+        var oTable = document.getElementById("stepsTable");
 
-	function downsteps(obj) {
-		if (obj === null) return;
-		var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
-		var parentTR = parentTD.parentNode;
-		var oTable = document.getElementById("stepsTable");
-		if (oTable.rows.length >= 3) {
-			swapTr(parentTR, oTable.rows[parentTR.sectionRowIndex+2]);
-			reorderTable(oTable);
-		}else{
-			$.modal.msgWarning("只有一个步骤，无需下移");
-		}
-	}
+        /*标题占用一行*/
+        if (oTable.rows.length < 3) {
+            $.modal.msgWarning("唯一的步骤不能删除");
+            return;
+        } else {
+            parentTB.removeChild(parentTR);
+            reorderTable(oTable);
+        }
+    }
 
-	/*交换tr1和tr2的位置*/
-	function swapTr(tr1, tr2) {
-		var target = (tr1.rowIndex < tr2.rowIndex) ? tr2.nextSibling : tr2;
-		var tBody = tr1.parentNode;
-		tBody.replaceChild(tr2, tr1);
-		tBody.insertBefore(tr1, target);
-	}
+    function upsteps(obj) {
+        if (obj === null) return;
+        var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
+        var parentTR = parentTD.parentNode;
+        var oTable = document.getElementById("stepsTable");
+        if (oTable.rows.length >= 3) {
+            swapTr(parentTR, oTable.rows[parentTR.sectionRowIndex]);
+            reorderTable(oTable);
+        } else {
+            $.modal.msgWarning("只有一个步骤，无需上移");
+        }
+    }
 
-	/*对表格里面的步骤重新排序*/
-	function reorderTable(oTable) {
-		/*对步骤进行重新排序*/
-		for (var i = 1; i < oTable.rows.length; i++) {
-			oTable.rows[i].cells[0].children[0].children[0].setAttribute("id", "stepId" + i);
-			oTable.rows[i].cells[0].children[0].children[1].setAttribute("id", "caseId" + i);
-			oTable.rows[i].cells[0].children[0].children[2].setAttribute("id", "projectId" + i);
-			oTable.rows[i].cells[0].children[0].children[3].setAttribute("id", "stepSerialNumber" + i);
-			oTable.rows[i].cells[0].children[0].children[3].setAttribute("value", i);
-			oTable.rows[i].cells[0].children[0].children[3].innerHTML=i;
-			oTable.rows[i].cells[1].children[0].children[0].setAttribute("id", "stepPath" + i);
-			var opob = oTable.rows[i].cells[2].children[0];
-			if (opob.children[0].tagName.toLocaleLowerCase() === 'input') {
-				opob.children[0].setAttribute("id", "stepOperation" + i);
-			} else {
-				opob.children[1].setAttribute("id", "stepOperation" + i);
-			}
-			oTable.rows[i].cells[3].children[0].children[0].setAttribute("id", "stepParameters" + i);
-			oTable.rows[i].cells[4].children[0].children[0].setAttribute("id", "action" + i);
-			oTable.rows[i].cells[5].children[0].children[0].setAttribute("id", "expectedResult" + i);
-			oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "stepType" + i);
-			var eob = oTable.rows[i].cells[7].children[0];
-			if (eob.children[0].tagName.toLocaleLowerCase() === 'input') {
-				eob.children[0].setAttribute("id", "extend" + i);
-			} else {
-				eob.children[1].setAttribute("id", "extend" + i);
-			}
-			oTable.rows[i].cells[8].children[0].setAttribute("id", "stepRemark" + i);
-			oTable.rows[i].cells[9].children[0].setAttribute("id", "a_stepMark" + i);
-		}
-	}
+    function downsteps(obj) {
+        if (obj === null) return;
+        var parentTD = obj.parentNode; //parentNode是父标签的意思，如果你的TD里用了很多div控制格式，要多调用几次parentNode
+        var parentTR = parentTD.parentNode;
+        var oTable = document.getElementById("stepsTable");
+        if (oTable.rows.length >= 3) {
+            swapTr(parentTR, oTable.rows[parentTR.sectionRowIndex + 2]);
+            reorderTable(oTable);
+        } else {
+            $.modal.msgWarning("只有一个步骤，无需下移");
+        }
+    }
 
-	function initSuggest(obj) {
-		$.validate.resetForm();
-		var index = obj.getAttribute("id").substring(8);
-		var stepType=$("#stepType"+index).val();
+    /*交换tr1和tr2的位置*/
+    function swapTr(tr1, tr2) {
+        var target = (tr1.rowIndex < tr2.rowIndex) ? tr2.nextSibling : tr2;
+        var tBody = tr1.parentNode;
+        tBody.replaceChild(tr2, tr1);
+        tBody.insertBefore(tr1, target);
+    }
 
-		if (stepType === '0') {
-			initSuggestOperation(index,0);
-			initSuggestTemplate(index);
-		} else if (stepType === '1') {
-			$("#extend" + index).bsSuggest("destroy");
-			initSuggestOperation(index,1);
-		} else if (stepType === '3') {
-			$("#extend" + index).bsSuggest("destroy");
-			initSuggestOperation(index,3);
-		} else {
-			$("#stepOperation" + index).bsSuggest("destroy");
-			$("#extend" + index).bsSuggest("destroy");
-		}
-	}
+    /*对表格里面的步骤重新排序*/
+    function reorderTable(oTable) {
+        /*对步骤进行重新排序*/
+        for (var i = 1; i < oTable.rows.length; i++) {
+            oTable.rows[i].cells[0].children[0].children[0].setAttribute("id", "stepId" + i);
+            oTable.rows[i].cells[0].children[0].children[1].setAttribute("id", "caseId" + i);
+            oTable.rows[i].cells[0].children[0].children[2].setAttribute("id", "projectId" + i);
+            oTable.rows[i].cells[0].children[0].children[3].setAttribute("id", "stepSerialNumber" + i);
+            oTable.rows[i].cells[0].children[0].children[3].setAttribute("value", i);
+            oTable.rows[i].cells[0].children[0].children[3].innerHTML = i;
+            oTable.rows[i].cells[1].children[0].children[0].setAttribute("id", "stepPath" + i);
+            var opob = oTable.rows[i].cells[2].children[0];
+            if (opob.children[0].tagName.toLocaleLowerCase() === 'input') {
+                opob.children[0].setAttribute("id", "stepOperation" + i);
+            } else {
+                opob.children[1].setAttribute("id", "stepOperation" + i);
+            }
+            oTable.rows[i].cells[3].children[0].children[0].setAttribute("id", "stepParameters" + i);
+            oTable.rows[i].cells[4].children[0].children[0].setAttribute("id", "action" + i);
+            oTable.rows[i].cells[5].children[0].children[0].setAttribute("id", "expectedResult" + i);
+            oTable.rows[i].cells[6].children[0].children[0].setAttribute("id", "stepType" + i);
+            var eob = oTable.rows[i].cells[7].children[0];
+            if (eob.children[0].tagName.toLocaleLowerCase() === 'input') {
+                eob.children[0].setAttribute("id", "extend" + i);
+            } else {
+                eob.children[1].setAttribute("id", "extend" + i);
+            }
+            oTable.rows[i].cells[8].children[0].setAttribute("id", "stepRemark" + i);
+            oTable.rows[i].cells[9].children[0].setAttribute("id", "a_stepMark" + i);
+        }
+    }
 
-	function initSuggestTemplate(index) {
-		$("#extend"+index).bsSuggest("destroy");
-		$("#extend"+index).bsSuggest({
-			url: templatePrefix+"/getTemplateListByProjectId/"+$("#projectId1").val(),
-			/*effectiveFields: ["userName", "shortAccount"],
+    function initSuggest(obj) {
+        $.validate.resetForm();
+        var index = obj.getAttribute("id").substring(8);
+        var stepType = $("#stepType" + index).val();
+
+        if (stepType === '0') {
+            initSuggestOperation(index, 0);
+            initSuggestTemplate(index);
+        } else if (stepType === '1') {
+            $("#extend" + index).bsSuggest("destroy");
+            initSuggestOperation(index, 1);
+        } else if (stepType === '3') {
+            $("#extend" + index).bsSuggest("destroy");
+            initSuggestOperation(index, 3);
+        } else {
+            $("#stepOperation" + index).bsSuggest("destroy");
+            $("#extend" + index).bsSuggest("destroy");
+        }
+    }
+
+    function initSuggestTemplate(index) {
+        $("#extend" + index).bsSuggest("destroy");
+        $("#extend" + index).bsSuggest({
+            url: templatePrefix + "/getTemplateListByProjectId/" + $("#projectId1").val(),
+            /*effectiveFields: ["userName", "shortAccount"],
             searchFields: [ "shortAccount"],*/
-			effectiveFieldsAlias: {templateName: "模板名称", updateBy: "更新人员", updateTime: "更新时间"},
-			ignorecase: true,
-			showHeader: true,
-			showBtn: false,     //不显示下拉按钮
-			delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
-			idField: "name",
-			keyField: "name",
-			clearable: false
-		}).on('onDataRequestSuccess', function (e, result) {
-			//console.log('onDataRequestSuccess: ', result);
-		}).on('onSetSelectValue', function (e, keyword, data) {
-			//console.log('onSetSelectValue: ', keyword, data);
-			//$('#casesteps').data('bootstrapValidator').updateStatus(extendindex, 'NOT_VALIDATED', null).validateField($("#"+templateId));
-		}).on('onUnsetSelectValue', function () {
-			//console.log("onUnsetSelectValue");
-		});
-	}
+            effectiveFieldsAlias: {templateName: "模板名称", updateBy: "更新人员", updateTime: "更新时间"},
+            ignorecase: true,
+            showHeader: true,
+            showBtn: false,     //不显示下拉按钮
+            delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
+            idField: "name",
+            keyField: "name",
+            clearable: false
+        }).on('onDataRequestSuccess', function (e, result) {
+            //console.log('onDataRequestSuccess: ', result);
+        }).on('onSetSelectValue', function (e, keyword, data) {
+            //console.log('onSetSelectValue: ', keyword, data);
+            //$('#casesteps').data('bootstrapValidator').updateStatus(extendindex, 'NOT_VALIDATED', null).validateField($("#"+templateId));
+        }).on('onUnsetSelectValue', function () {
+            //console.log("onUnsetSelectValue");
+        });
+    }
 
-	function initSuggestOperation(index,stepType) {
-		$("#stepOperation"+index).bsSuggest("destroy");
-		$("#stepOperation"+index).bsSuggest({
-			url: dictPrefix+"/getDictDataListByStepType/" + stepType,
-			/*effectiveFields: ["userName", "shortAccount"],
+    function initSuggestOperation(index, stepType) {
+        $("#stepOperation" + index).bsSuggest("destroy");
+        $("#stepOperation" + index).bsSuggest({
+            url: dictPrefix + "/getDictDataListByStepType/" + stepType,
+            /*effectiveFields: ["userName", "shortAccount"],
             searchFields: [ "shortAccount"],*/
-			effectiveFieldsAlias: {name: "操作", description: "描述"},
-			ignorecase: true,
-			showHeader: true,
-			showBtn: false,     //不显示下拉按钮
-			delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
-			idField: "name",
-			keyField: "name",
-			clearable: false
-		}).on('onDataRequestSuccess', function (e, result) {
+            effectiveFieldsAlias: {name: "操作", description: "描述"},
+            ignorecase: true,
+            showHeader: true,
+            showBtn: false,     //不显示下拉按钮
+            delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
+            idField: "name",
+            keyField: "name",
+            clearable: false
+        }).on('onDataRequestSuccess', function (e, result) {
 
-		}).on('onSetSelectValue', function (e, keyword, data) {
-			/* $('#casesteps').data('bootstrapValidator').updateStatus(operationindex, 'NOT_VALIDATED', null).validateField(operationindex); */
-		}).on('onUnsetSelectValue', function () {
+        }).on('onSetSelectValue', function (e, keyword, data) {
+            /* $('#casesteps').data('bootstrapValidator').updateStatus(operationindex, 'NOT_VALIDATED', null).validateField(operationindex); */
+        }).on('onUnsetSelectValue', function () {
 
-		});
-	}
+        });
+    }
 
-	function showDebugModal() {
-		var caseId=$("#caseId1").val();
-		var url = "/404.html";
-		if ($.common.isNotEmpty(caseId)) {
-			url = debugPrefix + "/projectCaseDebug/" + caseId;
-		}
-		$.modal.open("用例调试", url, null, null, "调试");
-	}
+    function showDebugModal() {
+        var caseId = $("#caseId1").val();
+        var url = "/404.html";
+        if ($.common.isNotEmpty(caseId)) {
+            url = debugPrefix + "/projectCaseDebug/" + caseId;
+        }
+        $.modal.open("用例调试", url, null, null, "调试");
+    }
 </script>
+
+<style type="text/css">
+
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu > .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -6px;
+        margin-left: -1px;
+        -webkit-border-radius: 0 6px 6px 6px;
+        -moz-border-radius: 0 6px 6px;
+        border-radius: 0 6px 6px 6px;
+        overflow: visible;
+        overflow-y: auto;
+        overflow-x: hidden;
+        width: 300px;
+        height: 200px;
+    }
+
+    .dropdown-submenu:hover > .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-submenu > a:after {
+        display: block;
+        content: " ";
+        float: right;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        border-left-color: #ccc;
+        margin-top: 5px;
+        margin-right: -10px;
+    }
+
+    .dropdown-submenu:hover > a:after {
+        border-left-color: #fff;
+    }
+
+    .dropdown-submenu.pull-left {
+        float: none;
+    }
+
+    .dropdown-submenu.pull-left > .dropdown-menu {
+        left: -100%;
+        margin-left: 10px;
+        -webkit-border-radius: 6px 0 6px 6px;
+        -moz-border-radius: 6px 0 6px 6px;
+        border-radius: 6px 0 6px 6px;
+    }
+</style>
 </body>
 </html>
