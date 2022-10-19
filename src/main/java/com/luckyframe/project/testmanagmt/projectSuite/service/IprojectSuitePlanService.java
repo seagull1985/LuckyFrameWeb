@@ -2,6 +2,8 @@ package com.luckyframe.project.testmanagmt.projectSuite.service;
 
 import com.luckyframe.project.testmanagmt.projectSuite.domain.ProjectSuitePlan;
 
+import java.util.List;
+
 /**
  * 聚合计划 服务层
  *
@@ -19,6 +21,13 @@ public interface IprojectSuitePlanService {
      */
     ProjectSuitePlan selectProjectSuitePlanById(Integer suitePlanId);
 
+    /**
+     * 查询聚合计划用例列表
+     *
+     * @param projectSuitePlan 聚合计划用例列表信息
+     * @return 聚合计划集合
+     */
+    List<ProjectSuitePlan> selectProjectSuitePlanList(ProjectSuitePlan projectSuitePlan);
 
     /**
      * 新增聚合计划
@@ -57,4 +66,12 @@ public interface IprojectSuitePlanService {
      * @param suiteId 测试计划ID
      */
     int selectProjectSuitePlanCountBySuiteId(Integer suiteId);
+
+    /**
+     * 查询同一聚合计划下同一个计划的数量
+     * @param suiteId 聚合测试计划ID  planId 测试计划ID
+     * @author Seagull
+     * @date 2022年5月10日
+     */
+    int selectProjectSuitePlanCountBySuiteIdAndPlanId(Integer suiteId,Integer planId);
 }

@@ -79,4 +79,12 @@
     <select id="selectProjectSuitePlanCountBySuiteId" parameterType="Integer" resultType="Integer">
         select count(1) from project_suite_plan where suite_id=#{suite_id}
     </select>
+
+    <select id="selectProjectSuitePlanCountBySuiteIdAndPlanId" parameterType="ProjectSuitePlan" resultType="Integer">
+        select count(1) from project_suite_plan
+        <where>
+            <if test="suiteId != null "> and suite_id = #{suiteId}</if>
+            <if test="planId != null "> and plan_id = #{planId}</if>
+        </where>
+    </select>
 </mapper>

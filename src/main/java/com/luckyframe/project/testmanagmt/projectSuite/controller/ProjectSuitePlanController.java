@@ -8,7 +8,11 @@ import com.luckyframe.framework.web.controller.BaseController;
 import com.luckyframe.framework.web.domain.AjaxResult;
 import com.luckyframe.framework.web.page.TableDataInfo;
 import com.luckyframe.project.system.project.service.IProjectService;
+import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCase;
+import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseService;
 import com.luckyframe.project.testmanagmt.projectPlan.domain.ProjectPlan;
+import com.luckyframe.project.testmanagmt.projectPlan.domain.ProjectPlanCase;
+import com.luckyframe.project.testmanagmt.projectPlan.service.IProjectPlanCaseService;
 import com.luckyframe.project.testmanagmt.projectPlan.service.IProjectPlanService;
 import com.luckyframe.project.testmanagmt.projectSuite.domain.ProjectSuite;
 import com.luckyframe.project.testmanagmt.projectSuite.domain.ProjectSuitePlan;
@@ -20,6 +24,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /***
@@ -41,7 +47,10 @@ public class ProjectSuitePlanController extends BaseController {
     private IProjectPlanService projectPlanService;
 
     @Autowired
-    private IProjectService projectService;
+    private IProjectPlanCaseService projectPlanCaseService;
+
+    @Autowired
+    private IProjectCaseService projectCaseService;
 
     @RequiresPermissions("testmanagmt:projectSuite:view")
     @GetMapping("/{suiteId}")
@@ -86,17 +95,39 @@ public class ProjectSuitePlanController extends BaseController {
             return error("没有此项目保存测试计划用例权限");
         }
 
+        //不同的测试计划存在同一个用例，不能添加到同一个聚合计划中
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for(ProjectPlan projectPlan:projectPlans){
+            if(projectPlan.isFlag()){
+                List<ProjectPlanCase>  projectPlanCaseList= projectPlanCaseService.selectProjectPlanCaseListByPlanId(projectPlan.getPlanId());
+                for(ProjectPlanCase ppc:projectPlanCaseList){
+                    if(!map.containsKey(ppc.getCaseId())){
+                        map.put(ppc.getCaseId(),ppc.getPlanId());
+                    }else {
+                        ProjectCase projectCase = projectCaseService.selectProjectCaseById(ppc.getCaseId());
+                        Integer oldPlanId=map.get(ppc.getCaseId());
+                        ProjectPlan oldProjectPlan = projectPlanService.selectProjectPlanById(oldPlanId);
+                        return error("用例重复存在，计划【"+projectPlan.getPlanName()+"】中的用例【"+projectCase.getCaseSign()+"】在计划【"+oldProjectPlan.getPlanName()+"】中已存在");
+                    }
+                }
+            }
+        }
+
         for(ProjectPlan projectPlan:projectPlans){
             if(StringUtils.isNotEmpty(projectPlan.getSuitePlanId())&&!projectPlan.isFlag()){
                 resultCount = resultCount+projectSuitePlanService.deleteProjectSuitePlanById(projectPlan.getSuitePlanId());
             }
-
             if(projectPlan.isFlag()&&StringUtils.isEmpty(projectPlan.getSuitePlanId())){
                 ProjectSuitePlan projectSuitePlan = new ProjectSuitePlan();
                 projectSuitePlan.setSuiteId(projectPlan.getSuiteId());
                 projectSuitePlan.setPlanId(projectPlan.getPlanId());
                 projectSuitePlan.setPriority(projectPlan.getPriority());
-                resultCount = resultCount+projectSuitePlanService.insertProjectSuitePlan(projectSuitePlan);
+                Integer sameSuitePlanCount = projectSuitePlanService.selectProjectSuitePlanCountBySuiteIdAndPlanId(projectSuitePlan.getSuiteId(),projectSuitePlan.getPlanId());
+                if(sameSuitePlanCount==0){
+                    resultCount = resultCount+projectSuitePlanService.insertProjectSuitePlan(projectSuitePlan);
+                }else{
+                    resultCount++;
+                }
             }else{
                 resultCount++;
             }

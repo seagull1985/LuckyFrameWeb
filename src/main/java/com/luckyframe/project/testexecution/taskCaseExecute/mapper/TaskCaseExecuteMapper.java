@@ -32,6 +32,15 @@ public interface TaskCaseExecuteMapper
 	TaskCaseExecute selectTaskCaseExecuteByTaskIdAndCaseId(TaskCaseExecute taskCaseExecute);
 
 	/**
+	 * 根据任务ID以及用例ID查询单任务中条数
+	 * @param taskCaseExecute 执行用例对象
+	 * @return 返回用例执行条数
+	 * @author Seagull
+	 * @date 2022年5月7日
+	 */
+	int selectTaskCaseExecuteCountByTaskIdAndCaseId(TaskCaseExecute taskCaseExecute);
+
+	/**
 	 * 根据任务ID以及计划ID和用例ID查询实体
 	 * @param taskCaseExecute
 	 * @return

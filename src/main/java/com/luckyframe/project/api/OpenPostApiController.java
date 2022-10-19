@@ -101,10 +101,16 @@ public class OpenPostApiController
 		// 更新实体
 		int result = 0;
 		try {
+			log.info("增加用例执行明细>>>>>{}",jsonObject.toJSONString());
 			TaskCaseExecute taskCaseExecute = JSONObject.parseObject(jsonObject.toJSONString(), TaskCaseExecute.class);
 			taskCaseExecute.setCreateTime(new Date());
 			taskCaseExecute.setUpdateTime(new Date());
-			result = taskCaseExecuteService.insertTaskCaseExecute(taskCaseExecute);			
+			int caseCount = taskCaseExecuteService.selectTaskCaseExecuteCountByTaskIdAndCaseId(taskCaseExecute);
+			if(caseCount>0){
+				log.info("当前任务中存在多条重复用例执行(已在{}条)，请检查。",caseCount);
+			}else{
+				result = taskCaseExecuteService.insertTaskCaseExecute(taskCaseExecute);
+			}
 		} catch (Exception e) {
 			log.error("增加用例执行明细出现异常", e);
 		}
@@ -127,6 +133,7 @@ public class OpenPostApiController
 		// 更新实体
 		int result = 0;
 		try {
+			log.info("修改用例执行状态入参>>>>>{}",jsonObject.toJSONString());
 			TaskCaseExecute taskCaseExecute = JSONObject.parseObject(jsonObject.toJSONString(), TaskCaseExecute.class);
 			Integer caseStatus = taskCaseExecute.getCaseStatus();
 			TaskCaseExecute tce=null;
@@ -169,6 +176,7 @@ public class OpenPostApiController
 		// 更新实体
 		int result = 0;
 		try {
+			log.info("增加用例日志明细>>>>>{}",jsonObject.toJSONString());
 			TaskCaseLog taskCaseLog = JSONObject.parseObject(jsonObject.toJSONString(), TaskCaseLog.class);
 			taskCaseLog.setCreateTime(new Date());
 			taskCaseLog.setUpdateTime(new Date());
@@ -205,6 +213,7 @@ public class OpenPostApiController
 		int casefail = 0;
 		int caselock = 0;
 		int casenoexec = 0;
+		log.info("更新任务执行数据>>>>>{}",jsonObject.toJSONString());
 		Integer taskId = jsonObject.getInteger("taskId");
 		Integer caseCount = jsonObject.getInteger("caseCount");
 		Integer taskStatus = jsonObject.getInteger("taskStatus");
@@ -256,6 +265,7 @@ public class OpenPostApiController
 	@PostMapping("/clientDeleteTaskCaseLog")
 	@ResponseBody
 	public String clientDeleteTaskCaseLog(@RequestBody JSONObject jsonObject) {
+		log.info("删除用例执行日志>>>>>{}",jsonObject.toJSONString());
 		Integer taskId = jsonObject.getInteger("taskId");
 		Integer caseId = jsonObject.getInteger("caseId");
 		int result = 0;
@@ -285,6 +295,7 @@ public class OpenPostApiController
 	@PostMapping("/getLogDetailResult")
 	@ResponseBody
 	public String getLogDetailResult(@RequestBody JSONObject jsonObject) {
+		log.info("提取测试结果的详细日志>>>>>{}",jsonObject.toJSONString());
 		String taskName = jsonObject.getString("taskName");
 		String caseSign = jsonObject.getString("caseSign");
 		String result = "未能提取到相关的测试结果...";
@@ -319,6 +330,7 @@ public class OpenPostApiController
 	@PostMapping("/runTaskBySchedulingName")
 	@ResponseBody
 	public String runTaskBySchedulingName(@RequestBody JSONObject jsonObject) {
+		log.info("对外接口,根据调度任务的名称，触发测试任务>>>>>{}",jsonObject.toJSONString());
 		String schedulingName = jsonObject.getString("schedulingName");
 		try {
 			TaskScheduling taskScheduling = taskSchedulingService.selectTaskSchedulingByName(schedulingName);

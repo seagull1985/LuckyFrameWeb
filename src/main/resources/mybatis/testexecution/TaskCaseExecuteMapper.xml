@@ -136,6 +136,10 @@
         select count(1) from task_case_execute where project_id=#{project_id}
     </select>
 
+    <select id="selectTaskCaseExecuteCountByTaskIdAndCaseId" parameterType="TaskCaseExecute" resultType="Integer">
+        select count(1) from task_case_execute  where task_id = #{taskId} and case_id = #{caseId}
+    </select>
+
     <select id="selectTaskCaseExecuteCount" resultType="Integer">
         select count(1) from task_case_execute
     </select>
