@@ -29,18 +29,18 @@ CREATE TABLE if  not exists  `project_page_object`  (
 -- 页面元素关联表
 -- ----------------------------
 CREATE TABLE if  not exists  `project_page_detail`  (
-                                        `id` int NOT NULL AUTO_INCREMENT COMMENT '系统主键',
-                                        `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
-                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-                                        `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
-                                        `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-                                        `remark` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-                                        `page_id` int NOT NULL COMMENT '页面唯一编号',
-                                        `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '定位类型，支持Byxpath等等',
-                                        `element` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '元素名称',
-                                        `value` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '具体的参数值',
-                                        PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 76 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '页面详情' ROW_FORMAT = DYNAMIC;
+                                                        `id` int NOT NULL AUTO_INCREMENT COMMENT '系统主键',
+                                                        `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+                                                        `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                                        `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+                                                        `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+                                                        `remark` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                                        `page_id` int NOT NULL COMMENT '页面唯一编号',
+                                                        `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '定位类型，支持Byxpath等等',
+                                                        `element` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '元素名称',
+                                                        `value` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '具体的参数值',
+                                                        PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '页面详情' ROW_FORMAT = DYNAMIC;
 
 INSERT INTO sys_menu (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (2001, '页面管理', 4, 3, '/testmanagmt/projectPageObject', 'C', '0', 'testmanagmt:projectPageObject:view', '#', 'admin', '2018-03-01 00:00:00', 'admin', '2022-03-31 17:48:28', '页面配置管理菜单');
 INSERT INTO sys_menu (`menu_id`, `menu_name`, `parent_id`, `order_num`, `url`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (2002, '页面配置管理查询', 2001, 1, '#', 'F', '0', 'testmanagmt:projectPageObject:list', '#', 'admin', '2018-03-01 00:00:00', 'admin', '2022-04-01 11:28:36', '');
