@@ -1,5 +1,8 @@
 /target/
+/.idea/
 *.iml
 *.classpath
 *.project
 *.prefs
+*.log
+*.log.*
