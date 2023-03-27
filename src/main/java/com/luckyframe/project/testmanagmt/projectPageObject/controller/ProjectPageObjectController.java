@@ -1,5 +1,6 @@
 package com.luckyframe.project.testmanagmt.projectPageObject.controller;
 
+import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
@@ -84,6 +85,9 @@ public class ProjectPageObjectController extends BaseController {
     public String add(ModelMap mmap) {
         List<Project> projects = projectService.selectProjectAll(0);
         mmap.put("projects", projects);
+        if(StringUtils.isNotEmpty(ShiroUtils.getProjectId())){
+            mmap.put("defaultProjectId", ShiroUtils.getProjectId());
+        }
         return prefix + "/add";
     }
 

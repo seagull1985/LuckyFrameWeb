@@ -9,7 +9,6 @@
             <label class="col-sm-3 control-label">项目：</label>
             <div class="col-sm-8">
                 <select id="projectId" name="projectId" style="width: 200px;" th:with="type=${projects}">
-                    <option value="">所有项目</option>
                     <option th:each="projects : ${type}" th:text="${projects.projectName}"
                             th:value="${projects.projectId}"
                             th:selected="${projects.projectId == defaultProjectId}"></option>
