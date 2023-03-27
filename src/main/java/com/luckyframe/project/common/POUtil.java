@@ -58,7 +58,8 @@ public class POUtil extends BaseController {
     public static boolean isPO(ProjectCaseSteps projectCaseSteps) {
         if (projectCaseSteps.getStepPath() != null) {
             String stepPath = projectCaseSteps.getStepPath();
-            if (stepPath.contains(".")) {
+            //用例步骤类型为WEB UI且路径中不包含"="号(直接写入定位路径会有=号，无需转换)
+            if (stepPath.contains(".") && 1==projectCaseSteps.getStepType() && !stepPath.contains("=")) {
                 String[] pas = stepPath.split("\\.");
                 if (pas.length == 2) {
                     return true;
