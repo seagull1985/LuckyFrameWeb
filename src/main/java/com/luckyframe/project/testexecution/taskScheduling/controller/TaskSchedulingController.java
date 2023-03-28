@@ -149,6 +149,9 @@ public class TaskSchedulingController extends BaseController
         	List<Client> clientList = clientService.selectClientsByProjectId(projectId);
         	mmap.put("clientList", clientList);
 			List<String> envList=projectCaseParamsService.selectProjectEnvListByProjectId(projectId);
+			if(envList.size()==0){
+				envList.add("默认环境");
+			}
 			mmap.put("envList",envList);
         	if(clientList.size()>0){
         		List<String> driverPathList = clientService.selectClientDriverListById(clientList.get(0).getClientId());
@@ -214,6 +217,9 @@ public class TaskSchedulingController extends BaseController
         	List<Client> clientList = clientService.selectClientsByProjectId(taskScheduling.getProjectId());
         	mmap.put("clientList", clientList);
 			List<String> envList= projectCaseParamsService.selectProjectEnvListByProjectId(taskScheduling.getProjectId());
+			if(envList.size()==0){
+				envList.add("默认环境");
+			}
 			mmap.put("envList",envList);
         	if(clientList.size()>0){
         		List<String> driverPathList = clientService.selectClientDriverListById(taskScheduling.getClientId());

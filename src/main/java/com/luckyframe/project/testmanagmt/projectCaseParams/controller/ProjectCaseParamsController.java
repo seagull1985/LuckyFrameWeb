@@ -173,7 +173,7 @@ public class ProjectCaseParamsController extends BaseController
     }
 
 	/**
-	 * 通过项目ID获取项目计划列表
+	 * 通过项目ID获取项目环境
 	 * @param projectId 项目ID
 	 * @author Seagull
 	 * @date 2019年3月26日
@@ -183,6 +183,9 @@ public class ProjectCaseParamsController extends BaseController
 	public String getProjectEnvListByProjectId(@PathVariable("projectId") Integer projectId)
 	{
 		List<String> envList = projectCaseParamsService.selectProjectEnvListByProjectId(projectId);
+		if(envList.size()==0){
+			envList.add("默认环境");
+		}
 		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(envList));
 		return jsonArray.toJSONString();
 	}
