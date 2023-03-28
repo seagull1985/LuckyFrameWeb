@@ -110,6 +110,32 @@ public class OpenGetApiController {
     }
 
 	/**
+	 * 通过计划ID获取计划对象
+	 * @param req HTTP请求
+	 * @param rsp HTTP响应
+	 * @author Seagull
+	 * @date 2023年3月28日
+	 */
+	@RequestMapping(value = "/clientGetProjectPlanByPlanId.do")
+	public void clientGetProjectPlanByPlanId(HttpServletRequest req, HttpServletResponse rsp) {
+		// 更新实体
+		try {
+			rsp.setContentType("text/html;charset=GBK");
+			req.setCharacterEncoding("GBK");
+			PrintWriter pw = rsp.getWriter();
+			log.info("通过计划ID获取计划对象>>>>>{}",req.getParameter("planId"));
+			Integer planId = Integer.valueOf(req.getParameter("planId"));
+
+			ProjectPlan projectplan = projectPlanService.selectProjectPlanById(planId);
+
+			// 转换成json字符串
+			pw.print(JSONObject.toJSONString(projectplan));
+		} catch (Exception e) {
+			log.error("通过计划ID获取计划对象出现异常", e);
+		}
+	}
+
+	/**
 	 * 通过聚合计划ID获取计划列表
 	 * @param req HTTP请求
 	 * @param rsp HTTP响应
