@@ -273,6 +273,22 @@
     });
 
     function showPathModal(e) {
+        //拿到当前行对象
+        var objTR = e.parentNode.parentNode.parentNode;
+        //拿到当前步骤类型对象，获取当前选中索引，获取当前选中项的值
+        var stepTypeObj = objTR.cells[6].children[0].children[0];
+        var index = stepTypeObj.selectedIndex;
+        var stepTypeValue = stepTypeObj.options[index].value;
+        //默认类型 0 HTTP接口 1 Web UI 2 API驱动  3移动端
+        //
+        if(stepTypeValue == "1" || stepTypeValue == "3"){
+            showUIPathModal(e);
+        }else{
+            return false;
+        }
+    }
+
+    function showUIPathModal(e) {
         var index = e.id.replace(/[^0-9]/ig, "");
         var projectId = Number(e.getAttribute("projectId"));
         $.ajax({
@@ -313,7 +329,6 @@
                 })
                 $("body").bind("click", function (evt) {
                     if ($(evt.target).parents(".col-sm-12 lf-td-div tooltip-show").length == 0) {
-                        console.log("test2");
                         $("#stepPath" + index).next().hide();
                     }
                 });

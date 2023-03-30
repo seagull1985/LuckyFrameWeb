@@ -184,6 +184,7 @@ public class ProjectPageObjectController extends BaseController {
     @PostMapping("/getAllPageObject")
     @ResponseBody
     public List<ProjectPageObject> getAllPageObject(@RequestBody ProjectCaseSteps projectCaseSteps) {
-        return projectPageObjectService.getAllPageObject2(projectCaseSteps.getProjectId());
+        List<ProjectPageObject> ppolist = projectPageObjectService.getAllPageObject2(projectCaseSteps.getProjectId());
+        return ppolist;
     }
 }
