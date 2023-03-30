@@ -308,23 +308,31 @@
                     a_pageName.setAttribute("data-title", result[i].pageName);
                     a_pageName.text = result[i].pageName;
                     li_pageName.appendChild(a_pageName);
-                    var ul_pageDetail = document.createElement("ul");
-                    ul_pageDetail.setAttribute("class", "dropdown-menu");
-                    li_pageName.appendChild(ul_pageDetail);
-                    ul.appendChild(li_pageName);
-                    for (var j in result[i].projectPageDetailList) {
-                        var li_element = document.createElement("li");
-                        var a_element = document.createElement("a");
-                        a_element.setAttribute("data-title", result[i].projectPageDetailList[j].element);
-                        a_element.text = result[i].projectPageDetailList[j].element;
-                        li_element.appendChild(a_element);
-                        ul_pageDetail.appendChild(li_element);
+                    if(result[i].projectPageDetailList.length!=0){
+                        var ul_pageDetail = document.createElement("ul");
+                        ul_pageDetail.setAttribute("class", "dropdown-menu");
+                        li_pageName.appendChild(ul_pageDetail);
+                        ul.appendChild(li_pageName);
+                        for (var j in result[i].projectPageDetailList) {
+                            var li_element = document.createElement("li");
+                            var a_element = document.createElement("a");
+                            a_element.setAttribute("data-title", result[i].projectPageDetailList[j].element);
+                            a_element.text = result[i].projectPageDetailList[j].element;
+                            li_element.appendChild(a_element);
+                            ul_pageDetail.appendChild(li_element);
+                        }
+                    }else{
+                        ul.appendChild(li_pageName);
                     }
                 }
                 $('.dropdown-menu li a').click(function () {
                     title = $(this).attr("data-title");
                     pageName = $(this).parent().parent().prev().attr("data-title");
-                    $("#stepPath" + index).val(pageName + "." + title);
+                    if(null==pageName){
+                        $("#stepPath" + index).val(title);
+                    }else{
+                        $("#stepPath" + index).val(pageName + "." + title);
+                    }
                     $("#stepPath" + index).next().empty();
                 })
                 $("body").bind("click", function (evt) {
