@@ -146,7 +146,12 @@
 				{
 					field : 'projectSuite.suiteName',
 					title : '聚合计划名称',
-					width : '16%'
+					width : '16%',
+					class : 'myTDLengthHidden',
+					formatter: function (value,
+										 row, index) {
+						return $.table.tooltip(value);
+					}
 				},
 				{
 					field : 'envName',
