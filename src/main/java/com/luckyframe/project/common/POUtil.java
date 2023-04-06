@@ -2,11 +2,14 @@ package com.luckyframe.project.common;
 
 import com.luckyframe.common.constant.Constants;
 import com.luckyframe.framework.web.controller.BaseController;
+import com.luckyframe.project.api.OpenGetApiController;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseSteps;
 import com.luckyframe.project.testmanagmt.projectPageDetail.domain.ProjectPageDetail;
 import com.luckyframe.project.testmanagmt.projectPageDetail.service.IProjectPageDetailService;
 import com.luckyframe.project.testmanagmt.projectPageObject.domain.ProjectPageObject;
 import com.luckyframe.project.testmanagmt.projectPageObject.service.IProjectPageObjectService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -17,6 +20,8 @@ import java.util.List;
 @Controller
 @Component
 public class POUtil extends BaseController {
+    private static final Logger log = LoggerFactory.getLogger(POUtil.class);
+
     private static IProjectPageObjectService projectPageObjectService;
 
     private static IProjectPageDetailService projectPageDetailService;
@@ -75,6 +80,7 @@ public class POUtil extends BaseController {
             ProjectPageDetail projectPageDetail = projectPageDetailService.selectProjectPageDetailById(elementId);
             step.setStepPath(projectPageDetail.getType() + "=" + projectPageDetail.getValue());
         } catch (Exception e) {
+            log.error("转换WEB UI页面元素出现异常", e);
         }
     }
 }
