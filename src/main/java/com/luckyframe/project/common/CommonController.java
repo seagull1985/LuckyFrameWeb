@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.luckyframe.common.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,10 @@ public class CommonController
         String realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf("_") + 1);
         try
         {
+            //防止跨目录访问漏洞
+            if(fileName.contains("..;/")||fileName.contains("../")){
+                throw new BusinessException("不允许跨目录访问");
+            }
             String filePath = LuckyFrameConfig.getDownloadPath() + fileName;
 
             response.setCharacterEncoding("utf-8");
