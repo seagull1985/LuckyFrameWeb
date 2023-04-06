@@ -259,30 +259,34 @@ public class ServerHandler extends ChannelHandlerAdapter {
         } else if ("upload".equals(json.get(CLIENT_METHOD))) {
             Result re = JSONObject.parseObject(json.get("data").toString(), Result.class);
             int start = Integer.parseInt(json.get("start").toString());
-            FileUploadFile ef = re.getFileUploadFile();
-            byte[] bytes = ef.getBytes();
-            int byteRead = ef.getEndPos();
-            //String md5 = ef.getFile_md5();//文件名
-            String path = file_dir + File.separator + json.get(IMG_NAME);
-            File file = new File(path);
-            if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdir();
-            }
-            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");//r: 只读模式 rw:读写模式
-            randomAccessFile.seek(start);//移动文件记录指针的位置,
-            randomAccessFile.write(bytes);//调用了seek（start）方法，是指把文件的记录指针定位到start字节的位置。也就是说程序将从start字节开始写数据
-            start = start + byteRead;
+            Map<String, Object> jsonparams = new HashMap<>();
             JSONObject tmp = new JSONObject();
             tmp.put(CLIENT_METHOD, "upload");
             tmp.put(CLIENT_SUCCESS, "1");
+            if(IMG_NAME.endsWith(".png")){
+                FileUploadFile ef = re.getFileUploadFile();
+                byte[] bytes = ef.getBytes();
+                int byteRead = ef.getEndPos();
+                //String md5 = ef.getFile_md5();//文件名
+                String path = file_dir + File.separator + json.get(IMG_NAME);
+                File file = new File(path);
+                if (!file.getParentFile().exists()) {
+                    file.getParentFile().mkdir();
+                }
+                RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");//r: 只读模式 rw:读写模式
+                randomAccessFile.seek(start);//移动文件记录指针的位置,
+                randomAccessFile.write(bytes);//调用了seek（start）方法，是指把文件的记录指针定位到start字节的位置。也就是说程序将从start字节开始写数据
+                start = start + byteRead;
+                jsonparams.put(IMG_NAME, json.get(IMG_NAME));
+                randomAccessFile.close();
+                log.info("处理完毕,文件路径:" + path + "," + byteRead);
+            }else{
+                jsonparams.put(IMG_NAME, json.get(IMG_NAME)+"不符合文件类型，上传失败！");
+            }
             tmp.put("uuid", json.get("uuid").toString());
             tmp.put("start", start);
-            Map<String, Object> jsonparams = new HashMap<>();
-            jsonparams.put(IMG_NAME, json.get(IMG_NAME));
             tmp.put("data", jsonparams);
             sendMessage(ctx, tmp.toString());
-            randomAccessFile.close();
-            log.info("处理完毕,文件路径:" + path + "," + byteRead);
         } else {
             log.info("客户端请求方法没有定义，请检查..." +CLIENT_METHOD+": " + json.get(CLIENT_METHOD));
         }
