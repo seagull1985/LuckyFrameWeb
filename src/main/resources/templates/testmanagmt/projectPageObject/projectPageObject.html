@@ -11,10 +11,13 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            页面编号：<input type="text" name="pageId"/>
+                            页面名称：<input type="text" name="pageName"/>
                         </li>
                         <li>
-                            页面名称：<input type="text" name="pageName"/>
+                            页面父菜单：<input type="text" name="pageParentMenu"/>
+                        </li>
+                        <li>
+                            页面菜单：<input type="text" name="pageMenu"/>
                         </li>
                         <li>
                             创建者：<input type="text" name="createBy"/>
@@ -135,7 +138,7 @@
                         var customUrl = pagedetailfix + "/edit/{id}";
                         customUrl = customUrl.replace("{id}", row.pageId);
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.pageId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.modal.openViewFull(\'页面元素维护\',\'' + customUrl+'\')"><i class="fa fa-edit"></i>页面元素维护</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.modal.openViewFull(\'页面元素维护\',\'' + customUrl+'\')"><i class="fa fa-edit"></i>页面元素</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.pageId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
