@@ -1,5 +1,6 @@
 package com.luckyframe.project.testmanagmt.projectPageDetail.controller;
 
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.common.utils.security.ShiroUtils;
 import com.luckyframe.framework.aspectj.lang.annotation.Log;
@@ -150,7 +151,14 @@ public class ProjectPageDetailController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        return toAjax(projectPageDetailService.deleteProjectPageDetailByIds(ids) > 0);
+        try
+        {
+            return toAjax(projectPageDetailService.deleteProjectPageDetailByIds(ids) > 0);
+        }
+        catch (BusinessException e)
+        {
+            return error(e.getMessage());
+        }
     }
 
 
