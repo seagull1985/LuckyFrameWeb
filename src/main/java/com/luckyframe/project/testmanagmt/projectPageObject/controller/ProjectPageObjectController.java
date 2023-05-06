@@ -1,5 +1,6 @@
 package com.luckyframe.project.testmanagmt.projectPageObject.controller;
 
+import com.luckyframe.common.exception.BusinessException;
 import com.luckyframe.common.utils.StringUtils;
 import com.luckyframe.common.utils.poi.ExcelUtil;
 import com.luckyframe.common.utils.security.ShiroUtils;
@@ -152,7 +153,14 @@ public class ProjectPageObjectController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        return toAjax(projectPageObjectService.deleteProjectPageObjectByIds(ids) > 0);
+        try
+        {
+            return toAjax(projectPageObjectService.deleteProjectPageObjectByIds(ids) > 0);
+        }
+        catch (BusinessException e)
+        {
+            return error(e.getMessage());
+        }
     }
 
     public boolean checkExist(ProjectPageObject projectPageObject) {

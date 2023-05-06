@@ -3,8 +3,10 @@ package com.luckyframe.project.testmanagmt.projectPageObject.service;
 import com.luckyframe.common.constant.Constants;
 import com.luckyframe.common.support.Convert;
 import com.luckyframe.project.testmanagmt.projectCase.domain.ProjectCaseSteps;
+import com.luckyframe.project.testmanagmt.projectCase.service.IProjectCaseService;
 import com.luckyframe.project.testmanagmt.projectPageDetail.domain.ProjectPageDetail;
 import com.luckyframe.project.testmanagmt.projectPageDetail.mapper.ProjectPageDetailMapper;
+import com.luckyframe.project.testmanagmt.projectPageDetail.service.IProjectPageDetailService;
 import com.luckyframe.project.testmanagmt.projectPageObject.domain.IbasePageObject;
 import com.luckyframe.project.testmanagmt.projectPageObject.domain.ProjectPageObject;
 import com.luckyframe.project.testmanagmt.projectPageObject.mapper.ProjectPageObjectMapper;
@@ -28,6 +30,9 @@ public class ProjectPageObjectServiceImpl implements IProjectPageObjectService, 
 
     @Autowired(required = false)
     private ProjectPageDetailMapper projectPageDetailMapper;
+
+    @Autowired
+    private IProjectPageDetailService projectPageDetailService;
 
     /**
      * 查询页面配置管理信息
@@ -81,7 +86,27 @@ public class ProjectPageObjectServiceImpl implements IProjectPageObjectService, 
      */
     @Override
     public int deleteProjectPageObjectByIds(String ids) {
-        return projectPageObjectMapper.deleteProjectPageObjectByIds(Convert.toStrArray(ids));
+        int result=0;
+        String[] pdoIds=Convert.toStrArray(ids);
+        for(String pdoIdstr:pdoIds){
+            Integer pdoId=Integer.valueOf(pdoIdstr);
+            ProjectPageDetail projectPageDetail = new ProjectPageDetail();
+            projectPageDetail.setPageId(pdoId);
+            List<ProjectPageDetail> projectPageDetailList = projectPageDetailService.selectProjectPageDetailList(projectPageDetail);
+            if(projectPageDetailList.size()>0){
+                String ppdids="";
+                for(ProjectPageDetail ppd:projectPageDetailList){
+                    ppdids = ppdids+ppd.getId()+",";
+                }
+                ppdids=ppdids.substring(0,ppdids.length()-1);
+                projectPageDetailService.deleteProjectPageDetailByIds(ppdids);
+            }else{
+                projectPageObjectMapper.deleteProjectPageObjectById(pdoId);
+            }
+            result++;
+        }
+
+        return result;
     }
 
 
