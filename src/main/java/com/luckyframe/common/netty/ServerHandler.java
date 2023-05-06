@@ -263,7 +263,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
             JSONObject tmp = new JSONObject();
             tmp.put(CLIENT_METHOD, "upload");
             tmp.put(CLIENT_SUCCESS, "1");
-            if(IMG_NAME.endsWith(".png")){
+            if(json.get(IMG_NAME).toString().endsWith(".png")){
                 FileUploadFile ef = re.getFileUploadFile();
                 byte[] bytes = ef.getBytes();
                 int byteRead = ef.getEndPos();
