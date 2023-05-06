@@ -8,10 +8,9 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">项目：</label>
             <div class="col-sm-8">
-                <select id="projectId" name="projectId" style="width: 200px;" th:with="type=${projects}">
-                    <option th:each="projects : ${type}" th:text="${projects.projectName}"
-                            th:value="${projects.projectId}"
-                            th:selected="${projects.projectId == defaultProjectId}"></option>
+                <select id="projectId" class="form-control m-b" name="projectId" th:with="type=${projects}">
+                    <option th:each="project : ${type}" th:text="${project.projectName}" th:value="${project.projectId}"
+                            th:selected="${project.projectId == defaultProjectId}"></option>
                 </select>
 			</div>
         </div>
