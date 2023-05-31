@@ -769,7 +769,11 @@
             	    url = $.table._option.customUrl.replace("{id}", id);
             	} else {
             	    var row = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-            	    url = $.table._option.customUrl.replace("{id}", row);
+                    if (row == "") {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    url = $.table._option.customUrl.replace("{id}", row);
             	}
             	$.modal.openFull($.table._option.childrenModalName, url, null, null, "保存");
             },
