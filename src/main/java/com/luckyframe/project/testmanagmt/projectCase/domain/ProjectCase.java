@@ -48,7 +48,7 @@ public class ProjectCase extends BaseEntity
 	/** 用例选中标记 */
 	private boolean flag = false;
 	/** 用例优先级 */
-    private int priority;
+    private int priority=5;
 	/** 关联计划ID标识 */
 	private Integer planId;
 	/** 关联计划用例ID标识 */
